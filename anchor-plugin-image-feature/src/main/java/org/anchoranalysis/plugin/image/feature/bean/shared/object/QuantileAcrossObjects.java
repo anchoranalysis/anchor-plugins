@@ -32,6 +32,8 @@ import org.anchoranalysis.feature.input.FeatureInputNRG;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates the quantile of a feature applied to each connected component
@@ -42,7 +44,7 @@ import cern.jet.stat.Descriptive;
 public class QuantileAcrossObjects<T extends FeatureInputNRG> extends ObjectAggregationBase<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private double quantile = 0.5;
 	// END BEAN PROPERTIES
 
@@ -50,13 +52,5 @@ public class QuantileAcrossObjects<T extends FeatureInputNRG> extends ObjectAggr
 	protected double deriveStatistic(DoubleArrayList featureVals) {
 		featureVals.sort();
 		return Descriptive.quantile(featureVals, quantile);
-	}
-
-	public double getQuantile() {
-		return quantile;
-	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
 	}
 }

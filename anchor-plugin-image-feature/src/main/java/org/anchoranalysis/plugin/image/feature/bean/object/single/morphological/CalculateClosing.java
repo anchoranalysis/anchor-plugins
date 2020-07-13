@@ -40,30 +40,16 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilationMap;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper=false)
 class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleObject> {
 
-	private int iterations;
-	private ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> mapDilation;
-	private boolean do3D;
-	
-	private CalculateClosing(
-		int iterations,
-		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> mapDilation,
-		boolean do3D
-	) {
-		this.iterations = iterations;
-		this.mapDilation = mapDilation;
-		this.do3D = do3D;
-	}
-	
-	private CalculateClosing( CalculateClosing src ) {
-		this.iterations = src.iterations;
-		this.mapDilation = src.mapDilation;
-		this.do3D = src.do3D;
-	}
+	private final int iterations;
+	private final ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> mapDilation;
+	private final boolean do3D;
 	
 	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
 		CalculationResolver<FeatureInputSingleObject> cache,
@@ -85,37 +71,17 @@ class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleO
 		try {
 			ObjectMask omDilated = mapDilation.getOrCalculate(params, iterations);
 			
-			ObjectMask omEroded = MorphologicalErosion.createErodedObjMask(
+			return MorphologicalErosion.createErodedObjMask(
 				omDilated,
-				params.getDimensionsOptional().map(ImageDimensions::getExtnt),
+				params.getDimensionsOptional().map(ImageDimensions::getExtent),
 				do3D,
 				iterations,
 				false,
 				Optional.empty()
 			);
-			return omEroded;
 			
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public boolean equals(final Object obj){
-		 if(obj instanceof CalculateClosing){
-		        final CalculateClosing other = (CalculateClosing) obj;
-		        return new EqualsBuilder()
-		            .append(iterations, other.iterations)
-		            .append(mapDilation, other.mapDilation)
-		            .append(do3D, other.do3D)
-		            .isEquals();
-		    } else{
-		        return false;
-		    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(iterations).append(mapDilation).append(do3D).toHashCode();
 	}
 }

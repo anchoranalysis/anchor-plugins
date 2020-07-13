@@ -38,14 +38,16 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import lombok.Getter;
+import lombok.Setter;
 
 // Takes each object one-by-one from objMaskProviderSourceObjs, and finds matching seeds from 
 // objMaskProviderSeeds
@@ -54,13 +56,13 @@ import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ObjectCollectionProvider objsSource;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objsSeeds;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectSegmentation sgmn;
 	// END BEAN PROPERTIES
 	
@@ -103,15 +105,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	
 	private static ObjectCollection sgmnIfMoreThanOne(MatchedObject ows, Channel chnl, ObjectSegmentation sgmn) throws CreateException {
 		if(ows.numMatches() <= 1) {
-			return ObjectCollectionFactory.from( ows.getSourceObj() );
+			return ObjectCollectionFactory.from( ows.getSource() );
 		} else {
 			try {
-				return sgmn(
-					ows.getSourceObj(),
-					ows.getMatches(),
-					chnl,
-					sgmn
-				);
+				return sgmn(ows, chnl, sgmn);
 			} catch (SgmnFailedException e) {
 				throw new CreateException(e);
 			}
@@ -120,17 +117,17 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	
 	private static ObjectCollection createWithoutSourceObjs(
 		Channel chnl,
-		ObjectCollection seedsAsObjs,
+		ObjectCollection seedsAsObjects,
 		ObjectSegmentation sgmn
 	) throws CreateException {
-		
-		SeedCollection seeds = SeedsFactory.createSeedsWithoutMask(seedsAsObjs);
 		
 		try {
 			return sgmn.sgmn(
 				chnl,
 				Optional.empty(),
-				Optional.of(seeds)
+				Optional.of(
+					SeedsFactory.createSeedsWithoutMask(seedsAsObjects)
+				)
 			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
@@ -140,62 +137,42 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		
 	// NB Objects in seeds are changed
 	private static ObjectCollection sgmn(
-		ObjectMask objMask,
-		ObjectCollection seeds,
-		Channel chnl,
+		MatchedObject matchedObject,
+		Channel channel,
 		ObjectSegmentation sgmn
 	) throws SgmnFailedException, CreateException {
 		
-		// We make a channel just for the object
-		VoxelBox<?> vb = chnl.getVoxelBox().any().region( objMask.getBoundingBox(), false);
-		Channel chnlObjLocal = ChannelFactory.instance().create(vb, chnl.getDimensions().getRes());
+		BoundingBox bboxSource = matchedObject.getSource().getBoundingBox();
 		
 		// We create a new ObjMask for the new channel
-		ObjectMask objMaskLocal = new ObjectMask( objMask.binaryVoxelBox() );
+		ObjectMask objectLocal = new ObjectMask(
+			matchedObject.getSource().binaryVoxelBox()
+		);
 		
 		SeedCollection seedsObj = SeedsFactory.createSeedsWithMask(
-			seeds,
-			objMaskLocal,
-			objMask.getBoundingBox().cornerMin(),
-			chnl.getDimensions()
+			matchedObject.getMatches(),
+			objectLocal,
+			bboxSource.cornerMin(),
+			channel.getDimensions()
 		);
 		
 		ObjectCollection sgmnObjs = sgmn.sgmn(
-			chnlObjLocal,
-			Optional.of(objMaskLocal),
+			createChannelForBox(channel, bboxSource),
+			Optional.of(objectLocal),
 			Optional.of(seedsObj)
 		);
 		
 		// We shift each object back to were it belongs globally
-		return sgmnObjs.shiftBy( objMask.getBoundingBox().cornerMin() );
+		return sgmnObjs.shiftBy(
+			bboxSource.cornerMin()
+		);
 	}
 	
-	
-
-	public ObjectSegmentation getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjectSegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
-
-	public ObjectCollectionProvider getObjsSeeds() {
-		return objsSeeds;
-	}
-
-
-	public void setObjsSeeds(ObjectCollectionProvider objsSeeds) {
-		this.objsSeeds = objsSeeds;
-	}
-
-
-	public ObjectCollectionProvider getObjsSource() {
-		return objsSource;
-	}
-
-
-	public void setObjsSource(ObjectCollectionProvider objsSource) {
-		this.objsSource = objsSource;
+	private static Channel createChannelForBox(Channel channel, BoundingBox boundingBox) {
+		// We make a channel just for the object
+		return ChannelFactory.instance().create(
+			channel.getVoxelBox().any().region(boundingBox, false),
+			channel.getDimensions().getRes()
+		);
 	}
 }

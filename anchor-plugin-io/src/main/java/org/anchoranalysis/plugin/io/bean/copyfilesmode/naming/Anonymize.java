@@ -35,10 +35,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.apache.commons.io.FilenameUtils;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Value;
 
 /**
  * Copies files to a number 001 002 etc. in the same order they are inputted.
@@ -48,52 +53,30 @@ import org.apache.commons.io.FilenameUtils;
  * @author feehano
  *
  */
-public class Anonymize extends CopyFilesNaming {
+public class Anonymize implements CopyFilesNaming {
 
-	/**
-	 * 
-	 */
+	private static final String OUTPUT_CSV_FILENAME = "output.csv";
+
+	@Value
+	private static class FileMapping {
+		private final Path original;
+		private final String anonymized;
+		private final int iter;
+	}
+	
 	// START BEAN PROPERTIES
 	/** Iff TRUE, a mapping.csv file is created showing the mapping between the original-names and the anonymized
 	 *   versions */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean outputCSV = true;
 	// END BEAN PROPERTIES
-
-	private static String OUTPUT_CSV_FILENAME = "output.csv";
 	
-	private static class FileMapping {
-		
-		private Path original;
-		private String anonymized;
-		private int iter;
-		
-		public FileMapping(Path original, String anonymized, int iter) {
-			super();
-			this.original = original;
-			this.anonymized = anonymized;
-			this.iter = iter;
-		}
-
-		public Path getOriginal() {
-			return original;
-		}
-
-		public String getAnonymized() {
-			return anonymized;
-		}
-		
-		public int getIter() {
-			return iter;
-		}
-	}
-	
-	private List<FileMapping> listMappings;
+	private Optional<List<FileMapping>> optionalMappings;
 	private String formatStr;
 	
 	@Override
 	public void beforeCopying(Path destDir, int totalNumFiles) {
-		listMappings = outputCSV ? new ArrayList<>() : null;
+		optionalMappings = OptionalUtilities.createFromFlag(outputCSV, ArrayList::new);
 		
 		formatStr = createFormatStrForMaxNum(totalNumFiles);
 	}
@@ -104,15 +87,10 @@ public class Anonymize extends CopyFilesNaming {
 		String ext = FilenameUtils.getExtension(file.toString());
 		String fileNameNew = createNumericString(iter) + "." + ext;
 		
-		synchronized(listMappings) {
-			listMappings.add(
-				new FileMapping(
-					NamingUtilities.filePathDiff( sourceDir, file.toPath() ),
-					fileNameNew,
-					iter
-				)
-			);
+		if (optionalMappings.isPresent()) {
+			addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
 		}
+		
 		return Optional.of(
 			Paths.get(fileNameNew)
 		);
@@ -121,13 +99,25 @@ public class Anonymize extends CopyFilesNaming {
 	@Override
 	public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
 
-		if (listMappings!=null && dummyMode==false) {
-			writeOutputCSV(destDir);
-			listMappings = null;
+		if (optionalMappings.isPresent() && !dummyMode) {
+			writeOutputCSV(optionalMappings.get(), destDir);
+			optionalMappings = Optional.empty();
 		}
 	}
 	
-	private void writeOutputCSV(Path destDir) throws AnchorIOException {
+	private void addMapping(List<FileMapping> mapping, Path sourceDir, File file, int iter, String fileNameNew) throws AnchorIOException {
+		synchronized(this) {
+			mapping.add(	// NOSONAR
+				new FileMapping(
+					NamingUtilities.filePathDiff( sourceDir, file.toPath() ),
+					fileNameNew,
+					iter
+				)
+			);
+		}
+	}
+	
+	private void writeOutputCSV(List<FileMapping> listMappings, Path destDir) throws AnchorIOException {
 		
 		Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
 		
@@ -136,7 +126,7 @@ public class Anonymize extends CopyFilesNaming {
 		csvWriter.writeHeaders( Arrays.asList("iter","in","out") );
 		
 		try {
-			for( FileMapping mapping : listMappings ) {
+			for(FileMapping mapping : listMappings) {
 				csvWriter.writeRow(
 					Arrays.asList(
 						new TypedValue( mapping.getIter() ),
@@ -163,5 +153,4 @@ public class Anonymize extends CopyFilesNaming {
 			return "%d";
 		}
 	}
-
 }

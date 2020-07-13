@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
 import java.util.Optional;
 
+
+
 /*
  * #%L
  * anchor-plugin-image
@@ -29,7 +31,6 @@ import java.util.Optional;
  */
 
 
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -38,8 +39,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Finds the intersection between the dilated versions of two objects (and then performs some erosion)
@@ -54,10 +56,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor(access=AccessLevel.PRIVATE) @EqualsAndHashCode(callSuper=false)
 class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> {
 
-	private ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond;
-	private ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst;
+	private final ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond;
+	private final ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst;
 	
 	public static FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createFromCache(
 		SessionInput<FeatureInputPairObjects> cache,
@@ -66,7 +69,7 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 		int iterationsDilation,
 		int iterationsErosion,
 		boolean do3D
-	) throws CreateException {
+	) {
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
@@ -79,15 +82,6 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
 	}
 	
-	private CalculatePairIntersectionCommutative(
-		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond,
-		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst
-	) {
-		super();
-		this.ccFirstToSecond = ccFirstToSecond;
-		this.ccSecondToFirst = ccSecondToFirst;
-	}
-
 	@Override
 	protected Optional<ObjectMask> execute(FeatureInputPairObjects input) throws FeatureCalcException {
 		
@@ -101,31 +95,9 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 		if (!omIntersection2.isPresent()) {
 			return omIntersection1;
 		}
-		
-		assert(omIntersection1.get().hasPixelsGreaterThan(0));
-		assert(omIntersection2.get().hasPixelsGreaterThan(0));
-		
-		ObjectMask merged = ObjectMaskMerger.merge( omIntersection1.get(), omIntersection2.get() );
-		
-		assert(merged.hasPixelsGreaterThan(0));
-		return Optional.of(merged);
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		 if(obj instanceof CalculatePairIntersectionCommutative){
-		        final CalculatePairIntersectionCommutative other = (CalculatePairIntersectionCommutative) obj;
-		        return new EqualsBuilder()
-		            .append(ccFirstToSecond, other.ccFirstToSecond)
-		            .append(ccSecondToFirst, other.ccSecondToFirst)
-		            .isEquals();
-		    } else{
-		        return false;
-		    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(ccFirstToSecond).append(ccSecondToFirst).toHashCode();
+		return Optional.of(
+			ObjectMaskMerger.merge( omIntersection1.get(), omIntersection2.get() )
+		);
 	}
 }

@@ -38,12 +38,11 @@ import java.util.Optional;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
-import org.anchoranalysis.experiment.log.reporter.StatefulLogReporter;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
+import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.experiment.task.Task;
@@ -125,12 +124,12 @@ class TaskSingleInputHelper {
 			
 			BoundOutputManagerRouteErrors bom = OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
 			
-			StatefulLogReporter logReporter = createStatefulLogReporter();
+			StatefulMessageLogger logger = createStatefulLogReporter();
 			
 			ParametersExperiment paramsExp = createParametersExperiment(
 				pathForOutputs,
 				bom.getDelegate(),
-				logReporter
+				logger
 			);
 			
 			S sharedState = task.beforeAnyJobIsExecuted(
@@ -147,7 +146,7 @@ class TaskSingleInputHelper {
 				)
 			);
 			
-			task.afterAllJobsAreExecuted(sharedState, paramsExp.context());
+			task.afterAllJobsAreExecuted(sharedState, paramsExp.getContext());
 			
 			return successful;
 		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException | BindFailedException e) {
@@ -155,28 +154,26 @@ class TaskSingleInputHelper {
 		}
 	}
 	
-	private static ParametersExperiment createParametersExperiment( Path pathTempFolder, BoundOutputManager outputManager, StatefulLogReporter logReporter ) throws AnchorIOException {
+	private static ParametersExperiment createParametersExperiment( Path pathTempFolder, BoundOutputManager outputManager, StatefulMessageLogger logger ) throws AnchorIOException {
 		ParametersExperiment params = new ParametersExperiment(
 			new ExperimentExecutionArguments(),
 			"arbitraryExperimentName",
 			Optional.empty(),
 			outputManager,
-			logReporter,
-			new ErrorReporterIntoLog(logReporter),
+			logger,
 			false
 		);
-		params.setLogReporterTaskCreator(
+		params.setLoggerTaskCreator(
 			createLogReporterBean()
 		);
 		return params;
 	}
 	
 	
-	private static LogReporterBean createLogReporterBean() {
-		LogReporterBean logReporter = mock(LogReporterBean.class);
+	private static LoggingDestination createLogReporterBean() {
+		LoggingDestination logger = mock(LoggingDestination.class);
 		when(
-			logReporter.create(
-				any(),
+			logger.create(
 				any(),
 				any(),
 				any(),
@@ -185,12 +182,22 @@ class TaskSingleInputHelper {
 		).thenReturn(
 			createStatefulLogReporter()
 		);
-		return logReporter;
+		when(
+			logger.createWithLogFallback(
+				any(),
+				any(),
+				any(),
+				anyBoolean()
+			)
+		).thenReturn(
+			createStatefulLogReporter()
+		);
+		return logger;
 	}
 	
 	
-	private static StatefulLogReporter createStatefulLogReporter() {
-		return mock(StatefulLogReporter.class);
+	private static StatefulMessageLogger createStatefulLogReporter() {
+		return mock(StatefulMessageLogger.class);
 	}
 	
 }

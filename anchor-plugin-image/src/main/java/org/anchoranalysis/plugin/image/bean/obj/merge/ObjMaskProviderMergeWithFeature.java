@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
@@ -52,22 +52,25 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.WrapAsUpdatable;
 import org.anchoranalysis.plugin.image.obj.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.obj.merge.priority.PrioritisedVertex;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMergeOptionalDistance {
 
 	// START BEAN PROPERTIES
 	/** Requires for any potential merge that the bounding-boxes of the two objects must intersect or touch */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean requireBBoxNeighbours = true;
 	
 	
 	/** Requires the object-masks to touch. More expensive to calculate than the requireBBoxNeighbours condition. */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean requireTouching = true;
 		 
 	/**
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private ObjectCollectionProvider objsSave;
 	// END BEAN PROPERTIES
 		
@@ -80,7 +83,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		);
 
 
-		getLogger().getLogReporter().logFormatted("There are %d input objects", objsSource.size() );
+		getLogger().messageLogger().logFormatted("There are %d input objects", objsSource.size() );
 		
 		try {
 			ObjectCollection merged = mergeMultiplex(
@@ -88,7 +91,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 				a -> mergeConnectedComponents( a, saveObjs )
 			);
 					
-			getLogger().getLogReporter().logFormatted("There are %d final objects", merged.size() );
+			getLogger().messageLogger().logFormatted("There are %d final objects", merged.size() );
 			
 			return merged;
 			
@@ -120,7 +123,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 */
 	private ObjectCollection mergeConnectedComponents( ObjectCollection objs, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
 		
-		LogReporter logger = getLogger().getLogReporter();
+		MessageLogger logger = getLogger().messageLogger();
 		
 		MergeGraph graph;
 		try {
@@ -169,9 +172,8 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 				edgeToMerge.getEdge().getOmWithFeature().getObjMask() 
 			)
 		);
-
 		
-		graph.merge(edgeToMerge,getLogger());
+		graph.merge(edgeToMerge);
 
 		return true;
 	}
@@ -208,21 +210,4 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 			new NeighbourhoodCond(requireBBoxNeighbours, requireTouching)
 		);
 	}
-	
-	public boolean isRequireBBoxNeighbours() {
-		return requireBBoxNeighbours;
-	}
-
-	public void setRequireBBoxNeighbours(boolean requireBBoxNeighbours) {
-		this.requireBBoxNeighbours = requireBBoxNeighbours;
-	}
-
-	public ObjectCollectionProvider getObjsSave() {
-		return objsSave;
-	}
-
-	public void setObjsSave(ObjectCollectionProvider objsSave) {
-		this.objsSave = objsSave;
-	}
-
 }

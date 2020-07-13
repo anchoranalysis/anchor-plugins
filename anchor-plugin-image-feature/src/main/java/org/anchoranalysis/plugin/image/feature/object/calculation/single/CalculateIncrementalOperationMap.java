@@ -32,9 +32,9 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap extends CacheableCalculationMapHash<
 	ObjectMask,
 	FeatureInputSingleObject,
@@ -56,7 +56,7 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	@Override
 	protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
 			throws FeatureCalcException {
-		Extent extent = params.getDimensionsRequired().getExtnt();
+		Extent extent = params.getDimensionsRequired().getExtent();
 
 		if (key==0) {
 			throw new FeatureCalcException("Key must be > 0");
@@ -102,21 +102,4 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	}
 	
 	protected abstract ObjectMask applyOperation( ObjectMask om, Extent extent, boolean do3D ) throws OperationFailedException;
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(do3D).toHashCode();
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateIncrementalOperationMap){
-	        final CalculateIncrementalOperationMap other = (CalculateIncrementalOperationMap) obj;
-	        return new EqualsBuilder()
-	            .append(do3D, other.do3D)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
 }

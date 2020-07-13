@@ -41,8 +41,8 @@ public class ResultsVectorTestUtilities {
 	public static void assertCalc( ResultsVector rv, Object... expectedVals  ) {
 		boolean areEquals = rv.equalsPrecision(eps, expectedVals);
 		if (!areEquals) {
-			System.out.println("assertCalc failed");
-			System.out.printf("Results: \t%s%n", rv );
+			System.out.println("assertCalc failed");	// NOSONAR
+			System.out.printf("Results: \t%s%n", rv );	// NOSONAR
 		}
 		assertTrue( areEquals );
 	}

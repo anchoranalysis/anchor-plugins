@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -55,12 +55,12 @@ public class RGB extends ChnlConversionStyle {
 	
 	@Override
 	public void convert(Set<String> chnlNames, ChnlGetterForTimepoint chnlGetter, BiConsumer<String, Stack> stacksOut,
-			LogErrorReporter logErrorReporter) throws AnchorIOException {
+			Logger logger) throws AnchorIOException {
 		
 		if (!chnlNamesAreRGB(chnlNames)) {
 			// Not compatable with RGB
 			if (fallback!=null) {
-				fallback.convert(chnlNames, chnlGetter, stacksOut, logErrorReporter);
+				fallback.convert(chnlNames, chnlGetter, stacksOut, logger);
 				return;
 			} else {
 				throw new AnchorIOException("Cannot convert as its channels do not look like RGB");
@@ -69,7 +69,7 @@ public class RGB extends ChnlConversionStyle {
 		}
 		
 		try {
-			Stack stack = createRGBStack(chnlGetter, logErrorReporter.getLogReporter());
+			Stack stack = createRGBStack(chnlGetter, logger.messageLogger());
 			
 			// The name is blank as there is a single channel
 			stacksOut.accept("", stack);
@@ -78,23 +78,23 @@ public class RGB extends ChnlConversionStyle {
 		}
 	}
 	
-	private static Stack createRGBStack( ChnlGetterForTimepoint chnlGetter, LogReporter logReporter ) throws CreateException  {
+	private static Stack createRGBStack( ChnlGetterForTimepoint chnlGetter, MessageLogger logger ) throws CreateException  {
 		
 		Stack stackRearranged = new Stack();
 		
-		addChnlOrBlank("red", chnlGetter, stackRearranged, logReporter);
-		addChnlOrBlank("green", chnlGetter, stackRearranged, logReporter);
-		addChnlOrBlank("blue", chnlGetter, stackRearranged, logReporter);
+		addChnlOrBlank("red", chnlGetter, stackRearranged, logger);
+		addChnlOrBlank("green", chnlGetter, stackRearranged, logger);
+		addChnlOrBlank("blue", chnlGetter, stackRearranged, logger);
 		
 		return stackRearranged;
 	}
 	
-	private static void addChnlOrBlank( String chnlName, ChnlGetterForTimepoint chnlGetter, Stack stackRearranged, LogReporter logReporter ) throws CreateException {
+	private static void addChnlOrBlank( String chnlName, ChnlGetterForTimepoint chnlGetter, Stack stackRearranged, MessageLogger logger ) throws CreateException {
 		try {
 			if (chnlGetter.hasChnl(chnlName)) {
 				stackRearranged.addChnl( chnlGetter.getChnl(chnlName) );
 			} else {
-				logReporter.logFormatted(
+				logger.logFormatted(
 					String.format("Adding a blank channel for %s", chnlName)
 				);
 				stackRearranged.addBlankChnl();

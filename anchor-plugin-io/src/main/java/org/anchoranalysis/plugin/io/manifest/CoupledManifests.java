@@ -32,9 +32,9 @@ package org.anchoranalysis.plugin.io.manifest;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathDifferenceFromFolderPath;
+import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -56,7 +56,7 @@ public class CoupledManifests implements InputFromManager {
 	public CoupledManifests(
 		ManifestRecorder experimentManifest,
 		ManifestRecorderFile fileManifest,
-		LogErrorReporter logger
+		Logger logger
 	) throws AnchorIOException {
 		super();
 		this.experimentManifest = Optional.of(experimentManifest);
@@ -67,7 +67,7 @@ public class CoupledManifests implements InputFromManager {
 	public CoupledManifests(
 		ManifestRecorderFile fileManifest,
 		int numFoldersInDescription,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		super();
 		this.experimentManifest = Optional.empty();
@@ -75,14 +75,13 @@ public class CoupledManifests implements InputFromManager {
 		name = generateNameFromFolders(numFoldersInDescription,logger);
 	}
 	
-	private String generateName(LogErrorReporter logger) throws AnchorIOException {
+	private String generateName(Logger logger) throws AnchorIOException {
 			
 		if (experimentManifest.isPresent()) {
 			Path experimentRootFolder = getExperimentManifest().get().getRootFolder().calcPath();
-			
-			FilePathDifferenceFromFolderPath ff = new FilePathDifferenceFromFolderPath();
-			ff.init(experimentRootFolder,fileManifest.getRootPath());
-			return ff.getRemainderCombined().toString();
+
+			 PathDifferenceFromBase ff = PathDifferenceFromBase.differenceFrom(experimentRootFolder,fileManifest.getRootPath());
+			return ff.combined().toString();
 			
 		} else {
 			return generateNameFromFolders(0, logger);
@@ -91,7 +90,7 @@ public class CoupledManifests implements InputFromManager {
 	
 	private String generateNameFromFolders(
 		int numFoldersInDescription,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		LastFolders dnff = new LastFolders();
 		dnff.setNumFoldersInDescription(numFoldersInDescription);

@@ -39,26 +39,21 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbIgnoreOutsideScene;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,FeatureInputSingleObject> {
 
 	/**
 	 * Whether to calculate the outline on a MIP
 	 */
-	private boolean mip=false;
+	private final boolean mip;
 	
 	/**
 	 * Whether to suppress 3D calculations (only consider XY neighbours). Doesn't make sense if mip=TRUE, and will then be ignroed.
 	 */
-	private boolean suppress3D=false;
-			
-	public CalculateOutlineNumberVoxelFaces(boolean mip, boolean suppress3D) {
-		super();
-		this.mip = mip;
-		this.suppress3D = suppress3D;
-	}
+	private final boolean suppress3D;
 	
 	private static int calcSurfaceSize( ObjectMask objMask, ImageDimensions dim, boolean mip, boolean suppress3D ) throws OperationFailedException {
 		
@@ -66,17 +61,16 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().cornerMin() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, objMask.getBinaryValuesByte(), true, dim.getExtent(), objMask.getBoundingBox().cornerMin() );
 			
 			VoxelBox<ByteBuffer> mipVb = objMask.getVoxelBox().maxIntensityProj();
 			return ApplyKernel.applyForCount(kernel, mipVb );
 			
 		} else {
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, objMask.getBinaryValuesByte(), true, dim.getExtnt(), objMask.getBoundingBox().cornerMin() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, objMask.getBinaryValuesByte(), true, dim.getExtent(), objMask.getBoundingBox().cornerMin() );
 			return ApplyKernel.applyForCount(kernel, objMask.getVoxelBox() );
 		}
 	}
-	
 
 	@Override
 	protected Integer execute(FeatureInputSingleObject params)	throws FeatureCalcException {
@@ -86,23 +80,4 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 			throw new FeatureCalcException(e);
 		}
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof CalculateOutlineNumberVoxelFaces){
-	        final CalculateOutlineNumberVoxelFaces other = (CalculateOutlineNumberVoxelFaces) obj;
-	        return new EqualsBuilder()
-	            .append(mip, other.mip)
-	            .append(suppress3D, other.suppress3D)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(mip).append(suppress3D).toHashCode();
-	}
-	
 }

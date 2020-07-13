@@ -1,6 +1,6 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 
 /*
@@ -35,10 +35,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=true)
 public class CenterSlice extends CenterSliceBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsForBBox(PxlMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter) {
+	protected VoxelStatistics createStatisticsForBBox(VoxelizedMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter) {
 		
 		if (zCenter<0 || zCenter>=bbox.extent().getZ()) {
 			return new VoxelStatisticsCombined();

@@ -34,14 +34,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.bean.chnl.converter.ChnlConverterBean;
+import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.chnl.ChnlFilter;
+import org.anchoranalysis.image.io.bean.channel.ChnlFilter;
 import org.anchoranalysis.image.io.chnl.ChnlGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -84,7 +84,7 @@ public class FormatConverterTask extends RasterTask {
 	private ChnlFilter chnlFilter = null;
 	
 	@BeanField @OptionalBean
-	private ChnlConverterBean chnlConverter = null;
+	private ConvertChannelTo chnlConverter = null;
 	// END BEAN PROPERTIES
 
 	private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
@@ -151,13 +151,13 @@ public class FormatConverterTask extends RasterTask {
 		}
 	}
 	
-	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int numSeries, int sizeT, ChnlGetter chnlGetter, LogErrorReporter logErrorReporter ) throws AnchorIOException {
+	private void convertEachTimepoint( int seriesIndex, Set<String> chnlNames, int numSeries, int sizeT, ChnlGetter chnlGetter, Logger logger ) throws AnchorIOException {
 		
 		for( int t=0; t<sizeT; t++) {
 		
 			CalcOutputName calcOutputName = new CalcOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
 			
-			logErrorReporter.getLogReporter().logFormatted("Starting time-point: %d", t);
+			logger.messageLogger().logFormatted("Starting time-point: %d", t);
 			
 			ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
 			
@@ -165,10 +165,10 @@ public class FormatConverterTask extends RasterTask {
 				chnlNames,
 				getterForTimepoint,
 				(name,stack) -> addStackToOutput(name, stack, calcOutputName),
-				logErrorReporter
+				logger
 			);
 			
-			logErrorReporter.getLogReporter().logFormatted("Ending time-point: %d", t);
+			logger.messageLogger().logFormatted("Ending time-point: %d", t);
 		}
 		
 	}
@@ -223,11 +223,11 @@ public class FormatConverterTask extends RasterTask {
 		this.chnlFilter = chnlFilter;
 	}
 
-	public ChnlConverterBean getChnlConverter() {
+	public ConvertChannelTo getChnlConverter() {
 		return chnlConverter;
 	}
 
-	public void setChnlConverter(ChnlConverterBean chnlConverter) {
+	public void setChnlConverter(ConvertChannelTo chnlConverter) {
 		this.chnlConverter = chnlConverter;
 	}
 

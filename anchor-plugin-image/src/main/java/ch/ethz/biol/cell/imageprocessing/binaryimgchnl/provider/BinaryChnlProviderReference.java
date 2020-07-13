@@ -33,25 +33,25 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class BinaryChnlProviderReference extends BinaryChnlProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id = "";
 	
 	/** If true the channel is duplicated after it is retrieved, to prevent overwriting exisiting data
 	 *  This is a shortcut to avoid embedding beans in a ChnlProviderDuplicate
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean duplicate=false;
 	// END BEAN PROPERTIES
 	
 	private BinaryChnl bi;
-
-	
-	public BinaryChnlProviderReference() {
-		
-	}
 	
 	public BinaryChnlProviderReference(String id) {
 		super();
@@ -60,7 +60,7 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 
 	@Override
 	public BinaryChnl create() throws CreateException {
-		assert( this.isHasBeenInit() );
+		assert( this.isInitialized() );
 		if (bi==null) {
 			bi = createChnl();
 		}
@@ -69,7 +69,7 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 	
 	private BinaryChnl createChnl() throws CreateException {
 		try {
-			BinaryChnl chnl = getSharedObjects().getBinaryImageCollection().getException(id);
+			BinaryChnl chnl = getInitializationParameters().getBinaryImageCollection().getException(id);
 			
 			if (duplicate) {
 				return chnl.duplicate();
@@ -79,21 +79,5 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 		} catch (NamedProviderGetException e) {
 			throw new CreateException(e);
 		}	
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public boolean isDuplicate() {
-		return duplicate;
-	}
-
-	public void setDuplicate(boolean duplicate) {
-		this.duplicate = duplicate;
 	}
 }

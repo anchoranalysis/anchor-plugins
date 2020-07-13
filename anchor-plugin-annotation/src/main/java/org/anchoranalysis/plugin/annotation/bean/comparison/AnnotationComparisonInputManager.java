@@ -135,8 +135,8 @@ public class AnnotationComparisonInputManager<T extends InputFromManager> extend
 		return FunctionalUtilities.mapListWithProgress(
 			listInputObjects,
 			progressReporter,
-			input -> new AnnotationComparisonInput<>(
-				input,
+			inputObject -> new AnnotationComparisonInput<>(
+				inputObject,
 				Pair.of(comparerLeft,comparerRight),
 				Pair.of(nameLeft,nameRight),
 				rasterReader

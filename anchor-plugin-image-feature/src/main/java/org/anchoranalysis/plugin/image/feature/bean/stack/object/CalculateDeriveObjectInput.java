@@ -35,17 +35,13 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 public class CalculateDeriveObjectInput extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
 
-	private int nrgIndex;
-		
-	public CalculateDeriveObjectInput(int nrgIndex) {
-		super();
-		this.nrgIndex = nrgIndex;
-	}
+	private final int nrgIndex;
 
 	@Override
 	protected FeatureInputSingleObject execute(FeatureInputStack input) throws FeatureCalcException {
@@ -63,23 +59,5 @@ public class CalculateDeriveObjectInput extends FeatureCalculation<FeatureInputS
 		BinaryChnl binary = new BinaryChnl(chnl, BinaryValues.getDefault());
 		
 		return new ObjectMask( binary.binaryVoxelBox() );
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		CalculateDeriveObjectInput rhs = (CalculateDeriveObjectInput) obj;
-		return new EqualsBuilder()
-             .append(nrgIndex, rhs.nrgIndex)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
 	}
 }

@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.error.BeanStrangeException;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
@@ -38,7 +37,7 @@ import org.anchoranalysis.bean.xml.factory.BeanPathUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
-import org.anchoranalysis.experiment.bean.logreporter.LogReporterBean;
+import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -67,16 +66,16 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 	}
 	
 	/** First method called ONCE after the constructor */
-	public void firstLocalise( Path beanLocalPath, String logReporterPathExperiment, String logReporterPathTask, String output ) throws BeanMisconfiguredException {
+	public void firstLocalise( Path beanLocalPath, String loggerPathExperiment, String loggerPathTask, String output ) {
 		
 		this.beanLocalPath = beanLocalPath;
 		
 		// We create these other beans, before we check the configuration. This is a bit hacky
-		delegate.setLogReporterExperiment(
-			extractLogReporterBean(logReporterPathExperiment)
+		delegate.setLogExperiment(
+			extractLogReporterBean(loggerPathExperiment)
 		);
-		delegate.setLogReporterTask(
-			extractLogReporterBean(logReporterPathTask)
+		delegate.setLogTask(
+			extractLogReporterBean(loggerPathTask)
 		);
 
 		delegate.setOutput(
@@ -129,14 +128,14 @@ class RepeatedExperimentFromXml<T extends InputFromManager,S> {
 		delegate.setOutput(output);
 	}
 		
-	public LogReporterBean extractLogReporterBean( String relativePath ) {
+	public LoggingDestination extractLogReporterBean( String relativePath ) {
 		return extractBean(relativePath, "LogReporterBean");
 	}
 	
 	private <U> U extractBean(String relativePath, String friendlyName) {
 		Path path = getCombinedPath(relativePath);
 		try {
-			U bean = BeanXmlLoader.loadBean(path);
+			U bean = BeanXmlLoader.loadBean(path);	// NOSONAR
 			return bean;
 		} catch (BeanXmlException e) {
 			throw new BeanStrangeException(

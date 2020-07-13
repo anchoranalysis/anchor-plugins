@@ -33,13 +33,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputGenericDescriptor;
-import org.anchoranalysis.image.feature.bean.FeatureShared;
-import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Retrieves a parameter from a collection in shared-objects.
@@ -51,22 +52,25 @@ import org.anchoranalysis.image.feature.init.FeatureInitParamsShared;
  *
  * @param <T> feature-input-type
  */
-public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T> {
+public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String collectionID = "";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String key = "";
 	// END BEAN PROPERTIES
 
 	private double val;
 	
 	@Override
-	public void beforeCalcCast(FeatureInitParamsShared params) throws InitException {
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
+		
+		ImageInitParams imageInit = new ImageInitParams( paramsInit.sharedObjectsRequired() );
 		try {
-			KeyValueParams kpv = params.getSharedObjects().getParams()
+			KeyValueParams kpv = imageInit.getParams()
 				.getNamedKeyValueParamsCollection()
 				.getException(collectionID);
 			this.val = kpv.getPropertyAsDouble(key);
@@ -79,26 +83,5 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureShared<T
 	@Override
 	public double calc(SessionInput<T> input) throws FeatureCalcException {
 		return val;
-	}
-
-	public String getCollectionID() {
-		return collectionID;
-	}
-
-	public void setCollectionID(String collectionID) {
-		this.collectionID = collectionID;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-	
-	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputGenericDescriptor.INSTANCE;
 	}
 }

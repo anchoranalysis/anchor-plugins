@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 
 /*
  * #%L
@@ -40,7 +40,7 @@ public final class Size extends FeatureSingleMemoRegion {
 	@Override
 	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
 		
-		PxlMark pm = input.get().getPxlPartMemo().doOperation();
+		VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
 		
 		VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, getRegionID());
 				

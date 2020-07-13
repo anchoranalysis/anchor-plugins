@@ -28,23 +28,22 @@ package org.anchoranalysis.io.manifest.reportfeature;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
 
 public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
 
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
+	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger)
 			throws OperationFailedException {
 
 		Path executionTimePath = obj.getRootPath().resolve( getFileName() + ".txt" );
 		
-		if (Files.exists(executionTimePath)) {
+		if (executionTimePath.toFile().exists()) {
 			String execTime;
 			try {
 				execTime = FinderFileAsText.readFile(executionTimePath);

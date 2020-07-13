@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureExce
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -43,22 +43,21 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance threshold;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkDistance distance;
 	// END BEAN PROPERTIES
 	
-	public AddCriteriaDistanceTo() {
-		
-	}
-	
 	@Override
-	public boolean includeMarks(PxlMarkMemo mark1, PxlMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 		double d;
 		try {
 			d = distance.distance(mark1.getMark(), mark2.getMark());
@@ -72,12 +71,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 				mark1.getMark().centerPoint(),
 				mark2.getMark().centerPoint()
 			);
-			
-			if (d < thresholdVal) {
-				return true;
-			} else {
-				return false;
-			}
+			return d < thresholdVal;
 			
 		} catch (OperationFailedException e) {
 			throw new IncludeMarksFailureException(e);
@@ -85,41 +79,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	}
 
 	@Override
-	public boolean paramsEquals(Object other) {
-		
-		if (!(other instanceof AddCriteriaDistanceTo)) {
-			return false;
-		}
-		
-		AddCriteriaDistanceTo obj = (AddCriteriaDistanceTo) other;
-		
-		if (threshold!=obj.threshold) {
-			return false;
-		}
-		
-		return true;
-	}
-
-	public MarkDistance getDistance() {
-		return distance;
-	}
-
-	public void setDistance(MarkDistance distance) {
-		this.distance = distance;
-	}
-
-	public UnitValueDistance getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(UnitValueDistance threshold) {
-		this.threshold = threshold;
-	}
-
-	@Override
 	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
 		return Optional.empty();
 	}
-
-	
 }

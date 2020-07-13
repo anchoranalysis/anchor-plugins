@@ -50,7 +50,7 @@ public class ReduceRatioFirstAndSecond extends FeatureListProviderAggregatePair 
 	) {
 		return createReducedFeature(
 			ratioTwoFeatures(first, second),
-			ratioTwoFeatures(second, first)
+			ratioTwoFeatures(second, first)		// NOSONAR
 		);
 	}
 	

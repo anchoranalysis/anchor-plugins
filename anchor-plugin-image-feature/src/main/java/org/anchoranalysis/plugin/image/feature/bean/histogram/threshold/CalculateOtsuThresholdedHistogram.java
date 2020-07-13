@@ -29,32 +29,26 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 import org.anchoranalysis.bean.init.params.NullInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateOtsuThresholdedHistogram extends FeatureCalculation<Histogram, FeatureInputHistogram> {
 
-	private CalculateLevel calculateLevel;
-	
-	private LogErrorReporter logger;
-	
-	public CalculateOtsuThresholdedHistogram(CalculateLevel calculateLevel, LogErrorReporter logger ) {
-		super();
-		this.calculateLevel = calculateLevel;
-		this.logger = logger;
-	}
+	private final CalculateLevel calculateLevel;
+	private final Logger logger;
 
 	@Override
 	protected Histogram execute(FeatureInputHistogram params) throws FeatureCalcException {
 		try {
-			if (!calculateLevel.isHasBeenInit()) {
+			if (!calculateLevel.isInitialized()) {
 				calculateLevel.init( NullInitParams.instance(), logger);
 			}
 			return HistogramThresholder.withCalculateLevel(
@@ -64,24 +58,5 @@ class CalculateOtsuThresholdedHistogram extends FeatureCalculation<Histogram, Fe
 		} catch (OperationFailedException | InitException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof CalculateOtsuThresholdedHistogram){
-	    	final CalculateOtsuThresholdedHistogram other = (CalculateOtsuThresholdedHistogram) obj;
-	        return new EqualsBuilder()
-	            .append(calculateLevel, other.calculateLevel)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(calculateLevel)
-			.toHashCode();
 	}
 }

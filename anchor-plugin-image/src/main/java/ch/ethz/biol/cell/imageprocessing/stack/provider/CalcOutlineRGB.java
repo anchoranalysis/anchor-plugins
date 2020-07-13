@@ -65,7 +65,7 @@ class CalcOutlineRGB {
 		DisplayStack background,
 		Channel blueToAssign,
 		boolean createShort	
-	) throws CreateException, InitException {
+	) throws CreateException {
 		
 		if (background.getNumChnl()==3) {
 			return apply(
@@ -96,7 +96,7 @@ class CalcOutlineRGB {
 		Channel backgroundBlue,
 		Channel blueToAssign,
 		boolean createShort
-	) throws CreateException, InitException {
+	) throws CreateException {
 
 		// Duplicate background and blue
 		blueToAssign = blueToAssign.duplicate();
@@ -120,23 +120,19 @@ class CalcOutlineRGB {
 		);
 	}
 	
-	private static Channel imposeOutlineOnChnl(
-		BinaryChnl outline,
-		Channel chnl,
-		VoxelDataType outputType
-	) throws CreateException {
+	private static Channel imposeOutlineOnChnl(BinaryChnl outline, Channel chnl,VoxelDataType outputType) {
 				
-		double multFact = (double) outputType.maxValue() / outline.getChnl().getVoxelDataType().maxValue();
+		double multFact = (double) outputType.maxValue() / outline.getChannel().getVoxelDataType().maxValue();
 		
 		return ChnlProviderIfPixelZero.mergeViaZeroCheck(
-			outline.getChnl(),
+			outline.getChannel(),
 			chnl,
 			outputType,
 			multFact
 		);
 	}
 	
-	private static void zeroPixels( BinaryChnl outline, Channel[] chnlArr ) throws CreateException {
+	private static void zeroPixels( BinaryChnl outline, Channel[] chnlArr ) {
 		ObjectMask omOutline = CreateFromEntireChnlFactory.createObjMask(outline);
 		for( Channel chnl : chnlArr ) {
 			chnl.getVoxelBox().any().setPixelsCheckMask(omOutline, 0);

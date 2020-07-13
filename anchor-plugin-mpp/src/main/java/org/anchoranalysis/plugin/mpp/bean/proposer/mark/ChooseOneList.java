@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 // Chooses one from a list
 public class ChooseOneList extends MarkProposerFromList {
@@ -42,7 +42,7 @@ public class ChooseOneList extends MarkProposerFromList {
 	private int lastIndex = -1;
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList)
 			throws ProposalAbnormalFailureException {
 		
 		int index = (int) (context.getRandomNumberGenerator().nextDouble() * markProposerList.size());

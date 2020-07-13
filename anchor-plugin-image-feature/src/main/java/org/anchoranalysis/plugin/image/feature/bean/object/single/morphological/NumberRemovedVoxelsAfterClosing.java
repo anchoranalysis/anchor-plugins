@@ -66,7 +66,7 @@ public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
 			new CalculateNumVoxels(false)
 		);
 		
-		return omClosing.numVoxelsOn() - numVoxels;
+		return omClosing.numberVoxelsOn() - numVoxels;
 	}
 
 	public int getIterations() {

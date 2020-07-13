@@ -48,7 +48,6 @@ class SplitString {
 	}
 	
 	public String combineFirstElements( int maxNumElements, String combineSeperator ) {
-		
 		StringBuilder sb = new StringBuilder();
 		for( int i=0; i<maxNumElements; i++) {
 			
@@ -64,8 +63,6 @@ class SplitString {
 			sb.append( splitParts[i] );
 			
 		}
-		//System.out.println("a " + sb.toString() + " a" );
-		
 		return sb.toString();
 	}
 }

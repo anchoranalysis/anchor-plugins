@@ -42,7 +42,7 @@ public class BinaryChnlProviderIfStackExists extends BinaryChnlProviderElseBase 
 	
 	@Override
 	protected boolean condition(BinaryChnl chnl) throws CreateException {
-		return getSharedObjects().getChnlCollection().keys().contains(stackID);
+		return getInitializationParameters().getChnlCollection().keys().contains(stackID);
 	}
 	
 	public String getStackID() {

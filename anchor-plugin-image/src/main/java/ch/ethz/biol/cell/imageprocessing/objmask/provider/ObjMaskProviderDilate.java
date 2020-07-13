@@ -59,7 +59,7 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	private ObjectMask dilate(ObjectMask om, Optional<ImageDimensions> dim) throws CreateException {
 		ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
 			om,
-			dim.map(ImageDimensions::getExtnt),
+			dim.map(ImageDimensions::getExtent),
 			do3D,
 			iterations,
 			bigNghb

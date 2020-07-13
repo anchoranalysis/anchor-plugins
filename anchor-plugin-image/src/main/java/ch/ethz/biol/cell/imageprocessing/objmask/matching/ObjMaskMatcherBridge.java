@@ -34,6 +34,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Matches to another object, and then uses that object to bridge to another
@@ -45,11 +49,11 @@ public class ObjMaskMatcherBridge extends ObjectMatcher {
 	
 	// START BEAN PROPERTIES
 	/** Used to match each input-object to an intermediary-object */
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectMatcher bridgeMatcher;
 
 	/** Used to match each intermediary-object to a final-object*/
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectMatcher objMaskMatcher;
 	// END BEAN PROPERTIES
 
@@ -58,37 +62,26 @@ public class ObjMaskMatcherBridge extends ObjectMatcher {
 			throws OperationFailedException {
 		
 		List<MatchedObject> bridgeMatches = bridgeMatcher.findMatch(sourceObjs);
-		
-		ObjectCollection bridgeObjs = new ObjectCollection();
-		for( MatchedObject owm : bridgeMatches ) {
 			
-			if (owm.getMatches().size()==0) {
-				throw new OperationFailedException("At least one object has no match. One is needed");
-			}
-			
-			if (owm.getMatches().size()>1) {
-				throw new OperationFailedException("At least one object has multiple matches. Only one is allowed.");
-			}
-			
-			bridgeObjs.addAll(owm.getMatches());
-		}
+		ObjectCollection bridgeObjs = ObjectCollectionFactory.flatMapFrom(
+			bridgeMatches.stream().map(MatchedObject::getMatches),
+			OperationFailedException.class,
+			ObjMaskMatcherBridge::checkExactlyOneMatch
+		);
 		
 		return objMaskMatcher.findMatch(bridgeObjs);
 	}
 	
-	public ObjectMatcher getBridgeMatcher() {
-		return bridgeMatcher;
-	}
-
-	public void setBridgeMatcher(ObjectMatcher bridgeMatcher) {
-		this.bridgeMatcher = bridgeMatcher;
-	}
-
-	public ObjectMatcher getObjMaskMatcher() {
-		return objMaskMatcher;
-	}
-
-	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
-		this.objMaskMatcher = objMaskMatcher;
+	private static ObjectCollection checkExactlyOneMatch(ObjectCollection matches) throws OperationFailedException {
+		
+		if (matches.size()==0) {
+			throw new OperationFailedException("At least one object has no match. One is needed");
+		}
+		
+		if (matches.size()>1) {
+			throw new OperationFailedException("At least one object has multiple matches. Only one is allowed.");
+		}
+		
+		return matches;
 	}
 }

@@ -93,26 +93,23 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
 		}
 	}
 	
-	private Channel montageChnl( Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) throws OperationFailedException {
-		try {
-			ImagePlus imp = IJWrap.createImagePlus( in );
+	private Channel montageChnl( Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc ) {
 
-			MontageMaker mm = new MontageMaker();
-			ImagePlus res = mm.makeMontage2(
-				imp,
-				colsCalc,
-				rowsCalc,
-				scale,
-				firstSliceCalc,
-				lastSliceCalc,
-				1,
-				borderWidth,
-				label
-			);
-			return IJWrap.chnlFromImagePlus(res, in.getDimensions().getRes());
-		} catch (CreateException e) {
-			throw new OperationFailedException("Cannot create image-plus", e);
-		}
+		ImagePlus imp = IJWrap.createImagePlus( in );
+
+		MontageMaker mm = new MontageMaker();
+		ImagePlus res = mm.makeMontage2(
+			imp,
+			colsCalc,
+			rowsCalc,
+			scale,
+			firstSliceCalc,
+			lastSliceCalc,
+			1,
+			borderWidth,
+			label
+		);
+		return IJWrap.chnlFromImagePlus(res, in.getDimensions().getRes());
 	}
 	
 	private int calcNumColumns(int totalNumSlices) {

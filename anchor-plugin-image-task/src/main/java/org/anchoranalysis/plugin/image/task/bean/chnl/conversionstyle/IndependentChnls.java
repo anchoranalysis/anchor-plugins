@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -48,7 +48,7 @@ public class IndependentChnls extends ChnlConversionStyle {
 		Set<String> chnlNames,
 		ChnlGetterForTimepoint chnlGetter,
 		BiConsumer<String, Stack> stacksOut,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws AnchorIOException {
 		
 		for( String key : chnlNames ) {
@@ -61,8 +61,7 @@ public class IndependentChnls extends ChnlConversionStyle {
 				);
 			} catch (GetOperationFailedException e) {
 				if (ignoreMissingChnl) {
-					logErrorReporter.getLogReporter().logFormatted("Cannot open channel '%s'. Ignoring.", key);
-					continue;
+					logger.messageLogger().logFormatted("Cannot open channel '%s'. Ignoring.", key);
 				} else {
 					throw new AnchorIOException( String.format("Cannot open channel '%s'.", key), e );
 				}

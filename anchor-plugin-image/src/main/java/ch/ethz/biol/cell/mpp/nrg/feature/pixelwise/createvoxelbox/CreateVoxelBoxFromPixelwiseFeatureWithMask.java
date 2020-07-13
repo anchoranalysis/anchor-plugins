@@ -69,7 +69,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		try {
 			init( pixelScore, objMask );
 			
-			Extent e = listVoxelBox.getFirstExtnt();
+			Extent e = listVoxelBox.getFirstExtent();
 			
 			// We make our index buffer
 			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
@@ -114,7 +114,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		return out;		
 	}
 
-	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore ) throws FeatureCalcException, InitException {
+	private void setPixelsWithoutMask( VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore ) throws FeatureCalcException {
 		
 		Extent e = vbOut.extent();
 		
@@ -135,7 +135,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 
-	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjectMask objMask, PixelScore pixelScore ) throws FeatureCalcException, InitException {
+	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjectMask objMask, PixelScore pixelScore ) throws FeatureCalcException {
 		
 		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
 		Extent e = vbOut.extent();

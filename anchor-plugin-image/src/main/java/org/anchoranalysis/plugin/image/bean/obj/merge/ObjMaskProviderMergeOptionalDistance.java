@@ -34,6 +34,9 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.plugin.image.obj.merge.condition.BeforeCondition;
 import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * An ObjMaskProviderMergeBase that optionally imposes a maximum-distance requirement between objects that are possibly merged
  *   
@@ -43,31 +46,15 @@ import org.anchoranalysis.plugin.image.obj.merge.condition.DistanceCondition;
 public abstract class ObjMaskProviderMergeOptionalDistance extends ObjMaskProviderMergeBase {
 
 	// START BEAN FIELDS
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	
 	/** An optional maximum distance */
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private UnitValueDistance maxDist; 
 	// END BEAN FIELDS
 	
 	protected BeforeCondition maybeDistanceCondition() {
-		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().getLogReporter() );
-	}
-
-	public void setMaxDist(UnitValueDistance maxDist) {
-		this.maxDist = maxDist;
-	}
-
-	public UnitValueDistance getMaxDist() {
-		return maxDist;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
+		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().messageLogger() );
 	}
 }

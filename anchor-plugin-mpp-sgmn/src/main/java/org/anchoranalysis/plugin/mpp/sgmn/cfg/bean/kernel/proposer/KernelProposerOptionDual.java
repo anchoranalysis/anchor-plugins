@@ -35,73 +35,37 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposerOption;
 import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class KernelProposerOptionDual<T> extends KernelProposerOption<T> {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private KernelPosNeg<T> kernelPositive = null;
+	@BeanField @Getter @Setter
+	private KernelPosNeg<T> kernelPositive;
 	
-	@BeanField
-	private KernelPosNeg<T> kernelNegative = null;
+	@BeanField @Getter @Setter
+	private KernelPosNeg<T> kernelNegative;
 	
-	@BeanField @NonNegative
-	private double weightPos = -1;
+	@BeanField @NonNegative @Getter @Setter
+	private double weightPositive = -1;
 	
-	@BeanField @NonNegative
-	private double weightNeg = -1;
+	@BeanField @NonNegative @Getter @Setter
+	private double weightNegative = -1;
 	// END BEAN PROPERTIES
-	
-	public KernelProposerOptionDual() {
 		
-	}
-	
-	@Override
-	public double getWeightPositive() {
-		return weightPos;
-	}
-
-	public void setWeightPositive(double weightPos) {
-		this.weightPos = weightPos;
-	}
-
-	@Override
-	public double getWeightNegative() {
-		return weightNeg;
-	}
-
-	public void setWeightNegative(double weightNeg) {
-		this.weightNeg = weightNeg;
-	}
-	
-	
 	@Override
 	// Add weighted kernel factories to a list, and returns the total weight
 	public double addWeightedKernelFactories( List<WeightedKernel<T>> lst ) {
 		
-		kernelPositive.setProbPos(weightPos);
-		kernelPositive.setProbNeg(weightNeg);
+		kernelPositive.setProbPos(weightPositive);
+		kernelPositive.setProbNeg(weightNegative);
 		
-		kernelNegative.setProbPos(weightNeg);
-		kernelNegative.setProbNeg(weightPos);
+		kernelNegative.setProbPos(weightNegative);
+		kernelNegative.setProbNeg(weightPositive);
 		
-		lst.add( new WeightedKernel<T>( kernelPositive, weightPos ));
-		lst.add( new WeightedKernel<T>( kernelNegative, weightNeg ));
+		lst.add( new WeightedKernel<T>( kernelPositive, weightPositive ));
+		lst.add( new WeightedKernel<T>( kernelNegative, weightNegative ));
 		return getWeightPositive() + getWeightNegative();	
-	}
-
-	public KernelPosNeg<T> getKernelPositive() {
-		return kernelPositive;
-	}
-
-	public void setKernelPositive(KernelPosNeg<T> kernelPositive) {
-		this.kernelPositive = kernelPositive;
-	}
-
-	public KernelPosNeg<T> getKernelNegative() {
-		return kernelNegative;
-	}
-
-	public void setKernelNegative(KernelPosNeg<T> kernelNegative) {
-		this.kernelNegative = kernelNegative;
 	}
 }

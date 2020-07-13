@@ -32,17 +32,14 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjects, FeatureInputSingleObject> {
 
-	private BinaryChnl chnl;
-		
-	public CalculatePairInput(BinaryChnl chnl) {
-		super();
-		this.chnl = chnl;
-	}
-
+	private final BinaryChnl chnl;
+	
 	@Override
 	protected FeatureInputPairObjects execute(FeatureInputSingleObject input) throws FeatureCalcException {
 
@@ -55,15 +52,5 @@ class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjects, Fea
 			objFromBinary,
 			input.getNrgStackOptional()
 		);
-	}
-	
-	@Override
-	public boolean equals(Object other) {
-		return other instanceof CalculatePairInput;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().toHashCode();
 	}
 }

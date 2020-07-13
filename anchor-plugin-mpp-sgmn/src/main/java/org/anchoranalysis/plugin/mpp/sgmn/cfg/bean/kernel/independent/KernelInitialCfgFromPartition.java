@@ -46,22 +46,20 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ExtractWei
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.PartitionedCfg;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPartition> {
 	
 	// START BEAN LIST
-	@BeanField
+	@BeanField @Getter @Setter
 	private CfgProposer cfgProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ExtractWeightFromMark extractWeight = new ConstantWeight();
 	// END BEAN LIST
 	
 	private Cfg lastCfg;
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return cfgProposer.isCompatibleWith(testMark);
-	}
 
 	@Override
 	public Optional<CfgFromPartition> makeProposal(Optional<CfgFromPartition> exst, KernelCalcContext context ) throws KernelCalcNRGException {
@@ -83,8 +81,13 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 	}
 
 	@Override
-	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+	public double calcAccptProb(
+		int exstSize,
+		int propSize,
+		double poissonIntensity,
+		ImageDimensions sceneSize,
+		double densityRatio
+	) {
 		// We always accept
 		return 1;
 	}
@@ -96,30 +99,19 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 
 	@Override
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, CfgFromPartition exst, CfgFromPartition accptd) throws UpdateMarkSetException {
-
+		// NOTHING TO DO
 	}
 
 	@Override
 	public int[] changedMarkIDArray() {
 		return this.lastCfg.createIdArr();
 	}
-
-	public CfgProposer getCfgProposer() {
-		return cfgProposer;
+	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return cfgProposer.isCompatibleWith(testMark);
 	}
-
-	public void setCfgProposer(CfgProposer cfgProposer) {
-		this.cfgProposer = cfgProposer;
-	}
-
-	public ExtractWeightFromMark getExtractWeight() {
-		return extractWeight;
-	}
-
-	public void setExtractWeight(ExtractWeightFromMark extractWeight) {
-		this.extractWeight = extractWeight;
-	}
-		
+	
 	private PartitionedCfg createPartition( Cfg cfg ) {
 		return new PartitionedCfg(
 			cfg,

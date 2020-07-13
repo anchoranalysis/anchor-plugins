@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.obj.merge.priority;
 
 import java.util.Optional;
 
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.relation.RelationToValue;
@@ -37,6 +36,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
 
+import lombok.AllArgsConstructor;
+
 
 /**
  * <p>Calculates pair-feature on each potential merge, and this value determines priority.</p>.
@@ -44,23 +45,13 @@ import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor
 public class AssignPriorityFromPair extends AssignPriority {
 
-	private double threshold;
-	private RelationToValue relation;
-	private FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator;
-			
-	public AssignPriorityFromPair(
-		FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator,
-		double threshold,
-		RelationToValue relation
-	) throws InitException {
-		super();
-		this.threshold = threshold;
-		this.relation = relation;
-		this.featureCalculator = featureCalculator;
-	}
-
+	private final FeatureCalculatorSingle<FeatureInputPairObjects> featureCalculator;
+	private final double threshold;
+	private final RelationToValue relation;
+	
 	@Override
 	public PrioritisedVertex assignPriorityToEdge(
 		ObjVertex src,

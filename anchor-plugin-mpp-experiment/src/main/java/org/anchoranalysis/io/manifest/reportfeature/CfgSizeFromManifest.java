@@ -31,8 +31,8 @@ import java.io.IOException;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.LogErrorReporter;
-import org.anchoranalysis.experiment.log.ConsoleLogReporter;
+import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
@@ -40,12 +40,12 @@ import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
 public class CfgSizeFromManifest extends ReportFeatureForManifest {
 
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger)
+	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger)
 			throws OperationFailedException {
 
 		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<>(
 			"cfg",
-			new ErrorReporterIntoLog(new ConsoleLogReporter())
+			new ErrorReporterIntoLog(new ConsoleMessageLogger())
 		);
 		
 		ManifestRecorder manifest = obj.doOperation();

@@ -7,7 +7,7 @@ import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -55,7 +55,7 @@ public class DistTo extends MarkProposerOne {
 	// END BEAN PARAMETERS
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
 			throws ProposalAbnormalFailureException {
 	
 		ErrorNode errorNode = context.getErrorNode().add("MarkProposerDistTo");

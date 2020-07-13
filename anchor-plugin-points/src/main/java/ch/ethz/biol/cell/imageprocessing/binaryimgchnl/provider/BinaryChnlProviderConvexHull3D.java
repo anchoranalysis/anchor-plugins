@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
@@ -46,7 +46,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
 	@Override
 	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
-		LogReporter logger = getLogger().getLogReporter();
+		MessageLogger logger = getLogger().messageLogger();
 		List<Point3d> extPnts = pointsFromChnl(outline);
 		
 		Point3d[] pntArr = extPnts.toArray( new Point3d[]{} );
@@ -71,7 +71,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 		}
 				
 		// we write the vertices to the outline
-		Channel out = outline.getChnl();
+		Channel out = outline.getChannel();
 		VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
 				
 		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
@@ -84,7 +84,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 	}
 
 	// We use it here as it uses the quickHull3D Point3d primitive
-	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) throws CreateException {
+	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) {
 		
 		List<Point3d> listOut = new ArrayList<>();
 		

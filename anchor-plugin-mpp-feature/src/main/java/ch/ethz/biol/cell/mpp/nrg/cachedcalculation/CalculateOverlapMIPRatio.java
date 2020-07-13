@@ -1,8 +1,9 @@
 package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
+
+import lombok.EqualsAndHashCode;
+
 
 /*
  * #%L
@@ -29,47 +30,21 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
  * THE SOFTWARE.
  * #L%
  */
-
-
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-public class OverlapCalculation extends FeatureCalculation<Double,FeatureInputPairMemo> {
-
-	private int regionID;
+@EqualsAndHashCode(callSuper=true)
+public class CalculateOverlapMIPRatio extends CalculateOverlapMIPBase {
 	
 	// Constructor
-	public OverlapCalculation( int regionID ) {
-		super();
-		this.regionID = regionID;
+	public CalculateOverlapMIPRatio( int regionID ) {
+		super(regionID);
 	}
 
 	@Override
-	protected Double execute( FeatureInputPairMemo params ) {
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
+	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
+		if (overlap==0) {
+			return 0.0;
+		}
 		
-		assert( mark1 != null );
-		assert( mark2 != null );
-		
-		return OverlapUtilities.overlapWith(mark1,mark2,regionID);
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(regionID).toHashCode();
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof OverlapCalculation){
-	        final OverlapCalculation other = (OverlapCalculation) obj;
-	        return new EqualsBuilder()
-	            .append(regionID, other.regionID)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
+		int minArea = pair.minArea();
+		return overlap / minArea;
 	}
 }

@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -48,19 +47,19 @@ import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CfgComparer extends Comparer {
 
-
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePathGenerator filePathGenerator;
 	// END BEAN PROPERTIES
 	
-	private RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex( GlobalRegionIdentifiers.SUBMARK_INSIDE );
-	
-	public CfgComparer() {
-		super();
-	}
+	private static final RegionMembershipWithFlags REGION_MEMBERSHIP = RegionMapSingleton.instance().membershipWithFlagsForIndex(
+		GlobalRegionIdentifiers.SUBMARK_INSIDE
+	);
 
 	@Override
 	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
@@ -72,7 +71,7 @@ public class CfgComparer extends Comparer {
 			throw new CreateException(e1);
 		}
 		
-		if (!Files.exists( filePath )) {
+		if (!filePath.toFile().exists()) {
 			return new NotFound<>(filePath, "No cfg exists at path");	// There's nothing to annotate against
 		}
 		
@@ -86,19 +85,10 @@ public class CfgComparer extends Comparer {
 		
 		ObjectCollection mask = cfg.calcMask(
 			dim,
-			rm,
+			REGION_MEMBERSHIP,
 			BinaryValuesByte.getDefault(),
 			null
 		).withoutProperties();
 		return new Found<>(mask);
 	}
-
-	public FilePathGenerator getFilePathGenerator() {
-		return filePathGenerator;
-	}
-
-	public void setFilePathGenerator(FilePathGenerator filePathGenerator) {
-		this.filePathGenerator = filePathGenerator;
-	}
-
 }

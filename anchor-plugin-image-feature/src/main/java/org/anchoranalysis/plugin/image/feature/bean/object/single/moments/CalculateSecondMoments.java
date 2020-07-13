@@ -38,11 +38,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.moment.ImageMoments;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Calculates a matrix of second moments (covariance) of all points in an object-mask.
@@ -53,15 +52,11 @@ import cern.colt.matrix.DoubleMatrix2D;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
 class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInputSingleObject> {
 
 	/** Whether to ignore the z-dimension */
-	private boolean suppressZ;
-		
-	public CalculateSecondMoments(boolean suppressZ) {
-		super();
-		this.suppressZ = suppressZ;
-	}
+	private final boolean suppressZ;
 
 	@Override
 	protected ImageMoments execute( FeatureInputSingleObject params ) {
@@ -72,23 +67,6 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 		);
 	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(suppressZ).toHashCode();
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateSecondMoments){
-	        final CalculateSecondMoments other = (CalculateSecondMoments) obj;
-	        return new EqualsBuilder()
-	            .append(suppressZ, other.suppressZ)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
 	/**
 	 * Creates a point-matrix with the distance of each point to the origin of the bounding-box
 	 * 
@@ -129,5 +107,4 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 		}
 		return mat;
 	}
-
 }

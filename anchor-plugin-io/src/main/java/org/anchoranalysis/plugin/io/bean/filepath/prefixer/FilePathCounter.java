@@ -39,8 +39,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FilePathCounter extends FilePathPrefixerAvoidResolve {
 
-	// TODO this counter should be initialized in a proper way, and not using
-	// a bean-wide variable
+	// TODO this counter should be initialized in a proper way, and not using a bean-wide variable
 	private int cnt = 0;
 	
 	// START BEAN PROPERTIES

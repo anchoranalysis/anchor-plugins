@@ -1,5 +1,9 @@
 package org.anchoranalysis.plugin.opencv.nonmaxima;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
 /*-
  * #%L
  * anchor-plugin-opencv
@@ -31,24 +35,14 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
  * 
  * @param T object to be associated with a confidence score
  * */
+@AllArgsConstructor @EqualsAndHashCode
 public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 	
+	@Getter
 	private T obj;
-	private double confidence;
 	
-	public WithConfidence(T obj, double confidence) {
-		super();
-		this.obj = obj;
-		this.confidence = confidence;
-	}
-
-	public T getObj() {
-		return obj;
-	}
-
-	public double getConfidence() {
-		return confidence;
-	}
+	@Getter
+	private double confidence;
 
 	@Override
 	public int compareTo(WithConfidence<T> other) {

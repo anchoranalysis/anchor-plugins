@@ -1,5 +1,7 @@
 package org.anchoranalysis.plugin.image.bean.obj.merge;
 
+import java.nio.file.Path;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -33,13 +35,14 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ObjMaskProviderMergeMaxTest {
 	
@@ -86,7 +89,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws CreateException {
 		
-		LogErrorReporter logger = LoggingFixture.suppressedLogErrorReporter();
+		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergeMax provider = new ObjMaskProviderMergeMax();
 		
@@ -96,7 +99,8 @@ public class ObjMaskProviderMergeMaxTest {
 		provider.setFeatureEvaluator(
 			FeatureEvaluatorFixture.createNrg(
 				MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(calculationFunc),
-				logger
+				logger,
+				Mockito.mock(Path.class)
 			)
 		);
 		
@@ -105,7 +109,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	/** Merges if the number-of-pixels becomes closer to 900 */
 	private static Double convergeTo900( FeatureInputSingleObject input ) {
-		int diff = 900 - input.getObjectMask().numVoxelsOn();
+		int diff = 900 - input.getObjectMask().numberVoxelsOn();
 		return (double) -1 * Math.abs(diff);
 	}
 }

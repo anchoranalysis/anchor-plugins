@@ -44,6 +44,8 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.NativeImg;
@@ -62,10 +64,10 @@ import net.imglib2.view.Views;
 public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private double scaleFactor = 1.0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean outputShort=false;	// If true, outputs a short. Otherwise a byte
 	// END BEAN
 		
@@ -106,7 +108,6 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 		
 		Cursor< T > in = Views.iterable( input ).localizingCursor();
 		RandomAccess< FloatType > oc = output.randomAccess();
-		//T zero = Views.iterable( input ).firstElement().createVariable();
 		OutOfBounds< T > ra = Views.extendMirrorDouble( input ).randomAccess();
 		
 		float[][] kernel = new float[3][3];  
@@ -115,12 +116,11 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 		{
 			in.fwd();
 
-			// Position neighborhood cursor;
+			// Position neighborhood cursor
 			ra.setPosition( in );
 
 			// Position output cursor
-			for ( int i = 0; i < input.numDimensions(); i++ )
-			{
+			for ( int i = 0; i < input.numDimensions(); i++ ) {
 				oc.setPosition( in.getLongPosition( i ), i );
 			}
 			
@@ -158,21 +158,4 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 			oc.get().set( diffNorm*scaleFactor );
 		}
 	}
-	
-	public double getScaleFactor() {
-		return scaleFactor;
-	}
-
-	public void setScaleFactor(double scaleFactor) {
-		this.scaleFactor = scaleFactor;
-	}
-
-	public boolean isOutputShort() {
-		return outputShort;
-	}
-
-	public void setOutputShort(boolean outputShort) {
-		this.outputShort = outputShort;
-	}
-
 }

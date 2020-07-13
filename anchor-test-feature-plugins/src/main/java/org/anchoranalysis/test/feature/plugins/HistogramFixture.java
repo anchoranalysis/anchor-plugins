@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class HistogramFixture {
 
-	private static int MAX_VAL = 255;
+	private static final int MAX_VAL = 255;
 	
 	private static Histogram createEmpty() {
 		return new HistogramArray(MAX_VAL+1);

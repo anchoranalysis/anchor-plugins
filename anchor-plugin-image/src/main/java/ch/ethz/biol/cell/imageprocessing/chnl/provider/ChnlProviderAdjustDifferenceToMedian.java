@@ -43,6 +43,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Corrects a channel in the following way
 //  For each object:
 //		1. Identify the median value from channelLookup
@@ -51,7 +54,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider chnlLookup;
 	// END BEAN PROPERTIES
 	
@@ -116,13 +119,4 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 			}
 		}
 	}
-
-	public ChnlProvider getChnlLookup() {
-		return chnlLookup;
-	}
-
-	public void setChnlLookup(ChnlProvider chnlLookup) {
-		this.chnlLookup = chnlLookup;
-	}
-
 }

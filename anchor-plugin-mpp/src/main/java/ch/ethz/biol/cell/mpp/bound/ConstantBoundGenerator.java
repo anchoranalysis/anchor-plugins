@@ -60,10 +60,4 @@ public class ConstantBoundGenerator extends BoundCalculator {
 			Optional.of(constantBound)
 		);
 	}
-
-	@Override
-	public boolean paramsEquals(Object other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

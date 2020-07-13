@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -69,6 +69,6 @@ public abstract class FeatureTableObjects<T extends FeatureInput> extends Anchor
 	public abstract List<T> createListInputs(
 		ObjectCollection objs,
 		NRGStackWithParams nrgStack,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) throws CreateException;
 }

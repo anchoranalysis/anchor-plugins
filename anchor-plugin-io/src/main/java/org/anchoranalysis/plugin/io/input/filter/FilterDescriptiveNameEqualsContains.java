@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.input.filter;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.anchoranalysis.io.input.InputFromManager;
@@ -65,7 +65,7 @@ public class FilterDescriptiveNameEqualsContains {
 		
 		removeNonMatchingFrom(
 			in,
-			s -> combinedPredicate(s)
+			this::combinedPredicate
 		);
 		
 		return in;
@@ -99,9 +99,9 @@ public class FilterDescriptiveNameEqualsContains {
 		);
 	}
 	
-	private static boolean nonEmptyAndPredicate( String strToTest, String strReference, BiFunction<String,String,Boolean> func ) {
+	private static boolean nonEmptyAndPredicate( String strToTest, String strReference, BiPredicate<String,String> func ) {
 		if (!strReference.isEmpty()) {
-			return func.apply(strReference, strToTest);	
+			return func.test(strReference, strToTest);	
 		} else {
 			return true;
 		}

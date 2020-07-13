@@ -37,21 +37,22 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 
-import cern.jet.random.Normal;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GaussianSamplerFromParams extends ScalarProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String paramMean = "";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String paramStdDev = "";
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double factorStdDev = 1.0;		// Multiples the standard deviation by a factor
 	// END BEAN PROPERTIES
 	
@@ -70,47 +71,14 @@ public class GaussianSamplerFromParams extends ScalarProposer {
 				throw new OperationFailedException( String.format("Params are missing key '%s' for paramStdDev", getParamStdDev() ) );
 			}		
 			
-			double mean = Double.valueOf( kvp.getProperty(getParamMean()) );
+			double mean = Double.parseDouble(
+				kvp.getProperty(getParamMean())
+			);
 			double sd = Double.valueOf( kvp.getProperty(getParamStdDev()) ) * factorStdDev;
 			
-			Normal normal = re.generateNormal(mean, sd);
-			return normal.nextDouble();
+			return re.generateNormal(mean, sd).nextDouble();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
-	
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(
-			KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-	public String getParamMean() {
-		return paramMean;
-	}
-
-	public void setParamMean(String paramMean) {
-		this.paramMean = paramMean;
-	}
-
-	public String getParamStdDev() {
-		return paramStdDev;
-	}
-
-	public void setParamStdDev(String paramStdDev) {
-		this.paramStdDev = paramStdDev;
-	}
-
-	public double getFactorStdDev() {
-		return factorStdDev;
-	}
-
-	public void setFactorStdDev(double factorStdDev) {
-		this.factorStdDev = factorStdDev;
-	}
-
 }

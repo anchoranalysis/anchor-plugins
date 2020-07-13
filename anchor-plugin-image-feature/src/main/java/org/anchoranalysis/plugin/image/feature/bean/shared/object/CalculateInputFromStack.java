@@ -30,8 +30,8 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Calculates an input for a single-object with an optional NRG-stack from the feature-input
@@ -40,51 +40,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @param <T> feature-input
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateInputFromStack<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {
 
-	private final ObjectCollection objs;
+	/** The object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular) */
+	private final ObjectCollection objects;
+	
+	/** Index of particular object in objs to derive parameters for */
 	private final int index;
-	
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param objs the object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular)
-	 * @param index index of particular object in objs to derive parameters for
-	 */
-	public CalculateInputFromStack(ObjectCollection objs, int index) {
-		super();
-		this.objs = objs;
-		this.index = index;
-	}
 
 	@Override
 	protected FeatureInputSingleObject execute(T input) {
 		return new FeatureInputSingleObject(
-			objs.get(index),
+			objects.get(index),
 			input.getNrgStackOptional()
 		);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		@SuppressWarnings("unchecked")
-		CalculateInputFromStack<T> rhs = (CalculateInputFromStack<T>) obj;
-		return new EqualsBuilder()
-             .append(index, rhs.index)
-             .isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(index)
-			.toHashCode();
-	}
-
 }

@@ -57,7 +57,7 @@ public class ObjMaskProviderMergeItemByItem extends ObjectCollectionProvider {
 		ObjectCollection second = objs2.create();
 		
 		if (first.size()!=second.size()) {
-			throw new CreateException( String.format("Both objProviders must have the same number of items, currently %d and %d", first.size(), second.size() ));
+			throw new CreateException( String.format("Both object-providers must have the same number of items, currently %d and %d", first.size(), second.size() ));
 		}
 		
 		return ObjectCollectionFactory.mapFromRange(

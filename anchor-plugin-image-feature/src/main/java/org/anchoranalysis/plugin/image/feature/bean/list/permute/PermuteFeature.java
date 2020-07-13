@@ -67,7 +67,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 	private StringSet referencesFeatureListCreator;	// Makes sure a particular feature list creator is evaluated
 	
 	@BeanField @NonEmpty
-	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<PermuteProperty<S>>();
+	private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<>();
 	// END BEAN PROPERTIES
 		
 	@Override
@@ -100,14 +100,13 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 	}
 
 	@Override
-	public void onInit(SharedFeaturesInitParams so)
-			throws InitException {
+	public void onInit(SharedFeaturesInitParams so)	throws InitException {
 		super.onInit(so);
 		if (referencesFeatureListCreator!=null && so!=null) {
 			for( String s : referencesFeatureListCreator.set() ) {
+				
 				try {
-					getSharedObjects().getFeatureListSet().getException(s);
-					
+					getInitializationParameters().getFeatureListSet().getException(s);
 				} catch (NamedProviderGetException e) {
 					throw new InitException(e.summarize());
 				}

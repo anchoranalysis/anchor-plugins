@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.pair.PairCollection;
 
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
@@ -45,10 +45,10 @@ class UpdateMarkSet {
 	private MPPInitParams psoImage;
 	private NRGStackWithParams nrgStack;
 	private ListUpdatableMarkSetCollection updatableMarkSetCollection;
-	private LogErrorReporter logger;
+	private Logger logger;
 	
 	public UpdateMarkSet(MPPInitParams psoImage, NRGStackWithParams nrgStack,
-			ListUpdatableMarkSetCollection updatableMarkSetCollection, LogErrorReporter logger) {
+			ListUpdatableMarkSetCollection updatableMarkSetCollection, Logger logger) {
 		super();
 		this.psoImage = psoImage;
 		this.nrgStack = nrgStack;

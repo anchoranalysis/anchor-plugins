@@ -35,12 +35,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class GrowUtilities {
 
-	private static Point3i subExtnt = new Point3i(1,1,1);
+	private static Point3i subExtent = new Point3i(1,1,1);
 	
 	public static BoundingBox growBBox( BoundingBox bbox ) {
 		
 		Point3i crnrMin = new Point3i(bbox.cornerMin());
-		crnrMin.subtract(subExtnt);
+		crnrMin.subtract(subExtent);
 		return new BoundingBox(
 			crnrMin,
 			bbox.extent().growBy(2)	

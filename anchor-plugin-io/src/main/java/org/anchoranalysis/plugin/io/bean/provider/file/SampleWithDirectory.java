@@ -57,7 +57,7 @@ public class SampleWithDirectory extends FileProviderWithDirectory {
 	@Override
 	public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) throws FileProviderException {
 
-		List<File> listSampled = new ArrayList<File>();
+		List<File> listSampled = new ArrayList<>();
 		
 		Collection<File> list = fileProvider.create(params);
 		

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -59,7 +59,7 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
 	
 	private final ImageInitParams initParams;
 	private final NRGStackWithParams nrgStack;
-	private final LogErrorReporter logger;
+	private final Logger logger;
 		
 	public FeatureCalculatorFromProviderFactory(
 		ProvidesStackInput stackInput,
@@ -111,7 +111,7 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
 	private NRGStackWithParams nrgStackFromProviderOrInput(
 		ProvidesStackInput stackInput,
 		Optional<StackProvider> nrgStackProvider,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 		if (nrgStackProvider.isPresent()) {
 			return ExtractFromProvider.extractStack(

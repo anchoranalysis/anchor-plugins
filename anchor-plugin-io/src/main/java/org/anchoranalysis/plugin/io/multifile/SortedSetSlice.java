@@ -1,5 +1,10 @@
 package org.anchoranalysis.plugin.io.multifile;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /*
  * #%L
  * anchor-io
@@ -26,28 +31,14 @@ package org.anchoranalysis.plugin.io.multifile;
  * #L%
  */
 
-
+@AllArgsConstructor @EqualsAndHashCode
 public class SortedSetSlice implements Comparable<SortedSetSlice> {
 
+	@Getter @Setter
 	private String filePath;
 	
+	@Getter @Setter
 	private int zSliceNum;
-
-	public SortedSetSlice(String filePath, int zSliceNum) {
-		super();
-		this.filePath = filePath;
-		this.zSliceNum = zSliceNum;
-	}
-
-
-
-	public int getzSliceNum() {
-		return zSliceNum;
-	}
-
-	public void setzSliceNum(int zSliceNum) {
-		this.zSliceNum = zSliceNum;
-	}
 	
 	@Override
 	public int compareTo(SortedSetSlice arg0) {
@@ -60,17 +51,4 @@ public class SortedSetSlice implements Comparable<SortedSetSlice> {
 			return 1;
 		}
 	}
-
-
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	
 }

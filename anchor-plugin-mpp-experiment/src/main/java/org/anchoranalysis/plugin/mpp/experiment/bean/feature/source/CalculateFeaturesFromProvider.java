@@ -33,7 +33,7 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -53,7 +53,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 	private final ImageInitParams imageInitParams;
 	private final NRGStackWithParams nrgStack;
 	private final boolean suppressErrors;
-	private final LogErrorReporter logger;
+	private final Logger logger;
 	
 	public CalculateFeaturesFromProvider(
 		FeatureTableObjects<T> table,
@@ -62,7 +62,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		ImageInitParams imageInitParams,
 		NRGStackWithParams nrgStack,
 		boolean suppressErrors,
-		LogErrorReporter logger
+		Logger logger
 	) {
 		super();
 		this.table = table;
@@ -125,7 +125,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		List<T> listInputs,
 		Function<T, StringLabelsForCsvRow> identifierFromObjName,
 		boolean suppressErrors,
-		LogErrorReporter logger
+		Logger logger
 	) throws OperationFailedException {
 
 		try {
@@ -133,11 +133,11 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 				
 				T input = listInputs.get(i);
 			
-				logger.getLogReporter().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
+				logger.messageLogger().logFormatted("Calculating input %d of %d: %s", i+1, listInputs.size(), input.toString() );
 				
 				addResultsFor.accept(
 					identifierFromObjName.apply(input),
-					calculator.calc(input, logger.getErrorReporter(), suppressErrors)
+					calculator.calc(input, logger.errorReporter(), suppressErrors)
 				);
 			}
 			
@@ -146,13 +146,13 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		}
 	}
 	
-	private static ObjectCollection objsFromProvider( ObjectCollectionProvider provider, ImageInitParams imageInitParams, LogErrorReporter logErrorReporter ) throws OperationFailedException {
+	private static ObjectCollection objsFromProvider( ObjectCollectionProvider provider, ImageInitParams imageInitParams, Logger logger ) throws OperationFailedException {
 
 		try {
 			ObjectCollectionProvider objMaskProviderLoc = provider.duplicateBean();
 			
 			// Initialise
-			objMaskProviderLoc.initRecursive(imageInitParams, logErrorReporter);
+			objMaskProviderLoc.initRecursive(imageInitParams, logger);
 	
 			return objMaskProviderLoc.create(); 
 			

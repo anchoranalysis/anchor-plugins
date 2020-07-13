@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -39,7 +39,6 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
@@ -56,18 +55,17 @@ public class FromSerializedObject extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) {
 		
 		ObjectInputStreamDeserializer<Mark> deserializer = new ObjectInputStreamDeserializer<>();
 		try {
 			Path path = Paths.get(filePath);
-			Mark deserializedMark = deserializer.deserialize(path );
-			
-			inputMark.getMark().assignFrom( deserializedMark );
-			inputMark.reset();
-			
+			inputMark.assignFrom(
+				deserializer.deserialize(path)
+			);
 			return true;
-		} catch (DeserializationFailedException | OptionalOperationUnsupportedException e) {
+			
+		} catch (DeserializationFailedException e) {
 			context.getErrorNode().addFormatted("Exception when deserializing: %s", e.toString());
 			return false;
 		}

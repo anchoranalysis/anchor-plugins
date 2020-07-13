@@ -37,20 +37,22 @@ import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObjMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjAsPoints extends MarkProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 
@@ -62,7 +64,7 @@ public class ObjAsPoints extends MarkProposer {
 	}
 
 	@Override
-	public boolean propose(PxlMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
+	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		try {
 			createObjsIfNecessary();
@@ -76,13 +78,9 @@ public class ObjAsPoints extends MarkProposer {
 			randomlySelectPoints(context)
 		);
 		
-		try {
-			inputMark.getMark().assignFrom(mark);
-		} catch (OptionalOperationUnsupportedException e) {
-			context.getErrorNode().add(e);
-			return false;
-		}
+		inputMark.assignFrom(mark);
 		inputMark.reset();
+		
 		return true;
 	}
 	
@@ -98,7 +96,7 @@ public class ObjAsPoints extends MarkProposer {
 	
 	private void createObjsIfNecessary() throws CreateException {
 		if (points==null) {
-			points = new ArrayList<List<Point3d>>();
+			points = new ArrayList<>();
 			
 			ObjectCollection objsCollection = objs.create();
 			for( ObjectMask om : objsCollection ) {
@@ -108,13 +106,4 @@ public class ObjAsPoints extends MarkProposer {
 			}
 		}
 	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
 }

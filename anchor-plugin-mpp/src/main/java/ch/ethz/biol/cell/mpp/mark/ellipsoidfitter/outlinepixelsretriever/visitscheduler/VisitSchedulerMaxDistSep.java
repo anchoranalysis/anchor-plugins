@@ -39,17 +39,20 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistSep extends VisitScheduler {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistX;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistY;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistZ;
 	// END BEAN PROPERTIES
 	
@@ -57,15 +60,10 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 	private double maxXRslv;
 	private double maxYRslv;
 	private double maxZRslv;
-	
-	public VisitSchedulerMaxDistSep() {
-		super();
-	}
 		
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
-			throws InitException {
-				
+	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException {
+		// NOTHING TO DO
 	}
 	
 	@Override
@@ -105,38 +103,6 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 		if (Math.abs(root.getY()-pnt.getY())>maxYRslv) {
 			return false;
 		}
-		if (Math.abs(root.getZ()-pnt.getZ())>maxZRslv) {
-			return false;
-		}
-		
-		return true;
-	
+		return Math.abs(root.getZ()-pnt.getZ())<=maxZRslv;
 	}
-
-	public UnitValueDistance getMaxDistX() {
-		return maxDistX;
-	}
-
-	public void setMaxDistX(UnitValueDistance maxDistX) {
-		this.maxDistX = maxDistX;
-	}
-
-	public UnitValueDistance getMaxDistY() {
-		return maxDistY;
-	}
-
-	public void setMaxDistY(UnitValueDistance maxDistY) {
-		this.maxDistY = maxDistY;
-	}
-
-	public UnitValueDistance getMaxDistZ() {
-		return maxDistZ;
-	}
-
-	public void setMaxDistZ(UnitValueDistance maxDistZ) {
-		this.maxDistZ = maxDistZ;
-	}
-
-
-
 }

@@ -60,7 +60,7 @@ public class LoadUtilities {
 		int maxSize = -1;
 		ObjectMask maxObj = null;
 		for( ObjectMask om : objs ) {
-			int size = om.numVoxelsOn();
+			int size = om.numberVoxelsOn();
 			if (size>maxSize) {
 				maxSize = size;
 				maxObj = om;

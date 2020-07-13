@@ -32,7 +32,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -79,9 +79,9 @@ class ObjsToCompareFactory {
 		Findable<ObjectCollection> objs,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
-		LogErrorReporter logErrorReporter
+		Logger logger
 	) {
-		Optional<ObjectCollection> found = objs.getFoundOrLog(objName, logErrorReporter );
+		Optional<ObjectCollection> found = objs.getFoundOrLog(objName, logger );
 		if (!found.isPresent()) {
 			addAnnotation.addUnannotatedImage();
 		}

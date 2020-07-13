@@ -34,12 +34,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputParams;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputDescriptor;
-import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Extracts a key-value-param as a double
@@ -54,17 +55,17 @@ import org.anchoranalysis.feature.input.descriptor.FeatureInputParamsDescriptor;
  *
  * @param <T> feature-input type
  */
-public class Param<T extends FeatureInputParams> extends Feature<T> {
+public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
 
 	// START BEAN PROPERTIES
 	/** Prefix prepended to key */
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	String keyPrefix = "";
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	private String key = "";
 	
-	@BeanField @AllowEmpty
+	@BeanField @AllowEmpty @Getter @Setter
 	String keySuffix = "";
 	// END BEAN PROPERTIES
 
@@ -79,8 +80,8 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 	}
 	
 	@Override
-	public void beforeCalc() throws InitException {
-		super.beforeCalc();
+	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
+		super.beforeCalc(paramsInit);
 		keyAggregated = keyAggregated();
 	}
 	
@@ -97,37 +98,8 @@ public class Param<T extends FeatureInputParams> extends Feature<T> {
 			);
 		}
 	}
-	
+		
 	private String keyAggregated() {
 		return keyPrefix + key + keySuffix;
-	}
-
-	@Override
-	public FeatureInputDescriptor inputDescriptor() {
-		return FeatureInputParamsDescriptor.INSTANCE;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getKeyPrefix() {
-		return keyPrefix;
-	}
-
-	public void setKeyPrefix(String keyPrefix) {
-		this.keyPrefix = keyPrefix;
-	}
-
-	public String getKeySuffix() {
-		return keySuffix;
-	}
-
-	public void setKeySuffix(String keySuffix) {
-		this.keySuffix = keySuffix;
 	}
 }

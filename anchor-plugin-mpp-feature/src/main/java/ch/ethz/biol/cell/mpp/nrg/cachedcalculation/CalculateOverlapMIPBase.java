@@ -29,68 +29,50 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
-import org.anchoranalysis.anchor.mpp.pxlmark.PxlMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class OverlapMIPCalculationBase extends FeatureCalculation<Double, FeatureInputPairMemo> {
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-	private int regionID;
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
+public abstract class CalculateOverlapMIPBase extends FeatureCalculation<Double, FeatureInputPairMemo> {
 
-	// Constructor
-	public OverlapMIPCalculationBase( int regionID ) {
-		super();
-		this.regionID = regionID;
-	}
+	private final int regionID;
 
 	@Override
 	protected Double execute( FeatureInputPairMemo params ) {
 		
-		PxlMarkMemo mark1 = params.getObj1();
-		PxlMarkMemo mark2 = params.getObj2();
+		VoxelizedMarkMemo mark1 = params.getObj1();
+		VoxelizedMarkMemo mark2 = params.getObj2();
 		
 		assert( mark1 != null );
 		assert( mark2 != null );
 		
-		PxlMark pm1 = mark1.doOperation();
-		PxlMark pm2 = mark2.doOperation();
+		VoxelizedMark pm1 = mark1.voxelized();
+		VoxelizedMark pm2 = mark2.voxelized();
 		
-		if (!pm1.getBoundingBoxMIP(regionID).intersection().existsWith(pm2.getBoundingBoxMIP(regionID))) {
+		if (!pm1.getBoundingBoxMIP().intersection().existsWith(pm2.getBoundingBoxMIP())) {
 			return 0.0;
 		}
 		
 		MaxIntensityProjectionPair pair =
 			new MaxIntensityProjectionPair(
-				pm1.getObjMaskMIP().getVoxelBoxBounded(),
-				pm2.getObjMaskMIP().getVoxelBoxBounded(),
+				pm1.getVoxelBoxMIP(),
+				pm2.getVoxelBoxMIP(),
 				regionMembershipForMark(mark1),
 				regionMembershipForMark(mark2)
 			);
 		
-		double overlap = pair.countIntersectingPixels();
+		double overlap = pair.countIntersectingVoxels();
 		
 		return calculateOverlapResult(overlap, pair);
 	}
-		
-	protected int regionIDHashCode() {
-		return new HashCodeBuilder().append(regionID).toHashCode();
-	}
 	
 	protected abstract Double calculateOverlapResult( double overlap, MaxIntensityProjectionPair pair);
-	
-	protected boolean isRegionIDEqual(OverlapMIPCalculationBase other) {
-		 return new EqualsBuilder()
-            .append(regionID, other.regionID)
-            .isEquals();
-	}
-	
-	protected int getRegionID() {
-		return regionID;
-	}
 		
-	private RegionMembershipWithFlags regionMembershipForMark( PxlMarkMemo mark ) {
+	private RegionMembershipWithFlags regionMembershipForMark( VoxelizedMarkMemo mark ) {
 		return mark.getRegionMap().membershipWithFlagsForIndex(regionID);
 	}
 }

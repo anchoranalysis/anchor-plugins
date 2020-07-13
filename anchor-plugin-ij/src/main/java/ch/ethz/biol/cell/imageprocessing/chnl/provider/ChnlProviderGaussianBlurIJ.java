@@ -55,7 +55,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 		// Are we missing a Z slice?
 		for (int z=0; z<chnl.getDimensions().getZ(); z++) {
 			ImageProcessor processor = IJWrap.imageProcessor(vb, z);
-			gb.blur( processor, sigma );
+			gb.blur( processor, sigma );	// NOSONAR
 		}
 		
 		return chnl;

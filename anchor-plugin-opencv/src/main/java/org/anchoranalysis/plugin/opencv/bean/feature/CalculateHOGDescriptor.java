@@ -37,10 +37,11 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.MatConverter;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 /**
  * Calculates the entire HOG descriptor for an image
@@ -48,28 +49,20 @@ import org.opencv.core.MatOfFloat;
  * @author Owen Feehan
  *
  */
+@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
 	
-	private Optional<SizeXY> resizeTo;
-	private HOGParameters params;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param resizeTo optionally resizes the image before calculating the descriptor (useful for achiving constant-sized descriptors for different sized images)
-	 * @param params parameters for the HOG-calculation
-	 */
-	public CalculateHOGDescriptor(Optional<SizeXY> resizeTo, HOGParameters params) {
-		super();
-		this.resizeTo = resizeTo;
-		this.params = params;
-	}
+	/** Optionally resizes the image before calculating the descriptor (useful for achiving constant-sized descriptors for different sized images) */
+	private final Optional<SizeXY> resizeTo;
+	
+	/** Parameters for the HOG-calculation */
+	private final HOGParameters params;
 
 	@Override
 	protected float[] execute(FeatureInputStack input) throws FeatureCalcException {
 		try {
 			Stack stack = extractStack(input);
-			Extent extent = stack.getDimensions().getExtnt();
+			Extent extent = stack.getDimensions().getExtent();
 			
 			checkSize(extent);
 			
@@ -101,27 +94,6 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 		} else {
 			return stack;
 		}
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateHOGDescriptor){
-	        final CalculateHOGDescriptor other = (CalculateHOGDescriptor) obj;
-	        return new EqualsBuilder()
-	            .append(resizeTo, other.resizeTo)
-	            .append(params, other.params)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(resizeTo)
-			.append(params)
-			.toHashCode();
 	}
 	
 	private void checkSize(Extent extent) throws FeatureCalcException {

@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.image.io.bean.chnl.map.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;

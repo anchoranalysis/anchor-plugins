@@ -51,7 +51,7 @@ public class ChnlProviderStackReference extends ChnlProvider {
 		
 		try {
 			if (chnl==null) {
-				Stack stack = getSharedObjects().getStackCollection().getException(stackProviderID);
+				Stack stack = getInitializationParameters().getStackCollection().getException(stackProviderID);
 				
 				chnl = stack.getChnl(chnlIndex);
 				if (chnl==null) {

@@ -38,6 +38,8 @@ import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.MultiNameFactory;
+import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
 
@@ -56,16 +58,23 @@ public abstract class GroupMapByName<S,T> {
 	private MapCreate<MultiName,T> map;
 	
 	private String nounT;
+	
+	private final ManifestFolderDescription manifestFolderDescription;
 
 	/**
 	 * 
 	 * @param nounT a word to describe a single instance of T in user error messages
 	 * @param createEmpty
 	 */
-	public GroupMapByName(String nounT, Operation<T,AnchorNeverOccursException> createEmpty ) {
+	public GroupMapByName(String nounT, String manifestFunction, Operation<T,AnchorNeverOccursException> createEmpty ) {
 		super();
 		this.map = new MapCreate<>( createEmpty );
 		this.nounT = nounT;
+		this.manifestFolderDescription = new ManifestFolderDescription(
+			"groupedFolder",
+			manifestFunction,
+			new SetSequenceType()
+		);
 	}
 	
 	/**
@@ -108,7 +117,7 @@ public abstract class GroupMapByName<S,T> {
 	) throws IOException {
 		
 		// We wish to create a new output-manager only once for each primary key, so we store them in a hashmap
-		CacheSubdirectoryContext subdirectoryCache = new CacheSubdirectoryContext(context);
+		CacheSubdirectoryContext subdirectoryCache = new CacheSubdirectoryContext(context, manifestFolderDescription);
 		
 		// If there is one part-only, it is assumed that there is no group (for all items) and it is written without a subdirectory
 		// If there are two parts, it is assumed that the first-part is a group-name (a seperate subdirectory) and the second-part is written without a subdirectory 

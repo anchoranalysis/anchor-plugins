@@ -69,7 +69,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				OperationFailedException.class,
 				obj -> splitObj(
 					obj,
-					objsSplitByCollection.findObjsWithIntersectingBBox(obj),
+					objsSplitByCollection.findObjectsWithIntersectingBBox(obj),
 					dim
 				)
 			);

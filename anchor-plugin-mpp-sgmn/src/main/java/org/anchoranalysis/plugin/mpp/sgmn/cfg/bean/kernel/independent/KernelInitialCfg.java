@@ -63,8 +63,13 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 	}
 
 	@Override
-	public double calcAccptProb(int exstSize, int propSize,
-			double poisson_intens, ImageDimensions scene_size, double densityRatio) {
+	public double calcAccptProb(
+		int exstSize,
+		int propSize,
+		double poissonIntensity,
+		ImageDimensions sceneSize,
+		double densityRatio
+	) {
 		// We always accept
 		return 1;
 	}
@@ -79,7 +84,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
 	@Override
 	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, Cfg exst, Cfg accptd) throws UpdateMarkSetException {
-
+		// NOTHING TO DO
 	}
 
 	@Override

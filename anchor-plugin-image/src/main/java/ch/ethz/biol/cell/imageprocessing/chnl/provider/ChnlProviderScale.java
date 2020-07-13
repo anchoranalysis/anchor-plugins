@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
@@ -55,11 +55,11 @@ public class ChnlProviderScale extends ChnlProviderOne {
 			chnl,
 			scaleCalculator,
 			interpolator.create(),
-			getLogger().getLogReporter()
+			getLogger().messageLogger()
 		);
 	}
 	
-	public static Channel scale( Channel chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, LogReporter logger) throws CreateException {
+	public static Channel scale( Channel chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, MessageLogger logger) throws CreateException {
 		try {
 			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
 			

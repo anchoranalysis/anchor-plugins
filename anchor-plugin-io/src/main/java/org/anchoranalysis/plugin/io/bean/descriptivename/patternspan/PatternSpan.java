@@ -30,9 +30,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
@@ -52,7 +51,7 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 public class PatternSpan extends DescriptiveNameFromFile {
 
 	@Override
-	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName, LogErrorReporter logger) {
+	public List<DescriptiveFile> descriptiveNamesFor(Collection<File> files, String elseName, Logger logger) {
 	
 		// Convert to list
 		List<Path> paths = listConvertToPath(files);
@@ -84,17 +83,15 @@ public class PatternSpan extends DescriptiveNameFromFile {
 	}
 	
 	private static List<DescriptiveFile> listExtractFileName(Collection<File> files) {
-		return files.stream()
-			.map( file -> new DescriptiveFile(file, extensionlessNameFromFile(file)) )
-			.collect( Collectors.toList() );
+		return FunctionalUtilities.mapToList(
+			files,
+			file -> new DescriptiveFile(file, extensionlessNameFromFile(file))
+		);
 	}
 	
 	// Convert all Files to Path
 	private static List<Path> listConvertToPath( Collection<File> files ) {
-		 return files
-			.stream()
-			.map( file -> file.toPath() )
-			.collect( Collectors.toList() );
+		 return FunctionalUtilities.mapToList(files, File::toPath);
 	}
 	
 	// The file-name without an extension

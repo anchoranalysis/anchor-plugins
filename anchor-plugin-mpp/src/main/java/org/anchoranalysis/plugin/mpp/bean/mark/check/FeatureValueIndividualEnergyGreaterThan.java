@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
 
 /*
@@ -41,7 +41,7 @@ public class FeatureValueIndividualEnergyGreaterThan extends FeatureValueCheckMa
 
 	@Override
 	protected FeatureInputSingleMemo createFeatureCalcParams(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
-		PxlMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
+		VoxelizedMarkMemo pmm = PxlMarkMemoFactory.create( mark, nrgStack.getNrgStack(), regionMap );
 		return new FeatureInputSingleMemo(
 			pmm,
 			Optional.of(nrgStack)

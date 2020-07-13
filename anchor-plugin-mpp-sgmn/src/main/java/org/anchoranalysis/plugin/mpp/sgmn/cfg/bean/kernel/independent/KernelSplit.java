@@ -13,7 +13,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -89,7 +89,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		}
 		
 		int markExstIndex = exst.get().getCfg().indexOf( markExst.get() );
-		PxlMarkMemo pmmMarkExst = exst.get().getMemoForIndex(markExstIndex);
+		VoxelizedMarkMemo pmmMarkExst = exst.get().getMemoForIndex(markExstIndex);
 		
 		try {
 			// Let's get positions for our two marks
@@ -185,12 +185,12 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		
 		MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 		
-		PxlMarkMemo memoExst = exst.getMemoForMark( this.markExst.get() );
+		VoxelizedMarkMemo memoExst = exst.getMemoForMark( this.markExst.get() );
 		
 		updatableMarkSetCollection.rmv( memoList, memoExst );
 		memoList.remove( memoExst );
 		
-		PxlMarkMemo memoAdded1 = pairNew.get().getSource();
+		VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource();
 		
 		// Should always find one
 		assert memoAdded1!=null;
@@ -198,7 +198,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 		
 		memoList.add(memoAdded1);
 		
-		PxlMarkMemo memoAdded2 = pairNew.get().getDestination();
+		VoxelizedMarkMemo memoAdded2 = pairNew.get().getDestination();
 		assert memoAdded2!=null;
 		
 		updatableMarkSetCollection.add(memoList, memoAdded2 );

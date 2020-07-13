@@ -43,17 +43,20 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private PointsFitter pointsFitter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ImageDimProvider dim;
 	
 	/** If an object has fewer points than before being fitted, we ignore */
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int minNumPnts = 1;
 	
 	@BeanField
@@ -74,37 +77,5 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	
 	public ImageDimensions createDim() throws CreateException {
 		return dim.create();
-	}
-		
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-	public int getMinNumPnts() {
-		return minNumPnts;
-	}
-
-	public void setMinNumPnts(int minNumPnts) {
-		this.minNumPnts = minNumPnts;
-	}
-	
-	public PointsFitter getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitter pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public ImageDimProvider getDim() {
-		return dim;
-	}
-
-	public void setDim(ImageDimProvider dim) {
-		this.dim = dim;
 	}
 }

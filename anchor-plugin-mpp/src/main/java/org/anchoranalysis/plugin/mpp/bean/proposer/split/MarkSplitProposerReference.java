@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -55,7 +55,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 	public void onInit(MPPInitParams pso) throws InitException {
 		super.onInit(pso);
 		try {
-			delegate = getSharedObjects().getMarkSplitProposerSet().getException(id);
+			delegate = getInitializationParameters().getMarkSplitProposerSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -75,7 +75,7 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 	}
 
 	@Override
-	public Optional<PairPxlMarkMemo> propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
+	public Optional<PairPxlMarkMemo> propose(VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
 		return delegate.propose(mark, context, cfgGen);
 	}
 }

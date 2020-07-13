@@ -38,15 +38,6 @@ import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 
 public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitterBase {
-
-	// This solves the normal-equation for a Linear Least Squares system where all our dependent variables
-	//   are treated as 1 (solution to the ellipsoid matrix equation).  It returns a matrix of our optimal coefficients
-	protected static DoubleMatrix2D solveNormalEquation( DoubleMatrix2D matrixD ) throws PointsFitterException {
-		DoubleMatrix2D num = matrixD.viewDice().zMult( matrixD, null);
-		DoubleMatrix2D ones = DoubleFactory2D.dense.make( matrixD.rows(), 1, 1 );
-		DoubleMatrix2D dem = matrixD.viewDice().zMult( ones, null );
-		return matrixLeftDivide(num,dem);
-	}
 	
 	@Override
 	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
@@ -55,17 +46,35 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
 		if (points.size() < minNumPoints()) {
 			throw new PointsFitterException( String.format("Must have at least %d points to fit", minNumPoints()) );
 		}
-		
 
-		DoubleMatrix2D matrixD = createDesignMatrix(points);
-
-		DoubleMatrix2D coefficients = solveNormalEquation(matrixD);
+		DoubleMatrix2D coefficients = solveNormalEquation(
+			createDesignMatrix(points)
+		);
 		applyCoefficientsToMark( coefficients, mark, dim);
 	}
 	
 	protected abstract int minNumPoints();
 	
-	protected abstract void applyCoefficientsToMark(  DoubleMatrix2D matrixV, Mark mark, ImageDimensions dim ) throws PointsFitterException;
+	protected abstract void applyCoefficientsToMark(DoubleMatrix2D matrixV, Mark mark, ImageDimensions dim ) throws PointsFitterException;
 	
 	protected abstract DoubleMatrix2D createDesignMatrix( List<Point3f> points );
+
+	/**
+	 * Solves the normal-equation for a Linear Least Squares system.
+	 * 
+	 * All our dependent variables are treated as 1 (solution to the ellipsoid matrix equation). 
+	 * 
+	 * @param matrixD 
+	 * @return a matrix of optimal coefficients
+	 * @throws PointsFitterException
+	 */
+	private static DoubleMatrix2D solveNormalEquation( DoubleMatrix2D matrixD ) throws PointsFitterException {
+
+		DoubleMatrix2D ones = DoubleFactory2D.dense.make( matrixD.rows(), 1, 1 );
+
+		return ConicFitterUtilities.matrixLeftDivide(
+			matrixD.viewDice().zMult( matrixD, null),
+			matrixD.viewDice().zMult( ones, null )
+		);
+	}
 }

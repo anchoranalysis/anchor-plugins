@@ -44,7 +44,7 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
 		BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
 		BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();
 			
-		Extent e = chnlCrnt.getDimensions().getExtnt();
+		Extent e = chnlCrnt.getDimensions().getExtent();
 			
 		byte crntOn = bvbCrnt.getOnByte();
 		byte crntOff = bvbCrnt.getOffByte();

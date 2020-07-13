@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 
 public class RootFilePathRegEx extends ReportFeatureForManifest {
@@ -45,7 +45,7 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, LogErrorReporter logger) throws OperationFailedException {
+	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger) throws OperationFailedException {
 
 		// We get the last three 
 		Path path = obj.getRootPath();

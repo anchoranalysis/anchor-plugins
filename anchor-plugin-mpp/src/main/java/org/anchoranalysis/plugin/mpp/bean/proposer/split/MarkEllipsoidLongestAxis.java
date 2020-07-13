@@ -10,7 +10,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -132,7 +132,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 	}
 	
 	@Override
-	public Optional<PairPxlMarkMemo> propose(PxlMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
+	public Optional<PairPxlMarkMemo> propose(VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
 		
 		MarkEllipsoid markC = (MarkEllipsoid) mark.getMark();
 		
@@ -161,7 +161,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 		point2.add( marg );
 		
 		
-		PxlMarkMemo memo1 = mark.duplicateFresh();
+		VoxelizedMarkMemo memo1 = mark.duplicateFresh();
 		memo1.getMark().setId( cfgGen.idAndIncrement() );
 		
 		MarkEllipsoid memoMark1 = (MarkEllipsoid) memo1.getMark();
@@ -177,7 +177,7 @@ public class MarkEllipsoidLongestAxis extends MarkSplitProposer {
 		}
 		
 		
-		PxlMarkMemo memo2 = mark.duplicateFresh();
+		VoxelizedMarkMemo memo2 = mark.duplicateFresh();
 		memo2.getMark().setId( cfgGen.idAndIncrement() );
 
 		MarkEllipsoid memoMark2 = (MarkEllipsoid) memo2.getMark();

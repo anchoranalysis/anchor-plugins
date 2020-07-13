@@ -53,8 +53,8 @@ public class BBoxZDist extends FeaturePairMemoSingleRegion {
 
 		FeatureInputPairMemo inputSessionless = input.get();
 		
-		BoundingBox bbox1 = bbox(inputSessionless, p->p.getObj1());
-		BoundingBox bbox2 = bbox(inputSessionless, p->p.getObj2());
+		BoundingBox bbox1 = bbox(inputSessionless, FeatureInputPairMemo::getObj1);
+		BoundingBox bbox2 = bbox(inputSessionless, FeatureInputPairMemo::getObj2);
 		
 		// Check the bounding boxes intersect in general (including XY)
 		if (bbox1.intersection().existsWith(bbox2)) {
@@ -65,16 +65,16 @@ public class BBoxZDist extends FeaturePairMemoSingleRegion {
 	}
 	
 	private double calcZDist(BoundingBox bbox1, BoundingBox bbox2) {
-		int z1_min = bbox1.cornerMin().getZ();
-		int z1_max = bbox1.calcCornerMax().getZ();
+		int z1Min = bbox1.cornerMin().getZ();
+		int z1Max = bbox1.calcCornerMax().getZ();
 		
-		int z2_min = bbox2.cornerMin().getZ();
-		int z2_max = bbox2.calcCornerMax().getZ();
+		int z2Min = bbox2.cornerMin().getZ();
+		int z2Max = bbox2.calcCornerMax().getZ();
 		
-		int diff1 = Math.abs( z1_min - z2_min );
-		int diff2 = Math.abs( z1_min - z2_max );
-		int diff3 = Math.abs( z2_min - z1_max );
-		int diff4 = Math.abs( z2_min - z1_min );
+		int diff1 = Math.abs( z1Min - z2Min );
+		int diff2 = Math.abs( z1Min - z2Max );
+		int diff3 = Math.abs( z2Min - z1Max );
+		int diff4 = Math.abs( z2Min - z1Min );
 
 		int min1 = Math.min( diff1, diff2 );
 		int min2 = Math.min( diff3, diff4 );

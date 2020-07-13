@@ -32,23 +32,21 @@ import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor(access=AccessLevel.PROTECTED) @EqualsAndHashCode(callSuper=false)
 public abstract class CalculateObjectMask extends FeatureCalculation<ObjectMask,FeatureInputSingleObject> {
 
-	private ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map;
-	private int iterations;
-
-	protected CalculateObjectMask(
-		int iterations,
-		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map
-	) {
-		super();
-		this.iterations = iterations;
-		this.map = map;
-	}
+	private final int iterations;
+	private final ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map;
 	
+	/**
+	 * Copy constructor
+	 * 
+	 * @param src where to copy from
+	 */
 	protected CalculateObjectMask( CalculateObjectMask src ) {
 		this.iterations = src.iterations;
 		this.map = src.map;
@@ -64,7 +62,6 @@ public abstract class CalculateObjectMask extends FeatureCalculation<ObjectMask,
 		return map.getOrCalculate(params, iterations);
 	}
 	
-	
 	@Override
 	public String toString() {
 		return String.format(
@@ -74,23 +71,4 @@ public abstract class CalculateObjectMask extends FeatureCalculation<ObjectMask,
 			map.toString()
 		);
 	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateObjectMask){
-	        final CalculateObjectMask other = (CalculateObjectMask) obj;
-	        return new EqualsBuilder()
-	            .append(iterations, other.iterations)
-	            .append(map, other.map)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(iterations).append(map).toHashCode();
-	}
-		
 }

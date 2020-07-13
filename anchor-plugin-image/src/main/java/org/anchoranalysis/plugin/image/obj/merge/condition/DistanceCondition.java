@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
  */
 
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.log.LogReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.BoundingBoxDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -41,13 +41,13 @@ public class DistanceCondition implements BeforeCondition {
 
 	private UnitValueDistance maxDist;
 	private boolean suppressZ;
-	private LogReporter logReporter;
+	private MessageLogger logger;
 	
-	public DistanceCondition(UnitValueDistance maxDist, boolean suppressZ, LogReporter logReporter) {
+	public DistanceCondition(UnitValueDistance maxDist, boolean suppressZ, MessageLogger logger) {
 		super();
 		this.maxDist = maxDist;
 		this.suppressZ = suppressZ;
-		this.logReporter = logReporter;
+		this.logger = logger;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class DistanceCondition implements BeforeCondition {
 			return false;
 		} else {
 		
-			logReporter.logFormatted(
+			logger.logFormatted(
 				"Maybe merging %s and %s with dist %f (<%f)",
 				omSrc.getBoundingBox().midpoint(),
 				omDest.getBoundingBox().midpoint(),

@@ -41,25 +41,24 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderSortByFeature extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	// END BEAN PROPERTIES
 	
 	/** Associates a feature-value with an object so it can be sorted by the feature-value */
+	@AllArgsConstructor
 	private static class ObjectWithFeatureValue implements Comparable<ObjectWithFeatureValue> {
 		
-		private ObjectMask objMask;
-		private double featureVal;
+		private final ObjectMask objMask;
+		private final double featureVal;
 		
-		public ObjectWithFeatureValue(ObjectMask objMask, double featureVal) throws FeatureCalcException {
-			super();
-			this.objMask = objMask;
-			this.featureVal = featureVal;
-		}
-
 		@Override
 		public int compareTo(ObjectWithFeatureValue o) {
 			return Double.valueOf(o.featureVal).compareTo(featureVal);
@@ -98,13 +97,5 @@ public class ObjMaskProviderSortByFeature extends ObjectCollectionProviderOne {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
 	}
 }

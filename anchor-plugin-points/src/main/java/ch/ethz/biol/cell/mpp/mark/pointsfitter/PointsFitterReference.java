@@ -40,10 +40,13 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PointsFitterReference extends PointsFitter {
 
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private String id;
 	// END BEAN
 
@@ -54,7 +57,7 @@ public class PointsFitterReference extends PointsFitter {
 			throws InitException {
 		super.onInit(so);
 		try {
-			this.pointsFitter = getSharedObjects().getPointsFitterSet().getException(id);
+			this.pointsFitter = getInitializationParameters().getPointsFitterSet().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -70,14 +73,4 @@ public class PointsFitterReference extends PointsFitter {
 			throws PointsFitterException, InsufficientPointsException {
 		pointsFitter.fit(points, mark, dim);
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
 }

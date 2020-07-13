@@ -72,7 +72,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 				binaryImage = binaryChnl.create();
 				assert( binaryImage!=null );
 				
-				chnl = binaryImage.getChnl();
+				chnl = binaryImage.getChannel();
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
 			}

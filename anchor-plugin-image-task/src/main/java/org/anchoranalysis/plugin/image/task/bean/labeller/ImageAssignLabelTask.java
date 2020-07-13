@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.LogErrorReporter;
+import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -157,10 +157,10 @@ public class ImageAssignLabelTask<T> extends Task<ProvidesStackInput,SharedState
 	}
 	
 
-	private void outputStack( String groupIdentifier, ImageInitParams initParams, String outputName, SharedStateFilteredImageOutput<T> sharedState, LogErrorReporter logErrorReporter ) throws JobExecutionException {
+	private void outputStack( String groupIdentifier, ImageInitParams initParams, String outputName, SharedStateFilteredImageOutput<T> sharedState, Logger logger ) throws JobExecutionException {
 
 		try {
-			outputStackProvider.initRecursive(initParams, logErrorReporter );
+			outputStackProvider.initRecursive(initParams, logger );
 
 			BoundOutputManagerRouteErrors outputSub = sharedState.getOutputManagerFor(groupIdentifier);
 			

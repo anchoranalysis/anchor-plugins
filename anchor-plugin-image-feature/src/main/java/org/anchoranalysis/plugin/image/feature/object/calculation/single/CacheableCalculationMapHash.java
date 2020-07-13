@@ -39,6 +39,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Implementation of a CachedCalculationMap using a Hash-Map
  * 
  * @author Owen Feehan
+ * 
+ * TODO integrate into CacheableCalculationMap
  *
  * @param <E> an exception thrown if something goes wrong during the calculation
  */

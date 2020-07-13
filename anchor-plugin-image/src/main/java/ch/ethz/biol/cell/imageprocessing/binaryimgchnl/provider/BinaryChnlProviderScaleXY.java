@@ -61,11 +61,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 			return chnl;
 		}
 		
-		try {
-			return chnl.scaleXY(sf.getX(), sf.getY(), interpolator);
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
+		return chnl.scaleXY(sf.getX(), sf.getY(), interpolator);
 	}
 
 	@Override

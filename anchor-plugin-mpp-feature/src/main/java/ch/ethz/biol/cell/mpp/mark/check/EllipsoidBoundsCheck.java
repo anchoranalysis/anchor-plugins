@@ -51,8 +51,8 @@ public class EllipsoidBoundsCheck extends CheckMark {
 		try {
 			MarkEllipsoid me = (MarkEllipsoid) mark;
 			
-			double minBound = getSharedObjects().getMarkBounds().getMinRslvd(nrgStack.getDimensions().getRes(), true);
-			double maxBound = getSharedObjects().getMarkBounds().getMaxRslvd(nrgStack.getDimensions().getRes(), true);
+			double minBound = getInitializationParameters().getMarkBounds().getMinRslvd(nrgStack.getDimensions().getRes(), true);
+			double maxBound = getInitializationParameters().getMarkBounds().getMaxRslvd(nrgStack.getDimensions().getRes(), true);
 			
 			double[] normalisedRadii = EllipsoidUtilities.normalisedRadii( me, nrgStack.getDimensions().getRes() );
 			

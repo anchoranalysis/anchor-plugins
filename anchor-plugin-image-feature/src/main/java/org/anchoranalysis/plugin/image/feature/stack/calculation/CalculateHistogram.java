@@ -32,21 +32,16 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
 public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInputStack> {
 
-	private int nrgIndex;
-	
-	public CalculateHistogram( int nrgIndex ) {
-		super();
-		this.nrgIndex = nrgIndex;
-	}
+	private final int nrgIndex;
 
 	@Override
 	protected Histogram execute( FeatureInputStack input ) throws FeatureCalcException {
-
 		try {
 			return HistogramFactory.create(
 				input.getNrgStackRequired().getChnl(nrgIndex)
@@ -54,24 +49,5 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
-	}
-	
-	@Override
-	public boolean equals(final Object obj){
-	    if(obj instanceof CalculateHistogram){
-	    	final CalculateHistogram other = (CalculateHistogram) obj;
-	        return new EqualsBuilder()
-	            .append(nrgIndex, other.nrgIndex)
-	            .isEquals();
-	    } else{
-	        return false;
-	    }
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(nrgIndex)
-				.toHashCode();
 	}
 }

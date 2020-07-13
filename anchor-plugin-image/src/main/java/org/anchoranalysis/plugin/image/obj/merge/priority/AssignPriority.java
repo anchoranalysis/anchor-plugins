@@ -58,8 +58,6 @@ public abstract class AssignPriority {
 			dest.getObjMask()
 		);
 		
-		assert( (merge.numVoxelsOn()!=src.getObjMask().numVoxelsOn()) && (merge.numVoxelsOn()!=dest.getObjMask().numVoxelsOn()) );
-		
 		PrioritisedVertex withPriority = assignPriorityToEdge(
 			src,
 			dest,

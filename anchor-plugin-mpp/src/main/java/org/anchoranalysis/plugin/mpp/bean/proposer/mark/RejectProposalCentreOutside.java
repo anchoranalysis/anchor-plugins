@@ -31,12 +31,13 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.channel.Channel;
@@ -63,7 +64,7 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 
 
 	@Override
-	protected boolean propose(PxlMarkMemo inputMark, ProposerContext context, MarkProposer source)
+	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
 			throws ProposalAbnormalFailureException {
 			
 		boolean succ = source.propose(inputMark, context);
@@ -74,7 +75,10 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 		
 		Point3d cp = inputMark.getMark().centerPoint();
 		
-		int voxelVal = getVoxelFromChnl( binaryImgChnl.getChnl(),(int) cp.getX(), (int) cp.getY(), (int) cp.getZ());
+		int voxelVal = getVoxelFromChnl(
+			binaryImgChnl.getChannel(),
+			PointConverter.intFromDouble(cp)
+		);
 		if ( voxelVal==binaryImgChnl.getBinaryValues().getOffInt()) {
 			context.getErrorNode().add("centre outside probmap");
 			return false;
@@ -83,9 +87,8 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 		return true;
 	}
 	
-	private static int getVoxelFromChnl(Channel raster, int x, int y, int z) {
-		Point3i pnt = new Point3i(x,y,z);
-		return raster.getVoxelBox().asByte().getVoxel(pnt.getX(), pnt.getY(), pnt.getZ());
+	private static int getVoxelFromChnl(Channel raster, Point3i pnt) {
+		return raster.getVoxelBox().asByte().getVoxel(pnt);
 	}
 
 	public BinaryChnlProvider getBinaryChnl() {

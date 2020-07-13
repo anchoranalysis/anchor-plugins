@@ -31,8 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 
 /**
@@ -105,7 +104,7 @@ public abstract class NonMaximaSuppression<T> {
 			
 			T other = othersItr.next().getObj();
 			
-			if (pred.apply(other)) {
+			if (pred.test(other)) {
 			
 				double score = overlapScoreFor(proposal.getObj(), other);
 				

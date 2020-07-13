@@ -98,8 +98,8 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		
 		
 		if (getLogger()!=null) {
-			getLogger().getLogReporter().log("START AssignObjsToCfg");
-			getLogger().getLogReporter().logFormatted("Start\t%d objs for %d ellipsoids", listObjs.size(), listEllipsoids.size() );
+			getLogger().messageLogger().log("START AssignObjsToCfg");
+			getLogger().messageLogger().logFormatted("Start\t%d objs for %d ellipsoids", listObjs.size(), listEllipsoids.size() );
 		}
 		
 		// FIRST STEP, we assign all objects that are contained inside the ellipsoids, so long as they are exclusively in a single ellipsoid
@@ -111,7 +111,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		
 		
 		if (getLogger()!=null) {
-			getLogger().getLogReporter().logFormatted("Contain\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
+			getLogger().messageLogger().logFormatted("Contain\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
 		}
 		
 		listEllipsoids.assignClosestEllipsoids( listObjs, maxDist );
@@ -138,8 +138,8 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		}
 		
 		if (getLogger()!=null) {
-			getLogger().getLogReporter().logFormatted("Final\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
-			getLogger().getLogReporter().log("END AssignObjsToCfg");
+			getLogger().messageLogger().logFormatted("Final\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
+			getLogger().messageLogger().log("END AssignObjsToCfg");
 		}
 		
 		// LAST STEP, for each included object, we merge all their associated object masks to form a new ObjMask

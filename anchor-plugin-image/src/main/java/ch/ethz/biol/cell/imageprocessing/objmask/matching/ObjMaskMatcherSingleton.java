@@ -38,6 +38,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Specifies a single object that will always be the "match" for whatever source object.
  * 
@@ -47,7 +50,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskMatcherSingleton extends ObjectMatcher {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objs;
 	// END BEAN PROPERTIES
 	
@@ -81,14 +84,4 @@ public class ObjMaskMatcherSingleton extends ObjectMatcher {
 		
 		return objsCollection.get(0);
 	}
-
-	public ObjectCollectionProvider getObjs() {
-		return objs;
-	}
-
-	public void setObjs(ObjectCollectionProvider objs) {
-		this.objs = objs;
-	}
-
-
 }

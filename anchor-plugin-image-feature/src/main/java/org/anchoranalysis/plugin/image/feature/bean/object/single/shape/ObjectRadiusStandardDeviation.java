@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -45,12 +44,14 @@ import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import lombok.Getter;
+import lombok.Setter;
 
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean cov = false;	// Returns the coefficient of variation (stdDev/mean) instead of stdDev
 	// END BEAN PROPERTIES
 	
@@ -60,7 +61,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		ObjectMask om = input.get().getObjectMask();
 		
 		// Get the outline
-		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1, false, false);
+		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1);
 
 		// Distances from the center to each point on the outline
 		DoubleArrayList distances = distancesToPoints(
@@ -104,28 +105,17 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		}
 	}
 
-	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions, boolean erodeEdges, boolean do3D ) throws FeatureCalcException {
-		try {
-			List<Point3i> ptsOutline = new ArrayList<Point3i>();
-			
-			ObjectMask outline = FindOutline.outline(mask, 1, false, true);
-			PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-				outline.binaryVoxelBox(),
-				outline.getBoundingBox().cornerMin(),
-				ptsOutline
-			);
-			
-			return ptsOutline;
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
+	private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions) {
 
-	public boolean isCov() {
-		return cov;
-	}
-
-	public void setCov(boolean cov) {
-		this.cov = cov;
+		List<Point3i> ptsOutline = new ArrayList<>();
+			
+		ObjectMask outline = FindOutline.outline(mask, numberErosions, false, true);
+		PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
+			outline.binaryVoxelBox(),
+			outline.getBoundingBox().cornerMin(),
+			ptsOutline
+		);
+		
+		return ptsOutline;
 	}
 }

@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  */
 
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -147,7 +146,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 			
 			if (forceEagerEvaluation) {
 				Path path = outPath.doOperation();
-				if (!Files.exists(path)) {
+				if (!path.toFile().exists()) {
 					
 					if (skipMissingChannels) {
 						continue;

@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 /*
  * #%L
@@ -36,58 +36,22 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Thresholded extends MarkRegion {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkRegion region;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationToThreshold threshold;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public VoxelStatistics createStatisticsFor(PxlMarkMemo pmm, ImageDimensions dim) throws CreateException {
+	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
 		return region.createStatisticsFor(pmm, dim).threshold(threshold);
-	}
-
-	public RelationToThreshold getThreshold() {
-		return threshold;
-	}
-
-	public void setThreshold(RelationToThreshold threshold) {
-		this.threshold = threshold;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((region == null) ? 0 : region.hashCode());
-		result = prime * result + ((threshold == null) ? 0 : threshold.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Thresholded other = (Thresholded) obj;
-		if (region == null) {
-			if (other.region != null)
-				return false;
-		} else if (!region.equals(other.region))
-			return false;
-		if (threshold == null) {
-			if (other.threshold != null)
-				return false;
-		} else if (!threshold.equals(other.threshold))
-			return false;
-		return true;
 	}
 
 	@Override
@@ -98,13 +62,5 @@ public class Thresholded extends MarkRegion {
 			region.uniqueName(),
 			threshold.uniqueName()
 		);
-	}
-
-	public MarkRegion getRegion() {
-		return region;
-	}
-
-	public void setRegion(MarkRegion region) {
-		this.region = region;
 	}
 }

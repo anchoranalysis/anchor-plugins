@@ -1,10 +1,15 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 
-/*-
+import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
+
+import lombok.EqualsAndHashCode;
+
+
+/*
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +30,16 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * THE SOFTWARE.
  * #L%
  */
+@EqualsAndHashCode(callSuper=true)
+public class CalculateOverlapMIP extends CalculateOverlapMIPBase {
 
-class ProviderUtilities {
+	public CalculateOverlapMIP( int regionID ) {
+		super(regionID);
+	}
+	
+	@Override
+	protected Double calculateOverlapResult(double overlap, MaxIntensityProjectionPair pair) {
+		return overlap;
+	}
 
 }

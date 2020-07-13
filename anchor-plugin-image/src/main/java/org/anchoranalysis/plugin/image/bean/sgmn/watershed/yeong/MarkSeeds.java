@@ -46,7 +46,7 @@ class MarkSeeds {
 	public static void apply( SeedCollection seeds, EncodedVoxelBox matS, Optional<MinimaStore> minimaStore, Optional<ObjectMask> containingMask ) throws SgmnFailedException {
 			
 		if (containingMask.isPresent() && !matS.extent().equals(containingMask.get().getBoundingBox().extent())) {
-			throw new SgmnFailedException("Extnt of matS does not match containingMask");
+			throw new SgmnFailedException("Extent of matS does not match containingMask");
 		}
 		
 		for( Seed s : seeds ) {
@@ -65,7 +65,7 @@ class MarkSeeds {
 	
 	private static ProcessVoxel createPointProcessor(EncodedVoxelBox matS, Optional<MinimaStore> minimaStore ) {
 		ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
-		return pnt -> ccWriter.writePoint(pnt);
+		return ccWriter::writePoint;
 	}
 	
 	private static void throwExceptionIfNotConnected( ObjectMask obj ) throws SgmnFailedException {
