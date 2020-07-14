@@ -1,10 +1,16 @@
 package org.anchoranalysis.plugin.annotation.comparison;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.text.TypedValue;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /*
  * #%L
@@ -32,19 +38,22 @@ import org.anchoranalysis.core.text.TypedValue;
  * #L%
  */
 
-
+@RequiredArgsConstructor @Accessors(fluent=true) @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> {
 
+	// START REQUIRED ARGUMENTS
+	@Getter @EqualsAndHashCode.Include
+	private final String identifier;
+	// END REQUIRED ARGUMENTS
+	
+	@Getter
 	private int numImagesWithAcceptedAnnotations = 0;
+	
+	@Getter
 	private int numImagesWithSkippedAnnotations = 0;
+	
+	@Getter
 	private int numImagesWithoutAnnotations = 0;
-	
-	private String identifier;
-	
-	public AnnotationGroup(String identifier) {
-		super();
-		this.identifier = identifier;
-	}
 	
 	@Override
 	public void addSkippedAnnotationImage() {
@@ -62,49 +71,34 @@ public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> 
 	}
 	
 	public List<String> createHeaders() {
-		List<String> headerNames = new ArrayList<>();
-		headerNames.add("name");
-		
-		headerNames.add("percentAnnotated");
-		headerNames.add("percentSkipped");
-		headerNames.add("cntImages");
-		headerNames.add("cntImagesAnnotations");
-		headerNames.add("cntImagesAcceptedAnnotations");
-		headerNames.add("cntImagesSkippedAnnotations");
-		headerNames.add("cntImagesWithoutAnnotations");
-		return headerNames;
+		return new ArrayList<>(
+			Arrays.asList(
+				"name",
+				"percentAnnotated",
+				"percentSkipped",
+				"cntImages",
+				"cntImagesAnnotations",
+				"cntImagesAcceptedAnnotations",
+				"cntImagesSkippedAnnotations",
+				"cntImagesWithoutAnnotations"
+			)
+		);
 	}
 	
 	public List<TypedValue> createValues() {
-		
-		List<TypedValue> rowElements = new ArrayList<>();
-		
-		rowElements.add( new TypedValue( getIdentifier(), false ));
-		
-		rowElements.add( new TypedValue( percentAnnotatedImages(), 2 ));
-		rowElements.add( new TypedValue( percentSkippedAnnotations(), 2 ));
-		
-		rowElements.add( new TypedValue( numImagesTotal(), 2 ));
-		rowElements.add( new TypedValue( numImagesAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithAcceptedAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithSkippedAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithoutAnnotations(), 2 ));
-		
-		return rowElements;
+		return new ArrayList<>(
+			Arrays.asList(
+				new TypedValue( identifier, false ),
+				new TypedValue( percentAnnotatedImages(), 2 ),
+				new TypedValue( percentSkippedAnnotations(), 2 ),
+				new TypedValue( numImagesTotal(), 2 ),
+				new TypedValue( numImagesAnnotations(), 2 ),
+				new TypedValue( numImagesWithAcceptedAnnotations(), 2 ),
+				new TypedValue( numImagesWithSkippedAnnotations(), 2 ),
+				new TypedValue( numImagesWithoutAnnotations(), 2 )
+			)
+		);
 	}
-	
-	public int numImagesWithAcceptedAnnotations() {
-		return numImagesWithAcceptedAnnotations;
-	}
-	
-	public int numImagesWithSkippedAnnotations() {
-		return numImagesWithSkippedAnnotations;
-	}
-
-	public int numImagesWithoutAnnotations() {
-		return numImagesWithoutAnnotations;
-	}
-	
 	public int numImagesTotal() {
 		return numImagesWithAcceptedAnnotations + numImagesWithoutAnnotations + numImagesWithSkippedAnnotations;
 	}
@@ -119,25 +113,5 @@ public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> 
 	
 	public double percentSkippedAnnotations() { 
 		 return ((double) (numImagesWithSkippedAnnotations) )*100 / numImagesAnnotations();
-	}
-	
-	
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	@Override
-	public int hashCode() {
-		return getIdentifier().hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof AnnotationGroup)) {
-			return false;
-		}
-		@SuppressWarnings("unchecked")
-		AnnotationGroup<T> objCast = (AnnotationGroup<T>) obj;
-		return getIdentifier().equals(objCast.getIdentifier());
 	}
 }

@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.PointsFromObjMask;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConicFitterBase;
 import lombok.AllArgsConstructor;
@@ -59,7 +59,7 @@ class EllipseFactory {
 
 		pointsFitter.setShellRad(shellRad);
 		
-		Set<Point3i> points = PointsFromObjMask.pntsFromMaskOutlineSet(object);
+		Set<Point3i> points = PointsFromObject.pntsFromMaskOutlineSet(object);
 		
 		if (points.size()<MIN_NUMBER_POINTS) {
 			throw new InsufficientPointsException(

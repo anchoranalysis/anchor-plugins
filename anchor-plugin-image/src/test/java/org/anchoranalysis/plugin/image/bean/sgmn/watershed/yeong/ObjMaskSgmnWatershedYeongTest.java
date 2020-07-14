@@ -30,13 +30,14 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong.WatershedYeong;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -55,7 +56,7 @@ public class ObjMaskSgmnWatershedYeongTest {
 	);
 	
 	@Test
-	public void test_noMasks_noSeeds() throws SgmnFailedException, TestDataLoadException, OutputWriteFailedException {
+	public void test_noMasks_noSeeds() throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
 		sgmn(
 			PATH_EXPECTED_NO_MASKS_NO_SEEDS,
 			Optional.empty()
@@ -63,21 +64,21 @@ public class ObjMaskSgmnWatershedYeongTest {
 	}
 	
 	@Test
-	public void test_masks_noSeeds() throws SgmnFailedException, TestDataLoadException, OutputWriteFailedException {
+	public void test_masks_noSeeds() throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
 		sgmn(
 			PATH_EXPECTED_MASKS_NO_SEEDS,
 			Optional.of(PATH_MASK)
 		);
 	}
 	
-	private void sgmn( String pathObjsExpected, Optional<String> pathMask ) throws SgmnFailedException, TestDataLoadException, OutputWriteFailedException {
-		ObjMaskSgmnWatershedYeong sgmn = new ObjMaskSgmnWatershedYeong();
+	private void sgmn( String pathObjsExpected, Optional<String> pathMask ) throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
+		WatershedYeong sgmn = new WatershedYeong();
 		
 		Optional<ObjectMask> mask = pathMask.map( path ->
 			mask(path)
 		); 
 		
-		ObjectCollection objectsResult = sgmn.sgmn(
+		ObjectCollection objectsResult = sgmn.segment(
 			chnl(PATH_CHNL_BLURRED),
 			mask,
 			Optional.empty()

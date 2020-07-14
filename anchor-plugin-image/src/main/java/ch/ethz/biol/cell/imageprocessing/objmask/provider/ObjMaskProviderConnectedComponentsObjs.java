@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -43,7 +43,7 @@ import lombok.Setter;
  * @author Owen Feehan
  *
  */
-public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProviderOne {
+public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProviderUnary {
 
 	// START BEAN PROPERTIES
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */

@@ -41,7 +41,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
-import org.anchoranalysis.test.feature.plugins.objects.CircleObjMaskFixture;
+import org.anchoranalysis.test.feature.plugins.objects.CircleObjectFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjsFixture;
 import org.mockito.Mockito;
 
@@ -152,7 +152,7 @@ class InteresectingObjsTestHelper {
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureInputSingleObject(objectMask, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObject(objectMask, CircleObjectFixture.nrgStack()),
 			Optional.of(
 				createInitParams(others).getSharedObjects()
 			),

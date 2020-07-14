@@ -29,14 +29,14 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class ObjMaskProviderMaskBase extends ObjectCollectionProviderOne {
+public abstract class ObjMaskProviderMaskBase extends ObjectCollectionProviderUnary {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

@@ -108,7 +108,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 	
 	private ObjectMask createShell( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
-		FeatureCalculation<ObjectMask,FeatureInputSingleObject> ccShellObjMask = CalculateShellObjectMask.createFromCache(
+		FeatureCalculation<ObjectMask,FeatureInputSingleObject> ccShellObjMask = CalculateShellObjectMask.of(
 			input.resolver(),
 			iterationsDilation,
 			getIterationsErosion(),

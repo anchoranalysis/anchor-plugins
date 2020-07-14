@@ -32,18 +32,21 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentationOne;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class SgmnRepeat extends BinarySegmentationOne {
 
 	// START BEAN PROPERTIES
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int maxIter = 10;
 	// END BEAN PROPERTIES
 
@@ -53,7 +56,7 @@ public class SgmnRepeat extends BinarySegmentationOne {
 		BinarySegmentationParameters params,
 		Optional<ObjectMask> mask,
 		BinarySegmentation sgmn
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> outOld = null;
 		
@@ -74,13 +77,5 @@ public class SgmnRepeat extends BinarySegmentationOne {
 		}
 		
 		return outOld;
-	}
-
-	public int getMaxIter() {
-		return maxIter;
-	}
-
-	public void setMaxIter(int maxIter) {
-		this.maxIter = maxIter;
 	}
 }

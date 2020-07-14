@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.seed.SeedObjMask;
+import org.anchoranalysis.image.seed.SeedObjectMask;
 
 class SeedsFactory {
 	
@@ -77,13 +77,13 @@ class SeedsFactory {
 		return out;
 	}
 	
-	private static SeedObjMask createSeed( ObjectMask object ) {
-		return new SeedObjMask(
+	private static SeedObjectMask createSeed( ObjectMask object ) {
+		return new SeedObjectMask(
 			object.duplicate()
 		);
 	}
 	
-	private static SeedObjMask createSeedWithinMask(
+	private static SeedObjectMask createSeedWithinMask(
 		ObjectMask object,
 		BoundingBox containingBBox,
 		ReadableTuple3i subtractFromCrnrMin,
@@ -95,7 +95,7 @@ class SeedsFactory {
 		);
 		
 		// If a seed object is partially located outside an object, the above line might fail, so we should test
-		return new SeedObjMask(
+		return new SeedObjectMask(
 			ensureInsideContainer(seed, containingBBox, dim)
 		);
 	}

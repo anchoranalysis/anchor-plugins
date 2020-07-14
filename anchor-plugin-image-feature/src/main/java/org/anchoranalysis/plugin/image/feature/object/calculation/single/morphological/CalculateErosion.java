@@ -38,14 +38,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class CalculateErosion extends CalculateObjectMask {
 
-	private CalculateErosion(
-		int iterations,
-		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map
-	) {
-		super(iterations,map);
-	}
-	
-	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> create(
+	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> of(
 		CalculationResolver<FeatureInputSingleObject> cache,
 		int iterations,
 		boolean do3D
@@ -57,13 +50,20 @@ public class CalculateErosion extends CalculateObjectMask {
 		return new CalculateErosion(iterations, map);
 	}
 	
-	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> createFromCacheRslvd(
+	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ofResolved(
 		CalculationResolver<FeatureInputSingleObject> cache,
 		int iterations,
 		boolean do3D
 	) {
 		return cache.search(
-			create(cache, iterations, do3D)
+			of(cache, iterations, do3D)
 		);
+	}
+		
+	private CalculateErosion(
+		int iterations,
+		ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> map
+	) {
+		super(iterations,map);
 	}
 }

@@ -38,6 +38,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeToIncreaseObjectFeature;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -87,14 +88,14 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergeMax createMergeMax(
+	private static MergeToIncreaseObjectFeature createMergeMax(
 		ObjectCollection objects,
 		ToDoubleFunction<FeatureInputSingleObject> calculationFunction
 	) throws CreateException {
 		
 		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
-		ObjMaskProviderMergeMax provider = new ObjMaskProviderMergeMax();
+		MergeToIncreaseObjectFeature provider = new MergeToIncreaseObjectFeature();
 		
 		provider.setObjects(
 			ProviderFixture.providerFor(objects)

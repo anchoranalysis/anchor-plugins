@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
-public class Shell extends DerivedObjMask {
+public class Shell extends DerivedObject {
 
 	// START BEAN PROPERTIES
 	@BeanField
@@ -51,7 +51,7 @@ public class Shell extends DerivedObjMask {
 	
 	@Override
 	protected FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session) throws FeatureCalcException {
-		return CalculateShellObjectMask.createFromCache(
+		return CalculateShellObjectMask.of(
 			session,
 			iterationsDilation,
 			iterationsErosion,

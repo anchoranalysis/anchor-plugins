@@ -12,7 +12,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBBoxGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -60,7 +60,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
 	 * @throws OutputWriteFailedException
 	 */
-	protected ObjectMask maybePadObjMask( ObjectMask object, ImageDimensions dim ) {
+	protected ObjectMask maybePadObject( ObjectMask object, ImageDimensions dim ) {
 		
 		if (paddingXY==0 && paddingZ==0) {
 			return object;
@@ -74,8 +74,11 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		return BoundingBoxUtilities.createObjectForBoundingBox(object, bboxToExtract);
 	}
 		
-	protected ExtractedBBoxGenerator createBoundingBoxGeneratorForStack(Stack stack, String manifestFunction ) {
-		ExtractedBBoxGenerator generator = new ExtractedBBoxGenerator(stack, manifestFunction);
+	protected ExtractedBoundingBoxGenerator createBoundingBoxGeneratorForStack(Stack stack, String manifestFunction) {
+		ExtractedBoundingBoxGenerator generator = new ExtractedBoundingBoxGenerator(
+			stack,
+			manifestFunction
+		);
 		generator.setPaddingXY(paddingXY);
 		generator.setPaddingZ(paddingZ);
 		return generator;

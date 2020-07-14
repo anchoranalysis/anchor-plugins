@@ -26,7 +26,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
  * #L%
  */
 
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
+import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
+import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 import lombok.Getter;
@@ -75,7 +75,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 			);
 			featureEvaluator.initRecursive( soFeature, context.getLogger() );
 
-			AssignmentObjMaskFactory assignmentCreator = new AssignmentObjMaskFactory(
+			AssignmentObjectFactory assignmentCreator = new AssignmentObjectFactory(
 				featureEvaluator,
 				useMIP
 			);
@@ -94,7 +94,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 			
 			context.getOutputManager().getWriterCheckIfAllowed().write(
 				"costMatrix",
-				() -> new ObjMaskCollectionDistanceMatrixGenerator(assignmentCreator.getCost(), numDecimalPlaces )
+				() -> new ObjectsDistanceMatrixGenerator(assignmentCreator.getCost(), numDecimalPlaces )
 			);
 			
 			return assignment;
@@ -105,7 +105,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
 	@Override
 	public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
-		return new AnnotationGroupObjMask(key);
+		return new AnnotationGroupObject(key);
 	}
 
 	@Override

@@ -31,8 +31,8 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
-import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -44,24 +44,24 @@ public class ObjMaskProviderSegmentByObject extends ObjMaskProviderOneChnlSource
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectSegmentation sgmn;
+	private SegmentChannelIntoObjects sgmn;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objectsSource, Channel channelToSegment) throws CreateException {
 		try {
 			return objectsSource.stream().flatMapWithException(
-				SgmnFailedException.class,
+				SegmentationFailedException.class,
 				om -> segmentObject(om, channelToSegment)
 			);
 			
-		} catch (SgmnFailedException e) {
+		} catch (SegmentationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
-	private ObjectCollection segmentObject(ObjectMask object, Channel chnlToSgmn) throws SgmnFailedException {
-		return sgmn.sgmn(
+	private ObjectCollection segmentObject(ObjectMask object, Channel chnlToSgmn) throws SegmentationFailedException {
+		return sgmn.segment(
 			chnlToSgmn,
 			Optional.of(object),
 			Optional.empty()

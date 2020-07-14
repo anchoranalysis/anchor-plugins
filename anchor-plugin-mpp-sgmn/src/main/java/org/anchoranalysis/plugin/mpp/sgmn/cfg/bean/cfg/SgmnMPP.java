@@ -51,7 +51,7 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -119,7 +119,7 @@ public class SgmnMPP extends CfgSgmn {
 		NamedProvider<ObjectCollection> objects,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 		ListUpdatableMarkSetCollection updatableMarkSetCollection = new ListUpdatableMarkSetCollection();
 		
 		try {
@@ -134,7 +134,7 @@ public class SgmnMPP extends CfgSgmn {
 			);
 			
 		} catch( OperationFailedException e ) {
-			throw new SgmnFailedException(e);
+			throw new SegmentationFailedException(e);
 		}
 	}
 	
@@ -185,7 +185,7 @@ public class SgmnMPP extends CfgSgmn {
 			CfgWithNRGTotal cfgNRG = findOpt(updatableMarkSetCollection, initContext);
 			return cfgNRG.getCfg().deepCopy();
 			
-		} catch (InitException | CreateException | SgmnFailedException e) {
+		} catch (InitException | CreateException | SegmentationFailedException e) {
 			throw new OperationFailedException(e);
 		}
 	}
@@ -202,7 +202,7 @@ public class SgmnMPP extends CfgSgmn {
 	private CfgWithNRGTotal findOpt(
 		ListUpdatableMarkSetCollection updatableMarkSetCollection,
 		OptSchemeContext context
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 		try {
 			CfgNRG cfgNRG = optScheme.findOpt(
 				kernelProposer,
@@ -222,9 +222,9 @@ public class SgmnMPP extends CfgSgmn {
 			return cfgNRG.getCfgWithTotal();
 			
 		} catch (OptTerminatedEarlyException e) {
-			throw new SgmnFailedException("Optimization terminated early", e);
+			throw new SegmentationFailedException("Optimization terminated early", e);
 		} catch (OperationFailedException e) {
-			throw new SgmnFailedException("Some operation failed", e);
+			throw new SegmentationFailedException("Some operation failed", e);
 		}
 	}
 	

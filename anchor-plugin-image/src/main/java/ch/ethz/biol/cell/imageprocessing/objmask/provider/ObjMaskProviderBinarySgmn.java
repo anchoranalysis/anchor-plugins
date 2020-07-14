@@ -32,9 +32,9 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -58,12 +58,12 @@ public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 			return objectsSource.stream().map( object->
 				sgmnObject(object, channelSource)
 			);
-		} catch (SgmnFailedException e) {
+		} catch (SegmentationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
-	private ObjectMask sgmnObject(ObjectMask object, Channel channelSource) throws SgmnFailedException {
+	private ObjectMask sgmnObject(ObjectMask object, Channel channelSource) throws SegmentationFailedException {
 		VoxelBox<?> vb = channelSource.getVoxelBox().any().region(
 			object.getBoundingBox(),
 			true

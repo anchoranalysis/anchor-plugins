@@ -31,6 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +42,7 @@ import lombok.Setter;
  * @author feehano
  *
  */
-public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
+public class ObjMaskProviderIntersectsWith extends ObjectCollectionProviderWithContainer {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

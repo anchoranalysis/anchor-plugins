@@ -51,7 +51,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleO
 	private final ResolvedCalculationMap<ObjectMask,FeatureInputSingleObject,Integer> mapDilation;
 	private final boolean do3D;
 	
-	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
+	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> of(
 		CalculationResolver<FeatureInputSingleObject> cache,
 		int iterations,
 		boolean do3D
