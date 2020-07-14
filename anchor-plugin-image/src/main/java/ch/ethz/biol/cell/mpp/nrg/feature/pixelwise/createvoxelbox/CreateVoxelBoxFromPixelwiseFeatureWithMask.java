@@ -62,20 +62,19 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		this.listAdditionalHistograms = listAdditionalHistograms;
 	}
 	
-	// objMask can be null
-	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, ObjectMask objMask ) throws CreateException {
+	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, Optional<ObjectMask> object ) throws CreateException {
 	
 		// Sets up the Feature
 		try {
-			init( pixelScore, objMask );
+			init(pixelScore, object);
 			
 			Extent e = listVoxelBox.getFirstExtent();
 			
 			// We make our index buffer
 			VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
 			
-			if (objMask!=null) {
-				setPixelsWithMask( vbOut, objMask, pixelScore );
+			if (object.isPresent()) {
+				setPixelsWithMask( vbOut, object.get(), pixelScore );
 			} else {
 				setPixelsWithoutMask( vbOut, pixelScore );
 			}
@@ -87,22 +86,21 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 	}
 	
 	/** Initializes the pixel-score */
-	private void init( PixelScore pixelScore, ObjectMask objMask ) throws InitException {
-
+	private void init( PixelScore pixelScore, Optional<ObjectMask> object ) throws InitException {
 		pixelScore.init(
-			createHistograms(objMask),
+			createHistograms(object),
 			keyValueParams
 		);
 	}
 	
-	private List<Histogram> createHistograms(ObjectMask mask) {
+	private List<Histogram> createHistograms(Optional<ObjectMask> object) {
 		List<Histogram> out = new ArrayList<>();
 
 		for( VoxelBoxWrapper voxelBox : listVoxelBox) {
 			out.add(
 				HistogramFactory.create(
 					voxelBox,
-					Optional.of(mask)
+					object
 				)
 			);
 		}
@@ -135,14 +133,14 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		}
 	}
 
-	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjectMask objMask, PixelScore pixelScore ) throws FeatureCalcException {
+	private void setPixelsWithMask( VoxelBox<ByteBuffer> vbOut, ObjectMask object, PixelScore pixelScore ) throws FeatureCalcException {
 		
-		byte maskOn = objMask.getBinaryValuesByte().getOnByte();
+		byte maskOn = object.getBinaryValuesByte().getOnByte();
 		Extent e = vbOut.extent();
-		Extent eMask = objMask.binaryVoxelBox().extent();
+		Extent eMask = object.binaryVoxelBox().extent();
 		
-		ReadableTuple3i crnrMin = objMask.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = objMask.getBoundingBox().calcCornerMax();
+		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
 		
 		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {
 			
@@ -150,7 +148,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
 			int zRel = z-crnrMin.getZ();
 			
-			ByteBuffer bbMask = objMask.getVoxelBox().getPixelsForPlane(zRel).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(zRel).buffer();
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 			
 			for( int y=crnrMin.getY();y<=crnrMax.getY(); y++) {

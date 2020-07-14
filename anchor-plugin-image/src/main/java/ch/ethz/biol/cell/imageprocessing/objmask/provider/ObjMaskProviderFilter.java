@@ -38,8 +38,11 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class ObjMaskProviderFilter extends ObjMaskProviderFilterBase {
 
 	@Override
-	protected ObjectCollection createFromObjs(ObjectCollection in, Optional<ObjectCollection> omcRejected,
-			Optional<ImageDimensions> dim) throws CreateException {
-		return filter(in, dim, omcRejected);
+	protected ObjectCollection createFromObjects(
+		ObjectCollection objects,
+		Optional<ObjectCollection> objectsRejected,
+		Optional<ImageDimensions> dim
+	) throws CreateException {
+		return filter(objects, dim, objectsRejected);
 	}
 }

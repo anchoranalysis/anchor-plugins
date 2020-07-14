@@ -9,7 +9,7 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 
 /*-
  * #%L
@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -111,7 +111,7 @@ class SgmnMPPOutputter {
 	
 	private static void writeOutline( String outputNamePrefix, ColoredCfgWithDisplayStack coloredCfgDisplayStack, RegionMembershipWithFlags rm, WriterRouterErrors writer, int outlineWidth ) {
 		
-		ObjMaskWriter outlineWriter = new RGBOutlineWriter(outlineWidth);
+		DrawObject outlineWriter = new Outline(outlineWidth);
 		writer.write(
 			outputNamePrefix,
 			() -> new CfgGenerator( outlineWriter, coloredCfgDisplayStack, new IDGetterIter<Overlay>(),  rm)

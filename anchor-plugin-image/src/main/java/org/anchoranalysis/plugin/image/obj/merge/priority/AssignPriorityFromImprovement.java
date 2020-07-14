@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
+import org.anchoranalysis.plugin.image.obj.merge.ObjectVertex;
 
 
 /**
@@ -54,8 +54,8 @@ public class AssignPriorityFromImprovement extends AssignPriority {
 
 	@Override
 	public PrioritisedVertex assignPriorityToEdge(
-		ObjVertex src,
-		ObjVertex dest,
+		ObjectVertex src,
+		ObjectVertex dest,
 		ObjectMask merged,
 		ErrorReporter errorReporter
 	) throws OperationFailedException
@@ -72,20 +72,20 @@ public class AssignPriorityFromImprovement extends AssignPriority {
 		return new PrioritisedVertex(merged,payloadMerge,improvement,true);
 	}
 	
-	private double calcPayload( PayloadCalculator payloadCalculator, ObjectMask om ) throws OperationFailedException {
+	private double calcPayload( PayloadCalculator payloadCalculator, ObjectMask object ) throws OperationFailedException {
 		try {
-			return payloadCalculator.calc(om);
+			return payloadCalculator.calc(object);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
 	/** A weighted-average of the feature value (weighted according to the relative number of pixeks */
-	private static double weightedAverageFeatureVal( ObjVertex om1, ObjVertex om2 ) {
-		long size1 = om1.numPixels();
-		long size2 = om2.numPixels();
+	private static double weightedAverageFeatureVal( ObjectVertex first, ObjectVertex second ) {
+		long size1 = first.numberVoxels();
+		long size2 = second.numberVoxels();
 		
-		double weightedSum = (om1.getPayload()*size1) + (om2.getPayload()*size2);
+		double weightedSum = (first.getPayload()*size1) + (second.getPayload()*size2);
 		return weightedSum / (size1 + size2);
 	}
 }

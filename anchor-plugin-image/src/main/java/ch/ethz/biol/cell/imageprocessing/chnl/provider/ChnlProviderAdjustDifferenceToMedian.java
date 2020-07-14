@@ -59,18 +59,23 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {
 	
 		Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
 		
 		try {
-			for( ObjectMask om : objsSource ) {
-				Histogram h = HistogramFactory.create(
+			for( ObjectMask object : objectsSource ) {
+				
+				Histogram histogram = HistogramFactory.create(
 					lookup.getVoxelBox(),
-					Optional.of(om)
+					Optional.of(object)
 				);
-				int objMedian = (int) Math.round(h.mean());
-				adjustObj(om, chnl, lookup, objMedian );
+				adjustObj(
+					object,
+					chnl,
+					lookup,
+					(int) Math.round(histogram.mean())
+				);
 	
 			}
 			
@@ -81,10 +86,10 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 		}
 	}
 	
-	private void adjustObj( ObjectMask om, Channel chnl, Channel chnlLookup, int objMedian ) {
+	private void adjustObj( ObjectMask object, Channel chnl, Channel chnlLookup, int objMedian ) {
 		
-		ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
+		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
@@ -93,13 +98,13 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 			
 			ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
 			ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
 			
 			int maskOffset = 0;
 			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++ ) {
 				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++ ) {
 					
-					if( bbMask.get(maskOffset++)==om.getBinaryValuesByte().getOnByte()) {
+					if( bbMask.get(maskOffset++)==object.getBinaryValuesByte().getOnByte()) {
 						
 						int offset = vb.extent().offset(x, y);
 						

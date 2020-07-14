@@ -37,13 +37,13 @@ class GrowUtilities {
 
 	private static Point3i subExtent = new Point3i(1,1,1);
 	
-	public static BoundingBox growBBox( BoundingBox bbox ) {
+	public static BoundingBox grow( BoundingBox boundingBox ) {
 		
-		Point3i crnrMin = new Point3i(bbox.cornerMin());
+		Point3i crnrMin = new Point3i(boundingBox.cornerMin());
 		crnrMin.subtract(subExtent);
 		return new BoundingBox(
 			crnrMin,
-			bbox.extent().growBy(2)	
+			boundingBox.extent().growBy(2)	
 		);
 	}
 }

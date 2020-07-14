@@ -68,8 +68,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private boolean useZ = true;
 	// END BEAN PROPERTIES
 	
-	private ObjectMask omFilled;		// Not-changed as traversal occurs
-	private ObjectMask omOutline;		// Changed as traversal occurs (visited pixels are removed)
+	private ObjectMask objectFilled;		// Not-changed as traversal occurs
+	private ObjectMask objectOutline;		// Changed as traversal occurs (visited pixels are removed)
 	
 	@Override
 	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
@@ -83,9 +83,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		
 		callBefore(chnlOutline.getDimensions().getRes(), re);
 		
-		omOutline = createObjMaskForPoint(root, chnlOutline);
+		objectOutline = createObjMaskForPoint(root, chnlOutline);
 			
-		omFilled = objectForFilled(root, chnlFilled);
+		objectFilled = objectForFilled(root, chnlFilled);
 		callAfter(root, chnlOutline.getDimensions().getRes(), re);
 		traverseOutline(root, listOut);
 	}
@@ -137,7 +137,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	) throws TraverseOutlineException {
 		Point3i rootRelToMask = BoundingBox.relPosTo(
 			root,
-			omOutline.getBoundingBox()
+			objectOutline.getBoundingBox()
 			.cornerMin()
 		);
 		try {
@@ -150,8 +150,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private void traverseOutline(Point3i root, List<Point3i> listOut) throws TraverseOutlineException {
 		try {
 			new OutlineTraverser(
-				omOutline,
-				(pnt,dist) -> visitScheduler.considerVisit(pnt,dist,omFilled),
+				objectOutline,
+				(pnt,dist) -> visitScheduler.considerVisit(pnt,dist,objectFilled),
 				useZ,
 				nghb8
 			).applyGlobal(

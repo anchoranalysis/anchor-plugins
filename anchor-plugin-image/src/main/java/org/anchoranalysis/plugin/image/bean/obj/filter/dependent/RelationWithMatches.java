@@ -48,6 +48,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Matches each object with others, and keeps only those where a relation holds true for all matches (in terms of features)
  * 
@@ -57,17 +60,17 @@ import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterRelation;
 public class RelationWithMatches extends ObjectFilterRelation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluatorMatch;		// Optionally uses a different evaluator for the matched objects
 	
-	@BeanField
-	private ObjectMatcher objMaskMatcher;
+	@BeanField @Getter @Setter
+	private ObjectMatcher matcher;
 	
 	/** Size of feature evaluation cache for featureEvaluatorMatch */
-	@BeanField
+	@BeanField @Getter @Setter
 	private int cacheSize = 50;
 	// END BEAN PROPERTIES
 	
@@ -76,13 +79,13 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	private Map<ObjectMask,ObjectCollection> matches;
 		
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
-		super.start(dim, objsToFilter);
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
+		super.start(dim, objectsToFilter);
 
 		setupEvaluators();
 		
 		matches = createMatchesMap(
-			objMaskMatcher.findMatch(objsToFilter)
+			matcher.findMatch(objectsToFilter)
 		);
 		
 		// If any object has no matches, throw an exception
@@ -105,14 +108,14 @@ public class RelationWithMatches extends ObjectFilterRelation {
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
 		try {
 			double val = evaluatorForSource.calc(
-				new FeatureInputSingleObject(om)
+				new FeatureInputSingleObject(object)
 			);
 			return doesMatchAllAssociatedObjects(
 				val,
-				matches.get(om),
+				matches.get(object),
 				relation
 			);
 		} catch (FeatureCalcException e) {
@@ -150,38 +153,5 @@ public class RelationWithMatches extends ObjectFilterRelation {
     		 MatchedObject::getMatches
     	  )
     	);
-	}
-
-	public ObjectMatcher getObjMaskMatcher() {
-		return objMaskMatcher;
-	}
-
-	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
-		this.objMaskMatcher = objMaskMatcher;
-	}
-
-	public int getCacheSize() {
-		return cacheSize;
-	}
-
-	public void setCacheSize(int cacheSize) {
-		this.cacheSize = cacheSize;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluatorMatch() {
-		return featureEvaluatorMatch;
-	}
-
-	public void setFeatureEvaluatorMatch(
-			FeatureEvaluator<FeatureInputSingleObject> featureEvaluatorMatch) {
-		this.featureEvaluatorMatch = featureEvaluatorMatch;
 	}
 }

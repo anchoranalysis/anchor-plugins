@@ -44,17 +44,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 public abstract class ObjectFilterPredicate extends ObjectFilter {
 
 	@Override
-	public ObjectCollection filter(ObjectCollection objsToFilter, Optional<ImageDimensions> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	public ObjectCollection filter(ObjectCollection objectsToFilter, Optional<ImageDimensions> dim, Optional<ObjectCollection> objectsRejected) throws OperationFailedException {
 
-		if (!precondition(objsToFilter)) {
-			return objsToFilter;
+		if (!precondition(objectsToFilter)) {
+			return objectsToFilter;
 		}
 		
-		start(dim, objsToFilter);
+		start(dim, objectsToFilter);
 		
-		ObjectCollection dup = objsToFilter.stream().filter(
+		ObjectCollection dup = objectsToFilter.stream().filter(
 			om -> match(om,dim),
-			objsRejected
+			objectsRejected
 		);
 		
 		end();
@@ -63,16 +63,16 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
 	}
 	
 	/** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
-	protected boolean precondition(ObjectCollection objsToFilter) {
+	protected boolean precondition(ObjectCollection objectsToFilter) {
 		return true;
 	}
 	
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
 		// Default implementation, nothing to do
 	}
 	
 	/** A predicate condition for an object to be kept in the collection */
-	protected abstract boolean match( ObjectMask om, Optional<ImageDimensions> dim ) throws OperationFailedException;
+	protected abstract boolean match( ObjectMask object, Optional<ImageDimensions> dim ) throws OperationFailedException;
 	
 	protected void end() throws OperationFailedException {
 		// Default implementation, nothing to do

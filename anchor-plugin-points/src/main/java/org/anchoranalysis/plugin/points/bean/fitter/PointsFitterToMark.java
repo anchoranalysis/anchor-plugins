@@ -59,8 +59,8 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	@BeanField @Positive @Getter @Setter
 	private int minNumPnts = 1;
 	
-	@BeanField
-	private ObjectCollectionProvider objs;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	public void fitPointsToMark( List<Point3f> pntsForFitter, Mark mark, ImageDimensions dim) throws OperationFailedException {
@@ -72,7 +72,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	}
 	
 	public ObjectCollection createObjs() throws CreateException {
-		return objs.create();
+		return objects.create();
 	}
 	
 	public ImageDimensions createDim() throws CreateException {

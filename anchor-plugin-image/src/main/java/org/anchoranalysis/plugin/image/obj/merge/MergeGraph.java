@@ -95,16 +95,15 @@ public class MergeGraph {
 			logger
 		);
 	}
-	
-	
-	public List<ObjVertex> addObjsToGraph( ObjectCollection objs ) throws OperationFailedException {
 		
-		List<ObjVertex> listAdded = new ArrayList<>();				
+	public List<ObjectVertex> addObjsToGraph(ObjectCollection objects) throws OperationFailedException {
 		
-		for( int i=0; i<objs.size(); i++ ) {
+		List<ObjectVertex> listAdded = new ArrayList<>();				
+		
+		for( int i=0; i<objects.size(); i++ ) {
 
-			ObjVertex vertex = createVertex(
-				objs.get(i)
+			ObjectVertex vertex = createVertex(
+				objects.get(i)
 			);
 			graph.addVertex( vertex, listAdded, prioritizer, logger);
 			listAdded.add( vertex );
@@ -114,13 +113,13 @@ public class MergeGraph {
 	}
 	
 	
-	public ObjVertex merge( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> bestImprovement) throws OperationFailedException {
+	public ObjectVertex merge( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> bestImprovement) throws OperationFailedException {
 		
-		Set<ObjVertex> setPossibleNghbs = graph.neighbourNodesFor( bestImprovement );
+		Set<ObjectVertex> setPossibleNghbs = graph.neighbourNodesFor( bestImprovement );
 		graph.removeVertex( bestImprovement.getNode1() );
 		graph.removeVertex( bestImprovement.getNode2() );
 		
-		ObjVertex omMerged = bestImprovement.getEdge().getOmWithFeature();
+		ObjectVertex omMerged = bestImprovement.getEdge().getOmWithFeature();
 		graph.addVertex( omMerged, setPossibleNghbs, prioritizer, logger);
 		
 		logger.describeMerge(omMerged, bestImprovement);
@@ -128,13 +127,13 @@ public class MergeGraph {
 		return omMerged;
 	}
 	
-	public EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> findMaxPriority() {
+	public EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> findMaxPriority() {
 		
-		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> max = null;
+		EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> max = null;
 		
 		Comparator3i<Point3i> comparator = new Comparator3i<>();
 		
-		for( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> entry : graph.edgeSetUnique() ) {
+		for( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> entry : graph.edgeSetUnique() ) {
 			
 			PrioritisedVertex edge = entry.getEdge();
 			
@@ -152,8 +151,8 @@ public class MergeGraph {
 				// If we have equal values, we impose an arbitrary ordering
 				// so as to keep the output of the algorithm as deterministic as possible
 				int cmp = comparator.compare(
-					max.getEdge().getOmWithFeature().getObjMask().findArbitraryOnVoxel().get(),
-					edge.getOmWithFeature().getObjMask().findArbitraryOnVoxel().get()
+					max.getEdge().getOmWithFeature().getObject().findArbitraryOnVoxel().get(),
+					edge.getOmWithFeature().getObject().findArbitraryOnVoxel().get()
 				);
 				if (cmp>0) {
 					max = entry;
@@ -175,9 +174,9 @@ public class MergeGraph {
 		return graph.verticesAsObjects();
 	}
 	
-	private ObjVertex createVertex( ObjectMask obj ) throws OperationFailedException {
+	private ObjectVertex createVertex( ObjectMask obj ) throws OperationFailedException {
 		try {
-			return new ObjVertex(
+			return new ObjectVertex(
 				obj,
 				payloadCalculator.calc(obj)
 			); 

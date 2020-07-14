@@ -38,21 +38,21 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
 
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {
 
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		if (objsSource.size()>255) {
+		if (objectsSource.size()>255) {
 			throw new CreateException(
-				String.format("A maximum of 255 objs is allowed. There are %d",objsSource.size())
+				String.format("A maximum of 255 objects is allowed. There are %d",objectsSource.size())
 			);
 		}
 		
 		vb.setAllPixelsTo(0);
 		
 		int index = 1;
-		for(ObjectMask om : objsSource) {
-			vb.setPixelsCheckMask(om, index++);
+		for(ObjectMask objects : objectsSource) {
+			vb.setPixelsCheckMask(objects, index++);
 		}
 		
 		return chnl;

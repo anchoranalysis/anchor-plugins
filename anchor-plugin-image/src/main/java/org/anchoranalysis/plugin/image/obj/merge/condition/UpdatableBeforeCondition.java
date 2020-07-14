@@ -47,7 +47,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  */
 public interface UpdatableBeforeCondition {
 	
-	void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException;
+	void updateSourceObject(ObjectMask source, Optional<ImageResolution> res) throws OperationFailedException;
 	
-	boolean accept(ObjectMask omDest) throws OperationFailedException;
+	boolean accept(ObjectMask destination) throws OperationFailedException;
 }

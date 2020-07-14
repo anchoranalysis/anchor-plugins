@@ -47,23 +47,23 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderMask extends ObjMaskProviderMaskBase {
 
 	@Override
-	protected ObjectCollection createFromObjs(ObjectCollection objsIn, BinaryChnl mask) throws CreateException {
-		for( ObjectMask om : objsIn ) {
-			applyMask(om, mask);
-		}
-		return objsIn;
+	protected ObjectCollection createFromObjs(ObjectCollection objects, BinaryChnl mask) throws CreateException {
+		objects.forEach( om->
+			applyMask(om, mask)
+		);
+		return objects;
 	}
 	
-	private static void applyMask( ObjectMask om, BinaryChnl mask ) {
+	private static void applyMask( ObjectMask object, BinaryChnl mask ) {
 		
 		// Just the portion of the mask that matches the bounding box of our object
-		ObjectMask maskObj = mask.region(om.getBoundingBox(), true);
+		ObjectMask maskObject = mask.region(object.getBoundingBox(), true);
 		
 		BinaryChnlAnd.apply(
-			om.binaryVoxelBox().getVoxelBox(),
-			maskObj.binaryVoxelBox().getVoxelBox(),
-			om.binaryVoxelBox().getBinaryValues().createByte(),
-			maskObj.binaryVoxelBox().getBinaryValues().createByte()
+			object.binaryVoxelBox().getVoxelBox(),
+			maskObject.binaryVoxelBox().getVoxelBox(),
+			object.binaryVoxelBox().getBinaryValues().createByte(),
+			maskObject.binaryVoxelBox().getBinaryValues().createByte()
 		);		
 	}
 }

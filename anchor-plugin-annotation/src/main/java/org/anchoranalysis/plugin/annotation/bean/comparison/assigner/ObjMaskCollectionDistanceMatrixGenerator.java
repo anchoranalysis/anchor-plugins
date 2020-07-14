@@ -31,10 +31,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.anchoranalysis.annotation.io.assignment.ObjMaskCollectionDistanceMatrix;
+import org.anchoranalysis.annotation.io.assignment.ObjectCollectionDistanceMatrix;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.csv.CSVGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -43,11 +42,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 
-	private ObjMaskCollectionDistanceMatrix distanceMatrix;
+	private ObjectCollectionDistanceMatrix distanceMatrix;
 	private int numDecimalPlaces;
 	
 	public ObjMaskCollectionDistanceMatrixGenerator(
-			ObjMaskCollectionDistanceMatrix distanceMatrix, int numDecimalPlaces ) {
+			ObjectCollectionDistanceMatrix distanceMatrix, int numDecimalPlaces ) {
 		super("objMaskCollectionDistanceMatrix");
 		this.distanceMatrix = distanceMatrix;
 		this.numDecimalPlaces = numDecimalPlaces;
@@ -60,13 +59,13 @@ class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 		try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 			
 			// A sensible header string, bearing in the mind the first column has object descriptions
-			List<String> headers = dscrFromObjMaskCollection( distanceMatrix.getObjs2() );
+			List<String> headers = dscrFromObjMaskCollection( distanceMatrix.getObjects2() );
 			headers.add(0, "Objects");
 			
 			csvWriter.writeHeaders(headers);
 			
-			// The descriptions of objs1 go in the first column
-			List<String> column0 = dscrFromObjMaskCollection( distanceMatrix.getObjs1() );
+			// The descriptions of objects1 go in the first column
+			List<String> column0 = dscrFromObjMaskCollection( distanceMatrix.getObjects1() );
 			
 			for( int i=0; i<distanceMatrix.sizeObjs1(); i++ ) {
 				List<TypedValue> row = rowFromDistanceMatrix(i);
@@ -93,14 +92,9 @@ class ObjMaskCollectionDistanceMatrixGenerator extends CSVGenerator {
 	
 	
 	// A description of each object in a collection
-	private static List<String> dscrFromObjMaskCollection( ObjectCollection objs ) {
-		List<String> out = new ArrayList<>();
-		
-		for( ObjectMask om : objs ) {
-			String dscr = om.centerOfGravity().toString();
-			out.add( dscr );
-		}
-		
-		return out;
+	private static List<String> dscrFromObjMaskCollection( ObjectCollection objects ) {
+		return objects.stream().mapToList( om->
+			om.centerOfGravity().toString()
+		);
 	}
 }

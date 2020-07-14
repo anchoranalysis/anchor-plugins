@@ -69,10 +69,10 @@ class CalculateClosing extends FeatureCalculation<ObjectMask,FeatureInputSingleO
 	protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalcException {
 		
 		try {
-			ObjectMask omDilated = mapDilation.getOrCalculate(params, iterations);
+			ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);
 			
-			return MorphologicalErosion.createErodedObjMask(
-				omDilated,
+			return MorphologicalErosion.createErodedObject(
+				dilated,
 				params.getDimensionsOptional().map(ImageDimensions::getExtent),
 				do3D,
 				iterations,

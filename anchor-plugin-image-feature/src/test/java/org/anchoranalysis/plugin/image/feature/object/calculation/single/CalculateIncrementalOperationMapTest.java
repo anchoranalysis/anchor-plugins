@@ -33,7 +33,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
 import org.anchoranalysis.test.image.NRGStackFixture;
-import org.anchoranalysis.test.image.obj.ObjMaskFixture;
+import org.anchoranalysis.test.image.obj.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Spy;
@@ -56,9 +56,9 @@ public class CalculateIncrementalOperationMapTest {
 	@Before
     public void setup() throws OperationFailedException {
 		// An arbitrary object
-		ObjectMask om = new ObjMaskFixture(nrgStack.getDimensions()).create1();
-
-		when( mockMap.applyOperation(any(), any(), anyBoolean()) ).thenReturn( om );
+		when( mockMap.applyOperation(any(), any(), anyBoolean()) ).thenReturn(
+			new ObjectMaskFixture(nrgStack.getDimensions()).create1()
+		);
     }
 	   
 	@Test

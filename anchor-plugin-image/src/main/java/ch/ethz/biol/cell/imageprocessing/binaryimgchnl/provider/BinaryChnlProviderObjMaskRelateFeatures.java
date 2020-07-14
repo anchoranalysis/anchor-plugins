@@ -42,42 +42,45 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlMain;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlCompareTo;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlElse;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureProvider<FeatureInputSingleObject> featureProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationBean relation;
 	// END BEAN PROPERTIES
 	
 	@Override
 	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
 
-		BinaryChnl chnlMain = binaryChnlMain.create();
+		BinaryChnl channel = binaryChnlMain.create();
 		
-		ObjectMask omMain = CreateFromEntireChnlFactory.createObjMask( chnlMain );
-		ObjectMask omCompareTo = CreateFromEntireChnlFactory.createObjMask(
+		ObjectMask objectMain = CreateFromEntireChnlFactory.createObject( channel );
+		ObjectMask objectCompareTo = CreateFromEntireChnlFactory.createObject(
 			binaryChnlCompareTo.create()
 		);
 			
 		FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 		
 		return calcRelation(
-			omMain,
-			omCompareTo,
-			chnlMain,
+			objectMain,
+			objectCompareTo,
+			channel,
 			NRGStackUtilities.addNrgStack(session, chnlSource)
 		);
 	}
@@ -95,13 +98,18 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 		}
 	}
 	
-	private BinaryChnl calcRelation( ObjectMask omMain, ObjectMask omCompareTo, BinaryChnl chnlMain, FeatureCalculatorSingle<FeatureInputSingleObject> session ) throws CreateException {
+	private BinaryChnl calcRelation(
+		ObjectMask objectMain,
+		ObjectMask objectCompareTo,
+		BinaryChnl chnlMain,
+		FeatureCalculatorSingle<FeatureInputSingleObject> calculator
+	) throws CreateException {
 		try {
-			double valMain = session.calc(
-				new FeatureInputSingleObject(omMain)
+			double valMain = calculator.calc(
+				new FeatureInputSingleObject(objectMain)
 			);
-			double valCompareTo = session.calc(
-				new FeatureInputSingleObject(omCompareTo)
+			double valCompareTo = calculator.calc(
+				new FeatureInputSingleObject(objectCompareTo)
 			);
 			
 			if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
@@ -113,45 +121,4 @@ public class BinaryChnlProviderObjMaskRelateFeatures extends BinaryChnlProviderC
 			throw new CreateException(e);
 		}
 	}
-
-	public FeatureProvider<FeatureInputSingleObject> getFeatureProvider() {
-		return featureProvider;
-	}
-
-	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObject> featureProvider) {
-		this.featureProvider = featureProvider;
-	}
-
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
-	}
-
-	public BinaryChnlProvider getBinaryChnlMain() {
-		return binaryChnlMain;
-	}
-
-	public void setBinaryChnlMain(BinaryChnlProvider binaryChnlMain) {
-		this.binaryChnlMain = binaryChnlMain;
-	}
-
-	public BinaryChnlProvider getBinaryChnlCompareTo() {
-		return binaryChnlCompareTo;
-	}
-
-	public void setBinaryChnlCompareTo(BinaryChnlProvider binaryChnlCompareTo) {
-		this.binaryChnlCompareTo = binaryChnlCompareTo;
-	}
-
-	public BinaryChnlProvider getBinaryChnlElse() {
-		return binaryChnlElse;
-	}
-
-	public void setBinaryChnlElse(BinaryChnlProvider binaryChnlElse) {
-		this.binaryChnlElse = binaryChnlElse;
-	}
-
 }

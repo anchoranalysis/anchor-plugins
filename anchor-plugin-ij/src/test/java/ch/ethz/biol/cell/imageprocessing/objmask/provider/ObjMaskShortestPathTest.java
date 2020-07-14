@@ -44,13 +44,13 @@ public class ObjMaskShortestPathTest {
 	@Test
 	public void test() throws OperationFailedException {
 		
-		Point3i pnt1 = new Point3i(4,19,0);
-		Point3i pnt2 = new Point3i(11,3,0);
+		Point3i point1 = new Point3i(4,19,0);
+		Point3i point2 = new Point3i(11,3,0);
 		
-		ObjectMask om = ObjMaskWalkShortestPath.walkLine(pnt1, pnt2);
+		ObjectMask object = ObjMaskWalkShortestPath.walkLine(point1, point2);
 				
-		assertTrue( om.binaryVoxelBox().countOn()==24 );
-		assertTrue( om.contains( new Point3i(4,19,0) ) );
-		assertTrue( om.contains( new Point3i(11,3,0) ) );
+		assertTrue( object.binaryVoxelBox().countOn()==24 );
+		assertTrue( object.contains( new Point3i(4,19,0) ) );
+		assertTrue( object.contains( new Point3i(11,3,0) ) );
 	}
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderFlattenZ extends ObjectCollectionProviderOne {
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.stream().map( ObjectMask::flattenZ );
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
+		return objects.stream().map( ObjectMask::flattenZ );
 	}
 }

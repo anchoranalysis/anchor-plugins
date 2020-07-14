@@ -75,23 +75,23 @@ public class DescribeGraph {
 	 * @param doMerge
 	 * @return
 	 */
-	public String describeEdge( ObjVertex src, ObjVertex dest, ObjVertex merged, double priority, boolean doMerge ) {
+	public String describeEdge( ObjectVertex src, ObjectVertex dest, ObjectVertex merged, double priority, boolean doMerge ) {
 		if (includePayload) {
 			return String.format("Merge? %s (%f)\t+%s (%f)\t= %s (%f)\t%e  %s",
-				src.getObjMask(),
+				src.getObject(),
 				src.getPayload(),
-				dest.getObjMask(),
+				dest.getObject(),
 				dest.getPayload(),
-				merged.getObjMask(),
+				merged.getObject(),
 				merged.getPayload(),
 				priority,
 				doMerge ? "Yes!" : "No!"
 			);
 		} else {
 			return String.format("Merge? %s\t+%s\t= %s\t%e  %s",
-				src.getObjMask(),
-				dest.getObjMask(),
-				merged.getObjMask(),
+				src.getObject(),
+				dest.getObject(),
+				merged.getObject(),
 				priority,
 				doMerge ? "Yes!" : "No!"
 			);
@@ -99,14 +99,14 @@ public class DescribeGraph {
 	}
 	
 	public String describeMerge(
-		ObjVertex omMerged,
-		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> bestImprovement
+		ObjectVertex omMerged,
+		EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> bestImprovement
 	) {
 		if (includePayload) {
 			return String.format("Merging %s and %s to %s (%f,%f->%f). Num vertices/edges=%d,%d.",
-				bestImprovement.getNode1().getObjMask().centerOfGravity(),
-				bestImprovement.getNode2().getObjMask().centerOfGravity(),
-				omMerged.getObjMask().centerOfGravity(),
+				bestImprovement.getNode1().getObject().centerOfGravity(),
+				bestImprovement.getNode2().getObject().centerOfGravity(),
+				omMerged.getObject().centerOfGravity(),
 				bestImprovement.getNode1().getPayload(),
 				bestImprovement.getNode2().getPayload(),
 				omMerged.getPayload(),
@@ -115,9 +115,9 @@ public class DescribeGraph {
 			);
 		} else {
 			return String.format("Merging %s and %s to %s. Num vertices/edges=%d,%d.",
-				bestImprovement.getNode1().getObjMask().centerOfGravity(),
-				bestImprovement.getNode2().getObjMask().centerOfGravity(),
-				omMerged.getObjMask().centerOfGravity(),
+				bestImprovement.getNode1().getObject().centerOfGravity(),
+				bestImprovement.getNode2().getObject().centerOfGravity(),
+				omMerged.getObject().centerOfGravity(),
 				graph.numVertices(),
 				graph.numEdges()
 			);
@@ -126,9 +126,9 @@ public class DescribeGraph {
 	
 	private void describeAllVertices(StringBuilder sb) {
 		sb.append("START Vertices\n");
-		for( ObjVertex vertex : graph.vertexSet() ) {
+		for( ObjectVertex vertex : graph.vertexSet() ) {
 			sb.append(
-				String.format("%s (%f)%n", vertex.getObjMask().centerOfGravity(), vertex.getPayload())
+				String.format("%s (%f)%n", vertex.getObject().centerOfGravity(), vertex.getPayload())
 			);
 		}
 		sb.append("END Vertices\n");
@@ -136,7 +136,7 @@ public class DescribeGraph {
 	
 	private void describeAllEdges(StringBuilder sb) {
 		sb.append("START Edges\n");
-		for( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edge : graph.edgeSetUnique() ) {
+		for( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge : graph.edgeSetUnique() ) {
 			sb.append(
 				describeEdge(
 					edge.getNode1(),

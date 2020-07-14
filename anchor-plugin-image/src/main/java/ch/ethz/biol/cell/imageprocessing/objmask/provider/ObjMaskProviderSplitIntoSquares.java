@@ -58,17 +58,17 @@ public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
-		return objsCollection.stream().flatMap(this::splitObj);
+	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {
+		return objectCollection.stream().flatMap(this::splitObject);
 	}
 	
 	// We want to add in any remaining space at the end into the last object, so we never have a rectangle
 	//  smaller than our squareSDize
-	private ObjectCollection splitObj( ObjectMask om ) {
+	private ObjectCollection splitObject( ObjectMask object ) {
 		
 		ObjectCollection out = new ObjectCollection();
 		
-		Extent e = om.getBoundingBox().extent();
+		Extent e = object.getBoundingBox().extent();
 		
 		int numX = numSquaresAlongDimension(e.getX());
 		int numY = numSquaresAlongDimension(e.getY());
@@ -96,7 +96,7 @@ public class ObjMaskProviderSplitIntoSquares extends ObjectCollectionProviderOne
 					endX = Math.min(endX+squareSize,e.getX());
 				}				
 				
-				createSquare(om, startX, startY, endX-startX, extentY).ifPresent(out::add);
+				createSquare(object, startX, startY, endX-startX, extentY).ifPresent(out::add);
 			}
 		}
 		

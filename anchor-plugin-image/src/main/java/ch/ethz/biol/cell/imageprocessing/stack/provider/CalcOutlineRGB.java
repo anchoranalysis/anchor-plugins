@@ -133,9 +133,9 @@ class CalcOutlineRGB {
 	}
 	
 	private static void zeroPixels( BinaryChnl outline, Channel[] chnlArr ) {
-		ObjectMask omOutline = CreateFromEntireChnlFactory.createObjMask(outline);
+		ObjectMask objectOutline = CreateFromEntireChnlFactory.createObject(outline);
 		for( Channel chnl : chnlArr ) {
-			chnl.getVoxelBox().any().setPixelsCheckMask(omOutline, 0);
+			chnl.getVoxelBox().any().setPixelsCheckMask(objectOutline, 0);
 		}
 	}
 	

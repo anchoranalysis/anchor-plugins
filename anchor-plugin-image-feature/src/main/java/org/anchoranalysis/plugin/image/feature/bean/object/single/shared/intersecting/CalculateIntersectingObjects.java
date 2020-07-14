@@ -52,6 +52,6 @@ class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, 
 	protected ObjectCollection execute(FeatureInputSingleObject params) {
 
 		ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree( searchObjs );
-		return bboxRTree.intersectsWith( params.getObjectMask() );
+		return bboxRTree.intersectsWith( params.getObject() );
 	}
 }

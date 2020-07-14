@@ -57,7 +57,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
-import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
+import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 public class AnnotationComparisonTask<T extends Assignment> extends Task<AnnotationComparisonInput<ProvidesStackInput>,SharedState<T>> {
 
@@ -157,18 +157,18 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 			descriptiveSplit
 		);
 		
-		Optional<ObjsToCompare> objs = ObjsToCompareFactory.create(
+		Optional<ObjectsToCompare> objectsToCompare = ObjectsToCompareFactory.create(
 			input,
 			addAnnotation,
 			background.getDimensions(),
 			context
 		);
 		return OptionalUtilities.map(
-			objs,
-			objCollection-> processAcceptedAnnotation(
+			objectsToCompare,
+			objects-> processAcceptedAnnotation(
 				input,
 				background,
-				objCollection,			
+				objects,			
 				addAnnotation,
 				sharedState,
 				descriptiveSplit,
@@ -205,7 +205,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 	private Assignment processAcceptedAnnotation(
 		AnnotationComparisonInput<ProvidesStackInput> inputObject,
 		DisplayStack background,
-		ObjsToCompare objs,
+		ObjectsToCompare objectsToCompare,
 		IAddAnnotation<T> addAnnotation,
 		SharedState<T> sharedStateC,
 		SplitString descriptiveSplit,
@@ -217,7 +217,7 @@ public class AnnotationComparisonTask<T extends Assignment> extends Task<Annotat
 		
 		try {
 			T assignment = assigner.createAssignment(
-				objs,
+				objectsToCompare,
 				background.getDimensions(),
 				useMIP,
 				context

@@ -30,32 +30,22 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
 public class LevelResult {
 	
-	private int level;
-	private ObjectMask objMask;
-	private Histogram histogram;
+	@Getter
+	private final int level;
 	
-	public LevelResult(int level, ObjectMask objMask, Histogram histogram) {
-		super();
-		this.level = level;
-		this.objMask = objMask;
-		this.histogram = histogram;
-	}
+	@Getter
+	private final ObjectMask object;
 	
+	@Getter
+	private final Histogram histogram;
+		
 	public double distToSquared( Point3d srcPnt ) {
-		return srcPnt.distanceSquared(objMask.getBoundingBox().midpoint());
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public ObjectMask getObjMask() {
-		return objMask;
-	}
-
-	public Histogram getHistogram() {
-		return histogram;
+		return srcPnt.distanceSquared(object.getBoundingBox().midpoint());
 	}
 }

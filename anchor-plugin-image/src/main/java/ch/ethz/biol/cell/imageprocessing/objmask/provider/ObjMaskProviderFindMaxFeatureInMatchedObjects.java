@@ -42,21 +42,24 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Returns a collection of each Max Object found in matches
 public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProviderFindMaxFeatureBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectMatcher objMaskMatcher;
+	@BeanField @Getter @Setter
+	private ObjectMatcher matcher;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
 
 		try {
-			List<MatchedObject> listMatches = objMaskMatcher.findMatch(in);
+			List<MatchedObject> listMatches = matcher.findMatch(objects);
 
 			return ObjectCollectionFactory.mapFromOptional(
 				listMatches,
@@ -68,30 +71,22 @@ public class ObjMaskProviderFindMaxFeatureInMatchedObjects extends ObjMaskProvid
 		}
 	}
 	
-	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection objs ) throws FeatureCalcException {
+	private Optional<ObjectMask> findMax( FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection objects ) throws FeatureCalcException {
 		Optional<ObjectMask> max = Optional.empty();
 		double maxVal = 0;
 		
-		for( ObjectMask om : objs ) {
+		for( ObjectMask objectMask : objects ) {
 			
 			double featureVal = session.calc(
-				new FeatureInputSingleObject(om)
+				new FeatureInputSingleObject(objectMask)
 			);
 			
 			if (!max.isPresent() || featureVal>maxVal) {
-				max = Optional.of(om);
+				max = Optional.of(objectMask);
 				maxVal = featureVal;
 			}
 		}
 		
 		return max;
-	}
-
-	public ObjectMatcher getObjMaskMatcher() {
-		return objMaskMatcher;
-	}
-
-	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
-		this.objMaskMatcher = objMaskMatcher;
 	}
 }

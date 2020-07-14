@@ -37,17 +37,17 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		ObjectMask omSlice = centerSlice(
-			input.get().getObjectMask()
+		return ShapeRegularityCalculator.calcShapeRegularity(
+			centerSlice(
+				input.get().getObject()
+			)
 		);
-		
-		return ShapeRegularityCalculator.calcShapeRegularity(omSlice);
 	}
 	
-	private ObjectMask centerSlice( ObjectMask om ) {
-		int zSliceCenter = (int) om.centerOfGravity().getZ();
-		return  om.extractSlice(
-			zSliceCenter - om.getBoundingBox().cornerMin().getZ(),
+	private ObjectMask centerSlice( ObjectMask object ) {
+		int zSliceCenter = (int) object.centerOfGravity().getZ();
+		return  object.extractSlice(
+			zSliceCenter - object.getBoundingBox().cornerMin().getZ(),
 			false
 		);
 	}

@@ -33,28 +33,23 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderIndex extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int index = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objMaskCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		
-		if (index>=objMaskCollection.size()) {
-			throw new CreateException( String.format("Index %d is out of bounds. ObjMaskCollection has %d items", index, objMaskCollection.size()) );
+		if (index>=objects.size()) {
+			throw new CreateException( String.format("Index %d is out of bounds. ObjMaskCollection has %d items", index, objects.size()) );
 		}
 		
-		return ObjectCollectionFactory.from( objMaskCollection.get(index) );
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
+		return ObjectCollectionFactory.from( objects.get(index) );
 	}
 }

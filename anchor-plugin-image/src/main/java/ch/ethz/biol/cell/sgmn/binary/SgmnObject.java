@@ -46,6 +46,9 @@ import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFact
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 // Thresholds an image, then creates an object out of each
 //   connected set of pixels, and then performs another threshold
@@ -56,14 +59,14 @@ public class SgmnObject extends BinarySegmentation {
 
 	// START BEANS
 	/** The Thresholder applied on the whole image */
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinarySegmentation imageSgmn;
 	
 	/** The Thresholder applied on the local object */
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinarySegmentation objectSgmn;
 	
-	@BeanField @Positive
+	@BeanField @Positive @Getter @Setter
 	private int minNumPixelsImageSgmn = 100;
 	// END BEANS
 	
@@ -100,7 +103,7 @@ public class SgmnObject extends BinarySegmentation {
 		BinarySegmentationParameters params
 	) throws SgmnFailedException {
 
-		for( ObjectMask obj : objsFromVoxelBox(voxelBox)) {
+		for( ObjectMask obj : objectsFromVoxelBox(voxelBox)) {
 			
 			if (!obj.numPixelsLessThan(minNumPixelsImageSgmn)) {
 				
@@ -128,40 +131,12 @@ public class SgmnObject extends BinarySegmentation {
 		}		
 	}
 		
-	private static ObjectCollection objsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
+	private static ObjectCollection objectsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
 		try {
 			CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
 			return omcCreator.createConnectedComponents(buffer.duplicate() );
 		} catch (CreateException e) {
 			throw new SgmnFailedException(e);
 		}
-	}
-	
-	public int getMinNumPixelsImageSgmn() {
-		return minNumPixelsImageSgmn;
-	}
-
-
-	public void setMinNumPixelsImageSgmn(int minNumPixelsImageSgmn) {
-		this.minNumPixelsImageSgmn = minNumPixelsImageSgmn;
-	}
-	
-	public BinarySegmentation getImageSgmn() {
-		return imageSgmn;
-	}
-
-
-	public void setImageSgmn(BinarySegmentation imageSgmn) {
-		this.imageSgmn = imageSgmn;
-	}
-
-
-	public BinarySegmentation getObjectSgmn() {
-		return objectSgmn;
-	}
-
-
-	public void setObjectSgmn(BinarySegmentation objectSgmn) {
-		this.objectSgmn = objectSgmn;
 	}
 }

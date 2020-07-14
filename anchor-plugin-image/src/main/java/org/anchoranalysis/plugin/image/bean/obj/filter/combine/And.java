@@ -42,12 +42,16 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class And extends ObjectFilterCombine {
 
 	@Override
-	public ObjectCollection filter(ObjectCollection objects, Optional<ImageDimensions> dim, Optional<ObjectCollection> objsRejected) throws OperationFailedException {
+	public ObjectCollection filter(
+		ObjectCollection objects,
+		Optional<ImageDimensions> dim,
+		Optional<ObjectCollection> objectsRejected
+	) throws OperationFailedException {
 		
 		ObjectCollection running = objects;
 		
 		for (ObjectFilter indFilter : getList()) {
-			running = indFilter.filter(running, dim, objsRejected);
+			running = indFilter.filter(running, dim, objectsRejected);
 		}
 		
 		return running;

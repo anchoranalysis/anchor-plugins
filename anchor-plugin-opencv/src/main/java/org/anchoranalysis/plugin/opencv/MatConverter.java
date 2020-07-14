@@ -38,17 +38,19 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-public class MatConverter {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private MatConverter() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class MatConverter {
 	
-	public static Mat fromObjMask( ObjectMask om ) throws CreateException {
-		Extent e = om.getBoundingBox().extent(); 
+	public static Mat fromObject( ObjectMask object ) throws CreateException {
+		Extent e = object.getBoundingBox().extent(); 
 		if (e.getZ()>1) {
 			throw new CreateException("Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
 		}
 
-		return singleChnlMatFromVoxelBox( om.binaryVoxelBox().getVoxelBox() );
+		return singleChnlMatFromVoxelBox( object.binaryVoxelBox().getVoxelBox() );
 	}
 		
 	public static Mat fromStack( Stack stack ) throws CreateException {

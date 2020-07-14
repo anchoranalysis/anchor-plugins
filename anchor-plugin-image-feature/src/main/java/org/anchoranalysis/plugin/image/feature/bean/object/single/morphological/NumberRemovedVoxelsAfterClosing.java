@@ -35,6 +35,9 @@ import org.anchoranalysis.image.feature.object.calculation.CalculateNumVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * How many pixels are removed after a morphological closing operation on the object-mask.
  * 
@@ -44,17 +47,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int iterations = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean do3D = true;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
-		ObjectMask omClosing = input.calc(
+		ObjectMask closed = input.calc(
 			CalculateClosing.createFromCache(
 				input.resolver(),
 				iterations,
@@ -66,23 +69,6 @@ public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
 			new CalculateNumVoxels(false)
 		);
 		
-		return omClosing.numberVoxelsOn() - numVoxels;
+		return closed.numberVoxelsOn() - numVoxels;
 	}
-
-	public int getIterations() {
-		return iterations;
-	}
-
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
 }

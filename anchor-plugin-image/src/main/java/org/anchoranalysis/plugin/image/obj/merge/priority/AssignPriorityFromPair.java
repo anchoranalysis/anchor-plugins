@@ -34,7 +34,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
+import org.anchoranalysis.plugin.image.obj.merge.ObjectVertex;
 
 import lombok.AllArgsConstructor;
 
@@ -54,19 +54,19 @@ public class AssignPriorityFromPair extends AssignPriority {
 	
 	@Override
 	public PrioritisedVertex assignPriorityToEdge(
-		ObjVertex src,
-		ObjVertex dest,
-		ObjectMask merge,
+		ObjectVertex source,
+		ObjectVertex destination,
+		ObjectMask merged,
 		ErrorReporter errorReporter
 	) throws OperationFailedException {
 
 		double resultPair = featureCalculator.calcSuppressErrors(
-			createInput(src, dest, merge),
+			createInput(source, destination, merged),
 			errorReporter
 		);
 
 		return new PrioritisedVertex(
-			merge,
+			merged,
 			0,
 			resultPair,
 			relation.isRelationToValueTrue(resultPair,threshold)
@@ -74,15 +74,15 @@ public class AssignPriorityFromPair extends AssignPriority {
 	}
 	
 	private FeatureInputPairObjects createInput(
-		ObjVertex omSrcWithFeature,
-		ObjVertex omDestWithFeature,
-		ObjectMask omMerge	
+		ObjectVertex sourceWithFeature,
+		ObjectVertex destinationWithFeature,
+		ObjectMask merged	
 	) {
 		return new FeatureInputPairObjects(
-			omSrcWithFeature.getObjMask(),
-			omDestWithFeature.getObjMask(),
+			sourceWithFeature.getObject(),
+			destinationWithFeature.getObject(),
 			Optional.empty(),
-			Optional.of(omMerge)
+			Optional.of(merged)
 		);
 	}
 }

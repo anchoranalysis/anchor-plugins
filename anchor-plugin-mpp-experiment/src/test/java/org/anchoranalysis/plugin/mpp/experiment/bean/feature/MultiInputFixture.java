@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
+import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjsFixture;
 
 class MultiInputFixture {
 
@@ -61,7 +61,7 @@ class MultiInputFixture {
 				"someName"
 			)
 		);
-		input.objs().add(
+		input.objects().add(
 			OBJS_NAME,
 			() -> IntersectingCircleObjsFixture.generateIntersectingObjs(
 				NUM_INTERSECTING_OBJECTS,

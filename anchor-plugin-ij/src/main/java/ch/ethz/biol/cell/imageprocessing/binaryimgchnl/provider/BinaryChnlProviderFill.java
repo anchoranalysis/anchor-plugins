@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,10 +64,13 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	public BinaryChnl createFromChnl(BinaryChnl bic) throws CreateException {
 		
 		BinaryChnl bicDup = fillChnl(bic);
-		
-		BinaryValues bvOut = BinaryValues.getDefault();
-		ObjectCollection omcFiltered = filterObjsFromBinaryImage(bicDup);
-		return fillHoles(omcFiltered, bic, bic.getDimensions(), bvOut);
+
+		return fillHoles(
+			filterObjsFromBinaryImage(bicDup),
+			bic,
+			bic.getDimensions(),
+			BinaryValues.getDefault()
+		);
 	}
 	
 	private BinaryChnl fillChnl( BinaryChnl bic ) throws CreateException {
@@ -90,17 +93,18 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	private ObjectCollection filterObjsFromBinaryImage( BinaryChnl bi ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
-		
-		ObjectCollection omc = createObjMasks.createConnectedComponents(bi) ;
 				
-		return filterObjs(omc, bi.getDimensions());
+		return filterObjs(
+			createObjMasks.createConnectedComponents(bi),
+			bi.getDimensions()
+		);
 	}
 	
-	private ObjectCollection filterObjs( ObjectCollection omc, ImageDimensions dim ) throws CreateException {
+	private ObjectCollection filterObjs( ObjectCollection objects, ImageDimensions dim ) throws CreateException {
 		
 		final double maxVolumeRslvd = determineMaxVolume(dim);
 
-		return omc.stream().filter( om->
+		return objects.stream().filter( om->
 			includeObject(om, dim, maxVolumeRslvd)
 		);
 	}
@@ -108,7 +112,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	private double determineMaxVolume(ImageDimensions dim) throws CreateException {
 		if (maxVolume!=null) {
 			try {
-				return maxVolume.rslv(
+				return maxVolume.resolveToVoxels(
 					Optional.of(dim.getRes())
 				);
 			} catch (UnitValueException e) {
@@ -119,18 +123,18 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		}
 	}
 	
-	private boolean includeObject(ObjectMask om, ImageDimensions dim, double maxVolumeRslvd) {
+	private boolean includeObject(ObjectMask object, ImageDimensions dim, double maxVolumeRslvd) {
 		// It's not allowed touch the border
-		if (skipAtBorder && om.getBoundingBox().atBorderXY(dim)) {
+		if (skipAtBorder && object.getBoundingBox().atBorderXY(dim)) {
 			return false;
 		}
 		
 		// Volume check
-		return maxVolume==null || om.numberVoxelsOn()<=maxVolumeRslvd;
+		return maxVolume==null || object.numberVoxelsOn()<=maxVolumeRslvd;
 	}
 	
 	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) {
-		BinaryChnl bcSelected = BinaryChnlFromObjs.createFromObjs(filled, sd, bvOut);
+		BinaryChnl bcSelected = BinaryChnlFromObjects.createFromObjects(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;
 	}

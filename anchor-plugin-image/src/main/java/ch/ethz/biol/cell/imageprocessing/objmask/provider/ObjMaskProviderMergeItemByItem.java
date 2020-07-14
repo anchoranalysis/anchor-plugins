@@ -36,6 +36,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Merges an object in each list item by item
 //
 // Requires each provider to return the same number of items
@@ -43,18 +46,18 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 public class ObjMaskProviderMergeItemByItem extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objs1;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objects1;
 	
-	@BeanField
-	private ObjectCollectionProvider objs2;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objects2;
 	// END BEAN PROPERTIES
 		
 	@Override
 	public ObjectCollection create() throws CreateException {
 
-		ObjectCollection first = objs1.create();
-		ObjectCollection second = objs2.create();
+		ObjectCollection first = objects1.create();
+		ObjectCollection second = objects2.create();
 		
 		if (first.size()!=second.size()) {
 			throw new CreateException( String.format("Both object-providers must have the same number of items, currently %d and %d", first.size(), second.size() ));
@@ -69,23 +72,4 @@ public class ObjMaskProviderMergeItemByItem extends ObjectCollectionProvider {
 			)
 		);
 	}
-
-	public ObjectCollectionProvider getObjs1() {
-		return objs1;
-	}
-
-	public void setObjs1(ObjectCollectionProvider objs1) {
-		this.objs1 = objs1;
-	}
-
-	public ObjectCollectionProvider getObjs2() {
-		return objs2;
-	}
-
-	public void setObjs2(ObjectCollectionProvider objs2) {
-		this.objs2 = objs2;
-	}
-
-
-
 }

@@ -34,22 +34,25 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderIfParamEqual extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objsEqual;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsEqual;
 	
-	@BeanField
-	private ObjectCollectionProvider objsNotEqual;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsNotEqual;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private KeyValueParamsProvider keyValueParamsProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String key;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private String value;
 	// END BEAN PROPERTIES
 
@@ -69,53 +72,9 @@ public class ObjMaskProviderIfParamEqual extends ObjectCollectionProvider {
 		}		
 		
 		if( valFromProp.equals(value)) {
-			return objsEqual.create();
+			return objectsEqual.create();
 		} else {
-			return objsNotEqual.create();
+			return objectsNotEqual.create();
 		}
 	}
-
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
-
-	public void setKeyValueParamsProvider(
-			KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public ObjectCollectionProvider getObjsEqual() {
-		return objsEqual;
-	}
-
-	public void setObjsEqual(ObjectCollectionProvider objsEqual) {
-		this.objsEqual = objsEqual;
-	}
-
-	public ObjectCollectionProvider getObjsNotEqual() {
-		return objsNotEqual;
-	}
-
-	public void setObjsNotEqual(ObjectCollectionProvider objsNotEqual) {
-		this.objsNotEqual = objsNotEqual;
-	}
-
-
-
 }

@@ -74,7 +74,7 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask objMask ) {
+	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object ) {
 		try {
 			return distToRoot(pnt)<maxDist.rslv(
 				Optional.of(res),

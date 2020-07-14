@@ -61,7 +61,7 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 	@Override
 	protected ImageMoments execute( FeatureInputSingleObject params ) {
 		return new ImageMoments(
-			createPointMatrixFromObjMaskPixelPositions(params.getObjectMask()),
+			createPointMatrixFromObjMaskPixelPositions(params.getObject()),
 			suppressZ,
 			false
 		);
@@ -70,24 +70,24 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 	/**
 	 * Creates a point-matrix with the distance of each point to the origin of the bounding-box
 	 * 
-	 * @param om
+	 * @param object
 	 * @return
 	 */
-	private static DoubleMatrix2D createPointMatrixFromObjMaskPixelPositions( ObjectMask om ) {
+	private static DoubleMatrix2D createPointMatrixFromObjMaskPixelPositions( ObjectMask object ) {
 		
 		List<Point3i> listPts = new ArrayList<>();
 		
-		Extent e = om.getVoxelBox().extent();
+		Extent e = object.getVoxelBox().extent();
 		
 		
 		for (int z=0; z<e.getZ(); z++) {
-			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
+			ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
 		
 			int offset = 0;
 			for (int y=0; y<e.getY(); y++) {
 				for (int x=0; x<e.getX(); x++) {
 					
-					if (bb.get(offset++)==om.getBinaryValuesByte().getOnByte()) {
+					if (bb.get(offset++)==object.getBinaryValuesByte().getOnByte()) {
 						listPts.add( new Point3i(x,y,z) );
 					}
 				}

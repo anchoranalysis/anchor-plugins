@@ -45,14 +45,14 @@ class SeedsFactory {
 	public static SeedCollection createSeedsWithoutMask( ObjectCollection seeds ) {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
-		SeedCollection seedsObj = new SeedCollection();
-		for( ObjectMask om : seeds ) {
-			seedsObj.add(
-				createSeed(om)
+		SeedCollection out = new SeedCollection();
+		for( ObjectMask object : seeds ) {
+			out.add(
+				createSeed(object)
 			);
 		}
 				
-		return seedsObj;
+		return out;
 	}
 	
 	public static SeedCollection createSeedsWithMask(
@@ -63,38 +63,34 @@ class SeedsFactory {
 	) throws CreateException {
 		// We create a collection of seeds localised appropriately
 		// NB: we simply change the object seeds, as it seemingly won't be used again!!!
-		SeedCollection seedsObj = new SeedCollection();
-		for( ObjectMask om : seeds ) {
-			seedsObj.add(
+		SeedCollection out = new SeedCollection();
+		for( ObjectMask object : seeds ) {
+			out.add(
 				createSeedWithinMask(
-					om,
+					object,
 					containingMask.getBoundingBox(),
 					subtractFromCrnrMin,
 					dim
 				)
 			);
 		}
-		
-		assert(
-			seedsObj.verifySeedsAreInside( containingMask.getBoundingBox().extent())
-		);
-		return seedsObj;
+		return out;
 	}
 	
-	private static SeedObjMask createSeed( ObjectMask om ) {
+	private static SeedObjMask createSeed( ObjectMask object ) {
 		return new SeedObjMask(
-			om.duplicate()
+			object.duplicate()
 		);
 	}
 	
 	private static SeedObjMask createSeedWithinMask(
-		ObjectMask om,
+		ObjectMask object,
 		BoundingBox containingBBox,
 		ReadableTuple3i subtractFromCrnrMin,
 		ImageDimensions dim
 	) throws CreateException {
 		
-		ObjectMask seed = om.mapBoundingBox( bbox->
+		ObjectMask seed = object.mapBoundingBox( bbox->
 			bbox.shiftBackBy(subtractFromCrnrMin)
 		);
 		

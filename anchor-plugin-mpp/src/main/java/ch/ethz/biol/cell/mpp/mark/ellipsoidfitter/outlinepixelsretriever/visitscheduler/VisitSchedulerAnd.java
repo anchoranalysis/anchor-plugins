@@ -95,9 +95,9 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask objMask) {
+	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask object) {
 		for( VisitScheduler vs : list ) {
-			if (!vs.considerVisit(pnt, distAlongContour, objMask)) {
+			if (!vs.considerVisit(pnt, distAlongContour, object)) {
 				return false;
 			}
 		}

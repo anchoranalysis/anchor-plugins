@@ -87,18 +87,21 @@ public class ObjMaskProviderMergeMaxTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergeMax createMergeMax( ObjectCollection objs, ToDoubleFunction<FeatureInputSingleObject> calculationFunc ) throws CreateException {
+	private static ObjMaskProviderMergeMax createMergeMax(
+		ObjectCollection objects,
+		ToDoubleFunction<FeatureInputSingleObject> calculationFunction
+	) throws CreateException {
 		
 		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
 		ObjMaskProviderMergeMax provider = new ObjMaskProviderMergeMax();
 		
-		provider.setObjs(
-			ProviderFixture.providerFor(objs)
+		provider.setObjects(
+			ProviderFixture.providerFor(objects)
 		);
 		provider.setFeatureEvaluator(
 			FeatureEvaluatorFixture.createNrg(
-				MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(calculationFunc),
+				MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(calculationFunction),
 				logger,
 				Mockito.mock(Path.class)
 			)
@@ -109,7 +112,7 @@ public class ObjMaskProviderMergeMaxTest {
 	
 	/** Merges if the number-of-pixels becomes closer to 900 */
 	private static Double convergeTo900( FeatureInputSingleObject input ) {
-		int diff = 900 - input.getObjectMask().numberVoxelsOn();
+		int diff = 900 - input.getObject().numberVoxelsOn();
 		return (double) -1 * Math.abs(diff);
 	}
 }

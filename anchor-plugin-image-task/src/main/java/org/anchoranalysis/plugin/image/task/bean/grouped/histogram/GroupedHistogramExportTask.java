@@ -66,7 +66,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram,Histo
 	private boolean writeImageHistograms = true;	// If enabled writes a histogram for each image, as well as the group
 	
 	@BeanField @OptionalBean @Getter @Setter
-	private ObjectCollectionProvider objs;		// Optional
+	private ObjectCollectionProvider objects;		// Optional
 	
 	/** If defined, this stack is used as a mask over the values which are fed into the histogram */
 	@BeanField @AllowEmpty @Getter @Setter

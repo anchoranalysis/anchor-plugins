@@ -27,14 +27,11 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
  */
 
 
-import java.nio.ByteBuffer;
-
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import lombok.AllArgsConstructor;
@@ -53,26 +50,30 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer,FeatureInp
 	 */
 	private boolean suppress3D;
 		
-	private static int calcSurfaceSize(ObjectMask objMask, ImageDimensions dim, boolean mip, boolean suppress3D) {
+	private static int calcSurfaceSize(ObjectMask object, ImageDimensions dim, boolean mip, boolean suppress3D) {
 		
 		boolean do3D = (dim.getZ() > 1) && !suppress3D;
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
 			
-			OutlineKernel3 kernel = new OutlineKernel3(objMask.getBinaryValuesByte(), false, false);
+			OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, false);
 			
-			VoxelBox<ByteBuffer> mipVb = objMask.getVoxelBox().maxIntensityProj();
-			return ApplyKernel.applyForCount(kernel, mipVb );
+			return ApplyKernel.applyForCount(
+				kernel,
+				object.getVoxelBox().maxIntensityProj()
+			);
 			
 		} else {
-			OutlineKernel3 kernel = new OutlineKernel3(objMask.getBinaryValuesByte(), false, do3D);
-			return ApplyKernel.applyForCount(kernel, objMask.getVoxelBox() );
+			return ApplyKernel.applyForCount(
+				new OutlineKernel3(object.getBinaryValuesByte(), false, do3D),
+				object.getVoxelBox()
+			);
 		}
 	}
 
 	@Override
 	protected Integer execute(FeatureInputSingleObject input) throws FeatureCalcException {
-		return calcSurfaceSize(input.getObjectMask(), input.getDimensionsRequired(), mip, suppress3D);
+		return calcSurfaceSize(input.getObject(), input.getDimensionsRequired(), mip, suppress3D);
 	}
 }

@@ -57,10 +57,10 @@ public class ProviderFixture {
 		);
 	}
 	
-	public static ObjectCollectionProvider providerFor(ObjectCollection objs) {
+	public static ObjectCollectionProvider providerFor(ObjectCollection objects) {
 		ObjectCollectionProvider provider = mock(ObjectCollectionProvider.class);
 		try {
-			when(provider.create()).thenReturn(objs);
+			when(provider.create()).thenReturn(objects);
 		} catch (CreateException e) {
 		}
 		when(provider.duplicateBean()).thenReturn(provider);

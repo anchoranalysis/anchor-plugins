@@ -49,11 +49,8 @@ class CalculateSingleInputFromMerged extends FeatureCalculation<FeatureInputSing
 	@Override
 	protected FeatureInputSingleObject execute(FeatureInputPairObjects input) {
 		
-		ObjectMask omSelected = extractObjFunc.apply(input);
+		ObjectMask selected = extractObjFunc.apply(input);
 		
-		FeatureInputSingleObject paramsNew = new FeatureInputSingleObject( omSelected );
-		paramsNew.setNrgStack( input.getNrgStackOptional() );
-		assert( paramsNew instanceof FeatureInputSingleObject);
-		return paramsNew;
+		return new FeatureInputSingleObject( selected, input.getNrgStackOptional() );
 	}
 }

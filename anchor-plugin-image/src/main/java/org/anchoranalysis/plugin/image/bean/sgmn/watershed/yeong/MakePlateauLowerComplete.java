@@ -148,13 +148,13 @@ class MakePlateauLowerComplete {
 		List<Point3i> searchPoints = plateau.ptsEdgeAsPoints();
 		
 		try {
-			// We create an objMask from the list of points
-			ObjectMask om = CreateObjectsFromPoints.create( plateau.getPtsInner() );
+			// We create an object-mask from the list of points
+			ObjectMask object = CreateObjectFromPoints.create( plateau.getPtsInner() );
 			Nghb nghb = new BigNghb();
 
 			ProcessVoxelNeighbour<List<Point3i>> process = ProcessVoxelNeighbourFactory.withinMask(
-				om,
-				new PointTester(matS, om.getBinaryValuesByte())
+				object,
+				new PointTester(matS, object.getBinaryValuesByte())
 			);
 			
 			while( !searchPoints.isEmpty() ) {

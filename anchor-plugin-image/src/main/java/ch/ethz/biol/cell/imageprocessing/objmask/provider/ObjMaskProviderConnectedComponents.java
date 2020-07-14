@@ -78,7 +78,7 @@ public class ObjMaskProviderConnectedComponents extends ObjectCollectionProvider
 		
 		try {
 			int minNumberVoxels = (int) Math.round(
-				minVolume.rslv(
+				minVolume.resolveToVoxels(
 					Optional.of(bi.getDimensions().getRes())
 				)
 			);

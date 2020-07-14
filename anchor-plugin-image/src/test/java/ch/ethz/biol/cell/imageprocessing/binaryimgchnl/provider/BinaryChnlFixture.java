@@ -74,7 +74,7 @@ class BinaryChnlFixture {
 	
 	/** Creates a rectangle (2d) or cuboid (3d) */
 	private static ObjectMask createRectange( Point3i crnr, boolean do3D ) {
-		ObjectMask om = new ObjectMask(
+		ObjectMask object = new ObjectMask(
 			new BoundingBox(
 				crnr,
 				new Extent(
@@ -84,7 +84,7 @@ class BinaryChnlFixture {
 				)
 			)
 		);
-		om.binaryVoxelBox().setAllPixelsToOn();
-		return om;
+		object.binaryVoxelBox().setAllPixelsToOn();
+		return object;
 	}
 }

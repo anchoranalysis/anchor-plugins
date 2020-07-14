@@ -49,7 +49,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsSource ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objectsSource ) throws CreateException {
 		try {
 			Merger merger = new Merger(
 				replaceWithMidpoint,
@@ -59,7 +59,7 @@ public class ObjMaskProviderMerge extends ObjMaskProviderMergeOptionalDistance {
 				getLogger()
 			);
 			
-			return mergeMultiplex(objsSource, merger::tryMerge);
+			return mergeMultiplex(objectsSource, merger::tryMerge);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

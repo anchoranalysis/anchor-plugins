@@ -52,18 +52,18 @@ class CalculateIntersectionOfDilatedBoundingBox extends FeatureCalculation<Optio
 		);
 	}
 
-	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjectMask om1, ObjectMask om2, Extent extent) {
+	private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox( ObjectMask first, ObjectMask second, Extent extent) {
 		
 		// Grow each bounding box
-		BoundingBox bbox1 = dilatedBoundingBoxFor(om1, extent);
-		BoundingBox bbox2 = dilatedBoundingBoxFor(om2, extent);
+		BoundingBox bboxFirst = dilatedBoundingBoxFor(first, extent);
+		BoundingBox bboxSecond = dilatedBoundingBoxFor(second, extent);
 		
 		// Find the intersection
-		return bbox1.intersection().withInside(bbox2, extent);
+		return bboxFirst.intersection().withInside(bboxSecond, extent);
 	}
 	
-	private BoundingBox dilatedBoundingBoxFor( ObjectMask om, Extent extent ) {
-		return om.getVoxelBoxBounded().dilate(
+	private BoundingBox dilatedBoundingBoxFor( ObjectMask object, Extent extent ) {
+		return object.getVoxelBoxBounded().dilate(
 			do3D,
 			Optional.of(extent)
 		);

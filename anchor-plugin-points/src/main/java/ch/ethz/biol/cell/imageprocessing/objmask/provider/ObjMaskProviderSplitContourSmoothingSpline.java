@@ -64,19 +64,19 @@ public class ObjMaskProviderSplitContourSmoothingSpline extends ObjectCollection
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.stream().flatMapWithException(CreateException.class, this::splitContoursFromObj);
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
+		return objects.stream().flatMapWithException(CreateException.class, this::splitContoursFromObj);
 	}
 	
-	private ObjectCollection splitContoursFromObj(ObjectMask om) throws CreateException {
+	private ObjectCollection splitContoursFromObj(ObjectMask object) throws CreateException {
 		
-		if (om.getBoundingBox().extent().getZ()>1) {
-			throw new CreateException("Only objs with z-slices > 1 are allowed");
+		if (object.getBoundingBox().extent().getZ()>1) {
+			throw new CreateException("Only objects with z-slices > 1 are allowed");
 		}
 		
 		try {
 			return contoursAsObjs(
-				SplitContourSmoothingSpline.apply(om, smoothingFactor, numLoopPoints, minNumPoints)
+				SplitContourSmoothingSpline.apply(object, smoothingFactor, numLoopPoints, minNumPoints)
 			);
 			
 		} catch (OperationFailedException e) {

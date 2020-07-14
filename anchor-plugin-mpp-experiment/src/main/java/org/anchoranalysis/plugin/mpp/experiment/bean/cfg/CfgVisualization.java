@@ -31,13 +31,13 @@ import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
-import org.anchoranalysis.io.bean.objmask.writer.RGBSolidWriter;
+import org.anchoranalysis.io.bean.object.writer.Filled;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
@@ -65,11 +65,11 @@ class CfgVisualization {
 			backgroundStack
 		);
 
-		writeCfgGenerator(writeIfAllowed, "solid", new RGBSolidWriter(), cfgWithStack );		
-		writeCfgGenerator(writeIfAllowed, "outline", new RGBOutlineWriter(), cfgWithStack );
+		writeCfgGenerator(writeIfAllowed, "solid", new Filled(), cfgWithStack );		
+		writeCfgGenerator(writeIfAllowed, "outline", new Outline(), cfgWithStack );
 	}
 	
-	private static void writeCfgGenerator( WriterRouterErrors writeIfAllowed, String outputName, ObjMaskWriter maskWriter, ColoredCfgWithDisplayStack cfgWithStack ) {
+	private static void writeCfgGenerator( WriterRouterErrors writeIfAllowed, String outputName, DrawObject maskWriter, ColoredCfgWithDisplayStack cfgWithStack ) {
 		writeIfAllowed.write(
 			outputName,
 			() -> new CfgGenerator(

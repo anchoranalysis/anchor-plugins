@@ -61,9 +61,9 @@ public class ObjMaskSgmnMIP extends ObjectSegmentationOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> object, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
 		
-		if (objMask.isPresent()) {
+		if (object.isPresent()) {
 			throw new SgmnFailedException("An object-mask is not supported for this operation");
 		}
 		
@@ -72,20 +72,20 @@ public class ObjMaskSgmnMIP extends ObjectSegmentationOne {
 		// Collapse seeds in z direction
 		seeds.ifPresent(ObjMaskSgmnMIP::flattenSeedsInZ);
 		
-		ObjectCollection objs = sgmn.sgmn(max, Optional.empty(), seeds);
+		ObjectCollection objects = sgmn.sgmn(max, Optional.empty(), seeds);
 		
-		if (isAny3d(objs)) {
+		if (isAny3d(objects)) {
 			throw new SgmnFailedException("A 3D object was returned from the initial segmentation. This must return only 2D objects");
 		}
 		
 		return ExtendObjsInto3DMask.extendObjs(
-			objs,
+			objects,
 			binarySgmn(chnl)
 		);
 	}
 	
-	private boolean isAny3d(ObjectCollection objs) {
-		return objs.stream().anyMatch(om->
+	private boolean isAny3d(ObjectCollection objects) {
+		return objects.stream().anyMatch(om->
 			om.getVoxelBox().extent().getZ() >1
 		);
 	}

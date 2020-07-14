@@ -81,21 +81,21 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	
 		ImageDimensions sd = input.getDimensionsRequired();
 		
-		ObjectMask omShell = createShellObjMask(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjectMask shell = createShellObjMask(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
-			ObjectMask omDup = input.getObjectMask().duplicate();
+			ObjectMask duplicated = input.getObject().duplicate();
 			
-			Optional<ObjectMask> omShellIntersected = omShell.intersect( omDup, sd );
+			Optional<ObjectMask> omShellIntersected = shell.intersect( duplicated, sd );
 			omShellIntersected.ifPresent( shellIntersected ->
-				omDup.binaryVoxelBox().setPixelsCheckMaskOff(
-					shellIntersected.relMaskTo(omDup.getBoundingBox())
+				duplicated.binaryVoxelBox().setPixelsCheckMaskOff(
+					shellIntersected.relMaskTo(duplicated.getBoundingBox())
 				)
 			);
-			return omDup;
+			return duplicated;
 			
 		} else {
-			return omShell;
+			return shell;
 		}
 	}
 	
@@ -120,27 +120,27 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		boolean do3D
 	) throws FeatureCalcException {
 
-		ObjectMask omDilated = ccDilation.getOrCalculate(input).duplicate();
-		ObjectMask omEroded = ccErosion.getOrCalculate(input);
+		ObjectMask objectDilated = ccDilation.getOrCalculate(input).duplicate();
+		ObjectMask objectEroded = ccErosion.getOrCalculate(input);
 		
 		// Maybe apply a second erosion
 		try {
-			omDilated = iterationsErosionSecond>0 ? MorphologicalErosion.createErodedObjMask(
-				omDilated,
+			objectDilated = iterationsErosionSecond>0 ? MorphologicalErosion.createErodedObject(
+				objectDilated,
 				null,
 				do3D,
 				iterationsErosionSecond,
 				true,
 				null
-			) : omDilated;
+			) : objectDilated;
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
 		
-		ObjectMask relMask = omEroded.relMaskTo( omDilated.getBoundingBox() );
+		ObjectMask relMask = objectEroded.relMaskTo( objectDilated.getBoundingBox() );
 		
-		omDilated.binaryVoxelBox().setPixelsCheckMaskOff( relMask );
+		objectDilated.binaryVoxelBox().setPixelsCheckMaskOff( relMask );
 	
-		return omDilated;
+		return objectDilated;
 	}
 }

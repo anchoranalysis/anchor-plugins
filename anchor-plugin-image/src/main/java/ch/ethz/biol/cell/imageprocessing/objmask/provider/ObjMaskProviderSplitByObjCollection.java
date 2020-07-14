@@ -47,29 +47,32 @@ import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensions {
 
 	private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR
 		= new CreateFromConnectedComponentsFactory();
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objsSplitBy;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsSplitBy;
 	// END BEAN PROPERTIES
 			
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {
 		
-		ObjectCollection objsSplitByCollection = objsSplitBy.create();
+		ObjectCollection objectsSplitByCollection = objectsSplitBy.create();
 
 		ImageDimensions dim = createDim();
 		
 		try {
-			return objsCollection.stream().flatMapWithException(
+			return objectCollection.stream().flatMapWithException(
 				OperationFailedException.class,
 				obj -> splitObj(
 					obj,
-					objsSplitByCollection.findObjectsWithIntersectingBBox(obj),
+					objectsSplitByCollection.findObjectsWithIntersectingBBox(obj),
 					dim
 				)
 			);
@@ -78,7 +81,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		}
 	}
 	
-	private ObjectCollection splitObj( ObjectMask objToSplit, ObjectCollection objsSplitBy, ImageDimensions dim ) throws OperationFailedException {
+	private ObjectCollection splitObj(ObjectMask objectToSplit, ObjectCollection objectsSplitBy, ImageDimensions dim) throws OperationFailedException {
 		
 		// We create a voxel buffer of the same size as objToSplit bounding box, and we write
 		//  a number for each obj in ObjsSplitBy
@@ -87,16 +90,16 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		// Should be set to 0 by default
 		BoundedVoxelBox<IntBuffer> boundedVbId = new BoundedVoxelBox<>(
 			VoxelBoxFactory.getInt().create(
-				objToSplit.getBoundingBox().extent()
+				objectToSplit.getBoundingBox().extent()
 			)
 		);
 		
 		// Populate boundedVbId with id values
 		int cnt = 1;
-		for( ObjectMask omLocal : objsSplitBy ) {
+		for( ObjectMask objectLocal : objectsSplitBy ) {
 		
-			Optional<ObjectMask> intersect = objToSplit.intersect(
-				omLocal,
+			Optional<ObjectMask> intersect = objectToSplit.intersect(
+				objectLocal,
 				dim
 			);
 			
@@ -106,7 +109,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 			}
 			
 			ObjectMask intersectShifted = intersect.get().mapBoundingBox( bbox->
-				bbox.shiftBackBy(objToSplit.getBoundingBox().cornerMin())
+				bbox.shiftBackBy(objectToSplit.getBoundingBox().cornerMin())
 			); 
 			
 			// We make the intersection relative to objToSplit
@@ -126,7 +129,7 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 				i -> createObjectForIndex(
 					i,
 					boundedVbId.getVoxelBox(),
-					objToSplit.getBoundingBox().cornerMin()
+					objectToSplit.getBoundingBox().cornerMin()
 				)
 			);
 			
@@ -145,13 +148,4 @@ public class ObjMaskProviderSplitByObjCollection extends ObjMaskProviderDimensio
 		// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
 		return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
 	}
-
-	public ObjectCollectionProvider getObjsSplitBy() {
-		return objsSplitBy;
-	}
-
-	public void setObjsSplitBy(ObjectCollectionProvider objsSplitBy) {
-		this.objsSplitBy = objsSplitBy;
-	}
-
 }

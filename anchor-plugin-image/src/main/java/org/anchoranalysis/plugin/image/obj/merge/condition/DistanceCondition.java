@@ -37,38 +37,34 @@ import org.anchoranalysis.image.extent.BoundingBoxDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class DistanceCondition implements BeforeCondition {
 
-	private UnitValueDistance maxDist;
-	private boolean suppressZ;
-	private MessageLogger logger;
+	private final UnitValueDistance maxDist;
+	private final boolean suppressZ;
+	private final MessageLogger logger;
 	
-	public DistanceCondition(UnitValueDistance maxDist, boolean suppressZ, MessageLogger logger) {
-		super();
-		this.maxDist = maxDist;
-		this.suppressZ = suppressZ;
-		this.logger = logger;
-	}
-
 	@Override
-	public boolean accept(ObjectMask omSrc, ObjectMask omDest, Optional<ImageResolution> res) throws OperationFailedException {
+	public boolean accept(ObjectMask source, ObjectMask destination, Optional<ImageResolution> res) throws OperationFailedException {
 		
 		// We impose a max dist condition if necessary
 		if (maxDist!=null) {
-			return isWithinMaxDist(omSrc,omDest,res);
+			return isWithinMaxDist(source,destination,res);
 		} else {
 			return true;
 		}
 	}
 	
-	private boolean isWithinMaxDist( ObjectMask omSrc, ObjectMask omDest, Optional<ImageResolution> res ) throws OperationFailedException {
+	private boolean isWithinMaxDist( ObjectMask source, ObjectMask destination, Optional<ImageResolution> res ) throws OperationFailedException {
 		
-		double dist = BoundingBoxDistance.distance( omSrc.getBoundingBox(), omDest.getBoundingBox(), !suppressZ );
+		double dist = BoundingBoxDistance.distance( source.getBoundingBox(), destination.getBoundingBox(), !suppressZ );
 		
 		double maxDistRslv = rslvDist(
 			res,
-			omSrc.getBoundingBox().midpoint(),
-			omDest.getBoundingBox().midpoint()
+			source.getBoundingBox().midpoint(),
+			destination.getBoundingBox().midpoint()
 		);
 		
 		if (dist>=maxDistRslv) {
@@ -77,8 +73,8 @@ public class DistanceCondition implements BeforeCondition {
 		
 			logger.logFormatted(
 				"Maybe merging %s and %s with dist %f (<%f)",
-				omSrc.getBoundingBox().midpoint(),
-				omDest.getBoundingBox().midpoint(),
+				source.getBoundingBox().midpoint(),
+				destination.getBoundingBox().midpoint(),
 				dist,
 				maxDistRslv
 			);

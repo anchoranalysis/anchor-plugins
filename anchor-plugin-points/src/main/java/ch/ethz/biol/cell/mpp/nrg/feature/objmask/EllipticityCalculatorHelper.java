@@ -42,22 +42,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-	public static double calc( ObjectMask om, Mark mark, ImageDimensions dim ) throws FeatureCalcException {
-		ObjectMask omCompare = maskCompare(mark, dim);
-		return calc(om, omCompare);
+	public static double calc( ObjectMask object, Mark mark, ImageDimensions dim ) throws FeatureCalcException {
+		return calc(
+			object,
+			maskCompare(mark, dim)
+		);
 	}
 	
-	private static double calc( ObjectMask om, ObjectMask omCompare ) {
-		ObjectMask omMerge = ObjectMaskMerger.merge(om, omCompare );
-		return calcWithMerged(om, omCompare, omMerge);
+	private static double calc( ObjectMask object, ObjectMask objectCompare ) {
+		return calcWithMerged(
+			object,
+			objectCompare,
+			ObjectMaskMerger.merge(object, objectCompare )
+		);
 	}
 	
-	private static double calcWithMerged( ObjectMask om, ObjectMask omCompare, ObjectMask omMerge ) {
-		int numPixelsCompare = omCompare.numberVoxelsOn();
-		int numUnion = omMerge.numberVoxelsOn();
+	private static double calcWithMerged( ObjectMask object, ObjectMask objectCompare, ObjectMask merged ) {
+		int numPixelsCompare = objectCompare.numberVoxelsOn();
+		int numUnion = merged.numberVoxelsOn();
 		
 		// Interseting pixels
-		int numIntersection = om.countIntersectingVoxels(omCompare);
+		int numIntersection = object.countIntersectingVoxels(objectCompare);
 		
 		return intDiv(
 			numPixelsCompare,

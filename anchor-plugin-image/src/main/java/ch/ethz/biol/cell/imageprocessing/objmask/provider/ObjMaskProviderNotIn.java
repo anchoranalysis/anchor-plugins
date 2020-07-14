@@ -34,20 +34,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {
 		ObjectCollection container = containerRequired();
-		return objsCollection.stream().filter( om->
+		return objectCollection.stream().filter( om->
 			!isObjIn(om,container)
 		);
 	}
 	
-	private static boolean isObjIn( ObjectMask om, ObjectCollection container ) {
-
-		for( ObjectMask omCompare : container ) {
-			if(om.equals(omCompare)) {
-				return true;
-			}
-		}
-		return false;
+	private static boolean isObjIn( ObjectMask object, ObjectCollection container ) {
+		return container.stream().anyMatch(object::equals);
 	}
 }

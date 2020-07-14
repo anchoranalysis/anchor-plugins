@@ -46,12 +46,12 @@ public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 	// END BEAN
 
 	@Override
-	protected Channel createFor(Channel chnlIntensity, ObjectCollection objs, Channel chnlOutput) throws CreateException {
+	protected Channel createFor(Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput) throws CreateException {
 
 		try {
 			LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(
 				chnlIntensity,
-				objs,
+				objects,
 				getCalculateLevel(),
 				numDilations,
 				getLogger().messageLogger()
@@ -59,7 +59,7 @@ public class ChnlProviderObjsLevelIndependently extends ChnlProviderLevel {
 			
 			VoxelBox<?> vbOutput = chnlOutput.getVoxelBox().any(); 
 			for( LevelResult lr : lrc ) {
-				vbOutput.setPixelsCheckMask(lr.getObjMask(), lr.getLevel());
+				vbOutput.setPixelsCheckMask(lr.getObject(), lr.getLevel());
 			}
 			
 			return chnlOutput;

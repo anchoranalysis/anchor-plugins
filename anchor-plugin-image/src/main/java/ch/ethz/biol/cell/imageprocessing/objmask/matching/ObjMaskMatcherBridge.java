@@ -54,7 +54,7 @@ public class ObjMaskMatcherBridge extends ObjectMatcher {
 
 	/** Used to match each intermediary-object to a final-object*/
 	@BeanField @Getter @Setter
-	private ObjectMatcher objMaskMatcher;
+	private ObjectMatcher objectMatcher;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -69,7 +69,7 @@ public class ObjMaskMatcherBridge extends ObjectMatcher {
 			ObjMaskMatcherBridge::checkExactlyOneMatch
 		);
 		
-		return objMaskMatcher.findMatch(bridgeObjs);
+		return objectMatcher.findMatch(bridgeObjs);
 	}
 	
 	private static ObjectCollection checkExactlyOneMatch(ObjectCollection matches) throws OperationFailedException {

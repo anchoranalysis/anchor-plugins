@@ -53,7 +53,7 @@ public class OutputManagerStack extends OutputManagerWithPrefixer {
 	
 	/** What's allowed or not when outputting object-collections */
 	@BeanField @Getter @Setter
-	private OutputAllowed objMaskCollectionOutputEnabled = new AllOutputAllowed();
+	private OutputAllowed objects = new AllOutputAllowed();
 	
 	/** What's allowed or not when outputting histograms */
 	@BeanField @Getter @Setter
@@ -69,8 +69,8 @@ public class OutputManagerStack extends OutputManagerWithPrefixer {
 			return getCfgCollectionOutputEnabled();
 		case StackOutputKeys.HISTOGRAM:
 			return getHistogramCollectionOutputEnabled();
-		case StackOutputKeys.OBJS:
-			return getObjMaskCollectionOutputEnabled();			
+		case StackOutputKeys.OBJECTS:
+			return getObjects();			
 		default:
 			return new NoOutputAllowed();
 		}

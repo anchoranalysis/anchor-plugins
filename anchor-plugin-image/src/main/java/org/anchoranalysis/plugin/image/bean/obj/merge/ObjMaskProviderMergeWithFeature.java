@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.obj.merge.MergeGraph;
-import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
+import org.anchoranalysis.plugin.image.obj.merge.ObjectVertex;
 import org.anchoranalysis.plugin.image.obj.merge.condition.AndCondition;
 import org.anchoranalysis.plugin.image.obj.merge.condition.NeighbourhoodCond;
 import org.anchoranalysis.plugin.image.obj.merge.condition.UpdatableBeforeCondition;
@@ -71,23 +71,23 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	 * Saves all objects that are inputs to the merge, outputs from the merge, or intermediate merges along the way
 	 */
 	@BeanField @OptionalBean @Getter @Setter
-	private ObjectCollectionProvider objsSave;
+	private ObjectCollectionProvider objectsSave;
 	// END BEAN PROPERTIES
 		
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsSource) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectsSource) throws CreateException {
 		
-		Optional<ObjectCollection> saveObjs = OptionalFactory.create(objsSave);
+		Optional<ObjectCollection> saveObjs = OptionalFactory.create(objectsSave);
 		saveObjs.ifPresent( so
-			->so.addAll(objsSource)
+			->so.addAll(objectsSource)
 		);
 
 
-		getLogger().messageLogger().logFormatted("There are %d input objects", objsSource.size() );
+		getLogger().messageLogger().logFormatted("There are %d input objects", objectsSource.size() );
 		
 		try {
 			ObjectCollection merged = mergeMultiplex(
-				objsSource,
+				objectsSource,
 				a -> mergeConnectedComponents( a, saveObjs )
 			);
 					
@@ -114,21 +114,21 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	
 	
 	/**
-	 * Tries to merge objs
+	 * Tries to merge objects
 	 * 
-	 * @param objs objects to be merged
-	 * @param saveObjs if non-NULL, all merged objects are added to saveObjs
+	 * @param objects objects to be merged
+	 * @param saveObjects if non-NULL, all merged objects are added to saveObjs
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private ObjectCollection mergeConnectedComponents( ObjectCollection objs, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
+	private ObjectCollection mergeConnectedComponents( ObjectCollection objects, Optional<ObjectCollection> saveObjects ) throws OperationFailedException {
 		
 		MessageLogger logger = getLogger().messageLogger();
 		
 		MergeGraph graph;
 		try {
 			graph = createGraph(
-				objs,
+				objects,
 				calcResOptional()
 			);
 		} catch (CreateException e) {
@@ -138,7 +138,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		logger.log("\nBefore");
 		graph.logGraphDescription();
 		
-		while( tryMerge(graph, saveObjs ) ) {
+		while( tryMerge(graph, saveObjects ) ) {
 			// NOTHING TO DO, we just keep merging until we cannot merge any moore
 		}
 		
@@ -160,7 +160,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	private boolean tryMerge( MergeGraph graph, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
 		
 		// Find the edge with the best improvement
-		EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
+		EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
 		
 		if (edgeToMerge==null) {
 			return false;
@@ -169,7 +169,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 		// When we decide to merge, we save the merged object
 		saveObjs.ifPresent( so->
 			so.add(
-				edgeToMerge.getEdge().getOmWithFeature().getObjMask() 
+				edgeToMerge.getEdge().getOmWithFeature().getObject() 
 			)
 		);
 		
@@ -179,7 +179,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 	}
 	
 	private MergeGraph createGraph(
-		ObjectCollection objs,
+		ObjectCollection objects,
 		Optional<ImageResolution> res
 	) throws CreateException {
 			
@@ -193,7 +193,7 @@ public abstract class ObjMaskProviderMergeWithFeature extends ObjMaskProviderMer
 				isPlayloadUsed()
 			);
 						
-			graph.addObjsToGraph(objs);
+			graph.addObjsToGraph(objects);
 				
 			return graph;
 			

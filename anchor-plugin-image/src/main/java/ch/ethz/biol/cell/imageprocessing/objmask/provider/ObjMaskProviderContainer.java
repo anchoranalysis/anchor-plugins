@@ -35,17 +35,20 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderContainer extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsContainer;
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsContainer;
 	// END BEAN PROPERTIES
 	
 	protected Optional<ObjectCollection> containerOptional() throws CreateException {
-		if (objsContainer!=null) {
+		if (objectsContainer!=null) {
 			return Optional.of(
-				objsContainer.create()
+				objectsContainer.create()
 			);
 		} else {
 			return Optional.empty();
@@ -54,15 +57,7 @@ public abstract class ObjMaskProviderContainer extends ObjectCollectionProviderO
 	
 	protected ObjectCollection containerRequired() throws CreateException {
 		return containerOptional().orElseThrow(
-			() -> new CreateException("An objsContainer must be defined for this provider")
+			() -> new CreateException("An objects-container must be defined for this provider")
 		);
-	}
-	
-	public ObjectCollectionProvider getObjsContainer() {
-		return objsContainer;
-	}
-
-	public void setObjsContainer(ObjectCollectionProvider objsContainer) {
-		this.objsContainer = objsContainer;
 	}
 }

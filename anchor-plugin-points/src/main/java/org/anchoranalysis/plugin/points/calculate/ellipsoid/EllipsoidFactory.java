@@ -51,16 +51,16 @@ public class EllipsoidFactory {
 	/**
 	 * Creates a MarkEllipsoid using least-squares fitting to the points on the outline of an object-mask
 	 * 
-	 * @param om object-mask
+	 * @param object object-mask
 	 * @param dim the dimensions of the scene the object is contaiend in
 	 * @param suppressZCovariance  whether to suppress the covariance in the z-dimension when doing least squares fiting
 	 * @param shellRad shellRad for the mark that is created
 	 * @return
 	 * @throws CreateException
 	 */
-	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask om, ImageDimensions dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
+	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask object, ImageDimensions dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
 		return createMarkEllipsoidLeastSquares(
-			()->pntsFromMaskOutlineWrapped(om),
+			()->PointsFromObjMask.pntsFromMaskOutline(object),
 			dim,
 			suppressZCovariance,
 			shellRad
@@ -94,9 +94,5 @@ public class EllipsoidFactory {
 			throw new CreateException(e);
 		}
 		return mark;
-	}
-	
-	private static List<Point3i> pntsFromMaskOutlineWrapped( ObjectMask om ) {
-		return PointsFromObjMask.pntsFromMaskOutline(om);
 	}
 }

@@ -43,63 +43,73 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.ObjectMask;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoid;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdEllipsoidList;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMask;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjstocfg.RslvdObjMaskList;
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjectstocfg.ResolvedEllipsoid;
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjectstocfg.ResolvedEllipsoidList;
+import lombok.Getter;
+import lombok.Setter;
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjectstocfg.ResolvedObject;
+import ch.ethz.biol.cell.imageprocessing.objmask.provider.assignobjectstocfg.ResolvedObjectList;
 
 // Assigns objects into groups, based upon distance to objects in a configuration. One group per object in the configuration
 public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private CfgProvider cfgProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean mip = false;
 	
-	@BeanField
-	private double maxDist = 0.0;		// A value <0 is OFF.  Imposes a maximum distance constraint on objs. Value in metres.
+	/** 
+	 * Imposes a maximum distance constraint on objects (if positive).
+	 * <p>
+	 * The value is expected in metres.
+	 * <p>
+	 * A value of {@code <=0) disables the constraint.
+	 **/
+	@BeanField @Getter @Setter
+	private double maxDist = 0.0; 
 	
-	@BeanField @OptionalBean
-	private CfgProvider cfgProviderOutIncluded = null;		// OPTIONAL. Adds all included marks
+	/** The marks that are included are added to this provider */
+	@BeanField @OptionalBean @Getter @Setter
+	private CfgProvider cfgProviderOutIncluded;
 	
-	@BeanField @OptionalBean
-	private CfgProvider cfgProviderOutExcluded = null;		// OPTIONAL. Adds all excluded marks
+	/** The marks that are excluded are added to this provider */
+	@BeanField @OptionalBean @Getter @Setter
+	private CfgProvider cfgProviderOutExcluded;
 	
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsOutUnassigned = null;	// Optional. All the objects not assigned anywhere at the end
+	/** The objects that remain unassigned upon completion of the algorithm are added to this provider. */
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsOutUnassigned; 
 	// END BEAN PROPERTIES
 	
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	private int regionID = 0;
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objectCollection ) throws CreateException {
 		
 		Cfg cfg = cfgProvider.create();
 		ImageDimensions dim = createDim();
 		
 		// EXIT EARLY when there are no ellipsoids
 		if (cfg.size()==0) {
-			// There are no ellipsoids to assign to, exit early making all objs unassigned
-			if (objsOutUnassigned!=null) {
-				objsOutUnassigned.create().addAll(objsCollection);
+			// There are no ellipsoids to assign to, exit early making all objects unassigned
+			if (objectsOutUnassigned!=null) {
+				objectsOutUnassigned.create().addAll(objectCollection);
 			}
 			return ObjectCollectionFactory.empty();
 		}
-		
-		
-		RslvdObjMaskList  listObjs = createRslvdObjMaskList( objsCollection );
-		RslvdEllipsoidList listEllipsoids = createRslvdEllipsoidList(cfg, dim, regionMap.membershipWithFlagsForIndex(regionID), BinaryValuesByte.getDefault() );
+				
+		ResolvedObjectList listObjs = createResolvedObjectList( objectCollection );
+		ResolvedEllipsoidList listEllipsoids = createRslvdEllipsoidList(cfg, dim, regionMap.membershipWithFlagsForIndex(regionID), BinaryValuesByte.getDefault() );
 		
 		
 		
 		if (getLogger()!=null) {
 			getLogger().messageLogger().log("START AssignObjsToCfg");
-			getLogger().messageLogger().logFormatted("Start\t%d objs for %d ellipsoids", listObjs.size(), listEllipsoids.size() );
+			getLogger().messageLogger().logFormatted("Start\t%d objects for %d ellipsoids", listObjs.size(), listEllipsoids.size() );
 		}
 		
 		// FIRST STEP, we assign all objects that are contained inside the ellipsoids, so long as they are exclusively in a single ellipsoid
@@ -111,7 +121,7 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		
 		
 		if (getLogger()!=null) {
-			getLogger().messageLogger().logFormatted("Contain\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
+			getLogger().messageLogger().logFormatted("Contain\t%d objects unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
 		}
 		
 		listEllipsoids.assignClosestEllipsoids( listObjs, maxDist );
@@ -128,17 +138,19 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		
 		// Excluded
 		if( cfgProviderOutExcluded!=null ) {
-			Cfg cfgOutExcluded = cfgProviderOutExcluded.create();
-			listEllipsoids.addExcluded(cfgOutExcluded);
+			listEllipsoids.addExcluded(
+				cfgProviderOutExcluded.create()
+			);
 		}
 		
-		if (objsOutUnassigned!=null) {
-			ObjectCollection objsOutUnassignedCollection = objsOutUnassigned.create();
-			listObjs.addAllTo(objsOutUnassignedCollection);
+		if (objectsOutUnassigned!=null) {
+			listObjs.addAllTo(
+				objectsOutUnassigned.create()
+			);
 		}
 		
 		if (getLogger()!=null) {
-			getLogger().messageLogger().logFormatted("Final\t%d objs unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
+			getLogger().messageLogger().logFormatted("Final\t%d objects unassigned, %d ellipsoids included, %d ellipsoids excluded", listObjs.size(), listEllipsoids.numIncluded(), listEllipsoids.numExcluded() );
 			getLogger().messageLogger().log("END AssignObjsToCfg");
 		}
 		
@@ -146,74 +158,24 @@ public class ObjMaskProviderAssignObjsToCfg extends ObjMaskProviderDimensions {
 		return listEllipsoids.createMergedObjsForIncluded();
 	}
 
-	private static RslvdObjMaskList createRslvdObjMaskList( ObjectCollection objs ) {
-		RslvdObjMaskList out = new RslvdObjMaskList();
-		for( ObjectMask om : objs ) {
-			out.add( new RslvdObjMask(om) );
-		}
-		return out;
+	private static ResolvedObjectList createResolvedObjectList( ObjectCollection objects ) {
+		return new ResolvedObjectList(
+			objects.streamStandardJava().map(ResolvedObject::new)
+		);
 	}
 		
-	private static RslvdEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDimensions dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
-		RslvdEllipsoidList out = new RslvdEllipsoidList();
+	private static ResolvedEllipsoidList createRslvdEllipsoidList( Cfg cfg, ImageDimensions dim, RegionMembershipWithFlags rm, BinaryValuesByte bvb ) throws CreateException {
+		ResolvedEllipsoidList out = new ResolvedEllipsoidList();
 		
 		for( Mark m : cfg ) {
 			
 			if (m instanceof MarkEllipsoid) {
-				out.add( new RslvdEllipsoid( (MarkEllipsoid) m, dim, rm, bvb ) );
+				out.add( new ResolvedEllipsoid( (MarkEllipsoid) m, dim, rm, bvb ) );
 			} else {
 				throw new CreateException("Mark found that is not an ellipsoid");
 			}
 		}
 		
 		return out;
-	}
-	
-	public CfgProvider getCfgProvider() {
-		return cfgProvider;
-	}
-
-	public void setCfgProvider(CfgProvider cfgProvider) {
-		this.cfgProvider = cfgProvider;
-	}
-
-	public boolean isMip() {
-		return mip;
-	}
-
-	public void setMip(boolean mip) {
-		this.mip = mip;
-	}
-
-	public CfgProvider getCfgProviderOutIncluded() {
-		return cfgProviderOutIncluded;
-	}
-
-	public void setCfgProviderOutIncluded(CfgProvider cfgProviderOutIncluded) {
-		this.cfgProviderOutIncluded = cfgProviderOutIncluded;
-	}
-
-	public CfgProvider getCfgProviderOutExcluded() {
-		return cfgProviderOutExcluded;
-	}
-
-	public void setCfgProviderOutExcluded(CfgProvider cfgProviderOutExcluded) {
-		this.cfgProviderOutExcluded = cfgProviderOutExcluded;
-	}
-
-	public double getMaxDist() {
-		return maxDist;
-	}
-
-	public void setMaxDist(double maxDist) {
-		this.maxDist = maxDist;
-	}
-
-	public ObjectCollectionProvider getObjsOutUnassigned() {
-		return objsOutUnassigned;
-	}
-
-	public void setObjsOutUnassigned(ObjectCollectionProvider objsOutUnassigned) {
-		this.objsOutUnassigned = objsOutUnassigned;
 	}
 }

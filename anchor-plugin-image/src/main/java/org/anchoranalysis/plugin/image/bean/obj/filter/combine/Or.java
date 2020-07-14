@@ -48,18 +48,18 @@ public class Or extends ObjectFilterCombine {
 
 	@Override
 	public ObjectCollection filter(
-		ObjectCollection objsToFilter,
+		ObjectCollection objectsToFilter,
 		Optional<ImageDimensions> dim,
-		Optional<ObjectCollection> objsRejected
+		Optional<ObjectCollection> objectsRejected
 	) throws OperationFailedException {
 
 		// Stores any successful items in a set
-		Set<ObjectMask> setAccepted = findAcceptedObjs(objsToFilter, dim);
+		Set<ObjectMask> setAccepted = findAcceptedObjs(objectsToFilter, dim);
 		
 		// Adds the rejected-objects
-		objsRejected.ifPresent( rejected-> 
+		objectsRejected.ifPresent( rejected-> 
 			rejected.addAll(
-				determineRejected(objsToFilter, setAccepted)		
+				determineRejected(objectsToFilter, setAccepted)		
 			)
 		);
 
@@ -68,12 +68,12 @@ public class Or extends ObjectFilterCombine {
 	}
 	
 	/** Finds the accepted objects (i.e. objects that pass any one of the filters) */
-	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objsToFilter, Optional<ImageDimensions> dim) throws OperationFailedException {
+	private Set<ObjectMask> findAcceptedObjs(ObjectCollection objectsToFilter, Optional<ImageDimensions> dim) throws OperationFailedException {
 		Set<ObjectMask> setAccepted = new HashSet<>();
 		
 		for (ObjectFilter indFilter : getList()) {
 			setAccepted.addAll(
-				indFilter.filter(objsToFilter, dim, Optional.empty()).asList()
+				indFilter.filter(objectsToFilter, dim, Optional.empty()).asList()
 			);
 		}
 		
@@ -81,8 +81,8 @@ public class Or extends ObjectFilterCombine {
 	}
 	
 	/** Determines which objects are rejected */
-	private static ObjectCollection determineRejected(ObjectCollection objsToFilter, Set<ObjectMask> setAccepted) {
-		return objsToFilter.stream().filter( obj ->
+	private static ObjectCollection determineRejected(ObjectCollection objectsToFilter, Set<ObjectMask> setAccepted) {
+		return objectsToFilter.stream().filter( obj ->
 			!setAccepted.contains(obj)
 		);
 	}

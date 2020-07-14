@@ -68,8 +68,8 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	private FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = null;
 		
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
-		super.start(dim, objsToFilter);
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
+		super.start(dim, objectsToFilter);
 		
 		// This could be called many times, so we create a new feature session only on the first occasion
 		if (featureSession==null) {
@@ -82,12 +82,12 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException {
 
 		double val;
 		try {
 			val = featureSession.calc(
-				new FeatureInputSingleObject(om)
+				new FeatureInputSingleObject(object)
 			);
 		} catch (FeatureCalcException e) {
 			throw new OperationFailedException(e);
@@ -97,9 +97,9 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 		
 		if(debug) {
 			if (succ) {
-				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f\t  (Accepted)", om.centerOfGravity(), val, threshold);
+				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f\t  (Accepted)", object.centerOfGravity(), val, threshold);
 			} else {
-				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f", om.centerOfGravity(), val, threshold);
+				getLogger().messageLogger().logFormatted("%s\tVal=%f\tthreshold=%f", object.centerOfGravity(), val, threshold);
 			}
 		}
 		

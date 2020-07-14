@@ -62,7 +62,7 @@ public class VolumeMin extends CheckMark {
 		
 		double volMin;
 		try {
-			volMin = minVolume.rslv(
+			volMin = minVolume.resolveToVoxels(
 				Optional.of(
 					nrgStack.getDimensions().getRes()
 				)

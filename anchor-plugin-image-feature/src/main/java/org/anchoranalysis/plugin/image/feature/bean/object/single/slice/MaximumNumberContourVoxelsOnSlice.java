@@ -45,7 +45,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		ObjectMask obj = input.get().getObjectMask();
+		ObjectMask obj = input.get().getObject();
 
 		return numVoxelsOnContour(
 			sliceWithMaxNumVoxels(obj)
@@ -76,14 +76,14 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 		return cnt;
 	}
 	
-	private static int indexOfSliceWithMaxNumVoxels( ObjectMask om ) {
+	private static int indexOfSliceWithMaxNumVoxels( ObjectMask object ) {
 		
 		int max = 0;
 		int ind = 0;
 		
-		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++) {
-			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
-			int cnt = cntForByteBuffer(bb, om.getBinaryValuesByte().getOnByte());
+		for( int z=0; z<object.getBoundingBox().extent().getZ(); z++) {
+			ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
+			int cnt = cntForByteBuffer(bb, object.getBinaryValuesByte().getOnByte());
 		
 			if (cnt>max) {
 				max = cnt;

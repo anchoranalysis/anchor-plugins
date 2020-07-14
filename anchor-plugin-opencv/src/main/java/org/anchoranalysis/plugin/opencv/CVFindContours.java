@@ -51,19 +51,19 @@ public class CVFindContours {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
-	public static List<Contour> contourForObjMask( ObjectMask om, int minNumPoints ) throws OperationFailedException {
+	public static List<Contour> contourForObjMask(ObjectMask object) throws OperationFailedException {
 		
 		try {
 			// We clone ss the source image is modified by the algorithm according to OpenCV docs
 			// https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours
-			Mat mat = MatConverter.fromObjMask(
-				om.duplicate()
+			Mat mat = MatConverter.fromObject(
+				object.duplicate()
 			);
 						
 			List<MatOfPoint> contours = new ArrayList<>();
 			Imgproc.findContours(mat, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE );
 			
-			return convertMatOfPoint( contours, om.getBoundingBox().cornerMin() );
+			return convertMatOfPoint( contours, object.getBoundingBox().cornerMin() );
 						
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -76,14 +76,14 @@ public class CVFindContours {
 		);
 	}
 	
-	private static Contour createContour(MatOfPoint mop, ReadableTuple3i crnrMin) {
+	private static Contour createContour(MatOfPoint mop, ReadableTuple3i cornerMin) {
 		Contour c = new Contour();
 		for( Point p : mop.toArray() ) {
 			
 			Point3f pnt = new Point3f(
-				convertAdd(p.x, crnrMin.getX() ),
-				convertAdd(p.y, crnrMin.getY() ),
-				crnrMin.getZ()
+				convertAdd(p.x, cornerMin.getX() ),
+				convertAdd(p.y, cornerMin.getY() ),
+				cornerMin.getZ()
 			);
 			
 			c.getPoints().add(pnt);

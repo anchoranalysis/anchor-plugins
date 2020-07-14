@@ -84,7 +84,7 @@ class ObjMaskWalkShortestPath {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pnts);
 		
-		ObjectMask om = new ObjectMask(bbox);
+		ObjectMask object = new ObjectMask(bbox);
 		
 		for( int i=0; i<(pnts.size()-1); i++ )  {
 		
@@ -93,16 +93,16 @@ class ObjMaskWalkShortestPath {
 			assert(pnt1.getZ()==pnt2.getZ());
 			
 			drawLineOnVoxelBuffer(
-				om.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.cornerMin().getZ()),
-				om.binaryVoxelBox().getVoxelBox().extent(),
-				om.binaryVoxelBox().getBinaryValues().createByte(),
+				object.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.cornerMin().getZ()),
+				object.binaryVoxelBox().getVoxelBox().extent(),
+				object.binaryVoxelBox().getBinaryValues().createByte(),
 				pnt1,
 				pnt2,
 				bbox.cornerMin()
 			);
 		}
 				
-		return om;
+		return object;
 		
 	}
 		

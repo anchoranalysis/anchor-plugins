@@ -44,24 +44,26 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 
 	/// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private PointsFitterToMark pointsFitter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkFactory markFactory;
 	
 	/** If true, Reduces the set of points by applying a convex-hull operation */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean convexHull = true;
 	
 	/** If true, if too few points exist to make a mark, or otherwise a fitting errors, it is simply not included (with only a log error)
 	 *  If false, an exception is thrown
 	 * */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean ignoreFittingFailure = true;
 	// END BEAN PROPERTIES
 	
@@ -77,16 +79,16 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		);
 	}
 	
-	private	Optional<Mark> createMarkFromObj(ObjectMask om, ImageDimensions dim) throws CreateException {	
+	private	Optional<Mark> createMarkFromObj(ObjectMask object, ImageDimensions dimensions) throws CreateException {	
 		try {
-			List<Point2i> points = maybeApplyConvexHull(om);
+			List<Point2i> points = maybeApplyConvexHull(object);
 			if (points.isEmpty()) {
 				return handleFittingFailure("There are 0 points to fit with.");
 			}
 			
 			return fitToMark(
 				PointConverter.convert2iTo3f(points),
-				dim
+				dimensions
 			);
 			
 		} catch (OperationFailedException e) {
@@ -94,8 +96,8 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		}
 	}
 	
-	private List<Point2i> maybeApplyConvexHull(ObjectMask om) throws OperationFailedException {
-		List<Point2i> points = ConvexHullUtilities.pointsOnOutline(om);
+	private List<Point2i> maybeApplyConvexHull(ObjectMask object) throws OperationFailedException {
+		List<Point2i> points = ConvexHullUtilities.pointsOnOutline(object);
 		if (convexHull) {
 			return ConvexHullUtilities.convexHull2D(
 				points,
@@ -106,12 +108,12 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 		}
 	}
 	
-	private Optional<Mark> fitToMark( List<Point3f> pntsToFit, ImageDimensions dim) throws CreateException {
+	private Optional<Mark> fitToMark( List<Point3f> pntsToFit, ImageDimensions dimensions) throws CreateException {
 
 		Mark markOut = markFactory.create();
 		
 		try {
-			pointsFitter.fitPointsToMark( pntsToFit, markOut, dim );
+			pointsFitter.fitPointsToMark( pntsToFit, markOut, dimensions );
 			return Optional.of(markOut);
 		} catch (OperationFailedException e) {
 			return handleFittingFailure( e.friendlyMessage() );
@@ -130,37 +132,5 @@ public class CfgProviderPointsFitterFromObjs extends CfgProvider {
 				String.format("Cannot create mark from points due to fitting error.%n%s", errorMsg)
 			);
 		}
-	}
-
-	public MarkFactory getMarkFactory() {
-		return markFactory;
-	}
-
-	public void setMarkFactory(MarkFactory markFactory) {
-		this.markFactory = markFactory;
-	}
-
-	public boolean isConvexHull() {
-		return convexHull;
-	}
-
-	public void setConvexHull(boolean convexHull) {
-		this.convexHull = convexHull;
-	}
-
-	public PointsFitterToMark getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitterToMark pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public boolean isIgnoreFittingFailure() {
-		return ignoreFittingFailure;
-	}
-
-	public void setIgnoreFittingFailure(boolean ignoreFittingFailure) {
-		this.ignoreFittingFailure = ignoreFittingFailure;
 	}
 }

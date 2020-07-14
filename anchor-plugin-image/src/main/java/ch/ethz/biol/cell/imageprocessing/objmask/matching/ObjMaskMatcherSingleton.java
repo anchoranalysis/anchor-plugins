@@ -51,37 +51,37 @@ public class ObjMaskMatcherSingleton extends ObjectMatcher {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public List<MatchedObject> findMatch(ObjectCollection sourceObjs) throws OperationFailedException {
+	public List<MatchedObject> findMatch(ObjectCollection sourceObjects) throws OperationFailedException {
 
-		ObjectMask omMatch = determineMatch();
+		ObjectMask match = determineMatch();
 		
-		return sourceObjs.stream().mapToList(
-			om -> new MatchedObject(
-				om,
-				ObjectCollectionFactory.from(omMatch)
+		return sourceObjects.stream().mapToList(
+			object -> new MatchedObject(
+				object,
+				ObjectCollectionFactory.from(match)
 			) 
 		);
 	}
 	
 	private ObjectMask determineMatch() throws OperationFailedException {
-		ObjectCollection objsCollection;
+		ObjectCollection objectCollection;
 		try {
-			objsCollection = objs.create();
+			objectCollection = objects.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 		
-		if (objsCollection.size()==0) {
+		if (objectCollection.size()==0) {
 			throw new OperationFailedException("No objects provided");
 		}
-		if (objsCollection.size()>1) {
+		if (objectCollection.size()>1) {
 			throw new OperationFailedException("More than one objects provided");
 		}
 		
-		return objsCollection.get(0);
+		return objectCollection.get(0);
 	}
 }

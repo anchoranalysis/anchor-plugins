@@ -88,23 +88,23 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl) throws FeatureCalcException {
 
-		ObjectMask om = createShell(input);
+		ObjectMask objectShell = createShell(input);
 		
 		if (nrgIndexMask!=-1) {
 			// If an NRG mask is defined...
 			Optional<ObjectMask> omIntersected = intersectWithNRGMask(
-				om,
+				objectShell,
 				input.get().getNrgStackRequired().getNrgStack()
 			);
 			
 			if (omIntersected.isPresent()) {
-				om = omIntersected.get();
+				objectShell = omIntersected.get();
 			} else {
 				return emptyValue;
 			}
 		}
 		
-		return calcForShell(om,	chnl);
+		return calcForShell(objectShell,	chnl);
 	}
 	
 	private ObjectMask createShell( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
@@ -120,8 +120,8 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 		return input.calc(ccShellObjMask);
 	}
 	
-	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask om, NRGStack nrgStack ) {
-		return om.intersect(
+	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask object, NRGStack nrgStack ) {
+		return object.intersect(
 			createNrgMask(nrgStack),
 			nrgStack.getDimensions()
 		);

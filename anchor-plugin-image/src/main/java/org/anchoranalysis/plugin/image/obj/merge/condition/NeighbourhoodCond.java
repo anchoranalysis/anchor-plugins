@@ -51,7 +51,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	private BoundingBox bboxSrcGrown;
 	
 	// The object-mask of omSrcWithFeature dilated by 1 in all directions (used for testing if objects touch)
-	private ObjectMask omGrown;
+	private ObjectMask objectGrown;
 	// END TEMPORARY objects
 	
 			
@@ -67,21 +67,21 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException {
+	public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res) throws OperationFailedException {
 
-		bboxSrcGrown = requireBBoxNeighbours ? bboxGrown( omSrc ) : null;
+		bboxSrcGrown = requireBBoxNeighbours ? boundingBoxGrown( source ) : null;
 		
 		try {
 			if (requireTouching) {
-				omGrown = MorphologicalDilation.createDilatedObjMask(
-					omSrc,
+				objectGrown = MorphologicalDilation.createDilatedObject(
+					source,
 					Optional.empty(),
 					true,
 					1,
 					false
 				);
 			} else {
-				omGrown = null;
+				objectGrown = null;
 			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -90,17 +90,17 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	}
 
 	@Override
-	public boolean accept(ObjectMask omDest) {
+	public boolean accept(ObjectMask destination) {
 		
 		// If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
-		if (requireBBoxNeighbours && !bboxSrcGrown.intersection().existsWith(omDest.getBoundingBox())) {
+		if (requireBBoxNeighbours && !bboxSrcGrown.intersection().existsWith(destination.getBoundingBox())) {
 			return false;
 		}
 		
-		return !requireTouching || omGrown.hasIntersectingVoxels(omDest);
+		return !requireTouching || objectGrown.hasIntersectingVoxels(destination);
 	}
 			
-	private static BoundingBox bboxGrown( ObjectMask obj ) {
-		return GrowUtilities.growBBox( obj.getBoundingBox() );
+	private static BoundingBox boundingBoxGrown( ObjectMask object ) {
+		return GrowUtilities.grow( object.getBoundingBox() );
 	}
 }

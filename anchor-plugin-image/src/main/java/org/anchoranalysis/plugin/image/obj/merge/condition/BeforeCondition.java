@@ -34,5 +34,5 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 @FunctionalInterface
 public interface BeforeCondition {
-	boolean accept(ObjectMask omSrc, ObjectMask omDest, Optional<ImageResolution> res) throws OperationFailedException;
+	boolean accept(ObjectMask source, ObjectMask destination, Optional<ImageResolution> res) throws OperationFailedException;
 }

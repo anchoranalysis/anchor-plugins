@@ -2,7 +2,6 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import java.util.Optional;
 
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.OptionalFactory;
 
@@ -40,36 +39,39 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.RGBObjMaskGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFromObjMaskBase {
+import lombok.Getter;
+import lombok.Setter;
+
+public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFromObjectBase {
 
 	private static final RGBColor COLOR_RED = new RGBColor(255,0,0);
 	private static final RGBColor COLOR_GREEN = new RGBColor(0,255,0);
 	private static final RGBColor COLOR_BLUE = new RGBColor(0,0,255);
 		
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsRed;
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsRed;
 	
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsBlue;
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsBlue;
 	
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsGreen;
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsGreen;
 	// END BEAN PROPERTIES
 
 	@Override
 	public void checkMisconfigured( BeanInstanceMap defaultInstances ) throws BeanMisconfiguredException {
 		super.checkMisconfigured( defaultInstances );
 		
-		if (objsRed==null && objsBlue==null && objsGreen==null) {
-			throw new BeanMisconfiguredException("Either objsRed or objsBlue or objsGreen must be non-null");
+		if (objectsRed==null && objectsBlue==null && objectsGreen==null) {
+			throw new BeanMisconfiguredException("Either objectsRed or objectsBlue or objectsGreen must be non-null");
 		}
 	}
 
@@ -78,18 +80,16 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		
 		ColorList colors = new ColorList();
 		
-		ObjectCollection objs = ObjectCollectionFactory.from(
-			addWithColor( objsRed, COLOR_RED, colors ),
-			addWithColor( objsGreen, COLOR_GREEN, colors ),
-			addWithColor( objsBlue, COLOR_BLUE, colors )
+		ObjectCollection objects = ObjectCollectionFactory.from(
+			addWithColor( objectsRed, COLOR_RED, colors ),
+			addWithColor( objectsGreen, COLOR_GREEN, colors ),
+			addWithColor( objectsBlue, COLOR_BLUE, colors )
 		);
 		
-		ObjMaskWriter objMaskWriter = createWriter();  
-		
-		RGBObjMaskGenerator generator = new RGBObjMaskGenerator(
-			objMaskWriter,
-			new ObjectCollectionWithProperties(objs),
-			maybeFlattenedBackground(),
+		DrawObjectsGenerator generator = new DrawObjectsGenerator(
+			createDrawer(),
+			new ObjectCollectionWithProperties(objects),
+			Optional.of( maybeFlattenedBackground() ),
 			colors
 		);
 		
@@ -100,44 +100,19 @@ public class StackProviderRGBFromObjMaskThreeColors extends StackProviderRGBFrom
 		}
 	}
 
-	private Optional<ObjectCollection> addWithColor( ObjectCollectionProvider provider, RGBColor color, ColorList colors) throws CreateException {
+	private Optional<ObjectCollection> addWithColor(
+		ObjectCollectionProvider provider,
+		RGBColor color,
+		ColorList colors
+	) throws CreateException {
 		// If objects were created, we add some corresponding colors
 		return OptionalFactory.create(provider).map(
-			objs -> maybeFlattenAddColor(objs, color, colors)
+			objects -> maybeFlattenAddColor(objects, color, colors)
 		);
 	}
 	
-	private ObjectCollection maybeFlattenAddColor(ObjectCollection objs, RGBColor color, ColorList colors) {
-		colors.addMultiple(color, objs.size());
-		return maybeFlatten(objs);
-	}
-	
-	public ObjectCollectionProvider getObjsRed() {
-		return objsRed;
-	}
-
-
-	public void setObjsRed(ObjectCollectionProvider objsRed) {
-		this.objsRed = objsRed;
-	}
-
-
-	public ObjectCollectionProvider getObjsBlue() {
-		return objsBlue;
-	}
-
-
-	public void setObjsBlue(ObjectCollectionProvider objsBlue) {
-		this.objsBlue = objsBlue;
-	}
-
-
-	public ObjectCollectionProvider getObjsGreen() {
-		return objsGreen;
-	}
-
-
-	public void setObjsGreen(ObjectCollectionProvider objsGreen) {
-		this.objsGreen = objsGreen;
+	private ObjectCollection maybeFlattenAddColor(ObjectCollection objects, RGBColor color, ColorList colors) {
+		colors.addMultiple(color, objects.size());
+		return maybeFlatten(objects);
 	}
 }

@@ -48,7 +48,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 		FeatureInputSingleObject inputSessionless = input.get();
 		
 		ReadableTuple3i pnt = extractTupleForBoundingBox(
-			inputSessionless.getObjectMask().getBoundingBox()
+			inputSessionless.getObject().getBoundingBox()
 		);
 		
 		return calcAxisValue(pnt);

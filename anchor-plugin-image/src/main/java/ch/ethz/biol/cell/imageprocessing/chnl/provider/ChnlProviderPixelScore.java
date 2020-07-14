@@ -129,17 +129,17 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 			kpv = Optional.empty();
 		}
 
-		Optional<ObjectMask> objMask = createMaskOrNull();
+		Optional<ObjectMask> object = createMaskOrNull();
 		
 		VoxelBox<ByteBuffer> vbPixelScore;
-		if (objMask.isPresent()) {
+		if (object.isPresent()) {
 			CreateVoxelBoxFromPixelwiseFeatureWithMask creator = new CreateVoxelBoxFromPixelwiseFeatureWithMask(
 				listVb,
 				kpv,
 				listHistExtra
 			);
 			
-			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, objMask.get());
+			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, object);
 			
 		} else {
 			CreateVoxelBoxFromPixelwiseFeature creator = new CreateVoxelBoxFromPixelwiseFeature(

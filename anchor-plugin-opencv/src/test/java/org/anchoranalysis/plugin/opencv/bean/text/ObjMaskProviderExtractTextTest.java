@@ -68,20 +68,20 @@ public class ObjMaskProviderExtractTextTest {
 		
 		ObjMaskProviderExtractText provider = createAndInitProvider("car.jpg");
 				
-		ObjectCollection objs = provider.create();
+		ObjectCollection objects = provider.create();
 		
-		assertTrue( objs.size()==3 );
+		assertTrue( objects.size()==3 );
 		
-		assertBoxAtIndex(objs, 0, boxAt(439, 311, 75, 37) );
-		assertBoxAtIndex(objs, 1, boxAt(310, 318, 108, 36) );
-		assertBoxAtIndex(objs, 2, boxAt(392, 199, 29, 26) );
+		assertBoxAtIndex(objects, 0, boxAt(439, 311, 75, 37) );
+		assertBoxAtIndex(objects, 1, boxAt(310, 318, 108, 36) );
+		assertBoxAtIndex(objects, 2, boxAt(392, 199, 29, 26) );
 	}
 	
-	private void assertBoxAtIndex( ObjectCollection objs, int index, BoundingBox box  ) {
+	private void assertBoxAtIndex( ObjectCollection objects, int index, BoundingBox box  ) {
 		assertEquals(
 			"box at index " + index,
 			box,
-			objs.get(index).getBoundingBox()
+			objects.get(index).getBoundingBox()
 		);		
 	}
 	

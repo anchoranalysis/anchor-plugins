@@ -85,7 +85,7 @@ public class ObjMaskProviderMergePair extends ObjMaskProviderMergeWithFeature {
 	@Override
 	protected PayloadCalculator createPayloadCalculator() {
 		// We don't care about evaluating single-features
-		return (ObjectMask om) -> 0;
+		return (ObjectMask objectMask) -> 0;
 	}
 	
 	@Override

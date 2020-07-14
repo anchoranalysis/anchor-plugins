@@ -37,6 +37,9 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * An independent object-filter that uses a relation in its predicate.
  * 
@@ -46,34 +49,26 @@ import org.anchoranalysis.image.object.ObjectMask;
 public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private RelationBean relation = new GreaterThanEqualToBean();
 	// END BEAN PROPERTIES
 	
 	private RelationToValue relationResolved;
 	
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
 		relationResolved = relation.create();
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
-		return match(om, dim, relationResolved);
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
+		return match(object, dim, relationResolved);
 	}
 	
-	protected abstract boolean match(ObjectMask om, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException;
+	protected abstract boolean match(ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation) throws OperationFailedException;
 
 	@Override
 	protected void end() throws OperationFailedException {
 		relationResolved = null;
-	}
-	
-	public RelationBean getRelation() {
-		return relation;
-	}
-
-	public void setRelation(RelationBean relation) {
-		this.relation = relation;
 	}
 }

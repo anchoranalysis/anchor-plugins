@@ -55,27 +55,27 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 	 */
 	private final boolean suppress3D;
 	
-	private static int calcSurfaceSize( ObjectMask objMask, ImageDimensions dim, boolean mip, boolean suppress3D ) throws OperationFailedException {
+	private static int calcSurfaceSize( ObjectMask object, ImageDimensions dim, boolean mip, boolean suppress3D ) throws OperationFailedException {
 		
 		boolean do3D = (dim.getZ() > 1) && !suppress3D;
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, objMask.getBinaryValuesByte(), true, dim.getExtent(), objMask.getBoundingBox().cornerMin() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
 			
-			VoxelBox<ByteBuffer> mipVb = objMask.getVoxelBox().maxIntensityProj();
+			VoxelBox<ByteBuffer> mipVb = object.getVoxelBox().maxIntensityProj();
 			return ApplyKernel.applyForCount(kernel, mipVb );
 			
 		} else {
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, objMask.getBinaryValuesByte(), true, dim.getExtent(), objMask.getBoundingBox().cornerMin() );
-			return ApplyKernel.applyForCount(kernel, objMask.getVoxelBox() );
+			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
+			return ApplyKernel.applyForCount(kernel, object.getVoxelBox() );
 		}
 	}
 
 	@Override
 	protected Integer execute(FeatureInputSingleObject params)	throws FeatureCalcException {
 		try {
-			return calcSurfaceSize(params.getObjectMask(), params.getDimensionsRequired(), mip, suppress3D);
+			return calcSurfaceSize(params.getObject(), params.getDimensionsRequired(), mip, suppress3D);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

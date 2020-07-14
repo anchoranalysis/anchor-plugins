@@ -31,9 +31,9 @@ package org.anchoranalysisplugin.io.test.image;
 import java.nio.file.Path;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.objs.GeneratorHDF5;
-import org.anchoranalysis.image.io.objs.GeneratorTIFFDirectory;
-import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.GeneratorHDF5;
+import org.anchoranalysis.image.io.objects.GeneratorTIFFDirectory;
+import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -54,8 +54,12 @@ class HelperReadWriteObjs {
 		}
 	}
 	
-	public static void writeObjs( ObjectCollection objs, Path path, IterableGenerator<ObjectCollection> generator ) throws SetOperationFailedException, BindFailedException {
-		generator.setIterableElement(objs);
+	public static void writeObjs(
+		ObjectCollection objects,
+		Path path,
+		IterableGenerator<ObjectCollection> generator
+	) throws SetOperationFailedException, BindFailedException {
+		generator.setIterableElement(objects);
 		
 		BoundOutputManagerRouteErrors outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
 		

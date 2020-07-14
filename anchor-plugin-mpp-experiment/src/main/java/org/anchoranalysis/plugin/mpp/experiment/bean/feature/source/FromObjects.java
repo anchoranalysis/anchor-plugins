@@ -224,7 +224,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 		CalculateFeaturesFromProvider<T> calculator
 	) throws OperationFailedException {
 		
-		// For every objMaskCollection provider
+		// For every object-collection-provider
 		for(NamedBean<ObjectCollectionProvider> ni : listObjMaskProvider) {
 			calculator.processProvider(
 				ni.getValue(),

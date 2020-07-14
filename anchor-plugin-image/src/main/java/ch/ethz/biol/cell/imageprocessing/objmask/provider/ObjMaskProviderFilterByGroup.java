@@ -38,35 +38,34 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
+import lombok.Getter;
+import lombok.Setter;
 
 // TODO lots of duplication with ObjMaskProviderFilter
 public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objsGrouped;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsGrouped;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected ObjectCollection createFromObjs(ObjectCollection in, Optional<ObjectCollection> omcRejected,
-			Optional<ImageDimensions> dim) throws CreateException {
+	protected ObjectCollection createFromObjects(
+		ObjectCollection objects,
+		Optional<ObjectCollection> objectsRejected,
+		Optional<ImageDimensions> dim
+	) throws CreateException {
 
-		ObjectCollection inGroups = objsGrouped.create();
-		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects( inGroups, in );
+		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(
+			objectsGrouped.create(),
+			objects
+		);
 		
 		return ObjectCollectionFactory.flatMapFromCollection(
 			matchList.stream().map(MatchedObject::getMatches),
 			CreateException.class,
-			matches -> filter(matches, dim, omcRejected).asList() 
+			matches -> filter(matches, dim, objectsRejected).asList() 
 		);
-	}
-	
-	public ObjectCollectionProvider getObjsGrouped() {
-		return objsGrouped;
-	}
-
-	public void setObjsGrouped(ObjectCollectionProvider objsGrouped) {
-		this.objsGrouped = objsGrouped;
 	}
 }

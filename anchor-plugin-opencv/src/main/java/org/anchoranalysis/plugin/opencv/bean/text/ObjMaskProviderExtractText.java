@@ -101,7 +101,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 		);
 		
 		// Convert marks to object-masks
-		List<WithConfidence<ObjectMask>> objsWithConfidence = EastObjsExtractor.apply(
+		List<WithConfidence<ObjectMask>> objectsWithConfidence = EastObjsExtractor.apply(
 			pair.getFirst(),
 			stack.getDimensions().getRes(),
 			minConfidence,
@@ -110,7 +110,7 @@ public class ObjMaskProviderExtractText extends ObjectCollectionProvider {
 		
 		// Scale each object-mask and extract as an ObjMaskCollection
 		return ScaleExtractObjs.apply(
-			maybeFilterList(objsWithConfidence),
+			maybeFilterList(objectsWithConfidence),
 			pair.getSecond()
 		);
 	}

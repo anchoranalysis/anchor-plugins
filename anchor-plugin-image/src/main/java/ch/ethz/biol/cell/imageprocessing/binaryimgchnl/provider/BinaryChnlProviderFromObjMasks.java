@@ -34,7 +34,7 @@ import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +46,7 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 
 	// START BEAN
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private boolean invert = false;
@@ -54,27 +54,31 @@ public class BinaryChnlProviderFromObjMasks extends BinaryChnlProviderDimSource 
 
 	@Override
 	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
-
-		ObjectCollection objCollection = objs.create();
-		if (objCollection==null) {
-			throw new CreateException("objMaskProvider returned null");
-		}
-		return create( objCollection, dimSource, invert );
+		return create(
+			objects.create(),
+			dimSource,
+			invert
+		);
 	}
 	
-	private static BinaryChnl create(  ObjectCollection objs, ImageDimensions dim, boolean invert ) throws CreateException {
+	private static BinaryChnl create(ObjectCollection objects, ImageDimensions dim, boolean invert ) {
 
 		BinaryValues bv = BinaryValues.getDefault();
 		
-		BinaryChnl maskedImage = createChnlFromObjsMux(objs, dim, bv, invert);
+		BinaryChnl maskedImage = createChannelFromObjectsMultiplex(objects, dim, bv, invert);
 		return new BinaryChnl(maskedImage.getChannel(), bv);	
 	}
 	
-	private static BinaryChnl createChnlFromObjsMux( ObjectCollection objs, ImageDimensions sd, BinaryValues outVal, boolean invert ) {
+	private static BinaryChnl createChannelFromObjectsMultiplex(
+		ObjectCollection objects,
+		ImageDimensions sd,
+		BinaryValues outVal,
+		boolean invert
+	) {
 		if (invert) {
-			return BinaryChnlFromObjs.createFromNotObjs(objs, sd, outVal);
+			return BinaryChnlFromObjects.createFromNotObjects(objects, sd, outVal);
 		} else {
-			return BinaryChnlFromObjs.createFromObjs(objs, sd, outVal);
+			return BinaryChnlFromObjects.createFromObjects(objects, sd, outVal);
 		}
 	}
 }

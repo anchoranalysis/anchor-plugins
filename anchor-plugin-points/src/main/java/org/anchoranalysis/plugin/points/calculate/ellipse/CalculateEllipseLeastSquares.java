@@ -41,7 +41,7 @@ import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
-public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndEllipse, FeatureInputSingleObject> {
+public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjectWithEllipse, FeatureInputSingleObject> {
 
 	@EqualsAndHashCode.Exclude
 	private EllipseFactory factory;
@@ -53,28 +53,28 @@ public class CalculateEllipseLeastSquares extends FeatureCalculation<ObjMaskAndE
 	}
 
 	@Override
-	protected ObjMaskAndEllipse execute( FeatureInputSingleObject input ) throws FeatureCalcException {
+	protected ObjectWithEllipse execute( FeatureInputSingleObject input ) throws FeatureCalcException {
 		
 		try {
 			NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 			
-			ObjectMask om = extractEllipseSlice( input.getObjectMask() );
+			ObjectMask object = extractEllipseSlice( input.getObject() );
 			
 			// Shell Rad is arbitrary here for now
 			MarkEllipse mark = factory.create(
-				om,
+				object,
 				nrgStack.getDimensions(),
 				0.2
 			);
 
-			return new ObjMaskAndEllipse(om,mark);
+			return new ObjectWithEllipse(object,mark);
 		} catch (CreateException | InsufficientPointsException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
 	
-	private static ObjectMask extractEllipseSlice( ObjectMask om ) {
-		int zSliceCenter = (int) om.centerOfGravity().getZ();
-		return om.extractSlice(zSliceCenter - om.getBoundingBox().cornerMin().getZ(), false);
+	private static ObjectMask extractEllipseSlice( ObjectMask object ) {
+		int zSliceCenter = (int) object.centerOfGravity().getZ();
+		return object.extractSlice(zSliceCenter - object.getBoundingBox().cornerMin().getZ(), false);
 	}
 }

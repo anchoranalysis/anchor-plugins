@@ -37,17 +37,17 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 final class SliceThresholderMask extends SliceThresholder {
 
-	private boolean clearOutsideMask;
-	private ReadableTuple3i crnrMin;
-	private ReadableTuple3i crnrMax;
-	private ObjectMask objMask;
-	
-	public SliceThresholderMask(boolean clearOutsideMask, ObjectMask objMask, BinaryValuesByte bvb) {
+	private final boolean clearOutsideMask;
+	private final ObjectMask object;
+	private final ReadableTuple3i cornerMin;
+	private final ReadableTuple3i cornerMax;
+		
+	public SliceThresholderMask(boolean clearOutsideMask, ObjectMask object, BinaryValuesByte bvb) {
 		super(bvb);
 		this.clearOutsideMask = clearOutsideMask;
-		this.objMask = objMask;
-		this.crnrMin = objMask.getBoundingBox().cornerMin();
-		this.crnrMax = objMask.getBoundingBox().calcCornerMax();
+		this.object = object;
+		this.cornerMin = object.getBoundingBox().cornerMin();
+		this.cornerMax = object.getBoundingBox().calcCornerMax();
 	}
 	
 	@Override
@@ -56,17 +56,17 @@ final class SliceThresholderMask extends SliceThresholder {
 		VoxelBox<?> vbThrshld,
 		VoxelBox<ByteBuffer> voxelBoxOut
 	) {
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
+		for( int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++ ) {
 			
-			int relZ = z - crnrMin.getZ();
+			int relZ = z - cornerMin.getZ();
 			
 			sgmnSlice(
 				voxelBoxIn.extent(),
 				voxelBoxIn.getPixelsForPlane(relZ),
 				vbThrshld.getPixelsForPlane(relZ),
 				voxelBoxOut.getPixelsForPlane(relZ),
-				objMask.getVoxelBox().getPixelsForPlane(z),
-				objMask.getBinaryValuesByte()
+				object.getVoxelBox().getPixelsForPlane(z),
+				object.getBinaryValuesByte()
 			);
 		}
 	}
@@ -82,8 +82,8 @@ final class SliceThresholderMask extends SliceThresholder {
 		int offsetMask = 0;
 		ByteBuffer out = vbOut.buffer();
 		
-		for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-			for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+		for( int y=cornerMin.getY(); y<=cornerMax.getY(); y++) {
+			for( int x=cornerMin.getX(); x<=cornerMax.getX(); x++) {
 				
 				int offset = extent.offset(x, y);
 				

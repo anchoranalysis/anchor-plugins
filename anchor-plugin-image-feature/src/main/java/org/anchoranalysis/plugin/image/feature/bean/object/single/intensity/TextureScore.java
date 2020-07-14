@@ -35,6 +35,9 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * From Page 727 from Lin et al (A Multi-Model Approach to Simultaneous Segmentation and Classification of Heterogeneous Populations of Cell Nuclei
@@ -45,19 +48,19 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 public class TextureScore extends FeatureNrgChnl {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int nrgIndexGradient = 1;
 	// END BEAN PROPERTIES
 
 	@Override
 	protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl) throws FeatureCalcException {
 
-		ObjectMask om = input.get().getObjectMask();
+		ObjectMask object = input.get().getObject();
 		Channel chnlGradient = input.get().getNrgStackRequired().getChnl(nrgIndexGradient);
 		
 		return scoreFromMeans(
-			IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om),
-			IntensityMeanCalculator.calcMeanIntensityObjMask(chnlGradient, om)
+			IntensityMeanCalculator.calcMeanIntensityObject(chnl, object),
+			IntensityMeanCalculator.calcMeanIntensityObject(chnlGradient, object)
 		);
 	}
 	
@@ -65,13 +68,5 @@ public class TextureScore extends FeatureNrgChnl {
 		double scaleFactor = 128 / meanIntensity;
 		
 		return (scaleFactor*meanGradientIntensity)/meanIntensity;
-	}
-
-	public int getNrgIndexGradient() {
-		return nrgIndexGradient;
-	}
-
-	public void setNrgIndexGradient(int nrgIndexGradient) {
-		this.nrgIndexGradient = nrgIndexGradient;
 	}
 }

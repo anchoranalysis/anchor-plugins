@@ -73,19 +73,19 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 	private Map<ObjectMask,Double> featureMap;
 	
 	@Override
-	protected boolean precondition(ObjectCollection objsToFilter) {
+	protected boolean precondition(ObjectCollection objectsToFilter) {
 		// We abandon the filtering if we have too small a number of objects, as statistics won't be meaningful
-		return objsToFilter.size()>=minNumObjs;
+		return objectsToFilter.size()>=minNumObjs;
 	}
 
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
-		super.start(dim, objsToFilter);
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
+		super.start(dim, objectsToFilter);
 		
 		// Now we calculate feature values for each object, and a standard deviation
-		featureVals = calcFeatures(objsToFilter, featureEvaluator.createAndStartSession() );
+		featureVals = calcFeatures(objectsToFilter, featureEvaluator.createAndStartSession() );
 		
-		featureMap = createFeatureMap(objsToFilter, featureVals);
+		featureMap = createFeatureMap(objectsToFilter, featureVals);
 		
 		double quantileVal = calcQuantile(featureVals);
 		minVal = quantileVal * minRatio;
@@ -97,9 +97,9 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
 
-		double featureVal = featureMap.get(om);
+		double featureVal = featureMap.get(object);
 		boolean matched = featureVal>=minVal; 
 		
 		if (!matched && getLogger()!=null) {
@@ -118,13 +118,13 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		}
 	}	
 
-	private static DoubleArrayList calcFeatures( ObjectCollection objs, FeatureCalculatorSingle<FeatureInputSingleObject> calculator ) throws OperationFailedException {
+	private static DoubleArrayList calcFeatures( ObjectCollection objects, FeatureCalculatorSingle<FeatureInputSingleObject> calculator ) throws OperationFailedException {
 		DoubleArrayList featureVals = new DoubleArrayList();
-		for( ObjectMask om : objs ) {
+		for( ObjectMask objectMask : objects ) {
 			try {
 				featureVals.add(
 					calculator.calc(
-						new FeatureInputSingleObject(om)
+						new FeatureInputSingleObject(objectMask)
 					)
 				);
 			} catch (FeatureCalcException e) {
@@ -134,14 +134,14 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		return featureVals;
 	}
 	
-	private static Map<ObjectMask,Double> createFeatureMap(ObjectCollection objsToFilter, DoubleArrayList featureVals) {
-		assert(objsToFilter.size()==featureVals.size());
+	private static Map<ObjectMask,Double> createFeatureMap(ObjectCollection objectsToFilter, DoubleArrayList featureVals) {
+		assert(objectsToFilter.size()==featureVals.size());
 		
 		Map<ObjectMask,Double> map = new HashMap<>();
 			
-		for(int i=0; i<objsToFilter.size(); i++) {
+		for(int i=0; i<objectsToFilter.size(); i++) {
 			map.put(
-				objsToFilter.get(i),
+				objectsToFilter.get(i),
 				featureVals.get(i)
 			);
 		}

@@ -37,28 +37,28 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 
 // Extends an object as much as it can within the z-slices of a containing object
 public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsSource) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectsSource) throws CreateException {
 			
-		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(
+		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(
 			containerRequired(),
-			objsSource.duplicate()	// Duplicated so as to avoid cahanging the original
+			objectsSource.duplicate()	// Duplicated so as to avoid cahanging the original
 		);
 		
 		// For each obj we extend it into its container
 		ObjectCollection out = new ObjectCollection();
 		
 		for( MatchedObject owm : matchList ) {
-			for( ObjectMask omOther : owm.getMatches() ) {
+			for( ObjectMask other : owm.getMatches() ) {
 				
 				out.add(
 					createExtendedObject(
-						omOther,
+						other,
 						owm.getSource()
 					)
 				);
@@ -68,29 +68,29 @@ public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
 		return out;
 	}
 		
-	private static ObjectMask createExtendedObject(ObjectMask om, ObjectMask container) throws CreateException {
+	private static ObjectMask createExtendedObject(ObjectMask object, ObjectMask container) throws CreateException {
 		
-		ObjectMask omFlat = om.flattenZ();
+		ObjectMask flattened = object.flattenZ();
 
-		int zCent = (int) om.centerOfGravity().getZ();
+		int zCent = (int) object.centerOfGravity().getZ();
 
-		BoundingBox bbox = potentialZExpansion(omFlat, container);
+		BoundingBox bbox = potentialZExpansion(flattened, container);
 		
 		// We update these values after our intersection with the container, in case they have changed
 		assert(container.getBoundingBox().contains().box(bbox));
 		
-		return ExtendObjsInZHelper.createExtendedObj(omFlat, container, bbox, zCent);
+		return ExtendObjsInZHelper.createExtendedObj(flattened, container, bbox, zCent);
 	}
 	
-	private static BoundingBox potentialZExpansion( ObjectMask omFlat, ObjectMask container ) throws CreateException {
+	private static BoundingBox potentialZExpansion( ObjectMask objectFlattened, ObjectMask container ) throws CreateException {
 		
 		int zLow = container.getBoundingBox().cornerMin().getZ();
 		int zHigh = container.getBoundingBox().calcCornerMax().getZ();
 		
-		Extent e = omFlat.getBoundingBox().extent().duplicateChangeZ(
+		Extent e = objectFlattened.getBoundingBox().extent().duplicateChangeZ(
 			zHigh-zLow+1
 		);
-		ReadableTuple3i crnrMin = omFlat.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
+		ReadableTuple3i crnrMin = objectFlattened.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
 		
 		return new BoundingBox( crnrMin, e ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
 			new CreateException("Bounding boxes don't intersect")	

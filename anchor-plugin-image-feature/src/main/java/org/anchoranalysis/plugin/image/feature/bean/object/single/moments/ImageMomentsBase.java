@@ -31,8 +31,10 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.moment.ImageMoments;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A base class for features that are calculated using image-moments
@@ -50,20 +52,14 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
 	private static final int MIN_NUM_VOXELS = 12;
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;		// Suppresses covariance in the z-direction.
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		
-		FeatureInputSingleObject params = input.get();
-		
-		// Max intensity projection of the input mask
-		ObjectMask om = params.getObjectMask();
 
-		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(MIN_NUM_VOXELS)) {
+		if (input.get().getObject().numPixelsLessThan(MIN_NUM_VOXELS)) {
 			return resultIfTooFewPixels();
 		}
 
@@ -85,13 +81,5 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
 		moments = moments.duplicate();
 
 		return moments;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
 	}
 }

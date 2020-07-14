@@ -33,10 +33,10 @@ class ShapeRegularityCalculator {
 
 	private ShapeRegularityCalculator() {}
 	
-	public static double calcShapeRegularity( ObjectMask om ) {
-		double area = om.numberVoxelsOn();
+	public static double calcShapeRegularity( ObjectMask object ) {
+		double area = object.numberVoxelsOn();
 		int perimeter = NumberVoxelsAtBorder.numBorderPixels(
-			om,
+			object,
 			false,
 			false,
 			false

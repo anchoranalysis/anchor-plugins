@@ -39,12 +39,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 class ObjMaskCollectionFixture {
 	
 	// Maximum extent of a scene
-	private static Extent sceneExtent = new Extent(1000,900, 40);
+	private static final Extent SCENE_EXTENT = new Extent(1000,900, 40);
 	
 	/** How frequently do we change value randomly when iterating over pixel values */
-	private static double probChangeVal = 0.2;
+	private static final double PROBABILITY_CHANGE_VALUE = 0.2;
 	
-	private static Random rand = new Random();
+	private static final Random RANDOM = new Random();
 	
 	/**
 	 * Creates an ObjMaskCollection containing between minNumObjs and maxNumObjs
@@ -72,14 +72,14 @@ class ObjMaskCollectionFixture {
 		
 	private ObjectMask mockObj( Point3i crnr, Extent e ) {
 		
-		ObjectMask om = new ObjectMask(
+		ObjectMask object = new ObjectMask(
 			new BoundingBox(crnr, e)
 		);
 		
 		int volumeXY = e.getVolumeXY();
 		for( int z=0; z<e.getZ(); z++) {
 			
-			VoxelBuffer<ByteBuffer> vb = om.getVoxelBox().getPixelsForPlane(z);
+			VoxelBuffer<ByteBuffer> vb = object.getVoxelBox().getPixelsForPlane(z);
 			ByteBuffer bb = vb.buffer();
 			
 			int prevVal = 0;
@@ -96,12 +96,12 @@ class ObjMaskCollectionFixture {
 		
 		// Switch samples on an off with uniform randomness
 		
-		return om;
+		return object;
 	}
 	
 	/** Randomly returns 0 or 255 with equal probability. prevVal must be 0 or 255 */
 	private static int randomMaybeChangeVal( int prevVal ) {
-		if (rand.nextDouble() > probChangeVal) {
+		if (RANDOM.nextDouble() > PROBABILITY_CHANGE_VALUE) {
 			return prevVal;
 		} else {
 			return (255-prevVal);
@@ -110,31 +110,29 @@ class ObjMaskCollectionFixture {
 	
 	/** Randomly returns an extent within a scene */
 	private static Extent randomExtent() {
-		int x = randomTotal( sceneExtent.getX()-1 ) + 1;
-		int y = randomTotal( sceneExtent.getY()-1 ) + 1;
-		int z = randomTotal( sceneExtent.getZ()-1 ) + 1;
+		int x = randomTotal( SCENE_EXTENT.getX()-1 ) + 1;
+		int y = randomTotal( SCENE_EXTENT.getY()-1 ) + 1;
+		int z = randomTotal( SCENE_EXTENT.getZ()-1 ) + 1;
 		return new Extent(x, y, z);
 	}
 	
 	/** A random starting corner, making sure there's enough room for the extent */
 	private static Point3i randomCrnr( Extent e) {
-		int x = randomSub( sceneExtent.getX(), e.getX() );
-		int y = randomSub( sceneExtent.getY(), e.getY() );
-		int z = randomSub( sceneExtent.getZ(), e.getZ() );
+		int x = randomSub( SCENE_EXTENT.getX(), e.getX() );
+		int y = randomSub( SCENE_EXTENT.getY(), e.getY() );
+		int z = randomSub( SCENE_EXTENT.getZ(), e.getZ() );
 		return new Point3i(x, y, z);
 	}
 	
 	private static int randomTotal( int total ) {
-		return rand.nextInt( total  );
+		return RANDOM.nextInt( total  );
 	}
 	
 	private static int randomMinMax( int min, int max ) {
-		return rand.nextInt( max-min ) + min;
+		return RANDOM.nextInt( max-min ) + min;
 	}
 	
 	private static int randomSub( int total, int sub ) {
 		return randomTotal( total - sub );
 	}
-
-
 }

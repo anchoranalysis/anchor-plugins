@@ -39,36 +39,31 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
 public class BinaryChnlProviderObjMaskFilterAsChnl extends BinaryChnlProviderElseBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectFilter objMaskFilter;
+	@BeanField @Getter @Setter
+	private ObjectFilter filter;
 	// END BEAN PROPERTIES
 
 	@Override
 	protected boolean condition(BinaryChnl chnl) throws CreateException {
 
-		ObjectMask om = CreateFromEntireChnlFactory.createObjMask( chnl );
+		ObjectMask objectMask = CreateFromEntireChnlFactory.createObject( chnl );
 		
 		try {
-			ObjectCollection omc = objMaskFilter.filter(
-				ObjectCollectionFactory.from(om),
+			ObjectCollection objects = filter.filter(
+				ObjectCollectionFactory.from(objectMask),
 				Optional.of(chnl.getDimensions()),
 				Optional.empty()
 			);
-			return omc.size()==1;
+			return objects.size()==1;
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public ObjectFilter getObjMaskFilter() {
-		return objMaskFilter;
-	}
-
-	public void setObjMaskFilter(ObjectFilter objMaskFilter) {
-		this.objMaskFilter = objMaskFilter;
 	}
 }

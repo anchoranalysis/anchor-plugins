@@ -59,7 +59,7 @@ public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private PermuteProperty<?> permuteProperty;
@@ -69,7 +69,7 @@ public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 	public ObjectCollection create() throws CreateException {
 				
 		try {
-			PermutationSetter ps = permuteProperty.createSetter(objs);
+			PermutationSetter ps = permuteProperty.createSetter(objects);
 			
 			return createPermutedObjs(
 				ps,
@@ -84,13 +84,13 @@ public class ObjMaskProviderPermute extends ObjectCollectionProvider {
 		return ObjectCollectionFactory.flatMapFrom(
 			propVals,
 			CreateException.class,
-			propVal -> objsForPermutation(setter, propVal)
+			propVal -> objectsForPermutation(setter, propVal)
 		);
 	}
 	
-	private ObjectCollection objsForPermutation(PermutationSetter setter, Object propVal) throws CreateException {
+	private ObjectCollection objectsForPermutation(PermutationSetter setter, Object propVal) throws CreateException {
 		// We permute a duplicate, so as to keep the original values
-		ObjectCollectionProvider provider = objs.duplicateBean();
+		ObjectCollectionProvider provider = objects.duplicateBean();
 		try {
 			setter.setPermutation(provider, propVal);
 		} catch (PermutationSetterException e) {

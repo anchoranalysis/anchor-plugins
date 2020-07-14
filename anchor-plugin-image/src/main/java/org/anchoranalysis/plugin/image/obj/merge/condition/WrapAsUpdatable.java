@@ -32,33 +32,33 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Wraps a BeforeCondition as an UpdatableBefoerCondition
  * 
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class WrapAsUpdatable implements UpdatableBeforeCondition {
 
-	private BeforeCondition beforeCondition;
+	// START REQUIRED ARGUMENTS
+	private final BeforeCondition beforeCondition;
+	// END REQUIRED ARGUMENTS
 	
 	// TEMPORARILY UPDATED
-	private ObjectMask omSrc;
-	private Optional<ImageResolution> res;
-	
-	public WrapAsUpdatable(BeforeCondition beforeCondition) {
-		super();
-		this.beforeCondition = beforeCondition;
+	private ObjectMask objectSource;
+	private Optional<ImageResolution> resolution;
+
+	@Override
+	public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res) throws OperationFailedException {
+		this.objectSource = source;
+		this.resolution = res;
 	}
 
 	@Override
-	public void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException {
-		this.omSrc = omSrc;
-		this.res = res;
-	}
-
-	@Override
-	public boolean accept(ObjectMask omDest) throws OperationFailedException {
-		return beforeCondition.accept(omSrc, omDest, res);
+	public boolean accept(ObjectMask destination) throws OperationFailedException {
+		return beforeCondition.accept(objectSource, destination, resolution);
 	}
 }

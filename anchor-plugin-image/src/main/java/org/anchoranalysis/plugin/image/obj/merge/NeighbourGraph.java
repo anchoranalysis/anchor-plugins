@@ -49,7 +49,7 @@ class NeighbourGraph {
 	private UpdatableBeforeCondition beforeCondition;
 	private Optional<ImageResolution> res;
 	
-	private GraphWithEdgeTypes<ObjVertex, PrioritisedVertex> graph = new GraphWithEdgeTypes<>(true);
+	private GraphWithEdgeTypes<ObjectVertex, PrioritisedVertex> graph = new GraphWithEdgeTypes<>(true);
 	
 	/**
 	 * Constructor
@@ -74,24 +74,24 @@ class NeighbourGraph {
 	 * @throws OperationFailedException
 	 */
 	public void addVertex(
-		ObjVertex om,
-		Collection<ObjVertex> possibleNghbs,
+		ObjectVertex om,
+		Collection<ObjectVertex> possibleNghbs,
 		AssignPriority prioritizer,
 		GraphLogger logger
 	) throws OperationFailedException {
 		
 		graph.addVertex(om);
 		
-		beforeCondition.updateSrcObj(om.getObjMask(), res);
+		beforeCondition.updateSourceObject(om.getObject(), res);
 				
-		for( ObjVertex possibleNghb : possibleNghbs ) {
+		for( ObjectVertex possibleNghb : possibleNghbs ) {
 			maybeAddEdge(om, possibleNghb, prioritizer, logger);
 		}
 	}
 	
 	/** Get a set of all neighbouring vertices of the vertices on a particular edge (not including the vertices associated with the edge) */
-	public Set<ObjVertex> neighbourNodesFor( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edge ) {
-		Set<ObjVertex> setOut = new HashSet<>();
+	public Set<ObjectVertex> neighbourNodesFor( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge ) {
+		Set<ObjectVertex> setOut = new HashSet<>();
 		addNghbsToSet( edge.getNode1(), setOut );
 		addNghbsToSet( edge.getNode2(), setOut );
 		setOut.remove( edge.getNode1() );
@@ -103,14 +103,14 @@ class NeighbourGraph {
 	public ObjectCollection verticesAsObjects() {
 		return ObjectCollectionFactory.mapFrom(
 			graph.vertexSet(),
-			ObjVertex::getObjMask
+			ObjectVertex::getObject
 		);
 	}
 	
-	private void addNghbsToSet( ObjVertex vertex, Set<ObjVertex> setPossibleNghbs ) {
+	private void addNghbsToSet( ObjectVertex vertex, Set<ObjectVertex> setPossibleNghbs ) {
 		
 		// Remove the nodes associated with this edge
-		for( EdgeTypeWithVertices<ObjVertex,PrioritisedVertex> edge : graph.edgesOf(vertex) ) {
+		for( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge : graph.edgesOf(vertex) ) {
 			if(!edge.getNode1().equals(vertex)) {
 				setPossibleNghbs.add(edge.getNode1());
 			}
@@ -122,13 +122,13 @@ class NeighbourGraph {
 			
 	// Returns true if an edge is added, false otherwise
 	private boolean maybeAddEdge(
-		ObjVertex src,
-		ObjVertex dest,
+		ObjectVertex src,
+		ObjectVertex dest,
 		AssignPriority prioritizer,
 		GraphLogger logger
 	) throws OperationFailedException {
 		
-		if(!beforeCondition.accept(dest.getObjMask())) {
+		if(!beforeCondition.accept(dest.getObject())) {
 			return false;
 		}
 			
@@ -138,7 +138,7 @@ class NeighbourGraph {
 		return true;
 	}
 
-	public void removeVertex(ObjVertex node) {
+	public void removeVertex(ObjectVertex node) {
 		graph.removeVertex(node);
 	}
 
@@ -150,11 +150,11 @@ class NeighbourGraph {
 		return graph.numEdges();
 	}
 
-	public Collection<EdgeTypeWithVertices<ObjVertex, PrioritisedVertex>> edgeSetUnique() {
+	public Collection<EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex>> edgeSetUnique() {
 		return graph.edgeSetUnique();
 	}
 
-	Collection<ObjVertex> vertexSet() {
+	Collection<ObjectVertex> vertexSet() {
 		return graph.vertexSet();
 	}
 }

@@ -26,15 +26,15 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Ensures each obj in a collection is a connected-component, decomposing it if necessary
@@ -47,44 +47,33 @@ public class ObjMaskProviderConnectedComponentsObjs extends ObjectCollectionProv
 
 	// START BEAN PROPERTIES
 	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean bigNghb = false;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 				
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(bigNghb, 1);
+		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(bigNghb, 1);
 		
-		return objsCollection.stream().flatMapWithException(
+		return objects.stream().flatMapWithException(
 			CreateException.class,
-			om -> createObjs3D(om, createObjMasks)
+			objectMask -> createObjects3D(objectMask, creator)
 		);
 	}
 	
-	private ObjectCollection createObjs3D(
-		ObjectMask omUnconnected,
-		CreateFromConnectedComponentsFactory createObjMasks
+	private ObjectCollection createObjects3D(
+		ObjectMask unconnected,
+		CreateFromConnectedComponentsFactory createObjectMasks
 	) throws CreateException {
 		
-		ObjectCollection objs = createObjsFromMask( omUnconnected.binaryVoxelBox(), createObjMasks );
+		ObjectCollection objects = createObjectMasks.createConnectedComponents(
+			unconnected.binaryVoxelBox()
+		);
 		
 		// Adjust the crnr of each object, by adding on the original starting point of our object-mask
-		return objs.shiftBy(
-			omUnconnected.getBoundingBox().cornerMin()
+		return objects.shiftBy(
+			unconnected.getBoundingBox().cornerMin()
 		);
 	}
-	
-	private ObjectCollection createObjsFromMask( BinaryVoxelBox<ByteBuffer> vb, CreateFromConnectedComponentsFactory createObjMasks ) throws CreateException {
-		return createObjMasks.createConnectedComponents(vb );
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
-	}
-
 }
