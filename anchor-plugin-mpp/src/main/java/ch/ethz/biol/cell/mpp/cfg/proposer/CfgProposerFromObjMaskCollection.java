@@ -56,7 +56,7 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private boolean suppressZCovariance = false;
@@ -73,18 +73,18 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		return testMark instanceof MarkEllipsoid;
 	}
 
-	private MarkEllipsoid createFromObjMask( ObjectMask om, NRGStackWithParams nrgStack ) throws CreateException {
-		return EllipsoidFactory.createMarkEllipsoidLeastSquares( om , nrgStack.getDimensions(), suppressZCovariance, shellRad );
+	private MarkEllipsoid createFromObjMask( ObjectMask object, NRGStackWithParams nrgStack ) throws CreateException {
+		return EllipsoidFactory.createMarkEllipsoidLeastSquares( object , nrgStack.getDimensions(), suppressZCovariance, shellRad );
 	}
 	
 	@Override
 	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
 
-		ObjectCollection objsCollection;
+		ObjectCollection objectCollection;
 		try {
-			objsCollection = objs.create();
+			objectCollection = objects.create();
 		} catch (CreateException e) {
-			throw new ProposalAbnormalFailureException("Failed to create objs", e);
+			throw new ProposalAbnormalFailureException("Failed to create objects", e);
 		}
 			
 		Cfg cfg = new Cfg();
@@ -98,8 +98,8 @@ public class CfgProposerFromObjMaskCollection extends CfgProposer {
 		}
 
 		try {
-			for( ObjectMask om : objsCollection ) {
-				Mark mark = createFromObjMask(om, context.getNrgStack());
+			for( ObjectMask object : objectCollection ) {
+				Mark mark = createFromObjMask(object, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
 				if (checkMark!=null && !checkMark.check(mark, context.getRegionMap(), context.getNrgStack())) {

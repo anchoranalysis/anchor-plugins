@@ -32,26 +32,23 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.AllArgsConstructor;
+
 /** Combines two UpdatableBeforeConditions as LOGICAL ANDs */
+@AllArgsConstructor
 public class AndCondition implements UpdatableBeforeCondition {
 
-	private UpdatableBeforeCondition cond1;
-	private UpdatableBeforeCondition cond2;
-		
-	public AndCondition(UpdatableBeforeCondition cond1, UpdatableBeforeCondition cond2) {
-		super();
-		this.cond1 = cond1;
-		this.cond2 = cond2;
+	private final UpdatableBeforeCondition firstCondition;
+	private final UpdatableBeforeCondition secondCondition;
+
+	@Override
+	public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res) throws OperationFailedException {
+		firstCondition.updateSourceObject(source, res);
+		secondCondition.updateSourceObject(source, res);
 	}
 
 	@Override
-	public void updateSrcObj(ObjectMask omSrc, Optional<ImageResolution> res) throws OperationFailedException {
-		cond1.updateSrcObj(omSrc, res);
-		cond2.updateSrcObj(omSrc, res);
-	}
-
-	@Override
-	public boolean accept(ObjectMask omDest) throws OperationFailedException {
-		return cond1.accept(omDest) && cond2.accept(omDest);
+	public boolean accept(ObjectMask destination) throws OperationFailedException {
+		return firstCondition.accept(destination) && secondCondition.accept(destination);
 	}
 }

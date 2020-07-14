@@ -42,43 +42,41 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderBinarySgmn extends ObjMaskProviderOneChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinarySegmentation binarySgmn;
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjectCollection createFromObjs(ObjectCollection objsSrc, Channel chnlSrc) throws CreateException {
+	protected ObjectCollection createFromObjects(ObjectCollection objectsSource, Channel channelSource) throws CreateException {
 		try {
-			return objsSrc.stream().map( om->
-				sgmnObject(om, chnlSrc)
+			return objectsSource.stream().map( object->
+				sgmnObject(object, channelSource)
 			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
-	private ObjectMask sgmnObject(ObjectMask om, Channel chnlSrc) throws SgmnFailedException {
-		VoxelBox<?> vb = chnlSrc.getVoxelBox().any().region(om.getBoundingBox(),true);
+	private ObjectMask sgmnObject(ObjectMask object, Channel channelSource) throws SgmnFailedException {
+		VoxelBox<?> vb = channelSource.getVoxelBox().any().region(
+			object.getBoundingBox(),
+			true
+		);
 		
 		BinaryVoxelBox<ByteBuffer> bvb = binarySgmn.sgmn(
 			new VoxelBoxWrapper(vb),
 			new BinarySegmentationParameters(),
 			Optional.of(
-				new ObjectMask(om.getVoxelBox())
+				new ObjectMask(object.getVoxelBox())
 			)
 		);
 				
-		return new ObjectMask(om.getBoundingBox(), bvb);	
-	}
-
-	public BinarySegmentation getBinarySgmn() {
-		return binarySgmn;
-	}
-
-	public void setBinarySgmn(BinarySegmentation binarySgmn) {
-		this.binarySgmn = binarySgmn;
+		return new ObjectMask(object.getBoundingBox(), bvb);	
 	}
 }

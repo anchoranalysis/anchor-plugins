@@ -32,9 +32,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Returns the only the objects from objMaskProvider that intersect
- *   with at least one object in objMaskProviderContainer
+ * Returns the only the objects that intersect with at least one object in the container
  *   
  * @author feehano
  *
@@ -42,22 +44,22 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean inverse=false;	// If set, we return the objects that DO NOT intersect
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-		ObjectCollection objsContainer = containerRequired();
+		ObjectCollection objectsContainer = containerRequired();
 		
-		return objsCollection.stream().filter( obj->
-			includeObj(obj,objsContainer)
+		return objects.stream().filter( object->
+			includeObject(object,objectsContainer)
 		);
 	}
 	
-	private boolean includeObj(ObjectMask obj, ObjectCollection objsContainer) {
-		boolean intersection = doesObjIntersect(obj,objsContainer);
+	private boolean includeObject(ObjectMask object, ObjectCollection objectsContainer) {
+		boolean intersection = doesObjIntersect(object,objectsContainer);
 		
 		if (inverse) {
 			return !intersection;
@@ -66,22 +68,7 @@ public class ObjMaskProviderIntersectsWith extends ObjMaskProviderContainer {
 		}
 	}
 	
-	private static boolean doesObjIntersect( ObjectMask om, ObjectCollection container ) {
-		
-		for( ObjectMask omCompare : container ) {
-			if(om.hasIntersectingVoxels(omCompare)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	public boolean isInverse() {
-		return inverse;
-	}
-
-	public void setInverse(boolean inverse) {
-		this.inverse = inverse;
+	private static boolean doesObjIntersect( ObjectMask object, ObjectCollection container ) {
+		return container.stream().anyMatch(object::hasIntersectingVoxels);
 	}
 }

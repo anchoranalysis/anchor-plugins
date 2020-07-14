@@ -33,7 +33,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class ObjMaskProviderDuplicate extends ObjectCollectionProviderOne {
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objMaskCollection ) throws CreateException {
-		return objMaskCollection.duplicate();
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
+		return objects.duplicate();
 	}
 }

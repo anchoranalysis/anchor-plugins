@@ -62,13 +62,16 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 	
 	@Override
 	public String uniqueIdentifierFor(FeatureInputSingleObject input) {
-		return UniqueIdentifierUtilities.forObject(input.getObjectMask());
+		return UniqueIdentifierUtilities.forObject(input.getObject());
 	}
 
 	@Override
-	public List<FeatureInputSingleObject> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
-		return objs.stream().mapToList(obj ->
+	public List<FeatureInputSingleObject> createListInputs(
+		ObjectCollection objects,
+		NRGStackWithParams nrgStack,
+		Logger logger
+	) throws CreateException {
+		return objects.stream().mapToList(obj ->
 			new FeatureInputSingleObject(
 				checkObjInsideScene(obj, nrgStack.getDimensions().getExtent()),
 				nrgStack

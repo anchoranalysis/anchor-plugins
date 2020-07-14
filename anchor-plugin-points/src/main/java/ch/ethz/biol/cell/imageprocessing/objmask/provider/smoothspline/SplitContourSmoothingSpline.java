@@ -27,7 +27,7 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
  */
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -47,38 +47,38 @@ public class SplitContourSmoothingSpline {
 	 * 1. Fits a smoothed-spline to the contour
 	 * 2. Splits this at each optima (critical points i.e. zero-crossing of first-derivative) 
 	 *  
-	 * @param om object-mask representing a closed contour
+	 * @param object object-mask representing a closed contour
 	 * @param rho smoothing factor [0,1] as per SSJ documentation
-	 * @param minNumPoints if less than this number of points, object is returned unchanged
+	 * @param minimumNumberPoints if less than this number of points, object is returned unchanged
 	 * @return
 	 * @throws OperationFailedException
 	 */
 	public static ContourList apply(
-		ObjectMask om,
+		ObjectMask object,
 		double rho,
-		int numLoopPoints,
-		int minNumPoints
+		int numberLoopPoints,
+		int minimumNumberPoints
 	) throws OperationFailedException {
 		
 		return traversePointsAndCallFitter(
-			om,
-			minNumPoints,
-			(pts, out) -> fitSplinesAndExtract(pts, rho, pts, numLoopPoints, out)
+			object,
+			minimumNumberPoints,
+			(pts, out) -> fitSplinesAndExtract(pts, rho, pts, numberLoopPoints, out)
 		);
 	}
 	
 	private static ContourList traversePointsAndCallFitter(
-		ObjectMask om,
-		int minNumPoints,
+		ObjectMask object,
+		int minimumNumberPoints,
 		FitSplinesExtract fitter
 	) throws OperationFailedException {
 			
-		List<Contour> contoursTraversed = CVFindContours.contourForObjMask(om, minNumPoints);
+		List<Contour> contoursTraversed = CVFindContours.contourForObjMask(object);
 
 		ContourList out = new ContourList();
 		
 		for( Contour c : contoursTraversed ) {
-			addSplinesFor(c, out, fitter, minNumPoints);
+			addSplinesFor(c, out, fitter, minimumNumberPoints);
 		}
 		
 		return out;
@@ -192,16 +192,16 @@ public class SplitContourSmoothingSpline {
 	 * @param numExtraPoints repeats the first numLoopedPoints points again at end of curve (to help deal with closed curves)
 	 * @return
 	 */
-	private static double[] extractFromPoint( List<Point3i> pts, Function<Point3i,Integer> extracter, List<Point3i> ptsExtra, int numExtraPoints ) {
+	private static double[] extractFromPoint( List<Point3i> pts, ToIntFunction<Point3i> extracter, List<Point3i> ptsExtra, int numExtraPoints ) {
 		
 		double[] out = new double[pts.size()+numExtraPoints];
 		
 		for( int i=0; i<pts.size(); i++) {
-			out[i] = (double) extracter.apply( pts.get(i) );
+			out[i] = (double) extracter.applyAsInt( pts.get(i) );
 		}
 		
 		for( int i=0; i<numExtraPoints; i++) {
-			out[pts.size() + i] = (double) extracter.apply( ptsExtra.get(i) );
+			out[pts.size() + i] = (double) extracter.applyAsInt( ptsExtra.get(i) );
 		}
 		
 		return out;

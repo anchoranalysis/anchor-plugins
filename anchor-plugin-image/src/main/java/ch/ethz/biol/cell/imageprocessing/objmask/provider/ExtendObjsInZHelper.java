@@ -42,13 +42,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtendObjsInZHelper {
 	
-	public static ObjectMask createExtendedObj( ObjectMask omFlat, ObjectMask container, BoundingBox bbox, int zCent ) throws CreateException {
+	public static ObjectMask createExtendedObj( ObjectMask flat, ObjectMask container, BoundingBox bbox, int zCent ) throws CreateException {
 		
 		Extent extent = bbox.extent();
 		
-		ObjectMask omNew = container.region(bbox,false);
+		ObjectMask objectNew = container.region(bbox,false);
 		
-		ByteBuffer bbFlat = omFlat.getVoxelBox().getPixelsForPlane(0).buffer();
+		ByteBuffer bbFlat = flat.getVoxelBox().getPixelsForPlane(0).buffer();
 				
 		int zLow = bbox.cornerMin().getZ();
 		int zHigh = bbox.calcCornerMax().getZ();
@@ -56,17 +56,24 @@ class ExtendObjsInZHelper {
 		if (zCent>zHigh) { zCent = zHigh; }
 		if (zCent<zLow) { zCent = zLow; }
 		
-		extend( bbFlat, extent, omNew, omFlat, zLow, IntStream.range(zCent, zHigh+1) );
-		extend( bbFlat, extent, omNew, omFlat, zLow, revRange(zLow, zCent) );
-		return omNew; 
+		extend( bbFlat, extent, objectNew, flat, zLow, IntStream.range(zCent, zHigh+1) );
+		extend( bbFlat, extent, objectNew, flat, zLow, revRange(zLow, zCent) );
+		return objectNew; 
 	}
 	
-	private static boolean extend( ByteBuffer bbFlat, Extent e, ObjectMask omNew, ObjectMask omFlat, int zLow, IntStream zRange ) {
+	private static boolean extend(
+		ByteBuffer bbFlat,
+		Extent extent,
+		ObjectMask objectNew,
+		ObjectMask flat,
+		int zLow,
+		IntStream zRange
+	) {
 		
 		boolean andMode = true;
 		boolean writtenOneSlice = false;
 		
-		int volumeXY = e.getVolumeXY();
+		int volumeXY = extent.getVolumeXY();
 		
 		// Start in the mid point, and go upwards
 		Iterator<Integer> itr = zRange.iterator();
@@ -76,11 +83,11 @@ class ExtendObjsInZHelper {
 			int zRel = z - zLow;
 			
 			// We want to set to the Flat version ANDed with
-			ByteBuffer bbExst = omNew.getVoxelBox().getPixelsForPlane(zRel).buffer();
+			ByteBuffer bbExst = objectNew.getVoxelBox().getPixelsForPlane(zRel).buffer();
 			
 			if (andMode) {
 			
-				if (bufferLogicalAnd( volumeXY, bbExst, bbFlat, omNew.getBinaryValuesByte(), omFlat.getBinaryValuesByte() )) {
+				if (bufferLogicalAnd( volumeXY, bbExst, bbFlat, objectNew.getBinaryValuesByte(), flat.getBinaryValuesByte() )) {
 					writtenOneSlice = true;
 				} else {
 					// As soon as we have no pixel high, we switch to simply clearing instead, so long as we've written a slice before
@@ -90,7 +97,7 @@ class ExtendObjsInZHelper {
 				}
 				
 			} else {
-				setBufferLow( e.getVolumeXY(), bbExst, omNew.getBinaryValuesByte() );
+				setBufferLow( extent.getVolumeXY(), bbExst, objectNew.getBinaryValuesByte() );
 			}
 		}
 		

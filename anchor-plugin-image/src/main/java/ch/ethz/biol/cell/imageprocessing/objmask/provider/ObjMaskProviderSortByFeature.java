@@ -1,5 +1,7 @@
 package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 
+import java.util.SortedSet;
+
 /*
  * #%L
  * anchor-plugin-image
@@ -27,8 +29,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
  */
 
 
-import java.util.TreeSet;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,6 +42,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,48 +54,40 @@ public class ObjMaskProviderSortByFeature extends ObjectCollectionProviderOne {
 	// END BEAN PROPERTIES
 	
 	/** Associates a feature-value with an object so it can be sorted by the feature-value */
-	@AllArgsConstructor
+	@AllArgsConstructor @EqualsAndHashCode
 	private static class ObjectWithFeatureValue implements Comparable<ObjectWithFeatureValue> {
 		
-		private final ObjectMask objMask;
+		@Getter
+		private final ObjectMask object;
 		private final double featureVal;
 		
 		@Override
-		public int compareTo(ObjectWithFeatureValue o) {
-			return Double.valueOf(o.featureVal).compareTo(featureVal);
-		}
-
-		public ObjectMask get() {
-			return objMask;
+		public int compareTo(ObjectWithFeatureValue other) {
+			return Double.valueOf(other.featureVal).compareTo(featureVal);
 		}
 	}
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 		
 		try {
 			FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = featureEvaluator.createAndStartSession();
 			
-			TreeSet<ObjectWithFeatureValue> sorted = new TreeSet<>();
-			for( ObjectMask om : objsCollection ) {
-				try {
-					double featureVal = featureSession.calc(
-						new FeatureInputSingleObject(om)
-					);
-					sorted.add(
-						new ObjectWithFeatureValue(om,featureVal)
-					);
-				} catch (FeatureCalcException e) {
-					throw new CreateException(e);
-				}
-			}
+			SortedSet<ObjectWithFeatureValue> sorted = objects.stream().mapToSortedSet(
+				objectMask -> new ObjectWithFeatureValue(
+					objectMask,
+					featureSession.calc(
+						new FeatureInputSingleObject(objectMask)
+					)
+				)
+			);
 			
 			return ObjectCollectionFactory.mapFrom(
 				sorted,
-				ObjectWithFeatureValue::get
+				ObjectWithFeatureValue::getObject
 			);
 			
-		} catch (OperationFailedException e) {
+		} catch (OperationFailedException | FeatureCalcException e) {
 			throw new CreateException(e);
 		}
 	}

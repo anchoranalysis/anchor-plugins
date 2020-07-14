@@ -38,5 +38,5 @@ public interface AfterCondition {
 	
 	void init(Logger logger) throws InitException;
 	
-	boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageResolution> res) throws OperationFailedException;
+	boolean accept(ObjectMask source, ObjectMask destination, ObjectMask merged, Optional<ImageResolution> res) throws OperationFailedException;
 }

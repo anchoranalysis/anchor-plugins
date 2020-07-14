@@ -48,7 +48,7 @@ class CalculatePairInput extends FeatureCalculation<FeatureInputPairObjects, Fea
 		);
 		
 		return new FeatureInputPairObjects(
-			input.getObjectMask(),
+			input.getObject(),
 			objFromBinary,
 			input.getNrgStackOptional()
 		);

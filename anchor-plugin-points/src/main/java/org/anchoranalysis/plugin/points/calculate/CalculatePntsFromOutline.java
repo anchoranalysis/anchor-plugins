@@ -42,7 +42,7 @@ public class CalculatePntsFromOutline extends FeatureCalculation<List<Point3i>, 
 	@Override
 	protected List<Point3i> execute(FeatureInputSingleObject params) throws FeatureCalcException {
 		return PointsFromObjMask.pntsFromMaskOutline(
-			params.getObjectMask()
+			params.getObject()
 		);
 	}
 }

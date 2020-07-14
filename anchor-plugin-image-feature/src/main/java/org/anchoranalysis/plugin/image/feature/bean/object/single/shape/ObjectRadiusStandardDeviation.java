@@ -58,14 +58,14 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		ObjectMask om = input.get().getObjectMask();
+		ObjectMask object = input.get().getObject();
 		
 		// Get the outline
-		List<Point3i> pntsOutline = createMaskOutlineAsPoints(om, 1);
+		List<Point3i> pntsOutline = createMaskOutlineAsPoints(object, 1);
 
 		// Distances from the center to each point on the outline
 		DoubleArrayList distances = distancesToPoints(
-			om.centerOfGravity(),
+			object.centerOfGravity(),
 			pntsOutline
 		);
 		

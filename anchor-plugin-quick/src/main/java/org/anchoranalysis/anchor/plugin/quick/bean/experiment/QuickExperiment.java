@@ -98,7 +98,7 @@ public class QuickExperiment<S> extends Experiment {
 	private OutputAllowed outputEnabled = new AllOutputAllowed();
 	
 	@BeanField @Getter @Setter
-	private OutputAllowed objMaskCollectionOutputEnabled = new AllOutputAllowed();
+	private OutputAllowed objects = new AllOutputAllowed();
 	
 	@BeanField @Getter @Setter
 	private OutputAllowed stackCollectionOutputEnabled = new AllOutputAllowed();
@@ -150,7 +150,7 @@ public class QuickExperiment<S> extends Experiment {
 		OutputManagerStack outputManager = new OutputManagerStack();
 		outputManager.setSilentlyDeleteExisting(true);
 		outputManager.setOutputEnabled( outputEnabled );
-		outputManager.setObjMaskCollectionOutputEnabled( objMaskCollectionOutputEnabled );
+		outputManager.setObjects(objects);
 		outputManager.setStackCollectionOutputEnabled( stackCollectionOutputEnabled );
 		try {
 			outputManager.localise(getLocalPath());

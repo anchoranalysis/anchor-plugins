@@ -33,28 +33,23 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderMaskBase extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider mask;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		return createFromObjs(
-			objsIn,
+			objects,
 			mask.create()
 		);
 	}
 	
-	protected abstract ObjectCollection createFromObjs(ObjectCollection objsIn, BinaryChnl mask) throws CreateException;
-
-	public BinaryChnlProvider getMask() {
-		return mask;
-	}
-
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
-	}
+	protected abstract ObjectCollection createFromObjs(ObjectCollection objects, BinaryChnl mask) throws CreateException;
 }

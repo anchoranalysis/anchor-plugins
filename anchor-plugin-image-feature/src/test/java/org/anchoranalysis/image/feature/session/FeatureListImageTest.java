@@ -50,7 +50,7 @@ import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.image.NRGStackFixture;
-import org.anchoranalysis.test.image.obj.ObjMaskFixture;
+import org.anchoranalysis.test.image.obj.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -81,8 +81,7 @@ public class FeatureListImageTest {
 		ResultsVector rv2 = session.calc( (FeatureInput) null );
 		ConstantsInListFixture.checkResultVector(rv2);
 	}
-	
-	
+		
 	@Test
 	public void testHistogram() throws InitException, FeatureCalcException, CreateException {
 		
@@ -109,46 +108,42 @@ public class FeatureListImageTest {
 	public void testImage() throws InitException, FeatureCalcException, CreateException {
 		
 		FeatureCalculatorMulti<FeatureInputSingleObject> session = createAndStart(
-			objMaskFeatures(loader)
+			objectFeatures(loader)
 		);
 		
-		ObjMaskFixture objMaskFixture = new ObjMaskFixture(
+		ObjectMaskFixture objectFixture = new ObjectMaskFixture(
 			NRG_STACK.getDimensions()
 		);
 		
 		assertCalc(
 			session.calc(
-				createParams(objMaskFixture.create1())
+				createInput(objectFixture.create1())
 			),
 			31.5, 29.0, 3.0, 59.0, 225.02857142857144, 2744.0, 560.0					
 		);
 		
 		assertCalc(
 			session.calc(
-				createParams(objMaskFixture.create2())
+				createInput(objectFixture.create2())
 			),
 			7.5, 21.0, 7.0, 28.5, 195.93956043956044, 108.0, 66.0					
 		);
 		
 		assertCalc(
 			session.calc(
-				createParams(objMaskFixture.create3())
+				createInput(objectFixture.create3())
 			),
 			21.5, 35.0, 2.0, 55.5, 159.37306501547988, 612.0, 162.0					
 		);
 	}
-	
-	
-	
-	
+		
 	private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart( FeatureList<T> features ) throws FeatureCalcException {
 		return FeatureSession.with(
 			features,
 			LoggingFixture.suppressedLogErrorReporter()
 		);
 	}
-	
-	
+		
 	/** creates a feature-list associated with the fixture
 	 *  
 	 * @throws CreateException 
@@ -161,20 +156,20 @@ public class FeatureListImageTest {
 	 *  
 	 * @throws CreateException 
 	 * */
-	private static FeatureList<FeatureInputSingleObject> objMaskFeatures( TestLoader loader ) throws CreateException {
-		return FeaturesFromXmlFixture.createFeatureList("objMaskFeatureList.xml", loader);
+	private static FeatureList<FeatureInputSingleObject> objectFeatures( TestLoader loader ) throws CreateException {
+		return FeaturesFromXmlFixture.createFeatureList("objectFeatureList.xml", loader);
 	}
 
-	private static FeatureInputHistogram createParams( Histogram hist ) throws CreateException {
+	private static FeatureInputHistogram createParams( Histogram histogram ) throws CreateException {
 		return new FeatureInputHistogram(
-			hist,
+			histogram,
 			Optional.of(
 				NRG_STACK.getDimensions().getRes()
 			)
 		);
 	}
 	
-	private static FeatureInputSingleObject createParams( ObjectMask om ) throws CreateException {
-		return new FeatureInputSingleObject(om, NRG_STACK);
+	private static FeatureInputSingleObject createInput( ObjectMask object ) throws CreateException {
+		return new FeatureInputSingleObject(object, NRG_STACK);
 	}
 }

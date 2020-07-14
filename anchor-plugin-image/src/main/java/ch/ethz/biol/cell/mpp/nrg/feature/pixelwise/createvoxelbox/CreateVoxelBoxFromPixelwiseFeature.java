@@ -61,7 +61,6 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 		this.listAdditionalHistograms = listAdditionalHistograms;
 	}
 	
-	// objMask can be null
 	public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore( PixelScore pixelScore, Logger logger ) throws CreateException {
 	
 		// Sets up the Feature

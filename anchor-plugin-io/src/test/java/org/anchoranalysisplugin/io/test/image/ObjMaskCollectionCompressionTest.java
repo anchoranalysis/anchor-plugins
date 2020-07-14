@@ -74,30 +74,38 @@ public class ObjMaskCollectionCompressionTest {
 	private ObjectCollectionWithSize calcUncompressed(String pathIn) {
 				
 		// Read the object, and write it again, this time compressed
-		ObjectCollection objs = testLoader.openObjsFromTestPath(pathIn);
+		ObjectCollection objects = testLoader.openObjsFromTestPath(pathIn);
 		
 		long size = fileSizeBytes(
 			testLoader.getTestLoader().resolveTestPath(pathIn)
 		);
 		
-		return new ObjectCollectionWithSize(objs, size);
+		return new ObjectCollectionWithSize(objects, size);
 	}
 
 	
-	private static ObjectCollectionWithSize calcCompressed( ObjectCollection objsUncompressed, Path root ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
+	private static ObjectCollectionWithSize calcCompressed(ObjectCollection objectsUncompressed, Path root) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		
 		Path pathOut = root.resolve(TEMPORARY_FOLDER_OUT+".h5");
 		
-		ObjectCollection objsCompressed = writeAndReadAgain( objsUncompressed, root, pathOut );
+		ObjectCollection objectsCompressed = writeAndReadAgain(
+			objectsUncompressed,
+			root,
+			pathOut
+		);
 				
 		long size = fileSizeBytes( pathOut );
 		
-		return new ObjectCollectionWithSize( objsCompressed, size );
+		return new ObjectCollectionWithSize( objectsCompressed, size );
 	}
 	
-	private static ObjectCollection writeAndReadAgain( ObjectCollection objs, Path pathRoot, Path pathOut ) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
-		// Write the objs to the file-system and read again
-		writeObjs(objs, pathRoot, generator(true,true) );
+	private static ObjectCollection writeAndReadAgain(
+		ObjectCollection objects,
+		Path pathRoot,
+		Path pathOut
+	) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
+		// Write the objects to the file-system and read again
+		writeObjs(objects, pathRoot, generator(true,true) );
 		return readObjs(pathOut);		
 	}
 	

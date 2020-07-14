@@ -44,7 +44,7 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {
 		
 		ImageDimensions dim = createDim();
 		
@@ -55,7 +55,7 @@ public class ObjMaskProviderScale extends ObjMaskProviderDimensions {
 			throw new CreateException(e);
 		}
 
-		return objsCollection.scale(
+		return objectCollection.scale(
 			sf,
 			InterpolatorFactory.getInstance().binaryResizing()
 		);

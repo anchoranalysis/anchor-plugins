@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
-import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
+import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjsFixture;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

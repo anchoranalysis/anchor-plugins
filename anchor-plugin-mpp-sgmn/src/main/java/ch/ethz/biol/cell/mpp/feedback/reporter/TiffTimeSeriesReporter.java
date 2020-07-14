@@ -43,7 +43,7 @@ import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.color.HashedColorSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
@@ -74,7 +74,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 			throw new ReporterException(e1);
 		}
 		
-		IterableGenerator<ColoredCfgWithDisplayStack> iterableRaster = new CfgGenerator( new RGBOutlineWriter(), new IDGetterOverlayID() );
+		IterableGenerator<ColoredCfgWithDisplayStack> iterableRaster = new CfgGenerator( new Outline(), new IDGetterOverlayID() );
 		
 		// This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
 		//   cleaning up woould be nice

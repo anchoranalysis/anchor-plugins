@@ -45,27 +45,27 @@ class RelativeUtilities {
 	 * Changes (immutably) the coordinates of a bounding-box to make them relative to another object
 	 * 
 	 * @param box a bounding-box
-	 * @param omRelativeBase object to make the bounding-box relative to
+	 * @param objectRelativeBase object to make the bounding-box relative to
 	 * @return a new bounding box with relative coordinates
 	 */
-	public static BoundingBox createRelBBox( BoundingBox box, ObjectMask omRelativeBase ) {
+	public static BoundingBox createRelBBox( BoundingBox box, ObjectMask objectRelativeBase ) {
 		BoundingBox bboxIntersectRel = new BoundingBox(
-			box.relPosTo(omRelativeBase.getBoundingBox()),
+			box.relPosTo(objectRelativeBase.getBoundingBox()),
 			box.extent()
 		);
-		return bboxIntersectRel.clipTo( omRelativeBase.getBoundingBox().extent() );
+		return bboxIntersectRel.clipTo( objectRelativeBase.getBoundingBox().extent() );
 	}
 	
 	/**
 	 * Changes the coordinates of an object to make them relative to another object
 	 * 
-	 * @param om the object 
-	 * @param omRelativeBase the other object to use as a base to make om relative to
+	 * @param object the object 
+	 * @param objectRelativeBase the other object to use as a base to make om relative to
 	 * @return a new object with new bounding-box (but with identical memory used for the mask)
 	 */
-	public static ObjectMask createRelMask( ObjectMask om, ObjectMask omRelativeBase ) {
-		return om.relMaskTo(
-			omRelativeBase.getBoundingBox()
+	public static ObjectMask createRelMask( ObjectMask object, ObjectMask objectRelativeBase ) {
+		return object.relMaskTo(
+			objectRelativeBase.getBoundingBox()
 		).mapBoundingBox(BoundingBox::reflectThroughOrigin);
 	}
 }

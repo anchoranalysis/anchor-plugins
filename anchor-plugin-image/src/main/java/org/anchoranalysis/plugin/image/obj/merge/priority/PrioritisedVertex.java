@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.obj.merge.priority;
  */
 
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
+import org.anchoranalysis.plugin.image.obj.merge.ObjectVertex;
 
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
  */
 public class PrioritisedVertex {
 	
-	private ObjVertex vertex;
+	private ObjectVertex vertex;
 	private double priority;
 	private boolean considerForMerge;
 	
@@ -53,12 +53,12 @@ public class PrioritisedVertex {
 	 * @param considerForMerge iff FALSE, these two objects object may not be merged, and priority is irrelevant.
 	 */
 	public PrioritisedVertex( ObjectMask obj, double payload, double priority, boolean considerForMerge ) {
-		this.vertex = new ObjVertex(obj, payload);
+		this.vertex = new ObjectVertex(obj, payload);
 		this.priority = priority;
 		this.considerForMerge = considerForMerge;
 	}
 			
-	public ObjVertex getOmWithFeature() {
+	public ObjectVertex getOmWithFeature() {
 		return vertex;
 	}
 

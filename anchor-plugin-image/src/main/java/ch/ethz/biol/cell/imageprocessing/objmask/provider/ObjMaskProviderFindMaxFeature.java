@@ -40,11 +40,11 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeatureBase {
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objMaskCollection ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 
 		Optional<ObjectMask> max = findMaxObj(
 			createSession(),
-			objMaskCollection
+			objects
 		);
 		
 		if (max.isPresent()) {
@@ -54,20 +54,23 @@ public class ObjMaskProviderFindMaxFeature extends ObjMaskProviderFindMaxFeature
 		}
 	}
 	
-	private Optional<ObjectMask> findMaxObj( FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection in ) throws CreateException {
+	private Optional<ObjectMask> findMaxObj(
+		FeatureCalculatorSingle<FeatureInputSingleObject> session,
+		ObjectCollection objects
+	) throws CreateException {
 		
 		try {
 			ObjectMask max = null;
 			
 			double maxVal = 0;
-			for( ObjectMask om : in ) {
+			for( ObjectMask object : objects ) {
 				
 				double featureVal = session.calc(
-					new FeatureInputSingleObject(om)
+					new FeatureInputSingleObject(object)
 				);
 				
 				if (max==null || featureVal>maxVal) {
-					max = om;
+					max = object;
 					maxVal = featureVal;
 				}
 			}

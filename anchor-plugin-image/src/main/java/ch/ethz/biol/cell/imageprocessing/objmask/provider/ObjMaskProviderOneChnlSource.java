@@ -33,29 +33,24 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderOneChnlSource extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsSrc ) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objectsSource) throws CreateException {
 
-		return createFromObjs(
-			objsSrc,
+		return createFromObjects(
+			objectsSource,
 			chnl.create()
 		);
 	}
 	
-	protected abstract ObjectCollection createFromObjs( ObjectCollection objsSrc, Channel chnlSrc ) throws CreateException;
-
-	public ChnlProvider getChnl() {
-		return chnl;
-	}
-
-	public void setChnl(ChnlProvider chnl) {
-		this.chnl = chnl;
-	}
+	protected abstract ObjectCollection createFromObjects(ObjectCollection objectsSource, Channel channelSource) throws CreateException;
 }

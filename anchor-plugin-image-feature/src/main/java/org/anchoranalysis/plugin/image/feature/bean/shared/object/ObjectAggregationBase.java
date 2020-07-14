@@ -56,26 +56,26 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 
 	// START BEAN PROPERTIES
 	@BeanField @SkipInit @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
-	// We cache the objsCollection as it's not dependent on individual parameters
-	private ObjectCollection objsCollection;
+	// We cache the objectCollection as it's not dependent on individual parameters
+	private ObjectCollection objectCollection;
 	
 	@Override
 	protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
-		objs.initRecursive(params, getLogger() );
+		objects.initRecursive(params, getLogger() );
 	}
 	
 	@Override
 	protected double calc(CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject) throws FeatureCalcException {
 
-		if (objsCollection==null) {
-			objsCollection = createObjs();
+		if (objectCollection==null) {
+			objectCollection = createObjs();
 		}
 	
 		return deriveStatistic(
-			featureValsForObjs(featureForSingleObject, calcForChild, objsCollection)
+			featureValsForObjs(featureForSingleObject, calcForChild, objectCollection)
 		);
 	}
 	
@@ -83,7 +83,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 		
 	private ObjectCollection createObjs() throws FeatureCalcException {
 		try {
-			return objs.create();
+			return objects.create();
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);
 		}
@@ -92,16 +92,16 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 	private DoubleArrayList featureValsForObjs(
 		Feature<FeatureInputSingleObject> feature,
 		CalcForChild<T> calcForChild,
-		ObjectCollection objsCollection
+		ObjectCollection objectCollection
 	) throws FeatureCalcException {
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
 		// Calculate a feature on each obj mask
-		for( int i=0; i<objsCollection.size(); i++) {
+		for( int i=0; i<objectCollection.size(); i++) {
 
 			double val = calcForChild.calc(
 				feature,
-				new CalculateInputFromStack<>(objsCollection, i),
+				new CalculateInputFromStack<>(objectCollection, i),
 				cacheName(i)
 			);
 			featureVals.add(val);
@@ -112,7 +112,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 	private ChildCacheName cacheName(int index) {
 		return new ChildCacheName(
 			ObjectAggregationBase.class,
-			index + "_" + objsCollection.hashCode()
+			index + "_" + objectCollection.hashCode()
 		);
 	}
 }

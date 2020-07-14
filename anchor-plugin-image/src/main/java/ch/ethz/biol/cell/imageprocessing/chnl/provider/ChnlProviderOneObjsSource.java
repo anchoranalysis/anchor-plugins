@@ -40,16 +40,16 @@ public abstract class ChnlProviderOneObjsSource extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 
 	@Override
-	public Channel createFromChnl( Channel chnl ) throws CreateException {
+	public Channel createFromChnl(Channel channel) throws CreateException {
 		return createFromChnl(
-			chnl,
-			objs.create()
+			channel,
+			objects.create()
 		);
 	}
 	
-	protected abstract Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException;
+	protected abstract Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException;
 }

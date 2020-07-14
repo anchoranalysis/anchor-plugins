@@ -52,16 +52,19 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 public class NumTouchingVoxelFaces extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
-			throws FeatureCalcException {
+	protected double calcWithIntersection(
+		ObjectMask object1,
+		ObjectMask object2,
+		BoundingBox bboxIntersect
+	) throws FeatureCalcException {
 		
-		ObjectMask om2Rel = RelativeUtilities.createRelMask( om2, om1 );
+		ObjectMask object2Relative = RelativeUtilities.createRelMask( object2, object1 );
 		
 		try {
 			return ApplyKernel.applyForCount(
-				createCountKernelMask(om1, om2Rel),
-				om1.getVoxelBox(),
-				RelativeUtilities.createRelBBox(bboxIntersect, om1)
+				createCountKernelMask(object1, object2Relative),
+				object1.getVoxelBox(),
+				RelativeUtilities.createRelBBox(bboxIntersect, object1)
 			);
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);

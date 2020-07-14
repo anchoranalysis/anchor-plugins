@@ -74,14 +74,14 @@ public class ObjMaskCollectionWriterTest {
 	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		Path path = folder.getRoot().toPath();
 		
-		ObjectCollection objs = fixture.createMockObjs(2, 7);
-		writeObjs(objs, path, generator(hdf5,false) );
+		ObjectCollection objects = fixture.createMockObjs(2, 7);
+		writeObjs(objects, path, generator(hdf5,false) );
 		
-		ObjectCollection objsRead = readObjs(
+		ObjectCollection objectsRead = readObjs(
 			outputPathExpected(hdf5, path)
 		);
 		
-		assertTrue( objs.equalsDeep(objsRead) );
+		assertTrue( objects.equalsDeep(objectsRead) );
 	}
 	
 	private static Path outputPathExpected(boolean hdf5, Path path) {

@@ -47,15 +47,18 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Performs a threshold on each pixel, by comparing the pixel value to another channel
 //  It sets a pixel as high, if it is greater than or equal to the pixel in the other "Thrshld" channel
 public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider chnlThreshold;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean clearOutsideMask = true;
 	// END BEAN PROPERTIES
 	
@@ -63,7 +66,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 	public BinaryVoxelBox<ByteBuffer> sgmn(
 		VoxelBoxWrapper voxelBox,
 		BinarySegmentationParameters params,
-		Optional<ObjectMask> objMask
+		Optional<ObjectMask> object
 	) throws SgmnFailedException {
 		
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
@@ -71,7 +74,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 		
 		BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 		
-		SliceThresholder sliceThresholder = createThresholder(objMask, bvb);
+		SliceThresholder sliceThresholder = createThresholder(object, bvb);
 		sliceThresholder.sgmnAll(
 			voxelBoxIn,
 			createThresholdedVoxelBox(voxelBox.any().extent()),
@@ -81,8 +84,11 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 		return new BinaryVoxelBoxByte( voxelBoxOut, bvb.createInt() );
 	}
 	
-	private SliceThresholder createThresholder(Optional<ObjectMask> objMask, BinaryValuesByte bvb) {
-		return objMask.map( om -> (SliceThresholder) new SliceThresholderMask(clearOutsideMask, om, bvb)).orElseGet( ()->
+	private SliceThresholder createThresholder(
+		Optional<ObjectMask> object,
+		BinaryValuesByte bvb
+	) {
+		return object.map( om -> (SliceThresholder) new SliceThresholderMask(clearOutsideMask, om, bvb)).orElseGet( ()->
 			new SliceThresholderWithoutMask(bvb)
 		);
 	}
@@ -115,23 +121,4 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 			return VoxelBoxFactory.getByte().create( voxelBox.any().extent() );
 		}
 	}
-	
-	public boolean isClearOutsideMask() {
-		return clearOutsideMask;
-	}
-
-	public void setClearOutsideMask(boolean clearOutsideMask) {
-		this.clearOutsideMask = clearOutsideMask;
-	}
-
-
-	public ChnlProvider getChnlThreshold() {
-		return chnlThreshold;
-	}
-
-
-	public void setChnlThreshold(ChnlProvider chnlThreshold) {
-		this.chnlThreshold = chnlThreshold;
-	}
-
 }

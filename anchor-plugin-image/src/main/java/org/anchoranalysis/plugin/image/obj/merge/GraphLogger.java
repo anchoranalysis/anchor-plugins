@@ -42,13 +42,13 @@ public class GraphLogger {
 		this.logger = logger;
 	}
 
-	public void describeEdge(ObjVertex src, ObjVertex dest, ObjVertex merged, double priority, boolean doMerge) {
+	public void describeEdge(ObjectVertex src, ObjectVertex dest, ObjectVertex merged, double priority, boolean doMerge) {
 		log(
 			describeGraph.describeEdge(src, dest, merged, priority, doMerge)
 		);
 	}
 
-	public void describeMerge(ObjVertex omMerged, EdgeTypeWithVertices<ObjVertex, PrioritisedVertex> bestImprovement) {
+	public void describeMerge(ObjectVertex omMerged, EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> bestImprovement) {
 		log(
 			describeGraph.describeMerge(omMerged, bestImprovement)	
 		);

@@ -45,7 +45,7 @@ public abstract class SpecificNRGChannelBase extends FeatureSingleObject {
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return calcWithChannel(
-			input.get().getObjectMask(),
+			input.get().getObject(),
 			input.get().getNrgStackRequired().getChnl(nrgIndex)
 		);
 	}

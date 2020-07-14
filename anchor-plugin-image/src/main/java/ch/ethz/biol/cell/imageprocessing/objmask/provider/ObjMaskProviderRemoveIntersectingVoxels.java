@@ -52,69 +52,72 @@ public class ObjMaskProviderRemoveIntersectingVoxels extends ObjMaskProviderDime
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objectCollection) throws CreateException {
 		
-		ObjectCollection objsDup = objsCollection.duplicate();
+		ObjectCollection objectsDuplicated = objectCollection.duplicate();
 		
 		ImageDimensions dims = createDim();
 		
-		for( int i=0; i<objsCollection.size(); i++) {
+		for( int i=0; i<objectCollection.size(); i++) {
 			
-			ObjectMask omWrite = objsDup.get(i);
+			ObjectMask objectWrite = objectsDuplicated.get(i);
 			
-			maybeErrorDisconnectedObjects( omWrite, "before" );
+			maybeErrorDisconnectedObjects( objectWrite, "before" );
 			
-			for( int j=0; j<objsCollection.size(); j++) {
+			for( int j=0; j<objectCollection.size(); j++) {
 				
-				ObjectMask omRead = objsDup.get(j);
+				ObjectMask objectRead = objectsDuplicated.get(j);
 				
 				if (i<j) {
-					removeIntersectingVoxelsIfIntersects( omWrite, omRead, dims );
+					removeIntersectingVoxelsIfIntersects( objectWrite, objectRead, dims );
 				}
 			}
 			
-			maybeErrorDisconnectedObjects( omWrite, "after" );
+			maybeErrorDisconnectedObjects( objectWrite, "after" );
 		}
 		
-		return objsDup;
+		return objectsDuplicated;
 	}
 	
-	private void removeIntersectingVoxels( ObjectMask omWrite, ObjectMask omRead, BoundingBox intersection  ) {
+	private void removeIntersectingVoxels( ObjectMask objectWrite, ObjectMask objectRead, BoundingBox intersection  ) {
 		
 		BoundingBox bboxRelWrite = new BoundingBox(
-			intersection.relPosTo( omWrite.getBoundingBox() ),
+			intersection.relPosTo( objectWrite.getBoundingBox() ),
 			intersection.extent()
 		);
 		
 		BoundingBox bboxRelRead = new BoundingBox(
-			intersection.relPosTo( omRead.getBoundingBox() ),
+			intersection.relPosTo( objectRead.getBoundingBox() ),
 			intersection.extent()
 		);
 		
 		// TODO we can make this more efficient, as we only need to duplicate the intersection area
-		ObjectMask omReadDup = omRead.duplicate();
-		ObjectMask omWriteDup = omWrite.duplicate();
+		ObjectMask objectReadDuplicated = objectRead.duplicate();
+		ObjectMask objectWriteDuplicated = objectWrite.duplicate();
 		
-		omWrite.getVoxelBox().setPixelsCheckMask(
+		objectWrite.getVoxelBox().setPixelsCheckMask(
 			bboxRelWrite,
-			omReadDup.getVoxelBox(),
+			objectReadDuplicated.getVoxelBox(),
 			bboxRelRead,
-			omWrite.getBinaryValues().getOffInt(),
-			omReadDup.getBinaryValuesByte().getOnByte()
+			objectWrite.getBinaryValues().getOffInt(),
+			objectReadDuplicated.getBinaryValuesByte().getOnByte()
 		);
 	
-		omRead.getVoxelBox().setPixelsCheckMask(
+		objectRead.getVoxelBox().setPixelsCheckMask(
 			bboxRelRead,
-			omWriteDup.getVoxelBox(),
+			objectWriteDuplicated.getVoxelBox(),
 			bboxRelWrite,
-			omRead.getBinaryValues().getOffInt(),
-			omWriteDup.getBinaryValuesByte().getOnByte()
+			objectRead.getBinaryValues().getOffInt(),
+			objectWriteDuplicated.getBinaryValuesByte().getOnByte()
 		);
 	}
 	
-	private void removeIntersectingVoxelsIfIntersects( ObjectMask omWrite, ObjectMask omRead, ImageDimensions sd ) {
-
-		Optional<BoundingBox> intersection = omWrite.getBoundingBox().intersection().withInside(omRead.getBoundingBox(), sd.getExtent() );
+	private void removeIntersectingVoxelsIfIntersects(
+		ObjectMask objectWrite,
+		ObjectMask objectRead,
+		ImageDimensions dimensions
+	) {
+		Optional<BoundingBox> intersection = objectWrite.getBoundingBox().intersection().withInside(objectRead.getBoundingBox(), dimensions.getExtent() );
 				
 		// We check if their bounding boxes intersect
 		if(intersection.isPresent()) {
@@ -123,16 +126,20 @@ public class ObjMaskProviderRemoveIntersectingVoxels extends ObjMaskProviderDime
 	
 			// TODO we can make this more efficient, we only need to duplicate intersection bit
 			// We duplicate the originals before everything is changed
-			removeIntersectingVoxels( omWrite, omRead, intersection.get() );
+			removeIntersectingVoxels( objectWrite, objectRead, intersection.get() );
 		}
 	}
 		
-	private void maybeErrorDisconnectedObjects( ObjectMask omWrite, String dscr ) throws CreateException {
+	private void maybeErrorDisconnectedObjects(ObjectMask objectWrite, String description) throws CreateException {
 		if (errorDisconnectedObjects) {
 			try {
-				if( !omWrite.checkIfConnected() ) {
+				if( !objectWrite.checkIfConnected() ) {
 					throw new CreateException(
-						String.format("Obj %s becomes disconnected %s removing intersecting-pixels%n", omWrite, dscr )	
+						String.format(
+							"Obj %s becomes disconnected %s removing intersecting-pixels%n",
+							objectWrite,
+							description
+						)	
 					);
 				}
 			} catch (OperationFailedException e) {

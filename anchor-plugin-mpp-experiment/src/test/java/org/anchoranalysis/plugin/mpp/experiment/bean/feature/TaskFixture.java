@@ -130,9 +130,9 @@ class TaskFixture {
 		return source;
 	}
 		
-	private static List<NamedBean<ObjectCollectionProvider>> createObjProviders(String objsName) {
+	private static List<NamedBean<ObjectCollectionProvider>> createObjProviders(String objectsName) {
 		return Arrays.asList(
-			new NamedBean<>(objsName, new ObjMaskProviderReference(objsName))	
+			new NamedBean<>(objectsName, new ObjMaskProviderReference(objectsName))	
 		);
 	}
 

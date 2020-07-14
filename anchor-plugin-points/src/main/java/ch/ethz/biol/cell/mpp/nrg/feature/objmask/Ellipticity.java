@@ -35,9 +35,9 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
-import org.anchoranalysis.plugin.points.calculate.ellipse.ObjMaskAndEllipse;
+import org.anchoranalysis.plugin.points.calculate.ellipse.ObjectWithEllipse;
 
-// Calculates the ellipticity of a objMask (on the COG slice if it's a zstack)
+// Calculates the ellipticity of an object-mask (on the COG slice if it's a zstack)
 public class Ellipticity extends FeatureSingleObject {
 
 	@Override
@@ -45,7 +45,7 @@ public class Ellipticity extends FeatureSingleObject {
 		
 		FeatureInputSingleObject inputSessionless = input.get();
 		
-		ObjMaskAndEllipse both;
+		ObjectWithEllipse both;
 		try {
 			both = input.calc(
 				new CalculateEllipseLeastSquares()		
@@ -59,15 +59,15 @@ public class Ellipticity extends FeatureSingleObject {
 			}
 		}
 		
-		ObjectMask om = both.getObjMask();
+		ObjectMask object = both.getObject();
 		
 		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(6)) {
+		if (object.numPixelsLessThan(6)) {
 			return 1.0;
 		}
 
 		return EllipticityCalculatorHelper.calc(
-			om,
+			object,
 			both.getMark(),
 			inputSessionless.getDimensionsRequired()
 		);

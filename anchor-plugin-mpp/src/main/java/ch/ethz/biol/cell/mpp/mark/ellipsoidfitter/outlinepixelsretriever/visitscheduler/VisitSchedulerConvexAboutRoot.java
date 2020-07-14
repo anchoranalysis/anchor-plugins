@@ -110,8 +110,8 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	}
 	
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour,	ObjectMask objMask) {
-		return isPointConvexTo(root, pnt, objMask.binaryVoxelBox());
+	public boolean considerVisit(Point3i pnt, int distAlongContour,	ObjectMask object) {
+		return isPointConvexTo(root, pnt, object.binaryVoxelBox());
 	}
 	
 	private static boolean pointEquals( Point3d point1, Point3i point2) {

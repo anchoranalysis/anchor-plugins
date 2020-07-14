@@ -54,8 +54,10 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 	}
 	
 	@Override
-	protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
-			throws FeatureCalcException {
+	protected ObjectMask execute(
+		FeatureInputSingleObject params,
+		Integer key
+	) throws FeatureCalcException {
 		Extent extent = params.getDimensionsRequired().getExtent();
 
 		if (key==0) {
@@ -65,21 +67,21 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		int lowestExistingKey = findHighestExistingKey( key - 1 );
 		
 		
-		ObjectMask omIn = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObjectMask();
+		ObjectMask object = lowestExistingKey!=0 ? getOrNull(lowestExistingKey) : params.getObject();
 		
 		try {
 			for( int i=(lowestExistingKey+1); i<=key; i++ ) {
 				
-				ObjectMask omNext = applyOperation( omIn, extent, do3D );
+				ObjectMask next = applyOperation( object, extent, do3D );
 				
 				// save in cache, as long as it's not the final one, as this will save after the function executes
 				if (i!=key) {
-					this.put(i, omNext);
+					this.put(i, next);
 				}
 				
-				omIn = omNext;
+				object = next;
 			}
-			return omIn;
+			return object;
 			
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
@@ -101,5 +103,9 @@ public abstract class CalculateIncrementalOperationMap extends CacheableCalculat
 		return 0;
 	}
 	
-	protected abstract ObjectMask applyOperation( ObjectMask om, Extent extent, boolean do3D ) throws OperationFailedException;
+	protected abstract ObjectMask applyOperation(
+		ObjectMask object,
+		Extent extent,
+		boolean do3D
+	) throws OperationFailedException;
 }

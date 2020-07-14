@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.objs.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -66,14 +66,14 @@ public class ObjMaskCollectionComparer extends Comparer {
 	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 		
 		try {
-			Path objsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
+			Path objectsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 			
-			if (!objsPath.toFile().exists()) {
-				return new NotFound<>(objsPath, "No objects exist");
+			if (!objectsPath.toFile().exists()) {
+				return new NotFound<>(objectsPath, "No objects exist");
 			}
 			
 			return new Found<>(
-				ObjectMaskCollectionReader.createFromPath(objsPath)
+				ObjectMaskCollectionReader.createFromPath(objectsPath)
 			);
 			
 		} catch (AnchorIOException | DeserializationFailedException e) {

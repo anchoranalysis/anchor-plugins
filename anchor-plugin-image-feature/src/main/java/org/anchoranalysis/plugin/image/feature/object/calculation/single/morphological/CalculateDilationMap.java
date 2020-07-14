@@ -50,10 +50,10 @@ public class CalculateDilationMap extends CalculateIncrementalOperationMap {
 	}
 
 	@Override
-	protected ObjectMask applyOperation( ObjectMask om, Extent extent, boolean do3D ) throws OperationFailedException {
+	protected ObjectMask applyOperation( ObjectMask object, Extent extent, boolean do3D ) throws OperationFailedException {
 		try {
-			return MorphologicalDilation.createDilatedObjMask(
-				om,
+			return MorphologicalDilation.createDilatedObject(
+				object,
 				Optional.of(extent),
 				do3D,
 				1,

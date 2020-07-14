@@ -46,7 +46,7 @@ class CalculateInputFromStack<T extends FeatureInputNRG> extends FeatureCalculat
 	/** The object-mask collection to calculate from (ignored in hash-coding and equality as assumed to be singular) */
 	private final ObjectCollection objects;
 	
-	/** Index of particular object in objs to derive parameters for */
+	/** Index of particular object in objects to derive parameters for */
 	private final int index;
 
 	@Override

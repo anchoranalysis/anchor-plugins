@@ -46,29 +46,35 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private BinaryChnlProvider mask;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectSegmentation sgmn;
 	
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsSeeds;
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsSeeds;
 	// END BEAN PROPERTIES
 
 	@Override
-	protected ObjectCollection createFromChnl(Channel chnlSrc) throws CreateException {
+	protected ObjectCollection createFromChnl(Channel chnlSource) throws CreateException {
 
-		Optional<ObjectMask> maskAsObj = createMask();
+		Optional<ObjectMask> maskAsObject = createMask();
 	
 		try {
 			return sgmn.sgmn(
-				chnlSrc,
-				maskAsObj,
-				createSeeds(chnlSrc.getDimensions(), maskAsObj)
+				chnlSource,
+				maskAsObject,
+				createSeeds(
+					chnlSource.getDimensions(),
+					maskAsObject
+				)
 			);
 		} catch (SgmnFailedException e) {
 			throw new CreateException(e);
@@ -77,56 +83,39 @@ public class ObjMaskProviderSgmn extends ObjMaskProviderChnlSource {
 	
 	private Optional<ObjectMask> createMask() throws CreateException {
 		return OptionalFactory.create(mask).map(
-			CreateFromEntireChnlFactory::createObjMask
+			CreateFromEntireChnlFactory::createObject
 		);
 	}
 	
-	private Optional<SeedCollection> createSeeds(ImageDimensions dim, Optional<ObjectMask> maskAsObj) throws CreateException {
+	private Optional<SeedCollection> createSeeds(
+		ImageDimensions dim,
+		Optional<ObjectMask> maskAsObject
+	) throws CreateException {
 		return OptionalUtilities.map(
-			OptionalFactory.create(objsSeeds),
-			objs-> createSeeds(
-				objs,
-				maskAsObj,
+			OptionalFactory.create(objectsSeeds),
+			objects-> createSeeds(
+				objects,
+				maskAsObject,
 				dim
 			) 
 		);
 	}
 	
-	private static SeedCollection createSeeds(ObjectCollection seeds, Optional<ObjectMask> maskAsObj, ImageDimensions dim) throws CreateException {
+	private static SeedCollection createSeeds(
+		ObjectCollection seeds,
+		Optional<ObjectMask> maskAsObject,
+		ImageDimensions dim
+	) throws CreateException {
 		return OptionalUtilities.map(
-			maskAsObj,
-			m -> SeedsFactory.createSeedsWithMask(
+			maskAsObject,
+			mask -> SeedsFactory.createSeedsWithMask(
 				seeds,
-				m,
+				mask,
 				new Point3i(0,0,0),
 				dim
 			)
 		).orElseGet( ()->
 			SeedsFactory.createSeedsWithoutMask(seeds)
 		);
-	}
-
-	public ObjectSegmentation getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(ObjectSegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
-
-	public ObjectCollectionProvider getObjsSeeds() {
-		return objsSeeds;
-	}
-
-	public void setObjsSeeds(ObjectCollectionProvider objsSeeds) {
-		this.objsSeeds = objsSeeds;
-	}
-
-	public BinaryChnlProvider getMask() {
-		return mask;
-	}
-
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
 	}
 }

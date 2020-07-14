@@ -115,8 +115,8 @@ public class SgmnMPP extends CfgSgmn {
 	// Do segmentation
 	@Override
 	public Cfg sgmn(
-		NamedImgStackCollection stackCollection,
-		NamedProvider<ObjectCollection> objMaskCollection,
+		NamedImgStackCollection stacks,
+		NamedProvider<ObjectCollection> objects,
 		Optional<KeyValueParams> keyValueParams,
 		BoundIOContext context
 	) throws SgmnFailedException {
@@ -127,8 +127,8 @@ public class SgmnMPP extends CfgSgmn {
 					
 			return define.processInput(
 				context,
-				Optional.of(stackCollection),
-				Optional.of(objMaskCollection),
+				Optional.of(stacks),
+				Optional.of(objects),
 				keyValueParams,
 				(mppInit, nrgStack) -> sgmnAndWrite(mppInit, nrgStack, updatableMarkSetCollection, keyValueParams, context)
 			);

@@ -76,9 +76,9 @@ public class ObjMaskSgmnMinimaImposition extends ObjectSegmentationOne {
 		}
 	}
 	
-	private Channel chnlWithImposedMinima(Channel chnl, SeedCollection seeds, Optional<ObjectMask> objMask) throws OperationFailedException {
+	private Channel chnlWithImposedMinima(Channel chnl, SeedCollection seeds, Optional<ObjectMask> object) throws OperationFailedException {
 		if (!seeds.isEmpty()) {
-			return minimaImposition.imposeMinima(chnl, seeds, objMask);
+			return minimaImposition.imposeMinima(chnl, seeds, object);
 		} else {
 			return chnl;
 		}

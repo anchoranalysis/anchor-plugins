@@ -38,53 +38,43 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ObjMaskProviderFilterBase extends ObjMaskProviderDimensionsOptional {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectFilter filter;
 	
-	@BeanField @OptionalBean
-	private ObjectCollectionProvider objsRejected;	// The rejected objects are put here (OPTIONAL)
+	@BeanField @OptionalBean @Getter @Setter
+	private ObjectCollectionProvider objectsRejected;	// The rejected objects are put here (OPTIONAL)
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection in) throws CreateException {
-		return createFromObjs(
-			in,
-			OptionalFactory.create(objsRejected),
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+		return createFromObjects(
+			objects,
+			OptionalFactory.create(objectsRejected),
 			createDims()
 		);
 	}
 	
-	protected ObjectCollection filter(ObjectCollection objs, Optional<ImageDimensions> dim, Optional<ObjectCollection> objsRejected) throws CreateException {
+	protected ObjectCollection filter(
+		ObjectCollection objects,
+		Optional<ImageDimensions> dim,
+		Optional<ObjectCollection> objectsRejected
+	) throws CreateException {
 		try {
-			return filter.filter(objs, dim, objsRejected);
+			return filter.filter(objects, dim, objectsRejected);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
 	
-	protected abstract ObjectCollection createFromObjs(
-		ObjectCollection in,
-		Optional<ObjectCollection> omcRejected,
+	protected abstract ObjectCollection createFromObjects(
+		ObjectCollection objects,
+		Optional<ObjectCollection> objectsRejected,
 		Optional<ImageDimensions> dim
 	) throws CreateException;
-
-
-	public ObjectCollectionProvider getObjsRejected() {
-		return objsRejected;
-	}
-
-	public void setObjsRejected(ObjectCollectionProvider objsRejected) {
-		this.objsRejected = objsRejected;
-	}
-
-	public ObjectFilter getFilter() {
-		return filter;
-	}
-
-	public void setFilter(ObjectFilter filter) {
-		this.filter = filter;
-	}
 }

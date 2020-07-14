@@ -33,13 +33,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
+import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<AssignmentMaskIntersection> {
 
 	@Override
 	public AssignmentMaskIntersection createAssignment(
-		ObjsToCompare objsToCompare, 
+		ObjectsToCompare objectsToCompare, 
 		ImageDimensions dim,
 		boolean useMIP,
 		BoundIOContext context
@@ -47,22 +47,22 @@ public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<Assig
 		
 		
 		return new AssignmentMaskIntersection(
-			extractSingleObj("left", objsToCompare.getLeft()),
-			extractSingleObj("right", objsToCompare.getRight())
+			extractSingleObj("left", objectsToCompare.getLeft()),
+			extractSingleObj("right", objectsToCompare.getRight())
 		);
 	}
 	
-	private static ObjectMask extractSingleObj( String dscr, ObjectCollection objs ) throws CreateException {
-		if (objs.size()==0) {
+	private static ObjectMask extractSingleObj( String dscr, ObjectCollection objects ) throws CreateException {
+		if (objects.size()==0) {
 			throw new CreateException(
 				String.format("%s obj contains no objects. Exactly one must exist.", dscr )	
 			); 
-		} else if (objs.size()>1) {
+		} else if (objects.size()>1) {
 			throw new CreateException(
-				String.format("%s obj contains %d objects. Only one is allowed.", dscr, objs.size() )	
+				String.format("%s obj contains %d objects. Only one is allowed.", dscr, objects.size() )	
 			); 
 		} else {
-			return objs.get(0);
+			return objects.get(0);
 		}
 	}
 

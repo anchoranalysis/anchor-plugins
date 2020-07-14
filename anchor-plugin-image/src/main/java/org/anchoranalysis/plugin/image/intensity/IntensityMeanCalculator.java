@@ -37,20 +37,22 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-public class IntensityMeanCalculator {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-	private IntensityMeanCalculator() {}
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public class IntensityMeanCalculator {
 	
-	public static double calcMeanIntensityObjMask( Channel chnl, ObjectMask om ) throws FeatureCalcException {
-		return calcMeanIntensityObjMask(chnl, om, false);
+	public static double calcMeanIntensityObject( Channel chnl, ObjectMask object ) throws FeatureCalcException {
+		return calcMeanIntensityObject(chnl, object, false);
 	}
 	
-	public static double calcMeanIntensityObjMask( Channel chnl, ObjectMask om, boolean excludeZero ) throws FeatureCalcException {
-		checkContained(om.getBoundingBox(), chnl.getDimensions().getExtent());
+	public static double calcMeanIntensityObject( Channel chnl, ObjectMask object, boolean excludeZero ) throws FeatureCalcException {
+		checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
 		
-		VoxelBoxWrapper vbIntens = chnl.getVoxelBox();
+		VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
 		
-		BoundingBox bbox = om.getBoundingBox();
+		BoundingBox bbox = object.getBoundingBox();
 		
 		ReadableTuple3i crnrMin = bbox.cornerMin();
 		ReadableTuple3i crnrMax = bbox.calcCornerMax();
@@ -60,15 +62,15 @@ public class IntensityMeanCalculator {
 		
 		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
 			
-			VoxelBuffer<?> bbIntens = vbIntens.any().getPixelsForPlane( z );
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
+			VoxelBuffer<?> bbIntens = vbIntensity.any().getPixelsForPlane( z );
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
 			
 			int offsetMask = 0;
 			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
 				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
 				
-					if (bbMask.get(offsetMask)==om.getBinaryValuesByte().getOnByte()) {
-						int offsetIntens = vbIntens.any().extent().offset(x, y);
+					if (bbMask.get(offsetMask)==object.getBinaryValuesByte().getOnByte()) {
+						int offsetIntens = vbIntensity.any().extent().offset(x, y);
 						
 						int val = bbIntens.getInt(offsetIntens);
 						

@@ -52,8 +52,8 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
 				BinaryValues.getDefault()
 			);
 			
-			CreateFromConnectedComponentsFactory objMaskCreator = new CreateFromConnectedComponentsFactory();
-			return objMaskCreator.createConnectedComponents(binaryImgChnl );
+			CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
+			return creator.createConnectedComponents(binaryImgChnl );
 			
 		} catch (CreateException e) {
 			throw new FeatureCalcException(e);

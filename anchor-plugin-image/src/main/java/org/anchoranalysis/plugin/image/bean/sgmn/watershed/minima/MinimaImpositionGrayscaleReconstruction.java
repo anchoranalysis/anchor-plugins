@@ -39,23 +39,28 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.bean.sgmn.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private GrayscaleReconstructionByErosion grayscaleReconstruction;
 	// END BEAN PROPERTIES
 	
-	private VoxelBoxWrapper createMarkerImageFromGradient(VoxelBox<ByteBuffer> markerMaskVb,
-			BinaryValuesByte maskBV,
-			VoxelBoxWrapper gradientImage) {
+	private VoxelBoxWrapper createMarkerImageFromGradient(
+		VoxelBox<ByteBuffer> markerMaskVb,
+		BinaryValuesByte maskBV,
+		VoxelBoxWrapper gradientImage
+	) {
 		
 		VoxelBoxWrapper out = VoxelBoxFactory.instance().create(
 			gradientImage.any().extent(),
@@ -81,10 +86,12 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		
 		ObjectCollection masks = seeds.createMasks();
 				
-		assert( masks.objectsAreAllInside( chnl.getDimensions().getExtent() ) );
-				
 		// We need 255 for the landini algorithms to work
-		BinaryChnl markerMask = BinaryChnlFromObjs.createFromObjs(masks, chnl.getDimensions(), masks.getFirstBinaryValues() );
+		BinaryChnl markerMask = BinaryChnlFromObjects.createFromObjects(
+			masks,
+			chnl.getDimensions(),
+			masks.getFirstBinaryValues()
+		);
 
 		// We duplicate the channel so we are not manipulating the original
 		chnl = chnl.duplicate();
@@ -92,8 +99,8 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
 		
 		// We set the EDM to 0 at the points of the minima
-		for( ObjectMask om : masks ) {
-			vbIntensity.any().setPixelsCheckMask(om, 0 );
+		for( ObjectMask object : masks ) {
+			vbIntensity.any().setPixelsCheckMask(object, 0 );
 		}
 		
 		// We set the EDM to 255 outside the channel, otherwise the reconstruction will be messed up
@@ -118,14 +125,5 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		);
 		
 		return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes() );
-	}
-
-	public GrayscaleReconstructionByErosion getGrayscaleReconstruction() {
-		return grayscaleReconstruction;
-	}
-
-	public void setGrayscaleReconstruction(
-			GrayscaleReconstructionByErosion grayscaleReconstruction) {
-		this.grayscaleReconstruction = grayscaleReconstruction;
 	}
 }

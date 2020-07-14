@@ -71,7 +71,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
 		);
 	}
 	
-	protected abstract double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect) throws FeatureCalcException;
+	protected abstract double calcWithIntersection(ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect) throws FeatureCalcException;
 	
 	/** The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the other */
 	private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
@@ -80,8 +80,8 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
 		);
 	}
 	
-	protected CountKernel createCountKernelMask( ObjectMask om1, ObjectMask om2Rel ) {
-		return new CountKernelNghbMask(do3D, om1.getBinaryValuesByte(), om2Rel, true );
+	protected CountKernel createCountKernelMask( ObjectMask object1, ObjectMask object2Relative ) {
+		return new CountKernelNghbMask(do3D, object1.getBinaryValuesByte(), object2Relative, true );
 	}
 
 	public boolean isDo3D() {

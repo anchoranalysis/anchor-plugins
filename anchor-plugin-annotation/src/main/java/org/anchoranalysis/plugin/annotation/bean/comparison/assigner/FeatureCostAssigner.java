@@ -40,27 +40,30 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
-import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
+import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator;
 		
-	@BeanField
+	@BeanField @Getter @Setter
 	private double maxCost = 1.0;
 		
-	@BeanField
+	@BeanField @Getter @Setter
 	private int numDecimalPlaces = 3;
 		
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean removeTouchingBorderXY = false;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public AssignmentOverlapFromPairs createAssignment(
-		ObjsToCompare objsToCompare,
+		ObjectsToCompare objectsToCompare,
 		ImageDimensions dim,
 		boolean useMIP,
 		BoundIOContext context
@@ -78,8 +81,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 			);
 			
 			AssignmentOverlapFromPairs assignment = assignmentCreator.createAssignment(
-				objsToCompare.getLeft(),
-				objsToCompare.getRight(),
+				objectsToCompare.getLeft(),
+				objectsToCompare.getRight(),
 				maxCost,
 				dim
 			);
@@ -100,30 +103,6 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 		}
 	}
 
-	public FeatureEvaluatorSimple<FeatureInputPairObjects> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
-
-	public double getMaxCost() {
-		return maxCost;
-	}
-
-	public void setMaxCost(double maxCost) {
-		this.maxCost = maxCost;
-	}
-
-	public int getNumDecimalPlaces() {
-		return numDecimalPlaces;
-	}
-
-	public void setNumDecimalPlaces(int numDecimalPlaces) {
-		this.numDecimalPlaces = numDecimalPlaces;
-	}
-
 	@Override
 	public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
 		return new AnnotationGroupObjMask(key);
@@ -132,13 +111,5 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	@Override
 	public boolean moreThanOneObj() {
 		return true;
-	}
-
-	public boolean isRemoveTouchingBorderXY() {
-		return removeTouchingBorderXY;
-	}
-
-	public void setRemoveTouchingBorderXY(boolean removeTouchingBorderXY) {
-		this.removeTouchingBorderXY = removeTouchingBorderXY;
 	}
 }

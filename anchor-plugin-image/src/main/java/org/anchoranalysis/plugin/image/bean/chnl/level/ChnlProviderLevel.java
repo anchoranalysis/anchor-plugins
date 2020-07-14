@@ -44,7 +44,7 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 	// START BEAN PROPERTIES
 	/** The input (an intensity channel in the normal way) */
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @Getter @Setter
 	private ChnlProvider chnlOutput;
@@ -58,11 +58,11 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
 				
 		return createFor(
 			chnl,
-			objs.create(),
+			objects.create(),
 			DimChecker.createSameSize(chnlOutput, "chnlOutput", chnl)
 			
 		);
 	}
 	
-	protected abstract Channel createFor( Channel chnlIntensity, ObjectCollection objs, Channel chnlOutput ) throws CreateException;
+	protected abstract Channel createFor( Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput ) throws CreateException;
 }

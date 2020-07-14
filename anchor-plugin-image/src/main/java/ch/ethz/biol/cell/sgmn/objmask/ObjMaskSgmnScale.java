@@ -98,8 +98,8 @@ public class ObjMaskSgmnScale extends ObjectSegmentationOne {
 		}
 	}
 	
-	private ObjectCollection scaleResultToOriginalScale(ObjectCollection objs, ScaleFactor sf) {
-		return objs.scale(
+	private ObjectCollection scaleResultToOriginalScale(ObjectCollection objects, ScaleFactor sf) {
+		return objects.scale(
 			sf.invert(),
 			createInterpolator()
 		);

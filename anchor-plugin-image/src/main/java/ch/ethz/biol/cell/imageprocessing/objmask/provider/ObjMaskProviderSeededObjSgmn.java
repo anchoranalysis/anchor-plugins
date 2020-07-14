@@ -45,22 +45,23 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 import lombok.Getter;
 import lombok.Setter;
 
-// Takes each object one-by-one from objMaskProviderSourceObjs, and finds matching seeds from 
-// objMaskProviderSeeds
-//
-// A segmentation is performed on the portion of chnlProviderSourceChnl
+/**
+ * Takes each object one-by-one from {@code objectsSource}, and finds matching seeds from {@code objectsSeeds}
+ *  
+ * @author Owen Feehan
+ */
 public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @OptionalBean @Getter @Setter
-	private ObjectCollectionProvider objsSource;
+	private ObjectCollectionProvider objectsSource;
 	
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objsSeeds;
+	private ObjectCollectionProvider objectsSeeds;
 	
 	@BeanField @Getter @Setter
 	private ObjectSegmentation sgmn;
@@ -69,10 +70,10 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	@Override
 	protected ObjectCollection createFromChnl(Channel chnlSrc) throws CreateException {
 		
-		ObjectCollection seeds = objsSeeds.create();
+		ObjectCollection seeds = objectsSeeds.create();
 		
-		if (objsSource!=null) {
-			ObjectCollection sourceObjs = objsSource.create();
+		if (objectsSource!=null) {
+			ObjectCollection sourceObjs = objectsSource.create();
 			return createWithSourceObjs(
 				chnlSrc,
 				seeds,
@@ -94,7 +95,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		assert(seeds!=null);
 		assert(sourceObjs!=null);
 		
-		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(sourceObjs, seeds);
+		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(sourceObjs, seeds);
 
 		return ObjectCollectionFactory.flatMapFrom(
 			matchList.stream(),

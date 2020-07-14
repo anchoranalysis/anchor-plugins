@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.objmask;
 
 
 import ij.process.ImageProcessor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Optional;
 
@@ -47,13 +49,13 @@ import ch.ethz.biol.cell.imageprocessing.io.objmask.FloodFillUtils;
 public class ObjMaskSgmnFloodFillIJ2D extends ObjectSegmentation {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int minBoundingBoxVolumeVoxels = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int startingColor = 1;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean doInt = false;		// Floodfills on an IntBuffer instead of a ByteBuffer
 	// END BEAN PROPERTIES
 	
@@ -99,7 +101,7 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjectSegmentation {
 	 * 
 	 * @param chnl a channel labelled as per {@link floodFillChnl}
 	 * @param numLabels the number of objects, so that the label ids are a sequence (1,numLabels) inclusive. 
-	 * @return a derived collection of objs
+	 * @return a derived collection of objects
 	 */
 	private ObjectCollection objectsFromLabels( Channel chnl, int numLabels ) {
 		return CreateFromLabels.create(
@@ -108,30 +110,5 @@ public class ObjMaskSgmnFloodFillIJ2D extends ObjectSegmentation {
 			numLabels,
 			minBoundingBoxVolumeVoxels
 		);
-	}
-	
-	public int getMinBoundingBoxVolumeVoxels() {
-		return minBoundingBoxVolumeVoxels;
-	}
-
-
-	public void setMinBoundingBoxVolumeVoxels(int minBoundingBoxVolumeVoxels) {
-		this.minBoundingBoxVolumeVoxels = minBoundingBoxVolumeVoxels;
-	}
-
-	public int getStartingColor() {
-		return startingColor;
-	}
-
-	public void setStartingColor(int startingColor) {
-		this.startingColor = startingColor;
-	}
-
-	public boolean isDoInt() {
-		return doInt;
-	}
-
-	public void setDoInt(boolean doInt) {
-		this.doInt = doInt;
 	}
 }

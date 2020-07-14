@@ -47,7 +47,7 @@ public class LevelResultCollectionFactory {
 
 	public static LevelResultCollection createCollection(
 			Channel chnl,
-			ObjectCollection objMasks,
+			ObjectCollection objects,
 			CalculateLevel calculateLevel,
 			int numDilations,
 			MessageLogger logger
@@ -55,16 +55,16 @@ public class LevelResultCollectionFactory {
 		
 		LevelResultCollection all = new LevelResultCollection(); 
 		
-		for( ObjectMask om : objMasks ) {
+		for( ObjectMask objectMask : objects ) {
 			
-			ObjectMask omForCalculateLevel;
+			ObjectMask objectForCalculateLevel;
 			
-			logger.logFormatted("Creating level result %s", om.centerOfGravity().toString() );
+			logger.logFormatted("Creating level result %s", objectMask.centerOfGravity().toString() );
 			
 			// Optional dilation
 			if (numDilations!=0) {
-				omForCalculateLevel = MorphologicalDilation.createDilatedObjMask(
-					om,
+				objectForCalculateLevel = MorphologicalDilation.createDilatedObject(
+					objectMask,
 					Optional.of(
 						chnl.getDimensions().getExtent()
 					),
@@ -73,10 +73,10 @@ public class LevelResultCollectionFactory {
 					false
 				);
 			} else {
-				omForCalculateLevel = om;
+				objectForCalculateLevel = objectMask;
 			}
 			
-			Histogram h = HistogramFactory.create(chnl,	omForCalculateLevel);
+			Histogram h = HistogramFactory.create(chnl,	objectForCalculateLevel);
 			int level;
 			try {
 				level = calculateLevel.calculateLevel(h);
@@ -84,7 +84,7 @@ public class LevelResultCollectionFactory {
 				throw new CreateException(e);
 			}
 			
-			LevelResult res = new LevelResult(level, om, h);
+			LevelResult res = new LevelResult(level, objectMask, h);
 			
 			logger.logFormatted("Level result is %d", res.getLevel());
 			

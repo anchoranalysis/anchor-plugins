@@ -32,12 +32,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
+import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 public abstract class AnnotationComparisonAssigner<T extends Assignment> extends AnchorBean<AnnotationComparisonAssigner<T>> {
 
 	public abstract T createAssignment(
-		ObjsToCompare objsToCompare,
+		ObjectsToCompare objectsToCompare,
 		ImageDimensions dim,
 		boolean useMIP,
 		BoundIOContext context

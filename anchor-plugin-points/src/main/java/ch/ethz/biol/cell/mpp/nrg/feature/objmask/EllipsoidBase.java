@@ -35,21 +35,24 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class EllipsoidBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	/** Iff true, supresses covariance in the z-direction. */
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		
-		ObjectMask om = input.get().getObjectMask();
+		ObjectMask object = input.get().getObject();
 		
 		// If we have these few pixels, assume we are perfectly ellipsoid
-		if (om.numPixelsLessThan(12)) {
+		if (object.numPixelsLessThan(12)) {
 			return 1.0;
 		}
 		
@@ -62,12 +65,4 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 	}
 	
 	protected abstract double calc(FeatureInputSingleObject input, MarkEllipsoid me) throws FeatureCalcException;
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
 }

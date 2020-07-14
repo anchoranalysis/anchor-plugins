@@ -47,21 +47,21 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 public class HasTouchingVoxels extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
+	protected double calcWithIntersection(ObjectMask first, ObjectMask second, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
 		return convertToInt(
 			calculateHasTouchingRelative(
-				om1,
-				RelativeUtilities.createRelMask( om2, om1 ),
-				RelativeUtilities.createRelBBox(bboxIntersect, om1)
+				first,
+				RelativeUtilities.createRelMask(second, first),
+				RelativeUtilities.createRelBBox(bboxIntersect, first)
 			)
 		);
 	}
 
-	private boolean calculateHasTouchingRelative(ObjectMask om1, ObjectMask om2Rel, BoundingBox bboxIntersectRel) throws FeatureCalcException {
-		CountKernel kernelMatch = createCountKernelMask(om1, om2Rel);
+	private boolean calculateHasTouchingRelative(ObjectMask first, ObjectMask secondRelative, BoundingBox bboxIntersectRel) throws FeatureCalcException {
+		CountKernel kernelMatch = createCountKernelMask(first, secondRelative);
 		try {
-			return ApplyKernel.applyUntilPositive(kernelMatch, om1.getVoxelBox(), bboxIntersectRel );
+			return ApplyKernel.applyUntilPositive(kernelMatch, first.getVoxelBox(), bboxIntersectRel );
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}

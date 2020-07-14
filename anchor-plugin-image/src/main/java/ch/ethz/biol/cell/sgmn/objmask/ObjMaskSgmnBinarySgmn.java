@@ -47,13 +47,16 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskSgmnBinarySgmn extends ObjectSegmentation {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinarySegmentation sgmn;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int minNumberVoxels = 1;
 	// END BEAN PROPERTIES
 
@@ -96,24 +99,10 @@ public class ObjMaskSgmnBinarySgmn extends ObjectSegmentation {
 		}
 	}
 	
-	private static ObjectCollection maybeShiftObjs( ObjectCollection objs, Optional<ReadableTuple3i> shiftByQuantity) {
-		return shiftByQuantity.map(objs::shiftBy).orElse(objs);
+	private static ObjectCollection maybeShiftObjs(
+		ObjectCollection objects,
+		Optional<ReadableTuple3i> shiftByQuantity
+	) {
+		return shiftByQuantity.map(objects::shiftBy).orElse(objects);
 	}
-	
-	public BinarySegmentation getSgmn() {
-		return sgmn;
-	}
-
-	public void setSgmn(BinarySegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
-	public int getMinNumberVoxels() {
-		return minNumberVoxels;
-	}
-
-	public void setMinNumberVoxels(int minNumberVoxels) {
-		this.minNumberVoxels = minNumberVoxels;
-	}
-
-
 }

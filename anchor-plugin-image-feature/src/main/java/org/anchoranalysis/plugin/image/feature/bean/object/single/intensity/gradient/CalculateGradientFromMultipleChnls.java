@@ -83,22 +83,22 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 		
 		NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 		
-		putGradientValue( input.getObjectMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
-		putGradientValue( input.getObjectMask(), out, 1, nrgStack.getChnl(nrgIndexY) );
+		putGradientValue( input.getObject(), out, 0, nrgStack.getChnl(nrgIndexX) );
+		putGradientValue( input.getObject(), out, 1, nrgStack.getChnl(nrgIndexY) );
 		
 		if (nrgIndexZ!=-1) {
-			putGradientValue( input.getObjectMask(), out, 2, nrgStack.getChnl(nrgIndexZ) );
+			putGradientValue( input.getObject(), out, 2, nrgStack.getChnl(nrgIndexZ) );
 		}
 		
 		return out;
 	}
 	
 	// Always iterates over the list in the same-order
-	private void putGradientValue( ObjectMask om, List<Point3d> pnts, int axisIndex, Channel chnl ) {
+	private void putGradientValue( ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl ) {
 		
-		BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
+		BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		BoundingBox bbox = om.getBoundingBox();
+		BoundingBox bbox = object.getBoundingBox();
 
 
 		Extent e = vb.extent();
@@ -125,14 +125,14 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 						
 						int gradVal = bb.getInt(offset) - subtractConstant;
 						
-						modifyOrAddPoint( pnts, pointIndex, gradVal, axisIndex );
+						modifyOrAddPoint( points, pointIndex, gradVal, axisIndex );
 						pointIndex++;
 					}
 				}
 			}
 			
 		}
-		assert( pnts.size()==pointIndex );
+		assert( points.size()==pointIndex );
 	}
 	
 	private static void modifyOrAddPoint( List<Point3d> pnts, int pointIndex, int gradVal, int axisIndex ) {

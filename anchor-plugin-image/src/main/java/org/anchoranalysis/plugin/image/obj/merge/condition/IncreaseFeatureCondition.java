@@ -38,16 +38,14 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class IncreaseFeatureCondition implements AfterCondition {
 
-	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
+	private final FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
 	private FeatureCalculatorSingle<FeatureInputSingleObject> session;
-	
-	public IncreaseFeatureCondition(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		super();
-		this.featureEvaluator = featureEvaluator;
-	}
 
 	@Override
 	public void init(Logger logger) throws InitException {
@@ -65,22 +63,31 @@ public class IncreaseFeatureCondition implements AfterCondition {
 	}
 
 	@Override
-	public boolean accept(ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerged, Optional<ImageResolution> res) throws OperationFailedException {
+	public boolean accept(
+		ObjectMask source,
+		ObjectMask destination,
+		ObjectMask merged,
+		Optional<ImageResolution> res
+	) throws OperationFailedException {
 		
 		if (session!=null) {
-			return doesIncreaseFeatureValueForBoth(omSrc, omDest, omMerged);
+			return doesIncreaseFeatureValueForBoth(source, destination, merged);
 		} else {
 			return true;
 		}
 	}
 	
-	private boolean doesIncreaseFeatureValueForBoth( ObjectMask omSrc, ObjectMask omDest, ObjectMask omMerge ) throws OperationFailedException {
+	private boolean doesIncreaseFeatureValueForBoth(
+		ObjectMask source,
+		ObjectMask destination,
+		ObjectMask merged
+	) throws OperationFailedException {
 		
 		// Feature source
 		try {
-			double featureSrc = calc(omSrc);
-			double featureDest = calc(omDest);
-			double featureMerge = calc(omMerge);
+			double featureSrc = calc(source);
+			double featureDest = calc(destination);
+			double featureMerge = calc(merged);
 			
 			// We skip if we don't increase the feature value for both objects
 			return (featureMerge>featureSrc && featureMerge>featureDest);
@@ -90,9 +97,9 @@ public class IncreaseFeatureCondition implements AfterCondition {
 		}		
 	}
 	
-	private double calc(ObjectMask om) throws FeatureCalcException {
+	private double calc(ObjectMask object) throws FeatureCalcException {
 		return session.calc(
-			new FeatureInputSingleObject(om)
+			new FeatureInputSingleObject(object)
 		);
 	}
 }

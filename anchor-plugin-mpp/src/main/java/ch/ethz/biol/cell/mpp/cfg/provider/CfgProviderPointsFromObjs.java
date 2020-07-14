@@ -2,7 +2,6 @@ package ch.ethz.biol.cell.mpp.cfg.provider;
 
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 
 /*-
@@ -45,28 +44,28 @@ public class CfgProviderPointsFromObjs extends CfgProvider {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Cfg create() throws CreateException {
-		return createMarksFromObjs( objs.create() );
+		return createMarksFromObjs( objects.create() );
 	}
 		
-	private static Cfg createMarksFromObjs( ObjectCollection objsCollection ) {
+	private static Cfg createMarksFromObjs( ObjectCollection objectCollection ) {
 		
 		Cfg out = new Cfg();
 		
-		for( int i=0; i<objsCollection.size(); i++ ) {
+		for( int i=0; i<objectCollection.size(); i++ ) {
 			
-			ObjectMask om = objsCollection.get(i);
-			
-			Mark m = MarkPointListFactory.create(
-				PointsFromObjMask.pntsFromMaskDouble(om),
-				i	// We assign an unique integer ID
-			);
+			ObjectMask object = objectCollection.get(i);
 					
-			out.add(m);
+			out.add(
+				MarkPointListFactory.create(
+					PointsFromObjMask.pntsFromMaskDouble(object),
+					i	// We assign an unique integer ID
+				)
+			);
 		}
 		return out;
 	}

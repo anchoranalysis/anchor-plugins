@@ -38,10 +38,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Only accepts an object if it has greater (or EQUAL) intersection with objMaskProviderGreater than objMaskProviderLesser
- * 
- * <p>If an object intersects with neither, it still gets accepted, as both return 0</p>
+ * Only accepts an object if it has greater (or EQUAL) intersection with {@code objectsGreater} than {@code objectsLesser}
+ * <p>
+ * If an object intersects with neither, it still gets accepted, as both return 0
  * 
  * @author Owen Feehan
  *
@@ -49,22 +52,22 @@ import org.anchoranalysis.plugin.image.bean.obj.filter.ObjectFilterPredicate;
 public class GreaterIntersectionWith extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objsGreater;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsGreater;
 	
-	@BeanField
-	private ObjectCollectionProvider objsLesser;
+	@BeanField @Getter @Setter
+	private ObjectCollectionProvider objectsLesser;
 	// END BEAN PROPERTIES
 	
 	private ObjectCollection intersectionGreater;
 	private ObjectCollection intersectionLesser;
 
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
-		super.start(dim, objsToFilter);
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
+		super.start(dim, objectsToFilter);
 		try {
-			intersectionGreater = objsGreater.create();
-			intersectionLesser = objsLesser.create();
+			intersectionGreater = objectsGreater.create();
+			intersectionLesser = objectsLesser.create();
 			
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
@@ -72,11 +75,10 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 	}
 	
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim)
-			throws OperationFailedException {
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
 
-		int cntGreater =  intersectionGreater.countIntersectingVoxels(om);
-		int cntLesser =  intersectionLesser.countIntersectingVoxels(om);
+		int cntGreater = intersectionGreater.countIntersectingVoxels(object);
+		int cntLesser = intersectionLesser.countIntersectingVoxels(object);
 		
 		return cntGreater >= cntLesser;
 	}
@@ -86,21 +88,5 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 		super.end();
 		intersectionGreater = null;
 		intersectionLesser = null;
-	}
-
-	public ObjectCollectionProvider getObjsGreater() {
-		return objsGreater;
-	}
-	
-	public void setObjsGreater(ObjectCollectionProvider objsGreater) {
-		this.objsGreater = objsGreater;
-	}
-
-	public ObjectCollectionProvider getObjsLesser() {
-		return objsLesser;
-	}
-	
-	public void setObjsLesser(ObjectCollectionProvider objsLesser) {
-		this.objsLesser = objsLesser;
 	}
 }

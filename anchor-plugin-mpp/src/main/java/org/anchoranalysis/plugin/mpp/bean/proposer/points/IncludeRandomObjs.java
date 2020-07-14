@@ -59,7 +59,7 @@ public class IncludeRandomObjs extends PointsProposer {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -73,10 +73,10 @@ public class IncludeRandomObjs extends PointsProposer {
 		List<Point3i> out = new ArrayList<>();
 		
 		try {
-			ObjectCollection objsCollection = objs.create();
+			ObjectCollection objectCollection = objects.create();
 			
-			for( ObjectMask om : objsCollection ) {
-				maybeAddToList(om, out, re);
+			for( ObjectMask object : objectCollection ) {
+				maybeAddToList(object, out, re);
 			}
 						
 		} catch (CreateException e) {
@@ -92,10 +92,10 @@ public class IncludeRandomObjs extends PointsProposer {
 		return Optional.empty();
 	}
 	
-	private static void maybeAddToList( ObjectMask om, List<Point3i> out, RandomNumberGenerator re ) {
+	private static void maybeAddToList( ObjectMask object, List<Point3i> out, RandomNumberGenerator re ) {
 		if (re.nextDouble() > 0.5) {
 			out.addAll(
-				PointsFromObjMask.pntsFromMask(om)
+				PointsFromObjMask.pntsFromMask(object)
 			);
 		}
 	}

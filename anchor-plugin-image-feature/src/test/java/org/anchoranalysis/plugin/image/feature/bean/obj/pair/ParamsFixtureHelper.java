@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
-import org.anchoranalysis.test.feature.plugins.objs.ParamsOverlappingCircleFixture;
+import org.anchoranalysis.test.feature.plugins.objects.ParamsOverlappingCircleFixture;
 
 public class ParamsFixtureHelper {
 	

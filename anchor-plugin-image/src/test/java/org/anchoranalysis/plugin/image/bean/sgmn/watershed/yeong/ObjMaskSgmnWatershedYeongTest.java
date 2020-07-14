@@ -77,15 +77,15 @@ public class ObjMaskSgmnWatershedYeongTest {
 			mask(path)
 		); 
 		
-		ObjectCollection objsResult = sgmn.sgmn(
+		ObjectCollection objectsResult = sgmn.sgmn(
 			chnl(PATH_CHNL_BLURRED),
 			mask,
 			Optional.empty()
 		);	
 					
-		ObjectCollection objsExpected = loader.openObjsFromTestPath(pathObjsExpected);
+		ObjectCollection objectsExpected = loader.openObjsFromTestPath(pathObjsExpected);
 		
-		assertTrue( objsExpected.equalsDeep(objsResult) );
+		assertTrue( objectsExpected.equalsDeep(objectsResult) );
 	}
 	
 	private ObjectMask mask(String path) {

@@ -44,31 +44,31 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
-import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjsStackCreator;
+import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjectsStackCreator;
 import lombok.Getter;
 import lombok.Setter;
 
-public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjMaskBase {
+public class StackProviderRGBFromObjMask extends StackProviderRGBFromObjectBase {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	
 	@BeanField @OptionalBean @Getter @Setter
 	private ColorListProvider colorListProvider;	// If null, uses the colorListGenerator below
 
 	// Fallback generator if colorListProvider is null
 	@BeanField @Getter @Setter
-	private ColorSetGenerator colorSetGenerator = ColoredObjsStackCreator.DEFAULT_COLOR_SET_GENERATOR;
+	private ColorSetGenerator colorSetGenerator = ColoredObjectsStackCreator.DEFAULT_COLOR_SET_GENERATOR;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public Stack create() throws CreateException {
 				
-		ObjectCollection objsCollection = objs.create();
+		ObjectCollection objectCollection = objects.create();
 		return createStack(
-			objsCollection,
-			colors(objsCollection.size())
+			objectCollection,
+			colors(objectCollection.size())
 		);
 	}
 		

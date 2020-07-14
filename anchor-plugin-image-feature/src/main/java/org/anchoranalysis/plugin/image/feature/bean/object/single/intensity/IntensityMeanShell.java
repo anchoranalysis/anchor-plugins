@@ -43,8 +43,8 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 public class IntensityMeanShell extends IntensityMeanShellBase {
 
 	@Override
-	protected double calcForShell(ObjectMask om, Channel chnl) throws FeatureCalcException {
-		return IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om );
+	protected double calcForShell(ObjectMask object, Channel chnl) throws FeatureCalcException {
+		return IntensityMeanCalculator.calcMeanIntensityObject(chnl, object);
 	}
 
 }

@@ -42,11 +42,11 @@ public class ObjMaskProviderRemoveTouchBorder extends ObjMaskProviderDimensions 
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		
 		ImageDimensions dim = createDim();
 		
-		return objsIn.stream().filter( obj->
+		return objects.stream().filter( obj->
 			!atBorder(obj, dim)
 		);
 	}

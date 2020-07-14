@@ -46,21 +46,21 @@ public class ColorListProviderFromObjMask extends ColorListProvider {
 	private ColorSetGenerator colorSetGenerator;
 	
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 
 	@Override
 	public ColorList create() throws CreateException {
 
-		ObjectCollection objsCollection;
+		ObjectCollection objectCollection;
 		try {
-			objsCollection = objs.create();
+			objectCollection = objects.create();
 		} catch (CreateException e) {
 			throw new CreateException(e);
 		}
 		
 		try {
-			return colorSetGenerator.genColors(objsCollection.size());
+			return colorSetGenerator.genColors(objectCollection.size());
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

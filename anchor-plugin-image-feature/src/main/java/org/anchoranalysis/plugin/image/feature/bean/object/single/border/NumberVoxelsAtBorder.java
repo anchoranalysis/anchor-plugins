@@ -36,60 +36,44 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class NumberVoxelsAtBorder extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean outsideAtThreshold = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean ignoreAtThreshold = false;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean do3D = false;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 		return (double) numBorderPixels(
-			input.get().getObjectMask(),
+			input.get().getObject(),
 			ignoreAtThreshold,
 			outsideAtThreshold,
 			do3D
 		);
 	}
 	
-	public static int numBorderPixels( ObjectMask om, boolean ignoreAtThreshold, boolean outsideAtThreshold, boolean do3D ) {
+	public static int numBorderPixels(
+		ObjectMask object,
+		boolean ignoreAtThreshold,
+		boolean outsideAtThreshold,
+		boolean do3D
+	) {
 		OutlineKernel3 kernel = new OutlineKernel3(
-			om.getBinaryValuesByte(),
+			object.getBinaryValuesByte(),
 			outsideAtThreshold,
 			do3D,
 			ignoreAtThreshold
 		);
-		return ApplyKernel.applyForCount(kernel, om.getVoxelBox());
-	}
-
-	public boolean isOutsideAtThreshold() {
-		return outsideAtThreshold;
-	}
-
-	public void setOutsideAtThreshold(boolean outsideAtThreshold) {
-		this.outsideAtThreshold = outsideAtThreshold;
-	}
-
-	public boolean isDo3D() {
-		return do3D;
-	}
-
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
-
-	public boolean isIgnoreAtThreshold() {
-		return ignoreAtThreshold;
-	}
-
-	public void setIgnoreAtThreshold(boolean ignoreAtThreshold) {
-		this.ignoreAtThreshold = ignoreAtThreshold;
+		return ApplyKernel.applyForCount(kernel, object.getVoxelBox());
 	}
 }

@@ -51,21 +51,21 @@ public class ObjMaskProviderDilate extends ObjMaskProviderDimensionsOptional {
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsIn) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		Optional<ImageDimensions> dim = createDims();
-		return objsIn.stream().map( om->dilate(om,dim) );
+		return objects.stream().map( om->dilate(om,dim) );
 	}
 	
-	private ObjectMask dilate(ObjectMask om, Optional<ImageDimensions> dim) throws CreateException {
-		ObjectMask omGrown = MorphologicalDilation.createDilatedObjMask(
-			om,
+	private ObjectMask dilate(ObjectMask object, Optional<ImageDimensions> dim) throws CreateException {
+		ObjectMask objectGrown = MorphologicalDilation.createDilatedObject(
+			object,
 			dim.map(ImageDimensions::getExtent),
 			do3D,
 			iterations,
 			bigNghb
 		);
-		assert( !dim.isPresent() || dim.get().contains( omGrown.getBoundingBox()) );
-		return omGrown;
+		assert( !dim.isPresent() || dim.get().contains( objectGrown.getBoundingBox()) );
+		return objectGrown;
 	}
 	
 	public boolean isDo3D() {

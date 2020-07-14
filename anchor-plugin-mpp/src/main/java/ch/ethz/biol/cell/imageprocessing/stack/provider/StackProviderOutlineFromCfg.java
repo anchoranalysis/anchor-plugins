@@ -43,7 +43,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
@@ -90,7 +90,7 @@ public class StackProviderOutlineFromCfg extends StackProvider {
 			);
 			
 			CfgGenerator cfgGenerator = new CfgGenerator(
-				new RGBOutlineWriter(outlineWidth),
+				new Outline(outlineWidth),
 				coloredCfgWithDisplayStack,
 				new IDGetterIter<Overlay>(),
 				RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID)

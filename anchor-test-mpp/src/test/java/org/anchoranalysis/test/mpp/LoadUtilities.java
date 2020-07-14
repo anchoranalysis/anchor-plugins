@@ -49,21 +49,21 @@ public class LoadUtilities {
 	private static ObjectMask largestObjFromStack( Stack stack ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory cc = new CreateFromConnectedComponentsFactory();
-		ObjectCollection objs = cc.createConnectedComponents(
+		ObjectCollection objects = cc.createConnectedComponents(
 			new BinaryChnl( stack.getChnl(0), BinaryValues.getDefault())
 		);
 		
-		return findLargestObj(objs);
+		return findLargestObj(objects);
 	}
 	
-	private static ObjectMask findLargestObj( ObjectCollection objs ) {
+	private static ObjectMask findLargestObj(ObjectCollection objects) {
 		int maxSize = -1;
 		ObjectMask maxObj = null;
-		for( ObjectMask om : objs ) {
-			int size = om.numberVoxelsOn();
+		for(ObjectMask objectMask : objects) {
+			int size = objectMask.numberVoxelsOn();
 			if (size>maxSize) {
 				maxSize = size;
-				maxObj = om;
+				maxObj = objectMask;
 			}
 		}
 		return maxObj;

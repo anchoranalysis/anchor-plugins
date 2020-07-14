@@ -32,26 +32,24 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
 import org.anchoranalysis.image.object.ObjectCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderExtractSlice extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int slice = 0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection in ) throws CreateException {
-		return in.stream().filterAndMap(
-			om -> om.getBoundingBox().contains().z(slice),
-			om -> om.extractSlice(slice - om.getBoundingBox().cornerMin().getZ(), false)
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
+		return objects.stream().filterAndMap(
+			objectMask -> objectMask.getBoundingBox().contains().z(slice),
+			objectMask -> objectMask.extractSlice(
+				slice - objectMask.getBoundingBox().cornerMin().getZ(),
+				false
+			)
 		);
-	}
-
-	public int getSlice() {
-		return slice;
-	}
-
-	public void setSlice(int slice) {
-		this.slice = slice;
 	}
 }

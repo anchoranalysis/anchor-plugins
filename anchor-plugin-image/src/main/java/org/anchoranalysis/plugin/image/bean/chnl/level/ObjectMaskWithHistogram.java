@@ -31,22 +31,18 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+
 class ObjectMaskWithHistogram {
 	
-	private ObjectMask objMask;
-	private Histogram histogram;
+	@Getter
+	private final ObjectMask object;
 	
-	public ObjectMaskWithHistogram(ObjectMask objMask, Channel chnl) {
-		super();
-		this.objMask = objMask;
-		this.histogram = HistogramFactory.create( chnl, objMask );
-	}
-
-	public ObjectMask getObjMask() {
-		return objMask;
-	}
-
-	public Histogram getHistogram() {
-		return histogram;
+	@Getter
+	private final Histogram histogram;
+	
+	public ObjectMaskWithHistogram(ObjectMask object, Channel chnl) {
+		this.object = object;
+		this.histogram = HistogramFactory.create( chnl, object );
 	}
 }

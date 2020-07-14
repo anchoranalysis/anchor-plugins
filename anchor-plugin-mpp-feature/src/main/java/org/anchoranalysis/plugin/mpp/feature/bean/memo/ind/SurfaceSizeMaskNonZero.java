@@ -46,26 +46,29 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int maskIndex = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private RegionMap regionMap = RegionMapSingleton.instance();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = false;
 	// END BEAN PROPERTIES
 
 	@Override
 	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 
-		ObjectMask om = createMask(input.get());
+		ObjectMask objectMask = createMask(input.get());
 		int surfaceSize = estimateSurfaceSize(
 			input.get().getPxlPartMemo(),
-			om
+			objectMask
 		);
 		
 		return rslvArea(
@@ -83,18 +86,18 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		return omWithProps.getMask();
 	}
 
-	private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask om) throws FeatureCalcException {
+	private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object) throws FeatureCalcException {
 		
-		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
+		VoxelBox<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
 		
-		Extent extent = om.getBoundingBox().extent();
+		Extent extent = object.getBoundingBox().extent();
 		
 		try {
 			int size = 0;
 			for( int z=0; z<extent.getZ(); z++) {
 				VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
 				if( stats.histogram().hasAboveZero() ) {
-					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
+					size += vbOutline.extractSlice(z).countEqual( object.getBinaryValues().getOnInt() );
 				}
 			}
 			return size;
@@ -103,38 +106,8 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 		}
 	}
 	
-	private static VoxelBox<ByteBuffer> calcOutline( ObjectMask objMask, boolean useZ ) {
-		OutlineKernel3 kernel = new OutlineKernel3( objMask.getBinaryValuesByte(), false, useZ );
-		return ApplyKernel.apply(kernel, objMask.getVoxelBox(), objMask.getBinaryValuesByte() );
+	private static VoxelBox<ByteBuffer> calcOutline( ObjectMask object, boolean useZ ) {
+		OutlineKernel3 kernel = new OutlineKernel3( object.getBinaryValuesByte(), false, useZ );
+		return ApplyKernel.apply(kernel, object.getVoxelBox(), object.getBinaryValuesByte() );
 	}
-	
-	public int getMaskIndex() {
-		return maskIndex;
-	}
-
-
-	public void setMaskIndex(int maskIndex) {
-		this.maskIndex = maskIndex;
-	}
-
-
-	public RegionMap getRegionMap() {
-		return regionMap;
-	}
-
-
-	public void setRegionMap(RegionMap regionMap) {
-		this.regionMap = regionMap;
-	}
-
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
-
 }

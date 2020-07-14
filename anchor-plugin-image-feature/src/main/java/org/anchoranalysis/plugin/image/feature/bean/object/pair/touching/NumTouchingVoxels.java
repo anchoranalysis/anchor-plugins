@@ -49,13 +49,13 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
 public class NumTouchingVoxels extends TouchingVoxels {
 
 	@Override
-	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
+	protected double calcWithIntersection(ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect)
 			throws FeatureCalcException {
 		// As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1, it's done in both directions.
 		try {
 			return Math.max(
-				numTouchingFrom(om1, om2, bboxIntersect),
-				numTouchingFrom(om2, om1, bboxIntersect)
+				numTouchingFrom(object1, object2, bboxIntersect),
+				numTouchingFrom(object2, object1, bboxIntersect)
 			);
 			
 		} catch (OperationFailedException e) {
@@ -63,23 +63,28 @@ public class NumTouchingVoxels extends TouchingVoxels {
 		}
 	}
 	
-
-	private int numTouchingFrom( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersect ) throws OperationFailedException {
-		BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(bboxIntersect, omSrc);
-		return calcNghbTouchingPixels( omSrc, omDest, bboxIntersectRel );
+	private int numTouchingFrom(
+		ObjectMask source,
+		ObjectMask destination,
+		BoundingBox bboxIntersect
+	) throws OperationFailedException {
+		BoundingBox bboxIntersectRelative = RelativeUtilities.createRelBBox(bboxIntersect, source);
+		return calcNghbTouchingPixels( source, destination, bboxIntersectRelative );
 	}
 		
-	private int calcNghbTouchingPixels( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersectRel ) throws OperationFailedException {
-		
-		ObjectMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
+	private int calcNghbTouchingPixels(
+		ObjectMask source,
+		ObjectMask destination,
+		BoundingBox bboxIntersectRelative
+	) throws OperationFailedException {
 		
 		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
 			isDo3D(),
-			omSrc.getBinaryValuesByte(),
-			omOtherDest,
+			source.getBinaryValuesByte(),
+			RelativeUtilities.createRelMask( destination, source ),
 			false
 		);
-		return ApplyKernel.applyForCount(kernelMatch, omSrc.getVoxelBox(), bboxIntersectRel );		
+		return ApplyKernel.applyForCount(kernelMatch, source.getVoxelBox(), bboxIntersectRelative );		
 	}
 
 

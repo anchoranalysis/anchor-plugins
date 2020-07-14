@@ -44,16 +44,16 @@ public class ObjMaskMatcherIntersection extends ObjectMatcher {
 	
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private ObjectCollectionProvider objs;
+	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public List<MatchedObject> findMatch(ObjectCollection sourceObjs) throws OperationFailedException {
 
 		try {
-			return ObjMaskMatchUtilities.matchIntersectingObjects(
+			return ObjectMatchUtilities.matchIntersectingObjects(
 				sourceObjs,
-				objs.create()
+				objects.create()
 			);
 			
 		} catch (CreateException e) {

@@ -89,13 +89,13 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 		try {
 			NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
 			
-			NamedProviderStore<ObjectCollection> objs = objsFromInput(inputObject, logger);
+			NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject, logger);
 					
 			Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logger);
 			
 			Cfg cfg = sgmn.duplicateBean().sgmn(
 				stackCollection,
-				objs,
+				objects,
 				keyValueParams,
 				params.context()
 			);
@@ -147,10 +147,16 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	}
 	
 	
-	private NamedProviderStore<ObjectCollection> objsFromInput( MultiInput inputObject, Logger logger ) throws OperationFailedException {
-		NamedProviderStore<ObjectCollection> objMaskCollectionStore = new LazyEvaluationStore<>(logger, "objMaskCollection");
-		inputObject.objs().addToStore(objMaskCollectionStore);
-		return objMaskCollectionStore;
+	private NamedProviderStore<ObjectCollection> objectsFromInput(
+		MultiInput inputObject,
+		Logger logger
+	) throws OperationFailedException {
+		NamedProviderStore<ObjectCollection> objectsStore = new LazyEvaluationStore<>(
+			logger,
+			"objMaskCollection"
+		);
+		inputObject.objects().addToStore(objectsStore);
+		return objectsStore;
 	}
 	
 	private void writeVisualization( Cfg cfg, BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection, Logger logger ) {

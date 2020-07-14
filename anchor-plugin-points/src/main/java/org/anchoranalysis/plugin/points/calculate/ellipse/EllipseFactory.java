@@ -51,27 +51,31 @@ class EllipseFactory {
 	
 	private final ConicFitterBase pointsFitter;
 	
-	public MarkEllipse create(ObjectMask om, ImageDimensions dim, double shellRad) throws CreateException, InsufficientPointsException {
+	public MarkEllipse create(
+		ObjectMask object,
+		ImageDimensions dim,
+		double shellRad
+	) throws CreateException, InsufficientPointsException {
 
 		pointsFitter.setShellRad(shellRad);
 		
-		Set<Point3i> pts = PointsFromObjMask.pntsFromMaskOutlineSet(om);
+		Set<Point3i> points = PointsFromObjMask.pntsFromMaskOutlineSet(object);
 		
-		if (pts.size()<MIN_NUMBER_POINTS) {
+		if (points.size()<MIN_NUMBER_POINTS) {
 			throw new InsufficientPointsException(
-				String.format("Only %d points. There must be at least %d points.", pts.size(), MIN_NUMBER_POINTS)	
+				String.format("Only %d points. There must be at least %d points.", points.size(), MIN_NUMBER_POINTS)	
 			);
 		}
 
-		return createEllipse(pts, dim);
+		return createEllipse(points, dim);
 	}
 	
-	private MarkEllipse createEllipse(Set<Point3i> pts, ImageDimensions dim) throws InsufficientPointsException, CreateException {
+	private MarkEllipse createEllipse(Set<Point3i> points, ImageDimensions dim) throws InsufficientPointsException, CreateException {
 		
 		MarkEllipse mark = new MarkEllipse();
 		
 		List<Point3f> ptsF = new ArrayList<>();
-		for( Point3i p : pts ) {
+		for( Point3i p : points ) {
 			ptsF.add( new Point3f(p.getX(),p.getY(),0) );
 		}
 		

@@ -79,20 +79,20 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		Function<T, StringLabelsForCsvRow> identifierFromInput
 	) throws OperationFailedException {
 		calculateFeaturesForProvider(
-			objsFromProvider(provider, imageInitParams, logger),
+			objectsFromProvider(provider, imageInitParams, logger),
 			nrgStack,
 			identifierFromInput
 		);		
 	}
 	
 	private void calculateFeaturesForProvider(
-		ObjectCollection objs,
+		ObjectCollection objects,
 		NRGStackWithParams nrgStack,
 		Function<T, StringLabelsForCsvRow> identifierFromInput
 	) throws OperationFailedException {
 		try {
 			List<T> listParams = table.createListInputs(
-				objs,
+				objects,
 				nrgStack,
 				logger
 			);
@@ -146,15 +146,15 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 		}
 	}
 	
-	private static ObjectCollection objsFromProvider( ObjectCollectionProvider provider, ImageInitParams imageInitParams, Logger logger ) throws OperationFailedException {
+	private static ObjectCollection objectsFromProvider( ObjectCollectionProvider provider, ImageInitParams imageInitParams, Logger logger ) throws OperationFailedException {
 
 		try {
-			ObjectCollectionProvider objMaskProviderLoc = provider.duplicateBean();
+			ObjectCollectionProvider providerLoc = provider.duplicateBean();
 			
 			// Initialise
-			objMaskProviderLoc.initRecursive(imageInitParams, logger);
+			providerLoc.initRecursive(imageInitParams, logger);
 	
-			return objMaskProviderLoc.create(); 
+			return providerLoc.create(); 
 			
 		} catch (InitException | CreateException e) {
 			throw new OperationFailedException(e);

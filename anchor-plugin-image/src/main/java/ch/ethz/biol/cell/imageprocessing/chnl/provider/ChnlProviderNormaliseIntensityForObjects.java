@@ -39,23 +39,23 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjsSource {
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {
 		
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		for(ObjectMask om : objsSource) {
+		for(ObjectMask object : objectsSource) {
 			
 			try {
-				double meanIntensity = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, om);
+				double meanIntensity = IntensityMeanCalculator.calcMeanIntensityObject(chnl, object);
 				
 				if (meanIntensity==0.0) {
 					// Special case. The mean can only be 0.0, if all pixels are 0
-					vb.setPixelsCheckMask(om, 128);
+					vb.setPixelsCheckMask(object, 128);
 					continue;
 				}
 				
 				double scaleFactor = 128/meanIntensity;
-				vb.scalePixelsCheckMask(om, scaleFactor);
+				vb.scalePixelsCheckMask(object, scaleFactor);
 			} catch (FeatureCalcException e) {
 				throw new CreateException(e);
 			}

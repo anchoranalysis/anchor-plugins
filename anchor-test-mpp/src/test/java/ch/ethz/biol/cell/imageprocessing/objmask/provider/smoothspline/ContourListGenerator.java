@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.objmask.writer.ObjMaskWriter;
+import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
-import org.anchoranalysis.io.bean.objmask.writer.RGBOutlineWriter;
+import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -68,7 +68,7 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 	public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR = new ShuffleColorSetGenerator( new HSBColorSetGenerator() );
 	
 	public ContourListGenerator( DisplayStack stack ) {
-		this( new RGBOutlineWriter(1,true), null, stack );
+		this( new Outline(1,true), null, stack );
 	}
 	
 	public ContourListGenerator( DisplayStack stack, List<Contour> contours ) throws SetOperationFailedException {
@@ -76,9 +76,9 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 		setIterableElement(contours);
 	}
 	
-	public ContourListGenerator( ObjMaskWriter objMaskWriter, ColorIndex colorIndex, DisplayStack stack ) {
+	public ContourListGenerator( DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack ) {
 		this.stack = stack;
-		delegate = new CfgGenerator(objMaskWriter, new IDGetterIter<Overlay>() );
+		delegate = new CfgGenerator(drawObject, new IDGetterIter<Overlay>() );
 		delegate.setManifestDescriptionFunction("contourRepresentationRGB");
 		this.colorIndex = colorIndex;
 	}

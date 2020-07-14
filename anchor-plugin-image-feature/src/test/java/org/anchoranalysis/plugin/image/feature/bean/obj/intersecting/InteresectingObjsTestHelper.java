@@ -41,8 +41,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
-import org.anchoranalysis.test.feature.plugins.objs.CircleObjMaskFixture;
-import org.anchoranalysis.test.feature.plugins.objs.IntersectingCircleObjsFixture;
+import org.anchoranalysis.test.feature.plugins.objects.CircleObjMaskFixture;
+import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjsFixture;
 import org.mockito.Mockito;
 
 class InteresectingObjsTestHelper {
@@ -77,7 +77,7 @@ class InteresectingObjsTestHelper {
 		int expectedLast
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
-		ObjectCollection objs = IntersectingCircleObjsFixture.generateIntersectingObjs(
+		ObjectCollection objects = IntersectingCircleObjsFixture.generateIntersectingObjs(
 			NUMBER_INTERSECTING,
 			NUMBER_NOT_INTERSECTING,
 			sameSize
@@ -87,7 +87,7 @@ class InteresectingObjsTestHelper {
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "first"),
 			feature,
-			objs,
+			objects,
 			0,
 			expectedFirst
 		);
@@ -96,7 +96,7 @@ class InteresectingObjsTestHelper {
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "second"),
 			feature,
-			objs,
+			objects,
 			1,
 			expectedSecond
 		);
@@ -106,7 +106,7 @@ class InteresectingObjsTestHelper {
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "second-last"),
 			feature,
-			objs,
+			objects,
 			secondLastIndex,
 			expectedSecondLast
 		);
@@ -116,7 +116,7 @@ class InteresectingObjsTestHelper {
 		InteresectingObjsTestHelper.assertFeatureIndexInt(
 			combine(messagePrefix, "last"),
 			feature,
-			objs,
+			objects,
 			lastIndex,
 			expectedLast
 		);		
@@ -127,7 +127,7 @@ class InteresectingObjsTestHelper {
 	 * 
 	 * @param message descriptive-message for test
 	 * @param feature feature to calculate on params to form value
-	 * @param objs object-collection used to determine parameter for feature (single object removed at index) and the remainder that form a set of objects to intersect with
+	 * @param objects object-collection used to determine parameter for feature (single object removed at index) and the remainder that form a set of objects to intersect with
 	 * @param index index of object in collection to remove and use as parameter
 	 * @param expectedResult expected result from test 
 	 *  
@@ -138,21 +138,21 @@ class InteresectingObjsTestHelper {
 	private static void assertFeatureIndexInt(
 		String message,
 		FeatureIntersectingObjects feature,
-		ObjectCollection objs,
+		ObjectCollection objects,
 		int index,
 		int expectedResult
 	) throws OperationFailedException, FeatureCalcException, InitException {
 		
 		// We take the second object in the collection, as one that should intersect with 2 others
-		ObjectMask om = objs.get(index);
-		ObjectCollection others = removeImmutable(objs, index);
+		ObjectMask objectMask = objects.get(index);
+		ObjectCollection others = removeImmutable(objects, index);
 				
 		// We take the final objection the collection , as one
 		
 		FeatureTestCalculator.assertIntResult(
 			message,
 			addId(feature),
-			new FeatureInputSingleObject(om, CircleObjMaskFixture.nrgStack()),
+			new FeatureInputSingleObject(objectMask, CircleObjMaskFixture.nrgStack()),
 			Optional.of(
 				createInitParams(others).getSharedObjects()
 			),
@@ -161,8 +161,8 @@ class InteresectingObjsTestHelper {
 	}
 	
 	/** Removes an object from the collection immutably */
-	private static ObjectCollection removeImmutable( ObjectCollection objs, int index ) {
-		ObjectCollection out = objs.duplicateShallow();
+	private static ObjectCollection removeImmutable( ObjectCollection objects, int index ) {
+		ObjectCollection out = objects.duplicateShallow();
 		out.remove(index);
 		return out;
 	}

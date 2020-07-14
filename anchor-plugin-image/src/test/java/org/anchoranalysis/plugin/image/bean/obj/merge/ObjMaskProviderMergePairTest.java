@@ -86,7 +86,7 @@ public class ObjMaskProviderMergePairTest {
 	}
 	
 	private static ObjMaskProviderMergePair createMergePair(
-		ObjectCollection objs,
+		ObjectCollection objects,
 		int threshold
 	) throws CreateException {
 		
@@ -98,8 +98,8 @@ public class ObjMaskProviderMergePairTest {
 			MockFeatureWithCalculationFixture.createMockFeatureWithCalculation()
 		); 
 		
-		provider.setObjs(
-			ProviderFixture.providerFor(objs)
+		provider.setObjects(
+			ProviderFixture.providerFor(objects)
 		);
 		provider.setFeatureEvaluatorThreshold(
 			FeatureEvaluatorFixture.createNrg(

@@ -35,6 +35,6 @@ public class NumberObjects extends FeatureObjectCollection {
 	@Override
 	public double calc(FeatureInputObjectCollection params)
 			throws FeatureCalcException {
-		return params.getObjMaskCollection().size();
+		return params.getObjects().size();
 	}
 }

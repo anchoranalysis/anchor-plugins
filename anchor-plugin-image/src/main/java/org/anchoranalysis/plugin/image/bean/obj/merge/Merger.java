@@ -95,7 +95,7 @@ class Merger {
 	}
 
 	/**
-	 * Tries to merge objs (the collection is changed in-place)
+	 * Tries to merge objects (the collection is changed in-place)
 	 * 
 	 * @param objects the objects to merge
 	 * @throws OperationFailedException
@@ -116,14 +116,14 @@ class Merger {
 	}
 		
 	/**
-	 * Tries to merge a particular subset of objects in objs based upon the parameters in mergeParams
+	 * Tries to merge a particular subset of objects in objects based upon the parameters in mergeParams
 	 * 
-	 * @param objs the entire set of objects
+	 * @param objects the entire set of objects
 	 * @param mergeParams parameters that determine which objects are considered for merge
 	 * @param stack the entire list of future parameters to also be considered
 	 * @throws OperationFailedException
 	 */
-	private void tryMergeOnIndices( ObjectCollection objs, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
+	private void tryMergeOnIndices( ObjectCollection objects, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
 		
 		try {
 			afterCondition.init(logger);
@@ -131,21 +131,21 @@ class Merger {
 			throw new OperationFailedException(e);
 		}
 		
-		for( int i=mergeParams.getStartSrc(); i<objs.size(); i++ ) {
-			for( int j=mergeParams.getEndSrc(); j<objs.size(); j++ ) {
+		for( int i=mergeParams.getStartSrc(); i<objects.size(); i++ ) {
+			for( int j=mergeParams.getEndSrc(); j<objects.size(); j++ ) {
 				
 				if (i==j) {
 					continue;
 				}
 				
-				ObjectMask omSrc = objs.get(i);
-				ObjectMask omDest = objs.get(j);
-				
-				Optional<ObjectMask> omMerge = tryMerge( omSrc, omDest );
+				Optional<ObjectMask> merged = tryMerge(
+					objects.get(i),
+					objects.get(j)
+				);
 
-				if (omMerge.isPresent()) {
-					removeTwoIndices(objs, i,j);
-					objs.add(omMerge.get());
+				if (merged.isPresent()) {
+					removeTwoIndices(objects, i,j);
+					objects.add(merged.get());
 					
 					int startPos = Math.max(i-1,0);
 					stack.add( new MergeParams(startPos, startPos) );
@@ -157,47 +157,54 @@ class Merger {
 		}
 	}
 	
-	private static void removeTwoIndices(ObjectCollection objs, int i, int j) {
+	private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
 		if (i<j) {
-			objs.remove(j);
-			objs.remove(i);
+			objects.remove(j);
+			objects.remove(i);
 		} else {
-			objs.remove(i);
-			objs.remove(j);
+			objects.remove(i);
+			objects.remove(j);
 		}
 	}
 
-	private Optional<ObjectMask> tryMerge( ObjectMask omSrc, ObjectMask omDest ) throws OperationFailedException {
+	private Optional<ObjectMask> tryMerge( ObjectMask source, ObjectMask destination ) throws OperationFailedException {
 		
-		if(!beforeCondition.accept(omSrc, omDest, res)) {
+		if(!beforeCondition.accept(source, destination, res)) {
 			return Optional.empty();
 		}
 		
 		// Do merge
-		ObjectMask omMerge;
-		if (replaceWithMidpoint) {
-			Point3i pntNew = PointConverter.intFromDouble(
-				Point3d.midPointBetween( omSrc.getBoundingBox().midpoint(), omDest.getBoundingBox().midpoint() )
-			);
-			omMerge = createSinglePixelObjMask(pntNew);
-		} else {
-			omMerge = ObjectMaskMerger.merge(omSrc, omDest );
-		}
+		ObjectMask merged = merge(source, destination);
 
-		if(!afterCondition.accept(omSrc, omDest, omMerge, res)) {
+		if(!afterCondition.accept(source, destination, merged, res)) {
 			return Optional.empty();
 		}
 		
-		return Optional.of(omMerge);
+		return Optional.of(merged);
+	}
+	
+	private ObjectMask merge(ObjectMask source, ObjectMask destination) {
+		if (replaceWithMidpoint) {
+			Point3i pntNew = PointConverter.intFromDouble(
+				Point3d.midPointBetween(
+					source.getBoundingBox().midpoint(),
+					destination.getBoundingBox().midpoint()
+				)
+			);
+			return createSinglePixelObject(pntNew);
+		} else {
+			return ObjectMaskMerger.merge(source, destination);
+		}
 	}
 		
-	private static ObjectMask createSinglePixelObjMask( Point3i pnt ) {
+	private static ObjectMask createSinglePixelObject( Point3i pnt ) {
 		Extent e = new Extent(1,1,1);
 		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
 		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
 		bvb.setAllPixelsToOn();
-		BoundingBox bbox = new BoundingBox(pnt, e);
-		
-		return new ObjectMask( bbox, bvb );
+		return new ObjectMask(
+			new BoundingBox(pnt, e),
+			bvb
+		);
 	}
 }

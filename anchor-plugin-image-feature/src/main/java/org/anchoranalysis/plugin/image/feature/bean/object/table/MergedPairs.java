@@ -155,8 +155,11 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 	}
 	
 	@Override
-	public List<FeatureInputPairObjects> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
+	public List<FeatureInputPairObjects> createListInputs(
+		ObjectCollection objects,
+		NRGStackWithParams nrgStack,
+		Logger logger
+	) throws CreateException {
 
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		
@@ -165,7 +168,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 			new EdgeAdderParameters(avoidOverlappingObjects)
 		);
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
-			objs.asList(),
+			objects.asList(),
 			Function.identity(),
 			(v1, v2, numPixels) -> numPixels,
 			nrgStack.getNrgStack().getDimensions().getExtent(),

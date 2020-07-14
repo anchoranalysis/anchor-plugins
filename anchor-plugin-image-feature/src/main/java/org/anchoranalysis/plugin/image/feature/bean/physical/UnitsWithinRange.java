@@ -78,8 +78,8 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
 		
 		try {
 			Optional<ImageResolution> resOpt = Optional.of(res);
-			double minVoxels = min.rslv(resOpt);
-			double maxVoxels = max.rslv(resOpt);
+			double minVoxels = min.resolveToVoxels(resOpt);
+			double maxVoxels = max.resolveToVoxels(resOpt);
 					
 			if (value >= minVoxels && value <= maxVoxels) {
 				return within;

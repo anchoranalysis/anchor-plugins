@@ -42,38 +42,33 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskSgmnFilter extends ObjectSegmentationOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ObjectFilter filter = null;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection sgmn(Channel chnl, Optional<ObjectMask> objMask, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
+	public ObjectCollection sgmn(Channel channel, Optional<ObjectMask> object, Optional<SeedCollection> seeds, ObjectSegmentation sgmn) throws SgmnFailedException {
 		return filterObjs(
-			sgmn.sgmn(chnl, objMask, seeds),
-			chnl.getDimensions()
+			sgmn.sgmn(channel, object, seeds),
+			channel.getDimensions()
 		);
 	}
 
-	private ObjectCollection filterObjs( ObjectCollection objs, ImageDimensions dim ) throws SgmnFailedException {
+	private ObjectCollection filterObjs(ObjectCollection objects, ImageDimensions dim) throws SgmnFailedException {
 		try {
 			return filter.filter(
-				objs,
+				objects,
 				Optional.of(dim),
 				Optional.empty()
 			);
 		} catch (OperationFailedException e) {
 			throw new SgmnFailedException(e);
 		}
-	}
-
-	public ObjectFilter getFilter() {
-		return filter;
-	}
-
-	public void setFilter(ObjectFilter filter) {
-		this.filter = filter;
 	}
 }

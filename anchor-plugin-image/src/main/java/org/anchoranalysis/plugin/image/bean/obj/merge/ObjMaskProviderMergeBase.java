@@ -41,7 +41,7 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
+import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderContainer;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,8 +56,8 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	// END BEAN PROPERTIES
 	
 	@FunctionalInterface
-	protected static interface MergeObjs {
-		ObjectCollection mergeObjs( ObjectCollection objs ) throws OperationFailedException;
+	protected static interface MergeObjects {
+		ObjectCollection mergeObjects(ObjectCollection objects) throws OperationFailedException;
 	}
 		
 	protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
@@ -79,47 +79,51 @@ public abstract class ObjMaskProviderMergeBase extends ObjMaskProviderContainer 
 	/**
 	 * Merges either in a container, or altogether
 	 * 
-	 * @param objs
+	 * @param objects
 	 * @param mergeFunc a function that merges a collection of objects together (changes the collection in place)
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	protected ObjectCollection mergeMultiplex( ObjectCollection objs, MergeObjs mergeFunc ) throws OperationFailedException {
+	protected ObjectCollection mergeMultiplex( ObjectCollection objects, MergeObjects mergeFunc ) throws OperationFailedException {
 		
 		// To avoid changing the original
-		ObjectCollection objsToMerge = objs.duplicateShallow();
+		ObjectCollection objectsToMerge = objects.duplicateShallow();
 
 		try {
 			Optional<ObjectCollection> container = containerOptional();
 			if (container.isPresent()) {
-				return mergeInContainer(mergeFunc, objsToMerge, container.get());
+				return mergeInContainer(mergeFunc, objectsToMerge, container.get());
 			} else {
-				return mergeAll(mergeFunc, objsToMerge);
+				return mergeAll(mergeFunc, objectsToMerge);
 			}
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
-	private static ObjectCollection mergeAll( MergeObjs merger, ObjectCollection objs) throws OperationFailedException {
+	private static ObjectCollection mergeAll( MergeObjects merger, ObjectCollection objects) throws OperationFailedException {
 		// TODO is this extra ObjectCollection constructor needed?
 		return ObjectCollectionFactory.from(
-			merger.mergeObjs(objs)	
+			merger.mergeObjects(objects)	
 		);
 	}
 	
-	private static ObjectCollection mergeInContainer( MergeObjs merger, ObjectCollection objs, ObjectCollection containerObjs) throws OperationFailedException {
+	private static ObjectCollection mergeInContainer(
+		MergeObjects merger,
+		ObjectCollection objects,
+		ObjectCollection containerObjects
+	) throws OperationFailedException {
 		
 		// All matched objects
-		Stream<ObjectCollection> matchesStream = ObjMaskMatchUtilities
-				.matchIntersectingObjects(containerObjs, objs)
+		Stream<ObjectCollection> matchesStream = ObjectMatchUtilities
+				.matchIntersectingObjects(containerObjects, objects)
 				.stream()
 				.map(MatchedObject::getMatches);
 
 		return ObjectCollectionFactory.flatMapFrom(
 			matchesStream,
 			OperationFailedException.class,
-			merger::mergeObjs
+			merger::mergeObjects
 		);		
 	}
 }

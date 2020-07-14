@@ -53,7 +53,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public abstract class FeatureTableObjects<T extends FeatureInput> extends AnchorBean<FeatureTableObjects<T>> {
 
 	/**
-	 * Creates features that will be applied on the objMasks. Features should always be duplicated from the input list.
+	 * Creates features that will be applied on the objects. Features should always be duplicated from the input list.
 	 * 
 	 * @param list
 	 * @param storeFactory TODO
@@ -67,7 +67,7 @@ public abstract class FeatureTableObjects<T extends FeatureInput> extends Anchor
 	public abstract String uniqueIdentifierFor(T input);
 	
 	public abstract List<T> createListInputs(
-		ObjectCollection objs,
+		ObjectCollection objects,
 		NRGStackWithParams nrgStack,
 		Logger logger
 	) throws CreateException;

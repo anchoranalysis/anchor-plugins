@@ -50,24 +50,24 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim)
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
 			throws OperationFailedException {
 		
 		if (!dim.isPresent()) {
 			throw new OperationFailedException("Image-dimensions are required for this operation");
 		}
 		
-		if (om.getBoundingBox().atBorderXY(dim.get())) {
+		if (object.getBoundingBox().atBorderXY(dim.get())) {
 			return false;
 		}
 		
 		if (includeZ) {
-			ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
+			ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
 			if (crnrMin.getZ()==0) {
 				return false;
 			}
 
-			ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
+			ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
 			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
 				return false;
 			}

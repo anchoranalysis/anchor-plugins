@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.plugin.image.obj.merge.GraphLogger;
-import org.anchoranalysis.plugin.image.obj.merge.ObjVertex;
+import org.anchoranalysis.plugin.image.obj.merge.ObjectVertex;
 
 public abstract class AssignPriority {
 	
@@ -47,15 +47,15 @@ public abstract class AssignPriority {
 	 * @throws OperationFailedException
 	 */
 	public PrioritisedVertex assignPriority(
-		ObjVertex src,
-		ObjVertex dest,
+		ObjectVertex src,
+		ObjectVertex dest,
 		GraphLogger logger
 	) throws OperationFailedException {
 				
 		// Do merge
 		ObjectMask merge = ObjectMaskMerger.merge(
-			src.getObjMask(),
-			dest.getObjMask()
+			src.getObject(),
+			dest.getObject()
 		);
 		
 		PrioritisedVertex withPriority = assignPriorityToEdge(
@@ -77,8 +77,8 @@ public abstract class AssignPriority {
 	}
 	
 	protected abstract PrioritisedVertex assignPriorityToEdge(
-		ObjVertex src,
-		ObjVertex dest,
+		ObjectVertex src,
+		ObjectVertex dest,
 		ObjectMask merge,
 		ErrorReporter errorReporter
 	) throws OperationFailedException;

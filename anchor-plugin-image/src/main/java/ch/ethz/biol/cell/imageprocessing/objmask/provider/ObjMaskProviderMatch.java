@@ -36,31 +36,26 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ObjMaskProviderMatch extends ObjectCollectionProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectMatcher objMaskMatcher;
+	@BeanField @Getter @Setter
+	private ObjectMatcher matcher;
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection in) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		try {
 			return ObjectCollectionFactory.flatMapFrom(
-				objMaskMatcher.findMatch(in),
+				matcher.findMatch(objects),
 				MatchedObject::getMatches
 			);
 			
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-
-	public ObjectMatcher getObjMaskMatcher() {
-		return objMaskMatcher;
-	}
-
-	public void setObjMaskMatcher(ObjectMatcher objMaskMatcher) {
-		this.objMaskMatcher = objMaskMatcher;
 	}
 }

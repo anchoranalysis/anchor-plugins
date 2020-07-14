@@ -65,7 +65,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 	private VoxelBox<?> vb;
 
 	@Override
-	protected void start(Optional<ImageDimensions> dim, ObjectCollection objsToFilter) throws OperationFailedException {
+	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
 		
 		Channel chnlSingleRegion;
 		try {
@@ -78,25 +78,25 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 	}
 
 	@Override
-	protected boolean match(ObjectMask om, Optional<ImageDimensions> dim) throws OperationFailedException {
+	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
 		
 		int thresholdRslv = threshold(dim);
 		
-		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++) {
+		for( int z=0; z<object.getBoundingBox().extent().getZ(); z++) {
 			
-			ByteBuffer bb = om.getVoxelBox().getPixelsForPlane(z).buffer();
+			ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
 			
-			int z1 = z + om.getBoundingBox().cornerMin().getZ();
+			int z1 = z + object.getBoundingBox().cornerMin().getZ();
 			VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
 			
-			for( int y=0; y<om.getBoundingBox().extent().getY(); y++) {
-				for( int x=0; x<om.getBoundingBox().extent().getX(); x++) {
+			for( int y=0; y<object.getBoundingBox().extent().getY(); y++) {
+				for( int x=0; x<object.getBoundingBox().extent().getX(); x++) {
 			
-					int offset = om.getBoundingBox().extent().offset(x, y);
-					if( bb.get(offset)==om.getBinaryValuesByte().getOnByte() ) {
+					int offset = object.getBoundingBox().extent().offset(x, y);
+					if( bb.get(offset)==object.getBinaryValuesByte().getOnByte() ) {
 						
-						int y1 = y + om.getBoundingBox().cornerMin().getY();
-						int x1 = x + om.getBoundingBox().cornerMin().getX();
+						int y1 = y + object.getBoundingBox().cornerMin().getY();
+						int x1 = x + object.getBoundingBox().cornerMin().getX();
 						
 						int offsetGlobal = vb.extent().offset(x1,y1);
 						

@@ -50,24 +50,27 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int valueNoObject = 0;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureProvider<FeatureInputSingleObject> featureProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double factor = 1.0;
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {
 
 		Feature<FeatureInputSingleObject> feature = featureProvider.create();
 		
@@ -76,7 +79,7 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 						
 			return createOutputChnl(
 				chnl.getDimensions(),
-				objsSource,
+				objectsSource,
 				createSession(feature),
 				new NRGStackWithParams(nrgStack)
 			);
@@ -118,53 +121,20 @@ public class ChnlProviderObjMaskFeature extends ChnlProviderOneObjsSource {
 	
 	private Channel createOutputChnl(
 		ImageDimensions dim,
-		ObjectCollection objsSource,
+		ObjectCollection objectsSource,
 		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.INSTANCE );
 		chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
-		for( ObjectMask om : objsSource ) {
+		for( ObjectMask object : objectsSource ) {
 
 			double featVal = session.calc(
-				new FeatureInputSingleObject(om, nrgStackParams)
+				new FeatureInputSingleObject(object, nrgStackParams)
 			);
-			chnlOut.getVoxelBox().any().setPixelsCheckMask(om, (int) (factor*featVal) );
+			chnlOut.getVoxelBox().any().setPixelsCheckMask(object, (int) (factor*featVal) );
 		}
 		
 		return chnlOut;		
-	}
-
-	public FeatureProvider<FeatureInputSingleObject> getFeatureProvider() {
-		return featureProvider;
-	}
-
-	public void setFeatureProvider(FeatureProvider<FeatureInputSingleObject> featureProvider) {
-		this.featureProvider = featureProvider;
-	}
-
-	public List<ChnlProvider> getListAdditionalChnlProviders() {
-		return listAdditionalChnlProviders;
-	}
-
-	public void setListAdditionalChnlProviders(
-			List<ChnlProvider> listAdditionalChnlProviders) {
-		this.listAdditionalChnlProviders = listAdditionalChnlProviders;
-	}
-
-	public int getValueNoObject() {
-		return valueNoObject;
-	}
-
-	public void setValueNoObject(int valueNoObject) {
-		this.valueNoObject = valueNoObject;
-	}
-
-	public double getFactor() {
-		return factor;
-	}
-
-	public void setFactor(double factor) {
-		this.factor = factor;
 	}
 }

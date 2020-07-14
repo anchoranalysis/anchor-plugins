@@ -50,19 +50,19 @@ import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilit
 public class ObjMaskProviderConvexHullConnectLines extends ObjMaskProviderDimensions {
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 		ImageDimensions dim = createDim();
-		return objsCollection.stream().map( om->transform(om,dim) );
+		return objects.stream().map( om->transform(om,dim) );
 	}
 	
-	private ObjectMask transform(ObjectMask obj, ImageDimensions dimensions) throws CreateException {
+	private ObjectMask transform(ObjectMask object, ImageDimensions dimensions) throws CreateException {
 		try {
 			List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(
-				ConvexHullUtilities.pointsOnOutline(obj)
+				ConvexHullUtilities.pointsOnOutline(object)
 			);
 			
 			if (pntsConvexHull.size()<=1) {
-				return obj;
+				return object;
 			}
 
 			return ObjMaskWalkShortestPath.walkLine(

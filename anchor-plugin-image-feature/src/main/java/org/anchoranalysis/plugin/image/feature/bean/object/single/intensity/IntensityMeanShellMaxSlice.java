@@ -42,9 +42,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 
 	@Override
-	protected double calcForShell(ObjectMask om, Channel chnl) throws FeatureCalcException {
+	protected double calcForShell(ObjectMask object, Channel chnl) throws FeatureCalcException {
 				
-		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, false );
+		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, object, false );
 		
 		if (vai.getIndex()==-1) {
 			return getEmptyValue();

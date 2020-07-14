@@ -40,11 +40,14 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 public class VisitSchedulerUniformSample extends VisitScheduler {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<VisitScheduler> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 
@@ -69,15 +72,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask objMask) {
-		return selected.considerVisit(pnt, distAlongContour, objMask);
-	}
-
-	public List<VisitScheduler> getList() {
-		return list;
-	}
-
-	public void setList(List<VisitScheduler> list) {
-		this.list = list;
+	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask object) {
+		return selected.considerVisit(pnt, distAlongContour, object);
 	}
 }

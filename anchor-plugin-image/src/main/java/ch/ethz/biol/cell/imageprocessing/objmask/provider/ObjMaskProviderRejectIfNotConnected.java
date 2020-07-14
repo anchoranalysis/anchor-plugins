@@ -42,11 +42,11 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjMaskProviderRejectIfNotConnected extends ObjectCollectionProviderOne {
 
 	@Override
-	public ObjectCollection createFromObjs(ObjectCollection objsCollection) throws CreateException {
+	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		
-		for( ObjectMask om : objsCollection ) {
+		for( ObjectMask objectMask : objects ) {
 			try {
-				if (!om.checkIfConnected()) {
+				if (!objectMask.checkIfConnected()) {
 					throw new CreateException("At least one object is not connected");
 				}
 			} catch (OperationFailedException e) {
@@ -54,6 +54,6 @@ public class ObjMaskProviderRejectIfNotConnected extends ObjectCollectionProvide
 			}
 		}
 		
-		return objsCollection;
+		return objects;
 	}
 }

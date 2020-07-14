@@ -53,7 +53,7 @@ class CalculateHistogramForNrgChannel extends FeatureCalculation<FeatureInputHis
 
 		Histogram hist = HistogramFactory.createHistogramIgnoreZero(
 			channel,
-			params.getObjectMask(),
+			params.getObject(),
 			excludeZero
 		);
 		

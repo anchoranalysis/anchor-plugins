@@ -56,20 +56,18 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSour
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {
 	
 		LevelResultCollection lrc = LevelResultCollectionFactory.createCollection(
 			chnl,
-			objsSource,
+			objectsSource,
 			calculateLevel,
 			0,
 			getLogger().messageLogger()
 		);
 		
 		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE );
-		
 		populateChnl( chnl, chnlOut, lrc );
-
 		return chnlOut;
 	}
 

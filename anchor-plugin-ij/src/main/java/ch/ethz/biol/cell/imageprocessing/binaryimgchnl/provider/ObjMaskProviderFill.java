@@ -60,12 +60,12 @@ public class ObjMaskProviderFill extends ObjectCollectionProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public ObjectCollection createFromObjs( ObjectCollection objsCollection ) throws CreateException {
+	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 		
 		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
 		
-		for( ObjectMask om : objsCollection ) {
-			BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
+		for( ObjectMask objectMask : objects ) {
+			BinaryVoxelBox<ByteBuffer> bvb = objectMask.binaryVoxelBox();
 			
 			
 			BinaryVoxelBox<ByteBuffer> bvbDup = bvb.duplicate();
@@ -77,17 +77,23 @@ public class ObjMaskProviderFill extends ObjectCollectionProviderOne {
 			
 			if (maskChnl.isPresent()) {
 				// Let's make an object for our mask
-				ObjectMask omMask = maskChnl.get().region(om.getBoundingBox(), true);
+				ObjectMask objectRegion = maskChnl.get().region(objectMask.getBoundingBox(), true);
 				
 				BoundingBox bboxAll = new BoundingBox( bvb.extent() );
 				
 				// We do an and operation with the mask
-				bvbDup.copyPixelsToCheckMask(bboxAll, bvb.getVoxelBox(), bboxAll, omMask.getVoxelBox(), omMask.getBinaryValuesByte());
+				bvbDup.copyPixelsToCheckMask(
+					bboxAll,
+					bvb.getVoxelBox(),
+					bboxAll,
+					objectRegion.getVoxelBox(),
+					objectRegion.getBinaryValuesByte()
+				);
 			}
 			
 		}
 		
-		return objsCollection;
+		return objects;
 	}
 
 	public BinaryChnlProvider getMask() {

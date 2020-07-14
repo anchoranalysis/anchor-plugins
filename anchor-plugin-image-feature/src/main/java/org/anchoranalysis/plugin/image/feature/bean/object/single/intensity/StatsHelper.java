@@ -47,26 +47,26 @@ class StatsHelper {
 	 * Calculates the mean-intensity of a masked-part of each slice, and returns the maximum value across all sices
 	 * 
 	 * @param chnl
-	 * @param om
+	 * @param object
 	 * @param excludeZero
 	 * @return
 	 * @throws FeatureCalcException
 	 */
-	public static ValueAndIndex calcMaxSliceMean( Channel chnl, ObjectMask om, boolean excludeZero ) throws FeatureCalcException {
+	public static ValueAndIndex calcMaxSliceMean( Channel chnl, ObjectMask object, boolean excludeZero ) throws FeatureCalcException {
 		
 		double max = Double.NEGATIVE_INFINITY;
 		int index = -1;
 		
-		for( int z=0; z<om.getBoundingBox().extent().getZ(); z++ ) {
+		for( int z=0; z<object.getBoundingBox().extent().getZ(); z++ ) {
 			
-			ObjectMask omSlice = om.extractSlice(z, true);
+			ObjectMask slice = object.extractSlice(z, true);
 
 			// We adjust the z coordiante to point to the channel
-			int zTarget = omSlice.getBoundingBox().cornerMin().getZ() + om.getBoundingBox().cornerMin().getZ(); 
-			omSlice = omSlice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
+			int zTarget = slice.getBoundingBox().cornerMin().getZ() + object.getBoundingBox().cornerMin().getZ(); 
+			slice = slice.mapBoundingBox( bbox->bbox.shiftToZ(zTarget) );
 			
-			if (omSlice.hasPixelsGreaterThan(0)) {
-				double mean = IntensityMeanCalculator.calcMeanIntensityObjMask(chnl, omSlice, excludeZero);
+			if (slice.hasPixelsGreaterThan(0)) {
+				double mean = IntensityMeanCalculator.calcMeanIntensityObject(chnl, slice, excludeZero);
 				
 				if (mean>max) {
 					index = z;
@@ -85,17 +85,17 @@ class StatsHelper {
 	 * <p>This number of pixels can either taken from the highest or lowest part of the histogram</p>
 	 * 
 	 * @param chnl
-	 * @param om
+	 * @param object
 	 * @param numPixels the number of pixels to be considered (either the highest-intensity pixels, or lowest-intensity pixel)
 	 * @param highest iff TRUE the highest-intensity pixels are used in the mask, otherwise the lowest-intensity pixels are used
 	 * @return
 	 * @throws OperationFailedException 
 	 */
-	public static double calcMeanNumPixels( Channel chnl, ObjectMask om, int numPixels, boolean highest ) throws OperationFailedException {
+	public static double calcMeanNumPixels( Channel chnl, ObjectMask object, int numPixels, boolean highest ) throws OperationFailedException {
 		
-		Histogram h = HistogramFactory.create(chnl, om);
+		Histogram histogram = HistogramFactory.create(chnl, object);
 		
-		Histogram hCut = highest ? h.extractPixelsFromRight(numPixels) : h.extractPixelsFromLeft(numPixels);
+		Histogram hCut = highest ? histogram.extractPixelsFromRight(numPixels) : histogram.extractPixelsFromLeft(numPixels);
 	
 		return hCut.mean();
 	}
@@ -103,12 +103,12 @@ class StatsHelper {
 	
 	public static double calcStatistic(
 		Channel chnl,
-		ObjectMask objMask,
+		ObjectMask object,
 		boolean ignoreZero,
 		double emptyValue,
 		ToDoubleFunction<VoxelStatisticsFromHistogram> funcExtractStatistic
 	) {
-		Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl,objMask,ignoreZero);
+		Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl,object,ignoreZero);
 		
 		if (hist.getTotalCount()==0) {
 			return emptyValue;

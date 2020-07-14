@@ -39,12 +39,12 @@ public class PointsFromContourTraverser {
 	private PointsFromContourTraverser() {}
 
 	/** Extracts a list of points from the outline (contour) of the object-mask */
-	public static List<Point3i> pntsFromContour( ObjectMask om ) throws OperationFailedException {
+	public static List<Point3i> pntsFromContour( ObjectMask object ) throws OperationFailedException {
 		
 		List<Point3i> ptsTraversed = new ArrayList<>();
 		
 		OutlineTraverser outline = new OutlineTraverser(
-			om.duplicate(),
+			object.duplicate(),
 			(a,b) -> true,
 			false,
 			true
