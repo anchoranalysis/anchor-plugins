@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ObjMaskProviderMatch extends ObjectCollectionProviderOne {
+public class ObjMaskProviderMatch extends ObjectCollectionProviderUnary {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

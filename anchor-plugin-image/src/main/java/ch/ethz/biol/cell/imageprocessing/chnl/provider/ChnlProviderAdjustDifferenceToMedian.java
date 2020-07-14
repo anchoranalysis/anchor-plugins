@@ -70,7 +70,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 					lookup.getVoxelBox(),
 					Optional.of(object)
 				);
-				adjustObj(
+				adjustObject(
 					object,
 					chnl,
 					lookup,
@@ -86,7 +86,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 		}
 	}
 	
-	private void adjustObj( ObjectMask object, Channel chnl, Channel chnlLookup, int objMedian ) {
+	private void adjustObject( ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject ) {
 		
 		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
 		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
@@ -109,7 +109,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSou
 						int offset = vb.extent().offset(x, y);
 						
 						int lookupVal = ByteConverter.unsignedByteToInt( bbChnlLookup.get(offset) );
-						int adj = (objMedian - lookupVal);
+						int adj = (medianFromObject - lookupVal);
 						
 						int crntVal = ByteConverter.unsignedByteToInt( bbChnl.get(offset) );
 						int valNew = crntVal - adj;

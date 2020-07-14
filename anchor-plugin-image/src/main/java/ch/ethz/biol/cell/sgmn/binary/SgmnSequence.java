@@ -35,9 +35,9 @@ import java.util.Optional;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -60,7 +60,7 @@ public class SgmnSequence extends BinarySegmentation {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
+			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SegmentationFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> out = null;
 		

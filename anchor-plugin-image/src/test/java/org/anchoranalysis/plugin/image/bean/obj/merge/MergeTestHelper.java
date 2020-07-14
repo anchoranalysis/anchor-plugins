@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergeBase;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -77,7 +78,7 @@ class MergeTestHelper {
 		int expectedFinalMergeCount,
 		int expectedFeatureCalcCount,
 		int expectedCalculationCount,
-		ObjMaskProviderMergeBase provider
+		MergeBase provider
 	) throws OperationFailedException {
 		
 		Logger logger = LoggingFixture.suppressedLogErrorReporter();

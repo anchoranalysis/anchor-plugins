@@ -67,7 +67,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> first;
 	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> second;
 	
-	public static ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createFromCache(
+	public static ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> of(
 		SessionInput<FeatureInputPairObjects> cache,
 		ChildCacheName cacheLeft,
 		ChildCacheName cacheRight,
@@ -83,7 +83,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 				do3D,
 				iterationsErosion,
 				cache.resolver().search(
-					CalculateDilatedFromPair.createFromCache(
+					CalculateDilatedFromPair.of(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.FIRST,
@@ -93,7 +93,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 					)
 				),
 				cache.resolver().search(
-					CalculateDilatedFromPair.createFromCache(
+					CalculateDilatedFromPair.of(
 						cache.resolver(),
 						cache.forChild(),
 						Extract.SECOND,

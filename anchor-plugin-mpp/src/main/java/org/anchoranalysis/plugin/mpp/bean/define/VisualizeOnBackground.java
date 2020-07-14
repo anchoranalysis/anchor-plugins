@@ -50,7 +50,7 @@ import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReferen
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFromCfg;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderRGBFromObjMask;
+import ch.ethz.biol.cell.imageprocessing.stack.provider.ColoredObjectsOnStack;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 
@@ -140,7 +140,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 	}
 	
 	private StackProvider visualizationObjMasks( String objectsProviderID ) {
-		StackProviderRGBFromObjMask provider = new StackProviderRGBFromObjMask();
+		ColoredObjectsOnStack provider = new ColoredObjectsOnStack();
 		provider.setOutline(true);
 		addBackgroundProvider(provider);
 		provider.setObjects( new ObjMaskProviderReference(objectsProviderID) );

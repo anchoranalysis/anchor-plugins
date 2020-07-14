@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderOne;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
@@ -50,7 +50,7 @@ import lombok.Setter;
 /**
  * Permutes some changes over an {@link ObjectCollectionProvider} and collects all the results in an {@link ObjectCollection}
  * 
- * We deliberately do not inherit from {@link ObjectCollectionProviderOne} as we not using the {@link ObjectCollectionProvider} in the same way.
+ * We deliberately do not inherit from {@link ObjectCollectionProviderUnary} as we not using the {@link ObjectCollectionProvider} in the same way.
  * 
  * @author Owen Feehan
  *

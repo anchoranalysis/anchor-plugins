@@ -31,10 +31,10 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentationOne;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -43,14 +43,14 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class SgmnInv extends BinarySegmentationOne {
 
 	@Override
-	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask, BinarySegmentation sgmn) throws SgmnFailedException {
+	public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(VoxelBoxWrapper voxelBox, BinarySegmentationParameters params, Optional<ObjectMask> mask, BinarySegmentation sgmn) throws SegmentationFailedException {
 		
 		BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, mask);
 		
 		try {
 			invertVoxelBox( vb );
 		} catch (OperationFailedException e) {
-			throw new SgmnFailedException(e);
+			throw new SegmentationFailedException(e);
 		}
 		
 		return vb;

@@ -78,16 +78,16 @@ public class ParamsOverlappingCircleFixture {
 		int extraRadius
 	) {
 		return new FeatureInputPairObjects(
-			CircleObjMaskFixture.circleAt(
+			CircleObjectFixture.circleAt(
 				position(0,0),
 				DEFAULT_CIRCLE_RADIUS
 			),
-			CircleObjMaskFixture.circleAt(
+			CircleObjectFixture.circleAt(
 				position(shiftPositionX,shiftPositionY),
 				radiusMaybeExtra(sameSize, extraRadius)
 			),
 			Optional.of(
-				CircleObjMaskFixture.nrgStack()
+				CircleObjectFixture.nrgStack()
 			)
 		);
 	}

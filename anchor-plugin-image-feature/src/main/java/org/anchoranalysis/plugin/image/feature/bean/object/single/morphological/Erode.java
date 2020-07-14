@@ -37,7 +37,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
 
-public class Erode extends DerivedObjMask {
+public class Erode extends DerivedObject {
 	
 	// START BEAN PROPERTIES
 	@BeanField
@@ -49,7 +49,7 @@ public class Erode extends DerivedObjMask {
 
 	@Override
 	protected FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session ) {
-		return CalculateErosion.create(session, iterations, do3D);
+		return CalculateErosion.of(session, iterations, do3D);
 	}
 	
 	@Override

@@ -37,7 +37,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class CalculateDilation extends CalculateObjectMask {
 
-	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
+	public static ResolvedCalculation<ObjectMask,FeatureInputSingleObject> of(
 		CalculationResolver<FeatureInputSingleObject> cache,
 		int iterations,
 		boolean do3D

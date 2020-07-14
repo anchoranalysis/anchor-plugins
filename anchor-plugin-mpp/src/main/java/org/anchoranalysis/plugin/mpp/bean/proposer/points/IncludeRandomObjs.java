@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.PointsFromObjMask;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -95,7 +95,7 @@ public class IncludeRandomObjs extends PointsProposer {
 	private static void maybeAddToList( ObjectMask object, List<Point3i> out, RandomNumberGenerator re ) {
 		if (re.nextDouble() > 0.5) {
 			out.addAll(
-				PointsFromObjMask.pntsFromMask(object)
+				PointsFromObject.fromAsInteger(object)
 			);
 		}
 	}

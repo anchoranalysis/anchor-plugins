@@ -48,7 +48,7 @@ public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllip
 	private final boolean suppressZCovariance;
 	private final ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts;
 
-	public static MarkEllipsoid createFromCache(SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance ) throws FeatureCalcException {
+	public static MarkEllipsoid of(SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance ) throws FeatureCalcException {
 		
 		ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts = input.resolver().search(
 			new CalculatePntsFromOutline()

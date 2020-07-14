@@ -33,9 +33,9 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.segmentation.object.ObjectSegmentation;
+import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -44,8 +44,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,7 +64,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	private ObjectCollectionProvider objectsSeeds;
 	
 	@BeanField @Getter @Setter
-	private ObjectSegmentation sgmn;
+	private SegmentChannelIntoObjects sgmn;
 	// END BEAN PROPERTIES
 	
 	@Override
@@ -89,13 +89,13 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		Channel chnl,
 		ObjectCollection seeds,
 		ObjectCollection sourceObjs,
-		ObjectSegmentation sgmn
+		SegmentChannelIntoObjects sgmn
 	) throws CreateException {
 		
 		assert(seeds!=null);
 		assert(sourceObjs!=null);
 		
-		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(sourceObjs, seeds);
+		List<MatchedObject> matchList = MatcherIntersectionHelper.matchIntersectingObjects(sourceObjs, seeds);
 
 		return ObjectCollectionFactory.flatMapFrom(
 			matchList.stream(),
@@ -104,13 +104,13 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 		);
 	}
 	
-	private static ObjectCollection sgmnIfMoreThanOne(MatchedObject ows, Channel chnl, ObjectSegmentation sgmn) throws CreateException {
+	private static ObjectCollection sgmnIfMoreThanOne(MatchedObject ows, Channel chnl, SegmentChannelIntoObjects sgmn) throws CreateException {
 		if(ows.numMatches() <= 1) {
 			return ObjectCollectionFactory.from( ows.getSource() );
 		} else {
 			try {
 				return sgmn(ows, chnl, sgmn);
-			} catch (SgmnFailedException e) {
+			} catch (SegmentationFailedException e) {
 				throw new CreateException(e);
 			}
 		}
@@ -119,18 +119,18 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	private static ObjectCollection createWithoutSourceObjs(
 		Channel chnl,
 		ObjectCollection seedsAsObjects,
-		ObjectSegmentation sgmn
+		SegmentChannelIntoObjects sgmn
 	) throws CreateException {
 		
 		try {
-			return sgmn.sgmn(
+			return sgmn.segment(
 				chnl,
 				Optional.empty(),
 				Optional.of(
 					SeedsFactory.createSeedsWithoutMask(seedsAsObjects)
 				)
 			);
-		} catch (SgmnFailedException e) {
+		} catch (SegmentationFailedException e) {
 			throw new CreateException(e);
 		}
 	}
@@ -140,8 +140,8 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 	private static ObjectCollection sgmn(
 		MatchedObject matchedObject,
 		Channel channel,
-		ObjectSegmentation sgmn
-	) throws SgmnFailedException, CreateException {
+		SegmentChannelIntoObjects sgmn
+	) throws SegmentationFailedException, CreateException {
 		
 		BoundingBox bboxSource = matchedObject.getSource().getBoundingBox();
 		
@@ -157,7 +157,7 @@ public class ObjMaskProviderSeededObjSgmn extends ObjMaskProviderChnlSource {
 			channel.getDimensions()
 		);
 		
-		ObjectCollection sgmnObjs = sgmn.sgmn(
+		ObjectCollection sgmnObjs = sgmn.segment(
 			createChannelForBox(channel, bboxSource),
 			Optional.of(objectLocal),
 			Optional.of(seedsObj)

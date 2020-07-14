@@ -30,8 +30,9 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
 
-public class ObjMaskProviderNotIn extends ObjMaskProviderContainer {
+public class ObjMaskProviderNotIn extends ObjectCollectionProviderWithContainer {
 	
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {

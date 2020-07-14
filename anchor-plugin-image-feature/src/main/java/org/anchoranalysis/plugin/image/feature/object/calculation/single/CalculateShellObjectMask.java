@@ -52,7 +52,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	private final boolean do3D;
 	private final boolean inverse;
 	
-	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> createFromCache(
+	public static FeatureCalculation<ObjectMask,FeatureInputSingleObject> of(
 		CalculationResolver<FeatureInputSingleObject> params,
 		int iterationsDilation,
 		int iterationsErosion,
@@ -60,10 +60,10 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		boolean do3D,
 		boolean inverse
 	) {
-		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation = CalculateDilation.createFromCache(
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation = CalculateDilation.of(
 			params, iterationsDilation, do3D	
 		);
-		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion = CalculateErosion.createFromCacheRslvd(
+		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion = CalculateErosion.ofResolved(
 			params, iterationsErosion, do3D
 		);
 	

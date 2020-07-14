@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.points.PointsFromObjMask;
+import org.anchoranalysis.image.points.PointsFromObject;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper=false)
@@ -41,7 +41,7 @@ public class CalculatePntsFromOutline extends FeatureCalculation<List<Point3i>, 
 
 	@Override
 	protected List<Point3i> execute(FeatureInputSingleObject params) throws FeatureCalcException {
-		return PointsFromObjMask.pntsFromMaskOutline(
+		return PointsFromObject.pntsFromMaskOutline(
 			params.getObject()
 		);
 	}

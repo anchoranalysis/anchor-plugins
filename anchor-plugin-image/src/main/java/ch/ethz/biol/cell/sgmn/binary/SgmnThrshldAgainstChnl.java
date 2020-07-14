@@ -32,10 +32,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -67,7 +67,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 		VoxelBoxWrapper voxelBox,
 		BinarySegmentationParameters params,
 		Optional<ObjectMask> object
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 		
 		VoxelBox<?> voxelBoxIn = voxelBox.any();
 		VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
@@ -93,19 +93,19 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 		);
 	}
 	
-	private VoxelBox<?> createThresholdedVoxelBox(Extent voxelBoxExtent) throws SgmnFailedException {
+	private VoxelBox<?> createThresholdedVoxelBox(Extent voxelBoxExtent) throws SegmentationFailedException {
 		
 		Channel threshold;
 		try {
 			threshold = chnlThreshold.create();
 		} catch (CreateException e) {
-			throw new SgmnFailedException(e);
+			throw new SegmentationFailedException(e);
 		}
 		
 		VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
 		
 		if (!vbThrshld.extent().equals(voxelBoxExtent)) {
-			throw new SgmnFailedException("chnlProviderThrshld is of different size to voxelBox");
+			throw new SegmentationFailedException("chnlProviderThrshld is of different size to voxelBox");
 		}
 		
 		return vbThrshld;

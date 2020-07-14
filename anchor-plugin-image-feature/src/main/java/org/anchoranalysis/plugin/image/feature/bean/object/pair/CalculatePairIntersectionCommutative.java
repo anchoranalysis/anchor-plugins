@@ -62,7 +62,7 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 	private final ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond;
 	private final ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst;
 	
-	public static FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createFromCache(
+	public static FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> of(
 		SessionInput<FeatureInputPairObjects> cache,
 		ChildCacheName childDilation1,
 		ChildCacheName childDilation2,
@@ -73,10 +73,10 @@ class CalculatePairIntersectionCommutative extends FeatureCalculation<Optional<O
 		
 		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
 		//  them also cached
-		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccFirstToSecond = CalculatePairIntersection.of(
 			cache, childDilation1, childDilation2, iterationsDilation, 0, do3D, iterationsErosion	
 		);
-		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst = CalculatePairIntersection.createFromCache(
+		ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> ccSecondToFirst = CalculatePairIntersection.of(
 			cache, childDilation1, childDilation2, 0, iterationsDilation, do3D, iterationsErosion	
 		);
 		return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);

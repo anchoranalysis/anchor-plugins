@@ -48,7 +48,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
@@ -101,7 +101,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 			);
 			writeVisualization(cfg, params.getOutputManager(), stackCollection, logger);
 			
-		} catch (SgmnFailedException e) {
+		} catch (SegmentationFailedException e) {
 			throw new JobExecutionException("An error occurred segmenting a configuration", e);
 		} catch (BeanDuplicateException e) {
 			throw new JobExecutionException("An error occurred duplicating the sgmn bean", e);

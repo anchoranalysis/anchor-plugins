@@ -40,9 +40,9 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 import org.apache.commons.math3.util.Pair;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -84,7 +84,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 	 */
 	private static Stream<Pair<ObjectMask,ObjectMask>> streamIntersectingObjects(ObjectCollection source, ObjectCollection target) {
 		
-		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(source, target);
+		List<MatchedObject> matchList = MatcherIntersectionHelper.matchIntersectingObjects(source, target);
 				
 		return matchList.stream().map( owm->
 			new Pair<>(

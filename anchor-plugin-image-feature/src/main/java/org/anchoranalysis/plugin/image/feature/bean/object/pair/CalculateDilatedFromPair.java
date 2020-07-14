@@ -56,7 +56,7 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
 	private int iterations;
 	private boolean do3D;
 	
-	public static FeatureCalculation<ObjectMask, FeatureInputPairObjects> createFromCache(
+	public static FeatureCalculation<ObjectMask, FeatureInputPairObjects> of(
 		CalculationResolver<FeatureInputPairObjects> resolver,
 		CalcForChild<FeatureInputPairObjects> calcForChild,
 		Extract extract,
@@ -81,7 +81,7 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
 		return resolverForChild.calc(
 			childCacheName,
 			calcInput.getOrCalculate(input),
-			resolver -> CalculateDilation.createFromCache(
+			resolver -> CalculateDilation.of(
 				resolver,
 				iterations,
 				do3D

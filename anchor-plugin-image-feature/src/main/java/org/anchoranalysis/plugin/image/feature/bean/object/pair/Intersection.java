@@ -91,7 +91,7 @@ public class Intersection extends FeatureDeriveFromPair {
 	}
 
 	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) {
-		return CalculatePairIntersectionCommutative.createFromCache(
+		return CalculatePairIntersectionCommutative.of(
 			input,
 			CACHE_NAME_FIRST,
 			CACHE_NAME_SECOND,

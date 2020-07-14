@@ -33,9 +33,9 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -75,10 +75,10 @@ public class SgmnObject extends BinarySegmentation {
 		VoxelBoxWrapper voxelBoxIn,
 		BinarySegmentationParameters params,
 		Optional<ObjectMask> mask
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 	
 		if (mask.isPresent()) {
-			throw new SgmnFailedException("Masks are not supported on this operation");
+			throw new SegmentationFailedException("Masks are not supported on this operation");
 		}
 		
 		// Keep a copy of the original unchanged
@@ -101,7 +101,7 @@ public class SgmnObject extends BinarySegmentation {
 		BinaryVoxelBox<ByteBuffer> voxelBox,
 		VoxelBoxWrapper orig,
 		BinarySegmentationParameters params
-	) throws SgmnFailedException {
+	) throws SegmentationFailedException {
 
 		for( ObjectMask obj : objectsFromVoxelBox(voxelBox)) {
 			
@@ -131,12 +131,12 @@ public class SgmnObject extends BinarySegmentation {
 		}		
 	}
 		
-	private static ObjectCollection objectsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SgmnFailedException {
+	private static ObjectCollection objectsFromVoxelBox( BinaryVoxelBox<ByteBuffer> buffer ) throws SegmentationFailedException {
 		try {
 			CreateFromConnectedComponentsFactory omcCreator = new CreateFromConnectedComponentsFactory();
 			return omcCreator.createConnectedComponents(buffer.duplicate() );
 		} catch (CreateException e) {
-			throw new SgmnFailedException(e);
+			throw new SegmentationFailedException(e);
 		}
 	}
 }

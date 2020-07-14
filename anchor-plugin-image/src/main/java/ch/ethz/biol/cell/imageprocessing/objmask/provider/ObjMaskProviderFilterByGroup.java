@@ -37,8 +37,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -57,7 +57,7 @@ public class ObjMaskProviderFilterByGroup extends ObjMaskProviderFilterBase {
 		Optional<ImageDimensions> dim
 	) throws CreateException {
 
-		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(
+		List<MatchedObject> matchList = MatcherIntersectionHelper.matchIntersectingObjects(
 			objectsGrouped.create(),
 			objects
 		);

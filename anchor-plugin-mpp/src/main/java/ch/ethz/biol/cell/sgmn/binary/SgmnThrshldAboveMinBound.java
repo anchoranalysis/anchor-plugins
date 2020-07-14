@@ -32,10 +32,10 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentationThreshold;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationThreshold;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -61,12 +61,12 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
 
 	@Override
 	public BinaryVoxelBox<ByteBuffer> sgmn(VoxelBoxWrapper voxelBox,
-			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SgmnFailedException {
+			BinarySegmentationParameters params, Optional<ObjectMask> mask) throws SegmentationFailedException {
 		
 		setUpDelegate(
 			voxelBox.any().extent(),
 			params.getRes().orElseThrow( ()->
-				new SgmnFailedException("Image-resolution is required but missing")
+				new SegmentationFailedException("Image-resolution is required but missing")
 			)
 		);
 		

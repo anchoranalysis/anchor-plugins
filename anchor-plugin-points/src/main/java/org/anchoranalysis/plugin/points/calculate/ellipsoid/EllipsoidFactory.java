@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.PointsFromObjMask;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipsoidFitter;
 import lombok.AccessLevel;
@@ -60,7 +60,7 @@ public class EllipsoidFactory {
 	 */
 	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask object, ImageDimensions dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
 		return createMarkEllipsoidLeastSquares(
-			()->PointsFromObjMask.pntsFromMaskOutline(object),
+			()->PointsFromObject.pntsFromMaskOutline(object),
 			dim,
 			suppressZCovariance,
 			shellRad

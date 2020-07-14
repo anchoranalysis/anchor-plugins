@@ -36,16 +36,16 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjectMatchUtilities;
+import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
+import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
 
 // Extends an object as much as it can within the z-slices of a containing object
-public class ObjMaskProviderExtendInZ extends ObjMaskProviderContainer {
+public class ObjMaskProviderExtendInZ extends ObjectCollectionProviderWithContainer {
 
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objectsSource) throws CreateException {
 			
-		List<MatchedObject> matchList = ObjectMatchUtilities.matchIntersectingObjects(
+		List<MatchedObject> matchList = MatcherIntersectionHelper.matchIntersectingObjects(
 			containerRequired(),
 			objectsSource.duplicate()	// Duplicated so as to avoid cahanging the original
 		);

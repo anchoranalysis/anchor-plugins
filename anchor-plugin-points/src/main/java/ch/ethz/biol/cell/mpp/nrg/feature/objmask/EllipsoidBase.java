@@ -56,7 +56,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 			return 1.0;
 		}
 		
-		MarkEllipsoid me = CalculateEllipsoidLeastSquares.createFromCache(
+		MarkEllipsoid me = CalculateEllipsoidLeastSquares.of(
 			input,
 			suppressZ
 		);

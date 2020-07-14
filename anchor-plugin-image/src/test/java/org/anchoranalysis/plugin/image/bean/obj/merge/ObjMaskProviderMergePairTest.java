@@ -42,6 +42,7 @@ import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.object.provider.merge.MergePairs;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -85,14 +86,14 @@ public class ObjMaskProviderMergePairTest {
 		);
 	}
 	
-	private static ObjMaskProviderMergePair createMergePair(
+	private static MergePairs createMergePair(
 		ObjectCollection objects,
 		int threshold
 	) throws CreateException {
 		
 		Logger logger = LoggingFixture.suppressedLogErrorReporter();
 		
-		ObjMaskProviderMergePair provider = new ObjMaskProviderMergePair();
+		MergePairs provider = new MergePairs();
 		
 		Feature<FeatureInputPairObjects> feature = new Minimum(
 			MockFeatureWithCalculationFixture.createMockFeatureWithCalculation()

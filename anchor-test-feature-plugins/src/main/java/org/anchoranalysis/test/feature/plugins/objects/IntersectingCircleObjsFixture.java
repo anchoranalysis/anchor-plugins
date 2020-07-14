@@ -64,7 +64,7 @@ public class IntersectingCircleObjsFixture {
 		ObjectCollection second = running.generateMultipleCircles(numNotIntersecting, 3);
 		
 		// Make sure we haven't generated so many we've run out of the scene
-		assert( CircleObjMaskFixture.sceneContains(running.getCenter()));
+		assert( CircleObjectFixture.sceneContains(running.getCenter()));
 		
 		return ObjectCollectionFactory.from(first, second);
 	}
@@ -97,7 +97,7 @@ public class IntersectingCircleObjsFixture {
 		}
 
 		private ObjectMask generateCircle(double factor) {
-			ObjectMask object = CircleObjMaskFixture.circleAt(center, radius);
+			ObjectMask object = CircleObjectFixture.circleAt(center, radius);
 			shift(factor);
 			
 			if (!sameSize) {
