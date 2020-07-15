@@ -45,7 +45,7 @@ import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import lombok.Getter;
 import lombok.Setter;
 
-// Treats the entire binaryimgchnl as an object, and sees if it passes an ObjMaskFilter
+// Treats the entire binaryimgchnl as an object, and sees if it passes an {@link ObjectFilter}
 public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProviderChnlSource {
 
 	// START BEAN PROPERTIES

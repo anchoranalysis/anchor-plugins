@@ -83,7 +83,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		
 		callBefore(chnlOutline.getDimensions().getRes(), re);
 		
-		objectOutline = createObjMaskForPoint(root, chnlOutline);
+		objectOutline = createObjectForPoint(root, chnlOutline);
 			
 		objectFilled = objectForFilled(root, chnlFilled);
 		callAfter(root, chnlOutline.getDimensions().getRes(), re);
@@ -116,16 +116,16 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	
 	private void callBefore(ImageResolution res, RandomNumberGenerator re) throws TraverseOutlineException {
 		try {
-			visitScheduler.beforeCreateObjMask(re, res);
+			visitScheduler.beforeCreateObject(re, res);
 		} catch (InitException e1) {
-			throw new TraverseOutlineException("Failure to call beforeCreateObjMask on visitScheduler", e1);
+			throw new TraverseOutlineException("Failure to call beforeCreateObject on visitScheduler", e1);
 		}
 	}
 	
 	
 	private ObjectMask objectForFilled(Point3i root, BinaryChnl chnlFilled) throws TraverseOutlineException {
 		// Important, so we can use the contains function later
-		return createObjMaskForPoint(root, chnlFilled ).mapBoundingBox( bbox->
+		return createObjectForPoint(root, chnlFilled ).mapBoundingBox( bbox->
 			bbox.shiftTo( new Point3i(0,0,0) )
 		);
 	}
@@ -141,9 +141,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			.cornerMin()
 		);
 		try {
-			visitScheduler.afterCreateObjMask(rootRelToMask, res, re);
+			visitScheduler.afterCreateObject(rootRelToMask, res, re);
 		} catch (InitException e) {
-			throw new TraverseOutlineException("Cannot call afterCreateObjMask on visitScheduler", e);
+			throw new TraverseOutlineException("Cannot call afterCreateObject on visitScheduler", e);
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}		
 	}
 	
-	private ObjectMask createObjMaskForPoint( Point3i root, BinaryChnl chnl ) throws TraverseOutlineException {
+	private ObjectMask createObjectForPoint( Point3i root, BinaryChnl chnl ) throws TraverseOutlineException {
 				
 		try {
 			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()).orElseThrow( ()->

@@ -51,7 +51,7 @@ import lombok.Setter;
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSource {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjectsSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

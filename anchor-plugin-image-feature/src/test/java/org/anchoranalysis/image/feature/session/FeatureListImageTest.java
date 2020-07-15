@@ -61,7 +61,7 @@ import org.junit.Test;
  */
 public class FeatureListImageTest {
 	
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 	
 	private static NRGStackWithParams NRG_STACK = NRGStackFixture.create(true, true);
 	

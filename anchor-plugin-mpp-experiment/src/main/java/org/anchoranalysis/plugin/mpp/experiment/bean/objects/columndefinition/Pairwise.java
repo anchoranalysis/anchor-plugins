@@ -114,12 +114,12 @@ public class Pairwise extends ColumnDefinition {
 	}
 	
 	@Override
-	public ObjectCollectionWithProperties findObjectsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjs ) throws OperationFailedException {
+	public ObjectCollectionWithProperties findObjectsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjects ) throws OperationFailedException {
 		
 		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
 		
-		ObjectMask object1 = indicesFirst.findObjectFromCSVRow(allObjs, csvRow);
-		ObjectMask object2 = indicesSecond.findObjectFromCSVRow(allObjs, csvRow);
+		ObjectMask object1 = indicesFirst.findObjectFromCSVRow(allObjects, csvRow);
+		ObjectMask object2 = indicesSecond.findObjectFromCSVRow(allObjects, csvRow);
 		
 		if (object1.equals(object2)) {
 			throw new OperationFailedException(

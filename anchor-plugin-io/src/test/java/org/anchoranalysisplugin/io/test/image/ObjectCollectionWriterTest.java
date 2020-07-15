@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Writes an ObjMaskCollection to the file-system, then reads it back again,
+ * Writes an object-collection to the file-system, then reads it back again,
  *   and makes sure it is identical
  *   
  * @author feehano
@@ -74,10 +74,10 @@ public class ObjectCollectionWriterTest {
 	private void testWriteRead(boolean hdf5) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		Path path = folder.getRoot().toPath();
 		
-		ObjectCollection objects = fixture.createMockObjs(2, 7);
-		writeObjs(objects, path, generator(hdf5,false) );
+		ObjectCollection objects = fixture.createMockObjects(2, 7);
+		writeObjects(objects, path, generator(hdf5,false) );
 		
-		ObjectCollection objectsRead = readObjs(
+		ObjectCollection objectsRead = readObjects(
 			outputPathExpected(hdf5, path)
 		);
 		
@@ -86,9 +86,9 @@ public class ObjectCollectionWriterTest {
 	
 	private static Path outputPathExpected(boolean hdf5, Path path) {
 		if (hdf5) {
-			return path.resolve("objs.h5");
+			return path.resolve("objects.h5");
 		} else {
-			return path.resolve("objs");
+			return path.resolve("objects");
 		}
 	}
 

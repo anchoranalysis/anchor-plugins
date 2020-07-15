@@ -56,7 +56,7 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 	}
 	
 	private void assignTo( ResolvedObject rom, int index ) {
-		delegate.get(index).assignObj(rom);
+		delegate.get(index).assignObject(rom);
 	}
 	
 	
@@ -104,7 +104,7 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 		for( int i=0; i<delegate.size(); i++ ) {
 			ResolvedEllipsoid re = delegate.get(i); 
 			
-			if( re.getObjMask().containsIgnoreZ(rom.getCenterInt())) {
+			if( re.getObject().containsIgnoreZ(rom.getCenterInt())) {
 				
 				assignTo( rom, i);
 				
@@ -170,13 +170,13 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 	}
 		
 	/** Create merged objects for those included */
-	public ObjectCollection createMergedObjsForIncluded() throws CreateException {
+	public ObjectCollection createMergedObjectsForIncluded() throws CreateException {
 		try {
 			return ObjectCollectionFactory.filterAndMapFrom(
 				this,
 				ResolvedEllipsoid::isIncluded,
 				re -> deriveSingleObject(
-					re.getAssignedObjs().createObjects()
+					re.getAssignedObjects().createObjects()
 				)
 			);
 		} catch (OperationFailedException e) {
@@ -194,7 +194,7 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 	
 	public void excludeEmptyEllipsoids() {
 		for( ResolvedEllipsoid re : this ) {
-			if( re.getAssignedObjs().size()==0) {
+			if( re.getAssignedObjects().size()==0) {
 				re.setAsExcluded();
 			}
 		}
@@ -204,8 +204,8 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 	// Assigns all objects that are contained inside the ellipsoids, so long as they are exclusively in a single ellipsoid
 	//   If they are in more than one ellipsoid, we ignore the object, and exclude each ellipsoid
 	//   Objects are removed from the list, if they are assigned, or belong to multiple objects
-	public void assignContainedWithin( ResolvedObjectList listObjs )	{
-		Iterator<ResolvedObject> itr = listObjs.iterator();
+	public void assignContainedWithin( ResolvedObjectList objects )	{
+		Iterator<ResolvedObject> itr = objects.iterator();
 		while( itr.hasNext() ) {
 			
 			ResolvedObject rom = itr.next();
@@ -222,8 +222,8 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 	// Assigns all objects that are contained inside the ellipsoids, so long as they are exclusively in a single ellipsoid
 	//   If they are in more than one ellipsoid, we ignore the object, and exclude each ellipsoid
 	//   Objects are removed from the list, if they are assigned, or belong to multiple objects
-	public void assignContainedWithinMIP( ResolvedObjectList listObjs )	{
-		Iterator<ResolvedObject> itr = listObjs.iterator();
+	public void assignContainedWithinMIP( ResolvedObjectList objects )	{
+		Iterator<ResolvedObject> itr = objects.iterator();
 		while( itr.hasNext() ) {
 			
 			ResolvedObject rom = itr.next();
@@ -306,13 +306,13 @@ public class ResolvedEllipsoidList implements Iterable<ResolvedEllipsoid> {
 		private final int index;
 	}
 		
-	public boolean assignClosestEllipsoids( ResolvedObjectList listObjs, double maxDist ) {
+	public boolean assignClosestEllipsoids( ResolvedObjectList objects, double maxDist ) {
 		
 		boolean assignedAtLeastOne = false;
 		
 		List<ResolvedObjectForAssignment> listForAssignment = new ArrayList<>();
 		
-		Iterator<ResolvedObject> itr = listObjs.iterator();
+		Iterator<ResolvedObject> itr = objects.iterator();
 		while( itr.hasNext() ) {
 			ResolvedObject rom = itr.next();
 		

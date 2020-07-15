@@ -62,8 +62,8 @@ public class MergeToIncreaseObjectFeature extends MergeWithFeature {
 		
 		FeatureCalculatorSingle<FeatureInputSingleObject> calculator = featureEvaluator.createAndStartSession();
 		
-		return om -> calculator.calc(
-			new FeatureInputSingleObject(om)
+		return object -> calculator.calc(
+			new FeatureInputSingleObject(object)
 		);
 	}
 	

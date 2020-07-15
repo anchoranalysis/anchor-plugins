@@ -33,25 +33,19 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class CountEqual extends SpecificNRGChannelBase {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private int value = BinaryValues.getDefault().getOnInt();
 	// END BEAN PROPERTIES
 
 	@Override
-	protected double calcWithChannel(ObjectMask obj, Channel chnl)
+	protected double calcWithChannel(ObjectMask object, Channel chnl)
 			throws FeatureCalcException {
-		return chnl.getVoxelBox().any().countEqualMask(value, obj);
+		return chnl.getVoxelBox().any().countEqualMask(value, object);
 	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
 }

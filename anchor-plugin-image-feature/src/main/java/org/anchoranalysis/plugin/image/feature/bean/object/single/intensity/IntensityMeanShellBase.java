@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -108,16 +107,16 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 	}
 	
 	private ObjectMask createShell( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
-		FeatureCalculation<ObjectMask,FeatureInputSingleObject> ccShellObjMask = CalculateShellObjectMask.of(
-			input.resolver(),
-			iterationsDilation,
-			getIterationsErosion(),
-			0,
-			isDo3D(),
-			inverse	
+		return input.calc(
+			CalculateShellObjectMask.of(
+				input.resolver(),
+				iterationsDilation,
+				getIterationsErosion(),
+				0,
+				isDo3D(),
+				inverse	
+			)
 		);
-		
-		return input.calc(ccShellObjMask);
 	}
 	
 	private Optional<ObjectMask> intersectWithNRGMask( ObjectMask object, NRGStack nrgStack ) {

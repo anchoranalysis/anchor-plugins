@@ -43,11 +43,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
-
 	
 	// START BEAN PROPERTIES
 	/**
-	 * ID for the particular ObjMaskCollection
+	 * ID for the particular object-collection
 	 */
 	@BeanField @Getter @Setter
 	private String id="";
@@ -56,7 +55,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 	private double valueNoObjects = Double.NaN;
 	// END BEAN PROPERTIES
 
-	private ObjectCollection searchObjs;
+	private ObjectCollection searchObjects;
 	
 	@Override
 	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
@@ -64,7 +63,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 		
 		ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
 		try {
-			this.searchObjs = imageInit.getObjMaskCollection().getException(id);
+			this.searchObjects = imageInit.getObjectCollection().getException(id);
 		} catch (NamedProviderGetException e) {
 			throw new InitException(e.summarize());
 		}
@@ -75,14 +74,14 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 	public double calc(SessionInput<FeatureInputSingleObject> input)
 			throws FeatureCalcException {
 
-		if (getSearchObjs().size()==0) {
+		if (getSearchObjects().isEmpty()) {
 			return getValueNoObjects();
 		}
 		
 		return valueFor(
 			input,
 			input.resolver().search(
-				new CalculateIntersectingObjects(id, searchObjs)
+				new CalculateIntersectingObjects(id, searchObjects)
 			)
 		);
 	}
@@ -92,7 +91,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 		ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting
 	) throws FeatureCalcException;
 
-	protected ObjectCollection getSearchObjs() {
-		return searchObjs;
+	protected ObjectCollection getSearchObjects() {
+		return searchObjects;
 	}
 }

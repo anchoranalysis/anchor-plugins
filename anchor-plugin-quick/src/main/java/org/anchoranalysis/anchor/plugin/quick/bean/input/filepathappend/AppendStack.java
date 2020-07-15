@@ -49,7 +49,7 @@ public class AppendStack extends FilePathBaseAppendToManagerWithFileID {
 	@Override
 	protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
 			throws BeanMisconfiguredException {
-		return inputManager.getListAppendStack();
+		return inputManager.getAppendStack();
 	}
 	
 	@Override

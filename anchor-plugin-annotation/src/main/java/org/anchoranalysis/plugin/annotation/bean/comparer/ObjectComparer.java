@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -60,7 +60,7 @@ public class ObjectComparer extends Comparer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path objectsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
@@ -70,7 +70,7 @@ public class ObjectComparer extends Comparer {
 			}
 			
 			return new Found<>(
-				ObjectMaskCollectionReader.createFromPath(objectsPath)
+				ObjectCollectionReader.createFromPath(objectsPath)
 			);
 			
 		} catch (AnchorIOException | DeserializationFailedException e) {

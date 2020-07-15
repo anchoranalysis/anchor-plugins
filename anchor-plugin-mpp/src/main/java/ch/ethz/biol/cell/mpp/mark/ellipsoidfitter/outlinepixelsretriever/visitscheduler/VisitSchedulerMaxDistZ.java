@@ -53,7 +53,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	private double maxZRslv;
 	
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		try {
 			maxZRslv = maxDistProposer.propose(re, res);
@@ -73,7 +73,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.root = root;
 	}
 

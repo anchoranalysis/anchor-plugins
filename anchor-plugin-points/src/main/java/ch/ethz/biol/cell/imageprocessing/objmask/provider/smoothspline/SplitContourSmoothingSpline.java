@@ -73,7 +73,7 @@ public class SplitContourSmoothingSpline {
 		FitSplinesExtract fitter
 	) throws OperationFailedException {
 			
-		List<Contour> contoursTraversed = CVFindContours.contourForObjMask(object);
+		List<Contour> contoursTraversed = CVFindContours.contoursForObject(object);
 
 		ContourList out = new ContourList();
 		

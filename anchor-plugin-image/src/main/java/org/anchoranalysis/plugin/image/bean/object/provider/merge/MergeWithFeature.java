@@ -83,9 +83,9 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objectsSource) throws CreateException {
 		
-		Optional<ObjectCollection> saveObjs = OptionalFactory.create(objectsSave);
-		saveObjs.ifPresent( so
-			->so.addAll(objectsSource)
+		Optional<ObjectCollection> saveObjects = OptionalFactory.create(objectsSave);
+		saveObjects.ifPresent( objects ->
+			objects.addAll(objectsSource)
 		);
 
 
@@ -94,7 +94,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 		try {
 			ObjectCollection merged = mergeMultiplex(
 				objectsSource,
-				a -> mergeConnectedComponents( a, saveObjs )
+				a -> mergeConnectedComponents( a, saveObjects )
 			);
 					
 			getLogger().messageLogger().logFormatted("There are %d final objects", merged.size() );
@@ -123,7 +123,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 	 * Tries to merge objects
 	 * 
 	 * @param objects objects to be merged
-	 * @param saveObjects if non-NULL, all merged objects are added to saveObjs
+	 * @param saveObjects if defined, all merged objects are added to this collection
 	 * @return
 	 * @throws OperationFailedException
 	 */
@@ -159,11 +159,11 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 	 * Search for suitable merges in graph, and merges them
 	 * 
 	 * @param graph the graph containing objects that can maybe be merged
-	 * @param saveObjs if defined, all merged objects are added to saveObjs
+	 * @param saveObjects if defined, all merged objects are added to this collection
 	 * @return
 	 * @throws OperationFailedException
 	 */
-	private boolean tryMerge( MergeGraph graph, Optional<ObjectCollection> saveObjs ) throws OperationFailedException {
+	private boolean tryMerge( MergeGraph graph, Optional<ObjectCollection> saveObjects ) throws OperationFailedException {
 		
 		// Find the edge with the best improvement
 		EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
@@ -173,7 +173,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 		}
 
 		// When we decide to merge, we save the merged object
-		saveObjs.ifPresent( so->
+		saveObjects.ifPresent( so->
 			so.add(
 				edgeToMerge.getEdge().getOmWithFeature().getObject() 
 			)
@@ -199,7 +199,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 				isPlayloadUsed()
 			);
 						
-			graph.addObjsToGraph(objects);
+			graph.addObjectsToGraph(objects);
 				
 			return graph;
 			

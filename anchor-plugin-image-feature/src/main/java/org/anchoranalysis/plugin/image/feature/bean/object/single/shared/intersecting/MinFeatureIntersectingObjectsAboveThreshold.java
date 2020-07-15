@@ -30,7 +30,7 @@ import java.util.List;
 
 
 /**
- * 1. Finds all objects from an ObjMaskCollection whose bounding-boxes intersect with a particular object.
+ * 1. Finds all objects from an object-collection whose bounding-boxes intersect with a particular object.
  * 2. Calculates a pairwise-feature
  * 3. Returns the maximum 
  * 

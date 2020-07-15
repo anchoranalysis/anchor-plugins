@@ -79,15 +79,15 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 			throw new CreateException(e);
 		}
 
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(rslvMinNum);
+		CreateFromConnectedComponentsFactory createObjects = new CreateFromConnectedComponentsFactory(rslvMinNum);
 		if (inverted) {
 			BinaryChnl biInverted = new BinaryChnl(
 				bi.getChannel(),
 				bi.getBinaryValues().createInverted()
 			);	// In case we've inverted the binary values
-			return createObjMasks.createConnectedComponents(biInverted);
+			return createObjects.createConnectedComponents(biInverted);
 		} else {
-			return createObjMasks.createConnectedComponents(bi);
+			return createObjects.createConnectedComponents(bi);
 		}
 	}
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
 // Note behaviour is undefined when objects overlap with each other. An ID of either object arbitrarily will be assigned.
-public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
+public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
 
 	@Override
 	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {

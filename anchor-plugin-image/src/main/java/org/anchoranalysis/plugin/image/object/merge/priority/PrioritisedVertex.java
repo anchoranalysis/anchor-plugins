@@ -47,13 +47,13 @@ public class PrioritisedVertex {
 	/**
 	 * Constructor
 	 * 
-	 * @param obj object to form the vertex
+	 * @param object object to form the vertex
 	 * @param payload associated payload with the object in the vertex
 	 * @param priority a priority to determine the order of merges (higher value implies greater priority)
 	 * @param considerForMerge iff FALSE, these two objects object may not be merged, and priority is irrelevant.
 	 */
-	public PrioritisedVertex( ObjectMask obj, double payload, double priority, boolean considerForMerge ) {
-		this.vertex = new ObjectVertex(obj, payload);
+	public PrioritisedVertex( ObjectMask object, double payload, double priority, boolean considerForMerge ) {
+		this.vertex = new ObjectVertex(object, payload);
 		this.priority = priority;
 		this.considerForMerge = considerForMerge;
 	}

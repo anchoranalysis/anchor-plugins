@@ -51,9 +51,9 @@ class ExportOutputter {
 		"nrgStack/nrgStack_00.tif",
 		"nrgStack/nrgStack_01.tif",
 		"nrgStack/nrgStack_02.tif",
-		"manifest.ser.xml",
 		"nrgStackParams.xml",
 		"grouped/arbitraryGroup/featuresAggregatedGroup.xml",
-		"objMaskCollection/objsTest.h5"
+		String.format("objects/%s.h5", MultiInputFixture.OBJECTS_NAME),
+		"manifest.ser.xml"
 	};
 }

@@ -47,25 +47,24 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class BinaryChnlComparer extends Comparer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FilePathGenerator filePathGenerator;
 	
-	@BeanField @DefaultInstance
+	@BeanField @DefaultInstance @Getter @Setter
 	private RasterReader rasterReader;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean invert=false;
 	// END BEAN PROPERTIES
 
-	public BinaryChnlComparer() {
-		super();
-	}
-	
 	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 		
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
@@ -81,7 +80,7 @@ public class BinaryChnlComparer extends Comparer {
 			);
 			
 			return new Found<>(
-				convertToObjs( chnl )
+				convertToObjects( chnl )
 			);
 			
 		} catch (AnchorIOException | RasterIOException e) {
@@ -97,31 +96,7 @@ public class BinaryChnlComparer extends Comparer {
 		}
 	}
 	
-	private static ObjectCollection convertToObjs( BinaryChnl chnl ) {
+	private static ObjectCollection convertToObjects( BinaryChnl chnl ) {
 		return ObjectCollectionFactory.from(chnl);
-	}
-	
-	public FilePathGenerator getFilePathGenerator() {
-		return filePathGenerator;
-	}
-
-	public void setFilePathGenerator(FilePathGenerator filePathGenerator) {
-		this.filePathGenerator = filePathGenerator;
-	}
-
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
-
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
-
-	public boolean isInvert() {
-		return invert;
-	}
-
-	public void setInvert(boolean invert) {
-		this.invert = invert;
 	}
 }

@@ -28,22 +28,22 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjsFixture;
+import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
 class MultiInputFixture {
 
-	public static final String OBJS_NAME = "objsTest";
+	public static final String OBJECTS_NAME = "objectsTest";
 	
-	public static final int NUM_INTERSECTING_OBJECTS = 4;
-	public static final int NUM_NOT_INTERSECTING_OBJECTS = 2;
+	public static final int NUMBER_INTERSECTING_OBJECTS = 4;
+	public static final int NUMBER_NOT_INTERSECTING_OBJECTS = 2;
 	
 	/** A number of unique pairs of intersecting objects
-	 *  (known from the output of {@link IntersectingCircleObjsFixture.generateIntersectingObjs} with the parameterization above.
+	 *  (known from the output of {@link IntersectingCircleObjectsFixture.generateIntersectingObjects} with the parameterization above.
 	 */
-	public static final int NUM_PAIRS_INTERSECTING = 3;
+	public static final int NUMBER_PAIRS_INTERSECTING = 3;
 	
 	/**
-	 * This creates a MultiInput with an object-collection OBJS_NAME
+	 * This creates a MultiInput with an object-collection {@code OBJECTS_NAME}
 	 * 
 	 * <p>It contains 6 unique objects, 4 of whom intersect, and 2 who don't intersect at all.</p>
 	 * <p>Among the four who intersect, there are 3 intersections.</p>
@@ -62,14 +62,13 @@ class MultiInputFixture {
 			)
 		);
 		input.objects().add(
-			OBJS_NAME,
-			() -> IntersectingCircleObjsFixture.generateIntersectingObjs(
-				NUM_INTERSECTING_OBJECTS,
-				NUM_NOT_INTERSECTING_OBJECTS,
+			OBJECTS_NAME,
+			() -> IntersectingCircleObjectsFixture.generateIntersectingObjects(
+				NUMBER_INTERSECTING_OBJECTS,
+				NUMBER_NOT_INTERSECTING_OBJECTS,
 				false
 			)
 		);
-		
 		return input;
 	}
 }

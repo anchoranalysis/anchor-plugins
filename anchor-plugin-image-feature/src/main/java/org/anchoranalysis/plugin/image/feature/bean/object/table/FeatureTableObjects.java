@@ -56,8 +56,8 @@ public abstract class FeatureTableObjects<T extends FeatureInput> extends Anchor
 	 * Creates features that will be applied on the objects. Features should always be duplicated from the input list.
 	 * 
 	 * @param list
-	 * @param storeFactory TODO
-	 * @param suppressErrors TODO
+	 * @param storeFactory
+	 * @param suppressErrors
 	 * @return
 	 * @throws CreateException
 	 */

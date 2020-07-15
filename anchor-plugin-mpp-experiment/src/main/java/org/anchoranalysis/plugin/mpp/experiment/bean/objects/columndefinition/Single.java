@@ -86,12 +86,12 @@ public class Single extends ColumnDefinition {
 	@Override
 	public ObjectCollectionWithProperties findObjectsMatchingRow(
 		CSVRow csvRow,
-		ObjectCollectionRTree allObjs
+		ObjectCollectionRTree allObjects
 	) throws OperationFailedException {
 
 		ObjectCollectionWithProperties objects = new ObjectCollectionWithProperties();
 		objects.add(
-			indices.findObjectFromCSVRow(allObjs, csvRow)
+			indices.findObjectFromCSVRow(allObjects, csvRow)
 		);
 		return objects;
 	}

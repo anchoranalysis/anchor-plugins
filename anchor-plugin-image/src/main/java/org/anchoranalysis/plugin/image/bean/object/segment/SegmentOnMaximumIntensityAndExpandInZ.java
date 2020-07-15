@@ -93,8 +93,8 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 	}
 	
 	private boolean isAny3d(ObjectCollection objects) {
-		return objects.stream().anyMatch(om->
-			om.getVoxelBox().extent().getZ() >1
+		return objects.stream().anyMatch(objectMask ->
+			objectMask.getVoxelBox().extent().getZ() >1
 		);
 	}
 	

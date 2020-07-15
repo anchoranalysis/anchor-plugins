@@ -43,25 +43,27 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
+import lombok.Getter;
+import lombok.Setter;
 
 // Applies a points fitter on the convex hull of some objects
 // Only works in 2D for now
 public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private PointsFitterToMark pointsFitter;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkProvider markProvider;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRatioPntsInsideRegion;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private RegionMap regionMap;
 		
-	@BeanField
+	@BeanField @Getter @Setter
 	private int regionID = 0;
 	// END BEAN PROPERTIES
 	
@@ -106,17 +108,17 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		RegionMembership rm = regionMap.membershipForIndex(regionID);
 		byte flags = rm.flags();
 		
-		int cnt = 0;
+		int count = 0;
 		for( Point3f pnt : pnts ) {
 			Point3d pntD = new Point3d( pnt );
 			byte membership = m.evalPntInside(pntD);
 			
 			if (rm.isMemberFlag(membership, flags)) {
-				cnt++;
+				count++;
 			}
 		}
 		
-		return ((double) cnt) / pnts.size();
+		return ((double) count) / pnts.size();
 	}
 	
 	private List<Point3f> pointsForFitter() throws CreateException {
@@ -124,7 +126,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		try {
 			List<Point2i> selectedPoints = ConvexHullUtilities.convexHull2D(
 				ConvexHullUtilities.pointsOnAllOutlines(
-					pointsFitter.createObjs()
+					pointsFitter.createObjects()
 				),
 				pointsFitter.getMinNumPnts()
 			);
@@ -133,45 +135,5 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-	
-	public MarkProvider getMarkProvider() {
-		return markProvider;
-	}
-
-	public void setMarkProvider(MarkProvider markProvider) {
-		this.markProvider = markProvider;
-	}
-
-	public double getMinRatioPntsInsideRegion() {
-		return minRatioPntsInsideRegion;
-	}
-
-	public void setMinRatioPntsInsideRegion(double minRatioPntsInsideRegion) {
-		this.minRatioPntsInsideRegion = minRatioPntsInsideRegion;
-	}
-
-	public RegionMap getRegionMap() {
-		return regionMap;
-	}
-
-	public void setRegionMap(RegionMap regionMap) {
-		this.regionMap = regionMap;
-	}
-
-	public PointsFitterToMark getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitterToMark pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-		
-	public int getRegionID() {
-		return regionID;
-	}
-
-	public void setRegionID(int regionID) {
-		this.regionID = regionID;
 	}
 }

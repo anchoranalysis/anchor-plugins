@@ -36,7 +36,7 @@ import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 
 public class FeatureListFixtureMPP {
 
-	private static TestLoader loader = TestLoader.createFromMavenWorkingDir();
+	private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 	
 	public static FeatureList<FeatureInputMark> mark() throws CreateException {
 		return FeaturesFromXmlFixture.createFeatureList("markFeatureList.xml", loader);

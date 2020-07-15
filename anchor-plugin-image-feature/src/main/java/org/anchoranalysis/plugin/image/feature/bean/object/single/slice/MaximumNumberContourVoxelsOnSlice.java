@@ -45,10 +45,10 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 	
 	@Override
 	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		ObjectMask obj = input.get().getObject();
+		ObjectMask object = input.get().getObject();
 
 		return numVoxelsOnContour(
-			sliceWithMaxNumVoxels(obj)
+			sliceWithMaxNumVoxels(object)
 		);
 	}
 	

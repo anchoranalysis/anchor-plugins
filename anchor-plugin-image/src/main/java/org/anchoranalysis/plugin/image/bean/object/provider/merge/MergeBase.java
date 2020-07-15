@@ -48,6 +48,7 @@ import lombok.Setter;
 
 /** 
  * A base class for algorithms that merge object-masks
+ *
  **/
 public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 	
@@ -104,7 +105,6 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 	}
 	
 	private static ObjectCollection mergeAll( MergeObjects merger, ObjectCollection objects) throws OperationFailedException {
-		// TODO is this extra ObjectCollection constructor needed?
 		return ObjectCollectionFactory.from(
 			merger.mergeObjects(objects)	
 		);

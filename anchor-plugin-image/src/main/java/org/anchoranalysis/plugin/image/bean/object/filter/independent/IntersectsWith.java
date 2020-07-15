@@ -54,28 +54,28 @@ public class IntersectsWith extends ObjectFilterPredicate {
 	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
-	private ObjectCollection intersectWithAnyOneObjs;
+	private ObjectCollection intersectWithAnyOneObject;
 
 	@Override
 	protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter) throws OperationFailedException {
 		super.start(dim, objectsToFilter);
 		try {
-			intersectWithAnyOneObjs = objects.create();
+			intersectWithAnyOneObject = objects.create();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}
 	}
 	
 	@Override
-	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
-		return intersectWithAnyOneObjs.stream().anyMatch(obj->
-			obj.hasIntersectingVoxels(object)
+	protected boolean match(ObjectMask objectToIntersectWith, Optional<ImageDimensions> dim) throws OperationFailedException {
+		return intersectWithAnyOneObject.stream().anyMatch(objectMask ->
+			objectMask.hasIntersectingVoxels(objectToIntersectWith)
 		);
 	}
 
 	@Override
 	protected void end() throws OperationFailedException {
 		super.end();
-		intersectWithAnyOneObjs = null;
+		intersectWithAnyOneObject = null;
 	}
 }

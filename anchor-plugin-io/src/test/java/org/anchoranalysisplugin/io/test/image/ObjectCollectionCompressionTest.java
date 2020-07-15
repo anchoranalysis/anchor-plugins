@@ -44,10 +44,10 @@ import org.junit.rules.TemporaryFolder;
 public class ObjectCollectionCompressionTest {
 		
 	// An uncompressed obj-mask-collection
-	private static final String PATH_UNCOMPRESSED_OBJS = "objsUncompressed/objs.h5";
+	private static final String PATH_UNCOMPRESSED_OBJECTS = "objectsUncompressed/objects.h5";
 	
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
+		TestLoader.createFromMavenWorkingDirectory()
 	);
 	
 	@Rule
@@ -56,7 +56,7 @@ public class ObjectCollectionCompressionTest {
 	@Test
 	public void testCompression() throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		
-		ObjectCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJS);
+		ObjectCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJECTS);
 		
 		ObjectCollectionWithSize compressed = calcCompressed(
 			uncompressed.getObjects(),
@@ -74,7 +74,7 @@ public class ObjectCollectionCompressionTest {
 	private ObjectCollectionWithSize calcUncompressed(String pathIn) {
 				
 		// Read the object, and write it again, this time compressed
-		ObjectCollection objects = testLoader.openObjsFromTestPath(pathIn);
+		ObjectCollection objects = testLoader.openObjectsFromTestPath(pathIn);
 		
 		long size = fileSizeBytes(
 			testLoader.getTestLoader().resolveTestPath(pathIn)
@@ -105,8 +105,8 @@ public class ObjectCollectionCompressionTest {
 		Path pathOut
 	) throws SetOperationFailedException, DeserializationFailedException, BindFailedException {
 		// Write the objects to the file-system and read again
-		writeObjs(objects, pathRoot, generator(true,true) );
-		return readObjs(pathOut);		
+		writeObjects(objects, pathRoot, generator(true,true) );
+		return readObjects(pathOut);		
 	}
 	
 	private static long fileSizeBytes( Path testPath ) {

@@ -42,12 +42,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 class ObjectsDistanceMatrixGenerator extends CSVGenerator {
 
-	private ObjectCollectionDistanceMatrix distanceMatrix;
-	private int numDecimalPlaces;
+	private static final String MANIFEST_FUNCTION = "objectCollectionDistanceMatrix";
+	
+	private final ObjectCollectionDistanceMatrix distanceMatrix;
+	private final int numDecimalPlaces;
 	
 	public ObjectsDistanceMatrixGenerator(
 			ObjectCollectionDistanceMatrix distanceMatrix, int numDecimalPlaces ) {
-		super("objMaskCollectionDistanceMatrix");
+		super(MANIFEST_FUNCTION);
 		this.distanceMatrix = distanceMatrix;
 		this.numDecimalPlaces = numDecimalPlaces;
 	}
@@ -67,7 +69,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator {
 			// The descriptions of objects1 go in the first column
 			List<String> column0 = descriptionFromObjects( distanceMatrix.getObjects1() );
 			
-			for( int i=0; i<distanceMatrix.sizeObjs1(); i++ ) {
+			for( int i=0; i<distanceMatrix.sizeObjects1(); i++ ) {
 				List<TypedValue> row = rowFromDistanceMatrix(i);
 				
 				// Insert the description
@@ -83,7 +85,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator {
 	private List<TypedValue> rowFromDistanceMatrix( int indx1 ) {
 		List<TypedValue> out = new ArrayList<>();
 		
-		for( int indx2=0; indx2<distanceMatrix.sizeObjs2(); indx2++) {
+		for( int indx2=0; indx2<distanceMatrix.sizeObjects2(); indx2++) {
 			out.add( new TypedValue( distanceMatrix.getDistance(indx1, indx2), numDecimalPlaces) );
 		}
 		
@@ -93,8 +95,8 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator {
 	
 	// A description of each object in a collection
 	private static List<String> descriptionFromObjects( ObjectCollection objects ) {
-		return objects.stream().mapToList( om->
-			om.centerOfGravity().toString()
+		return objects.stream().mapToList( objectMask ->
+			objectMask.centerOfGravity().toString()
 		);
 	}
 }

@@ -58,13 +58,13 @@ class ObjectsToCompareFactory {
 
 		// Both objects need to be found
 		return OptionalUtilities.mapBoth(
-			createObjs(true, "leftObj", addAnnotation, input, dim, context),
-			createObjs(false,"rightObj", addAnnotation, input, dim, context),
+			createObjects(true, "leftObj", addAnnotation, input, dim, context),
+			createObjects(false,"rightObj", addAnnotation, input, dim, context),
 			ObjectsToCompare::new
 		);
 	}
 	
-	private static Optional<ObjectCollection> createObjs(
+	private static Optional<ObjectCollection> createObjects(
 		boolean left,
 		String objName,
 		IAddAnnotation<?> addAnnotation,
@@ -96,7 +96,7 @@ class ObjectsToCompareFactory {
 		boolean debugMode
 	) throws JobExecutionException {
 		try {
-			return input.getComparerMultiplex(left).createObjs(
+			return input.getComparerMultiplex(left).createObjects(
 				input.pathForBindingRequired(),
 				dim,
 				debugMode

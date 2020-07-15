@@ -60,13 +60,13 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
 	
 	@Override
 	public ObjectCollection segment(Channel channel, Optional<ObjectMask> object, Optional<SeedCollection> seeds, SegmentChannelIntoObjects upstreamSegmentation) throws SegmentationFailedException {
-		return filterObjs(
+		return filterObjects(
 			upstreamSegmentation.segment(channel, object, seeds),
 			channel.getDimensions()
 		);
 	}
 
-	private ObjectCollection filterObjs(ObjectCollection objects, ImageDimensions dim) throws SegmentationFailedException {
+	private ObjectCollection filterObjects(ObjectCollection objects, ImageDimensions dim) throws SegmentationFailedException {
 		try {
 			return filter.filter(
 				objects,

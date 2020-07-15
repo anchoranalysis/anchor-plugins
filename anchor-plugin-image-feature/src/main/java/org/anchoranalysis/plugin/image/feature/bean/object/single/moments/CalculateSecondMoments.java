@@ -61,7 +61,7 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 	@Override
 	protected ImageMoments execute( FeatureInputSingleObject params ) {
 		return new ImageMoments(
-			createPointMatrixFromObjMaskPixelPositions(params.getObject()),
+			createPointMatrixFromObjectVoxelPositions(params.getObject()),
 			suppressZ,
 			false
 		);
@@ -73,7 +73,7 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 	 * @param object
 	 * @return
 	 */
-	private static DoubleMatrix2D createPointMatrixFromObjMaskPixelPositions( ObjectMask object ) {
+	private static DoubleMatrix2D createPointMatrixFromObjectVoxelPositions( ObjectMask object ) {
 		
 		List<Point3i> listPts = new ArrayList<>();
 		

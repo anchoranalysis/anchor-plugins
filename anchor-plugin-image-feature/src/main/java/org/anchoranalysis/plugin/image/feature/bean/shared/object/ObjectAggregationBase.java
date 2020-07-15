@@ -71,17 +71,17 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 	protected double calc(CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject) throws FeatureCalcException {
 
 		if (objectCollection==null) {
-			objectCollection = createObjs();
+			objectCollection = createObjects();
 		}
 	
 		return deriveStatistic(
-			featureValsForObjs(featureForSingleObject, calcForChild, objectCollection)
+			featureValsForObjects(featureForSingleObject, calcForChild, objectCollection)
 		);
 	}
 	
 	protected abstract double deriveStatistic( DoubleArrayList featureVals );
 		
-	private ObjectCollection createObjs() throws FeatureCalcException {
+	private ObjectCollection createObjects() throws FeatureCalcException {
 		try {
 			return objects.create();
 		} catch (CreateException e) {
@@ -89,7 +89,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG> extends F
 		}
 	}
 
-	private DoubleArrayList featureValsForObjs(
+	private DoubleArrayList featureValsForObjects(
 		Feature<FeatureInputSingleObject> feature,
 		CalcForChild<T> calcForChild,
 		ObjectCollection objectCollection

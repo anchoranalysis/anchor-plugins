@@ -115,7 +115,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			define.processInputImage(
 				params.getInputObject(),
 				params.context(),
-				paramsInit -> outputObjs(paramsInit, params.context())
+				paramsInit -> outputObjects(paramsInit, params.context())
 			);
 			
 		} catch (OperationFailedException e) {
@@ -133,7 +133,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		return false;
 	}
 	
-	private void outputObjs( ImageInitParams paramsInit, BoundIOContext context ) throws OperationFailedException {
+	private void outputObjects( ImageInitParams paramsInit, BoundIOContext context ) throws OperationFailedException {
 		
 		try {
 			Logger logger = context.getLogger();
@@ -316,7 +316,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		IterableGenerator<ObjectMask> generator,
 		BoundIOContext context
 	) {
-		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjs", 6);
+		IndexableOutputNameStyle outputNameStyle = new IntegerPrefixOutputNameStyle("extractedObjects", 6);
 		
 		return new GeneratorSequenceIncrementalRerouteErrors<>(
 			new GeneratorSequenceIncrementalWriter<>(
@@ -331,16 +331,16 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		);
 	}
 	
-	private static ObjectMask extractObjectKeepEntireImage( ObjectMask objectMask, ImageDimensions dim ) {
+	private static ObjectMask extractObjectKeepEntireImage( ObjectMask object, ImageDimensions dim ) {
 		return BoundingBoxUtilities.createObjectForBoundingBox(
-			objectMask,
+			object,
 			new BoundingBox(dim.getExtent())
 		);
 	}
 	
 	private static ObjectCollection extendObjectsInZ( ObjectCollection objects, int sz ) {
-		return objects.stream().map( om->
-			om.flattenZ().growToZ(sz)
+		return objects.stream().map( objectMask ->
+			objectMask.flattenZ().growToZ(sz)
 		);
 	}
 }

@@ -58,28 +58,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
- *    and pair features. 
- * 
+ * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features and pair features. 
+ * <p>
  * Specifically:
- * 1. Creates a graph of neighbouring-objects
- * 2. Passes each pair of immediately-neighbouring as params, together with their merged object
- * 
+ * <ul>
+ * <li>Creates a graph of neighbouring-objects
+ * <li>Passes each pair of immediately-neighbouring as params, together with their merged object
+ * </ul>
+ * <p>
  * Features are formed by duplicating the input-feature list (inputfeatures, single-object features only):
+ * <pre>
  *   a) First.inputfeatures     applies the features to the first-object in the pair
  *   b) Second.inputfeatures    applies the features to the second-object in the pair
  *   c) Merged.inputfeatures    applies the features to the merged-object
- *
+ * </pre>
+ * <p>
  * Features (that are not duplicated) are also possible:
+ * <pre>
  *   d) Image.					additional single-object features that don't depend on any individual-object, only the image
- *   e) Pair.					additional pair-features (FeatureObjMaskParamsPair)
- *   
- *   The column order output is:  Image, First, Second, Pair, Merged.
- * 
- *  For First and Second, we use a cache, to avoid repeated feature values
- *    
- *  TODO This latter caching-step, could also be avoided in @see ch.ethz.biol.cell.countchrom.experiment.ExportFeaturesObjMaskTask , due to knowledge of the topology of the repeated features in the resulting output
- *    but for now, it's done by putting a cache on each feature.
+ *   e) Pair.					additional pair-features ({@link FeatureInputPairObjects})
+ * </pre>
+ * <p>
+ * The column order output is:  <code>Image, First, Second, Pair, Merged</code>
+ * <p>
+ * For <code>First</code> and <code>Second</code>, we use a cache, to avoid repeated calculations.
+ * <p>   
+ * TODO This latter caching-step, could also be avoided in {@link org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask}
+ *  due to knowledge of the topology of the repeated features in the resulting output but for now, it's done by putting a cache on each feature.
  * 
  * @author Owen Feehan
  *
@@ -170,7 +175,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
 			objects.asList(),
 			Function.identity(),
-			(v1, v2, numPixels) -> numPixels,
+			(v1, v2, numberVoxels) -> numberVoxels,
 			nrgStack.getNrgStack().getDimensions().getExtent(),
 			do3D
 		);

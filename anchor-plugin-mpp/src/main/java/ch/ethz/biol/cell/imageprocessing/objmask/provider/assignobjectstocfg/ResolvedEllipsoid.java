@@ -35,12 +35,22 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+
 public class ResolvedEllipsoid {
 	
+	@Getter
 	private MarkEllipsoid mark;
+	
+	@Getter
 	private ObjectMask object;
-	private boolean include;
-	private ResolvedObjectList assignedObjs = new ResolvedObjectList();
+	
+	@Getter
+	private boolean included;
+	
+	@Getter
+	private ResolvedObjectList assignedObjects = new ResolvedObjectList();
+	
 	private double maxRadius;
 	private ImageDimensions dim;
 	
@@ -48,7 +58,7 @@ public class ResolvedEllipsoid {
 		super();
 		this.mark = mark;
 		this.object = mark.calcMask(dim, rm, bvb).getMask();
-		this.include = true;
+		this.included = true;
 		this.dim = dim;
 		
 		ImageResolution res = dim.getRes();
@@ -72,48 +82,32 @@ public class ResolvedEllipsoid {
 	}
 	
 	public void setAsExcluded() {
-		this.include = false;
+		this.included = false;
 	}
 	
-	public void assignObj( ResolvedObject rom ) {
-		assignedObjs.add(rom);
-	}
-	
-	public boolean isIncluded() {
-		return include;
-	}
-
-	public ResolvedObjectList getAssignedObjs() {
-		return assignedObjs;
-	}
-
-	public MarkEllipsoid getMark() {
-		return mark;
-	}
-
-	public ObjectMask getObjMask() {
-		return object;
+	public void assignObject( ResolvedObject object ) {
+		assignedObjects.add(object);
 	}
 
 	// NOTE DONE IN pixels, ignoring z-distance
 	// As our minimum-bound we take the distance to a sphere (of maximum radius) around the centre point of the ellipsoid
-	public double minBoundDistTo( Point3d pnt ) {
+	public double minBoundDistTo( Point3d point ) {
 		// Distance between tow center points
-		double distCenters = dim.getRes().distance( mark.getPos(), pnt );
+		double distCenters = dim.getRes().distance( mark.getPos(), point );
 		return Math.max( distCenters - maxRadius, 0.0);
 	}
 	
 	// We take the minimum of the distances to each possible point
-	public double distTo( Point3d pnt ) {
+	public double distTo( Point3d point ) {
 		
-		if (assignedObjs.size()==0) {
+		if (assignedObjects.size()==0) {
 			return Double.NaN;
 		}
 		
 		double min = Double.MAX_VALUE;
 		
-		for( ResolvedObject rom : assignedObjs ) {
-			double distSq = dim.getRes().distanceSq(rom.getCenter(), pnt);
+		for( ResolvedObject rom : assignedObjects ) {
+			double distSq = dim.getRes().distanceSq(rom.getCenter(), point);
 			
 			if (distSq<min) {
 				min = distSq;

@@ -39,13 +39,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class MatcherIntersectionHelper {
 	
-	public static List<MatchedObject> matchIntersectingObjects( ObjectCollection sourceObjs, ObjectCollection searchObjects ) {
+	public static List<MatchedObject> matchIntersectingObjects(
+		ObjectCollection sourceObjects,
+		ObjectCollection searchObjects
+	) {
 		
 		// Find matching seeds for each object
-		return sourceObjs.stream().mapToList(objSource->
+		return sourceObjects.stream().mapToList(objectSource->
 			new MatchedObject(
-				objSource,
-				searchObjectsThatIntersectWith(searchObjects, objSource)
+				objectSource,
+				searchObjectsThatIntersectWith(searchObjects, objectSource)
 			)
 		);
 	}
