@@ -35,8 +35,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
-// Rewrites the intensity for each ObjMask (assume no overlap) so that its mean is 128
-public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjsSource {
+// Rewrites the intensity for each object-mask (assume no overlap) so that its mean is 128
+public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjectsSource {
 	
 	@Override
 	protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource) throws CreateException {

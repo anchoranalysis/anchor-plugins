@@ -72,10 +72,6 @@ public class CfgProposerFromObjects extends CfgProposer {
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkEllipsoid;
 	}
-
-	private MarkEllipsoid createFromObjMask( ObjectMask object, NRGStackWithParams nrgStack ) throws CreateException {
-		return EllipsoidFactory.createMarkEllipsoidLeastSquares( object , nrgStack.getDimensions(), suppressZCovariance, shellRad );
-	}
 	
 	@Override
 	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) throws ProposalAbnormalFailureException {
@@ -99,14 +95,12 @@ public class CfgProposerFromObjects extends CfgProposer {
 
 		try {
 			for( ObjectMask object : objectCollection ) {
-				Mark mark = createFromObjMask(object, context.getNrgStack());
+				Mark mark = createFromObject(object, context.getNrgStack());
 				mark.setId( cfgGen.idAndIncrement() );
 				
-				if (checkMark!=null && !checkMark.check(mark, context.getRegionMap(), context.getNrgStack())) {
-					continue;
+				if (checkMark==null || checkMark.check(mark, context.getRegionMap(), context.getNrgStack())) {
+					cfg.add( mark );
 				}
-				
-				cfg.add( mark );
 			}
 			
 			if (checkMark!=null) {
@@ -120,5 +114,14 @@ public class CfgProposerFromObjects extends CfgProposer {
 		} catch (CheckException e) {
 			throw new ProposalAbnormalFailureException("A failure occurred while checking the mark", e);
 		}
+	}
+	
+	private MarkEllipsoid createFromObject( ObjectMask object, NRGStackWithParams nrgStack ) throws CreateException {
+		return EllipsoidFactory.createMarkEllipsoidLeastSquares(
+			object,
+			nrgStack.getDimensions(),
+			suppressZCovariance,
+			shellRad
+		);
 	}
 }

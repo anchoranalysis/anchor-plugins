@@ -41,6 +41,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.MergedPairs;
 import org.anchoranalysis.plugin.image.feature.bean.object.table.Simple;
@@ -49,15 +50,20 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.NRGStackFixture;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
+@Accessors(fluent=true)
 class TaskFixture {
 	
-	private NRGStack nrgStack = createNRGStack(true);
-	private FeatureTableObjects<?> flexiFeatureTable = new Simple();
+	@Getter
+	private NRGStack nrgStack;
 	
+	@Getter
 	private final ExportObjectsFeatureLoader featureLoader;
 	
+	private FeatureTableObjects<?> flexiFeatureTable = new Simple();
+		
 	/**
 	 * Constructor
 	 * 
@@ -89,14 +95,6 @@ class TaskFixture {
 		flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
 	}
 	
-	public ExportObjectsFeatureLoader featureLoader() {
-		return featureLoader;
-	}
-	
-	public NRGStack getNrgStack() {
-		return nrgStack;
-	}
-	
 	public <T extends FeatureInput> ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> createTask() throws CreateException {
 		
 		ExportFeaturesTask<MultiInput,FeatureTableCalculator<T>,FeatureInputSingleObject> task = new ExportFeaturesTask<>();
@@ -124,15 +122,15 @@ class TaskFixture {
 			)		
 		);
 		source.setTable( (FeatureTableObjects<T>) flexiFeatureTable);
-		source.setListObjMaskProvider(
-			createObjProviders(MultiInputFixture.OBJS_NAME)
+		source.setObjects(
+			createObjectProviders(MultiInputFixture.OBJECTS_NAME)
 		);
 		return source;
 	}
 		
-	private static List<NamedBean<ObjectCollectionProvider>> createObjProviders(String objectsName) {
+	private static List<NamedBean<ObjectCollectionProvider>> createObjectProviders(String objectsName) {
 		return Arrays.asList(
-			new NamedBean<>(objectsName, new ObjMaskProviderReference(objectsName))	
+			new NamedBean<>(objectsName, new Reference(objectsName))	
 		);
 	}
 

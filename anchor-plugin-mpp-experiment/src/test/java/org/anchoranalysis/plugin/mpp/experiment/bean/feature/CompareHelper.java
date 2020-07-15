@@ -44,11 +44,11 @@ class CompareHelper {
 
 	public static void compareOutputWithSaved( Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths ) throws OperationFailedException {
 		TestLoader loaderTempDir = TestLoader.createFromExplicitDirectory(pathAbsoluteOutput);
-		TestLoader loaderSavedObjs = TestLoader.createFromMavenWorkingDir(pathRelativeSaved);
+		TestLoader loaderSavedObjects = TestLoader.createFromMavenWorkingDirectory(pathRelativeSaved);
 		
 		DualComparer comparer = new DualComparer(
 			loaderTempDir,
-			loaderSavedObjs
+			loaderSavedObjects
 		);
 		
 		for(String path : relativePaths) {
@@ -72,7 +72,7 @@ class CompareHelper {
 			} else if (hasExtension(relativePath,".xml")) {
 				return comparer.compareTwoXmlDocuments(relativePath);
 			} else if (hasExtension(relativePath,".h5")) {
-				return comparer.compareTwoObjs(relativePath);			
+				return comparer.compareTwoObjectCollections(relativePath);			
 			} else {
 				throw new OperationFailedRuntimeException("Extension not supported");
 			}

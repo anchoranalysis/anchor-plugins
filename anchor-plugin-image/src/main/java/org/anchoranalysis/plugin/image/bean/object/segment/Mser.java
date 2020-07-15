@@ -96,13 +96,13 @@ public class Mser extends SegmentChannelIntoObjects {
 		);
 		
 		try {
-			return convertOutputToObjs( treeDarkToBright );
+			return convertOutputToObjects( treeDarkToBright );
 		} catch (CreateException exc) {
 			throw new SegmentationFailedException(exc);
 		}
 	}
 	
-	private <T extends Type<T>> ObjectCollection convertOutputToObjs( MserTree<T> tree ) throws CreateException {
+	private <T extends Type<T>> ObjectCollection convertOutputToObjects( MserTree<T> tree ) throws CreateException {
 		return ObjectCollectionFactory.mapFrom(
 			tree,
 			mser -> CreateFromPointsFactory.create(

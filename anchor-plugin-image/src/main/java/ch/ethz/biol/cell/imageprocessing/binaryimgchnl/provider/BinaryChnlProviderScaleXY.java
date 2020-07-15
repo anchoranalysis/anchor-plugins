@@ -49,19 +49,19 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 	
 	public static BinaryChnl scale( BinaryChnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator ) throws CreateException {
 		
-		ScaleFactor sf;
+		ScaleFactor scaleFactor;
 		try {
-			sf = scaleCalculator.calc( chnl.getDimensions() );
+			scaleFactor = scaleCalculator.calc( chnl.getDimensions() );
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
 		
-		if (sf.getX()==1.0 && sf.getY()==1.0) {
+		if (scaleFactor.isNoScale()) {
 			// Nothing to do
 			return chnl;
 		}
 		
-		return chnl.scaleXY(sf.getX(), sf.getY(), interpolator);
+		return chnl.scaleXY(scaleFactor, interpolator);
 	}
 
 	@Override

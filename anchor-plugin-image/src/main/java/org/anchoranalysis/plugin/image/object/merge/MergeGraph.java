@@ -96,7 +96,7 @@ public class MergeGraph {
 		);
 	}
 		
-	public List<ObjectVertex> addObjsToGraph(ObjectCollection objects) throws OperationFailedException {
+	public List<ObjectVertex> addObjectsToGraph(ObjectCollection objects) throws OperationFailedException {
 		
 		List<ObjectVertex> listAdded = new ArrayList<>();				
 		

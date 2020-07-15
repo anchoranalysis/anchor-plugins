@@ -44,7 +44,7 @@ public class AppendHistogram extends FilePathBaseAppendToManagerWithFileID {
 	@Override
 	protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
 			throws BeanMisconfiguredException {
-		return inputManager.getListAppendHistogram();
+		return inputManager.getAppendHistogram();
 	}
 
 	@Override

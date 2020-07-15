@@ -34,11 +34,14 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class SpecificNRGChannelBase extends FeatureSingleObject {
 
 	// START BEAN PROPERTIES
 	/** Index of which channel in the nrg-stack to select */ 
-	@BeanField
+	@BeanField @Getter @Setter
 	private int nrgIndex = 0;
 	// END BEAN PROPERTIES
 	
@@ -50,13 +53,5 @@ public abstract class SpecificNRGChannelBase extends FeatureSingleObject {
 		);
 	}
 	
-	protected abstract double calcWithChannel(ObjectMask obj, Channel chnl) throws FeatureCalcException;
-	
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
-
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
+	protected abstract double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalcException;
 }

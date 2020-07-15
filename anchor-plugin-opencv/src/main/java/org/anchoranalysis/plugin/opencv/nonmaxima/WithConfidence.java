@@ -39,7 +39,7 @@ import lombok.Getter;
 public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 	
 	@Getter
-	private T obj;
+	private T object;
 	
 	@Getter
 	private double confidence;

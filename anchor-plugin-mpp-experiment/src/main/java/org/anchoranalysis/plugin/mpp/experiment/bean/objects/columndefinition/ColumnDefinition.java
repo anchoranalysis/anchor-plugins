@@ -38,6 +38,9 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 
 	
@@ -47,19 +50,18 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 	/**
 	 * Name of CSV column with the file identifier
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnID = "id";
 	
 	/**
 	 * Name of CSV column used to group results (the same values, are outputted together) 
 	 */
-	@BeanField
+	@BeanField @Getter @Setter
 	private String columnGroup;
 	// END BEAN PROPERTIES
 		
 	private int indexFileID;
 	private int indexGroup;
-
 	
 	public void initHeaders(String[] headers) throws InitException {
 		// We resolve each of our columnNames to an index
@@ -75,24 +77,7 @@ public abstract class ColumnDefinition extends AnchorBean<ColumnDefinition> {
 		return row;
 	}
 	
-	public abstract ObjectCollectionWithProperties findObjectsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjs ) throws OperationFailedException;
+	public abstract ObjectCollectionWithProperties findObjectsMatchingRow( CSVRow csvRow, ObjectCollectionRTree allObjects ) throws OperationFailedException;
 	
 	public abstract void writeToXML( CSVRow csvRow, Element xmlElement, Document doc );
-		
-
-	public String getColumnID() {
-		return columnID;
-	}
-
-	public void setColumnID(String columnID) {
-		this.columnID = columnID;
-	}
-
-	public String getColumnGroup() {
-		return columnGroup;
-	}
-
-	public void setColumnGroup(String columnGroup) {
-		this.columnGroup = columnGroup;
-	}
 }

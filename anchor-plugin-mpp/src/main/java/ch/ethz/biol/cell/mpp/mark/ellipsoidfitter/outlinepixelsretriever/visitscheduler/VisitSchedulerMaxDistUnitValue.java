@@ -52,7 +52,7 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	private ImageResolution res;
 		
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException {
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res) throws InitException {
 		// NOTHING TO DO
 	}
 	
@@ -68,7 +68,7 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.res = res;
 		this.root = root;
 	}

@@ -45,7 +45,7 @@ import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 
-public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjsSource {
+public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
 	
 	// START BEAN PROPERTIES
 	@BeanField

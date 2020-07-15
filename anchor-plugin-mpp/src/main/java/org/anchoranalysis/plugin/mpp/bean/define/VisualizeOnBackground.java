@@ -43,10 +43,10 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
+import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.ObjMaskProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFromCfg;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
@@ -55,8 +55,7 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackgro
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 
 /**
- * Adds a visualization for all binary-masks and ObjMaskCollections that are added
- *  using a particular background
+ * Adds a visualization for all binary-masks and object-collections that are added using a particular background
  *  
  * @author Owen Feehan
  *
@@ -90,9 +89,9 @@ public class VisualizeOnBackground extends DefineAdderBean {
 			// We add all the existing definitions
 			define.addAll(def);
 			
-			// Now we add visualizations for the BinaryChnlProvider and ObjMaskProvider
+			// Now we add visualizations for the BinaryChnlProvider and object-collection providers
 			addVisualizationFor( def, define, BinaryChnlProvider.class, this::visualizationBinaryMask);
-			addVisualizationFor( def, define, ObjectCollectionProvider.class, this::visualizationObjMasks);
+			addVisualizationFor( def, define, ObjectCollectionProvider.class, this::visualizationObjects);
 			addVisualizationFor( def, define, CfgProvider.class, this::visualizationCfg);
 			
 		} catch (OperationFailedException e) {
@@ -139,11 +138,11 @@ public class VisualizeOnBackground extends DefineAdderBean {
 		return provider;
 	}
 	
-	private StackProvider visualizationObjMasks( String objectsProviderID ) {
+	private StackProvider visualizationObjects( String objectsProviderID ) {
 		ColoredObjectsOnStack provider = new ColoredObjectsOnStack();
 		provider.setOutline(true);
 		addBackgroundProvider(provider);
-		provider.setObjects( new ObjMaskProviderReference(objectsProviderID) );
+		provider.setObjects( new Reference(objectsProviderID) );
 		provider.setOutlineWidth(outlineWidth);
 		return provider;
 	}

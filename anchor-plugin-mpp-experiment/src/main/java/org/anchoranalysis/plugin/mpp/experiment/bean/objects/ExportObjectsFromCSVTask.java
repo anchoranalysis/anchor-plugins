@@ -97,16 +97,16 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 		/**
 		 * All objects associated with the image.
 		 */
-		private ObjectCollectionRTree allObjs;
+		private ObjectCollectionRTree allObjects;
 		
-		public CSVRowRGBOutlineGenerator( DrawObject drawObject, ObjectCollectionRTree allObjs, DisplayStack background, RGBColor colorFirst, RGBColor colorSecond ) {
-			this.allObjs = allObjs;
+		public CSVRowRGBOutlineGenerator( DrawObject drawObject, ObjectCollectionRTree allObjects, DisplayStack background, RGBColor colorFirst, RGBColor colorSecond ) {
+			this.allObjects = allObjects;
 			
-			ColorList colorList = new ColorList();
-			colorList.add(colorFirst);
-			colorList.add(colorSecond);
-			
-			delegate = createRGBMaskGenerator(drawObject, background, colorList);
+			delegate = createRGBMaskGenerator(
+				drawObject,
+				background,
+				new ColorList(colorFirst, colorSecond)
+			);
 		}
 		
 		@Override
@@ -135,7 +135,7 @@ public class ExportObjectsFromCSVTask extends ExportObjectsBase<FromCSVInputObje
 			
 			try {
 				delegate.setIterableElement(
-					element.findObjsMatchingRow( allObjs )
+					element.findObjectsMatchingRow( allObjects )
 				);
 				
 			} catch (OperationFailedException e) {

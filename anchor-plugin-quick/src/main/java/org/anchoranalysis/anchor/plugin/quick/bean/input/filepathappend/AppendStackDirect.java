@@ -34,6 +34,9 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * A stack from a stack-collection
  * @author Owen Feehan
@@ -42,14 +45,13 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 public class AppendStackDirect extends FilePathBaseAppendToManager {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private String extension = "tif";
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
-			throws BeanMisconfiguredException {
-		return inputManager.getListAppendStack();
+	protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)	throws BeanMisconfiguredException {
+		return inputManager.getAppendStack();
 	}
 	
 	@Override
@@ -59,13 +61,5 @@ public class AppendStackDirect extends FilePathBaseAppendToManager {
 			firstPartWithFilename(),
 			extension
 		);
-	}
-
-	public String getExtension() {
-		return extension;
-	}
-
-	public void setExtension(String extension) {
-		this.extension = extension;
 	}
 }

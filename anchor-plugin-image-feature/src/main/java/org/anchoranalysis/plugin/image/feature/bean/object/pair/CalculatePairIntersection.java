@@ -146,8 +146,6 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 			Optional.empty()
 		);
 		
-		Optional<ObjectMask> omIntersect = intersection.intersect(eroded, dim);
-		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
-		return omIntersect;
+		return intersection.intersect(eroded, dim);
 	}
 }

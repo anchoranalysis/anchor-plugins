@@ -46,12 +46,11 @@ public class MockFeatureWithCalculation extends FeatureOperator<FeatureInput> {
 	 * <p>
 	 * It is incremented every time {@link #calc} is called.
 	 */
-	static int cntCalcCalled = 0;
+	static int countCalcCalled = 0;
 	
 	@Override
 	protected double calc(SessionInput<FeatureInput> input) throws FeatureCalcException {
-		cntCalcCalled++;										// NOSONAR
-		MockCalculation calculation = new MockCalculation();
-		return input.calc( calculation );	
+		countCalcCalled++;										// NOSONAR
+		return input.calc( new MockCalculation() );	
 	}
 }

@@ -62,7 +62,7 @@ public class CfgComparer extends Comparer {
 	);
 
 	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {

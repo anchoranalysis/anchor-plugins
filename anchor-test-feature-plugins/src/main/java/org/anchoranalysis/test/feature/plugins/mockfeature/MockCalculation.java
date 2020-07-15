@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 class MockCalculation extends FeatureCalculation<Double,FeatureInput> {
 
 	// Incremented every time executed is called
-	static int cntExecuteCalled = 0;
+	static int countExecuteCalled = 0;
 	
 	/** Can be changed from the default implementation as desired */
 	static ToDoubleFunction<FeatureInput> funcCalculation;
@@ -44,7 +44,7 @@ class MockCalculation extends FeatureCalculation<Double,FeatureInput> {
 	@Override
 	protected Double execute(FeatureInput input) throws FeatureCalcException {
 		assert(funcCalculation!=null);					// NOSONAR
-		cntExecuteCalled++;								// NOSONAR
+		countExecuteCalled++;								// NOSONAR
 		return funcCalculation.applyAsDouble(input);	// NOSONAR
 	}
 	

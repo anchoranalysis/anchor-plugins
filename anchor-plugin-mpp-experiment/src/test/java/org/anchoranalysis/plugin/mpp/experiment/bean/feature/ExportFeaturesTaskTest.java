@@ -35,6 +35,7 @@ import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions.Extent;
+import org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;
@@ -62,7 +63,7 @@ public class ExportFeaturesTaskTest {
 	private static TestLoader loader;
 	private TaskFixture taskFixture;
 	
-	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObjMask/";
+	private static final String RELATIVE_PATH_SAVED_RESULTS = "expectedOutput/exportFeaturesObject/";
 		
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -70,7 +71,7 @@ public class ExportFeaturesTaskTest {
 	@BeforeClass
 	public static void setup() {
 		RegisterBeanFactories.registerAllPackageBeanFactories();
-		loader = TestLoader.createFromMavenWorkingDir();
+		loader = TestLoader.createFromMavenWorkingDirectory();
 	}
 	
 	@Before
@@ -83,7 +84,7 @@ public class ExportFeaturesTaskTest {
 		// The saved directory is irrelevant because an exception is thrown
 		testOnTask(
 			OUTPUT_DIR_IRRELEVANT,
-			fixture -> fixture.useSmallNRGInstead()
+			TaskFixture::useSmallNRGInstead
 		);
 	}
 	
@@ -197,11 +198,11 @@ public class ExportFeaturesTaskTest {
 		);
 		taskFixture.changeToMergedPairs(true, false);
 		
-		MockFeatureWithCalculationFixture.executeAndAssertCnt(
+		MockFeatureWithCalculationFixture.executeAndAssertCount(
 			// Each "single" input calculated once (as the results are cached), and twice for each pair (for pair and merged)
-			MultiInputFixture.NUM_INTERSECTING_OBJECTS + (2 * MultiInputFixture.NUM_PAIRS_INTERSECTING),
+			MultiInputFixture.NUMBER_INTERSECTING_OBJECTS + (2 * MultiInputFixture.NUMBER_PAIRS_INTERSECTING),
 			 // a calculation for each single object, and a calculation for each merged object
-			(MultiInputFixture.NUM_PAIRS_INTERSECTING + MultiInputFixture.NUM_INTERSECTING_OBJECTS),
+			(MultiInputFixture.NUMBER_PAIRS_INTERSECTING + MultiInputFixture.NUMBER_INTERSECTING_OBJECTS),
 			() -> testOnTask("repeatedInSingleAndPair/")
 		);
 	}
@@ -230,7 +231,7 @@ public class ExportFeaturesTaskTest {
 	}
 	
 	/**
-	 * Runs a test to check if the results of ExportFeaturesObjMaskTask correspond to saved-values
+	 * Runs a test to check if the results of {@link ExportFeaturesTask} correspond to saved-values
 	 *
 	 * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare against
 	 * @throws OperationFailedException
@@ -240,7 +241,7 @@ public class ExportFeaturesTaskTest {
 		
 		try {
 			TaskSingleInputHelper.runTaskAndCompareOutputs(
-				MultiInputFixture.createInput( taskFixture.getNrgStack() ),
+				MultiInputFixture.createInput( taskFixture.nrgStack() ),
 				taskFixture.createTask(),
 				folder.getRoot().toPath(),
 				RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,

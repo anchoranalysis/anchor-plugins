@@ -45,8 +45,8 @@ public class UnitTestCompareUtilities {
 	 *  the same code for executing the experiment
 	 *  
 	 *  This function executes the experiment inplace (not in a temporary folder), and creates a DualComparer, where:
-	 *  1. the first test-loader is associated with our savedObjs directory
-	 *  2. the second test-loader is associated with the output directoy of the folder
+	 *  1. the first test-loader is associated with our saved-objects directory
+	 *  2. the second test-loader is associated with the output directory of the folder
 	 *  
 	 * @param experimentName the name of the experiment (both the beanXML and in the test folders)
 	 * @param experimentIdentifierOutput how the experiment is identified in the output folder
@@ -56,13 +56,13 @@ public class UnitTestCompareUtilities {
 		String experimentName,
 		String experimentIdentifierOutput
 	) {
-		TestLoader testLoader = TestLoader.createFromMavenWorkingDir();
+		TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
 		
 		String pathTestDataFolder = createPathTestDataFolder( experimentName );
 		
-		ExperimentLauncherFromShell el = new ExperimentLauncherFromShell(testLoader);
+		ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(testLoader);
 		
-		el.runExperiment(
+		launcher.runExperiment(
 			createPathExperiment(experimentName),
 			Optional.of(
 				createPathReplacementInput(pathTestDataFolder)
@@ -89,7 +89,7 @@ public class UnitTestCompareUtilities {
 	 *  the same code for executing the experiment IN A TEMPORARY FOLDER
 	 *  
 	 *  This function executes the experiment in a temporary folder, and creates a DualComparer, where:
-	 *  1. the first test-loader is associated with our savedObjs directory
+	 *  1. the first test-loader is associated with our saved-objects directory
 	 *  2. the second test-loader is associated with the output directoy of the temporary folder
 	 *  
 	 * @param experimentName the name of the experiment (both the beanXML and in the test folders)
@@ -104,15 +104,15 @@ public class UnitTestCompareUtilities {
 		boolean includeShared,
 		TemporaryFolder folderTemp
 	) {
-		TestLoader testLoader = TestLoader.createFromMavenWorkingDir();
+		TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
 		
 		String pathTestDataFolder = createPathTestDataFolder( experimentName );
 		
-		ExperimentLauncherFromShell el = new ExperimentLauncherFromShell(testLoader);
+		ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(testLoader);
 		
 		String[] subdirectories = selectSubdirectories( pathTestDataFolder, includeShared );
 		
-		TestLoader testLoaderTemp = el.runExperimentInTemporaryFolder(
+		TestLoader testLoaderTemp = launcher.runExperimentInTemporaryFolder(
 			createPathExperiment(experimentName),
 			Optional.of(
 				createPathReplacementInput(pathTestDataFolder)

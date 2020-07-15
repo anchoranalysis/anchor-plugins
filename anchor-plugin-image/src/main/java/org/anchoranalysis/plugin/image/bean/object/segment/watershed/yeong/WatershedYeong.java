@@ -100,7 +100,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 		// Special behavior where we just want to find the minima and nothing more
 		if (minimaStore.isPresent()) {
 			try {
-				return minimaStore.get().createObjMasks();
+				return minimaStore.get().createObjects();
 			} catch (CreateException e) {
 				throw new SegmentationFailedException(e);
 			}

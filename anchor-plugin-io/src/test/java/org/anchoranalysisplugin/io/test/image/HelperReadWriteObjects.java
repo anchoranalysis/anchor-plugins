@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
 import org.anchoranalysis.image.io.objects.GeneratorTIFFDirectory;
-import org.anchoranalysis.image.io.objects.ObjectMaskCollectionReader;
+import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -44,7 +44,7 @@ import org.anchoranalysis.test.image.io.TestReaderWriterUtilities;
 
 class HelperReadWriteObjects {
 
-	public static final String TEMPORARY_FOLDER_OUT = "objs";
+	public static final String TEMPORARY_FOLDER_OUT = "objects";
 		
 	public static IterableGenerator<ObjectCollection> generator( boolean hdf5, boolean compression ) {
 		if (hdf5) {
@@ -54,7 +54,7 @@ class HelperReadWriteObjects {
 		}
 	}
 	
-	public static void writeObjs(
+	public static void writeObjects(
 		ObjectCollection objects,
 		Path path,
 		IterableGenerator<ObjectCollection> generator
@@ -64,16 +64,16 @@ class HelperReadWriteObjects {
 		BoundOutputManagerRouteErrors outputManager = OutputManagerFixture.outputManagerForRouterErrors(path);
 		
 		outputManager.getWriterAlwaysAllowed().write(
-			"objs",
+			"objects",
 			() -> generator.getGenerator()
 		);
 	}
 	
-	public static ObjectCollection readObjs(Path path) throws DeserializationFailedException {
+	public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {
 		
 		TestReaderWriterUtilities.ensureRasterReader();
 
-		return ObjectMaskCollectionReader.createFromPath(path);
+		return ObjectCollectionReader.createFromPath(path);
 	}
 	
 }

@@ -66,7 +66,7 @@ public class ObjectAsPoints extends MarkProposer {
 	public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context) throws ProposalAbnormalFailureException {
 
 		try {
-			createObjsIfNecessary();
+			createObjectsIfNecessary();
 		} catch (CreateException e) {
 			context.getErrorNode().add(e);
 			return false;
@@ -93,7 +93,7 @@ public class ObjectAsPoints extends MarkProposer {
 		return Optional.empty();
 	}
 	
-	private void createObjsIfNecessary() throws CreateException {
+	private void createObjectsIfNecessary() throws CreateException {
 		if (points==null) {
 			points = new ArrayList<>();
 			

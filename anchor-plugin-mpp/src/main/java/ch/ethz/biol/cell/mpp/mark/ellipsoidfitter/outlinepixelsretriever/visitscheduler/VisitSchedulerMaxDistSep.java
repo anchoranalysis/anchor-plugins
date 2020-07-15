@@ -62,7 +62,7 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 	private double maxZRslv;
 		
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res) throws InitException {
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res) throws InitException {
 		// NOTHING TO DO
 	}
 	
@@ -78,7 +78,7 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
 		
 		try {
 			Optional<ImageResolution> resOpt = Optional.of(res);

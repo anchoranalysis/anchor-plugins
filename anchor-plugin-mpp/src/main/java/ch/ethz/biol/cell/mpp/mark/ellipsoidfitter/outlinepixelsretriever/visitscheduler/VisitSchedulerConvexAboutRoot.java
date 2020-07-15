@@ -52,13 +52,13 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	}
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		// NOTHING TO DO
 	}
 
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
 		this.root = root;
 	}
 

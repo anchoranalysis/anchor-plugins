@@ -92,21 +92,21 @@ public abstract class NonMaximaSuppression<T> {
 	protected abstract double overlapScoreFor( T item1, T item2);
 
 	/** Finds possible neighbours for a particular object efficiently */
-	protected abstract Predicate<T> possibleOverlappingObjs( T src, Iterable<WithConfidence<T>> others );
+	protected abstract Predicate<T> possibleOverlappingObjects( T src, Iterable<WithConfidence<T>> others );
 	
 	
 	private void removeOverlapAboveScore( WithConfidence<T> proposal, PriorityQueue<WithConfidence<T>> others, double scoreThreshold ) {
 		
-		Predicate<T> pred = possibleOverlappingObjs(proposal.getObj(), others);
+		Predicate<T> pred = possibleOverlappingObjects(proposal.getObject(), others);
 		
 		Iterator<WithConfidence<T>> othersItr = others.iterator();
 		while( othersItr.hasNext() ) {
 			
-			T other = othersItr.next().getObj();
+			T other = othersItr.next().getObject();
 			
 			if (pred.test(other)) {
 			
-				double score = overlapScoreFor(proposal.getObj(), other);
+				double score = overlapScoreFor(proposal.getObject(), other);
 				
 				// These objects are deemed highly-similar and removed
 				if (score >= scoreThreshold) {

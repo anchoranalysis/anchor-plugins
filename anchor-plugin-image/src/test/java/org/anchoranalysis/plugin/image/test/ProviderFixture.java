@@ -38,14 +38,15 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.ImageBean;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
+import org.anchoranalysis.test.image.BoundIOContextFixture;
 
 public class ProviderFixture {
 
@@ -109,7 +110,9 @@ public class ProviderFixture {
 			provider.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
 			
 			provider.init(
-				mock(ImageInitParams.class),
+				ImageInitParamsFactory.create(
+					BoundIOContextFixture.withLogger(logger)
+				),
 				logger
 			);
 			

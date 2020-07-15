@@ -33,6 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -53,17 +54,17 @@ import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Executes a task on a single-input outputting into a specific directory
  * 
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class TaskSingleInputHelper {
-	
-	private TaskSingleInputHelper() {
-	}
-
 	
 	/**
 	 * Executes a task on a single-input
@@ -122,7 +123,9 @@ class TaskSingleInputHelper {
 		try {
 			task.checkMisconfigured( RegisterBeanFactories.getDefaultInstances() );
 			
-			BoundOutputManagerRouteErrors bom = OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
+			BoundOutputManagerRouteErrors bom = OutputManagerFixture.outputManagerForRouterErrors(
+				pathForOutputs
+			);
 			
 			StatefulMessageLogger logger = createStatefulLogReporter();
 			
@@ -149,14 +152,14 @@ class TaskSingleInputHelper {
 			task.afterAllJobsAreExecuted(sharedState, paramsExp.getContext());
 			
 			return successful;
-		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException | BindFailedException e) {
-			throw new OperationFailedException(e);
+		} catch (AnchorIOException | ExperimentExecutionException | JobExecutionException | BeanMisconfiguredException | BindFailedException exc) {
+			throw new OperationFailedException(exc);
 		}
 	}
 	
 	private static ParametersExperiment createParametersExperiment( Path pathTempFolder, BoundOutputManager outputManager, StatefulMessageLogger logger ) throws AnchorIOException {
 		ParametersExperiment params = new ParametersExperiment(
-			new ExperimentExecutionArguments(),
+			new ExperimentExecutionArguments(Paths.get(".")),
 			"arbitraryExperimentName",
 			Optional.empty(),
 			outputManager,

@@ -64,19 +64,22 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /** 
  * Extracts features for each object in a collection.
- *
+ * <p>
  *  <ol>
- *  <li>All input are aggregated into groups (with the name of the ObjMaskProvider added to the end)</li>
+ *  <li>All input are aggregated into groups (with the name of the {@link ObjectCollectionProvider} added to the end)</li>
  *  <li>For each input, the <code>define</code> is applied and one or more {@link ObjectCollection} are extracted</li>
  *  <li>These objects are added to the appropriate {@link ObjectCollection} associated with each group</li>
  *  </ol>
- *  
- *  <p>Note unlike other feature-sources, the group here is not only what is returned by the <code>group</code> generator
- *  in the super-class, but also includes the name of the {@link ObjectCollectionProvider} if there is more than one.</p>
- *  
- *  TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
+ * <p> 
+ * Note unlike other feature-sources, the group here is not only what is returned by the <code>group</code> generator
+ *  in the super-class, but also includes the name of the {@link ObjectCollectionProvider} if there is more than one.
+ * <p> 
+ * TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to anchor-plugin-image-task??
  *  
  *  @param <T> the feature input-type supported by the FlexiFeatureTable
 **/
@@ -85,16 +88,16 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 	private static final NamedFeatureStoreFactory STORE_FACTORY = NamedFeatureStoreFactory.bothNameAndParams();
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
 	
-	@BeanField
-	private List<NamedBean<ObjectCollectionProvider>> listObjMaskProvider = new ArrayList<>();
+	@BeanField @Getter @Setter
+	private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureTableObjects<T> table;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressErrors = false;
 	//END BEAN PROPERTIES
 
@@ -161,7 +164,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 	}
 	
 	private boolean moreThanOneProvider() {
-		return listObjMaskProvider.size()>1;
+		return objects.size()>1;
 	}
 	
 	private int calculateFeaturesForImage(
@@ -225,7 +228,7 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 	) throws OperationFailedException {
 		
 		// For every object-collection-provider
-		for(NamedBean<ObjectCollectionProvider> ni : listObjMaskProvider) {
+		for(NamedBean<ObjectCollectionProvider> ni : objects) {
 			calculator.processProvider(
 				ni.getValue(),
 				input -> identifierFor(
@@ -266,38 +269,5 @@ public class FromObjects<T extends FeatureInput> extends FeatureSource<MultiInpu
 		} else {
 			return groupGeneratorName.map(SimpleName::new);
 		}
-	}
-
-	public List<NamedBean<ObjectCollectionProvider>> getListObjMaskProvider() {
-		return listObjMaskProvider;
-	}
-
-	public void setListObjMaskProvider(
-			List<NamedBean<ObjectCollectionProvider>> listObjMaskProvider) {
-		this.listObjMaskProvider = listObjMaskProvider;
-	}
-
-	public boolean isSuppressErrors() {
-		return suppressErrors;
-	}
-
-	public void setSuppressErrors(boolean suppressErrors) {
-		this.suppressErrors = suppressErrors;
-	}
-
-	public DefineOutputterMPPWithNrg getDefine() {
-		return define;
-	}
-
-	public void setDefine(DefineOutputterMPPWithNrg define) {
-		this.define = define;
-	}
-
-	public FeatureTableObjects<T> getTable() {
-		return table;
-	}
-
-	public void setTable(FeatureTableObjects<T> table) {
-		this.table = table;
 	}
 }

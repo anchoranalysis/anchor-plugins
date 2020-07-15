@@ -34,6 +34,10 @@ import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.Co
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 /**
  * A row of the CSV File
  * 
@@ -42,48 +46,27 @@ import org.w3c.dom.Element;
  * @author Owen Feehan
  *
  */
+@RequiredArgsConstructor
 public class CSVRow {
-	
-	private String id;
-	private String group;
-	private String[] line;
-	
-	private ColumnDefinition columnDefinition;
-		
-	public CSVRow(ColumnDefinition columnDefinition) {
-		super();
-		this.columnDefinition = columnDefinition;
-	}
 
-	public ObjectCollectionWithProperties findObjsMatchingRow( ObjectCollectionRTree allObjs ) throws OperationFailedException {
-		return columnDefinition.findObjectsMatchingRow(this, allObjs);
+	// START REQUIRED ARGUMENTS
+	private final ColumnDefinition columnDefinition;
+	// END REQUIRED ARGUMENTS
+	
+	@Getter @Setter
+	private String id;
+	
+	@Getter @Setter
+	private String group;
+	
+	@Getter @Setter
+	private String[] line;
+
+	public ObjectCollectionWithProperties findObjectsMatchingRow( ObjectCollectionRTree allObjects ) throws OperationFailedException {
+		return columnDefinition.findObjectsMatchingRow(this, allObjects);
 	}
 	
 	public void writeToXML( Element xmlElement, Document doc ) {
 		columnDefinition.writeToXML(this, xmlElement, doc);
 	}
-
-	public String getId() {
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public String getGroup() {
-		return group;
-	}
-	
-	public void setGroup(String group) {
-		this.group = group;
-	}
-	
-	public String[] getLine() {
-		return line;
-	}
-	public void setLine(String[] line) {
-		this.line = line;
-	}
-	
 }

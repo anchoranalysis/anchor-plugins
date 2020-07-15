@@ -43,6 +43,8 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates features values for all objects, and discards any object less than <code>quantile - (minRatio * stdDev)</code>
@@ -53,17 +55,17 @@ import cern.jet.stat.Descriptive;
 public class DiscardOutliers extends ObjectFilterPredicate {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FeatureEvaluator<FeatureInputSingleObject> featureEvaluator;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double quantile;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minRatio;
 	
-	@BeanField
-	private int minNumObjs = 1;
+	@BeanField @Getter @Setter
+	private int minNumberObjects = 1;
 	// END BEAN PROPERTIES
 	
 	private double minVal;
@@ -75,7 +77,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 	@Override
 	protected boolean precondition(ObjectCollection objectsToFilter) {
 		// We abandon the filtering if we have too small a number of objects, as statistics won't be meaningful
-		return objectsToFilter.size()>=minNumObjs;
+		return objectsToFilter.size()>=minNumberObjects;
 	}
 
 	@Override
@@ -152,37 +154,5 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 		DoubleArrayList featureValsSorted = featureVals.copy();
 		featureValsSorted.sort();
 		return Descriptive.quantile(featureValsSorted,quantile);
-	}
-	
-	public int getMinNumObjs() {
-		return minNumObjs;
-	}
-
-	public void setMinNumObjs(int minNumObjs) {
-		this.minNumObjs = minNumObjs;
-	}
-
-	public double getQuantile() {
-		return quantile;
-	}
-
-	public void setQuantile(double quantile) {
-		this.quantile = quantile;
-	}
-
-	public double getMinRatio() {
-		return minRatio;
-	}
-
-	public void setMinRatio(double minRatio) {
-		this.minRatio = minRatio;
-	}
-
-	public FeatureEvaluator<FeatureInputSingleObject> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
-
-	public void setFeatureEvaluator(FeatureEvaluator<FeatureInputSingleObject> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
 	}
 }

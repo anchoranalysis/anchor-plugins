@@ -42,7 +42,7 @@ import org.junit.Test;
 public class HOGFeatureTest {
 
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
+		TestLoader.createFromMavenWorkingDirectory()
 	);
 	
 	private NRGStack stack = new NRGStack(

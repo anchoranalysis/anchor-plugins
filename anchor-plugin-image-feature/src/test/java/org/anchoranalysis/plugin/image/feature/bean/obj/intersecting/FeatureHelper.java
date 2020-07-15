@@ -46,7 +46,7 @@ class FeatureHelper {
 	/** 
 	 * The threshold placed on the number of voxels rejects the smaller (initial) circles before passing the later larger ones
 	 * 
-	 *  <p>Therefore the counts returned in these tests are initially 0 and latterly the same as {#link {@link NumIntersectingObjsTest}}
+	 *  <p>Therefore the counts returned in these tests are initially 0 and latterly the same as {#link {@link NumberIntersectingObjectsTest}}
 	 * 
 	 * @return
 	 */

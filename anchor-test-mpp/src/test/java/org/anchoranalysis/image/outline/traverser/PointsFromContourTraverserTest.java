@@ -46,7 +46,7 @@ import org.junit.Test;
 public class PointsFromContourTraverserTest {
 	
 	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
+		TestLoader.createFromMavenWorkingDirectory()
 	);
 	
 	@Test
@@ -59,7 +59,7 @@ public class PointsFromContourTraverserTest {
 		ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
 		
 		// Checks that first and last points are neighbours
-		List<Contour> contours = CVFindContours.contourForObjMask(objIn);
+		List<Contour> contours = CVFindContours.contoursForObject(objIn);
 		for( Contour c : contours ) {
 			List<Point3i> pts = c.pointsDiscrete();
 			assertTrue( areFirstLastNghb(pts) );

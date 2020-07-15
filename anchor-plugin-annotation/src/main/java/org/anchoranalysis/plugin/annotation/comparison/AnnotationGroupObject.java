@@ -33,6 +33,9 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.core.text.TypedValue;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper=true)
 public class AnnotationGroupObject extends AnnotationGroup<AssignmentOverlapFromPairs> {
 	
 	private int countMatched = 0;

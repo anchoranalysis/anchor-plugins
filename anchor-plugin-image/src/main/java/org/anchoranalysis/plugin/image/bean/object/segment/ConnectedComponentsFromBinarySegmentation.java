@@ -85,7 +85,7 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 		return createFromBinaryVoxelBox(
 			bvb,
 			channel.getDimensions().getRes(),
-			mask.map( om->om.getBoundingBox().cornerMin() )
+			mask.map( objectMask -> objectMask.getBoundingBox().cornerMin() )
 		);
 	}
 

@@ -52,7 +52,7 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	private double maxDistSq;
 
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		// NOTHING TO DO
 	}
@@ -66,7 +66,7 @@ public class VisitSchedulerMaxDist extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) {
 		this.root = root;
 		this.res = res;
 		this.maxDistSq = Math.pow(maxDistance,2);

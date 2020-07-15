@@ -51,7 +51,7 @@ public class CVFindContours {
 		CVInit.alwaysExecuteBeforeCallingLibrary();
 	}
 	
-	public static List<Contour> contourForObjMask(ObjectMask object) throws OperationFailedException {
+	public static List<Contour> contoursForObject(ObjectMask object) throws OperationFailedException {
 		
 		try {
 			// We clone ss the source image is modified by the algorithm according to OpenCV docs

@@ -59,16 +59,16 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	}
 	
 	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		int rand = (int) (re.nextDouble() * list.size());
 		selected = list.get(rand);
-		selected.beforeCreateObjMask(re, res);
+		selected.beforeCreateObject(re, res);
 	}
 	
 	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
-		selected.afterCreateObjMask(root, res, re);
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+		selected.afterCreateObject(root, res, re);
 	}
 
 	@Override

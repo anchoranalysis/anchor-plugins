@@ -39,13 +39,16 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ChnlProviderScale extends ChnlProviderOne {
 
 	// Start BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScaleCalculator scaleCalculator;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
 	// End BEAN PROPERTIES
 	
@@ -63,11 +66,11 @@ public class ChnlProviderScale extends ChnlProviderOne {
 		try {
 			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
 			
-			ScaleFactor sf = scaleCalculator.calc( chnl.getDimensions() );
+			ScaleFactor scaleFactor = scaleCalculator.calc( chnl.getDimensions() );
 			
-			logger.logFormatted("Scale Factor: %s\n", sf.toString() );
+			logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString() );
 			
-			Channel chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
+			Channel chnlOut = chnl.scaleXY(scaleFactor, interpolator);
 			
 			logger.logFormatted("outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes() );
 			
@@ -76,21 +79,5 @@ public class ChnlProviderScale extends ChnlProviderOne {
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}
-	}
-	
-	public ScaleCalculator getScaleCalculator() {
-		return scaleCalculator;
-	}
-
-	public void setScaleCalculator(ScaleCalculator scaleCalculator) {
-		this.scaleCalculator = scaleCalculator;
-	}
-
-	public InterpolatorBean getInterpolator() {
-		return interpolator;
-	}
-
-	public void setInterpolator(InterpolatorBean interpolator) {
-		this.interpolator = interpolator;
 	}
 }

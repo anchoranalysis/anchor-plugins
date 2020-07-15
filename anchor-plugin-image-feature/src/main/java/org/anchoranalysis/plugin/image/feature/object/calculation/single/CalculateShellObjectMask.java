@@ -79,14 +79,14 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 	@Override
 	protected ObjectMask execute( FeatureInputSingleObject input ) throws FeatureCalcException {
 	
-		ImageDimensions sd = input.getDimensionsRequired();
+		ImageDimensions dimensions = input.getDimensionsRequired();
 		
-		ObjectMask shell = createShellObjMask(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
+		ObjectMask shell = createShellObject(input, ccDilation, ccErosion, iterationsErosionSecond, do3D );
 		
 		if (inverse) {
 			ObjectMask duplicated = input.getObject().duplicate();
 			
-			Optional<ObjectMask> omShellIntersected = shell.intersect( duplicated, sd );
+			Optional<ObjectMask> omShellIntersected = shell.intersect( duplicated, dimensions );
 			omShellIntersected.ifPresent( shellIntersected ->
 				duplicated.binaryVoxelBox().setPixelsCheckMaskOff(
 					shellIntersected.relMaskTo(duplicated.getBoundingBox())
@@ -112,7 +112,7 @@ public class CalculateShellObjectMask extends FeatureCalculation<ObjectMask,Feat
 		);
 	}
 	
-	private static ObjectMask createShellObjMask(
+	private static ObjectMask createShellObject(
 		FeatureInputSingleObject input,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccDilation,
 		ResolvedCalculation<ObjectMask,FeatureInputSingleObject> ccErosion,

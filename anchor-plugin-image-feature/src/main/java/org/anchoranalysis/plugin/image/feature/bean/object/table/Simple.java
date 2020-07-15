@@ -71,24 +71,24 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 		NRGStackWithParams nrgStack,
 		Logger logger
 	) throws CreateException {
-		return objects.stream().mapToList(obj ->
+		return objects.stream().mapToList(object ->
 			new FeatureInputSingleObject(
-				checkObjInsideScene(obj, nrgStack.getDimensions().getExtent()),
+				checkObjectInsideScene(object, nrgStack.getDimensions().getExtent()),
 				nrgStack
 			) 
 		);
 	}
 	
-	private ObjectMask checkObjInsideScene( ObjectMask obj, Extent extent) throws CreateException {
-		if (!extent.contains(obj.getBoundingBox())) {
+	private ObjectMask checkObjectInsideScene( ObjectMask object, Extent extent) throws CreateException {
+		if (!extent.contains(object.getBoundingBox())) {
 			throw new CreateException(
 				String.format(
 					"Object is not (perhaps fully) contained inside the scene: %s is not in %s",
-					obj.getBoundingBox(),
+					object.getBoundingBox(),
 					extent
 				)
 			);
 		}
-		return obj;
+		return object;
 	}
 }

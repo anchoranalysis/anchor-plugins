@@ -71,7 +71,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 		}
 	}
 	
-	public ObjectCollection createObjs() throws CreateException {
+	public ObjectCollection createObjects() throws CreateException {
 		return objects.create();
 	}
 	

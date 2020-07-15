@@ -53,7 +53,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ChnlProviderObjectFeature extends ChnlProviderOneObjsSource {
+public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

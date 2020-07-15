@@ -47,30 +47,27 @@ class ObjectCollectionFixture {
 	private static final Random RANDOM = new Random();
 	
 	/**
-	 * Creates an ObjMaskCollection containing between minNumObjs and maxNumObjs
-	 * (range randomly sampled)
-	 * 
+	 * Creates an object-collection containing between a random number of objects (uniformly sampled from a range)
+	 * <p>
 	 * Each mask has a position and extent that is randomly-sampled, and contains voxels
 	 *  that are each randomly on or off.
 	 * 
-	 * @param minNumObjs
-	 * @param maxNumObjs
+	 * @param minNumberObjects minimum number of objects (inclusive)
+	 * @param maxNumberObjects maximum number of objects (exclusive)
 	 * @return
 	 */
-	public ObjectCollection createMockObjs( int minNumObjs, int maxNumObjs ) {
-				
-		int numObjs = randomMinMax( minNumObjs, maxNumObjs );
-		
-		return ObjectCollectionFactory.fromRepeated(numObjs, this::mockObj);
+	public ObjectCollection createMockObjects( int minNumberObjects, int maxNumberObjects ) {
+		int numberObjects = randomMinMax( minNumberObjects, maxNumberObjects );
+		return ObjectCollectionFactory.fromRepeated(numberObjects, this::mockObject);
 	}
 	
-	private ObjectMask mockObj() {
+	private ObjectMask mockObject() {
 		Extent e = randomExtent();
-		Point3i crnr = randomCrnr(e);
-		return mockObj(crnr, e);
+		Point3i crnr = randomCorner(e);
+		return mockObject(crnr, e);
 	}
 		
-	private ObjectMask mockObj( Point3i crnr, Extent e ) {
+	private ObjectMask mockObject( Point3i crnr, Extent e ) {
 		
 		ObjectMask object = new ObjectMask(
 			new BoundingBox(crnr, e)
@@ -91,11 +88,8 @@ class ObjectCollectionFixture {
 				);
 			}
 		}
-		
-		
-		
+				
 		// Switch samples on an off with uniform randomness
-		
 		return object;
 	}
 	
@@ -117,10 +111,10 @@ class ObjectCollectionFixture {
 	}
 	
 	/** A random starting corner, making sure there's enough room for the extent */
-	private static Point3i randomCrnr( Extent e) {
-		int x = randomSub( SCENE_EXTENT.getX(), e.getX() );
-		int y = randomSub( SCENE_EXTENT.getY(), e.getY() );
-		int z = randomSub( SCENE_EXTENT.getZ(), e.getZ() );
+	private static Point3i randomCorner( Extent extent) {
+		int x = randomSubtract( SCENE_EXTENT.getX(), extent.getX() );
+		int y = randomSubtract( SCENE_EXTENT.getY(), extent.getY() );
+		int z = randomSubtract( SCENE_EXTENT.getZ(), extent.getZ() );
 		return new Point3i(x, y, z);
 	}
 	
@@ -132,7 +126,7 @@ class ObjectCollectionFixture {
 		return RANDOM.nextInt( max-min ) + min;
 	}
 	
-	private static int randomSub( int total, int sub ) {
+	private static int randomSubtract( int total, int sub ) {
 		return randomTotal( total - sub );
 	}
 }

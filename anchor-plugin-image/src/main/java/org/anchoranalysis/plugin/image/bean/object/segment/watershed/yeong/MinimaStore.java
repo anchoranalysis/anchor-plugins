@@ -53,7 +53,7 @@ class MinimaStore {
 		list.add( new Minima(pnts) );
 	}
 	
-	public ObjectCollection createObjMasks() throws CreateException {
+	public ObjectCollection createObjects() throws CreateException {
 		return ObjectCollectionFactory.mapFrom(
 			list,
 			minima -> CreateObjectFromPoints.create( minima.getListPnts() )

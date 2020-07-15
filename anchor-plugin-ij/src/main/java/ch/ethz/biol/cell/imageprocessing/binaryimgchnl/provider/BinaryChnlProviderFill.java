@@ -66,7 +66,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		BinaryChnl bicDup = fillChnl(bic);
 
 		return fillHoles(
-			filterObjsFromBinaryImage(bicDup),
+			filterObjectsFromBinaryImage(bicDup),
 			bic,
 			bic.getDimensions(),
 			BinaryValues.getDefault()
@@ -90,22 +90,22 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	}
 	
 	
-	private ObjectCollection filterObjsFromBinaryImage( BinaryChnl bi ) throws CreateException {
+	private ObjectCollection filterObjectsFromBinaryImage( BinaryChnl bi ) throws CreateException {
 		
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory();
+		CreateFromConnectedComponentsFactory objectCreator = new CreateFromConnectedComponentsFactory();
 				
-		return filterObjs(
-			createObjMasks.createConnectedComponents(bi),
+		return filterObjects(
+			objectCreator.createConnectedComponents(bi),
 			bi.getDimensions()
 		);
 	}
 	
-	private ObjectCollection filterObjs( ObjectCollection objects, ImageDimensions dim ) throws CreateException {
+	private ObjectCollection filterObjects( ObjectCollection objects, ImageDimensions dim ) throws CreateException {
 		
 		final double maxVolumeRslvd = determineMaxVolume(dim);
 
-		return objects.stream().filter( om->
-			includeObject(om, dim, maxVolumeRslvd)
+		return objects.stream().filter( objectMask->
+			includeObject(objectMask, dim, maxVolumeRslvd)
 		);
 	}
 	

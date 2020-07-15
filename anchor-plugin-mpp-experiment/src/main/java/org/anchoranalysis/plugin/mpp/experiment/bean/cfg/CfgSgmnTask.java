@@ -153,7 +153,7 @@ public class CfgSgmnTask extends Task<MultiInput,ExperimentState>{
 	) throws OperationFailedException {
 		NamedProviderStore<ObjectCollection> objectsStore = new LazyEvaluationStore<>(
 			logger,
-			"objMaskCollection"
+			"object-colelctions"
 		);
 		inputObject.objects().addToStore(objectsStore);
 		return objectsStore;

@@ -73,29 +73,37 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
 		Interpolator interpolator = createInterpolator();
 		
-		ScaleFactor sf = determineScaleFactor(chnl.getDimensions());
+		ScaleFactor scaleFactor = determineScaleFactor(chnl.getDimensions());
 		
-		// Scale input channel
-		Channel chnlScaled = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
+		// Perform segmentation on scaled versions of the channel, mask and seeds
+		ObjectCollection scaledSegmentationResult = upstreamSegmentation.segment(
+			scaleChannel(chnl, scaleFactor, interpolator),
+			scaleMask(mask, scaleFactor, interpolator),
+			scaleSeeds(seeds, scaleFactor)
+		); 
 		
-		// Scale seeds
-		seeds = mapScale(
-			seeds,
-			s -> scaleSeeds(s, sf),
-			"seeds"
-		);
+		// Segment and scale results back up to original-scale
+		return scaleResultToOriginalScale(scaledSegmentationResult,	scaleFactor);
+	}
+	
+	private Channel scaleChannel(Channel chnl, ScaleFactor scaleFactor, Interpolator interpolator) {
+		return chnl.scaleXY(scaleFactor, interpolator);
+	}
+	
+	private Optional<ObjectMask> scaleMask(Optional<ObjectMask> mask, ScaleFactor scaleFactor, Interpolator interpolator) throws SegmentationFailedException {
 		
-		// Scale mask
-		mask = mapScale(
+		return mapScale(
 			mask,
-			om -> om.scaleNew(sf, interpolator),
+			object -> object.scaleNew(scaleFactor, interpolator),
 			"mask"
 		);
-
-		// Segment and scale results back up to original-scale
-		return scaleResultToOriginalScale(
-			upstreamSegmentation.segment( chnlScaled.duplicate(), mask, seeds ),
-			sf
+	}
+	
+	private Optional<SeedCollection> scaleSeeds(Optional<SeedCollection> seeds, ScaleFactor scaleFactor) throws SegmentationFailedException {
+		return mapScale(
+			seeds,
+			s -> scaleSeeds(s, scaleFactor),
+			"seeds"
 		);
 	}
 	

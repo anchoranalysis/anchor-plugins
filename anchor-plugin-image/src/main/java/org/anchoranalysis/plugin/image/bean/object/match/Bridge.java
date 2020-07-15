@@ -63,13 +63,13 @@ public class Bridge extends ObjectMatcher {
 		
 		List<MatchedObject> bridgeMatches = bridgeMatcher.findMatch(sourceObjects);
 			
-		ObjectCollection bridgeObjs = ObjectCollectionFactory.flatMapFrom(
+		ObjectCollection bridgeObjects = ObjectCollectionFactory.flatMapFrom(
 			bridgeMatches.stream().map(MatchedObject::getMatches),
 			OperationFailedException.class,
 			Bridge::checkExactlyOneMatch
 		);
 		
-		return objectMatcher.findMatch(bridgeObjs);
+		return objectMatcher.findMatch(bridgeObjects);
 	}
 	
 	private static ObjectCollection checkExactlyOneMatch(ObjectCollection matches) throws OperationFailedException {

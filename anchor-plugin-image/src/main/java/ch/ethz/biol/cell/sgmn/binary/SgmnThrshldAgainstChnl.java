@@ -88,7 +88,9 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 		Optional<ObjectMask> object,
 		BinaryValuesByte bvb
 	) {
-		return object.map( om -> (SliceThresholder) new SliceThresholderMask(clearOutsideMask, om, bvb)).orElseGet( ()->
+		return object.map( objectMask ->
+			(SliceThresholder) new SliceThresholderMask(clearOutsideMask, objectMask, bvb)
+		).orElseGet( ()->
 			new SliceThresholderWithoutMask(bvb)
 		);
 	}

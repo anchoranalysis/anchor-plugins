@@ -58,11 +58,11 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
 	@Override
 	public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
 
-		ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjs = input.resolver().search(
+		ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjects = input.resolver().search(
 			new CalculateConnectedComponents(nrgChnlIndex)
 		);
 		
-		int size = input.calc(ccObjs).size();
+		int size = input.calc(ccObjects).size();
 						
 		DoubleArrayList featureVals = new DoubleArrayList();
 		
@@ -71,7 +71,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
 						
 			double val = input.forChild().calc(
 				item,
-				new CalculateDeriveObjFromCollection(ccObjs, i),
+				new CalculateDeriveObjFromCollection(ccObjects, i),
 				cacheName(i)
 			);
 			featureVals.add(val);

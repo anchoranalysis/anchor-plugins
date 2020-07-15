@@ -59,34 +59,34 @@ public class MockFeatureWithCalculationFixture {
 	/**
 	 * Executes an operation, and afterwards asserts an expected number of times certain internal methods are called on a mock-calculation.
 	 * 
-	 * @param expectedCntCalc the expected number of calls to {@link Feature#calc}
-	 * @param expectedCntExecute the expected number of calls to {@code execute()} on the mock-calculation.
+	 * @param expectedCountCalc the expected number of calls to {@link Feature#calc}
+	 * @param expectedCountExecute the expected number of calls to {@code execute()} on the mock-calculation.
 	 * @param operation an operation, typically involving the mock-calculation.
 	 * @throws OperationFailedException
 	 */
-	public static void executeAndAssertCnt(
-		int expectedCntCalc,
-		int expectedCntExecute,
+	public static void executeAndAssertCount(
+		int expectedCountCalc,
+		int expectedCountExecute,
 		RunnableWithException<OperationFailedException> operation
 	) throws OperationFailedException {
 		// We rely on static variables in the class, so no concurrency allowed
 		synchronized(MockCalculation.class) {
 			
-			long beforeExecute = MockCalculation.cntExecuteCalled;
-			long beforeCalc = MockFeatureWithCalculation.cntCalcCalled;
+			long beforeExecute = MockCalculation.countExecuteCalled;
+			long beforeCalc = MockFeatureWithCalculation.countCalcCalled;
 			
 			operation.run();
 			
 			assertEquals(
 				"count of times execute() called on MockCalculation",
-				expectedCntExecute,
-				MockCalculation.cntExecuteCalled - beforeExecute
+				expectedCountExecute,
+				MockCalculation.countExecuteCalled - beforeExecute
 			);
 			
 			assertEquals(
 				"count of times calc() called on MockFeature",
-				expectedCntCalc,
-				MockFeatureWithCalculation.cntCalcCalled - beforeCalc
+				expectedCountCalc,
+				MockFeatureWithCalculation.countCalcCalled - beforeCalc
 			);
 		}
 	}
