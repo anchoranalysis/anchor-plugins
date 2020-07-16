@@ -43,6 +43,8 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Extracts text from a RGB image by using the EAST deep neural network model
@@ -59,20 +61,6 @@ public class SegmentText extends ObjectCollectionProvider {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
 
-    // START BEAN PROPERTIES
-    /** An RGB stack to look for text in */
-    @BeanField private StackProvider stackProvider;
-
-    /** Proposed bounding boxes below this confidence interval are removed */
-    @BeanField private double minConfidence = 0.5;
-
-    /** Bounding boxes with IoU scores above this threshold are removed */
-    @BeanField private double suppressIntersectionOverUnionAbove = 0.3;
-
-    /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
-    @BeanField private boolean suppressNonMaxima = true;
-    // END BEAN PROPERTIES
-
     /** Only exact integral multiples of this size in each dimension can be accepted as input */
     private static final Extent EAST_EXTENT = new Extent(32, 32, 1);
 
@@ -82,6 +70,20 @@ public class SegmentText extends ObjectCollectionProvider {
      * size proportionate to what EAST was trained on.
      */
     private static final int MAX_SCALE_FACTOR = (720 / EAST_EXTENT.getY());
+    
+    // START BEAN PROPERTIES
+    /** An RGB stack to look for text in */
+    @BeanField @Getter @Setter private StackProvider stackProvider;
+
+    /** Proposed bounding boxes below this confidence interval are removed */
+    @BeanField @Getter @Setter private double minConfidence = 0.5;
+
+    /** Bounding boxes with IoU scores above this threshold are removed */
+    @BeanField @Getter @Setter private double suppressIntersectionOverUnionAbove = 0.3;
+
+    /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
+    @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
+    // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection create() throws CreateException {
@@ -152,37 +154,5 @@ public class SegmentText extends ObjectCollectionProvider {
         return getInitializationParameters()
                 .getModelDirectory()
                 .resolve("frozen_east_text_detection.pb");
-    }
-
-    public StackProvider getStackProvider() {
-        return stackProvider;
-    }
-
-    public void setStackProvider(StackProvider stackProvider) {
-        this.stackProvider = stackProvider;
-    }
-
-    public double getSuppressIntersectionOverUnionAbove() {
-        return suppressIntersectionOverUnionAbove;
-    }
-
-    public void setSuppressIntersectionOverUnionAbove(double suppressIntersectionOverUnionAbove) {
-        this.suppressIntersectionOverUnionAbove = suppressIntersectionOverUnionAbove;
-    }
-
-    public double getMinConfidence() {
-        return minConfidence;
-    }
-
-    public void setMinConfidence(double minConfidence) {
-        this.minConfidence = minConfidence;
-    }
-
-    public boolean isSuppressNonMaxima() {
-        return suppressNonMaxima;
-    }
-
-    public void setSuppressNonMaxima(boolean suppressNonMaxima) {
-        this.suppressNonMaxima = suppressNonMaxima;
     }
 }

@@ -33,6 +33,8 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates a score based upon the statistical mean and std-deviation
@@ -43,9 +45,9 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<T> itemMean = null;
+    @BeanField @Getter @Setter private Feature<T> itemMean;
 
-    @BeanField private Feature<T> itemStdDev = null;
+    @BeanField @Getter @Setter private Feature<T> itemStdDev;
     // END BEAN PROPERTIES
 
     @Override
@@ -67,22 +69,6 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
     protected abstract double deriveScore(
             double featureValue, double mean, Operation<Double, FeatureCalcException> stdDev)
             throws FeatureCalcException;
-
-    public Feature<T> getItemMean() {
-        return itemMean;
-    }
-
-    public void setItemMean(Feature<T> itemMean) {
-        this.itemMean = itemMean;
-    }
-
-    public Feature<T> getItemStdDev() {
-        return itemStdDev;
-    }
-
-    public void setItemStdDev(Feature<T> itemStdDev) {
-        this.itemStdDev = itemStdDev;
-    }
 
     @Override
     public String getParamDscr() {

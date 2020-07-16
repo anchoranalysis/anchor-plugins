@@ -38,11 +38,13 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 
     // START BEAN
-    @BeanField private Thresholder thresholder;
+    @BeanField @Getter @Setter private Thresholder thresholder;
     // END BEAN
 
     @Override
@@ -59,13 +61,5 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    public Thresholder getThresholder() {
-        return thresholder;
-    }
-
-    public void setThresholder(Thresholder thresholder) {
-        this.thresholder = thresholder;
     }
 }

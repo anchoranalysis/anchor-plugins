@@ -52,11 +52,13 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderRepo
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import lombok.Getter;
+import lombok.Setter;
 
 public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
     // START Bean Properties
-    @BeanField private int numColors = 20;
+    @BeanField @Getter @Setter private int numColors = 20;
     // END Bean Properties
 
     private ColorIndex colorIndex;
@@ -92,12 +94,10 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
         super.reportBegin(initParams);
     }
-
-    private ColoredCfgWithDisplayStack addColor(
-            Cfg cfg, OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) {
-        DisplayStack stack = initParams.getInitContext().getDualStack().getBgStack();
-        ColoredCfg coloredCfg = new ColoredCfg(cfg, colorIndex, new IDGetterIter<Mark>());
-        return new ColoredCfgWithDisplayStack(coloredCfg, stack);
+    
+    @Override
+    public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+        // NOTHING TO DO
     }
 
     @Override
@@ -106,16 +106,10 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
         return Optional.of(reporting.getCfgNRGAfter().getCfgNRG());
     }
 
-    public int getNumColors() {
-        return numColors;
-    }
-
-    public void setNumColors(int numColors) {
-        this.numColors = numColors;
-    }
-
-    @Override
-    public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-        // NOTHING TO DO
+    private ColoredCfgWithDisplayStack addColor(
+            Cfg cfg, OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) {
+        DisplayStack stack = initParams.getInitContext().getDualStack().getBgStack();
+        ColoredCfg coloredCfg = new ColoredCfg(cfg, colorIndex, new IDGetterIter<Mark>());
+        return new ColoredCfgWithDisplayStack(coloredCfg, stack);
     }
 }

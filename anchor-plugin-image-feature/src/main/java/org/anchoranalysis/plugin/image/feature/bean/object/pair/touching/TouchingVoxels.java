@@ -36,6 +36,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Base class for features that calculate touching with a dilated bounding box intersection
@@ -45,7 +47,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 public abstract class TouchingVoxels extends FeaturePairObjects {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean do3D = true;
+    @BeanField @Getter @Setter private boolean do3D = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -80,13 +82,5 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     protected CountKernel createCountKernelMask(ObjectMask object1, ObjectMask object2Relative) {
         return new CountKernelNeighborhoodMask(
                 do3D, object1.getBinaryValuesByte(), object2Relative, true);
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3d) {
-        do3D = do3d;
     }
 }

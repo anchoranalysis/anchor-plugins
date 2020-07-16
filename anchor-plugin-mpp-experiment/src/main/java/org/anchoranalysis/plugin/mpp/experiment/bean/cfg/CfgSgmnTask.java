@@ -56,20 +56,18 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgSgmn sgmn = null;
+    @BeanField @Getter @Setter private CfgSgmn sgmn = null;
 
-    @BeanField private String outputNameOriginal = "original";
+    @BeanField @Getter @Setter private String outputNameOriginal = "original";
 
-    @BeanField @AllowEmpty private String keyValueParamsID = "";
+    @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
     // END BEAN PROPERTIES
-
-    public CfgSgmnTask() {
-        super();
-    }
 
     @Override
     public void doJobOnInputObject(InputBound<MultiInput, ExperimentState> params)
@@ -182,21 +180,5 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     public void afterAllJobsAreExecuted(ExperimentState sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
         sharedState.outputAfterAllTasksAreExecuted(context.getOutputManager());
-    }
-
-    public CfgSgmn getSgmn() {
-        return sgmn;
-    }
-
-    public void setSgmn(CfgSgmn sgmn) {
-        this.sgmn = sgmn;
-    }
-
-    public String getKeyValueParamsID() {
-        return keyValueParamsID;
-    }
-
-    public void setKeyValueParamsID(String keyValueParamsID) {
-        this.keyValueParamsID = keyValueParamsID;
     }
 }

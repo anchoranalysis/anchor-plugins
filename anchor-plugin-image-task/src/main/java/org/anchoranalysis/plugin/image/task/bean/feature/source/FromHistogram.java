@@ -55,6 +55,8 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Each input-file describes a histogram that produces one row of features.
@@ -78,7 +80,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
      * <p>In this way histogramProvider can be used as a type of function around the original
      * histogram.
      */
-    @BeanField @OptionalBean private HistogramProvider histogramProvider;
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
     // END BEAN PROPERTIES
 
     public FromHistogram() {
@@ -170,13 +172,5 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
 
         return HistogramCSVReader.readHistogramFromFile(file.toPath());
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

@@ -43,25 +43,22 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * As an example, this is like sampling WITH replacement.
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor @AllArgsConstructor
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private MarkProposer markProposer;
+    @BeanField @Getter @Setter private MarkProposer markProposer;
     // END BEAN PROPERTIES
-
-    public KernelBirthPixelized() {
-        // Standard bean constructor
-    }
-
-    public KernelBirthPixelized(MarkProposer markProposer) {
-        this.markProposer = markProposer;
-    }
 
     @Override
     protected Optional<Set<Mark>> proposeNewMarks(
@@ -147,14 +144,6 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
         }
 
         return newNRG;
-    }
-
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
     }
 
     private Mark proposeNewMark(KernelCalcContext context) {

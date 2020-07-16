@@ -34,6 +34,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Copies the pixels from chnlAssignFrom to chnl (possibly masking)
@@ -45,7 +47,7 @@ import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 public class ChnlProviderAssign extends ChnlProviderOneMask {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnlAssignFrom;
+    @BeanField @Getter @Setter private ChnlProvider chnlAssignFrom;
     // END BEAN PROPERTIES
 
     @Override
@@ -74,13 +76,5 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
                         bbox,
                         object.getVoxelBox(),
                         object.getBinaryValuesByte());
-    }
-
-    public ChnlProvider getChnlAssignFrom() {
-        return chnlAssignFrom;
-    }
-
-    public void setChnlAssignFrom(ChnlProvider chnlAssignFrom) {
-        this.chnlAssignFrom = chnlAssignFrom;
     }
 }

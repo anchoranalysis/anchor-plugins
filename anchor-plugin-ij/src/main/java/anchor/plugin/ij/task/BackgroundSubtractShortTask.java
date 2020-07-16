@@ -27,6 +27,8 @@
 package anchor.plugin.ij.task;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIJBackgroundSubtractor;
+import lombok.Getter;
+import lombok.Setter;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -51,9 +53,9 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class BackgroundSubtractShortTask extends RasterTask {
 
     // START BEAN PROPERTIES
-    @BeanField private int radius;
+    @BeanField @Getter @Setter private int radius;
 
-    @BeanField private int scaleDownIntensityFactor = 1;
+    @BeanField @Getter @Setter private int scaleDownIntensityFactor = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,21 +113,5 @@ public class BackgroundSubtractShortTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         // NOTHING TO DO
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public int getScaleDownIntensityFactor() {
-        return scaleDownIntensityFactor;
-    }
-
-    public void setScaleDownIntensityFactor(int scaleDownIntensityFactor) {
-        this.scaleDownIntensityFactor = scaleDownIntensityFactor;
     }
 }

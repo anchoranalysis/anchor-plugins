@@ -34,13 +34,15 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndPar
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private FeedbackReceiverBean<T> feedbackReceiver;
+    @BeanField @OptionalBean @Getter @Setter private FeedbackReceiverBean<T> feedbackReceiver;
 
-    @BeanField private RequireArguments requireArguments;
+    @BeanField @Getter @Setter private RequireArguments requireArguments;
     // END BEAN PROPERTIES
 
     private boolean doFeedback;
@@ -86,21 +88,5 @@ public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T>
         }
 
         feedbackReceiver.reportEnd(optStep);
-    }
-
-    public FeedbackReceiverBean<T> getFeedbackReceiver() {
-        return feedbackReceiver;
-    }
-
-    public void setFeedbackReceiver(FeedbackReceiverBean<T> feedbackReceiver) {
-        this.feedbackReceiver = feedbackReceiver;
-    }
-
-    public RequireArguments getRequireArguments() {
-        return requireArguments;
-    }
-
-    public void setRequireArguments(RequireArguments requireArguments) {
-        this.requireArguments = requireArguments;
     }
 }

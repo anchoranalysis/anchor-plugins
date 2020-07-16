@@ -40,6 +40,8 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Combines all series and frames returned by a reader by converting them into multiple channels in
@@ -53,7 +55,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
 public class FlattenAsChnl extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField private RasterReader rasterReader;
+    @BeanField @Getter @Setter private RasterReader rasterReader;
     // END BEAN PROPERTIES
 
     @Override
@@ -196,13 +198,5 @@ public class FlattenAsChnl extends RasterReader {
                 dest.addChnl(c);
             }
         }
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
     }
 }

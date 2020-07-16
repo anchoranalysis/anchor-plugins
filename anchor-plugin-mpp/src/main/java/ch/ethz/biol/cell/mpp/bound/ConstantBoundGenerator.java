@@ -27,7 +27,10 @@
 package ch.ethz.biol.cell.mpp.bound;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -35,17 +38,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 public class ConstantBoundGenerator extends BoundCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField private ResolvedBound constantBound;
+    @BeanField @Getter @Setter private ResolvedBound constantBound;
     // END BEAN PROPERTIES
-
-    public ConstantBoundGenerator(ResolvedBound constantBound) {
-        super();
-        this.constantBound = constantBound;
-    }
 
     @Override
     public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) {

@@ -37,6 +37,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
@@ -45,9 +47,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class ChnlProviderExpandSliceToMask extends ChnlProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnlTargetDimensions;
+    @BeanField @Getter @Setter private ChnlProvider chnlTargetDimensions;
 
-    @BeanField private ChnlProvider chnlSlice;
+    @BeanField @Getter @Setter private ChnlProvider chnlSlice;
     // END BEAN PROPERTIES
 
     @Override

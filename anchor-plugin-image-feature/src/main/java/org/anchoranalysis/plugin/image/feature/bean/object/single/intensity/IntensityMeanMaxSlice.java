@@ -31,13 +31,15 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.Getter;
+import lombok.Setter;
 
 public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean excludeZero = false;
+    @BeanField @Getter @Setter private boolean excludeZero = false;
 
-    @BeanField private int emptyValue = 0;
+    @BeanField @Getter @Setter private int emptyValue = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -52,21 +54,5 @@ public class IntensityMeanMaxSlice extends FeatureNrgChnl {
         }
 
         return vai.getValue();
-    }
-
-    public boolean isExcludeZero() {
-        return excludeZero;
-    }
-
-    public void setExcludeZero(boolean excludeZero) {
-        this.excludeZero = excludeZero;
-    }
-
-    public int getEmptyValue() {
-        return emptyValue;
-    }
-
-    public void setEmptyValue(int emptyValue) {
-        this.emptyValue = emptyValue;
     }
 }

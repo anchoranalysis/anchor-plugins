@@ -41,6 +41,8 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Each image produces one row of features
@@ -50,7 +52,7 @@ import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalcu
 public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInputStack> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private StackProvider nrgStackProvider;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider nrgStackProvider;
     // END BEAN PROPERTIES
 
     public FromImage() {
@@ -90,13 +92,5 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
         } catch (OperationFailedException e) {
             throw new FeatureCalcException(e);
         }
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
     }
 }

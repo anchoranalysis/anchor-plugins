@@ -36,17 +36,19 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Intensity extends FeatureSingleMemo {
 
     // START BEAN
     /** Feature to apply to the histogram */
-    @BeanField private Feature<FeatureInputHistogram> item = new Mean();
+    @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
     /** If TRUE, zeros are excluded from considering in the histogram */
-    @BeanField private boolean excludeZero = false;
+    @BeanField @Getter @Setter private boolean excludeZero = false;
 
-    @BeanField private MarkRegion region;
+    @BeanField @Getter @Setter private MarkRegion region;
     // END BEAN
 
     @Override
@@ -56,36 +58,12 @@ public class Intensity extends FeatureSingleMemo {
                 .calc(item, new CalculateHistogramInputFromMemo(region, excludeZero), cacheName());
     }
 
-    private ChildCacheName cacheName() {
-        return new ChildCacheName(Intensity.class, region.uniqueName());
-    }
-
     @Override
     public String getParamDscr() {
         return region.getBeanDscr();
     }
-
-    public boolean isExcludeZero() {
-        return excludeZero;
-    }
-
-    public void setExcludeZero(boolean excludeZero) {
-        this.excludeZero = excludeZero;
-    }
-
-    public MarkRegion getRegion() {
-        return region;
-    }
-
-    public void setRegion(MarkRegion region) {
-        this.region = region;
-    }
-
-    public Feature<FeatureInputHistogram> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<FeatureInputHistogram> item) {
-        this.item = item;
+    
+    private ChildCacheName cacheName() {
+        return new ChildCacheName(Intensity.class, region.uniqueName());
     }
 }

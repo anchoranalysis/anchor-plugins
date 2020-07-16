@@ -32,6 +32,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Takes the XY-resolution determined by rasterReaderInput. Partitions this into three ranges, based
@@ -48,17 +50,17 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 public class ThreeWayBranchXYResolution extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField private RasterReader rasterReaderInput;
+    @BeanField @Getter @Setter private RasterReader rasterReaderInput;
 
-    @BeanField private RasterReader rasterReaderLow;
+    @BeanField @Getter @Setter private RasterReader rasterReaderLow;
 
-    @BeanField private RasterReader rasterReaderMiddle;
+    @BeanField @Getter @Setter private RasterReader rasterReaderMiddle;
 
-    @BeanField private RasterReader rasterReaderHigh;
+    @BeanField @Getter @Setter private RasterReader rasterReaderHigh;
 
-    @BeanField private double thresholdLow;
+    @BeanField @Getter @Setter private double thresholdLow;
 
-    @BeanField private double thresholdHigh;
+    @BeanField @Getter @Setter private double thresholdHigh;
     // END BEAN PROPERTIES
 
     @Override
@@ -84,53 +86,5 @@ public class ThreeWayBranchXYResolution extends RasterReader {
         } else {
             return rasterReaderHigh.openFile(filepath);
         }
-    }
-
-    public RasterReader getRasterReaderInput() {
-        return rasterReaderInput;
-    }
-
-    public void setRasterReaderInput(RasterReader rasterReaderInput) {
-        this.rasterReaderInput = rasterReaderInput;
-    }
-
-    public RasterReader getRasterReaderLow() {
-        return rasterReaderLow;
-    }
-
-    public void setRasterReaderLow(RasterReader rasterReaderLow) {
-        this.rasterReaderLow = rasterReaderLow;
-    }
-
-    public RasterReader getRasterReaderMiddle() {
-        return rasterReaderMiddle;
-    }
-
-    public void setRasterReaderMiddle(RasterReader rasterReaderMiddle) {
-        this.rasterReaderMiddle = rasterReaderMiddle;
-    }
-
-    public RasterReader getRasterReaderHigh() {
-        return rasterReaderHigh;
-    }
-
-    public void setRasterReaderHigh(RasterReader rasterReaderHigh) {
-        this.rasterReaderHigh = rasterReaderHigh;
-    }
-
-    public double getThresholdLow() {
-        return thresholdLow;
-    }
-
-    public void setThresholdLow(double thresholdLow) {
-        this.thresholdLow = thresholdLow;
-    }
-
-    public double getThresholdHigh() {
-        return thresholdHigh;
-    }
-
-    public void setThresholdHigh(double thresholdHigh) {
-        this.thresholdHigh = thresholdHigh;
     }
 }

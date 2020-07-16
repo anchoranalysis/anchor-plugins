@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.scale;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -35,52 +36,45 @@ import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private ImageDimProvider dimSource;
+    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimSource;
 
-    @BeanField private ImageDimProvider dimTarget;
+    @BeanField @Getter @Setter private ImageDimProvider dimTarget;
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(ImageDimensions srcDim) throws OperationFailedException {
+    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
 
-        ImageDimensions sdSource = srcDim;
-        if (dimSource != null) {
-            try {
-                sdSource = dimSource.create();
-            } catch (CreateException e) {
-                throw new OperationFailedException(e);
-            }
-        }
+        Optional<ImageDimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);
 
-        if (sdSource == null) {
+        if (!dimensions.isPresent()) {
             throw new OperationFailedException("No source dimensions can be found");
         }
 
         try {
             return ScaleFactorUtilities.calcRelativeScale(
-                    sdSource.getExtent(), dimTarget.create().getExtent());
+                    dimensions.get().getExtent(),
+                    dimTarget.create().getExtent()
+            );
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-
-    public ImageDimProvider getDimSource() {
-        return dimSource;
-    }
-
-    public void setDimSource(ImageDimProvider dimSource) {
-        this.dimSource = dimSource;
-    }
-
-    public ImageDimProvider getDimTarget() {
-        return dimTarget;
-    }
-
-    public void setDimTarget(ImageDimProvider dimTarget) {
-        this.dimTarget = dimTarget;
+    
+    private Optional<ImageDimensions> maybeReplaceSourceDimensions(Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
+        if (dimSource != null) {
+            try {
+                return Optional.of( dimSource.create() );
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
+        } else {
+            return sourceDimensions; 
+        }
     }
 }

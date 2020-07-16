@@ -41,6 +41,8 @@ import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Creates a an aggregated-image for each group, where each voxel-value is the mean voxel-value
@@ -55,7 +57,7 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Channel, AggregateChnl
      * If set, each channel is scaled to a specific size before the mean is calculated (useful for
      * combining different sized images)
      */
-    @BeanField @OptionalBean private SizeXY resizeTo;
+    @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
     // END BEAN PROPERTIES
 
     @Override
@@ -89,13 +91,5 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Channel, AggregateChnl
     @Override
     protected Optional<String> subdirectoryForGroupOutputs() {
         return Optional.empty();
-    }
-
-    public SizeXY getResizeTo() {
-        return resizeTo;
-    }
-
-    public void setResizeTo(SizeXY resizeTo) {
-        this.resizeTo = resizeTo;
     }
 }

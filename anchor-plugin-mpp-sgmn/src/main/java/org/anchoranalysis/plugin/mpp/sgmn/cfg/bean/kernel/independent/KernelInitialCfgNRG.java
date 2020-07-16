@@ -44,23 +44,23 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
     // START BEAN LIST
-    @BeanField private CfgProposer cfgProposer;
+    @BeanField @Getter @Setter private CfgProposer cfgProposer;
     // END BEAN LIST
 
-    private Optional<Cfg> lastCfg;
-
-    public KernelInitialCfgNRG() {
-        // Standard bean constuctor
-    }
+    private Optional<Cfg> lastCfg = Optional.empty();
 
     public KernelInitialCfgNRG(CfgProposer cfgProposer) {
         this.cfgProposer = cfgProposer;
     }
-
+    
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return cfgProposer.isCompatibleWith(testMark);
@@ -126,13 +126,5 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
     @Override
     public int[] changedMarkIDArray() {
         return this.lastCfg.map(Cfg::createIdArr).orElse(new int[] {});
-    }
-
-    public CfgProposer getCfgProposer() {
-        return cfgProposer;
-    }
-
-    public void setCfgProposer(CfgProposer cfgProposer) {
-        this.cfgProposer = cfgProposer;
     }
 }

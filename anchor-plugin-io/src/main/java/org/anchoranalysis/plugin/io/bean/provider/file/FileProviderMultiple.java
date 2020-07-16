@@ -36,11 +36,13 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FileProviderMultiple extends FileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private List<FileProvider> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<FileProvider> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -59,13 +61,5 @@ public class FileProviderMultiple extends FileProvider {
             }
             return combined;
         }
-    }
-
-    public List<FileProvider> getList() {
-        return list;
-    }
-
-    public void setList(List<FileProvider> list) {
-        this.list = list;
     }
 }

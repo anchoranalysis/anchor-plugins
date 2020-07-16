@@ -38,13 +38,15 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
 
     // START BEAN PARAMETERS
-    @BeanField private String axis = "x";
+    @BeanField @Getter @Setter private String axis = "x";
 
-    @BeanField private UnitConverter unit = new UnitConverter();
+    @BeanField @Getter @Setter private UnitConverter unit = new UnitConverter();
     // END BEAN PARAMETERS
 
     @Override
@@ -58,6 +60,11 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
                 bbox, Optional.of(dimensions.getRes()), AxisTypeConverter.createFromString(axis));
     }
 
+    @Override
+    public String getParamDscr() {
+        return String.format("%s", axis);
+    }
+    
     private double resolveDistance(
             BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType)
             throws FeatureCalcException {
@@ -73,24 +80,4 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         return dirVector;
     }
 
-    @Override
-    public String getParamDscr() {
-        return String.format("%s", axis);
-    }
-
-    public String getAxis() {
-        return axis;
-    }
-
-    public void setAxis(String axis) {
-        this.axis = axis;
-    }
-
-    public UnitConverter getUnit() {
-        return unit;
-    }
-
-    public void setUnit(UnitConverter unit) {
-        this.unit = unit;
-    }
 }

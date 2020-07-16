@@ -30,11 +30,13 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class OverlapRatio extends OverlapMIPBase {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean useMax = false;
+    @BeanField @Getter @Setter private boolean useMax = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -49,13 +51,5 @@ public class OverlapRatio extends OverlapMIPBase {
                 getRegionID(),
                 isMip(),
                 OverlapRatioUtilities.maxOrMin(useMax));
-    }
-
-    public boolean isUseMax() {
-        return useMax;
-    }
-
-    public void setUseMax(boolean useMax) {
-        this.useMax = useMax;
     }
 }

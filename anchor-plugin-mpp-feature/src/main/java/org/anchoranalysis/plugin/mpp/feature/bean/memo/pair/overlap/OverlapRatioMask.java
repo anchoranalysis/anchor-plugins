@@ -33,11 +33,13 @@ import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class OverlapRatioMask extends OverlapMaskBase {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean useMax = false;
+    @BeanField @Getter @Setter private boolean useMax = false;
     // END BEAN PROPERTIES
 
     private RelationBean relationToThreshold = new EqualToBean();
@@ -68,13 +70,5 @@ public class OverlapRatioMask extends OverlapMaskBase {
                         relationToThreshold,
                         OverlapRatioUtilities.maxOrMin(useMax));
         return overlap / volume;
-    }
-
-    public boolean isUseMax() {
-        return useMax;
-    }
-
-    public void setUseMax(boolean useMax) {
-        this.useMax = useMax;
     }
 }

@@ -35,6 +35,8 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * When writing a Raster, an additional filename (with .xml appended, e.g. rasterFilename.tif.xml)
@@ -45,7 +47,7 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 public class WriteResolutionXml extends RasterWriter {
 
     // START BEAN PROPERTIES
-    @BeanField private RasterWriter writer;
+    @BeanField @Getter @Setter private RasterWriter writer;
     // END BEAN PROPERTIES
 
     @Override
@@ -80,13 +82,5 @@ public class WriteResolutionXml extends RasterWriter {
     private void writeResolutionXml(Path filePath, ImageResolution res) throws RasterIOException {
         Path pathOut = Paths.get(filePath.toString() + ".xml");
         AnchorMetadataXml.writeResolutionXml(pathOut, res);
-    }
-
-    public RasterWriter getWriter() {
-        return writer;
-    }
-
-    public void setWriter(RasterWriter writer) {
-        this.writer = writer;
     }
 }

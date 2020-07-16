@@ -34,6 +34,8 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Filters all the input objects for only those with certain types of descriptive-names.
@@ -46,15 +48,15 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 public class FilterDescriptiveName<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
 
     /**
      * A descriptive-name must be exactly equal to (case-sensitive) this string. If empty, disabled.
      */
-    @BeanField @AllowEmpty private String equals = "";
+    @BeanField @AllowEmpty @Getter @Setter private String equals = "";
 
     /** A descriptive-name must contain (case-sensitive) this string. If empty, disabled. */
-    @BeanField @AllowEmpty private String contains = "";
+    @BeanField @AllowEmpty @Getter @Setter private String contains = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -66,29 +68,5 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
         return filter.removeNonMatching(
                 input.inputObjects(params) // Existing collection
                 );
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
-    }
-
-    public String getEquals() {
-        return equals;
-    }
-
-    public void setEquals(String equals) {
-        this.equals = equals;
-    }
-
-    public String getContains() {
-        return contains;
-    }
-
-    public void setContains(String contains) {
-        this.contains = contains;
     }
 }

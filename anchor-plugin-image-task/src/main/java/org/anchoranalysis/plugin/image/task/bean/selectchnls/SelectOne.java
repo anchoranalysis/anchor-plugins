@@ -33,6 +33,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Selects one specific channel from a set of stacks
@@ -46,9 +48,9 @@ public class SelectOne extends SelectChnlsFromStacks {
      * If defined, processing only occurs the stack with this specific stack and index. Otherwise
      * processing occurs on all input stacks
      */
-    @BeanField private String stackName;
+    @BeanField @Getter @Setter private String stackName;
 
-    @BeanField private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int chnlIndex = 0;
     // END BEAN FIELDS
 
     @Override

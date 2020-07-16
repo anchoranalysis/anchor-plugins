@@ -51,7 +51,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
-    @BeanField private String outputNameOriginal = "original";
+    @BeanField @Getter @Setter private String outputNameOriginal = "original";
     // END BEAN PROPERTIES
 
     @Override

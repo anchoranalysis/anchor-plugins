@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
 import cern.colt.list.DoubleArrayList;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -37,7 +39,7 @@ import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 public abstract class FeatureResultsFromIndex extends FeatureResults {
 
     // START BEAN PROPERTIES
-    @BeanField private String id = "";
+    @BeanField @Getter @Setter private String id = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -69,13 +71,5 @@ public abstract class FeatureResultsFromIndex extends FeatureResults {
             featureVals.add(rvc.get(i).get(index));
         }
         return featureVals;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

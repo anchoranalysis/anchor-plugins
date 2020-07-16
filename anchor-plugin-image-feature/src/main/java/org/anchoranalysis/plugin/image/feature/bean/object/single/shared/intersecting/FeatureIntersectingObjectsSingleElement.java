@@ -37,11 +37,13 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class FeatureIntersectingObjectsSingleElement extends FeatureIntersectingObjects {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<FeatureInputPairObjects> item;
+    @BeanField @Getter @Setter private Feature<FeatureInputPairObjects> item;
     // END BEAN PROPERTIES
 
     @Override
@@ -78,13 +80,5 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
             results.add(res);
         }
         return results;
-    }
-
-    public Feature<FeatureInputPairObjects> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<FeatureInputPairObjects> item) {
-        this.item = item;
     }
 }

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMIPRatio;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -36,7 +38,7 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
 public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean mip = false;
+    @BeanField @Getter @Setter private boolean mip = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -47,13 +49,5 @@ public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
         } else {
             return super.overlappingNumVoxels(input);
         }
-    }
-
-    public boolean isMip() {
-        return mip;
-    }
-
-    public void setMip(boolean mip) {
-        this.mip = mip;
     }
 }

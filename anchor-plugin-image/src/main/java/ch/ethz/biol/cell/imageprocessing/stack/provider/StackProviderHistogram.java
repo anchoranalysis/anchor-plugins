@@ -40,16 +40,18 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
+import lombok.Getter;
+import lombok.Setter;
 
 /** Displays a histogram */
 public class StackProviderHistogram extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
 
-    @BeanField @Positive private int width;
+    @BeanField @Positive @Getter @Setter private int width;
 
-    @BeanField @Positive private int height;
+    @BeanField @Positive @Getter @Setter private int height;
     // END BEAN PROPERTIES
 
     @Override
@@ -76,29 +78,5 @@ public class StackProviderHistogram extends StackProvider {
             listHI.add(hi);
         }
         return listHI;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

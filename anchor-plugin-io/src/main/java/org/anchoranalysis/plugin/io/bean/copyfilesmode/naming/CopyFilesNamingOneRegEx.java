@@ -30,11 +30,13 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
 
     // START BEAN PROPERTIES
-    @BeanField private String regex;
+    @BeanField @Getter @Setter private String regex;
     // END BEAN PROPERTIES
 
     @Override
@@ -44,12 +46,4 @@ public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
 
     protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex)
             throws AnchorIOException;
-
-    public String getRegex() {
-        return regex;
-    }
-
-    public void setRegex(String regex) {
-        this.regex = regex;
-    }
 }

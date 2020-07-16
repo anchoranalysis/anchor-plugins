@@ -46,21 +46,23 @@ import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MovieFromSlicesTask extends RasterTask {
 
     // START BEAN PROPERTIES
-    @BeanField private int delaySizeAtEnd = 0;
+    @BeanField @Getter @Setter private int delaySizeAtEnd = 0;
 
-    @BeanField private String filePrefix = "movie";
+    @BeanField @Getter @Setter private String filePrefix = "movie";
 
-    @BeanField private int width = -1;
+    @BeanField @Getter @Setter private int width = -1;
 
-    @BeanField private int height = -1;
+    @BeanField @Getter @Setter private int height = -1;
 
-    @BeanField private int startIndex = 0; // this does nothing atm
+    @BeanField @Getter @Setter private int startIndex = 0; // this does nothing atm
 
-    @BeanField private int repeat = 1;
+    @BeanField @Getter @Setter private int repeat = 1;
     // END BEAN PROPERTIES
 
     private int index = 0;
@@ -155,53 +157,5 @@ public class MovieFromSlicesTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         generatorSeq.end();
-    }
-
-    public int getDelaySizeAtEnd() {
-        return delaySizeAtEnd;
-    }
-
-    public void setDelaySizeAtEnd(int delaySizeAtEnd) {
-        this.delaySizeAtEnd = delaySizeAtEnd;
-    }
-
-    public String getFilePrefix() {
-        return filePrefix;
-    }
-
-    public void setFilePrefix(String filePrefix) {
-        this.filePrefix = filePrefix;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public int getRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(int repeat) {
-        this.repeat = repeat;
     }
 }

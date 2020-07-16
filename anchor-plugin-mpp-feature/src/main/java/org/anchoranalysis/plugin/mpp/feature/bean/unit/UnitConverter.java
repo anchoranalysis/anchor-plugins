@@ -35,6 +35,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Converts units (distance, area, volume) to a another representation (e.g. physical units)
@@ -44,9 +46,9 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 public class UnitConverter extends AnchorBean<UnitConverter> {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean physical = false;
+    @BeanField @Getter @Setter private boolean physical = false;
 
-    @BeanField @AllowEmpty private String unitType = "";
+    @BeanField @AllowEmpty @Getter @Setter private String unitType = "";
     // END BEAN PROPERTIES
 
     /**
@@ -141,21 +143,5 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
             throw new FeatureCalcException(
                     "Image-resolution is required for conversions to physical units, but it is not specified");
         }
-    }
-
-    public String getUnitType() {
-        return unitType;
-    }
-
-    public void setUnitType(String unitType) {
-        this.unitType = unitType;
-    }
-
-    public boolean isPhysical() {
-        return physical;
-    }
-
-    public void setPhysical(boolean physical) {
-        this.physical = physical;
     }
 }

@@ -35,11 +35,13 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MeanFromAll extends FeatureAllMemo {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<FeatureInputSingleMemo> item;
+    @BeanField @Getter @Setter private Feature<FeatureInputSingleMemo> item;
     // END BEAN PROPERTIES
 
     @Override
@@ -64,13 +66,5 @@ public class MeanFromAll extends FeatureAllMemo {
         }
 
         return sum / memo.size();
-    }
-
-    public Feature<FeatureInputSingleMemo> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<FeatureInputSingleMemo> item) {
-        this.item = item;
     }
 }

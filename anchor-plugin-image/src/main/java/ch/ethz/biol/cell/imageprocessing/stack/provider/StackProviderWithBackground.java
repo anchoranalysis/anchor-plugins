@@ -35,6 +35,8 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.DisplayStack;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class StackProviderWithBackground extends StackProvider {
 
@@ -42,11 +44,11 @@ public abstract class StackProviderWithBackground extends StackProvider {
 
     // Either chnlProviderBackground or stackProviderBackground should be non-null
     //  but not both
-    @BeanField @OptionalBean private ChnlProvider chnlBackground;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnlBackground;
 
-    @BeanField @OptionalBean private StackProvider stackBackground;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider stackBackground;
 
-    @BeanField @OptionalBean private ChnlProvider chnlBackgroundMIP;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnlBackgroundMIP;
     // END BEAN PROPERTIES
 
     @Override
@@ -84,29 +86,5 @@ public abstract class StackProviderWithBackground extends StackProvider {
                 return chnlBackground.create().maxIntensityProjection();
             }
         }
-    }
-
-    public ChnlProvider getChnlBackground() {
-        return chnlBackground;
-    }
-
-    public void setChnlBackground(ChnlProvider chnlBackground) {
-        this.chnlBackground = chnlBackground;
-    }
-
-    public StackProvider getStackBackground() {
-        return stackBackground;
-    }
-
-    public void setStackBackground(StackProvider stackBackground) {
-        this.stackBackground = stackBackground;
-    }
-
-    public ChnlProvider getChnlBackgroundMIP() {
-        return chnlBackgroundMIP;
-    }
-
-    public void setChnlBackgroundMIP(ChnlProvider chnlBackgroundMIP) {
-        this.chnlBackgroundMIP = chnlBackgroundMIP;
     }
 }

@@ -32,6 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.io.FilenameUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Takes a file-path of form somedir/somename.ext and converts to somedir.ext
@@ -41,7 +43,7 @@ import org.apache.commons.io.FilenameUtils;
 public class FilePathGeneratorCollapseFileName extends FilePathGenerator {
 
     // START BEAN FIELDS
-    @BeanField private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
     // END BEAN FIELDS
 
     @Override
@@ -58,17 +60,6 @@ public class FilePathGeneratorCollapseFileName extends FilePathGenerator {
         if (ext.isEmpty()) {
             return pathDir.getFirst();
         }
-
-        String pathNew = String.format("%s.%s", pathDir.getFirst().toString(), ext);
-
-        return Paths.get(pathNew);
-    }
-
-    public FilePathGenerator getFilePathGenerator() {
-        return filePathGenerator;
-    }
-
-    public void setFilePathGenerator(FilePathGenerator filePathGenerator) {
-        this.filePathGenerator = filePathGenerator;
+        return Paths.get(String.format("%s.%s", pathDir.getFirst().toString(), ext));
     }
 }

@@ -41,13 +41,14 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
 
     // START BEAN PROPERTIES
-
-    // The name of the RootPath to associate with this fileset. If empty, it is ignored.
-    @BeanField @AllowEmpty private String rootName = "";
+    /** The name of the RootPath to associate with this fileset. If empty, it is ignored. */
+    @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -98,14 +99,6 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
         context.getOutputManager()
                 .getWriterAlwaysAllowed()
                 .write("list", () -> new StringGenerator(sharedState.toString()));
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
     }
 
     @Override

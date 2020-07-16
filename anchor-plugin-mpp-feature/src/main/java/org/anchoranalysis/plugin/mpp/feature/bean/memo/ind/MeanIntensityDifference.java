@@ -33,21 +33,17 @@ import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor @AllArgsConstructor
 public class MeanIntensityDifference extends FeatureSingleMemo {
 
     // START BEAN PROPERTIES
-    @BeanField private double minDiff;
+    @BeanField @Getter @Setter private double minDiff;
     // END BEAN PROPERTIES
-
-    public MeanIntensityDifference() {
-        super();
-    }
-
-    public MeanIntensityDifference(double minDiff) {
-        super();
-        this.minDiff = minDiff;
-    }
 
     @Override
     public double calc(SessionInput<FeatureInputSingleMemo> params) throws FeatureCalcException {
@@ -65,13 +61,5 @@ public class MeanIntensityDifference extends FeatureSingleMemo {
     @Override
     public String getParamDscr() {
         return String.format("minDiff=%f", minDiff);
-    }
-
-    public double getMinDiff() {
-        return minDiff;
-    }
-
-    public void setMinDiff(double minDiff) {
-        this.minDiff = minDiff;
     }
 }

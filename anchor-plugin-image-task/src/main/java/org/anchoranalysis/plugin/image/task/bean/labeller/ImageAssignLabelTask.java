@@ -48,6 +48,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Assigns a label to each image and optionally 1. copies each image into directory corresponding to
@@ -62,13 +64,13 @@ public class ImageAssignLabelTask<T>
 
     // START BEAN PROPERTIES
     /** Maps a label to an image */
-    @BeanField private ImageLabeller<T> imageLabeller;
+    @BeanField @Getter @Setter private ImageLabeller<T> imageLabeller;
 
     /**
      * If it's set, a stack is generated that is outputted into sub-directory corresponding to the
      * groupIdentifier.
      */
-    @BeanField @OptionalBean @SkipInit private StackProvider outputStackProvider;
+    @BeanField @OptionalBean @SkipInit @Getter @Setter private StackProvider outputStackProvider;
     // END BEAN PROPERTIES
 
     public ImageAssignLabelTask() {
@@ -127,22 +129,6 @@ public class ImageAssignLabelTask<T>
             SharedStateFilteredImageOutput<T> sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
         sharedState.close();
-    }
-
-    public StackProvider getOutputStackProvider() {
-        return outputStackProvider;
-    }
-
-    public void setOutputStackProvider(StackProvider outputStackProvider) {
-        this.outputStackProvider = outputStackProvider;
-    }
-
-    public ImageLabeller<T> getImageLabeller() {
-        return imageLabeller;
-    }
-
-    public void setImageLabeller(ImageLabeller<T> imageLabeller) {
-        this.imageLabeller = imageLabeller;
     }
 
     private void outputStack(

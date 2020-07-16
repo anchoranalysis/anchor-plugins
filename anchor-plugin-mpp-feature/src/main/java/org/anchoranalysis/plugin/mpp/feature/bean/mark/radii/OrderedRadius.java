@@ -32,11 +32,13 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class OrderedRadius extends FeatureMark {
 
     // START BEAN PROPERTIES
-    @BeanField private int index;
+    @BeanField @Getter @Setter private int index;
     // END BEAN PROPERTIES
 
     @Override
@@ -57,13 +59,5 @@ public class OrderedRadius extends FeatureMark {
             return radii[index];
         }
         return -1;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 }

@@ -53,6 +53,8 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Base class for stacks that somehow are grouped-together
@@ -72,9 +74,9 @@ public abstract class GroupedStackTask<S, T>
      * If defined, translates a file-path into a group. If not-defined, all images are treated as
      * part of the same group
      */
-    @BeanField @OptionalBean private FilePathGenerator group;
+    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
 
-    @BeanField private SelectChnlsFromStacks selectChnls = new SelectAll();
+    @BeanField @Getter @Setter private SelectChnlsFromStacks selectChnls = new SelectAll();
     // END BEAN PROPERTIES
 
     @Override
@@ -173,21 +175,5 @@ public abstract class GroupedStackTask<S, T>
             throw new JobExecutionException("An error occurred creating inputs to the task", e1);
         }
         return stackCollection;
-    }
-
-    public SelectChnlsFromStacks getSelectChnls() {
-        return selectChnls;
-    }
-
-    public void setSelectChnls(SelectChnlsFromStacks selectChnls) {
-        this.selectChnls = selectChnls;
-    }
-
-    public FilePathGenerator getGroup() {
-        return group;
-    }
-
-    public void setGroup(FilePathGenerator group) {
-        this.group = group;
     }
 }

@@ -30,15 +30,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
+import lombok.Getter;
+import lombok.Setter;
 
 public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 
     // START BEAN PROPERTIES
-    @BeanField private String keyMean;
+    @BeanField @Getter @Setter private String keyMean;
 
-    @BeanField private String keyStdDev;
+    @BeanField @Getter @Setter private String keyStdDev;
 
-    @BeanField private double shift;
+    @BeanField @Getter @Setter private double shift;
     // END BEAN PROPERTIES
 
     private double mean;
@@ -64,37 +66,5 @@ public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
         double scoreShifted = (scoreBeforeShift - shift) / (1 - shift);
 
         return (scoreShifted / 2) + 0.5;
-    }
-
-    public String getKeyMean() {
-        return keyMean;
-    }
-
-    public void setKeyMean(String keyMean) {
-        this.keyMean = keyMean;
-    }
-
-    public String getKeyStdDev() {
-        return keyStdDev;
-    }
-
-    public void setKeyStdDev(String keyStdDev) {
-        this.keyStdDev = keyStdDev;
-    }
-
-    public double getShift() {
-        return shift;
-    }
-
-    public void setShift(double shift) {
-        this.shift = shift;
-    }
-
-    public double getMean() {
-        return mean;
-    }
-
-    public void setMean(double mean) {
-        this.mean = mean;
     }
 }

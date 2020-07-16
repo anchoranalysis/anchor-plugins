@@ -43,6 +43,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import lombok.Getter;
+import lombok.Setter;
 
 // Expects to be passed one file per set
 // Then finds all channels and stacks from an associated regular expression
@@ -50,20 +52,20 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 public class MultiFileReader extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField private FilePathParser filePathParser = null;
+    @BeanField @Getter @Setter private FilePathParser filePathParser;
 
-    @BeanField @DefaultInstance private RasterReader rasterReader = null;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private boolean recurseSubfolders = false;
+    @BeanField @Getter @Setter private boolean recurseSubfolders = false;
 
     /** Search x number directories higher than file */
-    @BeanField private int navigateHigherDirs = 0;
+    @BeanField @Getter @Setter private int navigateHigherDirs = 0;
 
     /** If non-empty a regular-expression is applied to files */
-    @BeanField @AllowEmpty private String regExFile = "";
+    @BeanField @AllowEmpty @Getter @Setter private String regExFile = "";
 
     /** If non-empty a regular-expression is applied to directories */
-    @BeanField @AllowEmpty private String regExDir = "";
+    @BeanField @AllowEmpty @Getter @Setter private String regExDir = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -120,53 +122,5 @@ public class MultiFileReader extends RasterReader {
         } else {
             return TrueFileFilter.INSTANCE;
         }
-    }
-
-    public FilePathParser getFilePathParser() {
-        return filePathParser;
-    }
-
-    public void setFilePathParser(FilePathParser filePathParser) {
-        this.filePathParser = filePathParser;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public boolean isRecurseSubfolders() {
-        return recurseSubfolders;
-    }
-
-    public void setRecurseSubfolders(boolean recurseSubfolders) {
-        this.recurseSubfolders = recurseSubfolders;
-    }
-
-    public int getNavigateHigherDirs() {
-        return navigateHigherDirs;
-    }
-
-    public void setNavigateHigherDirs(int navigateHigherDirs) {
-        this.navigateHigherDirs = navigateHigherDirs;
-    }
-
-    public String getRegExDir() {
-        return regExDir;
-    }
-
-    public void setRegExDir(String regExDir) {
-        this.regExDir = regExDir;
-    }
-
-    public String getRegExFile() {
-        return regExFile;
-    }
-
-    public void setRegExFile(String regExFile) {
-        this.regExFile = regExFile;
     }
 }

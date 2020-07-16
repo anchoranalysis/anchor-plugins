@@ -33,6 +33,8 @@ import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Thresholds a histogram using a CalculateLevel keeping only the values greater equal than the
@@ -43,7 +45,7 @@ import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 public class HistogramProviderAboveCalculateLevel extends HistogramProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private CalculateLevel calculateLevel;
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
     @Override
@@ -53,13 +55,5 @@ public class HistogramProviderAboveCalculateLevel extends HistogramProviderOne {
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    public CalculateLevel getCalculateLevel() {
-        return calculateLevel;
-    }
-
-    public void setCalculateLevel(CalculateLevel calculateLevel) {
-        this.calculateLevel = calculateLevel;
     }
 }

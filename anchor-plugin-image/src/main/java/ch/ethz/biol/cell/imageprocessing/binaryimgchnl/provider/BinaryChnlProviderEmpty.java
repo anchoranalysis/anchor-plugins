@@ -34,12 +34,14 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 
     // START BEAN PROPERTIES
     /** If true binary values are set high when created */
-    @BeanField private boolean createOn = false;
+    @BeanField @Getter @Setter private boolean createOn = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -54,13 +56,5 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
             chnl.getVoxelBox().any().setAllPixelsTo(bvOut.getOnInt());
         }
         return new Mask(chnl, bvOut);
-    }
-
-    public boolean isCreateOn() {
-        return createOn;
-    }
-
-    public void setCreateOn(boolean createOn) {
-        this.createOn = createOn;
     }
 }

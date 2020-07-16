@@ -31,13 +31,15 @@ import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean avoidDivideByZero = false;
+    @BeanField @Getter @Setter private boolean avoidDivideByZero = false;
 
-    @BeanField private double divideByZeroValue = 1e+15;
+    @BeanField @Getter @Setter private double divideByZeroValue = 1e+15;
     // END BEAN PROPERTIES
 
     @Override
@@ -67,21 +69,5 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
     @Override
     public String getDscrLong() {
         return descriptionForList("/");
-    }
-
-    public boolean isAvoidDivideByZero() {
-        return avoidDivideByZero;
-    }
-
-    public void setAvoidDivideByZero(boolean avoidDivideByZero) {
-        this.avoidDivideByZero = avoidDivideByZero;
-    }
-
-    public double getDivideByZeroValue() {
-        return divideByZeroValue;
-    }
-
-    public void setDivideByZeroValue(double divideByZeroValue) {
-        this.divideByZeroValue = divideByZeroValue;
     }
 }

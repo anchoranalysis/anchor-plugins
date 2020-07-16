@@ -40,6 +40,8 @@ import org.anchoranalysis.image.feature.bean.object.pair.Second;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates features on each part of a pair (first, second, merged etc.) and then reduces the
@@ -59,9 +61,9 @@ public abstract class FeatureListProviderAggregatePair
      * For each feature in the list, a corresponding "aggregate" feature is created in the output
      * list
      */
-    @BeanField private FeatureListProvider<FeatureInputSingleObject> item;
+    @BeanField @Getter @Setter private FeatureListProvider<FeatureInputSingleObject> item;
 
-    @BeanField private String prependString;
+    @BeanField @Getter @Setter private String prependString;
 
     /** Method for reducing all pairs into a single value e.g. Mean, Max, Min etc. */
     @BeanField @SkipInit private FeatureListElem<FeatureInputPairObjects> reduce = new Mean<>();
@@ -96,29 +98,5 @@ public abstract class FeatureListProviderAggregatePair
         featWithList.getList().add(first);
         featWithList.getList().add(second);
         return featWithList;
-    }
-
-    public String getPrependString() {
-        return prependString;
-    }
-
-    public void setPrependString(String prependString) {
-        this.prependString = prependString;
-    }
-
-    public FeatureListProvider<FeatureInputSingleObject> getItem() {
-        return item;
-    }
-
-    public void setItem(FeatureListProvider<FeatureInputSingleObject> item) {
-        this.item = item;
-    }
-
-    public FeatureListElem<FeatureInputPairObjects> getReduce() {
-        return reduce;
-    }
-
-    public void setReduce(FeatureListElem<FeatureInputPairObjects> reduce) {
-        this.reduce = reduce;
     }
 }

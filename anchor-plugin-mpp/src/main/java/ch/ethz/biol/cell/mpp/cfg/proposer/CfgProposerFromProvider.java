@@ -36,11 +36,13 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProposerFromProvider extends CfgProposer {
 
     // START BEAN FIELDS
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
     // END BEAN FIELDS
 
     @Override
@@ -56,13 +58,5 @@ public class CfgProposerFromProvider extends CfgProposer {
         } catch (CreateException e) {
             throw new ProposalAbnormalFailureException(e);
         }
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
     }
 }

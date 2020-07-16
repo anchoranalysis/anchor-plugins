@@ -34,6 +34,8 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Excludes all inputs that match a regular expression
@@ -44,9 +46,9 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class Exclude<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-    @BeanField private RegEx regEx;
+    @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERITES
 
     @Override
@@ -63,21 +65,5 @@ public class Exclude<T extends InputFromManager> extends InputManager<T> {
         }
 
         return list;
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
-    }
-
-    public RegEx getRegEx() {
-        return regEx;
-    }
-
-    public void setRegEx(RegEx regEx) {
-        this.regEx = regEx;
     }
 }

@@ -33,11 +33,13 @@ import org.anchoranalysis.mpp.sgmn.transformer.Compose;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RemovePartitionAndThen<T> extends StateTransformerBean<CfgFromPartition, T> {
 
     // START BEAN PROPERTIES
-    @BeanField private StateTransformerBean<Cfg, T> transformer;
+    @BeanField @Getter @Setter private StateTransformerBean<Cfg, T> transformer;
     // END BEAN PROPERTIES
 
     @Override
@@ -51,13 +53,5 @@ public class RemovePartitionAndThen<T> extends StateTransformerBean<CfgFromParti
         compose.setFirst(new RemovePartition());
         compose.setSecond(transformer);
         return compose;
-    }
-
-    public StateTransformerBean<Cfg, T> getTransformer() {
-        return transformer;
-    }
-
-    public void setTransformer(StateTransformerBean<Cfg, T> transformer) {
-        this.transformer = transformer;
     }
 }

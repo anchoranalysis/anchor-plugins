@@ -45,6 +45,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Permutes one or more properties of a Feature, so as to create a set of Features
@@ -55,15 +57,11 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  */
 public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBase<T> {
 
-    /** */
-
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean
-    private StringSet
-            referencesFeatureListCreator; // Makes sure a particular feature list creator is
-    // evaluated
+    /** Makes sure a particular feature list creator is evaluated */
+    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator; 
 
-    @BeanField @NonEmpty private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<>();
+    @BeanField @NonEmpty @Getter @Setter private List<PermuteProperty<S>> listPermuteProperty = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -117,21 +115,5 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
         // We add our item to fl as the 'input' item, knowing there's at least one permutation
         // The named doesn't matter, as will be replaced by next permutation
         return feature.duplicateChangeName("");
-    }
-
-    public StringSet getReferencesFeatureListCreator() {
-        return referencesFeatureListCreator;
-    }
-
-    public void setReferencesFeatureListCreator(StringSet referencesFeatureListCreator) {
-        this.referencesFeatureListCreator = referencesFeatureListCreator;
-    }
-
-    public List<PermuteProperty<S>> getListPermuteProperty() {
-        return listPermuteProperty;
-    }
-
-    public void setListPermuteProperty(List<PermuteProperty<S>> listPermuteProperty) {
-        this.listPermuteProperty = listPermuteProperty;
     }
 }

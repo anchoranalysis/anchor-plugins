@@ -37,11 +37,13 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private double quantile = 1.0;
+    @BeanField @Getter @Setter private double quantile = 1.0;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,13 +113,5 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
         }
 
         return rounded;
-    }
-
-    public double getQuantile() {
-        return quantile;
-    }
-
-    public void setQuantile(double quantile) {
-        this.quantile = quantile;
     }
 }

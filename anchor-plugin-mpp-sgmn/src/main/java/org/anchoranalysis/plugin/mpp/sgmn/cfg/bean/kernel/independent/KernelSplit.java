@@ -46,13 +46,15 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
     // START BEAN
-    @BeanField private MarkSplitProposer splitProposer = null;
+    @BeanField @Getter @Setter private MarkSplitProposer splitProposer = null;
 
-    @BeanField private MarkFromCfgProposer markFromCfgProposer = null;
+    @BeanField @Getter @Setter private MarkFromCfgProposer markFromCfgProposer = null;
     // END BEAN
 
     private Optional<Mark> markExst;
@@ -168,7 +170,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
         MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 
-        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get());
+        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get());      // NOSONAR
 
         updatableMarkSetCollection.rmv(memoList, memoExst);
         memoList.remove(memoExst);
@@ -195,21 +197,5 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
                         pairNew.map(pmm -> pmm.getSource().getMark()),
                         pairNew.map(pmm -> pmm.getDestination().getMark()));
         return stream.filter(Optional::isPresent).mapToInt(opt -> opt.get().getId()).toArray();
-    }
-
-    public MarkSplitProposer getSplitProposer() {
-        return splitProposer;
-    }
-
-    public void setSplitProposer(MarkSplitProposer splitProposer) {
-        this.splitProposer = splitProposer;
-    }
-
-    public MarkFromCfgProposer getMarkFromCfgProposer() {
-        return markFromCfgProposer;
-    }
-
-    public void setMarkFromCfgProposer(MarkFromCfgProposer markFromCfgProposer) {
-        this.markFromCfgProposer = markFromCfgProposer;
     }
 }

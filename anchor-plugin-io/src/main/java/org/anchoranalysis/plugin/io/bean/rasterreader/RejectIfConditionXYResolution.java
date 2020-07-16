@@ -37,6 +37,8 @@ import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import lombok.Getter;
+import lombok.Setter;
 
 // If the XY resolution of an opened-image meets a certain condition
 //  then the resolution is scaled by a factor
@@ -48,11 +50,11 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 public class RejectIfConditionXYResolution extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private RelationBean relation;
+    @BeanField @Getter @Setter private RelationBean relation;
 
-    @BeanField @NonNegative private double value;
+    @BeanField @NonNegative @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
     private static class MaybeRejectProcessor
@@ -90,29 +92,5 @@ public class RejectIfConditionXYResolution extends RasterReader {
         OpenedRaster or = rasterReader.openFile(filepath);
         return new OpenedRasterAlterDimensions(
                 or, new MaybeRejectProcessor(relation.create(), value));
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public RelationBean getRelation() {
-        return relation;
-    }
-
-    public void setRelation(RelationBean relation) {
-        this.relation = relation;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
     }
 }

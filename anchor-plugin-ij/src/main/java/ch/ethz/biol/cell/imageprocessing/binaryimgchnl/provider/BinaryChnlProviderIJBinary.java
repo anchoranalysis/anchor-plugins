@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import ij.Prefs;
 import ij.plugin.filter.Binary;
 import ij.process.ImageProcessor;
+import lombok.Getter;
+import lombok.Setter;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -44,10 +46,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField
-    private String command = ""; // One of: open, close, fill, erode, dilate, skel, outline
+    /** One of: open, close, fill, erode, dilate, skel, outline */
+    @BeanField @Getter @Setter 
+    private String command = "";
 
-    @BeanField @Positive private int iterations = 1; // iterations for erode, dilate, open, close
+    /** iterations for erode, dilate, open, close */
+    @BeanField @Positive @Getter @Setter private int iterations = 1;
     // END BEAN PROPERTIES
 
     public static void fill(BinaryVoxelBox<ByteBuffer> bvb) throws OperationFailedException {
@@ -97,21 +101,5 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public int getIterations() {
-        return iterations;
-    }
-
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
     }
 }

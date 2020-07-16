@@ -38,11 +38,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FromSerializedObject extends MarkProposer {
 
     // START BEAN
-    @BeanField private String filePath;
+    @BeanField @Getter @Setter private String filePath;
     // END BEAN
 
     @Override
@@ -63,14 +65,6 @@ public class FromSerializedObject extends MarkProposer {
             context.getErrorNode().addFormatted("Exception when deserializing: %s", e.toString());
             return false;
         }
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     @Override

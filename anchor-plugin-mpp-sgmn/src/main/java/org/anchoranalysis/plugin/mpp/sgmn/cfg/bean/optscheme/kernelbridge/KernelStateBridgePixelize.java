@@ -35,6 +35,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.PixelizeWithTra
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveSourceFromPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * State takes the form of ToPixelized<T> derived from the Kernel
@@ -46,7 +48,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixelized<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField private StateTransformerBean<T, CfgNRGPixelized> transformer;
+    @BeanField @Getter @Setter private StateTransformerBean<T, CfgNRGPixelized> transformer;
     // END BEAN PROPERTIES
 
     @Override
@@ -57,13 +59,5 @@ public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixeliz
     @Override
     public StateTransformer<Optional<ToPixelized<T>>, Optional<T>> stateToKernel() {
         return new TransformMapOptional<>(new RetrieveSourceFromPixelized<>());
-    }
-
-    public StateTransformerBean<T, CfgNRGPixelized> getTransformer() {
-        return transformer;
-    }
-
-    public void setTransformer(StateTransformerBean<T, CfgNRGPixelized> transformer) {
-        this.transformer = transformer;
     }
 }

@@ -97,13 +97,13 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     private Optional<SeedCollection> scaleSeeds(
             Optional<SeedCollection> seeds, ScaleFactor scaleFactor)
             throws SegmentationFailedException {
-        return mapScale(seeds, s -> scaleSeeds(s, scaleFactor), "seeds");
+        return mapScale(seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor), "seeds");
     }
 
     private ScaleFactor determineScaleFactor(ImageDimensions dimensions)
             throws SegmentationFailedException {
         try {
-            return scaleCalculator.calc(dimensions);
+            return scaleCalculator.calc(Optional.of(dimensions));
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException("Cannot calculate scale", e);
         }

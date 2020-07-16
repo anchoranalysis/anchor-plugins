@@ -34,6 +34,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular
@@ -48,7 +50,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class GradientMeanForAxis extends IntensityGradientBase {
 
     // START BEAN PROPERTIES
-    @BeanField private String axis = "";
+    @BeanField @Getter @Setter private String axis = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -66,13 +68,5 @@ public class GradientMeanForAxis extends IntensityGradientBase {
         }
 
         return sum / points.size();
-    }
-
-    public String getAxis() {
-        return axis;
-    }
-
-    public void setAxis(String axis) {
-        this.axis = axis;
     }
 }

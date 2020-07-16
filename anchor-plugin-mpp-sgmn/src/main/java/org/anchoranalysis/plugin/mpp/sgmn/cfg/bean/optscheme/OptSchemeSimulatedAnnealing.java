@@ -40,6 +40,8 @@ import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.AssignMode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Finds an optima using a simulated-annealing approach
@@ -52,11 +54,11 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.AssignMode;
 public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
 
     // START BEAN PARAMETERS
-    @BeanField private TerminationCondition termCondition = null;
+    @BeanField @Getter @Setter private TerminationCondition termCondition = null;
 
-    @BeanField private AnnealScheme annealScheme = null;
+    @BeanField @Getter @Setter private AnnealScheme annealScheme = null;
 
-    @BeanField private AssignMode<S, T, U> assignMode;
+    @BeanField @Getter @Setter private AssignMode<S, T, U> assignMode;
     // END BEAN PARAMTERS
 
     @Override
@@ -117,29 +119,5 @@ public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
                         termCondition, initContext.getTriggerTerminationCondition());
         termConditionAll.init();
         return termConditionAll;
-    }
-
-    public TerminationCondition getTermCondition() {
-        return termCondition;
-    }
-
-    public void setTermCondition(TerminationCondition termCondition) {
-        this.termCondition = termCondition;
-    }
-
-    public AnnealScheme getAnnealScheme() {
-        return annealScheme;
-    }
-
-    public void setAnnealScheme(AnnealScheme annealScheme) {
-        this.annealScheme = annealScheme;
-    }
-
-    public AssignMode<S, T, U> getAssignMode() {
-        return assignMode;
-    }
-
-    public void setAssignMode(AssignMode<S, T, U> assignMode) {
-        this.assignMode = assignMode;
     }
 }

@@ -36,6 +36,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Only keeps objects whose feature-value satisfies a condition relative to a threshold.
@@ -47,7 +49,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 public class ThresholdedVolume extends ObjectFilterRelation {
 
     // START BEAN PROPERTIES
-    @BeanField private UnitValueVolume threshold;
+    @BeanField @Getter @Setter private UnitValueVolume threshold;
     // END BEAN PROPERTIES
 
     private int thresholdResolved;

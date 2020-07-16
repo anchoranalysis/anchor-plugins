@@ -36,11 +36,13 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectoryString;
+import lombok.Getter;
+import lombok.Setter;
 
 public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
-    @BeanField private StringSet filePaths;
+    @BeanField @Getter @Setter private StringSet filePaths;
     // END BEAN PROPERTIES
 
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
@@ -53,13 +55,5 @@ public class FileSetFromStringSet extends FileProviderWithDirectoryString {
         }
 
         return files;
-    }
-
-    public StringSet getFilePaths() {
-        return filePaths;
-    }
-
-    public void setFilePaths(StringSet filePaths) {
-        this.filePaths = filePaths;
     }
 }

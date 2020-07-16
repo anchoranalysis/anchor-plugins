@@ -37,6 +37,8 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.apache.commons.lang.ArrayUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
@@ -46,7 +48,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     private Optional<T> afterDeathProp;
 
     // START BEAN PROPERTIES
-    @BeanField private int birthRepeats = 1;
+    @BeanField @Getter @Setter private int birthRepeats = 1;
     // END BEAN PROPERTIES
 
     private boolean hasBeenInit = false;
@@ -106,14 +108,6 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     @Override
     public int[] changedMarkIDArray() {
         return makeArray(kernelBirth.changedMarkIDArray(), kernelDeath.changedMarkIDArray());
-    }
-
-    public int getBirthRepeats() {
-        return birthRepeats;
-    }
-
-    public void setBirthRepeats(int birthRepeats) {
-        this.birthRepeats = birthRepeats;
     }
 
     private static <S> String changedID(Kernel<S> kernel) {

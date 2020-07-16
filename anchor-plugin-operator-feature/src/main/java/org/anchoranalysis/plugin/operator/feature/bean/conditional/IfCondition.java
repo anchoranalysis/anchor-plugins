@@ -34,6 +34,8 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The result of featureCondition is compared to a threshold, and then either the underlying feature
@@ -47,11 +49,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PROPERTIRES
-    @BeanField private Feature<T> featureCondition;
+    @BeanField @Getter @Setter private Feature<T> featureCondition;
 
-    @BeanField private Feature<T> featureElse;
+    @BeanField @Getter @Setter private Feature<T> featureElse;
 
-    @BeanField private RelationToThreshold threshold;
+    @BeanField @Getter @Setter private RelationToThreshold threshold;
     // END BEAN PROPERTIES
 
     @Override
@@ -65,29 +67,5 @@ public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleEle
         } else {
             return input.calc(featureElse);
         }
-    }
-
-    public Feature<T> getFeatureCondition() {
-        return featureCondition;
-    }
-
-    public void setFeatureCondition(Feature<T> featureCondition) {
-        this.featureCondition = featureCondition;
-    }
-
-    public Feature<T> getFeatureElse() {
-        return featureElse;
-    }
-
-    public void setFeatureElse(Feature<T> featureElse) {
-        this.featureElse = featureElse;
-    }
-
-    public RelationToThreshold getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(RelationToThreshold threshold) {
-        this.threshold = threshold;
     }
 }

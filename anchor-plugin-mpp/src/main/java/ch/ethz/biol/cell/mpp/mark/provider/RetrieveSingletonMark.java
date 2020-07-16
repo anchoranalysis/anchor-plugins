@@ -33,13 +33,15 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import lombok.Getter;
+import lombok.Setter;
 
 // Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an
 // error
 public class RetrieveSingletonMark extends MarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -55,13 +57,5 @@ public class RetrieveSingletonMark extends MarkProvider {
         }
 
         return Optional.of(cfg.get(0));
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
     }
 }

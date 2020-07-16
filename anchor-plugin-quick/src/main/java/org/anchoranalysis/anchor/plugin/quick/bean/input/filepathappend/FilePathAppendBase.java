@@ -35,33 +35,35 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorRegEx;
 import org.anchoranalysis.io.bean.filepath.generator.Rooted;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 
     // START BEAN FIELDS
     /** The name of the appended entity */
-    @BeanField private String name;
+    @BeanField @Getter @Setter private String name;
 
     /** A suffix appended to the dataset name extracted from the reg exp */
-    @BeanField private String datasetSuffix;
+    @BeanField @Getter @Setter private String datasetSuffix;
 
     /**
      * A folder identifying the type of experiment (where the outputs are all put in the same
      * directory
      */
-    @BeanField private String experimentType;
+    @BeanField @Getter @Setter private String experimentType;
 
     // If non-zero, n trailing directories are removed from the end
-    @BeanField private int trimTrailingDirectory = 0;
+    @BeanField @Getter @Setter private int trimTrailingDirectory = 0;
 
-    @BeanField private int skipFirstTrim = 0;
+    @BeanField @Getter @Setter private int skipFirstTrim = 0;
 
     // Do not include the file-name
-    @BeanField private boolean skipFileName = false;
+    @BeanField @Getter @Setter private boolean skipFileName = false;
 
     // Iff true, then the filename will be removed apart from the .extension which remains
     //  Specifically path/name.ext becomes path.ext
-    @BeanField private boolean collapseFilename = false;
+    @BeanField @Getter @Setter private boolean collapseFilename = false;
     // END BEAN FIELDS
 
     protected abstract String createOutPathString() throws BeanMisconfiguredException;
@@ -152,61 +154,5 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
         fpg.setRegEx(regEx);
         fpg.setOutPath(createOutPathString());
         return fpg;
-    }
-
-    public String getExperimentType() {
-        return experimentType;
-    }
-
-    public void setExperimentType(String experimentType) {
-        this.experimentType = experimentType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDatasetSuffix() {
-        return datasetSuffix;
-    }
-
-    public void setDatasetSuffix(String datasetSuffix) {
-        this.datasetSuffix = datasetSuffix;
-    }
-
-    public int getTrimTrailingDirectory() {
-        return trimTrailingDirectory;
-    }
-
-    public void setTrimTrailingDirectory(int trimTrailingDirectory) {
-        this.trimTrailingDirectory = trimTrailingDirectory;
-    }
-
-    public int getSkipFirstTrim() {
-        return skipFirstTrim;
-    }
-
-    public void setSkipFirstTrim(int skipFirstTrim) {
-        this.skipFirstTrim = skipFirstTrim;
-    }
-
-    public boolean isSkipFileName() {
-        return skipFileName;
-    }
-
-    public void setSkipFileName(boolean skipFileName) {
-        this.skipFileName = skipFileName;
-    }
-
-    public boolean isCollapseFilename() {
-        return collapseFilename;
-    }
-
-    public void setCollapseFilename(boolean collapseFilename) {
-        this.collapseFilename = collapseFilename;
     }
 }

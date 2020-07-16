@@ -32,11 +32,13 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 
     // START BEAN PROPERTIES
-    @BeanField private CopyFilesNaming copyFilesNaming;
+    @BeanField @Getter @Setter private CopyFilesNaming copyFilesNaming;
     // END BEAN PROPERTIES
 
     @Override
@@ -58,13 +60,5 @@ public abstract class CopyFilesNamingOne implements CopyFilesNaming {
     @Override
     public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
         copyFilesNaming.afterCopying(destDir, dummyMode);
-    }
-
-    public CopyFilesNaming getCopyFilesNaming() {
-        return copyFilesNaming;
-    }
-
-    public void setCopyFilesNaming(CopyFilesNaming copyFilesNaming) {
-        this.copyFilesNaming = copyFilesNaming;
     }
 }

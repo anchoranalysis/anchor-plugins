@@ -33,11 +33,13 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProviderFromMark extends CfgProvider {
 
     /// START BEAN PROPERTIES
-    @BeanField private MarkProvider markProvider;
+    @BeanField @Getter @Setter private MarkProvider markProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -48,13 +50,5 @@ public class CfgProviderFromMark extends CfgProvider {
         Optional<Mark> mark = markProvider.create();
         mark.ifPresent(cfg::add);
         return cfg;
-    }
-
-    public MarkProvider getMarkProvider() {
-        return markProvider;
-    }
-
-    public void setMarkProvider(MarkProvider markProvider) {
-        this.markProvider = markProvider;
     }
 }

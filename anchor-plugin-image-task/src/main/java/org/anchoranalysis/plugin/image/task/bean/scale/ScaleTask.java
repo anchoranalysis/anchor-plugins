@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -68,9 +70,9 @@ public class ScaleTask extends RasterTask {
     private static final String KEY_OUTPUT_STACK = "stack";
 
     // START BEAN PROPERTIES
-    @BeanField private ScaleCalculator scaleCalculator;
+    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField private boolean forceBinary = false;
+    @BeanField @Getter @Setter private boolean forceBinary = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -199,21 +201,5 @@ public class ScaleTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         // NOTHING TO DO
-    }
-
-    public ScaleCalculator getScaleCalculator() {
-        return scaleCalculator;
-    }
-
-    public void setScaleCalculator(ScaleCalculator scaleCalculator) {
-        this.scaleCalculator = scaleCalculator;
-    }
-
-    public boolean isForceBinary() {
-        return forceBinary;
-    }
-
-    public void setForceBinary(boolean forceBinary) {
-        this.forceBinary = forceBinary;
     }
 }

@@ -37,6 +37,8 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveDestinationFromPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveSourceFromPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Assumes we are interested in CfgNRGPixelized as reporting type, and our optimization-state is in
@@ -48,7 +50,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private StateTransformerBean<T, CfgNRGPixelized> secondary;
+    @BeanField @OptionalBean @Getter @Setter private StateTransformerBean<T, CfgNRGPixelized> secondary;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,13 +68,5 @@ public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, C
         compose.setFirst(new RetrieveSourceFromPixelized<T>());
         compose.setSecond(secondary);
         return compose;
-    }
-
-    public StateTransformerBean<T, CfgNRGPixelized> getSecondary() {
-        return secondary;
-    }
-
-    public void setSecondary(StateTransformerBean<T, CfgNRGPixelized> secondary) {
-        this.secondary = secondary;
     }
 }

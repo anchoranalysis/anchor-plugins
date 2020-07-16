@@ -38,6 +38,8 @@ import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.plugin.opencv.CVInit;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * One part of a <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">Histogram
@@ -57,13 +59,13 @@ public class HOGFeature extends FeatureStack {
 
     // START BEAN PROPERTIES
     /** The input is rescaled to this width/height before calculating HOG descriptors */
-    @BeanField @OptionalBean private SizeXY resizeTo;
+    @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
 
     /** Parameters used for calculating HOG */
-    @BeanField private HOGParameters params = new HOGParameters();
+    @BeanField @Getter @Setter private HOGParameters params = new HOGParameters();
 
     /** Which index to return from the HOG descriptor */
-    @BeanField @NonNegative private int index = 0;
+    @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
 
     @Override
@@ -94,30 +96,6 @@ public class HOGFeature extends FeatureStack {
         }
 
         return arr[index];
-    }
-
-    public SizeXY getResizeTo() {
-        return resizeTo;
-    }
-
-    public void setResizeTo(SizeXY resizeTo) {
-        this.resizeTo = resizeTo;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public HOGParameters getParams() {
-        return params;
-    }
-
-    public void setParams(HOGParameters params) {
-        this.params = params;
     }
 
     @Override

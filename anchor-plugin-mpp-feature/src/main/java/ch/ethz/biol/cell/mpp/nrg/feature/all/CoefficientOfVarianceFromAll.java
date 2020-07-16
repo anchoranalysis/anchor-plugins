@@ -35,11 +35,13 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<FeatureInputSingleMemo> item;
+    @BeanField @Getter @Setter private Feature<FeatureInputSingleMemo> item;
     // END BEAN PROPERTIES
 
     @Override
@@ -101,13 +103,5 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
         }
 
         return Math.sqrt(sumSqDiff);
-    }
-
-    public Feature<FeatureInputSingleMemo> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<FeatureInputSingleMemo> item) {
-        this.item = item;
     }
 }

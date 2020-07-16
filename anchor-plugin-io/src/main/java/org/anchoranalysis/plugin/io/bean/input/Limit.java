@@ -33,6 +33,8 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Limits the number of input-objects to a certain hard-maximum
@@ -45,9 +47,9 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class Limit<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-    @BeanField private int maxNumItems = 0;
+    @BeanField @Getter @Setter private int maxNumItems = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -64,21 +66,5 @@ public class Limit<T extends InputFromManager> extends InputManager<T> {
             }
         }
         return list;
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
-    }
-
-    public int getMaxNumItems() {
-        return maxNumItems;
-    }
-
-    public void setMaxNumItems(int maxNumItems) {
-        this.maxNumItems = maxNumItems;
     }
 }

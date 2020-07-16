@@ -28,6 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -63,7 +64,7 @@ public class ChnlProviderScale extends ChnlProviderOne {
         try {
             logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes());
 
-            ScaleFactor scaleFactor = scaleCalculator.calc(chnl.getDimensions());
+            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.getDimensions()));
 
             logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
 

@@ -39,6 +39,8 @@ import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 //
 // Represents a set of files, with a different root depending on the operating-system
@@ -53,14 +55,14 @@ import org.apache.commons.logging.LogFactory;
 public class Rooted extends FileProvider {
 
     // START BEAN PARAMETERS
-    @BeanField private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
     // The name of the RootPath to associate with this fileset
-    @BeanField private String rootName;
+    @BeanField @Getter @Setter private String rootName;
 
     // If TRUE, we will disable debug-mode for this current bean, if debug-mode it's set. Otherwise,
     // there is no impact.
-    @BeanField private boolean disableDebugMode = false;
+    @BeanField @Getter @Setter private boolean disableDebugMode = false;
     // END BEAN PARAMETERS
 
     private static Log log = LogFactory.getLog(Rooted.class);
@@ -102,29 +104,5 @@ public class Rooted extends FileProvider {
         } catch (BeanDuplicateException | AnchorIOException e) {
             throw new FileProviderException(e);
         }
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
-    }
-
-    public boolean isDisableDebugMode() {
-        return disableDebugMode;
-    }
-
-    public void setDisableDebugMode(boolean disableDebugMode) {
-        this.disableDebugMode = disableDebugMode;
-    }
-
-    public FileProviderWithDirectory getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProviderWithDirectory fileProvider) {
-        this.fileProvider = fileProvider;
     }
 }

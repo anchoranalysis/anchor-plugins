@@ -33,14 +33,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean includeFileName = false;
+    @BeanField @Getter @Setter private boolean includeFileName = false;
 
     // If non-empty this directory is appended to make the out path string
-    @BeanField @AllowEmpty private String subDirectory = "";
+    @BeanField @AllowEmpty @Getter @Setter private String subDirectory = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -72,21 +74,5 @@ public class AppendKeyValueParams extends FilePathBaseAppendToManager {
         } else {
             return firstPart();
         }
-    }
-
-    public boolean isIncludeFileName() {
-        return includeFileName;
-    }
-
-    public void setIncludeFileName(boolean includeFileName) {
-        this.includeFileName = includeFileName;
-    }
-
-    public String getSubDirectory() {
-        return subDirectory;
-    }
-
-    public void setSubDirectory(String subDirectory) {
-        this.subDirectory = subDirectory;
     }
 }

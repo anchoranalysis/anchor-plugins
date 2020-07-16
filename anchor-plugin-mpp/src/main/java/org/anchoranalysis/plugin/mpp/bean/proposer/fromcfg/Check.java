@@ -36,13 +36,15 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Check extends MarkFromCfgProposer {
 
     // START BEANS
-    @BeanField private MarkFromCfgProposer markFromCfgProposer;
+    @BeanField @Getter @Setter private MarkFromCfgProposer markFromCfgProposer;
 
-    @BeanField private CheckMark checkMark;
+    @BeanField @Getter @Setter private CheckMark checkMark;
     // END BEANS
 
     @Override
@@ -85,21 +87,5 @@ public class Check extends MarkFromCfgProposer {
     public boolean isCompatibleWith(Mark testMark) {
         return checkMark.isCompatibleWith(testMark)
                 && markFromCfgProposer.isCompatibleWith(testMark);
-    }
-
-    public CheckMark getCheckMark() {
-        return checkMark;
-    }
-
-    public void setCheckMark(CheckMark checkMark) {
-        this.checkMark = checkMark;
-    }
-
-    public MarkFromCfgProposer getMarkFromCfgProposer() {
-        return markFromCfgProposer;
-    }
-
-    public void setMarkFromCfgProposer(MarkFromCfgProposer markFromCfgProposer) {
-        this.markFromCfgProposer = markFromCfgProposer;
     }
 }

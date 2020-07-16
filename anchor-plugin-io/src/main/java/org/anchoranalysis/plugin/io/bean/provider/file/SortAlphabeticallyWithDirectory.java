@@ -34,25 +34,19 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
+import lombok.Getter;
+import lombok.Setter;
 
 public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 
     // START BEAN PROPERTIES
-    @BeanField private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
     // END BEAN PROPERTIES
 
     @Override
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
             throws FileProviderException {
         return SortUtilities.sortFiles(fileProvider.matchingFilesForDirectory(directory, params));
-    }
-
-    public FileProviderWithDirectory getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProviderWithDirectory fileProvider) {
-        this.fileProvider = fileProvider;
     }
 
     @Override

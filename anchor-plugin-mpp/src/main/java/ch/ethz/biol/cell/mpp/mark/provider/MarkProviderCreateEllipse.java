@@ -34,13 +34,15 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.image.orientation.Orientation2D;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MarkProviderCreateEllipse extends MarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private double shellRad = 0.2;
+    @BeanField @Getter @Setter private double shellRad = 0.2;
 
-    @BeanField private int id = 0;
+    @BeanField @Getter @Setter private int id = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -50,21 +52,5 @@ public class MarkProviderCreateEllipse extends MarkProvider {
         mark.setId(id);
         mark.updateShellRad(shellRad);
         return Optional.of(mark);
-    }
-
-    public double getShellRad() {
-        return shellRad;
-    }
-
-    public void setShellRad(double shellRad) {
-        this.shellRad = shellRad;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

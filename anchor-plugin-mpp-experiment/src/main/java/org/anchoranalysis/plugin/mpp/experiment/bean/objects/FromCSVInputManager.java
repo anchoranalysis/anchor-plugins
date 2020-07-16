@@ -38,14 +38,16 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
+import lombok.Getter;
+import lombok.Setter;
 
 // An input stack
 public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
 
     // START BEAN PROPERTIES
-    @BeanField private MultiInputManager input;
+    @BeanField @Getter @Setter private MultiInputManager input;
 
-    @BeanField private FilePathGenerator appendCSV;
+    @BeanField @Getter @Setter private FilePathGenerator appendCSV;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,21 +68,5 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
         }
 
         return out;
-    }
-
-    public FilePathGenerator getAppendCSV() {
-        return appendCSV;
-    }
-
-    public void setAppendCSV(FilePathGenerator appendCSV) {
-        this.appendCSV = appendCSV;
-    }
-
-    public MultiInputManager getInput() {
-        return input;
-    }
-
-    public void setInput(MultiInputManager input) {
-        this.input = input;
     }
 }
