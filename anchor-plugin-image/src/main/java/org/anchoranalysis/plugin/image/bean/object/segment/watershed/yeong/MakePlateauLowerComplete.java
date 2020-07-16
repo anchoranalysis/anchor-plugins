@@ -115,12 +115,12 @@ class MakePlateauLowerComplete {
 			// We pick one pixel to use as an index, and pointing the rest of the pixels
 			//  of them towards it
 			
-			assert plateau.getPtsInner().size() >= 2;
+			assert plateau.getPointsInner().size() >= 2;
 			
-			matS.pointListAtFirstPoint( plateau.getPtsInner() );
+			matS.pointListAtFirstPoint( plateau.getPointsInner() );
 			
 			if (minimaStore.isPresent()) {
-				minimaStore.get().add( plateau.getPtsInner() );
+				minimaStore.get().add( plateau.getPointsInner() );
 			}
 		} else {
 			
@@ -133,7 +133,7 @@ class MakePlateauLowerComplete {
 	
 	private void pointEdgeToNeighbouring( EncodedVoxelBox matS ) {
 		// We set them all to their neighbouring points
-		for( PointWithNghb pointNghb : plateau.getPtsEdge()) {
+		for( PointWithNghb pointNghb : plateau.getPointsEdge()) {
 			assert( pointNghb.getNghbIndex() >= 0 );
 			
 			// IMPROVE BY SORTING BY Z-VALUE
@@ -145,11 +145,11 @@ class MakePlateauLowerComplete {
 	private void pointInnerToEdge( EncodedVoxelBox matS ) {
 		// Iterate through each edge pixel, and look for neighbouring points in the Inner pixels
 		//   for any such point, point towards the edge pixel, and move to the new edge list
-		List<Point3i> searchPoints = plateau.ptsEdgeAsPoints();
+		List<Point3i> searchPoints = plateau.pointsEdge();
 		
 		try {
 			// We create an object-mask from the list of points
-			ObjectMask object = CreateObjectFromPoints.create( plateau.getPtsInner() );
+			ObjectMask object = CreateObjectFromPoints.create( plateau.getPointsInner() );
 			Nghb nghb = new BigNghb();
 
 			ProcessVoxelNeighbour<List<Point3i>> process = ProcessVoxelNeighbourFactory.withinMask(
@@ -172,11 +172,11 @@ class MakePlateauLowerComplete {
 		List<Point3i> foundPoints = new ArrayList<>();
 		
 		// We iterate through all the search points
-		for( Point3i p : points ) {
+		for( Point3i point : points ) {
 			
 			foundPoints.addAll(
 				IterateVoxels.callEachPointInNghb(
-					p,
+					point,
 					nghb,
 					do3D,
 					process,

@@ -33,6 +33,7 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -77,16 +78,14 @@ public class EllipsoidFactory {
 		LinearLeastSquaresEllipsoidFitter pointsFitter = new LinearLeastSquaresEllipsoidFitter();
 		pointsFitter.setShellRad(shellRad);
 		pointsFitter.setSuppressZCovariance(suppressZCovariance);
-		
-		List<Point3i> pts = opPoints.doOperation();
 				
 		// Now get all the points on the outline 
 		MarkEllipsoid mark = new MarkEllipsoid();
 		
-		List<Point3f> pointsFloat = new ArrayList<>();
-		pts.forEach( p->pointsFloat.add(
-			PointConverter.floatFromInt(p)
-		));
+		List<Point3f> pointsFloat = FunctionalList.mapToList(
+			opPoints.doOperation(),
+			PointConverter::floatFromInt
+		);
 		
 		try {
 			pointsFitter.fit( pointsFloat, mark, dim );

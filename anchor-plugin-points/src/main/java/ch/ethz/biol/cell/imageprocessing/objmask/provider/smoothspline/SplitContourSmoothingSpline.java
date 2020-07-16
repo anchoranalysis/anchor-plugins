@@ -99,7 +99,7 @@ public class SplitContourSmoothingSpline {
 		
 	@FunctionalInterface
 	private static interface FitSplinesExtract {
-		public void apply( List<Point3i> ptsTraversed, ContourList out );
+		public void apply( List<Point3i> pointsTraversed, ContourList out );
 	}
 	
 	/**
@@ -109,26 +109,26 @@ public class SplitContourSmoothingSpline {
 	 *  of the same contour (to handle cyclical contours) ptsExtra provides a means
 	 *  to append some additional points to be fit against.
 	 * 
-	 * @param ptsToFit the points to fit the splines to
+	 * @param pointsToFit the points to fit the splines to
 	 * @param rho a smoothing factor [0, 1] see SSJ documentation
-	 * @param ptsExtra additional points, of which the first numExtraPoints will be appended to ptsToFit
+	 * @param pointsExtra additional points, of which the first numExtraPoints will be appended to ptsToFit
 	 * @param numExtraPoints how many additional points to include
 	 * @param out created contours are appended to the list
 	 */
 	private static void fitSplinesAndExtract(
-		List<Point3i> ptsToFit,
+		List<Point3i> pointsToFit,
 		double rho,
-		List<Point3i> ptsExtra,
+		List<Point3i> pointsExtra,
 		int numExtraPoints,
 		ContourList out
 	) {
-		if (numExtraPoints > ptsExtra.size()) {
-			numExtraPoints = ptsExtra.size();
+		if (numExtraPoints > pointsExtra.size()) {
+			numExtraPoints = pointsExtra.size();
 		}
 		
-		double[] u = integerSequence(ptsToFit.size() + numExtraPoints);
-		double[] x = extractFromPoint(ptsToFit, Point3i::getX, ptsExtra, numExtraPoints );
-		double[] y = extractFromPoint(ptsToFit, Point3i::getY, ptsExtra, numExtraPoints );
+		double[] u = integerSequence(pointsToFit.size() + numExtraPoints);
+		double[] x = extractFromPoint(pointsToFit, Point3i::getX, pointsExtra, numExtraPoints );
+		double[] y = extractFromPoint(pointsToFit, Point3i::getY, pointsExtra, numExtraPoints );
 		
 		// We use two smoothing splines with respect to artificial parameter u (just an integer sequence)
 		extractSplitContour(
@@ -149,7 +149,7 @@ public class SplitContourSmoothingSpline {
 	) {
 		double prevDer = Double.NaN;
 		
-		Contour c = new Contour();
+		Contour contour = new Contour();
 		
 		double step = 0.05;
 		double z = 0;
@@ -164,12 +164,12 @@ public class SplitContourSmoothingSpline {
 			double der = xDer / yDer;
 			
 			if (!Double.isNaN(prevDer) && !Double.isNaN(der) && Math.signum(der)!=Math.signum(prevDer)) {
-				out.add(c);
-				c = new Contour();
+				out.add(contour);
+				contour = new Contour();
 			}
 			prevDer = der;
 						
-			c.getPoints().add(
+			contour.getPoints().add(
 				new Point3f(
 					(float) xEval,
 					(float) yEval,
@@ -180,28 +180,33 @@ public class SplitContourSmoothingSpline {
 			z += step;
 		}
 
-		out.add(c);
+		out.add(contour);
 		return out;		
 	}
 	
 	
 	/**
 	 * 
-	 * @param pts
+	 * @param points
 	 * @param extracter
 	 * @param numExtraPoints repeats the first numLoopedPoints points again at end of curve (to help deal with closed curves)
 	 * @return
 	 */
-	private static double[] extractFromPoint( List<Point3i> pts, ToIntFunction<Point3i> extracter, List<Point3i> ptsExtra, int numExtraPoints ) {
+	private static double[] extractFromPoint(
+		List<Point3i> points,
+		ToIntFunction<Point3i> extracter,
+		List<Point3i> pointsExtra,
+		int numExtraPoints
+	) {
 		
-		double[] out = new double[pts.size()+numExtraPoints];
+		double[] out = new double[points.size()+numExtraPoints];
 		
-		for( int i=0; i<pts.size(); i++) {
-			out[i] = (double) extracter.applyAsInt( pts.get(i) );
+		for( int i=0; i<points.size(); i++) {
+			out[i] = (double) extracter.applyAsInt( points.get(i) );
 		}
 		
 		for( int i=0; i<numExtraPoints; i++) {
-			out[pts.size() + i] = (double) extracter.applyAsInt( ptsExtra.get(i) );
+			out[points.size() + i] = (double) extracter.applyAsInt( pointsExtra.get(i) );
 		}
 		
 		return out;

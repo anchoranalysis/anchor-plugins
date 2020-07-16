@@ -66,8 +66,8 @@ public class GradientMeanForAxis extends IntensityGradientBase {
 			gradientCalculation()
 		);
 		
-		for( Point3d p : points ) {
-			sum += p.getValueByDimension(axisType);
+		for( Point3d point : points ) {
+			sum += point.getValueByDimension(axisType);
 		}
 		
 		return sum/points.size();

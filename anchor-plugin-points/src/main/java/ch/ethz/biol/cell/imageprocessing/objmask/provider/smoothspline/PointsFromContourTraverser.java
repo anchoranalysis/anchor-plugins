@@ -34,14 +34,16 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class PointsFromContourTraverser {
-	
-	private PointsFromContourTraverser() {}
 
 	/** Extracts a list of points from the outline (contour) of the object-mask */
 	public static List<Point3i> pointsFromContour( ObjectMask object ) throws OperationFailedException {
 		
-		List<Point3i> ptsTraversed = new ArrayList<>();
+		List<Point3i> pointsTraversed = new ArrayList<>();
 		
 		OutlineTraverser outline = new OutlineTraverser(
 			object.duplicate(),
@@ -49,8 +51,8 @@ public class PointsFromContourTraverser {
 			false,
 			true
 		);
-		outline.applyGlobal(ptsTraversed);
+		outline.applyGlobal(pointsTraversed);
 		
-		return ptsTraversed;
+		return pointsTraversed;
 	}
 }
