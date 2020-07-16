@@ -42,6 +42,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -90,14 +91,16 @@ public class MarkProposerPointsFitter extends MarkProposer {
 			}
 			
 			// Now we create a list of point2d, and run the ellipse fitter on these
-			ArrayList<Point3f> fitList = new ArrayList<>();
-			for( Point3i p : points.get()) {
-				fitList.add(
-					PointConverter.floatFromInt(p)
-				);
-			}
+			List<Point3f> fitList = FunctionalList.mapToList(
+				points.get(),
+				PointConverter::floatFromInt
+			);
 
-			pointsFitter.fit(fitList, inputMark.getMark(), context.getDimensions());
+			pointsFitter.fit(
+				fitList,
+				inputMark.getMark(),
+				context.getDimensions()
+			);
 			
 		} catch (PointsFitterException | InsufficientPointsException e) {
 			

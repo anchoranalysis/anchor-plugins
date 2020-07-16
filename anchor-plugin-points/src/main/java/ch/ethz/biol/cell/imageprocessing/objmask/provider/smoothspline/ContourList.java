@@ -39,35 +39,12 @@ public class ContourList extends ArrayList<Contour> {
 	 * 
 	 */
 	private static final long serialVersionUID = 7003021223351541824L;
-
-	public ContourList() {
-		super();
-	}
-	
-	@Override
-	public String toString() {
-		String newLine = System.getProperty("line.separator");
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("--" + newLine);
-		for (int i=0; i<size(); i++) {
-			Contour c = get(i);
-			sb.append( c.summaryStr() + newLine);
-		}
-		
-		sb.append("--" + newLine);
-		return sb.toString();
-	}
-	
-
 	
 	// Create one large contour with all the points
 	public Contour createCombinedContour() {
 		Contour out = new Contour();
-		for( Contour c : this ) {
-			for( Point3f p : c.getPoints() ) {
-				out.getPoints().add(p);
-			}
+		for( Contour contour : this ) {
+			contour.getPoints().stream().forEach(out.getPoints()::add);
 		}
 		return out;
 	}
@@ -81,8 +58,6 @@ public class ContourList extends ArrayList<Contour> {
 		}
 		return cnt;
 	}
-	
-
 	
 	public Contour getFirst() {
 		return get(0);
@@ -98,5 +73,20 @@ public class ContourList extends ArrayList<Contour> {
 
 	public boolean lastConnectedTo( ContourList other ) {
 		return getLast().connectedTo( other.getFirst() );
+	}
+	
+	@Override
+	public String toString() {
+		String newLine = System.getProperty("line.separator");
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("--" + newLine);
+		for (int i=0; i<size(); i++) {
+			Contour c = get(i);
+			sb.append( c.summaryStr() + newLine);
+		}
+		
+		sb.append("--" + newLine);
+		return sb.toString();
 	}
 }

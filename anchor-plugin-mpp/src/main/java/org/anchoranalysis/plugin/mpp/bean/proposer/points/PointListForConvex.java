@@ -47,14 +47,10 @@ class PointListForConvex {
 		return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, vb);
 	}
 	
-	public boolean convexWithAtLeastOnePoint( Point3i point, BinaryVoxelBox<ByteBuffer> vb  ) {
-		
-		for( Point3i p : list ) {
-			if (convexWithAtLeastOnePoint(p, point, vb)) {
-				return true;
-			}
-		}
-		return false;
+	public boolean convexWithAtLeastOnePoint( Point3i pointToHave, BinaryVoxelBox<ByteBuffer> vb  ) {
+		return list.stream().anyMatch( point ->
+			convexWithAtLeastOnePoint(point, pointToHave, vb)
+		);
 	}
 	
 }

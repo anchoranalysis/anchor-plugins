@@ -30,75 +30,72 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3i;
 
 import com.google.common.base.Preconditions;
 
+import lombok.Getter;
+
 
 class EqualVoxelsPlateau {
 
-		private List<PointWithNghb> ptsEdge = new ArrayList<>();
-		private List<Point3i> ptsInner = new ArrayList<>();
+		@Getter
+		private List<PointWithNghb> pointsEdge = new ArrayList<>();
+		
+		@Getter
+		private List<Point3i> pointsInner = new ArrayList<>();
 		
 		public void addEdge( Point3i point, int nghbIndex ) {
 			Preconditions.checkArgument(nghbIndex >= 0);
-			ptsEdge.add(
+			pointsEdge.add(
 				new PointWithNghb(point, nghbIndex)
 			);
 		}
 		
 		public void addInner( Point3i point ) {
 			// We make we duplicate, as point is coming from an iterator and is mutable
-			ptsInner.add(
+			pointsInner.add(
 				new Point3i(point)
 			);
 		}
 		
 		public boolean hasPoints() {
-			return !ptsEdge.isEmpty() || !ptsInner.isEmpty();
+			return !pointsEdge.isEmpty() || !pointsInner.isEmpty();
 		}
 		
 		public boolean isOnlyEdge() {
-			return ptsInner.isEmpty() && !ptsEdge.isEmpty(); 
+			return pointsInner.isEmpty() && !pointsEdge.isEmpty(); 
 		}
 		
 		public boolean isOnlyInner() {
-			return ptsEdge.isEmpty() && !ptsInner.isEmpty(); 
+			return pointsEdge.isEmpty() && !pointsInner.isEmpty(); 
 		}
 		
 		// TODO EFFICIENCY, rewrite as two separate lists, avoids having to make new lists
-		public List<Point3i> ptsEdgeAsPoints() {
-			List<Point3i> ptsEdgeOut = new ArrayList<>();
-			
-			for( PointWithNghb pwn : ptsEdge ) {
-				ptsEdgeOut.add( pwn.getPoint() );
-			}
-			return ptsEdgeOut;
-		}
-		
-		public List<PointWithNghb> getPtsEdge() {
-			return ptsEdge;
-		}
-		public List<Point3i> getPtsInner() {
-			return ptsInner;
+		public List<Point3i> pointsEdge() {
+			return FunctionalList.mapToList(
+				pointsEdge,
+				PointWithNghb::getPoint
+			);
 		}
 
 		public boolean hasNullItems() {
 			
-			for( Point3i p : ptsInner ) {
-				if(p==null) {
+			for( Point3i point : pointsInner ) {
+				if(point==null) {
 					return true;
 				}
 			}
 			
-			for( PointWithNghb pwn : ptsEdge ) {
-				if(pwn==null) {
+			for( PointWithNghb pointWithNeighbor : pointsEdge ) {
+				if(pointWithNeighbor==null) {
 					return true;
 				}
 			}
 			return false;
 		}
 		public int size() {
-			return ptsEdge.size() + ptsInner.size();
+			return pointsEdge.size() + pointsInner.size();
 		}
 	}

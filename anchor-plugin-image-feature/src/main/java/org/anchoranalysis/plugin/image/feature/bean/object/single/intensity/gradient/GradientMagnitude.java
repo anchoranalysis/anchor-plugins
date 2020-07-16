@@ -56,9 +56,9 @@ public class GradientMagnitude extends IntensityGradientBase {
 			gradientCalculation()
 		);
 		
-		for( Point3d p : points ) {
+		for( Point3d point : points ) {
 			// Calculate the norm of the point
-			sum += p.l2norm();
+			sum += point.l2norm();
 		}
 		
 		return sum/points.size();

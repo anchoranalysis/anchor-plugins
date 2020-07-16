@@ -35,8 +35,10 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsExcept
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
@@ -74,13 +76,13 @@ class EllipseFactory {
 		
 		MarkEllipse mark = new MarkEllipse();
 		
-		List<Point3f> ptsF = new ArrayList<>();
-		for( Point3i p : points ) {
-			ptsF.add( new Point3f(p.getX(),p.getY(),0) );
-		}
+		List<Point3f> pointsAsFloat = FunctionalList.mapToList(
+			points,
+			PointConverter::floatFromIntDropZ
+		);
 		
 		try {
-			pointsFitter.fit( ptsF, mark, dim );
+			pointsFitter.fit(pointsAsFloat,	mark, dim);
 		} catch (PointsFitterException e) {
 			throw new CreateException(e);
 		}
