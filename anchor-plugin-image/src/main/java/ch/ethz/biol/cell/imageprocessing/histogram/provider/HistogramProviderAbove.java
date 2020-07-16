@@ -30,6 +30,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Removes all items in the histogram below a certain threshold.
@@ -41,20 +43,12 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class HistogramProviderAbove extends HistogramProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private int threshold = 0;
+    @BeanField @Getter @Setter private int threshold = 0;
     // END BEAN PROPERTIES
 
     @Override
     protected Histogram createFromHistogram(Histogram hist) throws CreateException {
         hist.removeBelowThreshold(threshold);
         return hist;
-    }
-
-    public int getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
     }
 }

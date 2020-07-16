@@ -45,15 +45,17 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private PointsProposer pointsProposer;
+    @BeanField @Getter @Setter private PointsProposer pointsProposer;
 
-    @BeanField private PointsFitter pointsFitter;
+    @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
-    @BeanField private boolean reportFitterErrors = true;
+    @BeanField @Getter @Setter private boolean reportFitterErrors = true;
     // END BEAN PROPERTIES
 
     @SuppressWarnings("unused")
@@ -105,29 +107,5 @@ public class MarkProposerPointsFitter extends MarkProposer {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         return pointsProposer.proposalVisualization(detailed);
-    }
-
-    public PointsProposer getPointsProposer() {
-        return pointsProposer;
-    }
-
-    public void setPointsProposer(PointsProposer pointsProposer) {
-        this.pointsProposer = pointsProposer;
-    }
-
-    public boolean isReportFitterErrors() {
-        return reportFitterErrors;
-    }
-
-    public void setReportFitterErrors(boolean reportFitterErrors) {
-        this.reportFitterErrors = reportFitterErrors;
-    }
-
-    public PointsFitter getPointsFitter() {
-        return pointsFitter;
-    }
-
-    public void setPointsFitter(PointsFitter pointsFitter) {
-        this.pointsFitter = pointsFitter;
     }
 }

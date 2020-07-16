@@ -35,11 +35,13 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean subtractFromMaskOnly = true;
+    @BeanField @Getter @Setter private boolean subtractFromMaskOnly = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -159,13 +161,5 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
                 }
             }
         }
-    }
-
-    public boolean isSubtractFromMaskOnly() {
-        return subtractFromMaskOnly;
-    }
-
-    public void setSubtractFromMaskOnly(boolean subtractFromMaskOnly) {
-        this.subtractFromMaskOnly = subtractFromMaskOnly;
     }
 }

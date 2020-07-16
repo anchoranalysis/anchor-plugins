@@ -35,11 +35,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RandomOrder extends FileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private FileProvider fileProvider;
+    @BeanField @Getter @Setter private FileProvider fileProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -51,13 +53,5 @@ public class RandomOrder extends FileProvider {
         out.addAll(in);
         Collections.shuffle(out);
         return out;
-    }
-
-    public FileProvider getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProvider fileProvider) {
-        this.fileProvider = fileProvider;
     }
 }

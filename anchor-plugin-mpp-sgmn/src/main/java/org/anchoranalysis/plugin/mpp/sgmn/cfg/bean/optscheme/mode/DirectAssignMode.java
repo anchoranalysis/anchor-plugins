@@ -34,25 +34,22 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.Kernel
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.KernelStateBridgeIdentity;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter.StateReporterIdentity;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Directly assigns a CfgNRG for every optimisation step
  *
  * @param S state-type for optimization
  */
+@NoArgsConstructor @AllArgsConstructor
 public class DirectAssignMode<S> extends AssignMode<S, S, S> {
 
     // START BEAN PROPERTIES
-    @BeanField private ExtractScoreSize<S> extractScoreSize;
+    @BeanField @Getter @Setter private ExtractScoreSize<S> extractScoreSize;
     // END BEAN PROPERTIES
-
-    public DirectAssignMode() {
-        // Standard bean constructor
-    }
-
-    public DirectAssignMode(ExtractScoreSize<S> extractScoreSize) {
-        this.extractScoreSize = extractScoreSize;
-    }
 
     public AccptProbCalculator<S> probCalculator(AnnealScheme annealScheme) {
         return new AccptProbCalculator<>(annealScheme, extractScoreSize);
@@ -76,13 +73,5 @@ public class DirectAssignMode<S> extends AssignMode<S, S, S> {
     @Override
     public ExtractScoreSize<S> extractScoreSizeState() {
         return extractScoreSizeReport();
-    }
-
-    public ExtractScoreSize<S> getExtractScoreSize() {
-        return extractScoreSize;
-    }
-
-    public void setExtractScoreSize(ExtractScoreSize<S> extractScoreSize) {
-        this.extractScoreSize = extractScoreSize;
     }
 }

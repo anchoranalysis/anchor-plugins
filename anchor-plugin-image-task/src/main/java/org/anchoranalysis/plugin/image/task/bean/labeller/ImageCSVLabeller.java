@@ -38,6 +38,8 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
 
@@ -48,7 +50,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
      * <p>The CSV file should have two columns: first column = image id (to match the
      * descriptiveName() of an image) second column = a label string
      */
-    @BeanField private FilePathGenerator csvLabelFilePathGenerator;
+    @BeanField @Getter @Setter private FilePathGenerator csvLabelFilePathGenerator;
     // END BEAN PROPERTIES
 
     @Override
@@ -85,13 +87,5 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
         }
 
         return label;
-    }
-
-    public FilePathGenerator getCsvLabelFilePathGenerator() {
-        return csvLabelFilePathGenerator;
-    }
-
-    public void setCsvLabelFilePathGenerator(FilePathGenerator csvLabelFilePathGenerator) {
-        this.csvLabelFilePathGenerator = csvLabelFilePathGenerator;
     }
 }

@@ -31,6 +31,8 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Finds the repciprocal (multiplicate inverse), but imposes a maximum ceiling via a constant.
@@ -41,7 +43,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PARAMETERS
-    @BeanField private double max = 100;
+    @BeanField @Getter @Setter private double max = 100;
     // END BEAN PARAMETERS
 
     @Override
@@ -57,13 +59,5 @@ public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleEle
     @Override
     public String getDscrLong() {
         return "(1/" + getItem().getBeanName() + ")[max=" + max + "]";
-    }
-
-    public double getMax() {
-        return max;
-    }
-
-    public void setMax(double max) {
-        this.max = max;
     }
 }

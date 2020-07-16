@@ -32,16 +32,18 @@ import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
 public class ChnlProviderStack extends ChnlProvider {
 
-    // START
-    @BeanField private int chnlIndex = 0;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int chnlIndex = 0;
 
-    @BeanField private StackProvider stackProvider;
-    // END
-
-    public ChnlProviderStack() {}
+    @BeanField @Getter @Setter private StackProvider stackProvider;
+    // END BEAN PROPERTIES
 
     public ChnlProviderStack(StackProvider stackProvider) {
         this.stackProvider = stackProvider;
@@ -52,21 +54,5 @@ public class ChnlProviderStack extends ChnlProvider {
 
         Stack in = stackProvider.create();
         return in.getChnl(chnlIndex);
-    }
-
-    public int getChnlIndex() {
-        return chnlIndex;
-    }
-
-    public void setChnlIndex(int chnlIndex) {
-        this.chnlIndex = chnlIndex;
-    }
-
-    public StackProvider getStackProvider() {
-        return stackProvider;
-    }
-
-    public void setStackProvider(StackProvider stackProvider) {
-        this.stackProvider = stackProvider;
     }
 }

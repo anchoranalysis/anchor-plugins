@@ -38,13 +38,15 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
+import lombok.Getter;
+import lombok.Setter;
 
 public class UniformRandomRadiiProposer extends RadiiProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private Bound radiusBound;
+    @BeanField @Getter @Setter private Bound radiusBound;
 
-    @BeanField private boolean do3D = false;
+    @BeanField @Getter @Setter private boolean do3D = false;
     // END BEAN PROPERTIES
 
     public UniformRandomRadiiProposer() {
@@ -71,21 +73,5 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return testMark instanceof MarkConic;
-    }
-
-    public Bound getRadiusBound() {
-        return radiusBound;
-    }
-
-    public void setRadiusBound(Bound radiusBound) {
-        this.radiusBound = radiusBound;
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3d) {
-        do3D = do3d;
     }
 }

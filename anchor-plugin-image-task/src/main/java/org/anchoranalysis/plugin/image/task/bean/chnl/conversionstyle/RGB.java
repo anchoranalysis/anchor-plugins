@@ -39,6 +39,8 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RGB extends ChnlConversionStyle {
 
@@ -48,7 +50,7 @@ public class RGB extends ChnlConversionStyle {
      *
      * <p>If unset, an error is instead thrown in this circumstances
      */
-    @BeanField @OptionalBean private ChnlConversionStyle fallback;
+    @BeanField @OptionalBean @Getter @Setter private ChnlConversionStyle fallback;
     // END BEAN PROPERTIES
 
     @Override
@@ -124,13 +126,5 @@ public class RGB extends ChnlConversionStyle {
         }
 
         return true;
-    }
-
-    public ChnlConversionStyle getFallback() {
-        return fallback;
-    }
-
-    public void setFallback(ChnlConversionStyle fallback) {
-        this.fallback = fallback;
     }
 }

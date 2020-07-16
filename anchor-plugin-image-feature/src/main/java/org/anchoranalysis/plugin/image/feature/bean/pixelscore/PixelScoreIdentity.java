@@ -29,19 +29,21 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
+import lombok.Getter;
+import lombok.Setter;
 
 public class PixelScoreIdentity extends PixelScore {
 
     // START BEAN PROPERTIES
-    @BeanField private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
 
-    @BeanField private boolean normalize = true;
+    @BeanField @Getter @Setter private boolean normalize = true;
 
-    @BeanField private double factorLow = 1.0;
+    @BeanField @Getter @Setter private double factorLow = 1.0;
 
-    @BeanField private double factorHigh = 1.0;
+    @BeanField @Getter @Setter private double factorHigh = 1.0;
 
-    @BeanField private boolean keepExtremes = false;
+    @BeanField @Getter @Setter private boolean keepExtremes = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -72,45 +74,5 @@ public class PixelScoreIdentity extends PixelScore {
         } else {
             return pxlValue;
         }
-    }
-
-    public int getNrgChnlIndex() {
-        return nrgChnlIndex;
-    }
-
-    public void setNrgChnlIndex(int nrgChnlIndex) {
-        this.nrgChnlIndex = nrgChnlIndex;
-    }
-
-    public boolean isNormalize() {
-        return normalize;
-    }
-
-    public void setNormalize(boolean normalize) {
-        this.normalize = normalize;
-    }
-
-    public double getFactorLow() {
-        return factorLow;
-    }
-
-    public void setFactorLow(double factorLow) {
-        this.factorLow = factorLow;
-    }
-
-    public double getFactorHigh() {
-        return factorHigh;
-    }
-
-    public void setFactorHigh(double factorHigh) {
-        this.factorHigh = factorHigh;
-    }
-
-    public boolean isKeepExtremes() {
-        return keepExtremes;
-    }
-
-    public void setKeepExtremes(boolean keepExtremes) {
-        this.keepExtremes = keepExtremes;
     }
 }

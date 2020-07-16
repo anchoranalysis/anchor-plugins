@@ -33,6 +33,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates a level (a threshold-value) from a histogram.
@@ -42,7 +44,7 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 public class LevelFromHistogram extends FeatureHistogram {
 
     // START BEAN PROPERTIES
-    @BeanField private CalculateLevel calculateLevel;
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
     @Override
@@ -52,13 +54,5 @@ public class LevelFromHistogram extends FeatureHistogram {
         } catch (OperationFailedException e) {
             throw new FeatureCalcException(e);
         }
-    }
-
-    public CalculateLevel getCalculateLevel() {
-        return calculateLevel;
-    }
-
-    public void setCalculateLevel(CalculateLevel calculateLevel) {
-        this.calculateLevel = calculateLevel;
     }
 }

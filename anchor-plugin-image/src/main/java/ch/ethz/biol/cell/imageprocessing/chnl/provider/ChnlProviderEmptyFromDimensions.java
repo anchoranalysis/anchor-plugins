@@ -33,13 +33,16 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 
     // START BEAN PROPERTIES
-    @BeanField private int value;
+    @BeanField @Getter @Setter private int value;
 
-    @BeanField private boolean createShort; // If True creates an unsigned short-image
+    /** If True creates an unsigned short-image */
+    @BeanField @Getter @Setter private boolean createShort;
     // END BEAN PROPERTIES
 
     @Override
@@ -55,21 +58,5 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
             chnlNew.getVoxelBox().any().setAllPixelsTo(value);
         }
         return chnlNew;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public boolean isCreateShort() {
-        return createShort;
-    }
-
-    public void setCreateShort(boolean createShort) {
-        this.createShort = createShort;
     }
 }

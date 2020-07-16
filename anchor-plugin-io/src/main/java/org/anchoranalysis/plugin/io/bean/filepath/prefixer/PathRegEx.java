@@ -33,6 +33,8 @@ import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import lombok.Getter;
+import lombok.Setter;
 
 ///
 
@@ -47,7 +49,7 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
     /** Regular expression to use to match path with at least one group in it. */
-    @BeanField private RegEx regEx;
+    @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERTIES
 
     @Override
@@ -86,13 +88,5 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
         }
 
         return new FilePathPrefix(path);
-    }
-
-    public RegEx getRegEx() {
-        return regEx;
-    }
-
-    public void setRegEx(RegEx regEx) {
-        this.regEx = regEx;
     }
 }

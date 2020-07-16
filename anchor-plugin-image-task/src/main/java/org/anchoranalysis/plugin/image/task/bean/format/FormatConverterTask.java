@@ -54,6 +54,8 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Converts the input-image to the default output format, optionally changing the bit depth
@@ -68,13 +70,13 @@ public class FormatConverterTask extends RasterTask {
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
-    @BeanField private ChnlConversionStyle chnlConversionStyle = null;
+    @BeanField @Getter @Setter private ChnlConversionStyle chnlConversionStyle = null;
 
-    @BeanField private boolean suppressSeries = false;
+    @BeanField @Getter @Setter private boolean suppressSeries = false;
 
-    @BeanField @OptionalBean private ChnlFilter chnlFilter = null;
+    @BeanField @OptionalBean @Getter @Setter private ChnlFilter chnlFilter = null;
 
-    @BeanField @OptionalBean private ConvertChannelTo chnlConverter = null;
+    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo chnlConverter = null;
     // END BEAN PROPERTIES
 
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
@@ -208,37 +210,5 @@ public class FormatConverterTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         generatorSeq.end();
-    }
-
-    public boolean isSuppressSeries() {
-        return suppressSeries;
-    }
-
-    public void setSuppressSeries(boolean supressSeries) {
-        this.suppressSeries = supressSeries;
-    }
-
-    public ChnlFilter getChnlFilter() {
-        return chnlFilter;
-    }
-
-    public void setChnlFilter(ChnlFilter chnlFilter) {
-        this.chnlFilter = chnlFilter;
-    }
-
-    public ConvertChannelTo getChnlConverter() {
-        return chnlConverter;
-    }
-
-    public void setChnlConverter(ConvertChannelTo chnlConverter) {
-        this.chnlConverter = chnlConverter;
-    }
-
-    public ChnlConversionStyle getChnlConversionStyle() {
-        return chnlConversionStyle;
-    }
-
-    public void setChnlConversionStyle(ChnlConversionStyle chnlConversionStyle) {
-        this.chnlConversionStyle = chnlConversionStyle;
     }
 }

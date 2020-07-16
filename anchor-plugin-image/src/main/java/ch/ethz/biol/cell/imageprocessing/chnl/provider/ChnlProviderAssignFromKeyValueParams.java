@@ -34,13 +34,15 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private String keyValueParamsID = "";
+    @BeanField @Getter @Setter private String keyValueParamsID = "";
 
-    @BeanField private String key;
+    @BeanField @Getter @Setter private String key;
     // END BEAN PROPERTIES
 
     @Override
@@ -77,21 +79,5 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
         }
 
         return chnl;
-    }
-
-    public String getKeyValueParamsID() {
-        return keyValueParamsID;
-    }
-
-    public void setKeyValueParamsID(String keyValueParamsID) {
-        this.keyValueParamsID = keyValueParamsID;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 }

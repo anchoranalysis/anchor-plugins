@@ -48,13 +48,15 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
 
     // START BEAN PROPERTIES
-    @BeanField private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
 
-    @BeanField @OptionalBean private DefineOutputterMPP define;
+    @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
     // END BEAN PROPERTIES
 
     @Override
@@ -133,21 +135,5 @@ public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
-    }
-
-    public List<ReportFeatureForSharedObjects> getListReportFeatures() {
-        return listReportFeatures;
-    }
-
-    public void setListReportFeatures(List<ReportFeatureForSharedObjects> listReportFeatures) {
-        this.listReportFeatures = listReportFeatures;
-    }
-
-    public DefineOutputterMPP getDefine() {
-        return define;
-    }
-
-    public void setDefine(DefineOutputterMPP define) {
-        this.define = define;
     }
 }

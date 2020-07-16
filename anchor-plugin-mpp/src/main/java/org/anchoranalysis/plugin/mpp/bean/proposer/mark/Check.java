@@ -39,11 +39,13 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Check extends MarkProposerOne {
 
     // BEAN PARAMETERS
-    @BeanField private CheckMark checkMark = null;
+    @BeanField @Getter @Setter private CheckMark checkMark = null;
     // END BEAN
 
     private Mark lastFailedMark;
@@ -96,13 +98,5 @@ public class Check extends MarkProposerOne {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return super.isCompatibleWith(testMark) && checkMark.isCompatibleWith(testMark);
-    }
-
-    public CheckMark getCheckMark() {
-        return checkMark;
-    }
-
-    public void setCheckMark(CheckMark checkMark) {
-        this.checkMark = checkMark;
     }
 }

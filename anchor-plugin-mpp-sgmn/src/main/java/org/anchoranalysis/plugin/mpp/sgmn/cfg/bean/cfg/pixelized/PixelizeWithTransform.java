@@ -32,36 +32,26 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Converts a Cfg to a CfgToPixelized using a transformer
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor @AllArgsConstructor
 public class PixelizeWithTransform<T> extends StateTransformerBean<T, ToPixelized<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField private StateTransformerBean<T, CfgNRGPixelized> transformer;
+    @BeanField @Getter @Setter private StateTransformerBean<T, CfgNRGPixelized> transformer;
     // END BEAN PROPERTIES
-
-    public PixelizeWithTransform() {}
-
-    public PixelizeWithTransform(StateTransformerBean<T, CfgNRGPixelized> transformer) {
-        super();
-        this.transformer = transformer;
-    }
 
     @Override
     public ToPixelized<T> transform(T in, TransformationContext context)
             throws OperationFailedException {
         return new ToPixelized<>(in, transformer.transform(in, context));
-    }
-
-    public StateTransformerBean<T, CfgNRGPixelized> getTransformer() {
-        return transformer;
-    }
-
-    public void setTransformer(StateTransformerBean<T, CfgNRGPixelized> transformer) {
-        this.transformer = transformer;
     }
 }

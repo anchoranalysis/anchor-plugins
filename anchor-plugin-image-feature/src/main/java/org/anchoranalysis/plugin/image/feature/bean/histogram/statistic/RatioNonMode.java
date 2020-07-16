@@ -33,6 +33,8 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.Getter;
+import lombok.Setter;
 
 //
 // Ratio of number of non-mode pixels to number of pixels
@@ -40,7 +42,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class RatioNonMode extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean ignoreZero = false;
+    @BeanField @Getter @Setter private boolean ignoreZero = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -95,13 +97,5 @@ public class RatioNonMode extends FeatureHistogramStatistic {
             }
         }
         return maxIndex;
-    }
-
-    public boolean isIgnoreZero() {
-        return ignoreZero;
-    }
-
-    public void setIgnoreZero(boolean ignoreZero) {
-        this.ignoreZero = ignoreZero;
     }
 }

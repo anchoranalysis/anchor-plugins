@@ -29,8 +29,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
 
 /**
  * Performs Otsu auto-thresholding
@@ -43,6 +42,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * @author Owen Feehan
  */
+@EqualsAndHashCode(callSuper = false)
 public class Otsu extends CalculateLevel {
 
     @Override
@@ -73,20 +73,6 @@ public class Otsu extends CalculateLevel {
         }
 
         return thresholdChosen;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Otsu) {
-            return new EqualsBuilder().isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().toHashCode();
     }
 
     private static double betweenClassVariance(

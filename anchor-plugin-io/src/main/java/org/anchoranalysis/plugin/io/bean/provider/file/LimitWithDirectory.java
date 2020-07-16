@@ -34,13 +34,15 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
+import lombok.Getter;
+import lombok.Setter;
 
 public class LimitWithDirectory extends FileProviderWithDirectory {
 
     // START BEANS
-    @BeanField private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
-    @BeanField private int maxNumItems = 0;
+    @BeanField @Getter @Setter private int maxNumItems = 0;
     // END BEANS
 
     @Override
@@ -53,21 +55,5 @@ public class LimitWithDirectory extends FileProviderWithDirectory {
     @Override
     public Path getDirectoryAsPath(InputContextParams inputContext) {
         return fileProvider.getDirectoryAsPath(inputContext);
-    }
-
-    public FileProviderWithDirectory getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProviderWithDirectory fileProvider) {
-        this.fileProvider = fileProvider;
-    }
-
-    public int getMaxNumItems() {
-        return maxNumItems;
-    }
-
-    public void setMaxNumItems(int maxNumItems) {
-        this.maxNumItems = maxNumItems;
     }
 }

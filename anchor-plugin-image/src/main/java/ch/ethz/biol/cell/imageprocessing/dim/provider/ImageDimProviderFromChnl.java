@@ -39,6 +39,8 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Creates image-dimensions by referencing them from a ChnlProvider
@@ -50,9 +52,9 @@ import org.anchoranalysis.image.stack.Stack;
 public class ImageDimProviderFromChnl extends ImageDimProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @AllowEmpty private String id = "";
+    @BeanField @AllowEmpty @Getter @Setter private String id = "";
 
-    @BeanField @OptionalBean private ChnlProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnl;
     // END BEAN PROPERTIES
 
     @Override
@@ -104,21 +106,5 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 
     private static Channel firstChnl(Stack stack) {
         return stack.getChnl(0);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public ChnlProvider getChnl() {
-        return chnl;
-    }
-
-    public void setChnl(ChnlProvider chnl) {
-        this.chnl = chnl;
     }
 }

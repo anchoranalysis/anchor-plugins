@@ -37,11 +37,13 @@ import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisual
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class MarkProposerFromList extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @NonEmpty private List<MarkProposer> list = new ArrayList<>();
+    @BeanField @NonEmpty @Getter @Setter private List<MarkProposer> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -76,12 +78,4 @@ public abstract class MarkProposerFromList extends MarkProposer {
 
     protected abstract Optional<CreateProposalVisualization> proposalVisualization(
             boolean detailed, List<MarkProposer> markProposerList);
-
-    public List<MarkProposer> getList() {
-        return list;
-    }
-
-    public void setList(List<MarkProposer> list) {
-        this.list = list;
-    }
 }

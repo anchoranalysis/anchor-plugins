@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeature;
 import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeatureWithMask;
+import lombok.Getter;
+import lombok.Setter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,20 +56,20 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class ChnlProviderPixelScore extends ChnlProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider intensityProvider;
+    @BeanField @Getter @Setter private ChnlProvider intensityProvider;
 
-    @BeanField @OptionalBean private ChnlProvider gradientProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider gradientProvider;
 
     // We don't use {@link ChnlProiderMask} as here it's optional.
-    @BeanField @OptionalBean private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
 
-    @BeanField private PixelScore pixelScore;
+    @BeanField @Getter @Setter private PixelScore pixelScore;
 
-    @BeanField private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
 
-    @BeanField private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 
-    @BeanField @OptionalBean private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
 
     private VoxelBoxList createVoxelBoxList(Channel chnlIntensity) throws CreateException {
@@ -136,61 +138,5 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 
         return new ChannelFactoryByte()
                 .create(vbPixelScore, chnlIntensity.getDimensions().getRes());
-    }
-
-    public ChnlProvider getIntensityProvider() {
-        return intensityProvider;
-    }
-
-    public void setIntensityProvider(ChnlProvider intensityProvider) {
-        this.intensityProvider = intensityProvider;
-    }
-
-    public ChnlProvider getGradientProvider() {
-        return gradientProvider;
-    }
-
-    public void setGradientProvider(ChnlProvider gradientProvider) {
-        this.gradientProvider = gradientProvider;
-    }
-
-    public PixelScore getPixelScore() {
-        return pixelScore;
-    }
-
-    public void setPixelScore(PixelScore pixelScore) {
-        this.pixelScore = pixelScore;
-    }
-
-    public List<ChnlProvider> getListChnlProviderExtra() {
-        return listChnlProviderExtra;
-    }
-
-    public void setListChnlProviderExtra(List<ChnlProvider> listChnlProviderExtra) {
-        this.listChnlProviderExtra = listChnlProviderExtra;
-    }
-
-    public List<HistogramProvider> getListHistogramProviderExtra() {
-        return listHistogramProviderExtra;
-    }
-
-    public void setListHistogramProviderExtra(List<HistogramProvider> listHistogramProviderExtra) {
-        this.listHistogramProviderExtra = listHistogramProviderExtra;
-    }
-
-    public KeyValueParamsProvider getKeyValueParamsProvider() {
-        return keyValueParamsProvider;
-    }
-
-    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-        this.keyValueParamsProvider = keyValueParamsProvider;
-    }
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
     }
 }

@@ -31,6 +31,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Compares a value with a range, returning specified constants if its inside the range, below it or
@@ -43,7 +45,7 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
 
     // START BEAN PROPERTIES
     /** Constant to return if value lies within the range */
-    @BeanField private double withinValue = 0;
+    @BeanField @Getter @Setter private double withinValue = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,13 +62,5 @@ public class CompareWithRange<T extends FeatureInput> extends RangeCompareFromSc
     @Override
     public String getParamDscr() {
         return String.format("%s,withinValue=%f", super.getParamDscr(), withinValue);
-    }
-
-    public double getWithinValue() {
-        return withinValue;
-    }
-
-    public void setWithinValue(double withinValue) {
-        this.withinValue = withinValue;
     }
 }

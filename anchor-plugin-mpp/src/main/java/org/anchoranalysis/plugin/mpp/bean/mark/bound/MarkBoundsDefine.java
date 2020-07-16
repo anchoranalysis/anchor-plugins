@@ -30,31 +30,20 @@ import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor @AllArgsConstructor
 public class MarkBoundsDefine extends MarkBoundsProvider {
 
     // START BEAN FIELDS
-    @BeanField private MarkBounds markBounds;
+    @BeanField @Getter @Setter private MarkBounds markBounds;
     // END BEAN FIELDS
-
-    public MarkBoundsDefine() {
-        // Standard bean constructor
-    }
-
-    public MarkBoundsDefine(MarkBounds markBounds) {
-        this.markBounds = markBounds;
-    }
 
     @Override
     public MarkBounds create() throws CreateException {
         return markBounds;
-    }
-
-    public MarkBounds getMarkBounds() {
-        return markBounds;
-    }
-
-    public void setMarkBounds(MarkBounds markBounds) {
-        this.markBounds = markBounds;
     }
 }

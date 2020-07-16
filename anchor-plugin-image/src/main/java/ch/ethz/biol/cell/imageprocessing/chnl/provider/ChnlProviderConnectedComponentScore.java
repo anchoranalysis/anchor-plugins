@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
+import lombok.Getter;
+import lombok.Setter;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -45,9 +47,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
 
     // START BEAN PROPERTIES
-    @BeanField private CalculateLevel calculateLevel;
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
 
-    @BeanField private int intensityTolerance = 0;
+    @BeanField @Getter @Setter private int intensityTolerance = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -129,21 +131,5 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
                 }
             }
         }
-    }
-
-    public CalculateLevel getCalculateLevel() {
-        return calculateLevel;
-    }
-
-    public void setCalculateLevel(CalculateLevel calculateLevel) {
-        this.calculateLevel = calculateLevel;
-    }
-
-    public int getIntensityTolerance() {
-        return intensityTolerance;
-    }
-
-    public void setIntensityTolerance(int intensityTolerance) {
-        this.intensityTolerance = intensityTolerance;
     }
 }

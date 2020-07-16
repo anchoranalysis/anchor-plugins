@@ -32,11 +32,13 @@ import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Not extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private CheckMark check;
+    @BeanField @Getter @Setter private CheckMark check;
     // END BEAN PROPERTIES
 
     @Override
@@ -48,13 +50,5 @@ public class Not extends CheckMark {
     public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack)
             throws CheckException {
         return !check.check(mark, regionMap, nrgStack);
-    }
-
-    public CheckMark getCheck() {
-        return check;
-    }
-
-    public void setCheck(CheckMark check) {
-        this.check = check;
     }
 }

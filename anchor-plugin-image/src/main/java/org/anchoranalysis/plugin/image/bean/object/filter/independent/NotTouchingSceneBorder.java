@@ -33,6 +33,8 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Keeps only objects that are not adjacent to the scene-border (i.e. have a bounding-box on the
@@ -43,7 +45,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean includeZ = false;
+    @BeanField @Getter @Setter private boolean includeZ = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -70,13 +72,5 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             }
         }
         return true;
-    }
-
-    public boolean isIncludeZ() {
-        return includeZ;
-    }
-
-    public void setIncludeZ(boolean includeZ) {
-        this.includeZ = includeZ;
     }
 }

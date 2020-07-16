@@ -35,6 +35,8 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Calculates each feature individually, and combines them using the ratios between
@@ -43,7 +45,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 public class FeatureAsIndividualProportionate extends FeaturePairMemoOne {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<FeatureInputSingleMemo> itemProportionate;
+    @BeanField @Getter @Setter private Feature<FeatureInputSingleMemo> itemProportionate;
     // eND BEAN PROPERTIES
 
     private static final ChildCacheName CACHE_NAME_FIRST =
@@ -104,13 +106,5 @@ public class FeatureAsIndividualProportionate extends FeaturePairMemoOne {
         weight2 /= weightSum;
 
         return (weight1 * val1) + (weight2 * val2);
-    }
-
-    public Feature<FeatureInputSingleMemo> getItemProportionate() {
-        return itemProportionate;
-    }
-
-    public void setItemProportionate(Feature<FeatureInputSingleMemo> itemProportionate) {
-        this.itemProportionate = itemProportionate;
     }
 }

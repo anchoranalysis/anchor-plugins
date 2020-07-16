@@ -34,11 +34,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RootFilePathRegEx extends ReportFeatureForManifest {
 
     // START BEAN PROPERTIES
-    @BeanField private int groupNum;
+    @BeanField @Getter @Setter private int groupNum;
     // END BEAN PROPERTIES
 
     @Override
@@ -75,14 +77,6 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     @Override
     public boolean isNumeric() {
         return groupNum >= 2;
-    }
-
-    public int getGroupNum() {
-        return groupNum;
-    }
-
-    public void setGroupNum(int groupNum) {
-        this.groupNum = groupNum;
     }
 
     @Override

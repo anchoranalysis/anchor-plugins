@@ -32,15 +32,17 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PROPERTIES
     /** Constant to return if outside the range (below the minimum allowed) */
-    @BeanField private double belowMinValue = 0;
+    @BeanField @Getter @Setter private double belowMinValue = 0;
 
     /** Constant to return if outside the range (above the maximum allowed) */
-    @BeanField private double aboveMaxValue = 0;
+    @BeanField @Getter @Setter private double aboveMaxValue = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -88,21 +90,5 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     @Override
     public String getParamDscr() {
         return String.format("belowMinValue=%f,aboveMaxValue=%f", belowMinValue, aboveMaxValue);
-    }
-
-    public double getBelowMinValue() {
-        return belowMinValue;
-    }
-
-    public void setBelowMinValue(double belowMinValue) {
-        this.belowMinValue = belowMinValue;
-    }
-
-    public double getAboveMaxValue() {
-        return aboveMaxValue;
-    }
-
-    public void setAboveMaxValue(double aboveMaxValue) {
-        this.aboveMaxValue = aboveMaxValue;
     }
 }

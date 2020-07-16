@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Multiplexes between two summarizers depending on the total number of count
@@ -44,13 +46,13 @@ public class SummarizerSplitMoreThan<T> extends Summarizer<T> {
      * If there are more than <code>countThreshold</code> elements, use summarizerGreaterThan, else
      * summarizerElse
      */
-    @BeanField private int countThreshold;
+    @BeanField @Getter @Setter private int countThreshold;
 
     /** Used for summary if count(elements) > countThreshold */
-    @BeanField private Summarizer<T> summarizerGreaterThan;
+    @BeanField @Getter @Setter private Summarizer<T> summarizerGreaterThan;
 
     /** Used for summary if count(elements) <= countThreshold */
-    @BeanField private Summarizer<T> summarizerElse;
+    @BeanField @Getter @Setter private Summarizer<T> summarizerElse;
     // END BEAN PROPERTIES
 
     private int count = 0;
@@ -67,29 +69,5 @@ public class SummarizerSplitMoreThan<T> extends Summarizer<T> {
         Summarizer<T> summarizer =
                 (count > countThreshold) ? summarizerGreaterThan : summarizerElse;
         return summarizer.describe();
-    }
-
-    public int getCountThreshold() {
-        return countThreshold;
-    }
-
-    public void setCountThreshold(int countThreshold) {
-        this.countThreshold = countThreshold;
-    }
-
-    public Summarizer<T> getSummarizerGreaterThan() {
-        return summarizerGreaterThan;
-    }
-
-    public void setSummarizerGreaterThan(Summarizer<T> summarizerGreaterThan) {
-        this.summarizerGreaterThan = summarizerGreaterThan;
-    }
-
-    public Summarizer<T> getSummarizerElse() {
-        return summarizerElse;
-    }
-
-    public void setSummarizerElse(Summarizer<T> summarizerElse) {
-        this.summarizerElse = summarizerElse;
     }
 }

@@ -33,6 +33,8 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Blurs an image
@@ -44,7 +46,7 @@ import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 public class ChnlProviderBlur extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private BlurStrategy strategy = new BlurGaussian3D();
+    @BeanField @Getter @Setter private BlurStrategy strategy = new BlurGaussian3D();
     // END BEAN PROPERTIES
 
     @Override
@@ -57,13 +59,5 @@ public class ChnlProviderBlur extends ChnlProviderOne {
         }
 
         return chnl;
-    }
-
-    public BlurStrategy getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(BlurStrategy strategy) {
-        this.strategy = strategy;
     }
 }

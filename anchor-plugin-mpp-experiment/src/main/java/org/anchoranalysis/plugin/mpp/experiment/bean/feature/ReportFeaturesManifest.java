@@ -45,11 +45,13 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
-    @BeanField
+    @BeanField @Getter @Setter
     private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
     // END BEAN PROPERTIES
 
@@ -108,14 +110,5 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
-    }
-
-    public List<ReportFeature<ManifestRecorderFile>> getListReportFeatures() {
-        return listReportFeatures;
-    }
-
-    public void setListReportFeatures(
-            List<ReportFeature<ManifestRecorderFile>> listReportFeatures) {
-        this.listReportFeatures = listReportFeatures;
     }
 }

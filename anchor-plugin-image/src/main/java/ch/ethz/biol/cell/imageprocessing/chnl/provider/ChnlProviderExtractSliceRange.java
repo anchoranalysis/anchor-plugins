@@ -38,13 +38,15 @@ import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 
     // START BEANS
-    @BeanField @Positive private int sliceStart;
+    @BeanField @Positive @Getter @Setter private int sliceStart;
 
-    @BeanField @Positive private int sliceEnd;
+    @BeanField @Positive @Getter @Setter private int sliceEnd;
     // END BEANS
 
     @Override
@@ -82,21 +84,5 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
         if (sliceEnd < sliceStart) {
             throw new BeanMisconfiguredException("SliceStart must be less than SliceEnd");
         }
-    }
-
-    public int getSliceStart() {
-        return sliceStart;
-    }
-
-    public void setSliceStart(int sliceStart) {
-        this.sliceStart = sliceStart;
-    }
-
-    public int getSliceEnd() {
-        return sliceEnd;
-    }
-
-    public void setSliceEnd(int sliceEnd) {
-        this.sliceEnd = sliceEnd;
     }
 }

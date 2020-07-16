@@ -47,21 +47,23 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
+import lombok.Getter;
+import lombok.Setter;
 
 public class NamedChnlsAppend extends NamedChnlsBase {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<NamedChnlsInputPart> input;
+    @BeanField @Getter @Setter private InputManager<NamedChnlsInputPart> input;
 
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField @OptionalBean private List<NamedBean<FilePathGenerator>> listAppend;
+    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<FilePathGenerator>> listAppend;
 
-    @BeanField private boolean forceEagerEvaluation = false;
+    @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
 
-    @BeanField private boolean ignoreFileNotFoundAppend = false;
+    @BeanField @Getter @Setter private boolean ignoreFileNotFoundAppend = false;
 
-    @BeanField private boolean skipMissingChannels = false;
+    @BeanField @Getter @Setter private boolean skipMissingChannels = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -150,53 +152,5 @@ public class NamedChnlsAppend extends NamedChnlsBase {
         }
 
         return out;
-    }
-
-    public InputManager<NamedChnlsInputPart> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<NamedChnlsInputPart> input) {
-        this.input = input;
-    }
-
-    public List<NamedBean<FilePathGenerator>> getListAppend() {
-        return listAppend;
-    }
-
-    public void setListAppend(List<NamedBean<FilePathGenerator>> listAppend) {
-        this.listAppend = listAppend;
-    }
-
-    public boolean isForceEagerEvaluation() {
-        return forceEagerEvaluation;
-    }
-
-    public void setForceEagerEvaluation(boolean forceEagerEvaluation) {
-        this.forceEagerEvaluation = forceEagerEvaluation;
-    }
-
-    public boolean isIgnoreFileNotFoundAppend() {
-        return ignoreFileNotFoundAppend;
-    }
-
-    public void setIgnoreFileNotFoundAppend(boolean ignoreFileNotFoundAppend) {
-        this.ignoreFileNotFoundAppend = ignoreFileNotFoundAppend;
-    }
-
-    public boolean isSkipMissingChannels() {
-        return skipMissingChannels;
-    }
-
-    public void setSkipMissingChannels(boolean skipMissingChannels) {
-        this.skipMissingChannels = skipMissingChannels;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
     }
 }

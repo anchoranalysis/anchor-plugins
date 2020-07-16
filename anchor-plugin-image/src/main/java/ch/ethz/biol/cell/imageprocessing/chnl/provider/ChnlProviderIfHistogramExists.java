@@ -32,11 +32,13 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -49,13 +51,5 @@ public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
         } else {
             throw new CreateException("histogram is null");
         }
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

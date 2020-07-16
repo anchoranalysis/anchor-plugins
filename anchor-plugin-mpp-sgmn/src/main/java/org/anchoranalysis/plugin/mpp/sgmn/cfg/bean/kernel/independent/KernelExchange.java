@@ -41,11 +41,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private MarkProposer markProposer = null;
+    @BeanField @Getter @Setter private MarkProposer markProposer = null;
     // END BEAN PROPERTIES
 
     private Mark markExst;
@@ -134,13 +136,5 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return markProposer.isCompatibleWith(testMark);
-    }
-
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
     }
 }

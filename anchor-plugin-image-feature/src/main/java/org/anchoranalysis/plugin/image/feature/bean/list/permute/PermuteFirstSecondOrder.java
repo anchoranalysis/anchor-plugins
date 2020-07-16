@@ -36,13 +36,15 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         extends PermuteFeatureSequenceInteger<T> {
 
     // START BEAN PROPERTIES
     /** If true the constant is appended to the param prefix (a dot and a number) */
-    @BeanField private boolean paramPrefixAppendNumber = true;
+    @BeanField @Getter @Setter private boolean paramPrefixAppendNumber = true;
     // END BEAN PROPERTIES
 
     private CreateFirstSecondOrder<T> factory;
@@ -117,13 +119,5 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         permuteProperty.setPropertyPath(
                 String.format("item.item.item.%s", permuteProperty.getPropertyPath()));
         return permuteProperty;
-    }
-
-    public boolean isParamPrefixAppendNumber() {
-        return paramPrefixAppendNumber;
-    }
-
-    public void setParamPrefixAppendNumber(boolean paramPrefixAppendNumber) {
-        this.paramPrefixAppendNumber = paramPrefixAppendNumber;
     }
 }

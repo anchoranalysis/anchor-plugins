@@ -31,21 +31,25 @@ import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
+import lombok.Getter;
+import lombok.Setter;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
 // approaches 1.0
 public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean ignoreHigherSide = false; // Always returns 1.0 for the higher side
+    @BeanField @Getter @Setter private boolean ignoreHigherSide = false; // Always returns 1.0 for the higher side
 
-    @BeanField private boolean ignoreLowerSide = false; // Always returns 1.0 for the lower side
+    @BeanField @Getter @Setter private boolean ignoreLowerSide = false; // Always returns 1.0 for the lower side
 
-    @BeanField
-    private boolean rewardHigherSide = false; // Treat the higher side as if it's the the fill cdf
+    /** Treat the higher side as if it's the the fill cdf */
+    @BeanField @Getter @Setter 
+    private boolean rewardHigherSide = false; 
 
-    @BeanField
-    private boolean rewardLowerSide = false; // Treat the lower side as if it's 1 - the fill cdf
+    /* Treat the lower side as if it's 1 - the fill cdf */
+    @BeanField @Getter @Setter 
+    private boolean rewardLowerSide = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -63,37 +67,5 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
         return GaussianScoreCalculator.calc(
                 mean, stdDev.doOperation(), featureValue, rewardHigherSide, rewardLowerSide);
-    }
-
-    public boolean isIgnoreHigherSide() {
-        return ignoreHigherSide;
-    }
-
-    public void setIgnoreHigherSide(boolean ignoreHigherSide) {
-        this.ignoreHigherSide = ignoreHigherSide;
-    }
-
-    public boolean isIgnoreLowerSide() {
-        return ignoreLowerSide;
-    }
-
-    public void setIgnoreLowerSide(boolean ignoreLowerSide) {
-        this.ignoreLowerSide = ignoreLowerSide;
-    }
-
-    public boolean isRewardHigherSide() {
-        return rewardHigherSide;
-    }
-
-    public void setRewardHigherSide(boolean rewardHigherSide) {
-        this.rewardHigherSide = rewardHigherSide;
-    }
-
-    public boolean isRewardLowerSide() {
-        return rewardLowerSide;
-    }
-
-    public void setRewardLowerSide(boolean rewardLowerSide) {
-        this.rewardLowerSide = rewardLowerSide;
     }
 }

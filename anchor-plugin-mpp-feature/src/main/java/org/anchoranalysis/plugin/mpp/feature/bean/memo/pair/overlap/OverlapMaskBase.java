@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.function.LongBinaryOperator;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
@@ -41,9 +43,9 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
 public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
     // START BEAN PROPERTIES
-    @BeanField private int maskValue = 255;
+    @BeanField @Getter @Setter private int maskValue = 255;
 
-    @BeanField private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int nrgIndex = 0;
     // END BEAN PROPERTIES
 
     protected double overlapWithGlobalMask(SessionInput<FeatureInputPairMemo> params)
@@ -82,21 +84,5 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
     private long sizeForObj(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
         VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
         return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
-    }
-
-    public int getNrgIndex() {
-        return nrgIndex;
-    }
-
-    public void setNrgIndex(int nrgIndex) {
-        this.nrgIndex = nrgIndex;
-    }
-
-    public int getMaskValue() {
-        return maskValue;
-    }
-
-    public void setMaskValue(int maskValue) {
-        this.maskValue = maskValue;
     }
 }

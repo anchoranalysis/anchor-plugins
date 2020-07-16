@@ -35,11 +35,13 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AngleRotation extends OrientationProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private double angleDegrees = 0;
+    @BeanField @Getter @Setter private double angleDegrees = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -51,14 +53,6 @@ public class AngleRotation extends OrientationProposer {
 
         double angleRadians = (angleDegrees / 180) * Math.PI;
         return Optional.of(new Orientation2D(exstOrientation.getAngleRadians() + angleRadians));
-    }
-
-    public double getAngleDegrees() {
-        return angleDegrees;
-    }
-
-    public void setAngleDegrees(double angleDegrees) {
-        this.angleDegrees = angleDegrees;
     }
 
     @Override

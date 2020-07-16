@@ -31,11 +31,13 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
+import lombok.Getter;
+import lombok.Setter;
 
 public class RatioThreshold extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
-    @BeanField private RelationToThreshold threshold;
+    @BeanField @Getter @Setter private RelationToThreshold threshold;
     // END BEAN PROPERTIES
 
     @Override
@@ -53,13 +55,5 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     @Override
     public String getParamDscr() {
         return String.format("%s,threshold=%s", super.getParamDscr(), threshold.toString());
-    }
-
-    public RelationToThreshold getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(RelationToThreshold threshold) {
-        this.threshold = threshold;
     }
 }

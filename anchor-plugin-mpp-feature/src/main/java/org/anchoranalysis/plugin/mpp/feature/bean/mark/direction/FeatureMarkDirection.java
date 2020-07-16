@@ -39,11 +39,13 @@ import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
 
     // START BEAN PROPERTIES
-    @BeanField private DirectionVectorBean directionVector;
+    @BeanField @Getter @Setter private DirectionVectorBean directionVector;
     // END BEAN PROPERTIES
 
     private DirectionVector dv;
@@ -74,12 +76,4 @@ public abstract class FeatureMarkDirection extends FeatureMark {
             RotationMatrix rotMatrix,
             Vector3d directionVector)
             throws FeatureCalcException;
-
-    public DirectionVectorBean getDirectionVector() {
-        return directionVector;
-    }
-
-    public void setDirectionVector(DirectionVectorBean directionVector) {
-        this.directionVector = directionVector;
-    }
 }

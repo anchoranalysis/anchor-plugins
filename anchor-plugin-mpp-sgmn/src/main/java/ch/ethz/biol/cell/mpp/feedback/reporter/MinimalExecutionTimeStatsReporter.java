@@ -37,11 +37,13 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
+import lombok.Getter;
+import lombok.Setter;
 
 public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private String outputName = "minimalExecutionTimeStats";
+    @BeanField @Getter @Setter private String outputName = "minimalExecutionTimeStats";
     // END BEAN PROPERTIES
 
     private BoundOutputManagerRouteErrors outputManager = null;
@@ -93,13 +95,5 @@ public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<CfgN
                         () ->
                                 new XStreamGenerator<>(
                                         stats, Optional.of("minimalExecutionTimeStats")));
-    }
-
-    public String getOutputName() {
-        return outputName;
-    }
-
-    public void setOutputName(String outputName) {
-        this.outputName = outputName;
     }
 }

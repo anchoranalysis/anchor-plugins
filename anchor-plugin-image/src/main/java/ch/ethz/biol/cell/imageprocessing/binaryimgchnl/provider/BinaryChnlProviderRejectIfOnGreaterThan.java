@@ -30,14 +30,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private double maxRatioOn;
+    @BeanField @Getter @Setter private double maxRatioOn;
 
-    @BeanField
-    private boolean bySlice = false; // Rejects if any slice has more On than the maxRatio allows
+    /** Rejects if any slice has a greater ratio of ON-voxels than the maxRatio allows */
+    @BeanField @Getter @Setter private boolean bySlice = false; 
     // END BEAN PROPERTIES
 
     @Override
@@ -64,21 +66,5 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
                             "binaryImgChnl has on-pixel ratio of %f when a max of %f is allowed",
                             ratio, maxRatioOn));
         }
-    }
-
-    public double getMaxRatioOn() {
-        return maxRatioOn;
-    }
-
-    public void setMaxRatioOn(double maxRatioOn) {
-        this.maxRatioOn = maxRatioOn;
-    }
-
-    public boolean isBySlice() {
-        return bySlice;
-    }
-
-    public void setBySlice(boolean bySlice) {
-        this.bySlice = bySlice;
     }
 }

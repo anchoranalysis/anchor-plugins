@@ -39,18 +39,20 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapAutoname;
+import lombok.Getter;
+import lombok.Setter;
 
 // Provides access to a named set of channels for each input
 public class NamedChnls extends NamedChnlsBase {
 
     // START BEANS
-    @BeanField private InputManager<FileInput> fileInput;
+    @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private ImgChnlMapCreator imgChnlMapCreator = new ImgChnlMapAutoname();
+    @BeanField @Getter @Setter private ImgChnlMapCreator imgChnlMapCreator = new ImgChnlMapAutoname();
 
-    @BeanField private boolean useLastSeriesIndexOnly = false;
+    @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
     // END BEANS
 
     @Override
@@ -70,37 +72,5 @@ public class NamedChnls extends NamedChnlsBase {
         }
 
         return listOut;
-    }
-
-    public InputManager<FileInput> getFileInput() {
-        return fileInput;
-    }
-
-    public void setFileInput(InputManager<FileInput> fileInput) {
-        this.fileInput = fileInput;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public ImgChnlMapCreator getImgChnlMapCreator() {
-        return imgChnlMapCreator;
-    }
-
-    public void setImgChnlMapCreator(ImgChnlMapCreator imgChnlMapCreator) {
-        this.imgChnlMapCreator = imgChnlMapCreator;
-    }
-
-    public boolean isUseLastSeriesIndexOnly() {
-        return useLastSeriesIndexOnly;
-    }
-
-    public void setUseLastSeriesIndexOnly(boolean useLastSeriesIndexOnly) {
-        this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
     }
 }

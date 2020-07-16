@@ -40,11 +40,13 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
 
     // START BEAN PROPERTIES
-    @BeanField private Summarizer<S> summarizer = new SummarizerCount<>();
+    @BeanField @Getter @Setter private Summarizer<S> summarizer = new SummarizerCount<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -98,13 +100,5 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
 
         eea.getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
-    }
-
-    public Summarizer<S> getSummarizer() {
-        return summarizer;
-    }
-
-    public void setSummarizer(Summarizer<S> summarizer) {
-        this.summarizer = summarizer;
     }
 }

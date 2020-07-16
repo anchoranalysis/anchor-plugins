@@ -34,11 +34,13 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class MarkProposerOne extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private MarkProposer proposer;
+    @BeanField @Getter @Setter private MarkProposer proposer;
     // END BEAN PROPERTIES
 
     public boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context)
@@ -58,13 +60,5 @@ public abstract class MarkProposerOne extends MarkProposer {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         return proposer.proposalVisualization(detailed);
-    }
-
-    public MarkProposer getProposer() {
-        return proposer;
-    }
-
-    public void setProposer(MarkProposer proposer) {
-        this.proposer = proposer;
     }
 }

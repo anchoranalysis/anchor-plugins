@@ -56,6 +56,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice
@@ -69,12 +71,12 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     private static final String OUTPUT_STACK_KEY = "stack";
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit private FeatureListProvider<FeatureInputStack> scoreProvider;
+    @BeanField @SkipInit @Getter @Setter private FeatureListProvider<FeatureInputStack> scoreProvider;
 
-    @BeanField private StackProvider nrgStackProvider;
+    @BeanField @Getter @Setter private StackProvider nrgStackProvider;
 
     /** If true, the maxima of the score is searched for. If false, rather the minima. */
-    @BeanField private boolean findMaxima = true;
+    @BeanField @Getter @Setter private boolean findMaxima = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -241,29 +243,5 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
-    }
-
-    public FeatureListProvider<FeatureInputStack> getScoreProvider() {
-        return scoreProvider;
-    }
-
-    public void setScoreProvider(FeatureListProvider<FeatureInputStack> scoreProvider) {
-        this.scoreProvider = scoreProvider;
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
-    }
-
-    public boolean isFindMaxima() {
-        return findMaxima;
-    }
-
-    public void setFindMaxima(boolean findMaxima) {
-        this.findMaxima = findMaxima;
     }
 }

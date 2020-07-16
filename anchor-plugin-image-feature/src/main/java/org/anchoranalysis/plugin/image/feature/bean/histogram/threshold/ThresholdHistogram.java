@@ -34,6 +34,8 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies a feature to the thresholded
@@ -44,10 +46,10 @@ import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 public class ThresholdHistogram extends FeatureHistogram {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<FeatureInputHistogram> item;
+    @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item;
 
     // START BEAN PROPERTIES
-    @BeanField private CalculateLevel calculateLevel;
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,21 +62,5 @@ public class ThresholdHistogram extends FeatureHistogram {
                                 new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),
                                 input.resolver()),
                         new ChildCacheName(ThresholdHistogram.class, calculateLevel.hashCode()));
-    }
-
-    public Feature<FeatureInputHistogram> getItem() {
-        return item;
-    }
-
-    public void setItem(Feature<FeatureInputHistogram> item) {
-        this.item = item;
-    }
-
-    public CalculateLevel getCalculateLevel() {
-        return calculateLevel;
-    }
-
-    public void setCalculateLevel(CalculateLevel calculateLevel) {
-        this.calculateLevel = calculateLevel;
     }
 }

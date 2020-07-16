@@ -35,13 +35,15 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 public class HistogramProviderChnl extends HistogramProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnl;
+    @BeanField @Getter @Setter private ChnlProvider chnl;
 
-    @BeanField @OptionalBean private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
     // END BEAN PROPERTIES
 
     @Override
@@ -54,21 +56,5 @@ public class HistogramProviderChnl extends HistogramProvider {
         } else {
             return HistogramFactory.create(chnlIn);
         }
-    }
-
-    public ChnlProvider getChnl() {
-        return chnl;
-    }
-
-    public void setChnl(ChnlProvider chnl) {
-        this.chnl = chnl;
-    }
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
     }
 }

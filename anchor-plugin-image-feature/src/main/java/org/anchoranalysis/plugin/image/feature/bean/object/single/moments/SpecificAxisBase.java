@@ -30,6 +30,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.ImageMoments;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A feature based one one-specific principal-axis as identified by Image Moments.
@@ -48,7 +50,7 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
      * Specifies which principal-axis to use for calculations (0=largest eigenvalue,
      * 1=second-largest eigenvalue etc.)
      */
-    @BeanField private int index = 0;
+    @BeanField @Getter @Setter private int index = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,12 +62,4 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
     /** Calculates the result for the specific moment identified by index */
     protected abstract double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalcException;
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 }

@@ -47,18 +47,20 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 
     // START BEANS
-    @BeanField private double overlapRatioThreshold = 0.1;
+    @BeanField @Getter @Setter private double overlapRatioThreshold = 0.1;
 
-    @BeanField private MarkProposer markProposer = null;
+    @BeanField @Getter @Setter private MarkProposer markProposer = null;
 
     // Optional proposal for doing an additional birth
-    @BeanField @OptionalBean private MarkProposer markProposerAdditionalBirth = null;
+    @BeanField @OptionalBean @Getter @Setter private MarkProposer markProposerAdditionalBirth = null;
 
-    @BeanField private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+    @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
     // END BEANS
 
     private Mark markNew;
@@ -214,40 +216,8 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
         return new int[] {this.markNew.getId()};
     }
 
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
-    }
-
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return markProposer.isCompatibleWith(testMark);
-    }
-
-    public double getOverlapRatioThreshold() {
-        return overlapRatioThreshold;
-    }
-
-    public void setOverlapRatioThreshold(double overlapRatioThreshold) {
-        this.overlapRatioThreshold = overlapRatioThreshold;
-    }
-
-    public MarkProposer getMarkProposerAdditionalBirth() {
-        return markProposerAdditionalBirth;
-    }
-
-    public void setMarkProposerAdditionalBirth(MarkProposer markProposerAdditionalBirth) {
-        this.markProposerAdditionalBirth = markProposerAdditionalBirth;
-    }
-
-    public int getRegionID() {
-        return regionID;
-    }
-
-    public void setRegionID(int regionID) {
-        this.regionID = regionID;
     }
 }

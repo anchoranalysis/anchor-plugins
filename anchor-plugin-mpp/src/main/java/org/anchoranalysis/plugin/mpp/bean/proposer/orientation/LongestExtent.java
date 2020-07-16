@@ -39,13 +39,15 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
+import lombok.Getter;
+import lombok.Setter;
 
 public class LongestExtent extends OrientationProposer {
 
     // START BEAN
-    @BeanField private double incrementDegrees = 1;
+    @BeanField @Getter @Setter private double incrementDegrees = 1;
 
-    @BeanField private BoundCalculator boundCalculator;
+    @BeanField @Getter @Setter private BoundCalculator boundCalculator;
     // END BEAN
 
     @Override
@@ -66,9 +68,7 @@ public class LongestExtent extends OrientationProposer {
             BidirectionalBound bib;
 
             try {
-                bib =
-                        boundCalculator.calcBound(
-                                markC.getPos(), new Orientation2D(angle).createRotationMatrix());
+                bib = boundCalculator.calcBound(markC.getPos(), new Orientation2D(angle).createRotationMatrix());
             } catch (OperationFailedException e) {
                 throw new ProposalAbnormalFailureException(e);
             }
@@ -76,7 +76,7 @@ public class LongestExtent extends OrientationProposer {
             double max = bib.getMaxOfMax();
 
             if (max > maxExtent) {
-                max = maxExtent;
+                maxExtent = max;
                 angleAtMax = angle;
             }
         }
@@ -84,24 +84,8 @@ public class LongestExtent extends OrientationProposer {
         return Optional.of(new Orientation2D(angleAtMax));
     }
 
-    public double getIncrementDegrees() {
-        return incrementDegrees;
-    }
-
-    public void setIncrementDegrees(double incrementDegrees) {
-        this.incrementDegrees = incrementDegrees;
-    }
-
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return testMark instanceof MarkAbstractPosition;
-    }
-
-    public BoundCalculator getBoundCalculator() {
-        return boundCalculator;
-    }
-
-    public void setBoundCalculator(BoundCalculator boundCalculator) {
-        this.boundCalculator = boundCalculator;
     }
 }

@@ -32,6 +32,8 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A base class for a {@link ChnlProvider} which also uses a binary-mask, but which doesn't use any
@@ -45,7 +47,7 @@ import org.anchoranalysis.image.channel.Channel;
 public abstract class ChnlProviderMask extends ChnlProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private BinaryChnlProvider mask;
+    @BeanField @Getter @Setter private BinaryChnlProvider mask;
     // END BEAN PROPERTIES
 
     @Override
@@ -55,12 +57,4 @@ public abstract class ChnlProviderMask extends ChnlProvider {
     }
 
     protected abstract Channel createFromMask(Mask mask) throws CreateException;
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
-    }
 }

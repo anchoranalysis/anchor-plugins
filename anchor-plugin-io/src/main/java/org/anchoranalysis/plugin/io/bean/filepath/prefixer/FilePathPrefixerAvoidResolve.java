@@ -37,6 +37,8 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a
@@ -56,7 +58,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * <p>If empty, first the bean will try to use any output-dir set in the input context if it
      * exists, or otherwise use the system temp dir
      */
-    @BeanField @AllowEmpty private String outPathPrefix = "";
+    @BeanField @AllowEmpty @Getter @Setter private String outPathPrefix = "";
     // END BEAN PROPERTIES
 
     // Caches the calculation
@@ -147,13 +149,5 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
     private static Path tempDir() {
         String tempDir = System.getProperty("java.io.tmpdir");
         return Paths.get(tempDir);
-    }
-
-    public String getOutPathPrefix() {
-        return outPathPrefix;
-    }
-
-    public void setOutPathPrefix(String outPathPrefix) {
-        this.outPathPrefix = outPathPrefix;
     }
 }

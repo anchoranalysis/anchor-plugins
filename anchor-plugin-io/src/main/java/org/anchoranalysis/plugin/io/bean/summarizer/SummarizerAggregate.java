@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
 import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Collects summary data about a set of input files that will eventually be outputted to the user
@@ -38,10 +40,10 @@ public class SummarizerAggregate<T> extends Summarizer<T> {
     private static final String BULLET_POINT = "-> ";
 
     // START BEAN PROPERTIES
-    @BeanField private List<Summarizer<T>> list;
+    @BeanField @Getter @Setter private List<Summarizer<T>> list;
 
     /** Iff TRUE no bullet is added for the very first-item in the list */
-    @BeanField private boolean avoidBulletOnFirst = false;
+    @BeanField @Getter @Setter private boolean avoidBulletOnFirst = false;
     // END BEAN PROPERTIES
 
     public void add(T element) throws OperationFailedException {
@@ -70,21 +72,5 @@ public class SummarizerAggregate<T> extends Summarizer<T> {
         }
 
         return sb.toString();
-    }
-
-    public List<Summarizer<T>> getList() {
-        return list;
-    }
-
-    public void setList(List<Summarizer<T>> list) {
-        this.list = list;
-    }
-
-    public boolean isAvoidBulletOnFirst() {
-        return avoidBulletOnFirst;
-    }
-
-    public void setAvoidBulletOnFirst(boolean avoidBulletOnFirst) {
-        this.avoidBulletOnFirst = avoidBulletOnFirst;
     }
 }

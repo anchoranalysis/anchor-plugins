@@ -33,24 +33,18 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.DualCfgNRGPixelized;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AddDualTransformer extends StateTransformerBean<CfgNRGPixelized, DualCfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private StateTransformerBean<Cfg, CfgNRGPixelized> transformerCfg;
+    @BeanField @Getter @Setter private StateTransformerBean<Cfg, CfgNRGPixelized> transformerCfg;
     // END BEAN PROPERTIES
 
     @Override
     public DualCfgNRGPixelized transform(CfgNRGPixelized in, TransformationContext context)
             throws OperationFailedException {
         return new DualCfgNRGPixelized(in, transformerCfg.transform(in.getCfg(), context));
-    }
-
-    public StateTransformerBean<Cfg, CfgNRGPixelized> getTransformerCfg() {
-        return transformerCfg;
-    }
-
-    public void setTransformerCfg(StateTransformerBean<Cfg, CfgNRGPixelized> transformerCfg) {
-        this.transformerCfg = transformerCfg;
     }
 }

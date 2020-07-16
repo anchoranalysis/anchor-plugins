@@ -39,15 +39,17 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ChnlProviderZScore extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private HistogramProvider histogram;
+    @BeanField @Getter @Setter private HistogramProvider histogram;
 
-    @BeanField private boolean alwaysDuplicate = false;
+    @BeanField @Getter @Setter private boolean alwaysDuplicate = false;
 
-    @BeanField private double factor = 100.0; // Multiples
+    @BeanField @Getter @Setter private double factor = 100.0; // Multiples
     // END BEAN PROPERTIES
 
     @Override
@@ -100,29 +102,5 @@ public class ChnlProviderZScore extends ChnlProviderOne {
                 vbOut.putInt(offset, valOut);
             }
         }
-    }
-
-    public double getFactor() {
-        return factor;
-    }
-
-    public void setFactor(double factor) {
-        this.factor = factor;
-    }
-
-    public boolean isAlwaysDuplicate() {
-        return alwaysDuplicate;
-    }
-
-    public void setAlwaysDuplicate(boolean alwaysDuplicate) {
-        this.alwaysDuplicate = alwaysDuplicate;
-    }
-
-    public HistogramProvider getHistogram() {
-        return histogram;
-    }
-
-    public void setHistogram(HistogramProvider histogram) {
-        this.histogram = histogram;
     }
 }

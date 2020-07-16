@@ -40,15 +40,17 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.Getter;
+import lombok.Setter;
 
 public class StackProviderRGBChnlProvider extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private ChnlProvider red;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider red;
 
-    @BeanField @OptionalBean private ChnlProvider green;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider green;
 
-    @BeanField @OptionalBean private ChnlProvider blue;
+    @BeanField @OptionalBean @Getter @Setter private ChnlProvider blue;
     // END BEAN PROPERTIES
 
     @Override
@@ -183,29 +185,5 @@ public class StackProviderRGBChnlProvider extends StackProvider {
         } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);
         }
-    }
-
-    public ChnlProvider getRed() {
-        return red;
-    }
-
-    public void setRed(ChnlProvider red) {
-        this.red = red;
-    }
-
-    public ChnlProvider getGreen() {
-        return green;
-    }
-
-    public void setGreen(ChnlProvider green) {
-        this.green = green;
-    }
-
-    public ChnlProvider getBlue() {
-        return blue;
-    }
-
-    public void setBlue(ChnlProvider blue) {
-        this.blue = blue;
     }
 }

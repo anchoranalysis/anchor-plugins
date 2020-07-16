@@ -37,6 +37,8 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.Getter;
+import lombok.Setter;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram
 // creation
@@ -44,7 +46,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 
     // START BEAN PROPERTIES
-    @BeanField private double quantile = 0.5;
+    @BeanField @Getter @Setter private double quantile = 0.5;
     // END BEAN PROPERTIES
 
     @Override
@@ -86,13 +88,5 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
                 }
             }
         }
-    }
-
-    public double getQuantile() {
-        return quantile;
-    }
-
-    public void setQuantile(double quantile) {
-        this.quantile = quantile;
     }
 }

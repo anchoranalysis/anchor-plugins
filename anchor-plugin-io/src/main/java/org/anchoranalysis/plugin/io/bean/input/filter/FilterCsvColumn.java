@@ -37,6 +37,8 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Finds a CSV file with the descriptiveNames of an input as the first-column
@@ -52,11 +54,11 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-    @BeanField private FilePathGenerator csvFilePath;
+    @BeanField @Getter @Setter private FilePathGenerator csvFilePath;
 
-    @BeanField private String match;
+    @BeanField @Getter @Setter private String match;
     // END BEAN PROPERTIES
 
     @Override
@@ -102,29 +104,5 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
                 itr.remove();
             }
         }
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
-    }
-
-    public String getMatch() {
-        return match;
-    }
-
-    public void setMatch(String match) {
-        this.match = match;
-    }
-
-    public FilePathGenerator getCsvFilePath() {
-        return csvFilePath;
-    }
-
-    public void setCsvFilePath(FilePathGenerator csvFilePath) {
-        this.csvFilePath = csvFilePath;
     }
 }

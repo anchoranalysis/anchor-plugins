@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,8 +36,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.math.statistics.VarianceCalculator;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Similar to Otsu, but weighs the variances differently of background and foreground
@@ -53,6 +52,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class OtsuWeighted extends CalculateLevel {
 
     // START BEAN PROPERTIES
@@ -132,23 +132,5 @@ public class OtsuWeighted extends CalculateLevel {
         double prob2 = 1 - prob1;
 
         return (prob1 * varBg * weightBackground + prob2 * varFg * weightForeground);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof OtsuWeighted) {
-            final OtsuWeighted other = (OtsuWeighted) obj;
-            return new EqualsBuilder()
-                    .append(weightForeground, other.weightForeground)
-                    .append(weightBackground, other.weightBackground)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(weightForeground).append(weightBackground).toHashCode();
     }
 }

@@ -35,13 +35,15 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int chnlIndex = 0;
 
-    @BeanField private String stackProviderID;
+    @BeanField @Getter @Setter private String stackProviderID;
     // END BEAN PROPERTIES
 
     private Channel chnl;
@@ -59,21 +61,5 @@ public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
     @Override
     public Mask create() throws CreateException {
         return new Mask(chnl, BinaryValues.getDefault());
-    }
-
-    public int getChnlIndex() {
-        return chnlIndex;
-    }
-
-    public void setChnlIndex(int chnlIndex) {
-        this.chnlIndex = chnlIndex;
-    }
-
-    public String getStackProviderID() {
-        return stackProviderID;
-    }
-
-    public void setStackProviderID(String stackProviderID) {
-        this.stackProviderID = stackProviderID;
     }
 }

@@ -37,11 +37,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private CreateMarkFromPoints createMark;
+    @BeanField @Getter @Setter private CreateMarkFromPoints createMark;
     // END BEAN PROPERTIES
 
     @Override
@@ -59,14 +61,6 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, Cfg
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    public CreateMarkFromPoints getCreateMark() {
-        return createMark;
-    }
-
-    public void setCreateMark(CreateMarkFromPoints createMark) {
-        this.createMark = createMark;
     }
 
     private static Cfg wrapMark(Optional<Mark> mark) {

@@ -37,11 +37,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
     // START BEAN LIST
-    @BeanField private CfgProposer cfgProposer;
+    @BeanField @Getter @Setter private CfgProposer cfgProposer;
     // END BEAN LIST
 
     private Optional<Cfg> lastCfg;
@@ -84,13 +86,5 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
     @Override
     public int[] changedMarkIDArray() {
         return this.lastCfg.map(Cfg::createIdArr).orElse(new int[] {});
-    }
-
-    public CfgProposer getCfgProposer() {
-        return cfgProposer;
-    }
-
-    public void setCfgProposer(CfgProposer cfgProposer) {
-        this.cfgProposer = cfgProposer;
     }
 }

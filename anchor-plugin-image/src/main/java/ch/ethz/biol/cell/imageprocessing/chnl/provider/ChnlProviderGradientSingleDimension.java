@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Extracts the gradient
@@ -38,7 +40,7 @@ public class ChnlProviderGradientSingleDimension extends ChnlProviderGradientBas
 
     // START BEAN
     /** Which axis? X=0, Y=1, Z=2 */
-    @BeanField private int axis = 0;
+    @BeanField @Getter @Setter private int axis = 0;
     // END BEAN
 
     @Override
@@ -53,13 +55,5 @@ public class ChnlProviderGradientSingleDimension extends ChnlProviderGradientBas
             default:
                 throw new CreateException("Axis must be 0 (x-axis) or 1 (y-axis) or 2 (z-axis)");
         }
-    }
-
-    public int getAxis() {
-        return axis;
-    }
-
-    public void setAxis(int axis) {
-        this.axis = axis;
     }
 }

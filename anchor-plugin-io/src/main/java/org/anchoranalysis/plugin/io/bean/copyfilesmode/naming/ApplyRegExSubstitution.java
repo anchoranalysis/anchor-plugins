@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A regular expression substitution (replaceAll) is applied to the relative-path
@@ -40,7 +42,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class ApplyRegExSubstitution extends CopyFilesNamingOneRegEx {
 
     // START BEAN PROPERTIES
-    @BeanField private String replacement;
+    @BeanField @Getter @Setter private String replacement;
     // END BEAN PROPERTIES
 
     @Override
@@ -51,11 +53,4 @@ public class ApplyRegExSubstitution extends CopyFilesNamingOneRegEx {
         return Optional.of(Paths.get(pathAfterRegEx));
     }
 
-    public String getReplacement() {
-        return replacement;
-    }
-
-    public void setReplacement(String replacement) {
-        this.replacement = replacement;
-    }
 }

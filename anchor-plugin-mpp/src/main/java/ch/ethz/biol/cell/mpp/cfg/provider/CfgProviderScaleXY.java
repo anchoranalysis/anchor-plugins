@@ -26,6 +26,7 @@
 
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
+import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -34,13 +35,15 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CfgProviderScaleXY extends CfgProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
 
-    @BeanField private ScaleCalculator scaleCalculator;
+    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
     @Override
@@ -48,7 +51,7 @@ public class CfgProviderScaleXY extends CfgProvider {
 
         ScaleFactor sf;
         try {
-            sf = scaleCalculator.calc(null);
+            sf = scaleCalculator.calc(Optional.empty());
         } catch (OperationFailedException e1) {
             throw new CreateException(e1);
         }
@@ -69,21 +72,5 @@ public class CfgProviderScaleXY extends CfgProvider {
             throw new CreateException(e);
         }
         return cfgCopy;
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
-    }
-
-    public ScaleCalculator getScaleCalculator() {
-        return scaleCalculator;
-    }
-
-    public void setScaleCalculator(ScaleCalculator scaleCalculator) {
-        this.scaleCalculator = scaleCalculator;
     }
 }

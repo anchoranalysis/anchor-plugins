@@ -35,11 +35,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import lombok.Getter;
+import lombok.Setter;
 
 public class AndList extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private List<CheckMark> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<CheckMark> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -52,14 +54,6 @@ public class AndList extends CheckMark {
             }
         }
         return true;
-    }
-
-    public List<CheckMark> getList() {
-        return list;
-    }
-
-    public void setList(List<CheckMark> list) {
-        this.list = list;
     }
 
     @Override

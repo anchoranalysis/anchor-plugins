@@ -42,17 +42,19 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit private FeatureListProvider<FeatureInputStack> classifierProvider;
+    @BeanField @SkipInit @Getter @Setter private FeatureListProvider<FeatureInputStack> classifierProvider;
 
-    @BeanField @NonEmpty
+    @BeanField @NonEmpty @Getter @Setter 
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures =
             new ArrayList<>();
 
-    @BeanField private StackProvider nrgStackProvider;
+    @BeanField @Getter @Setter private StackProvider nrgStackProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -81,30 +83,5 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
         } catch (FeatureCalcException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    public FeatureListProvider<FeatureInputStack> getClassifierProvider() {
-        return classifierProvider;
-    }
-
-    public void setClassifierProvider(FeatureListProvider<FeatureInputStack> classifierProvider) {
-        this.classifierProvider = classifierProvider;
-    }
-
-    public List<NamedBean<FeatureListProvider<FeatureInputStack>>> getListFeatures() {
-        return listFeatures;
-    }
-
-    public void setListFeatures(
-            List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures) {
-        this.listFeatures = listFeatures;
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
     }
 }

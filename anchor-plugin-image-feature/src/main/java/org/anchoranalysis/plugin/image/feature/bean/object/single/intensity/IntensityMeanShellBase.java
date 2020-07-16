@@ -40,6 +40,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Constructs a shell around an object-mask using a standard dilation and erosion process
@@ -49,27 +51,27 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     // START BEAN PROPERTIES
-    @BeanField @NonNegative private int iterationsErosion = 0;
+    @BeanField @NonNegative @Getter @Setter private int iterationsErosion = 0;
 
-    @BeanField private int iterationsDilation = 0;
+    @BeanField @Getter @Setter private int iterationsDilation = 0;
 
     /**
      * Iff TRUE, calculates instead on the inverse of the mask (what's left when the shell is
      * removed)
      */
-    @BeanField private boolean inverse = false;
+    @BeanField @Getter @Setter private boolean inverse = false;
 
     /**
      * A channel of the nrgStack that is used as an additional mask using default byte values for ON
      * and OFF
      */
-    @BeanField private int nrgIndexMask = -1;
+    @BeanField @Getter @Setter private int nrgIndexMask = -1;
 
-    @BeanField private boolean inverseMask = false; // Uses the inverse of the passed mask
+    @BeanField @Getter @Setter private boolean inverseMask = false; // Uses the inverse of the passed mask
 
-    @BeanField private double emptyValue = 255;
+    @BeanField @Getter @Setter private double emptyValue = 255;
 
-    @BeanField private boolean do3D = true;
+    @BeanField @Getter @Setter private boolean do3D = true;
 
     // END BEAN PROPERTIES
 
@@ -142,61 +144,5 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
                 iterationsErosion,
                 inverse ? "true" : "false",
                 do3D ? "true" : "false");
-    }
-
-    public int getIterationsDilation() {
-        return iterationsDilation;
-    }
-
-    public void setIterationsDilation(int iterationsDilation) {
-        this.iterationsDilation = iterationsDilation;
-    }
-
-    public boolean isInverse() {
-        return inverse;
-    }
-
-    public void setInverse(boolean inverse) {
-        this.inverse = inverse;
-    }
-
-    public int getNrgIndexMask() {
-        return nrgIndexMask;
-    }
-
-    public void setNrgIndexMask(int nrgIndexMask) {
-        this.nrgIndexMask = nrgIndexMask;
-    }
-
-    public boolean isInverseMask() {
-        return inverseMask;
-    }
-
-    public void setInverseMask(boolean inverseMask) {
-        this.inverseMask = inverseMask;
-    }
-
-    public double getEmptyValue() {
-        return emptyValue;
-    }
-
-    public void setEmptyValue(double emptyValue) {
-        this.emptyValue = emptyValue;
-    }
-
-    public int getIterationsErosion() {
-        return iterationsErosion;
-    }
-
-    public void setIterationsErosion(int iterationsErosion) {
-        this.iterationsErosion = iterationsErosion;
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3D) {
-        this.do3D = do3D;
     }
 }
