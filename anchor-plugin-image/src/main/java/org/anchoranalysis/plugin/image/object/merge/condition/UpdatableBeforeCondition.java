@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  * 2. Check Obj2 vs Step 1
  * 
  * This allows additional (costly) operations to occur after Step 1, that can be repeatedly used
- * in Step 2 e.g. growing object-masks to check for neighbouring objects
+ * in Step 2 e.g. growing object-masks to check for neighboring objects
  * 
  * @author Owen Feehan
  *

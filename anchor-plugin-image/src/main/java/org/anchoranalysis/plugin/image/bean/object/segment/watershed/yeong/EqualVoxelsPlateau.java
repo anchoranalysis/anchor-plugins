@@ -41,15 +41,15 @@ import lombok.Getter;
 class EqualVoxelsPlateau {
 
 		@Getter
-		private List<PointWithNghb> pointsEdge = new ArrayList<>();
+		private List<PointWithNeighbor> pointsEdge = new ArrayList<>();
 		
 		@Getter
 		private List<Point3i> pointsInner = new ArrayList<>();
 		
-		public void addEdge( Point3i point, int nghbIndex ) {
-			Preconditions.checkArgument(nghbIndex >= 0);
+		public void addEdge( Point3i point, int neighborIndex ) {
+			Preconditions.checkArgument(neighborIndex >= 0);
 			pointsEdge.add(
-				new PointWithNghb(point, nghbIndex)
+				new PointWithNeighbor(point, neighborIndex)
 			);
 		}
 		
@@ -76,7 +76,7 @@ class EqualVoxelsPlateau {
 		public List<Point3i> pointsEdge() {
 			return FunctionalList.mapToList(
 				pointsEdge,
-				PointWithNghb::getPoint
+				PointWithNeighbor::getPoint
 			);
 		}
 
@@ -88,7 +88,7 @@ class EqualVoxelsPlateau {
 				}
 			}
 			
-			for( PointWithNghb pointWithNeighbor : pointsEdge ) {
+			for( PointWithNeighbor pointWithNeighbor : pointsEdge ) {
 				if(pointWithNeighbor==null) {
 					return true;
 				}

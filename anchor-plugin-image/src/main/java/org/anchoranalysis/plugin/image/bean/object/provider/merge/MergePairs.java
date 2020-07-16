@@ -59,7 +59,7 @@ import lombok.Setter;
 /**
  *   Merges objects if a <emph>pair</emph> feature value satisfies a condition
  *   <p>
- *   The pair feature is calculated on all combinations of any two neighbouring objects (but only once for each pair, unidirectionally). 
+ *   The pair feature is calculated on all combinations of any two neighboring objects (but only once for each pair, unidirectionally). 
  *   <p>
  *   The merges occur in order of the maximum increase offered (if the value exceeds the threshold),
  *   and the algorithm recursively merge until all possible merges are complete.

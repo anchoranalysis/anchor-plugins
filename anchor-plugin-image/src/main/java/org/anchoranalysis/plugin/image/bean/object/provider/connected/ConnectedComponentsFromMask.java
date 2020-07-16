@@ -66,9 +66,9 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 	@BeanField @Getter @Setter
 	private boolean bySlices = false;
 	
-	/** If true uses 8 nghb rather than 4 nghb etc. in 2D, and similar in 3D */
+	/** If true uses 8 neighborhood rather than 4 neighborhood etc. in 2D, and similar in 3D */
 	@BeanField @Getter @Setter
-	private boolean bigNghb = false;
+	private boolean bigNeighborhood = false;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -98,7 +98,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 	}
 	
 	private CreateFromConnectedComponentsFactory createFactory( int minNumberVoxels ) {
-		return new CreateFromConnectedComponentsFactory(bigNghb, minNumberVoxels);
+		return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
 	}
 	
 	private ObjectCollection createObjects3D( Mask bi, int minNumberVoxels ) throws CreateException {

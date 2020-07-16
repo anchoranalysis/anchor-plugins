@@ -32,11 +32,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
 
 /** There's no meaningful "result" value here, so we always return -1 */
-class PointProcessor extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Object> {
+class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Object> {
 
 	private SlidingBuffer<?> sbMask;
 	private SlidingBuffer<ByteBuffer> sbFinalized;
@@ -91,7 +91,7 @@ class PointProcessor extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Obje
 			// write this value to the output image
 			putInt(index, valToWrite);
 			
-			// put the neighbour on the queue
+			// put the neighbor on the queue
 			queue.put(new Point3i(x1,y1,z), valToWrite);
 			
 			// point as finalized

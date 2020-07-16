@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
+import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 
 
 /**
@@ -81,7 +81,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
 	}
 	
 	protected CountKernel createCountKernelMask( ObjectMask object1, ObjectMask object2Relative ) {
-		return new CountKernelNghbMask(do3D, object1.getBinaryValuesByte(), object2Relative, true );
+		return new CountKernelNeighborhoodMask(do3D, object1.getBinaryValuesByte(), object2Relative, true );
 	}
 
 	public boolean isDo3D() {

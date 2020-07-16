@@ -47,7 +47,7 @@ public class Dilate extends ObjectCollectionProviderMorphological {
 	
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter
-	private boolean bigNghb = false;
+	private boolean bigNeighborhood = false;
 	// END BEAN PROPERTIES
 
 	@Override
@@ -57,7 +57,7 @@ public class Dilate extends ObjectCollectionProviderMorphological {
 			extent,
 			isDo3D(),
 			getIterations(),
-			bigNghb
+			bigNeighborhood
 		);
 	}
 }

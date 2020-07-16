@@ -46,7 +46,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.object.merge.MergeGraph;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 import org.anchoranalysis.plugin.image.object.merge.condition.AndCondition;
-import org.anchoranalysis.plugin.image.object.merge.condition.NeighbourhoodCond;
+import org.anchoranalysis.plugin.image.object.merge.condition.NeighborhoodCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.WrapAsUpdatable;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
@@ -66,10 +66,10 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 	// START BEAN PROPERTIES
 	/** Requires for any potential merge that the bounding-boxes of the two objects must intersect or touch */
 	@BeanField @Getter @Setter
-	private boolean requireBBoxNeighbours = true;
+	private boolean requireBBoxNeighbors = true;
 	
 	
-	/** Requires the object-masks to touch. More expensive to calculate than the requireBBoxNeighbours condition. */
+	/** Requires the object-masks to touch. More expensive to calculate than the {@code requireBBoxNeighbors} condition. */
 	@BeanField @Getter @Setter
 	private boolean requireTouching = true;
 		 
@@ -109,7 +109,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 	/** Determines the payload for any given or potential vertex */
 	protected abstract PayloadCalculator createPayloadCalculator() throws OperationFailedException;
 	
-	/** Determines the priority (and selection criteria) used to allow merges between neighbours */
+	/** Determines the priority (and selection criteria) used to allow merges between neighbors */
 	protected abstract AssignPriority createPrioritizer() throws OperationFailedException;
 
 	/**
@@ -213,7 +213,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 			new WrapAsUpdatable(
 				maybeDistanceCondition()	
 			),
-			new NeighbourhoodCond(requireBBoxNeighbours, requireTouching)
+			new NeighborhoodCondition(requireBBoxNeighbors, requireTouching)
 		);
 	}
 }

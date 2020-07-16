@@ -39,12 +39,12 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NghbMatchValue;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NeighborMatchValue;
 
 /**
- * Calculates the number of voxels on the object that have a neighbour (according to a binary-mask on an nrg-channel)
+ * Calculates the number of voxels on the object that have a neighbor (according to a binary-mask on an nrg-channel)
  * 
- * <p>The nrg-channel should be a binary-channel (with 255 high, and 0 low) showing all possible neighbour voxels
+ * <p>The nrg-channel should be a binary-channel (with 255 high, and 0 low) showing all possible neighbor voxels
  * 
  * @author Owen Feehan
  *
@@ -65,7 +65,7 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
 	@Override
 	protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalcException {
 		
-		OutlineKernel3NghbMatchValue kernelMatch = new OutlineKernel3NghbMatchValue(
+		OutlineKernel3NeighborMatchValue kernelMatch = new OutlineKernel3NeighborMatchValue(
 			outsideAtThreshold,
 			do3D,
 			object,

@@ -46,7 +46,7 @@ import lombok.Setter;
  * These merges occur in order of the maximum increase offered, and the algorithm recursively merge until all possible merges are complete.
  * <p>
  * The feature-value is calculated for each object that is a vertex of the graph (including all prospective merges
- * of neighbours).
+ * of neighbors).
  * 
  * @author Owen Feehan
  */

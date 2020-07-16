@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.segment.watershed.encoding;
  */
 
 
-public interface IEncodeDirection {
+public interface EncodeDirection {
 
 	int encodeDirection( int x, int y, int z );
 }

@@ -51,19 +51,19 @@ import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPa
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
+import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features and pair features. 
+ * Creates a set of features, that creates pairs of neighboring-objects and applies a mixture of single-object features and pair features. 
  * <p>
  * Specifically:
  * <ul>
- * <li>Creates a graph of neighbouring-objects
- * <li>Passes each pair of immediately-neighbouring as params, together with their merged object
+ * <li>Creates a graph of neighboring-objects
+ * <li>Passes each pair of immediately-neighboring as params, together with their merged object
  * </ul>
  * <p>
  * Features are formed by duplicating the input-feature list (inputfeatures, single-object features only):
@@ -168,11 +168,11 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 
 		List<FeatureInputPairObjects> out = new ArrayList<>();
 		
-		// We create a neighbour-graph of our input objects
+		// We create a neighbor-graph of our input objects
 		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>(
 			new EdgeAdderParameters(avoidOverlappingObjects)
 		);
-		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
+		GraphWithEdgeTypes<ObjectMask,Integer> graphNeighbors = graphCreator.createGraph(
 			objects.asList(),
 			Function.identity(),
 			(v1, v2, numberVoxels) -> numberVoxels,
@@ -181,7 +181,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 		);
 		
 		// We iterate through every edge in the graph, edges can exist in both directions
-		for( EdgeTypeWithVertices<ObjectMask,Integer> e : graphNghb.edgeSetUnique() ) {
+		for( EdgeTypeWithVertices<ObjectMask,Integer> e : graphNeighbors.edgeSetUnique() ) {
 			out.add(
 				new FeatureInputPairObjects(
 					e.getNode1(),

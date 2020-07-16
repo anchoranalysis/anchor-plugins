@@ -38,10 +38,10 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
-import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.Nghb;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
 
 class MakePlateauLowerComplete {
@@ -109,7 +109,7 @@ class MakePlateauLowerComplete {
 		
 		assert(plateau.hasPoints());
 		if (plateau.isOnlyEdge()) {
-			pointEdgeToNeighbouring( matS );
+			pointEdgeToNeighboring( matS );
 		} else if (plateau.isOnlyInner()) {
 			// EVERYTHING COLLECTIVELY IS A LOCAL MINIMA
 			// We pick one pixel to use as an index, and pointing the rest of the pixels
@@ -126,39 +126,35 @@ class MakePlateauLowerComplete {
 			
 			// IF IT'S MIXED...
 			
-			pointEdgeToNeighbouring( matS );
+			pointEdgeToNeighboring( matS );
 			pointInnerToEdge( matS );
 		}
 	}
 	
-	private void pointEdgeToNeighbouring( EncodedVoxelBox matS ) {
-		// We set them all to their neighbouring points
-		for( PointWithNghb pointNghb : plateau.getPointsEdge()) {
-			assert( pointNghb.getNghbIndex() >= 0 );
-			
-			// IMPROVE BY SORTING BY Z-VALUE
-			//ByteBuffer bb = rbb.bufferRel( pointNghb.getPoint().getZ() )
-			matS.setPoint( pointNghb.getPoint(), pointNghb.getNghbIndex() );
+	private void pointEdgeToNeighboring( EncodedVoxelBox matS ) {
+		// We set them all to their neighboring points
+		for( PointWithNeighbor pointNeighbor : plateau.getPointsEdge()) {
+			matS.setPoint( pointNeighbor.getPoint(), pointNeighbor.getNeighborIndex() );
 		}		
 	}
 		
 	private void pointInnerToEdge( EncodedVoxelBox matS ) {
-		// Iterate through each edge pixel, and look for neighbouring points in the Inner pixels
+		// Iterate through each edge pixel, and look for neighboring points in the Inner pixels
 		//   for any such point, point towards the edge pixel, and move to the new edge list
 		List<Point3i> searchPoints = plateau.pointsEdge();
 		
 		try {
 			// We create an object-mask from the list of points
 			ObjectMask object = CreateObjectFromPoints.create( plateau.getPointsInner() );
-			Nghb nghb = new BigNghb();
+			Neighborhood neighborhood = NeighborhoodFactory.of(true);
 
-			ProcessVoxelNeighbour<List<Point3i>> process = ProcessVoxelNeighbourFactory.withinMask(
+			ProcessVoxelNeighbor<List<Point3i>> process = ProcessVoxelNeighborFactory.withinMask(
 				object,
 				new PointTester(matS, object.getBinaryValuesByte())
 			);
 			
 			while( !searchPoints.isEmpty() ) {
-				searchPoints = findPointsFor(searchPoints, nghb, process);
+				searchPoints = findPointsFor(searchPoints, neighborhood, process);
 			}
 			
 		} catch (CreateException e) {
@@ -167,7 +163,11 @@ class MakePlateauLowerComplete {
 		}
 	}
 	
-	private List<Point3i> findPointsFor( List<Point3i> points, Nghb nghb, ProcessVoxelNeighbour<List<Point3i>> process ) {
+	private List<Point3i> findPointsFor(
+		List<Point3i> points,
+		Neighborhood neighborhood,
+		ProcessVoxelNeighbor<List<Point3i>> process
+	) {
 		
 		List<Point3i> foundPoints = new ArrayList<>();
 		
@@ -175,9 +175,9 @@ class MakePlateauLowerComplete {
 		for( Point3i point : points ) {
 			
 			foundPoints.addAll(
-				IterateVoxels.callEachPointInNghb(
+				IterateVoxels.callEachPointInNeighborhood(
 					point,
-					nghb,
+					neighborhood,
 					do3D,
 					process,
 					-1,	// The -1 value are arbitrary, as it will be ignored

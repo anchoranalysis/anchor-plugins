@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Naive greedy merge strategy when any two neighbouring objects are merged if it increases a feature.
+ * Naive greedy merge strategy when any two neighboring objects are merged if it increases a feature.
  * <p>
  * No guarantee exists over the priority over which merges occur, so any inferior merge could occur before
  * a superior one, as long as both merges fulfill the conditions.

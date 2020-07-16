@@ -32,7 +32,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
+import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 
 /**
  * A scheme for counting touching voxels.
@@ -69,16 +69,16 @@ public class NumTouchingVoxels extends TouchingVoxels {
 		BoundingBox bboxIntersect
 	) throws OperationFailedException {
 		BoundingBox bboxIntersectRelative = RelativeUtilities.createRelBBox(bboxIntersect, source);
-		return calcNghbTouchingPixels( source, destination, bboxIntersectRelative );
+		return calcNeighborhoodTouchingPixels( source, destination, bboxIntersectRelative );
 	}
 		
-	private int calcNghbTouchingPixels(
+	private int calcNeighborhoodTouchingPixels(
 		ObjectMask source,
 		ObjectMask destination,
 		BoundingBox bboxIntersectRelative
 	) throws OperationFailedException {
 		
-		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
+		CountKernelNeighborhoodMask kernelMatch = new CountKernelNeighborhoodMask(
 			isDo3D(),
 			source.getBinaryValuesByte(),
 			RelativeUtilities.createRelMask( destination, source ),

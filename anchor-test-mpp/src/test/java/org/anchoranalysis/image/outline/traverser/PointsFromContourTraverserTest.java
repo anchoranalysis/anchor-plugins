@@ -58,19 +58,19 @@ public class PointsFromContourTraverserTest {
 
 		ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
 		
-		// Checks that first and last points are neighbours
+		// Checks that first and last points are neighbors
 		List<Contour> contours = CVFindContours.contoursForObject(objIn);
 		for( Contour contour : contours ) {
 			List<Point3i> points = contour.pointsDiscrete();
-			assertTrue( areFirstLastNghb(points) );
-			assertTrue( PointsListNeighborUtilities.areNghbDistinct(points) );
-			assertTrue( PointsListNeighborUtilities.areAllPointsInBigNghb(points) );
+			assertTrue( doesFirstNeighborLast(points) );
+			assertTrue( PointsListNeighborUtilities.areNeighborsDistinct(points) );
+			assertTrue( PointsListNeighborUtilities.areAllPointsInBigNeighborhood(points) );
 		}
 	}
 		
-	private static boolean areFirstLastNghb( List<Point3i> points ) {
+	private static boolean doesFirstNeighborLast( List<Point3i> points ) {
 		Point3i first = points.get(0);
 		Point3i last = points.get( points.size() -1 );
-		return PointsListNeighborUtilities.arePointsNghb(first, last );		
+		return PointsListNeighborUtilities.arePointsNeighbors(first, last );		
 	}
 }

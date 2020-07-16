@@ -49,9 +49,9 @@ import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
 
 /**
- * A graph that stores each object as a vertex, where edges represent a neighbourhood relation.
+ * A graph that stores each object as a vertex, where edges represent a neighborhood relation.
  * 
- * <p>It potentially allows merges between neighbouring vertices.</p>
+ * <p>It potentially allows merges between neighboring vertices.</p>
  * 
  * <p>Each vertex has a payload (double) value associated with it, that is a function of the object-mask.</p>
  * 
@@ -64,7 +64,7 @@ public class MergeGraph {
 	private PayloadCalculator payloadCalculator;
 	// END: Set from constructor
 	
-	private NeighbourGraph graph;
+	private NeighborGraph graph;
 	private GraphLogger logger;
 	private AssignPriority prioritizer;
 	
@@ -89,7 +89,7 @@ public class MergeGraph {
 		this.payloadCalculator = payloadCalculator;
 		this.prioritizer = prioritizer;
 				
-		graph = new NeighbourGraph(beforeCondition,	imageRes);
+		graph = new NeighborGraph(beforeCondition,	imageRes);
 		this.logger = new GraphLogger(
 			new DescribeGraph(graph, logPayload),
 			logger
@@ -115,12 +115,12 @@ public class MergeGraph {
 	
 	public ObjectVertex merge( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> bestImprovement) throws OperationFailedException {
 		
-		Set<ObjectVertex> setPossibleNghbs = graph.neighbourNodesFor( bestImprovement );
+		Set<ObjectVertex> setPossibleNeighbors = graph.neighborNodesFor( bestImprovement );
 		graph.removeVertex( bestImprovement.getNode1() );
 		graph.removeVertex( bestImprovement.getNode2() );
 		
 		ObjectVertex omMerged = bestImprovement.getEdge().getOmWithFeature();
-		graph.addVertex( omMerged, setPossibleNghbs, prioritizer, logger);
+		graph.addVertex( omMerged, setPossibleNeighbors, prioritizer, logger);
 		
 		logger.describeMerge(omMerged, bestImprovement);
 		

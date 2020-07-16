@@ -56,7 +56,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private VisitScheduler visitScheduler;
 	
 	@BeanField @Getter @Setter
-	private boolean nghb8 = true;
+	private boolean bigNeighborhood = true;
 	
 	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnlOutline;
@@ -153,7 +153,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 				objectOutline,
 				(point,distance) -> visitScheduler.considerVisit(point,distance,objectFilled),
 				useZ,
-				nghb8
+				bigNeighborhood
 			).applyGlobal(
 				root,
 				listOut

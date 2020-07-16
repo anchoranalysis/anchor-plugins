@@ -70,7 +70,7 @@ public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<Boundi
 		return ((double) intersectionArea) / total;
 	}
 
-	/** As bounding box intersection test is cheap, we pass back all neighbours */
+	/** As bounding box intersection test is cheap, we pass back all neighbors */
 	@Override
 	protected Predicate<BoundingBox> possibleOverlappingObjects(BoundingBox src,
 			Iterable<WithConfidence<BoundingBox>> others) {
