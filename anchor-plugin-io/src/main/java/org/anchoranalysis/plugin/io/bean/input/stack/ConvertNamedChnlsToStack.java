@@ -1,35 +1,11 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.io.bean.input.stack;
-
-/*
- * #%L
- * anchor-image-io
- * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
 
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -50,138 +26,126 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Manager that converts NamedChnlInput to StackSequenceInput
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private InputManager<NamedChnlsInput> input;
-	
-	@BeanField @Getter @Setter
-	private String chnlName;
-	
-	@BeanField @Getter @Setter
-	private int timeIndex = 0;
-	// END BEAN PROPERTIES
-	
-	
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private InputManager<NamedChnlsInput> input;
 
-	/**
-	 * An input object that converts StackNamedChnlInputObject to StackSequenceInputObject
-	 * 
-	 * @author Owen Feehan
-	 *
-	 */
-	private class ConvertInputObject extends StackSequenceInput {
+    @BeanField @Getter @Setter private String chnlName;
 
-		private NamedChnlsInput in;
-				
-		public ConvertInputObject(NamedChnlsInput in) {
-			super();
-			this.in = in;
-		}
+    @BeanField @Getter @Setter private int timeIndex = 0;
+    // END BEAN PROPERTIES
 
-		@Override
-		public String descriptiveName() {
-			return in.descriptiveName();
-		}
+    /**
+     * An input object that converts StackNamedChnlInputObject to StackSequenceInputObject
+     *
+     * @author Owen Feehan
+     */
+    private class ConvertInputObject extends StackSequenceInput {
 
-		@Override
-		public Optional<Path> pathForBinding() {
-			return in.pathForBinding();
-		}
+        private NamedChnlsInput in;
 
-		@Override
-		public void close(ErrorReporter errorReporter) {
-			in.close(errorReporter);
-		}
+        public ConvertInputObject(NamedChnlsInput in) {
+            super();
+            this.in = in;
+        }
 
-		@Override
-		public OperationWithProgressReporter<TimeSequence,OperationFailedException> createStackSequenceForSeries(
-				int seriesNum) throws RasterIOException {
-			return new OperationConvert(in, seriesNum);			
-		}
-				
+        @Override
+        public String descriptiveName() {
+            return in.descriptiveName();
+        }
 
-		@Override
-		public void addToStore(
-			NamedProviderStore<TimeSequence> stackCollection,
-			int seriesNum,
-			ProgressReporter progressReporter
-		) throws OperationFailedException {
-			in.addToStore(stackCollection, seriesNum, progressReporter);
-		}
+        @Override
+        public Optional<Path> pathForBinding() {
+            return in.pathForBinding();
+        }
 
-		@Override
-		public void addToStoreWithName(
-			String name,
-			NamedProviderStore<TimeSequence> stackCollection,
-			int seriesNum,
-			ProgressReporter progressReporter
-		) throws OperationFailedException {
-			in.addToStoreWithName(name, stackCollection, seriesNum, progressReporter);
-		}
+        @Override
+        public void close(ErrorReporter errorReporter) {
+            in.close(errorReporter);
+        }
 
-		@Override
-		public int numFrames() throws OperationFailedException {
-			return in.numFrames();
-		}
-	}
-	
-	
-	/**
-	 * The operation of doing the conversion
-	 * 
-	 * @author Owen Feehan
-	 *
-	 */
-	private class OperationConvert implements OperationWithProgressReporter<TimeSequence,OperationFailedException> {
-		
-		private int seriesNum;
-		private NamedChnlsInput in;
-					
-		public OperationConvert(NamedChnlsInput in, int seriesNum) {
-			super();
-			this.seriesNum = seriesNum;
-			this.in = in;
-		}
+        @Override
+        public OperationWithProgressReporter<TimeSequence, OperationFailedException>
+                createStackSequenceForSeries(int seriesNum) throws RasterIOException {
+            return new OperationConvert(in, seriesNum);
+        }
 
-		@Override
-		public TimeSequence doOperation(ProgressReporter progressReporter) throws OperationFailedException {
-			
-			try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
-			
-				NamedChnlCollectionForSeries ncc = in.createChnlCollectionForSeries(seriesNum, new ProgressReporterOneOfMany(prm) );
-				prm.incrWorker();
-				Channel chnl = ncc.getChnl(chnlName, timeIndex, new ProgressReporterOneOfMany(prm) );
-				
-				TimeSequence ts = new TimeSequence();
-				ts.add( new Stack(chnl) );
-				return ts;
-			} catch (RasterIOException | GetOperationFailedException e) {
-				throw new OperationFailedException(e);
-			}
-		}
-	}
-	
-	@Override
-	public List<StackSequenceInput> inputObjects(InputManagerParams params)
-			throws AnchorIOException {
-		return FunctionalList.mapToList(
-			input.inputObjects(params),
-			this::convert
-		);
-	}
-	
-	private StackSequenceInput convert( NamedChnlsInput in ) {
-		return new ConvertInputObject(in);
-	}
+        @Override
+        public void addToStore(
+                NamedProviderStore<TimeSequence> stackCollection,
+                int seriesNum,
+                ProgressReporter progressReporter)
+                throws OperationFailedException {
+            in.addToStore(stackCollection, seriesNum, progressReporter);
+        }
+
+        @Override
+        public void addToStoreWithName(
+                String name,
+                NamedProviderStore<TimeSequence> stackCollection,
+                int seriesNum,
+                ProgressReporter progressReporter)
+                throws OperationFailedException {
+            in.addToStoreWithName(name, stackCollection, seriesNum, progressReporter);
+        }
+
+        @Override
+        public int numFrames() throws OperationFailedException {
+            return in.numFrames();
+        }
+    }
+
+    /**
+     * The operation of doing the conversion
+     *
+     * @author Owen Feehan
+     */
+    private class OperationConvert
+            implements OperationWithProgressReporter<TimeSequence, OperationFailedException> {
+
+        private int seriesNum;
+        private NamedChnlsInput in;
+
+        public OperationConvert(NamedChnlsInput in, int seriesNum) {
+            super();
+            this.seriesNum = seriesNum;
+            this.in = in;
+        }
+
+        @Override
+        public TimeSequence doOperation(ProgressReporter progressReporter)
+                throws OperationFailedException {
+
+            try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
+
+                NamedChnlCollectionForSeries ncc =
+                        in.createChnlCollectionForSeries(
+                                seriesNum, new ProgressReporterOneOfMany(prm));
+                prm.incrWorker();
+                Channel chnl = ncc.getChnl(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+
+                TimeSequence ts = new TimeSequence();
+                ts.add(new Stack(chnl));
+                return ts;
+            } catch (RasterIOException | GetOperationFailedException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+    }
+
+    @Override
+    public List<StackSequenceInput> inputObjects(InputManagerParams params)
+            throws AnchorIOException {
+        return FunctionalList.mapToList(input.inputObjects(params), this::convert);
+    }
+
+    private StackSequenceInput convert(NamedChnlsInput in) {
+        return new ConvertInputObject(in);
+    }
 }

@@ -1,36 +1,9 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.mpp.experiment.objects;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-
-/*
- * #%L
- * anchor-mpp-io
- * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -40,36 +13,37 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 
 public class FromCSVInputObject implements InputFromManager, InputForMPPBean {
 
-	private MultiInput input;
-	private Path csvFilePath;
+    private MultiInput input;
+    private Path csvFilePath;
 
-	public FromCSVInputObject(MultiInput input, Path csvFilePath) {
-		super();
-		this.input = input;
-		this.csvFilePath = csvFilePath;
-	}
+    public FromCSVInputObject(MultiInput input, Path csvFilePath) {
+        super();
+        this.input = input;
+        this.csvFilePath = csvFilePath;
+    }
 
-	@Override
-	public String descriptiveName() {
-		return input.descriptiveName();
-	}
+    @Override
+    public String descriptiveName() {
+        return input.descriptiveName();
+    }
 
-	@Override
-	public Optional<Path> pathForBinding() {
-		return input.pathForBinding();
-	}
+    @Override
+    public Optional<Path> pathForBinding() {
+        return input.pathForBinding();
+    }
 
-	@Override
-	public void close(ErrorReporter errorReporter) {
-		input.close(errorReporter);
-	}
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        input.close(errorReporter);
+    }
 
-	public Path getCsvFilePath() {
-		return csvFilePath;
-	}
+    public Path getCsvFilePath() {
+        return csvFilePath;
+    }
 
-	@Override
-	public void addToSharedObjects( MPPInitParams soMPP, ImageInitParams soImage )	throws OperationFailedException {
-		input.addToSharedObjects( soMPP, soImage );
-	}
+    @Override
+    public void addToSharedObjects(MPPInitParams soMPP, ImageInitParams soImage)
+            throws OperationFailedException {
+        input.addToSharedObjects(soMPP, soImage);
+    }
 }

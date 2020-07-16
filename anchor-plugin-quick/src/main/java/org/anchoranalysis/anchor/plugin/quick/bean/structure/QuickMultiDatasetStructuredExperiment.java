@@ -1,33 +1,9 @@
+/* (C)2020 */
 package org.anchoranalysis.anchor.plugin.quick.bean.structure;
 
-/*-
- * #%L
- * anchor-plugin-quick
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
 import java.nio.file.Path;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plugin.quick.bean.experiment.QuickMultiDatasetExperiment;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
@@ -45,186 +21,183 @@ import org.anchoranalysis.io.output.bean.OutputManager;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * Similar to {@link QuickMultiDatasetStructuredExperiment} put sets properties according to an expected directory structure.
+ * Similar to {@link QuickMultiDatasetStructuredExperiment} put sets properties according to an
+ * expected directory structure.
+ *
  * <p>
- * <pre>  
+ *
+ * <pre>
  *   Project Directory/
  *      Experiments/			# where Experiments are stored
  *      Experiments/include/	# where a loggerExperiment.xml and loggerTask.xml can be found
  *      Filesets/				# where Filesets are stored
  *      IO/OutputManager/		# where OutputManagers are stored
  * </pre>
- * <p>
- * It also assumes a certain naming structure for the xml files in each, based upon an experiment-type parameter $1.
+ *
+ * <p>It also assumes a certain naming structure for the xml files in each, based upon an
+ * experiment-type parameter $1.
+ *
  * <pre>
- *		Filesets/For$1/		# the first letter of $1 is capitalized)
- *		IO/OutputManager/$1.xml
+ * 	Filesets/For$1/		# the first letter of $1 is capitalized)
+ * 	IO/OutputManager/$1.xml
  * </pre>
- * <p>
- *	his allows many parameters of {@link QuickMultiDatasetStructuredExperiment} to be easily set.
+ *
+ * <p>his allows many parameters of {@link QuickMultiDatasetStructuredExperiment} to be easily set.
  */
-public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager,S> extends Experiment implements IReplaceInputManager, IReplaceOutputManager {
+public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S> extends Experiment
+        implements IReplaceInputManager, IReplaceOutputManager {
 
-	// START BEAN PROPERTIES
-	/** How many directories to recurse back from the current file to the Experiments/ directory
-	 * 
-	 *  0 implies that the file is directly in Experiments/ 
-	 *  1 implies that the file is in Experiments/SOMESUBDIR/ etc.
-	 * */
-	@BeanField @Getter @Setter
-	private int directoryDistance = 0;
-	
-	/** The value of $1 (see comment above) in naming-structure. It should be in camel-case typically. */
-	@BeanField @Getter @Setter
-	private String experimentType;
-	// END BEAN PROPERTIES
-			
-	private QuickMultiDatasetExperiment<T,S> delegate;
-	
-	// Have we populated delegate yet?
-	private boolean populatedDelegate = false;
-	
-	public QuickMultiDatasetStructuredExperiment() {
-		delegate = new QuickMultiDatasetExperiment<>();
-	}
+    // START BEAN PROPERTIES
+    /**
+     * How many directories to recurse back from the current file to the Experiments/ directory
+     *
+     * <p>0 implies that the file is directly in Experiments/ 1 implies that the file is in
+     * Experiments/SOMESUBDIR/ etc.
+     */
+    @BeanField @Getter @Setter private int directoryDistance = 0;
 
-	@Override
-	public void localise(Path path) throws BeanMisconfiguredException {
-		delegate.localise(path);
-	}
-	
-	@Override
-	public void checkMisconfigured(BeanInstanceMap defaultInstances) throws BeanMisconfiguredException {
-		super.checkMisconfigured(defaultInstances);
-		populateDelegateIfNeeded();
-		delegate.checkMisconfigured(defaultInstances);
-	}
-	
-	private void populateDelegateIfNeeded() {
-		if (!populatedDelegate) {
-			delegate.setFolderDataset( folderDataset() );
-			delegate.setOutput( output() );
-			delegate.setLogExperimentPath( loggerPath("Experiment") );
-			delegate.setLogTaskPath( loggerPath("Task") );
+    /**
+     * The value of $1 (see comment above) in naming-structure. It should be in camel-case
+     * typically.
+     */
+    @BeanField @Getter @Setter private String experimentType;
+    // END BEAN PROPERTIES
 
-			populatedDelegate = true;
-		}
-	}
-	
-	private String folderDataset() {
-		return String.format(
-			"%s../Filesets/For%s/",
-			pathPrefix(),
-			StringUtils.capitalize(experimentType)
-		);
-	}
-	
-	private String output() {
-		return String.format(
-			"%s../IO/OutputManager/%s.xml",
-			pathPrefix(),
-			experimentType
-		);
-	}
-	
-	private String loggerPath( String suffix ) {
-		return String.format(
-			"%s/include/logger%s.xml",
-			pathPrefix(),
-			StringUtils.capitalize(suffix)
-		);
-	}
-	
-	private String pathPrefix() {
-		if (directoryDistance==0) {
-			return "./";
-		} else {
-			StringBuilder sb = new StringBuilder();
-			for( int i=0; i<directoryDistance; i++) {
-				sb.append("../");
-			}
-			return sb.toString();
-		}
-	}
+    private QuickMultiDatasetExperiment<T, S> delegate;
 
-	@Override
-	public void associateXml(XMLConfiguration xmlConfiguration) {
-		super.associateXml(xmlConfiguration);
-		delegate.associateXml(xmlConfiguration);
-	}
-	
-	@Override
-	public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
-		populateDelegateIfNeeded();
-		delegate.replaceOutputManager(outputManager);
-	}
+    // Have we populated delegate yet?
+    private boolean populatedDelegate = false;
 
-	@Override
-	public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
-		populateDelegateIfNeeded();
-		delegate.replaceInputManager(inputManager);
-	}
+    public QuickMultiDatasetStructuredExperiment() {
+        delegate = new QuickMultiDatasetExperiment<>();
+    }
 
-	@Override
-	public void doExperiment(ExperimentExecutionArguments arguments) throws ExperimentExecutionException {
-		populateDelegateIfNeeded();
-		delegate.doExperiment(arguments);
-	}
+    @Override
+    public void localise(Path path) throws BeanMisconfiguredException {
+        delegate.localise(path);
+    }
 
-	@Override
-	public boolean useDetailedLogging() {
-		return delegate.useDetailedLogging();
-	}
+    @Override
+    public void checkMisconfigured(BeanInstanceMap defaultInstances)
+            throws BeanMisconfiguredException {
+        super.checkMisconfigured(defaultInstances);
+        populateDelegateIfNeeded();
+        delegate.checkMisconfigured(defaultInstances);
+    }
 
-	public String getDatasetSpecific() {
-		return delegate.getDatasetSpecific();
-	}
+    private void populateDelegateIfNeeded() {
+        if (!populatedDelegate) {
+            delegate.setFolderDataset(folderDataset());
+            delegate.setOutput(output());
+            delegate.setLogExperimentPath(loggerPath("Experiment"));
+            delegate.setLogTaskPath(loggerPath("Task"));
 
-	public void setDatasetSpecific(String datasetSpecific) {
-		delegate.setDatasetSpecific(datasetSpecific);
-	}
+            populatedDelegate = true;
+        }
+    }
 
-	public String getBeanExtension() {
-		return delegate.getBeanExtension();
-	}
+    private String folderDataset() {
+        return String.format(
+                "%s../Filesets/For%s/", pathPrefix(), StringUtils.capitalize(experimentType));
+    }
 
-	public void setBeanExtension(String beanExtension) {
-		delegate.setBeanExtension(beanExtension);
-	}
+    private String output() {
+        return String.format("%s../IO/OutputManager/%s.xml", pathPrefix(), experimentType);
+    }
 
-	public String getIdentifierSuffix() {
-		return delegate.getIdentifierSuffix();
-	}
+    private String loggerPath(String suffix) {
+        return String.format(
+                "%s/include/logger%s.xml", pathPrefix(), StringUtils.capitalize(suffix));
+    }
 
-	public void setIdentifierSuffix(String identifierSuffix) {
-		delegate.setIdentifierSuffix(identifierSuffix);
-	}
+    private String pathPrefix() {
+        if (directoryDistance == 0) {
+            return "./";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < directoryDistance; i++) {
+                sb.append("../");
+            }
+            return sb.toString();
+        }
+    }
 
-	public StringSet getDatasets() {
-		return delegate.getDatasets();
-	}
+    @Override
+    public void associateXml(XMLConfiguration xmlConfiguration) {
+        super.associateXml(xmlConfiguration);
+        delegate.associateXml(xmlConfiguration);
+    }
 
-	public void setDatasets(StringSet datasets) {
-		delegate.setDatasets(datasets);
-	}
+    @Override
+    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
+        populateDelegateIfNeeded();
+        delegate.replaceOutputManager(outputManager);
+    }
 
-	public int getMaxNumProcessors() {
-		return delegate.getMaxNumProcessors();
-	}
+    @Override
+    public void replaceInputManager(InputManager<?> inputManager) throws OperationFailedException {
+        populateDelegateIfNeeded();
+        delegate.replaceInputManager(inputManager);
+    }
 
-	public void setMaxNumProcessors(int maxNumProcessors) {
-		delegate.setMaxNumProcessors(maxNumProcessors);
-	}
+    @Override
+    public void doExperiment(ExperimentExecutionArguments arguments)
+            throws ExperimentExecutionException {
+        populateDelegateIfNeeded();
+        delegate.doExperiment(arguments);
+    }
 
-	public boolean isSuppressExceptions() {
-		return delegate.isSuppressExceptions();
-	}
+    @Override
+    public boolean useDetailedLogging() {
+        return delegate.useDetailedLogging();
+    }
 
-	public void setSuppressExceptions(boolean suppressExceptions) {
-		delegate.setSuppressExceptions(suppressExceptions);
-	}
+    public String getDatasetSpecific() {
+        return delegate.getDatasetSpecific();
+    }
+
+    public void setDatasetSpecific(String datasetSpecific) {
+        delegate.setDatasetSpecific(datasetSpecific);
+    }
+
+    public String getBeanExtension() {
+        return delegate.getBeanExtension();
+    }
+
+    public void setBeanExtension(String beanExtension) {
+        delegate.setBeanExtension(beanExtension);
+    }
+
+    public String getIdentifierSuffix() {
+        return delegate.getIdentifierSuffix();
+    }
+
+    public void setIdentifierSuffix(String identifierSuffix) {
+        delegate.setIdentifierSuffix(identifierSuffix);
+    }
+
+    public StringSet getDatasets() {
+        return delegate.getDatasets();
+    }
+
+    public void setDatasets(StringSet datasets) {
+        delegate.setDatasets(datasets);
+    }
+
+    public int getMaxNumProcessors() {
+        return delegate.getMaxNumProcessors();
+    }
+
+    public void setMaxNumProcessors(int maxNumProcessors) {
+        delegate.setMaxNumProcessors(maxNumProcessors);
+    }
+
+    public boolean isSuppressExceptions() {
+        return delegate.isSuppressExceptions();
+    }
+
+    public void setSuppressExceptions(boolean suppressExceptions) {
+        delegate.setSuppressExceptions(suppressExceptions);
+    }
 }

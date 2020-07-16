@@ -1,36 +1,9 @@
+/* (C)2020 */
 package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
-
-/*
- * #%L
- * anchor-mpp-io
- * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
-
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
@@ -56,112 +29,109 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 
-class ContourListGenerator extends RasterGenerator implements IterableObjectGenerator<List<Contour>, Stack> {
+class ContourListGenerator extends RasterGenerator
+        implements IterableObjectGenerator<List<Contour>, Stack> {
 
-	private CfgGenerator delegate;
-	
-	private List<Contour> contourList;
-	private DisplayStack stack;
-	private ColorIndex colorIndex;
-	
-	public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR = new ShuffleColorSetGenerator(
-		new HSBColorSetGenerator()
-	);
-	
-	public ContourListGenerator( DisplayStack stack ) {
-		this( new Outline(1,true), null, stack );
-	}
-	
-	public ContourListGenerator( DisplayStack stack, List<Contour> contours ) throws SetOperationFailedException {
-		this( stack );
-		setIterableElement(contours);
-	}
-	
-	public ContourListGenerator( DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack ) {
-		this.stack = stack;
-		delegate = new CfgGenerator(drawObject, new IDGetterIter<Overlay>() );
-		delegate.setManifestDescriptionFunction("contourRepresentationRGB");
-		this.colorIndex = colorIndex;
-	}
+    private CfgGenerator delegate;
 
-	@Override
-	public boolean isRGB() {
-		return delegate.isRGB();
-	}
+    private List<Contour> contourList;
+    private DisplayStack stack;
+    private ColorIndex colorIndex;
 
-	@Override
-	public Stack generate() throws OutputWriteFailedException {
-		return delegate.generate();
-	}
+    public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR =
+            new ShuffleColorSetGenerator(new HSBColorSetGenerator());
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return delegate.createManifestDescription();
-	}
+    public ContourListGenerator(DisplayStack stack) {
+        this(new Outline(1, true), null, stack);
+    }
 
-	private static Cfg createCfgFromContourList( List<Contour> contourList ) {
-		
-		Cfg cfg = new Cfg();
-		
-		for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext();) {
-			Contour contour = itr.next();
+    public ContourListGenerator(DisplayStack stack, List<Contour> contours)
+            throws SetOperationFailedException {
+        this(stack);
+        setIterableElement(contours);
+    }
 
-			cfg.add(
-				createMarkForContour(contour, false)
-			);
-		}
-		return cfg;
-	}
+    public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack) {
+        this.stack = stack;
+        delegate = new CfgGenerator(drawObject, new IDGetterIter<Overlay>());
+        delegate.setManifestDescriptionFunction("contourRepresentationRGB");
+        this.colorIndex = colorIndex;
+    }
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		delegate.start();
-	}
+    @Override
+    public boolean isRGB() {
+        return delegate.isRGB();
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		delegate.end();
-	}
+    @Override
+    public Stack generate() throws OutputWriteFailedException {
+        return delegate.generate();
+    }
 
-	@Override
-	public List<Contour> getIterableElement() {
-		return contourList;
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return delegate.createManifestDescription();
+    }
 
-	@Override
-	public void setIterableElement(List<Contour> element) throws SetOperationFailedException {
-		
-		this.contourList = element;
-		
-		try {
-			ColoredCfg cfg =  new ColoredCfg(
-				createCfgFromContourList( contourList ),
-				generateColors(contourList.size()),
-				new IDGetterIter<>()
-			);
-			delegate.setIterableElement(
-				new ColoredCfgWithDisplayStack(cfg, stack)
-			);
-			
-		} catch (OperationFailedException e) {
-			throw new SetOperationFailedException(e);
-		}
-	}
+    private static Cfg createCfgFromContourList(List<Contour> contourList) {
 
-	@Override
-	public ObjectGenerator<Stack> getGenerator() {
-		return delegate.getGenerator();
-	}
-		
-	private ColorIndex generateColors(int size) throws OperationFailedException {
-		if (colorIndex!=null) {
-			return colorIndex;
-		} else {
-			return DEFAULT_COLOR_SET_GENERATOR.generateColors(size);
-		}
-	}
-	
-	private static MarkPointList createMarkForContour(Contour c, boolean round ) {
-		return MarkPointListFactory.createMarkFromPoints3f( c.getPoints());
-	}
+        Cfg cfg = new Cfg();
+
+        for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext(); ) {
+            Contour contour = itr.next();
+
+            cfg.add(createMarkForContour(contour, false));
+        }
+        return cfg;
+    }
+
+    @Override
+    public void start() throws OutputWriteFailedException {
+        delegate.start();
+    }
+
+    @Override
+    public void end() throws OutputWriteFailedException {
+        delegate.end();
+    }
+
+    @Override
+    public List<Contour> getIterableElement() {
+        return contourList;
+    }
+
+    @Override
+    public void setIterableElement(List<Contour> element) throws SetOperationFailedException {
+
+        this.contourList = element;
+
+        try {
+            ColoredCfg cfg =
+                    new ColoredCfg(
+                            createCfgFromContourList(contourList),
+                            generateColors(contourList.size()),
+                            new IDGetterIter<>());
+            delegate.setIterableElement(new ColoredCfgWithDisplayStack(cfg, stack));
+
+        } catch (OperationFailedException e) {
+            throw new SetOperationFailedException(e);
+        }
+    }
+
+    @Override
+    public ObjectGenerator<Stack> getGenerator() {
+        return delegate.getGenerator();
+    }
+
+    private ColorIndex generateColors(int size) throws OperationFailedException {
+        if (colorIndex != null) {
+            return colorIndex;
+        } else {
+            return DEFAULT_COLOR_SET_GENERATOR.generateColors(size);
+        }
+    }
+
+    private static MarkPointList createMarkForContour(Contour c, boolean round) {
+        return MarkPointListFactory.createMarkFromPoints3f(c.getPoints());
+    }
 }

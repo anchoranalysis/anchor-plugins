@@ -1,30 +1,5 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.image.task.bean.slice;
-
-/*-
- * #%L
- * anchor-plugin-image-task
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
@@ -44,165 +19,164 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalR
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
 public class MovieFromSlicesTask extends RasterTask {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int delaySizeAtEnd = 0;
-	
-	@BeanField
-	private String filePrefix = "movie";
-	
-	@BeanField
-	private int width = -1;
-	
-	@BeanField
-	private int height = -1;
-	
-	@BeanField
-	private int startIndex = 0;	// this does nothing atm
-	
-	@BeanField
-	private int repeat = 1;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private int delaySizeAtEnd = 0;
 
-	private int index = 0;
-	private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
-	
-	public MovieFromSlicesTask() {
-		super();
-	}
+    @BeanField private String filePrefix = "movie";
 
-	@Override
-	public void startSeries(BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter) throws JobExecutionException {
-		
-		StackGenerator generator = new StackGenerator(false, "out" );
-	
-		generatorSeq =
-			new GeneratorSequenceNonIncrementalRerouterErrors<>(
-				new GeneratorSequenceNonIncrementalWriter<>(
-					outputManager.getDelegate(),
-					"",
-					// NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
-					new StringSuffixOutputNameStyle("","%s"),
-					generator,
-					true
-				),
-				errorReporter	
-			);
-		generatorSeq.setSuppressSubfolder(true);
-		
-		// TODO it would be nicer to reflect the real sequence type, than just using a set of indexes
-		generatorSeq.start(new SetSequenceType(), -1);
-	}
-	
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
-	}
+    @BeanField private int width = -1;
 
-	private String formatIndex( int index ) {
-		return String.format("%s_%08d",filePrefix, index);
-	}
-	
-	@Override
-	public void doStack( NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context ) throws JobExecutionException {
-		
-		try {
-			NamedChnlCollectionForSeries ncc = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get() );
-			
-			ProgressReporter progressReporter = ProgressReporterNull.get();
-			
-			Channel red = ncc.getChnl("red", 0, progressReporter);
-			Channel blue = ncc.getChnl("blue", 0, progressReporter);
-			Channel green = ncc.getChnl("green", 0, progressReporter);
-			
-			//
-			if (!red.getDimensions().equals(blue.getDimensions()) || !blue.getDimensions().equals(green.getDimensions()) ) {
-				throw new JobExecutionException("Scene dimensions do not match");
-			}
-			
-			Stack sliceOut = null;
-			
-			ExtractProjectedStack extract = new ExtractProjectedStack(width, height);
-			
-			for (int z=0; z<red.getDimensions().getZ(); z++) {
-				
-				sliceOut = extract.extractAndProjectStack(red, green, blue, z);
-				
-				for( int i=0; i<repeat; i++) {
-					generatorSeq.add(sliceOut, formatIndex(index) );
-					index++;
-				}
-			}
-			
-			// Just
-			if (delaySizeAtEnd>0 && sliceOut!=null) {
-				for (int i=0; i<delaySizeAtEnd; i++) {
-					generatorSeq.add(sliceOut, formatIndex(index) );
-					index++;					
-				}
-			}
-			
-			
-		} catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException e) {
-			throw new JobExecutionException(e);
-		}
-	}
-	
-	@Override
-	public void endSeries(BoundOutputManagerRouteErrors outputManager) throws JobExecutionException {
-		generatorSeq.end();
-	}
+    @BeanField private int height = -1;
 
-	public int getDelaySizeAtEnd() {
-		return delaySizeAtEnd;
-	}
+    @BeanField private int startIndex = 0; // this does nothing atm
 
-	public void setDelaySizeAtEnd(int delaySizeAtEnd) {
-		this.delaySizeAtEnd = delaySizeAtEnd;
-	}
+    @BeanField private int repeat = 1;
+    // END BEAN PROPERTIES
 
-	public String getFilePrefix() {
-		return filePrefix;
-	}
+    private int index = 0;
+    private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
 
-	public void setFilePrefix(String filePrefix) {
-		this.filePrefix = filePrefix;
-	}
+    public MovieFromSlicesTask() {
+        super();
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    @Override
+    public void startSeries(
+            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            throws JobExecutionException {
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+        StackGenerator generator = new StackGenerator(false, "out");
 
-	public int getHeight() {
-		return height;
-	}
+        generatorSeq =
+                new GeneratorSequenceNonIncrementalRerouterErrors<>(
+                        new GeneratorSequenceNonIncrementalWriter<>(
+                                outputManager.getDelegate(),
+                                "",
+                                // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
+                                new StringSuffixOutputNameStyle("", "%s"),
+                                generator,
+                                true),
+                        errorReporter);
+        generatorSeq.setSuppressSubfolder(true);
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+        // TODO it would be nicer to reflect the real sequence type, than just using a set of
+        // indexes
+        generatorSeq.start(new SetSequenceType(), -1);
+    }
 
-	public int getStartIndex() {
-		return startIndex;
-	}
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
 
-	public void setStartIndex(int startIndex) {
-		this.startIndex = startIndex;
-	}
+    private String formatIndex(int index) {
+        return String.format("%s_%08d", filePrefix, index);
+    }
 
-	public int getRepeat() {
-		return repeat;
-	}
+    @Override
+    public void doStack(
+            NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            throws JobExecutionException {
 
-	public void setRepeat(int repeat) {
-		this.repeat = repeat;
-	}
+        try {
+            NamedChnlCollectionForSeries ncc =
+                    inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+
+            ProgressReporter progressReporter = ProgressReporterNull.get();
+
+            Channel red = ncc.getChnl("red", 0, progressReporter);
+            Channel blue = ncc.getChnl("blue", 0, progressReporter);
+            Channel green = ncc.getChnl("green", 0, progressReporter);
+
+            //
+            if (!red.getDimensions().equals(blue.getDimensions())
+                    || !blue.getDimensions().equals(green.getDimensions())) {
+                throw new JobExecutionException("Scene dimensions do not match");
+            }
+
+            Stack sliceOut = null;
+
+            ExtractProjectedStack extract = new ExtractProjectedStack(width, height);
+
+            for (int z = 0; z < red.getDimensions().getZ(); z++) {
+
+                sliceOut = extract.extractAndProjectStack(red, green, blue, z);
+
+                for (int i = 0; i < repeat; i++) {
+                    generatorSeq.add(sliceOut, formatIndex(index));
+                    index++;
+                }
+            }
+
+            // Just
+            if (delaySizeAtEnd > 0 && sliceOut != null) {
+                for (int i = 0; i < delaySizeAtEnd; i++) {
+                    generatorSeq.add(sliceOut, formatIndex(index));
+                    index++;
+                }
+            }
+
+        } catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException e) {
+            throw new JobExecutionException(e);
+        }
+    }
+
+    @Override
+    public void endSeries(BoundOutputManagerRouteErrors outputManager)
+            throws JobExecutionException {
+        generatorSeq.end();
+    }
+
+    public int getDelaySizeAtEnd() {
+        return delaySizeAtEnd;
+    }
+
+    public void setDelaySizeAtEnd(int delaySizeAtEnd) {
+        this.delaySizeAtEnd = delaySizeAtEnd;
+    }
+
+    public String getFilePrefix() {
+        return filePrefix;
+    }
+
+    public void setFilePrefix(String filePrefix) {
+        this.filePrefix = filePrefix;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public int getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(int repeat) {
+        this.repeat = repeat;
+    }
 }

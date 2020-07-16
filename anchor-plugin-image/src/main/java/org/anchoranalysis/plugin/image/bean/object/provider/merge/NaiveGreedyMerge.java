@@ -1,36 +1,12 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
-
-/*-
- * #%L
- * anchor-plugin-image
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -51,142 +27,135 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
-
 /**
- * Naive merge algorithm that merges in a very greedy away as long as certain conditions are fulfilled.
- * 
- * @author Owen Feehan
+ * Naive merge algorithm that merges in a very greedy away as long as certain conditions are
+ * fulfilled.
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class NaiveGreedyMerge {
 
-	private final boolean replaceWithMidpoint;
-	private final BeforeCondition beforeCondition;
-	private final AfterCondition afterCondition;
-	private final Optional<ImageResolution> res;
-	private final Logger logger;
-	
-	@Value
-	private static class MergeParams {
-		private int startSrc;
-		private int endSrc;
-	}
+    private final boolean replaceWithMidpoint;
+    private final BeforeCondition beforeCondition;
+    private final AfterCondition afterCondition;
+    private final Optional<ImageResolution> res;
+    private final Logger logger;
 
-	/**
-	 * Tries to merge objects (the collection is changed in-place)
-	 * 
-	 * @param objects the objects to merge
-	 * @throws OperationFailedException
-	 */
-	public ObjectCollection tryMerge( ObjectCollection objects ) throws OperationFailedException {
-		
-		List<MergeParams> stack = new ArrayList<>();
-		MergeParams mergeParams = new MergeParams(0,0);
-		
-		stack.add(mergeParams);
-		
-		while( !stack.isEmpty() ) {
-			MergeParams params = stack.remove(0);
-			tryMergeOnIndices(objects, params, stack);
-		}
-		
-		return objects;
-	}
-		
-	/**
-	 * Tries to merge a particular subset of objects in objects based upon the parameters in mergeParams
-	 * 
-	 * @param objects the entire set of objects
-	 * @param mergeParams parameters that determine which objects are considered for merge
-	 * @param stack the entire list of future parameters to also be considered
-	 * @throws OperationFailedException
-	 */
-	private void tryMergeOnIndices( ObjectCollection objects, MergeParams mergeParams, List<MergeParams> stack ) throws OperationFailedException {
-		
-		try {
-			afterCondition.init(logger);
-		} catch (InitException e) {
-			throw new OperationFailedException(e);
-		}
-		
-		for( int i=mergeParams.getStartSrc(); i<objects.size(); i++ ) {
-			for( int j=mergeParams.getEndSrc(); j<objects.size(); j++ ) {
-				
-				if (i==j) {
-					continue;
-				}
-				
-				Optional<ObjectMask> merged = tryMerge(
-					objects.get(i),
-					objects.get(j)
-				);
+    @Value
+    private static class MergeParams {
+        private int startSrc;
+        private int endSrc;
+    }
 
-				if (merged.isPresent()) {
-					removeTwoIndices(objects, i,j);
-					objects.add(merged.get());
-					
-					int startPos = Math.max(i-1,0);
-					stack.add( new MergeParams(startPos, startPos) );
-					
-					// After a succesful merge, we don't try to merge again
-					break;
-				}
-			}
-		}
-	}
-	
-	private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
-		if (i<j) {
-			objects.remove(j);
-			objects.remove(i);
-		} else {
-			objects.remove(i);
-			objects.remove(j);
-		}
-	}
+    /**
+     * Tries to merge objects (the collection is changed in-place)
+     *
+     * @param objects the objects to merge
+     * @throws OperationFailedException
+     */
+    public ObjectCollection tryMerge(ObjectCollection objects) throws OperationFailedException {
 
-	private Optional<ObjectMask> tryMerge( ObjectMask source, ObjectMask destination ) throws OperationFailedException {
-		
-		if(!beforeCondition.accept(source, destination, res)) {
-			return Optional.empty();
-		}
-		
-		// Do merge
-		ObjectMask merged = merge(source, destination);
+        List<MergeParams> stack = new ArrayList<>();
+        MergeParams mergeParams = new MergeParams(0, 0);
 
-		if(!afterCondition.accept(source, destination, merged, res)) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(merged);
-	}
-	
-	private ObjectMask merge(ObjectMask source, ObjectMask destination) {
-		if (replaceWithMidpoint) {
-			Point3i pointNew = PointConverter.intFromDouble(
-				Point3d.midPointBetween(
-					source.getBoundingBox().midpoint(),
-					destination.getBoundingBox().midpoint()
-				)
-			);
-			return createSinglePixelObject(pointNew);
-		} else {
-			return ObjectMaskMerger.merge(source, destination);
-		}
-	}
-		
-	private static ObjectMask createSinglePixelObject( Point3i point ) {
-		Extent e = new Extent(1,1,1);
-		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
-		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
-		bvb.setAllPixelsToOn();
-		return new ObjectMask(
-			new BoundingBox(point, e),
-			bvb
-		);
-	}
+        stack.add(mergeParams);
+
+        while (!stack.isEmpty()) {
+            MergeParams params = stack.remove(0);
+            tryMergeOnIndices(objects, params, stack);
+        }
+
+        return objects;
+    }
+
+    /**
+     * Tries to merge a particular subset of objects in objects based upon the parameters in
+     * mergeParams
+     *
+     * @param objects the entire set of objects
+     * @param mergeParams parameters that determine which objects are considered for merge
+     * @param stack the entire list of future parameters to also be considered
+     * @throws OperationFailedException
+     */
+    private void tryMergeOnIndices(
+            ObjectCollection objects, MergeParams mergeParams, List<MergeParams> stack)
+            throws OperationFailedException {
+
+        try {
+            afterCondition.init(logger);
+        } catch (InitException e) {
+            throw new OperationFailedException(e);
+        }
+
+        for (int i = mergeParams.getStartSrc(); i < objects.size(); i++) {
+            for (int j = mergeParams.getEndSrc(); j < objects.size(); j++) {
+
+                if (i == j) {
+                    continue;
+                }
+
+                Optional<ObjectMask> merged = tryMerge(objects.get(i), objects.get(j));
+
+                if (merged.isPresent()) {
+                    removeTwoIndices(objects, i, j);
+                    objects.add(merged.get());
+
+                    int startPos = Math.max(i - 1, 0);
+                    stack.add(new MergeParams(startPos, startPos));
+
+                    // After a succesful merge, we don't try to merge again
+                    break;
+                }
+            }
+        }
+    }
+
+    private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
+        if (i < j) {
+            objects.remove(j);
+            objects.remove(i);
+        } else {
+            objects.remove(i);
+            objects.remove(j);
+        }
+    }
+
+    private Optional<ObjectMask> tryMerge(ObjectMask source, ObjectMask destination)
+            throws OperationFailedException {
+
+        if (!beforeCondition.accept(source, destination, res)) {
+            return Optional.empty();
+        }
+
+        // Do merge
+        ObjectMask merged = merge(source, destination);
+
+        if (!afterCondition.accept(source, destination, merged, res)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(merged);
+    }
+
+    private ObjectMask merge(ObjectMask source, ObjectMask destination) {
+        if (replaceWithMidpoint) {
+            Point3i pointNew =
+                    PointConverter.intFromDouble(
+                            Point3d.midPointBetween(
+                                    source.getBoundingBox().midpoint(),
+                                    destination.getBoundingBox().midpoint()));
+            return createSinglePixelObject(pointNew);
+        } else {
+            return ObjectMaskMerger.merge(source, destination);
+        }
+    }
+
+    private static ObjectMask createSinglePixelObject(Point3i point) {
+        Extent e = new Extent(1, 1, 1);
+        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(e);
+        BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault());
+        bvb.setAllPixelsToOn();
+        return new ObjectMask(new BoundingBox(point, e), bvb);
+    }
 }
