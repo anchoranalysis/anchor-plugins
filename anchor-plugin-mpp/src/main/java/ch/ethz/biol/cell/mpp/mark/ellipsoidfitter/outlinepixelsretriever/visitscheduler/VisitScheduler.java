@@ -41,9 +41,9 @@ public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
 	public abstract Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res) throws OperationFailedException;
 	
-	public abstract void beforeCreateObject(RandomNumberGenerator re, ImageResolution res) throws InitException;
+	public abstract void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, ImageResolution res) throws InitException;
 	
-	public abstract void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException;
+	public abstract void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator) throws InitException;
 	
 	public abstract boolean considerVisit( Point3i point, int distanceAlongContour, ObjectMask object );
 }

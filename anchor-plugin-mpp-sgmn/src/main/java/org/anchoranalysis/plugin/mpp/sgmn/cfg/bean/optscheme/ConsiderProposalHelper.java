@@ -84,12 +84,13 @@ class ConsiderProposalHelper {
 			iter,
 			context.getKernelCalcContext()
 		);
-		double r = context.getKernelCalcContext().proposer().getRandomNumberGenerator().nextDouble();
+		double randomValueBetweenZeroAndOne = context.getKernelCalcContext().proposer()
+				.getRandomNumberGenerator().sampleDoubleZeroAndOne();
 		
 		// check that the proposal actually contains a change
 		assert !Double.isNaN(accptProb);
 		
-		if (r <= accptProb || !optStep.getBest().isPresent() ) {
+		if (randomValueBetweenZeroAndOne <= accptProb || !optStep.getBest().isPresent() ) {
 		
 			if (crnt.isPresent()) {
 				assert( !crnt.get().equals(proposal) );

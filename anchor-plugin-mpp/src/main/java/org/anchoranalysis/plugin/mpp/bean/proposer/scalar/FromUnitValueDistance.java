@@ -49,7 +49,7 @@ public class FromUnitValueDistance extends ScalarProposer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double propose(RandomNumberGenerator re, ImageResolution res)
+	public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
 			throws OperationFailedException {
 		// TODO this could be a bit slow, we are creating an object on the heap every time from directionVector
 		return unitValueDistance.resolve(

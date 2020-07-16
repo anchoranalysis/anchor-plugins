@@ -42,7 +42,7 @@ public class Constant extends ScalarProposer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double propose(RandomNumberGenerator re, ImageResolution res)
+	public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
 			throws OperationFailedException {
 		return value;
 	}

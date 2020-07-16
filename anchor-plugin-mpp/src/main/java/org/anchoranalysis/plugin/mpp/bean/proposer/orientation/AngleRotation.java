@@ -47,7 +47,7 @@ public class AngleRotation extends OrientationProposer {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator re ) {
+	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator ) {
 		MarkEllipse markC = (MarkEllipse) mark;
 		
 		Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();

@@ -69,18 +69,32 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	
 	// Calculates the points in both directions
 	@Override
-	public List<List<Point3i>> calcPoints( Point3d centerPoint, Orientation orientation, boolean do3D, RandomNumberGenerator re, boolean forwardDirectionOnly ) throws TraverseOutlineException {
+	public List<List<Point3i>> calcPoints( Point3d centerPoint, Orientation orientation, boolean do3D, RandomNumberGenerator randomNumberGenerator, boolean forwardDirectionOnly ) throws TraverseOutlineException {
 		
 		this.do3D = do3D;
 		
 		lastPointsForward.clear();
 		lastPointsReverse.clear();
 		
-		forwardCenterPoint = addPointsFromOrientation( centerPoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPointsForward, re);
+		forwardCenterPoint = addPointsFromOrientation(
+			centerPoint,
+			orientation,
+			findOutlinePixelAngle,
+			outlinePixelsRetriever,
+			lastPointsForward,
+			randomNumberGenerator
+		);
 	
 		if (!forwardDirectionOnly) {
 			OutlinePixelsRetriever reverseRetriever = outlinePixelsRetrieverReverse!=null ? outlinePixelsRetrieverReverse : outlinePixelsRetriever;
-			reverseCenterPoint = addPointsFromOrientation( centerPoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPointsReverse, re);
+			reverseCenterPoint = addPointsFromOrientation(
+				centerPoint,
+				orientation.negative(),
+				findOutlinePixelAngle,
+				reverseRetriever,
+				lastPointsReverse,
+				randomNumberGenerator
+			);
 			
 			if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
 				throw new TraverseOutlineException("Cannot find forward or reverse point to traverse");
@@ -105,7 +119,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		FindPointOnOutline find,
 		OutlinePixelsRetriever traverseOutline,
 		List<Point3i> listOut,
-		RandomNumberGenerator re
+		RandomNumberGenerator randomNumberGenerator
 	) throws TraverseOutlineException {
 		
 		try {
@@ -115,7 +129,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 				traverseOutline.traverse(
 					foundPoint.get(),
 					listOut,
-					re
+					randomNumberGenerator
 				);
 			}
 			

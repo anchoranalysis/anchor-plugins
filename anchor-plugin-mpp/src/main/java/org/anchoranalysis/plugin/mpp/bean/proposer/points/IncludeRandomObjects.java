@@ -68,7 +68,7 @@ public class IncludeRandomObjects extends PointsProposer {
 	}
 
 	@Override
-	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode) {
 
 		List<Point3i> out = new ArrayList<>();
 		
@@ -76,7 +76,7 @@ public class IncludeRandomObjects extends PointsProposer {
 			ObjectCollection objectCollection = objects.create();
 			
 			for( ObjectMask object : objectCollection ) {
-				maybeAddToList(object, out, re);
+				maybeAddToList(object, out, randomNumberGenerator);
 			}
 						
 		} catch (CreateException e) {
@@ -92,8 +92,8 @@ public class IncludeRandomObjects extends PointsProposer {
 		return Optional.empty();
 	}
 	
-	private static void maybeAddToList( ObjectMask object, List<Point3i> out, RandomNumberGenerator re ) {
-		if (re.nextDouble() > 0.5) {
+	private static void maybeAddToList( ObjectMask object, List<Point3i> out, RandomNumberGenerator randomNumberGenerator ) {
+		if (randomNumberGenerator.sampleDoubleZeroAndOne() > 0.5) {
 			out.addAll(
 				PointsFromObject.fromAsInteger(object)
 			);

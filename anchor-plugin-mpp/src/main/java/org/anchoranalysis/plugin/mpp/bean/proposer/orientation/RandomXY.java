@@ -39,11 +39,11 @@ import org.anchoranalysis.image.orientation.OrientationAxisAngle;
 public class RandomXY extends OrientationProposer {
 
 	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator re) {
+	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator randomNumberGenerator) {
 		return Optional.of(
 			new OrientationAxisAngle(
 				new Vector3d(0,0,1),
-				re.nextDouble() * Math.PI * 2
+				randomNumberGenerator.sampleDoubleFromRange(Math.PI * 2)
 			)
 		);
 	}

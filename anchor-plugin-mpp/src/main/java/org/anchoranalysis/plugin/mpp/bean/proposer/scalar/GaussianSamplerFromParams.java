@@ -57,7 +57,7 @@ public class GaussianSamplerFromParams extends ScalarProposer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public double propose( RandomNumberGenerator re, ImageResolution res ) throws OperationFailedException {
+	public double propose( RandomNumberGenerator randomNumberGenerator, ImageResolution res ) throws OperationFailedException {
 		
 		try {
 			KeyValueParams kvp = keyValueParamsProvider.create();
@@ -76,7 +76,7 @@ public class GaussianSamplerFromParams extends ScalarProposer {
 			);
 			double sd = Double.valueOf( kvp.getProperty(getParamStdDev()) ) * factorStdDev;
 			
-			return re.generateNormal(mean, sd).nextDouble();
+			return randomNumberGenerator.generateNormal(mean, sd).nextDouble();
 		} catch (CreateException e) {
 			throw new OperationFailedException(e);
 		}

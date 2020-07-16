@@ -84,8 +84,7 @@ public class ObjectAsPoints extends MarkProposer {
 	}
 	
 	private List<Point3d> randomlySelectPoints( ProposerContext context ) {
-		int selectedIndex = (int) (context.getRandomNumberGenerator().nextDouble() * points.size());
-		return points.get(selectedIndex);
+		return context.getRandomNumberGenerator().sampleFromList(points);
 	}
 
 	@Override

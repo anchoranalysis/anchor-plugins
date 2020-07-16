@@ -76,20 +76,20 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
 			throws InitException {
 		
 		for( VisitScheduler vs : list ) {
-			vs.beforeCreateObject(re, res);
+			vs.beforeCreateObject(randomNumberGenerator, res);
 		}
 		
 	}
 
 	@Override
-	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator) throws InitException {
 		
 		for( VisitScheduler vs : list ) {
-			vs.afterCreateObject(root, res, re);
+			vs.afterCreateObject(root, res, randomNumberGenerator);
 		}
 		
 	}
