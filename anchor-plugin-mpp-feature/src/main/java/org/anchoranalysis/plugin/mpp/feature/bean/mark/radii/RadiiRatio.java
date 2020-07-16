@@ -54,7 +54,7 @@ public class RadiiRatio extends FeatureMark {
 		MarkConic markCast = (MarkConic) input.get().getMark();
 		
 		ImageResolution sr = suppressRes ? uniformRes : input.get().getResRequired(); 
-		double[] radiiOrdered = markCast.radiiOrderedRslvd( sr );
+		double[] radiiOrdered = markCast.radiiOrderedResolved( sr );
 		
 		int len = radiiOrdered.length;
 		assert(len>=2);

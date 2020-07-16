@@ -44,7 +44,7 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
 		
 		double maxSliceSizeVoxels = calcMaxSliceSize(pm);
 		
-		double retVal = rslvArea(
+		double retVal = resolveArea(
 			maxSliceSizeVoxels,
 			input.get().getResOptional()
 		);

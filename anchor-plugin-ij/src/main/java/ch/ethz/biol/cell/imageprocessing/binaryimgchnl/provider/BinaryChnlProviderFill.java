@@ -102,10 +102,10 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	
 	private ObjectCollection filterObjects( ObjectCollection objects, ImageDimensions dim ) throws CreateException {
 		
-		final double maxVolumeRslvd = determineMaxVolume(dim);
+		final double maxVolumeResolved = determineMaxVolume(dim);
 
 		return objects.stream().filter( objectMask->
-			includeObject(objectMask, dim, maxVolumeRslvd)
+			includeObject(objectMask, dim, maxVolumeResolved)
 		);
 	}
 	
@@ -123,14 +123,14 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		}
 	}
 	
-	private boolean includeObject(ObjectMask object, ImageDimensions dim, double maxVolumeRslvd) {
+	private boolean includeObject(ObjectMask object, ImageDimensions dim, double maxVolumeResolved) {
 		// It's not allowed touch the border
 		if (skipAtBorder && object.getBoundingBox().atBorderXY(dim)) {
 			return false;
 		}
 		
 		// Volume check
-		return maxVolume==null || object.numberVoxelsOn()<=maxVolumeRslvd;
+		return maxVolume==null || object.numberVoxelsOn()<=maxVolumeResolved;
 	}
 	
 	private static Mask fillHoles( ObjectCollection filled, Mask src, ImageDimensions sd, BinaryValues bvOut ) {

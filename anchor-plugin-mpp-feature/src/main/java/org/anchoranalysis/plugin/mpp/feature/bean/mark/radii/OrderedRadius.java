@@ -48,7 +48,7 @@ public class OrderedRadius extends FeatureMark {
 		if (input.get().getMark() instanceof MarkConic) {
 			
 			MarkConic markCast = (MarkConic) input.get().getMark();
-			double[] radii = markCast.createRadiiArrayRslvd(input.get().getResRequired());
+			double[] radii = markCast.createRadiiArrayResolved(input.get().getResRequired());
 			
 			if( index >= radii.length ) {
 				throw new FeatureCalcException(String.format("Feature index %d must be less than radii array length %d",index,radii.length));

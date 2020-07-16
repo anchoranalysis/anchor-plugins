@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.bound;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 
 
@@ -45,10 +45,10 @@ public class ConstantBoundGenerator extends BoundCalculator {
 
 	// START BEAN PROPERTIES
 	@BeanField
-	private RslvdBound constantBound;
+	private ResolvedBound constantBound;
 	// END BEAN PROPERTIES
 	
-	public ConstantBoundGenerator(RslvdBound constantBound) {
+	public ConstantBoundGenerator(ResolvedBound constantBound) {
 		super();
 		this.constantBound = constantBound;
 	}

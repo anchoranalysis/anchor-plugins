@@ -159,16 +159,16 @@ public class QuickExperiment<S> extends Experiment {
 			assert(false);
 		}
 		
-		DirectoryStructure filePathRslvr = new DirectoryStructure();
-		filePathRslvr.setInPathPrefix( inPathBaseDir.toString() );
-		filePathRslvr.setOutPathPrefix(pathFolderOut.toString());
+		DirectoryStructure filePathResolver = new DirectoryStructure();
+		filePathResolver.setInPathPrefix( inPathBaseDir.toString() );
+		filePathResolver.setOutPathPrefix(pathFolderOut.toString());
 		try {
-			filePathRslvr.localise(getLocalPath());
+			filePathResolver.localise(getLocalPath());
 		} catch (BeanMisconfiguredException e) {
 			// Should never arise, as getLocalPath() should always be absolute
 			assert(false);
 		}
-		outputManager.setFilePathPrefixer(filePathRslvr);
+		outputManager.setFilePathPrefixer(filePathResolver);
 		outputManager.setOutputWriteSettings(outputWriteSettings);
 		return outputManager;
 	}

@@ -61,36 +61,36 @@ class MultiBuffer {
 		Channel chnl = stackForFile.getChnl(0);
 		VoxelBox<?> vb = chnl.getVoxelBox().any();
 		
-		int chnlIndexRslvd = size.getRangeC().index(chnlNum);
-		int timeIndexRslvd = size.getRangeT().index(timeIndex);
+		int chnlIndexResolved = size.getRangeC().index(chnlNum);
+		int timeIndexResolved = size.getRangeT().index(timeIndex);
 		
 		if( sliceNum.isPresent()) {
-			copyFirstSliceForChnl(timeIndexRslvd, chnlIndexRslvd, vb, sliceNum.get());
+			copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, vb, sliceNum.get());
 			
 		} else {
-			copyAllSlicesForChnl(timeIndexRslvd, chnlIndexRslvd, vb);
+			copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, vb);
 		}
 	}
 	
 	public void populateWithSpecifiedSlice(Stack stackForFile, int sliceNum, int timeIndex) {
 		
-		int timeIndexRslvd = size.getRangeT().index(timeIndex);
+		int timeIndexResolved = size.getRangeT().index(timeIndex);
 		
 		for( int c=0; c<stackForFile.getNumChnl(); c++ ) {
 			Channel chnl = stackForFile.getChnl(c);
-			copyFirstSliceForChnl(timeIndexRslvd, c, chnl.getVoxelBox().any(), sliceNum);
+			copyFirstSliceForChnl(timeIndexResolved, c, chnl.getVoxelBox().any(), sliceNum);
 		}
 	}
 			
 	public void populateNoSpecifics(Stack stackForFile, int timeIndex) {
 		
-		int timeIndexRslvd = size.getRangeT().index(timeIndex);
+		int timeIndexResolved = size.getRangeT().index(timeIndex);
 		
 		// No specific Channel Number, and no specific Slice Number
 		// Then we have to guess the channel
 		for( int c=0; c<stackForFile.getNumChnl(); c++ ) {
 			Channel chnl = stackForFile.getChnl(c);
-			copyAllSlicesForChnl(timeIndexRslvd, c, chnl.getVoxelBox().any() );
+			copyAllSlicesForChnl(timeIndexResolved, c, chnl.getVoxelBox().any() );
 		}	
 	}
 

@@ -61,11 +61,11 @@ public abstract class FeatureSingleMemoRegion extends FeatureSingleMemo {
 		this.unit = unit;
 	}
 
-	protected double rslvVolume(double value, Optional<ImageResolution> res) throws FeatureCalcException {
-		return unit.rslvVolume(value, res);
+	protected double resolveVolume(double value, Optional<ImageResolution> res) throws FeatureCalcException {
+		return unit.resolveVolume(value, res);
 	}
 
-	protected double rslvArea(double value, Optional<ImageResolution> res) throws FeatureCalcException {
-		return unit.rslvArea(value, res);
+	protected double resolveArea(double value, Optional<ImageResolution> res) throws FeatureCalcException {
+		return unit.resolveArea(value, res);
 	}
 }

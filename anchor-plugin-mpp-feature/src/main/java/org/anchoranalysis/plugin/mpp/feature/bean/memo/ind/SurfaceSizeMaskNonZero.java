@@ -71,7 +71,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 			objectMask
 		);
 		
-		return rslvArea(
+		return resolveArea(
 			surfaceSize,
 			input.get().getResOptional()
 		);

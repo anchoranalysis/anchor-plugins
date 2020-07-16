@@ -63,15 +63,15 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 			getRegionID()
 		);
 		
-		return rslvDistance(
+		return resolveDistance(
 			bbox,
 			Optional.of(dim.getRes()),
 			AxisTypeConverter.createFromString(axis)
 		);
 	}
 	
-	private double rslvDistance(BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType) throws FeatureCalcException {
-		return unit.rslvDistance(
+	private double resolveDistance(BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType) throws FeatureCalcException {
+		return unit.resolveDistance(
 			bbox.extent().getValueByDimension(axisType),
 			res,
 			unitVector(

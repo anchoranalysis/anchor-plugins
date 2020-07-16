@@ -96,7 +96,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 		}
 		
 		this.delegate = wrapWithRoot(
-			createRslvr()
+			createResolver()
 		);
 		
 		try {
@@ -106,11 +106,11 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 		}
 	}
 	
-	private FilePathPrefixerAvoidResolve createRslvr() {
-		PathRegEx rslvr = new PathRegEx();
-		rslvr.setOutPathPrefix(prefix + experimentType);
-		rslvr.setRegEx( regEx );
-		return rslvr;
+	private FilePathPrefixerAvoidResolve createResolver() {
+		PathRegEx resolver = new PathRegEx();
+		resolver.setOutPathPrefix(prefix + experimentType);
+		resolver.setRegEx( regEx );
+		return resolver;
 	}
 	
 	private Rooted wrapWithRoot( FilePathPrefixerAvoidResolve in ) {

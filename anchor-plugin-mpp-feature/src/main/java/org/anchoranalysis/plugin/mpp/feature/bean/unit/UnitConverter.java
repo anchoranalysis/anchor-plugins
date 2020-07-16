@@ -64,7 +64,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return distance expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvDistance( double value, Optional<ImageResolution> res, DirectionVector dirVector ) throws FeatureCalcException {
+	public double resolveDistance( double value, Optional<ImageResolution> res, DirectionVector dirVector ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {
@@ -86,7 +86,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return volume expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvVolume( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
+	public double resolveVolume( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {
@@ -107,7 +107,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	 * @return area expressed in desired units
 	 * @throws FeatureCalcException
 	 */
-	public double rslvArea( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
+	public double resolveArea( double value, Optional<ImageResolution> res ) throws FeatureCalcException {
 		
 		// If we aren't doing anything physical, we can just return the current value
 		if (isNonPhysical(res)) {

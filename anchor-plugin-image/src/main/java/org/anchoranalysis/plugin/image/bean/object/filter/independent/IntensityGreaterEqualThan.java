@@ -80,7 +80,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 	@Override
 	protected boolean match(ObjectMask object, Optional<ImageDimensions> dim) throws OperationFailedException {
 		
-		int thresholdRslv = threshold(dim);
+		int thresholdResolved = threshold(dim);
 		
 		for( int z=0; z<object.getBoundingBox().extent().getZ(); z++) {
 			
@@ -102,7 +102,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 						
 						// Now we get a value from the vb
 						int val = bbChnl.getInt(offsetGlobal);
-						if (val>=thresholdRslv) {
+						if (val>=thresholdResolved) {
 							return true;
 						}
 					}

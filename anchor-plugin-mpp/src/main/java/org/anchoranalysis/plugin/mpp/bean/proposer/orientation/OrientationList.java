@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -53,7 +53,7 @@ class OrientationList {
 		this.boundsRatio = boundsRatio;
 	}		
 	
-	public void addOrientationIfUseful(Orientation orientation, Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+	public void addOrientationIfUseful(Orientation orientation, Mark mark, ResolvedBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		BidirectionalBound bib;
 		try {

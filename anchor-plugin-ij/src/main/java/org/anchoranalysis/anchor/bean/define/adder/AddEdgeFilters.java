@@ -132,12 +132,12 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 			);
 		}
 		
-		private ChnlProvider edgeFilter( String unrslvdSrcName ) {
+		private ChnlProvider edgeFilter( String unresolvedSrcName ) {
 			ChnlProviderEdgeFilter provider = new ChnlProviderEdgeFilter();
 			provider.setOutputShort(true);
 			provider.setChnl(
 				createDup(
-					rslvName(unrslvdSrcName)
+					resolveName(unresolvedSrcName)
 				)
 			);
 			return provider;
@@ -150,7 +150,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 			provider.setAxis(axis);
 			provider.setChnl(
 				createDup(
-					rslvName(filterName)
+					resolveName(filterName)
 				)
 			);
 			return provider;
