@@ -1,30 +1,5 @@
+/* (C)2020 */
 package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
-
-/*-
- * #%L
- * anchor-plugin-io
- * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Value;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
@@ -41,116 +18,109 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.apache.commons.io.FilenameUtils;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
-
 /**
  * Copies files to a number 001 002 etc. in the same order they are inputted.
- * 
- * No shuffling occurs.
- * 
- * @author feehano
  *
+ * <p>No shuffling occurs.
+ *
+ * @author feehano
  */
 public class Anonymize implements CopyFilesNaming {
 
-	private static final String OUTPUT_CSV_FILENAME = "output.csv";
+    private static final String OUTPUT_CSV_FILENAME = "output.csv";
 
-	@Value
-	private static class FileMapping {
-		private final Path original;
-		private final String anonymized;
-		private final int iter;
-	}
-	
-	// START BEAN PROPERTIES
-	/** Iff TRUE, a mapping.csv file is created showing the mapping between the original-names and the anonymized
-	 *   versions */
-	@BeanField @Getter @Setter
-	private boolean outputCSV = true;
-	// END BEAN PROPERTIES
-	
-	private Optional<List<FileMapping>> optionalMappings;
-	private String formatStr;
-	
-	@Override
-	public void beforeCopying(Path destDir, int totalNumFiles) {
-		optionalMappings = OptionalUtilities.createFromFlag(outputCSV, ArrayList::new);
-		
-		formatStr = createFormatStrForMaxNum(totalNumFiles);
-	}
-	
+    @Value
+    private static class FileMapping {
+        private final Path original;
+        private final String anonymized;
+        private final int iter;
+    }
 
-	@Override
-	public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter) throws AnchorIOException {
-		String ext = FilenameUtils.getExtension(file.toString());
-		String fileNameNew = createNumericString(iter) + "." + ext;
-		
-		if (optionalMappings.isPresent()) {
-			addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
-		}
-		
-		return Optional.of(
-			Paths.get(fileNameNew)
-		);
-	}
+    // START BEAN PROPERTIES
+    /**
+     * Iff TRUE, a mapping.csv file is created showing the mapping between the original-names and
+     * the anonymized versions
+     */
+    @BeanField @Getter @Setter private boolean outputCSV = true;
+    // END BEAN PROPERTIES
 
-	@Override
-	public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+    private Optional<List<FileMapping>> optionalMappings;
+    private String formatStr;
 
-		if (optionalMappings.isPresent() && !dummyMode) {
-			writeOutputCSV(optionalMappings.get(), destDir);
-			optionalMappings = Optional.empty();
-		}
-	}
-	
-	private void addMapping(List<FileMapping> mapping, Path sourceDir, File file, int iter, String fileNameNew) throws AnchorIOException {
-		synchronized(this) {
-			mapping.add(	// NOSONAR
-				new FileMapping(
-					NamingUtilities.filePathDiff( sourceDir, file.toPath() ),
-					fileNameNew,
-					iter
-				)
-			);
-		}
-	}
-	
-	private void writeOutputCSV(List<FileMapping> listMappings, Path destDir) throws AnchorIOException {
-		
-		Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
-		
-		CSVWriter csvWriter = CSVWriter.create(csvOut);
-		
-		csvWriter.writeHeaders( Arrays.asList("iter","in","out") );
-		
-		try {
-			for(FileMapping mapping : listMappings) {
-				csvWriter.writeRow(
-					Arrays.asList(
-						new TypedValue( mapping.getIter() ),
-						new TypedValue( mapping.getOriginal().toString() ),
-						new TypedValue( mapping.getAnonymized() )
-					)
-				);
-			}
-		} finally {
-			csvWriter.close();
-		}
-	}
-	
-	private String createNumericString( int iter ) {
-		return String.format(formatStr, iter);
-	}
-		
-	private static String createFormatStrForMaxNum( int maxNum ) {
-		int maxNumDigits = (int) Math.ceil(Math.log10(maxNum));
-		
-		if (maxNumDigits>0) {
-			return "%0" + maxNumDigits + "d";
-		} else {
-			return "%d";
-		}
-	}
+    @Override
+    public void beforeCopying(Path destDir, int totalNumFiles) {
+        optionalMappings = OptionalUtilities.createFromFlag(outputCSV, ArrayList::new);
+
+        formatStr = createFormatStrForMaxNum(totalNumFiles);
+    }
+
+    @Override
+    public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
+            throws AnchorIOException {
+        String ext = FilenameUtils.getExtension(file.toString());
+        String fileNameNew = createNumericString(iter) + "." + ext;
+
+        if (optionalMappings.isPresent()) {
+            addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
+        }
+
+        return Optional.of(Paths.get(fileNameNew));
+    }
+
+    @Override
+    public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+
+        if (optionalMappings.isPresent() && !dummyMode) {
+            writeOutputCSV(optionalMappings.get(), destDir);
+            optionalMappings = Optional.empty();
+        }
+    }
+
+    private void addMapping(
+            List<FileMapping> mapping, Path sourceDir, File file, int iter, String fileNameNew)
+            throws AnchorIOException {
+        synchronized (this) {
+            mapping.add( // NOSONAR
+                    new FileMapping(
+                            NamingUtilities.filePathDiff(sourceDir, file.toPath()),
+                            fileNameNew,
+                            iter));
+        }
+    }
+
+    private void writeOutputCSV(List<FileMapping> listMappings, Path destDir)
+            throws AnchorIOException {
+
+        Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
+
+        CSVWriter csvWriter = CSVWriter.create(csvOut);
+
+        csvWriter.writeHeaders(Arrays.asList("iter", "in", "out"));
+
+        try {
+            for (FileMapping mapping : listMappings) {
+                csvWriter.writeRow(
+                        Arrays.asList(
+                                new TypedValue(mapping.getIter()),
+                                new TypedValue(mapping.getOriginal().toString()),
+                                new TypedValue(mapping.getAnonymized())));
+            }
+        } finally {
+            csvWriter.close();
+        }
+    }
+
+    private String createNumericString(int iter) {
+        return String.format(formatStr, iter);
+    }
+
+    private static String createFormatStrForMaxNum(int maxNum) {
+        int maxNumDigits = (int) Math.ceil(Math.log10(maxNum));
+
+        if (maxNumDigits > 0) {
+            return "%0" + maxNumDigits + "d";
+        } else {
+            return "%d";
+        }
+    }
 }
