@@ -138,10 +138,10 @@ class RotatableBoundingBoxFromArrays {
 		return avg;
 	}
 	
-	private static Point3d meanPoint( Point3d pnt1, Point3d pnt2 ) {
+	private static Point3d meanPoint( Point3d point1, Point3d point2 ) {
 		return new Point3d(
-			(pnt1.getX() + pnt2.getX())/2,
-			(pnt1.getY() + pnt2.getY())/2,
+			(point1.getX() + point2.getX())/2,
+			(point1.getY() + point2.getY())/2,
 			0
 		);
 	}

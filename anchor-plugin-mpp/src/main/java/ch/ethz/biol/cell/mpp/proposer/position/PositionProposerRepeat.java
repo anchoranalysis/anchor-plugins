@@ -49,12 +49,12 @@ public class PositionProposerRepeat extends PositionProposerBean {
 	public Optional<Point3d> propose(ProposerContext context) {
 
 		for (int i=0; i<maxIter; i++) {
-			Optional<Point3d> pnt = positionProposer.propose(
+			Optional<Point3d> point = positionProposer.propose(
 				context.addErrorLevel(positionProposer.getBeanName())
 			);
 			
-			if (pnt.isPresent()) {
-				return pnt;
+			if (point.isPresent()) {
+				return point;
 			}
 		}
 		

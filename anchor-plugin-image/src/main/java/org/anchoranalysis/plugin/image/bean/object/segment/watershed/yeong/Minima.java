@@ -35,16 +35,16 @@ class Minima {
 
 	private List<Point3i> delegate;
 	
-	public Minima( List<Point3i> pntList ) {
-		delegate = pntList;
+	public Minima( List<Point3i> pointList ) {
+		delegate = pointList;
 	}
 	
-	public Minima( Point3i pnt ) {
+	public Minima( Point3i point ) {
 		delegate = new ArrayList<>();
-		delegate.add(pnt);
+		delegate.add(point);
 	}
 
-	public List<Point3i> getListPnts() {
+	public List<Point3i> getListPoints() {
 		return delegate;
 	}
 

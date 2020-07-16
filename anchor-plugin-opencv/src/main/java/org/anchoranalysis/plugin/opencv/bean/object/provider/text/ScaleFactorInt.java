@@ -40,10 +40,10 @@ class ScaleFactorInt {
 		this.y = y;
 	}
 	
-	public Point2i scale( Point2i pnt ) {
+	public Point2i scale( Point2i point ) {
 		return new Point2i(
-			scaledX( pnt.getX() ),
-			scaledY( pnt.getY() )
+			scaledX( point.getX() ),
+			scaledY( point.getY() )
 		);
 	}
 

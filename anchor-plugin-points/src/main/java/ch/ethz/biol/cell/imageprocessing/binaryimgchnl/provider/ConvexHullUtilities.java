@@ -61,7 +61,7 @@ public class ConvexHullUtilities {
 	 * <p>Note the algorithm will return the input-points if there are too few points.</p>
 	 * 
 	 * @param points points to filter
-	 * @param minNumPnts a minimum of number of points (before any convex hull filtering) that must be found.
+	 * @param minNumPoints a minimum of number of points (before any convex hull filtering) that must be found.
 	 * @return the filtered points on convex-hull iff the minimum number of points exists, otherwise the input points unchanged.
 	 * @throws OperationFailedException if the count variable becomes too high during calculation
 	 */
@@ -168,13 +168,13 @@ public class ConvexHullUtilities {
 		return points;
 	}
 	
-	private static int calculateStartingIndex( List<Point2i> pntsIn ) {
+	private static int calculateStartingIndex( List<Point2i> pointsIn ) {
 		
 		int smallestY = Integer.MAX_VALUE;
 		int x;
 		int y;
-		for (int i=0; i<pntsIn.size(); i++) {
-			y = pntsIn.get(i).getY();
+		for (int i=0; i<pointsIn.size(); i++) {
+			y = pointsIn.get(i).getY();
 			if (y<smallestY) {
 				smallestY = y;
 			}
@@ -182,9 +182,9 @@ public class ConvexHullUtilities {
 		
 		int smallestX = Integer.MAX_VALUE;
 		int p1 = 0;
-		for (int i=0; i<pntsIn.size(); i++) {
-			x = pntsIn.get(i).getX();
-			y = pntsIn.get(i).getY();
+		for (int i=0; i<pointsIn.size(); i++) {
+			x = pointsIn.get(i).getX();
+			y = pointsIn.get(i).getY();
 			if (y==smallestY && x<smallestX) {
 				smallestX = x;
 				p1 = i;

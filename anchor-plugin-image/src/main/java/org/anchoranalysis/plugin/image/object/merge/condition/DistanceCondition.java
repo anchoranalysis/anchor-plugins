@@ -83,11 +83,11 @@ public class DistanceCondition implements BeforeCondition {
 		}
 	}
 	
-	private double rslvDist( Optional<ImageResolution> res, Point3d pnt1, Point3d pnt2 ) throws OperationFailedException {
+	private double rslvDist( Optional<ImageResolution> res, Point3d point1, Point3d point2 ) throws OperationFailedException {
 		if (suppressZ) {
-			return maxDist.rslv(res, new Point3d(pnt1.getX(),pnt1.getY(),0), new Point3d(pnt2.getX(),pnt2.getY(),0) );
+			return maxDist.rslv(res, new Point3d(point1.getX(),point1.getY(),0), new Point3d(point2.getX(),point2.getY(),0) );
 		} else {
-			return maxDist.rslv(res, pnt1, pnt2 );
+			return maxDist.rslv(res, point1, point2 );
 		}
 	}
 }

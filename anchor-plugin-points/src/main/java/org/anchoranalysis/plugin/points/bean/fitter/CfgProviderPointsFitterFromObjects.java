@@ -101,19 +101,19 @@ public class CfgProviderPointsFitterFromObjects extends CfgProvider {
 		if (convexHull) {
 			return ConvexHullUtilities.convexHull2D(
 				points,
-				pointsFitter.getMinNumPnts()
+				pointsFitter.getMinNumPoints()
 			);
 		} else {
 			return points;
 		}
 	}
 	
-	private Optional<Mark> fitToMark( List<Point3f> pntsToFit, ImageDimensions dimensions) throws CreateException {
+	private Optional<Mark> fitToMark( List<Point3f> pointsToFit, ImageDimensions dimensions) throws CreateException {
 
 		Mark markOut = markFactory.create();
 		
 		try {
-			pointsFitter.fitPointsToMark( pntsToFit, markOut, dimensions );
+			pointsFitter.fitPointsToMark( pointsToFit, markOut, dimensions );
 			return Optional.of(markOut);
 		} catch (OperationFailedException e) {
 			return handleFittingFailure( e.friendlyMessage() );

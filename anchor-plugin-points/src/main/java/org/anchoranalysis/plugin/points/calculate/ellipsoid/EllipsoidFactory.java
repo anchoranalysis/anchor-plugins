@@ -60,7 +60,7 @@ public class EllipsoidFactory {
 	 */
 	public static MarkEllipsoid createMarkEllipsoidLeastSquares( ObjectMask object, ImageDimensions dim, boolean suppressZCovariance, double shellRad ) throws CreateException {
 		return createMarkEllipsoidLeastSquares(
-			()->PointsFromObject.pntsFromMaskOutline(object),
+			()->PointsFromObject.pointsFromMaskOutline(object),
 			dim,
 			suppressZCovariance,
 			shellRad
@@ -68,7 +68,7 @@ public class EllipsoidFactory {
 	}
 		
 	public static MarkEllipsoid createMarkEllipsoidLeastSquares(
-		Operation<List<Point3i>,CreateException> opPnts,
+		Operation<List<Point3i>,CreateException> opPoints,
 		ImageDimensions dim,
 		boolean suppressZCovariance,
 		double shellRad
@@ -78,7 +78,7 @@ public class EllipsoidFactory {
 		pointsFitter.setShellRad(shellRad);
 		pointsFitter.setSuppressZCovariance(suppressZCovariance);
 		
-		List<Point3i> pts = opPnts.doOperation();
+		List<Point3i> pts = opPoints.doOperation();
 				
 		// Now get all the points on the outline 
 		MarkEllipsoid mark = new MarkEllipsoid();

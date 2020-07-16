@@ -167,25 +167,25 @@ class NaiveGreedyMerge {
 	
 	private ObjectMask merge(ObjectMask source, ObjectMask destination) {
 		if (replaceWithMidpoint) {
-			Point3i pntNew = PointConverter.intFromDouble(
+			Point3i pointNew = PointConverter.intFromDouble(
 				Point3d.midPointBetween(
 					source.getBoundingBox().midpoint(),
 					destination.getBoundingBox().midpoint()
 				)
 			);
-			return createSinglePixelObject(pntNew);
+			return createSinglePixelObject(pointNew);
 		} else {
 			return ObjectMaskMerger.merge(source, destination);
 		}
 	}
 		
-	private static ObjectMask createSinglePixelObject( Point3i pnt ) {
+	private static ObjectMask createSinglePixelObject( Point3i point ) {
 		Extent e = new Extent(1,1,1);
 		VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create( e );
 		BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault() );
 		bvb.setAllPixelsToOn();
 		return new ObjectMask(
-			new BoundingBox(pnt, e),
+			new BoundingBox(point, e),
 			bvb
 		);
 	}

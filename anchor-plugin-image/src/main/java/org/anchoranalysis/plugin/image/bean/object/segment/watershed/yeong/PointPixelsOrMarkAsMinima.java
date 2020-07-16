@@ -42,9 +42,9 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
 	}
 	
 	@Override
-	public void process(Point3i pnt) {
+	public void process(Point3i point) {
 		
-		int indxBuffer = bufferPlus.offsetSlice(pnt);
+		int indxBuffer = bufferPlus.offsetSlice(point);
 		
 		// Exit early if this voxel has already been visited
 		if (!bbS.isUnvisited(indxBuffer)) {
@@ -55,15 +55,15 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
 		int gVal = bufferPlus.getG(indxBuffer);
 		
 		// Calculate steepest descent. -1 indicates that there is no steepest descent
-		int chainCode = bufferPlus.calcSteepestDescent(pnt,gVal,indxBuffer);
+		int chainCode = bufferPlus.calcSteepestDescent(point,gVal,indxBuffer);
 		
 		if (bufferPlus.isMinima(chainCode)) {
 			// Treat as local minima
 			bbS.putCode(indxBuffer, chainCode);	
-			bufferPlus.maybeAddMinima(pnt);
+			bufferPlus.maybeAddMinima(point);
 			
 		} else if (bufferPlus.isPlateau(chainCode)) {
-			bufferPlus.makePlateauAt(pnt);
+			bufferPlus.makePlateauAt(point);
 		} else {
 			// Record steepest
 			bbS.putCode(indxBuffer,chainCode);

@@ -82,7 +82,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 		IterateVoxels.callEachPoint(
 			chnl.binaryVoxelBox().getVoxelBox(),				
 			mask,
-			(Point3i pnt, ByteBuffer buffer, int offset) -> {
+			(Point3i point, ByteBuffer buffer, int offset) -> {
 				byte val = buffer.get(offset);
 				
 				if (val==byteOn) {

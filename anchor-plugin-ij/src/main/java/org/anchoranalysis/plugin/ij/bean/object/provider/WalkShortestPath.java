@@ -57,9 +57,9 @@ import lombok.NoArgsConstructor;
 class WalkShortestPath {
 
 	/** Walks a 4-connected line between two points, producing a minimal object-mask for both */
-	public static ObjectMask walkLine( Point3i pnt1, Point3i pnt2 ) throws OperationFailedException {
+	public static ObjectMask walkLine( Point3i point1, Point3i point2 ) throws OperationFailedException {
 		return walkLineInternal(
-			Arrays.asList(pnt1, pnt2)
+			Arrays.asList(point1, point2)
 		);
 	}
 
@@ -94,16 +94,16 @@ class WalkShortestPath {
 		
 		for( int i=0; i<(points.size()-1); i++ )  {
 		
-			Point3i pnt1 = points.get(i);
-			Point3i pnt2 = points.get(i+1);
-			assert(pnt1.getZ()==pnt2.getZ());
+			Point3i point1 = points.get(i);
+			Point3i point2 = points.get(i+1);
+			assert(point1.getZ()==point2.getZ());
 			
 			drawLineOnVoxelBuffer(
-				object.binaryVoxelBox().getVoxelBox().getPixelsForPlane(pnt1.getZ() - bbox.cornerMin().getZ()),
+				object.binaryVoxelBox().getVoxelBox().getPixelsForPlane(point1.getZ() - bbox.cornerMin().getZ()),
 				object.binaryVoxelBox().getVoxelBox().extent(),
 				object.binaryVoxelBox().getBinaryValues().createByte(),
-				pnt1,
-				pnt2,
+				point1,
+				point2,
 				bbox.cornerMin()
 			);
 		}
@@ -112,20 +112,20 @@ class WalkShortestPath {
 		
 	}
 		
-	private static void checkCoplanar( List<Point3i> pnts ) throws OperationFailedException {
+	private static void checkCoplanar( List<Point3i> points ) throws OperationFailedException {
 
-		Point3i firstPnt = null;
+		Point3i firstPoint = null;
 		
-		for( Point3i pnt : pnts ) {
+		for( Point3i point : points ) {
 			
-			if (firstPnt==null) {
-				firstPnt = pnt;
+			if (firstPoint==null) {
+				firstPoint = point;
 			}
 			
 			// Only accept points in 2D
-			if (firstPnt.getZ()!=pnt.getZ()) {
+			if (firstPoint.getZ()!=point.getZ()) {
 				throw new OperationFailedException(
-					String.format("the first point in the list (%d) and another pnt (%d) have different z values. This algorithm only supports co-planar points (parallel to XY-axis)", firstPnt.getZ(), pnt.getZ())
+					String.format("the first point in the list (%d) and another point (%d) have different z values. This algorithm only supports co-planar points (parallel to XY-axis)", firstPoint.getZ(), point.getZ())
 				);
 			}
 		}
@@ -135,18 +135,18 @@ class WalkShortestPath {
 		VoxelBuffer<ByteBuffer> plane,
 		Extent extent,
 		BinaryValuesByte bvb,
-		Point3i pnt1,
-		Point3i pnt2,
+		Point3i point1,
+		Point3i point2,
 		ReadableTuple3i crnrMin
 	) {
 		drawLine4(
 			plane,
 			extent,
 			bvb,
-			pnt1.getX() - crnrMin.getX(),
-			pnt1.getY() - crnrMin.getY(),
-			pnt2.getX() - crnrMin.getX(),
-			pnt2.getY() - crnrMin.getY()
+			point1.getX() - crnrMin.getX(),
+			point1.getY() - crnrMin.getY(),
+			point2.getX() - crnrMin.getX(),
+			point2.getY() - crnrMin.getY()
 		);
 	}
 	

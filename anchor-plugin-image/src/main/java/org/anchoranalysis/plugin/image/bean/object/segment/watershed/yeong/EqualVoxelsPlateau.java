@@ -40,17 +40,17 @@ class EqualVoxelsPlateau {
 		private List<PointWithNghb> ptsEdge = new ArrayList<>();
 		private List<Point3i> ptsInner = new ArrayList<>();
 		
-		public void addEdge( Point3i pnt, int nghbIndex ) {
+		public void addEdge( Point3i point, int nghbIndex ) {
 			Preconditions.checkArgument(nghbIndex >= 0);
 			ptsEdge.add(
-				new PointWithNghb(pnt, nghbIndex)
+				new PointWithNghb(point, nghbIndex)
 			);
 		}
 		
-		public void addInner( Point3i pnt ) {
-			// We make we duplicate, as pnt is coming from an iterator and is mutable
+		public void addInner( Point3i point ) {
+			// We make we duplicate, as point is coming from an iterator and is mutable
 			ptsInner.add(
-				new Point3i(pnt)
+				new Point3i(point)
 			);
 		}
 		
@@ -71,7 +71,7 @@ class EqualVoxelsPlateau {
 			List<Point3i> ptsEdgeOut = new ArrayList<>();
 			
 			for( PointWithNghb pwn : ptsEdge ) {
-				ptsEdgeOut.add( pwn.getPnt() );
+				ptsEdgeOut.add( pwn.getPoint() );
 			}
 			return ptsEdgeOut;
 		}

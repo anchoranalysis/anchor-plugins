@@ -53,18 +53,18 @@ final class ConnectedComponentWriter {
 	
 	/**
 	 * 
-	 * @param pnt a point that is treated immutably
+	 * @param point a point that is treated immutably
 	 */
-	public void writePoint( Point3i pnt ) {
+	public void writePoint( Point3i point ) {
 		// We write a connected component id based upon the first voxel encountered
 		if (id==-1) {
-			id = matS.extent().offset(pnt);
+			id = matS.extent().offset(point);
 			
 			if (minimaStore.isPresent()) {
-				minimaStore.get().addDuplicated(pnt);
+				minimaStore.get().addDuplicated(point);
 			}
 		}
 		
-		matS.setPointConnectedComponentID(pnt, id);
+		matS.setPointConnectedComponentID(point, id);
 	}
 }

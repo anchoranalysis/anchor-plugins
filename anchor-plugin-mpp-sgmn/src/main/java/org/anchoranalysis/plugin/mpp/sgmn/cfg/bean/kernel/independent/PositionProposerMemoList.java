@@ -76,22 +76,22 @@ class PositionProposerMemoList implements PositionProposer {
 			
 			BoundingBox bbox = pm.getBoundingBox();
 			
-			Point3d pnt = randomPosition(bbox, context.getRandomNumberGenerator());
+			Point3d point = randomPosition(bbox, context.getRandomNumberGenerator());
 					
-			if (insideRelevantRegion(pm, rm, pnt, bbox)) {
-				return Optional.of(pnt);
+			if (insideRelevantRegion(pm, rm, point, bbox)) {
+				return Optional.of(point);
 			}
 		}
 
 		return Optional.empty();
 	}
 	
-	private boolean insideRelevantRegion( VoxelizedMark pm, RegionMembership rm, Point3d pnt, BoundingBox bbox) {
+	private boolean insideRelevantRegion( VoxelizedMark pm, RegionMembership rm, Point3d point, BoundingBox bbox) {
 				
 		byte flags = rm.flags();
 				
 		Point3i rel = Point3i.immutableSubtract(
-			PointConverter.intFromDouble(pnt),
+			PointConverter.intFromDouble(point),
 			bbox.cornerMin()
 		);
 		
@@ -104,7 +104,7 @@ class PositionProposerMemoList implements PositionProposer {
 			return false;
 		}
 		
-		byte membership = markBlock.evalPntInside(pnt);
+		byte membership = markBlock.evalPointInside(point);
 		
 		// If it's inside our block mark, then we don't consider it
 		return !rm.isMemberFlag(membership, flags);

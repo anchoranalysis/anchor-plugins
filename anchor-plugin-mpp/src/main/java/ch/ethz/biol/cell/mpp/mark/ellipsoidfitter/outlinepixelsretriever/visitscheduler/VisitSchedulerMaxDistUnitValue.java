@@ -74,12 +74,12 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object ) {
+	public boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object ) {
 		try {
-			return distToRoot(pnt)<maxDist.rslv(
+			return distToRoot(point)<maxDist.rslv(
 				Optional.of(res),
 				root,
-				pnt
+				point
 			);
 		} catch (OperationFailedException e) {
 			throw new AnchorFriendlyRuntimeException(e);
@@ -94,8 +94,8 @@ public class VisitSchedulerMaxDistUnitValue extends VisitScheduler {
 		this.maxDist = maxDist;
 	}
 	
-	private double distToRoot( Point3i pnt ) {
-		 return res.distance(root, pnt);
+	private double distToRoot( Point3i point ) {
+		 return res.distance(root, point);
 	}
 	
 	private int distForAxis(AxisType axis, ImageResolution res) throws OperationFailedException {

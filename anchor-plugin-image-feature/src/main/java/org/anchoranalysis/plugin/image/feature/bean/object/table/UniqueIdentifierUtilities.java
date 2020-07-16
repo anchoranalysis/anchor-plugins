@@ -70,7 +70,7 @@ class UniqueIdentifierUtilities {
 		return sb.toString();
 	}
 	
-	private static String forPoint(Point3i pnt) {
-		return String.format("%d_%d_%d", pnt.getX(), pnt.getY(), pnt.getZ());
+	private static String forPoint(Point3i point) {
+		return String.format("%d_%d_%d", point.getX(), point.getY(), point.getZ());
 	}
 }

@@ -135,13 +135,13 @@ class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d
 		assert( points.size()==pointIndex );
 	}
 	
-	private static void modifyOrAddPoint( List<Point3d> pnts, int pointIndex, int gradVal, int axisIndex ) {
+	private static void modifyOrAddPoint( List<Point3d> points, int pointIndex, int gradVal, int axisIndex ) {
 		Point3d out=null;
-		if (pointIndex==pnts.size()) {
+		if (pointIndex==points.size()) {
 			out = new Point3d(0,0,0);
-			pnts.add(out);
+			points.add(out);
 		} else {
-			out = pnts.get(pointIndex);
+			out = points.get(pointIndex);
 		}
 		assert(out!=null);
 		

@@ -68,7 +68,7 @@ public class IncludeRandomObjects extends PointsProposer {
 	}
 
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
 
 		List<Point3i> out = new ArrayList<>();
 		

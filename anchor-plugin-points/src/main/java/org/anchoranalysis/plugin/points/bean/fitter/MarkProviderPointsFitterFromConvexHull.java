@@ -58,7 +58,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	private MarkProvider markProvider;
 	
 	@BeanField @Getter @Setter
-	private double minRatioPntsInsideRegion;
+	private double minRatioPointsInsideRegion;
 	
 	@BeanField @Getter @Setter
 	private RegionMap regionMap;
@@ -70,7 +70,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 	@Override
 	public Optional<Mark> create() throws CreateException {
 
-		List<Point3f> pntsForFitter = pointsForFitter();
+		List<Point3f> pointsForFitter = pointsForFitter();
 		Optional<Mark> mark = markProvider.create();
 		
 		if (!mark.isPresent()) {
@@ -79,7 +79,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 		
 		try {
 			pointsFitter.fitPointsToMark(
-				pntsForFitter,
+				pointsForFitter,
 				mark.get(),
 				pointsFitter.createDim()
 			);
@@ -87,38 +87,38 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 			throw new CreateException(e);
 		}
 		
-		if (minRatioPntsInsideRegion>0) {
-			// We perform a check that a minimum % of pnts are inside a particular region
+		if (minRatioPointsInsideRegion>0) {
+			// We perform a check that a minimum % of points are inside a particular region
 			double ratioInside = ratioPointsInsideRegion(
 				mark.get(),
-				pntsForFitter,
+				pointsForFitter,
 				regionMap,
 				regionID
 			);
 			
-			if (ratioInside<minRatioPntsInsideRegion) {
+			if (ratioInside<minRatioPointsInsideRegion) {
 				return Optional.empty();
 			}
 		}
 		return mark;
 	}
 	
-	public static double ratioPointsInsideRegion( Mark m, List<Point3f> pnts, RegionMap regionMap, int regionID ) {
+	public static double ratioPointsInsideRegion( Mark m, List<Point3f> points, RegionMap regionMap, int regionID ) {
 	
 		RegionMembership rm = regionMap.membershipForIndex(regionID);
 		byte flags = rm.flags();
 		
 		int count = 0;
-		for( Point3f pnt : pnts ) {
-			Point3d pntD = new Point3d( pnt );
-			byte membership = m.evalPntInside(pntD);
+		for( Point3f point : points ) {
+			Point3d pointD = new Point3d( point );
+			byte membership = m.evalPointInside(pointD);
 			
 			if (rm.isMemberFlag(membership, flags)) {
 				count++;
 			}
 		}
 		
-		return ((double) count) / pnts.size();
+		return ((double) count) / points.size();
 	}
 	
 	private List<Point3f> pointsForFitter() throws CreateException {
@@ -128,7 +128,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
 				ConvexHullUtilities.pointsOnAllOutlines(
 					pointsFitter.createObjects()
 				),
-				pointsFitter.getMinNumPnts()
+				pointsFitter.getMinNumPoints()
 			);
 			return PointConverter.convert2iTo3f(selectedPoints);
 			

@@ -59,7 +59,7 @@ public class MarkPolygon extends MarkAbstractPointList {
 	private Point3d centroid;
 	
 	@Override
-	public byte evalPntInside(Point3d pt) {
+	public byte evalPointInside(Point3d pt) {
 		
 		// FOR NOW WE IGNORE THE SHELL RADIUS
 		if ( containsPixel(pt.getX(), pt.getY()) || getPoints().contains(pt) ) {
@@ -130,19 +130,19 @@ public class MarkPolygon extends MarkAbstractPointList {
 		polygon = createRoi( getPoints() );
 	}
 	
-	private static PolygonRoi createRoi( List<Point3d> pnts ) {
+	private static PolygonRoi createRoi( List<Point3d> points ) {
 		
-		float[] xArr = new float[ pnts.size() ];
-		float[] yArr = new float[ pnts.size() ];
+		float[] xArr = new float[ points.size() ];
+		float[] yArr = new float[ points.size() ];
 		
 		int i = 0;
-		for (Point3d pnt : pnts) {
-			xArr[i] = (float) pnt.getX();
-			yArr[i] = (float) pnt.getY();
+		for (Point3d point : points) {
+			xArr[i] = (float) point.getX();
+			yArr[i] = (float) point.getY();
 			i++;
 		}
 		
-		return new PolygonRoi(xArr, yArr, pnts.size(), Roi.POLYGON);
+		return new PolygonRoi(xArr, yArr, points.size(), Roi.POLYGON);
 	}
 		
 	private static double calcArea( List<Point3d> points ) {
@@ -153,12 +153,12 @@ public class MarkPolygon extends MarkAbstractPointList {
 		double sum = 0;
 		
 		for (int i=0; i<numPoints; i++)  {
-			Point3d pnt = points.get(i);
+			Point3d point = points.get(i);
 			
 			// We cycle around at the end
-			Point3d pntNext = i==(numPoints-1) ? points.get(0) : points.get(i+1);
+			Point3d pointNext = i==(numPoints-1) ? points.get(0) : points.get(i+1);
 			
-			sum += (pnt.getX() * pntNext.getY()) - (pntNext.getX() * pnt.getY()); 
+			sum += (point.getX() * pointNext.getY()) - (pointNext.getX() * point.getY()); 
 		}
 		return sum/2;
 	}
@@ -173,14 +173,14 @@ public class MarkPolygon extends MarkAbstractPointList {
 		Point3d centroid = new Point3d();
 		
 		for (int i=0; i<numPoints; i++)  {
-			Point3d pnt = points.get(i);
+			Point3d point = points.get(i);
 			
 			// We cycle around at the end
-			Point3d pntNext = i==(numPoints-1) ? points.get(0) : points.get(i+1);
+			Point3d pointNext = i==(numPoints-1) ? points.get(0) : points.get(i+1);
 			
-			double leftX = pnt.getX() + pntNext.getX();
-			double leftY = pnt.getY() + pntNext.getY();
-			double right = (pnt.getX() * pntNext.getY()) - (pntNext.getX() * pnt.getY());
+			double leftX = point.getX() + pointNext.getX();
+			double leftY = point.getY() + pointNext.getY();
+			double right = (point.getX() * pointNext.getY()) - (pointNext.getX() * point.getY());
 			
 			centroid.setX( centroid.getX() + leftX*right );
 			centroid.setY( centroid.getY() + leftY*right );

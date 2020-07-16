@@ -42,7 +42,7 @@ import lombok.Data;
 @Data
 public class FitResult {
 	
-	private Point3d centrePnt;
+	private Point3d centrePoint;
 	private double radiusX;
 	private double radiusY;
 	private double radiusZ;
@@ -56,7 +56,7 @@ public class FitResult {
 		
 		mark.setShellRad( shellRad );
 		mark.setMarksExplicit(
-			centrePnt,
+			centrePoint,
 			orientation,
 			radiiAsPoint()
 		);

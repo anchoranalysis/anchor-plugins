@@ -57,9 +57,9 @@ public class MinDistByDim extends FeaturePairMemo {
 	}
 	
 	/** Calculates the distance between two points in each dimension independently */
-	private static Point3d distanceVector(Point3d pnt1, Point3d pnt2) {
-		Point3d cp = new Point3d(pnt1);
-		cp.subtract(pnt2);
+	private static Point3d distanceVector(Point3d point1, Point3d point2) {
+		Point3d cp = new Point3d(point1);
+		cp.subtract(point2);
 		cp.absolute();
 		return cp;
 	}

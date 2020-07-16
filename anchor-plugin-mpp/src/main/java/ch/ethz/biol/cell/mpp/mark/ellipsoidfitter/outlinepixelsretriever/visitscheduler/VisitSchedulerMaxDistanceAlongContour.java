@@ -79,7 +79,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object ) {
+	public boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object ) {
 		return (distAlongContour <= maxDist);
 	}
 	

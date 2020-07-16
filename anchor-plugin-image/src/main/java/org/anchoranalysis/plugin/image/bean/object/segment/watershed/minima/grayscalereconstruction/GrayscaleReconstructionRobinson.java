@@ -111,16 +111,16 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		
 		for( int nextVal=queue.nextValue(); nextVal!=-1; nextVal=queue.nextValue() ) {
 			
-			Point3i pnt = queue.get();
+			Point3i point = queue.get();
 			
-			sbMarker.seek(pnt.getZ());
-			sbMask.seek(pnt.getZ());
-			sbFinalized.seek(pnt.getZ());
+			sbMarker.seek(point.getZ());
+			sbMask.seek(point.getZ());
+			sbFinalized.seek(point.getZ());
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
 			// Makes sure that it includes its centre point
-			IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, nextVal, extent.offsetSlice(pnt));
+			IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, nextVal, extent.offsetSlice(point));
 		}
 	}
 		

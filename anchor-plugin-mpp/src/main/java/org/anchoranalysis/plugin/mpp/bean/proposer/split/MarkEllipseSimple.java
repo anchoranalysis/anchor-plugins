@@ -113,9 +113,9 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		MarkEllipse markExstCast = (MarkEllipse) markExst.getMark();
 		
-		Optional<Point3d[]> pntArr = createNewMarkPos(orientation, markExstCast, context.getRandomNumberGenerator(), context.getDimensions(), minRadScaleStart, minRadScaleEnd, wigglePos);
+		Optional<Point3d[]> pointArr = createNewMarkPos(orientation, markExstCast, context.getRandomNumberGenerator(), context.getDimensions(), minRadScaleStart, minRadScaleEnd, wigglePos);
 		
-		if (!pntArr.isPresent()) {
+		if (!pointArr.isPresent()) {
 			return Optional.empty();
 		}
 		
@@ -124,7 +124,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		VoxelizedMarkMemo markNew1 = extractMemo(
 			markExst,
-			pntArr.get(),
+			pointArr.get(),
 			0,
 			orientationRight,
 			context,
@@ -134,7 +134,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		VoxelizedMarkMemo markNew2 = extractMemo(
 			markExst,
-			pntArr.get(),
+			pointArr.get(),
 			1,
 			orientationRight,
 			context,
@@ -149,7 +149,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 	
 	private VoxelizedMarkMemo extractMemo(
 		VoxelizedMarkMemo markExst,
-		Point3d[] pntArr,
+		Point3d[] pointArr,
 		int dimensionIndex,
 		Orientation2D orientationRight,
 		ProposerContext context,
@@ -159,7 +159,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		try {
 			VoxelizedMarkMemo pmm = createMarkAtPos(
 				markExst,
-				pntArr[dimensionIndex],
+				pointArr[dimensionIndex],
 				orientationRight,
 				context
 			);
@@ -191,18 +191,18 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		double extent = markExst.getRadii().getX() * ((re.nextDouble() * interval) + minRadScaleStart); 
 		
 		RotationMatrix rotMat = orientation.createRotationMatrix();
-		double[] pntArr1 = rotMat.calcRotatedPoint( new double[] { -1 * extent, 0 } );
-		double[] pntArr2 = rotMat.calcRotatedPoint( new double[] { extent, 0 } );
+		double[] pointArr1 = rotMat.calcRotatedPoint( new double[] { -1 * extent, 0 } );
+		double[] pointArr2 = rotMat.calcRotatedPoint( new double[] { extent, 0 } );
 		
-		Point3d pnt1 = new Point3d( pntArr1[0] + markExst.getPos().getX(), pntArr1[1] + markExst.getPos().getY(), 0);
-		Point3d pnt2 = new Point3d( pntArr2[0] + markExst.getPos().getX(), pntArr2[1] + markExst.getPos().getY(), 0);
+		Point3d point1 = new Point3d( pointArr1[0] + markExst.getPos().getX(), pointArr1[1] + markExst.getPos().getY(), 0);
+		Point3d point2 = new Point3d( pointArr2[0] + markExst.getPos().getX(), pointArr2[1] + markExst.getPos().getY(), 0);
 		
 		if (wigglePos) {
 			// We add some randomness around this point, say 4 pixels
-	    	pnt1.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
-	    	pnt2.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
+	    	point1.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
+	    	point2.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
 		}
-		return ifBothPointsInside(sd, pnt1, pnt2);
+		return ifBothPointsInside(sd, point1, point2);
 	}
 	
 	private static Point3d randomPointXY(RandomNumberGenerator re, int wiggleMaxSize) {
@@ -211,17 +211,17 @@ public class MarkEllipseSimple extends MarkSplitProposer {
     	return new Point3d(randX, randY, 0 );
 	}
 	
-	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d pnt1, Point3d pnt2) {
-		if (!dim.contains(pnt1)) {
+	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d point1, Point3d point2) {
+		if (!dim.contains(point1)) {
 			return Optional.empty();
 		}
 		
-		if (!dim.contains(pnt2)) {
+		if (!dim.contains(point2)) {
 			return Optional.empty();
 		}
 		
 		return Optional.of(
-			new Point3d[]{pnt1, pnt2}
+			new Point3d[]{point1, point2}
 		);
 	}
 

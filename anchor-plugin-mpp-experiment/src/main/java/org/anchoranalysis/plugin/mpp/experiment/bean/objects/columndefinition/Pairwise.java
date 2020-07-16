@@ -50,37 +50,37 @@ public class Pairwise extends ColumnDefinition {
 	 * Name of CSV column with X coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnFirstPointX = "first.insidePnt.x";
+	private String columnFirstPointX = "first.insidePoint.x";
 
 	/**
 	 * Name of CSV column with Y coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnFirstPointY = "first.insidePnt.y";
+	private String columnFirstPointY = "first.insidePoint.y";
 	
 	/**
 	 * Name of CSV column with Z coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnFirstPointZ = "first.insidePnt.z";
+	private String columnFirstPointZ = "first.insidePoint.z";
 	
 	/**
 	 * Name of CSV column with X coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnSecondPointX = "second.insidePnt.x";
+	private String columnSecondPointX = "second.insidePoint.x";
 
 	/**
 	 * Name of CSV column with Y coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnSecondPointY = "second.insidePnt.y";
+	private String columnSecondPointY = "second.insidePoint.y";
 	
 	/**
 	 * Name of CSV column with Z coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnSecondPointZ = "second.insidePnt.z";
+	private String columnSecondPointZ = "second.insidePoint.z";
 	
 	/**
 	 * Name of CSV column with the number of pixels for the first Object

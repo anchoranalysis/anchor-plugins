@@ -65,8 +65,8 @@ final class SlidingBufferPlus {
 		return slidingBufferSteepestCalc;
 	}
 	
-	public int offsetSlice(Point3i pnt) {
-		return slidingBufferSteepestCalc.extent().offsetSlice(pnt);
+	public int offsetSlice(Point3i point) {
+		return slidingBufferSteepestCalc.extent().offsetSlice(point);
 	}
 	
 	public int getG(int indxBuffer) {
@@ -78,15 +78,15 @@ final class SlidingBufferPlus {
 		return matS.getPixelsForPlane(z);
 	}
 	
-	public void maybeAddMinima(Point3i pnt) {
+	public void maybeAddMinima(Point3i point) {
 		if (minimaStore.isPresent()) {
-			minimaStore.get().addDuplicated(pnt);
+			minimaStore.get().addDuplicated(point);
 		}
 	}
 	
-	public void makePlateauAt(Point3i pnt) {
+	public void makePlateauAt(Point3i point) {
 		new MakePlateauLowerComplete(
-			findEqualVoxels.createPlateau(pnt),
+			findEqualVoxels.createPlateau(point),
 			findEqualVoxels.isDo3D()
 		).makeBufferLowerCompleteForPlateau(
 			matS,
@@ -94,8 +94,8 @@ final class SlidingBufferPlus {
 		);
 	}
 
-	public int calcSteepestDescent(Point3i pnt, int val, int indxBuffer) {
-		return steepestCalc.calcSteepestDescent(pnt, val, indxBuffer);
+	public int calcSteepestDescent(Point3i point, int val, int indxBuffer) {
+		return steepestCalc.calcSteepestDescent(point, val, indxBuffer);
 	}
 
 	public boolean isPlateau(int code) {

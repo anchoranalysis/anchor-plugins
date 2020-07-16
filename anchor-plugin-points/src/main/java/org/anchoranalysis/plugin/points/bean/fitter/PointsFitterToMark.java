@@ -57,15 +57,15 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
 	
 	/** If an object has fewer points than before being fitted, we ignore */
 	@BeanField @Positive @Getter @Setter
-	private int minNumPnts = 1;
+	private int minNumPoints = 1;
 	
 	@BeanField @Getter @Setter
 	private ObjectCollectionProvider objects;
 	// END BEAN PROPERTIES
 	
-	public void fitPointsToMark( List<Point3f> pntsForFitter, Mark mark, ImageDimensions dim) throws OperationFailedException {
+	public void fitPointsToMark( List<Point3f> pointsForFitter, Mark mark, ImageDimensions dim) throws OperationFailedException {
 		try {
-			pointsFitter.fit( pntsForFitter, mark, dim );
+			pointsFitter.fit( pointsForFitter, mark, dim );
 		} catch (PointsFitterException | InsufficientPointsException e) {
 			throw new OperationFailedException(e);
 		}

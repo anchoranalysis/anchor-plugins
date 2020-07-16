@@ -62,16 +62,16 @@ public class DrawLineAlongConvexHull extends ObjectCollectionProviderWithDimensi
 	
 	private ObjectMask transform(ObjectMask object, ImageDimensions dimensions) throws CreateException {
 		try {
-			List<Point2i> pntsConvexHull = ConvexHullUtilities.convexHull2D(
+			List<Point2i> pointsConvexHull = ConvexHullUtilities.convexHull2D(
 				ConvexHullUtilities.pointsOnOutline(object)
 			);
 			
-			if (pntsConvexHull.size()<=1) {
+			if (pointsConvexHull.size()<=1) {
 				return object;
 			}
 
 			return WalkShortestPath.walkLine(
-				PointConverter.convert2iTo3d(pntsConvexHull)
+				PointConverter.convert2iTo3d(pointsConvexHull)
 			);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);

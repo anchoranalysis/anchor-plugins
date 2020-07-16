@@ -111,7 +111,7 @@ public final class SteepestCalc {
 	}
 	
 	// Calculates the steepest descent
-	public int calcSteepestDescent( Point3i pnt, int val, int indxBuffer ) {
-		return IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, val, indxBuffer);
+	public int calcSteepestDescent( Point3i point, int val, int indxBuffer ) {
+		return IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, val, indxBuffer);
 	}
 }

@@ -123,9 +123,9 @@ class EastMarkExtractor {
 		
 		int index = 0;
 		
-		Point2i pnt = new Point2i(0,0);
-		for (pnt.setY(0); pnt.getY()<extent.getY(); pnt.incrY()) {
-			for (pnt.setX(0); pnt.getX()<extent.getX(); pnt.incrX()) {
+		Point2i point = new Point2i(0,0);
+		for (point.setY(0); point.getY()<extent.getY(); point.incrY()) {
+			for (point.setX(0); point.getX()<extent.getX(); point.incrX()) {
 				
 				float confidence = scoresData[index]; 
 				if (confidence>=minConfidence) {
@@ -133,7 +133,7 @@ class EastMarkExtractor {
 					Mark mark = RotatableBoundingBoxFromArrays.markFor(
 						geometryArrs,
 						index,
-						offsetScale.scale(pnt)
+						offsetScale.scale(point)
 					);
 					
 					list.add(

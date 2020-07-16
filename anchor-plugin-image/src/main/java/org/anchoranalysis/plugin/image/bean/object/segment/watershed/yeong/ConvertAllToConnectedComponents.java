@@ -54,13 +54,13 @@ final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<I
 	}		
 	
 	@Override
-	public void process(Point3i pnt, IntBuffer buffer, int offsetSlice) {
+	public void process(Point3i point, IntBuffer buffer, int offsetSlice) {
 		assert(buffer!=null);
 		new EncodedIntBuffer(buffer, matS.getEncoding()).convertCode(
 			offsetSlice,
 			offsetZ + offsetSlice,
 			matS,
-			pnt
+			point
 		);
 	}
 }
