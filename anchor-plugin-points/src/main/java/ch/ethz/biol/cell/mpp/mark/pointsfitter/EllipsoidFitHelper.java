@@ -35,7 +35,7 @@ public class EllipsoidFitHelper {
 	}
 	
 	private static void setCenterFromFirstColumn( FitResult fitResult, DoubleMatrix2D matrixCenter ) {
-		fitResult.setCentrePoint(
+		fitResult.setCenterPoint(
 			new Point3d(
 				matrixCenter.get(0, 0),
 				matrixCenter.get(1, 0),

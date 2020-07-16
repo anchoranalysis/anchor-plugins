@@ -119,7 +119,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			
 			// We have a point, and a value
 			// Now we iterate through the neighbours (but only if they haven't been finalised)
-			// Makes sure that it includes its centre point
+			// Makes sure that it includes its center point
 			IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, nextVal, extent.offsetSlice(point));
 		}
 	}

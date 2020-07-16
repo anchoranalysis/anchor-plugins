@@ -30,42 +30,38 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * #L%
  */
 
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
+import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.BoundingBox;
 
-/**
- * The centre ps of at least one slice should be on the stack
- * Tries overall centre point first, and then projects it onto each slice
- * 
- * @author Owen Feehan
- *
- */
-public class AnySliceCentrePosOnBinaryChnl extends CheckMarkBinaryChnl {
+import lombok.Getter;
+import lombok.Setter;
+
+public class CenterOnMask extends CheckMarkBinaryChnl {
+
+	// START BEAN PROPERTIES
+	@BeanField @Getter @Setter
+	private boolean suppressZ = false;
+	// END BEAN BEAN PROPERTIES
 	
 	@Override
 	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		Point3d cp = mark.centerPoint();
-		if(isPointOnBinaryChnl( cp, nrgStack, AnySliceCentrePosOnBinaryChnl::derivePoint )) {
-			return true;
+		return isPointOnBinaryChnl(
+			mark.centerPoint(),
+			nrgStack,
+			this::derivePoint
+		);
+	}
+	
+	private Point3i derivePoint(Point3d center) {
+		Point3i centerAsInt = PointConverter.intFromDouble(center);
+		
+		if (suppressZ) {
+			centerAsInt.setZ(0);
 		}
 		
-		BoundingBox bbox = mark.bboxAllRegions( nrgStack.getDimensions() ) ;
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
-		for( int z=bbox.cornerMin().getZ(); z<=crnrMax.getZ(); z++) {
-			Point3d cpSlice = new Point3d(cp.getX(), cp.getY(),z);
-			if(isPointOnBinaryChnl( cpSlice, nrgStack, AnySliceCentrePosOnBinaryChnl::derivePoint )) {
-				return true;
-			}
-		}
-	
-		return false;
+		return centerAsInt;
 	}
-
-	private static Point3i derivePoint(Point3d cp) {
-		return new Point3i((int) cp.getX(), (int) cp.getY(), (int) cp.getZ());
-	}
-
 }

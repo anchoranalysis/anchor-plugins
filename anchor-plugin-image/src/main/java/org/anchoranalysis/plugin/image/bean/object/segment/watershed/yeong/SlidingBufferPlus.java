@@ -43,8 +43,7 @@ final class SlidingBufferPlus {
 	
 	/* The sliding buffer used for calculating the steepest-calc */
 	private final SlidingBuffer<?> slidingBufferSteepestCalc;
-	
-	
+		
 	private final FindEqualVoxels findEqualVoxels;
 	private final EncodedVoxelBox matS;
 	private final Optional<MinimaStore> minimaStore;
@@ -70,10 +69,9 @@ final class SlidingBufferPlus {
 	}
 	
 	public int getG(int indxBuffer) {
-		return slidingBufferSteepestCalc.getCentre().getInt(indxBuffer);
+		return slidingBufferSteepestCalc.getCenter().getInt(indxBuffer);
 	}
 	
-
 	public EncodedIntBuffer getSPlane(int z) {
 		return matS.getPixelsForPlane(z);
 	}

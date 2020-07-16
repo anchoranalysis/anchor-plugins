@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  * 
  * An NRG channel is present for X, Y and optionally Z intensity-gradients.
  * 
- * A constant is subtracted from the NRG channel (all positive) to centre around 0
+ * A constant is subtracted from the NRG channel (all positive) to center around 0
  * 
  * @author Owen Feehan
  *

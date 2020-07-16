@@ -30,43 +30,42 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * #L%
  */
 
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.BoundingBox;
 
-public class CentrePosOnBinaryChnl extends CheckMarkBinaryChnl {
-
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean suppressZ = false;
-	// END BEAN BEAN PROPERTIES
+/**
+ * The center ps of at least one slice should be on the stack
+ * Tries overall center point first, and then projects it onto each slice
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
 	
 	@Override
 	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		return isPointOnBinaryChnl(
-			mark.centerPoint(),
-			nrgStack,
-			this::derivePoint
-		);
-	}
-	
-	private Point3i derivePoint(Point3d cp) {
-		Point3i cpInt = PointConverter.intFromDouble(cp);
-		
-		if (suppressZ) {
-			cpInt.setZ(0);
+		Point3d cp = mark.centerPoint();
+		if(isPointOnBinaryChnl( cp, nrgStack, AnySliceCenterOnMask::derivePoint )) {
+			return true;
 		}
 		
-		return cpInt;
+		BoundingBox bbox = mark.bboxAllRegions( nrgStack.getDimensions() ) ;
+		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		for( int z=bbox.cornerMin().getZ(); z<=crnrMax.getZ(); z++) {
+			Point3d cpSlice = new Point3d(cp.getX(), cp.getY(),z);
+			if(isPointOnBinaryChnl( cpSlice, nrgStack, AnySliceCenterOnMask::derivePoint )) {
+				return true;
+			}
+		}
+	
+		return false;
 	}
 
-	public boolean isSuppressZ() {
-		return suppressZ;
+	private static Point3i derivePoint(Point3d cp) {
+		return new Point3i((int) cp.getX(), (int) cp.getY(), (int) cp.getZ());
 	}
 
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
 }
