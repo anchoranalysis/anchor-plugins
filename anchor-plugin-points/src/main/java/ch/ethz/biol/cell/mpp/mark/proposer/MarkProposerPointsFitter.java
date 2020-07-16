@@ -27,7 +27,6 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
