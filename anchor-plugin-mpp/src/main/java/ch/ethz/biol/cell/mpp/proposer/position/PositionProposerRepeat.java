@@ -1,15 +1,8 @@
-package ch.ethz.biol.cell.mpp.proposer.position;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -17,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,50 +24,50 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.proposer.position;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
+import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 
 public class PositionProposerRepeat extends PositionProposerBean {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private PositionProposerBean positionProposer;
-	
-	@BeanField
-	private int maxIter;
-	// END BEAN PROPERTIES
-		
-	@Override
-	public Optional<Point3d> propose(ProposerContext context) {
+    // START BEAN PROPERTIES
+    @BeanField private PositionProposerBean positionProposer;
 
-		for (int i=0; i<maxIter; i++) {
-			Optional<Point3d> pnt = positionProposer.propose(
-				context.addErrorLevel(positionProposer.getBeanName())
-			);
-			
-			if (pnt.isPresent()) {
-				return pnt;
-			}
-		}
-		
-		return Optional.empty();
-	}
+    @BeanField private int maxIter;
+    // END BEAN PROPERTIES
 
-	public PositionProposerBean getPositionProposer() {
-		return positionProposer;
-	}
+    @Override
+    public Optional<Point3d> propose(ProposerContext context) {
 
-	public void setPositionProposer(PositionProposerBean positionProposer) {
-		this.positionProposer = positionProposer;
-	}
+        for (int i = 0; i < maxIter; i++) {
+            Optional<Point3d> point =
+                    positionProposer.propose(context.addErrorLevel(positionProposer.getBeanName()));
 
-	public int getMaxIter() {
-		return maxIter;
-	}
+            if (point.isPresent()) {
+                return point;
+            }
+        }
 
-	public void setMaxIter(int maxIter) {
-		this.maxIter = maxIter;
-	}
+        return Optional.empty();
+    }
 
+    public PositionProposerBean getPositionProposer() {
+        return positionProposer;
+    }
+
+    public void setPositionProposer(PositionProposerBean positionProposer) {
+        this.positionProposer = positionProposer;
+    }
+
+    public int getMaxIter() {
+        return maxIter;
+    }
+
+    public void setMaxIter(int maxIter) {
+        this.maxIter = maxIter;
+    }
 }

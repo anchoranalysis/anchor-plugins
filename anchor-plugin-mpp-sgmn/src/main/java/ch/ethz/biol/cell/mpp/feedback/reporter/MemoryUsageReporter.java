@@ -1,12 +1,8 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-
-/*
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,85 +24,82 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
+import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean showBest = true;
-	
-	@BeanField
-	private boolean showAgg = true;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private boolean showBest = true;
 
-	private MessageLogger logger;
-	
-	@Override
-	protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
-		return new AggregateReceiver<CfgNRGPixelized>() {
-			
-			@Override
-			public void aggStart(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg) {
-				logger = initParams.getInitContext().getLogger().messageLogger();
-				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=start", logger );
-				
-			}
-			
-			@Override
-			public void aggReport(Reporting<CfgNRGPixelized> reporting, Aggregator agg) {
-				
-				if (!showAgg) {
-					return;
-				}
-				
-				MemoryUtilities.logMemoryUsage(
-					String.format("MemoryUsageReporter AGG step=%d",reporting.getIter()	),
-					logger
-				);
-			}
-			
-			@Override
-			public void aggEnd(Aggregator agg) {
-				MemoryUtilities.logMemoryUsage( "MemoryUsageReporter step=end", logger );
-			}
-		};
-	}
+    @BeanField private boolean showAgg = true;
+    // END BEAN PROPERTIES
 
-	@Override
-	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		
-		if (!showBest) {
-			return;
-		}
-		
-		MemoryUtilities.logMemoryUsage(
-			String.format("MemoryUsageReporter BEST step=%d", reporting.getIter() ),
-			logger
-		);
-	}
+    private MessageLogger logger;
 
-	public boolean isShowBest() {
-		return showBest;
-	}
+    @Override
+    protected AggregateReceiver<CfgNRGPixelized> getAggregateReceiver() {
+        return new AggregateReceiver<CfgNRGPixelized>() {
 
-	public void setShowBest(boolean showBest) {
-		this.showBest = showBest;
-	}
+            @Override
+            public void aggStart(
+                    OptimizationFeedbackInitParams<CfgNRGPixelized> initParams, Aggregator agg) {
+                logger = initParams.getInitContext().getLogger().messageLogger();
+                MemoryUtilities.logMemoryUsage("MemoryUsageReporter step=start", logger);
+            }
 
-	public boolean isShowAgg() {
-		return showAgg;
-	}
+            @Override
+            public void aggReport(Reporting<CfgNRGPixelized> reporting, Aggregator agg) {
 
-	public void setShowAgg(boolean showAgg) {
-		this.showAgg = showAgg;
-	}
+                if (!showAgg) {
+                    return;
+                }
+
+                MemoryUtilities.logMemoryUsage(
+                        String.format("MemoryUsageReporter AGG step=%d", reporting.getIter()),
+                        logger);
+            }
+
+            @Override
+            public void aggEnd(Aggregator agg) {
+                MemoryUtilities.logMemoryUsage("MemoryUsageReporter step=end", logger);
+            }
+        };
+    }
+
+    @Override
+    public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+
+        if (!showBest) {
+            return;
+        }
+
+        MemoryUtilities.logMemoryUsage(
+                String.format("MemoryUsageReporter BEST step=%d", reporting.getIter()), logger);
+    }
+
+    public boolean isShowBest() {
+        return showBest;
+    }
+
+    public void setShowBest(boolean showBest) {
+        this.showBest = showBest;
+    }
+
+    public boolean isShowAgg() {
+        return showAgg;
+    }
+
+    public void setShowAgg(boolean showAgg) {
+        this.showAgg = showAgg;
+    }
 }

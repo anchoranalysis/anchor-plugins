@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,41 +24,36 @@ package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox;
+
 import java.nio.ByteBuffer;
 import java.util.List;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BufferUtilities {
 
-	public static void putScoreForOffset(
-		PixelScore pixelScore,
-		List<VoxelBuffer<?>> bbList,
-		ByteBuffer bbOut,
-		int offset
-	) throws FeatureCalcException {
-		double score = pixelScore.calc(
-			createParams(bbList, offset)
-		);
-		
-		int scoreInt = (int) Math.round(score * 255);
-		bbOut.put(offset, (byte) scoreInt );
-	}
-	
-	private static int[] createParams( List<VoxelBuffer<?>> bbList, int offset ) {
-		
-		int[] vals = new int[bbList.size()];
-		
-		for( int c=0; c<bbList.size(); c++) {
-			vals[c] = bbList.get(c).getInt( offset );
-		}
-		
-		return vals;
-	}
+    public static void putScoreForOffset(
+            PixelScore pixelScore, List<VoxelBuffer<?>> bbList, ByteBuffer bbOut, int offset)
+            throws FeatureCalcException {
+        double score = pixelScore.calc(createParams(bbList, offset));
+
+        int scoreInt = (int) Math.round(score * 255);
+        bbOut.put(offset, (byte) scoreInt);
+    }
+
+    private static int[] createParams(List<VoxelBuffer<?>> bbList, int offset) {
+
+        int[] vals = new int[bbList.size()];
+
+        for (int c = 0; c < bbList.size(); c++) {
+            vals[c] = bbList.get(c).getInt(offset);
+        }
+
+        return vals;
+    }
 }

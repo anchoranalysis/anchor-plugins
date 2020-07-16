@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
- * anchor-bean
+ * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,42 +24,43 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.core.error.CreateException;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ProviderBeanUtilities {
-	
-	/**
-	 * Creates a list of ProviderType from Beans
-	 * 
-	 * @param listIn input-list
-	 * @return a newly-created list containing the newly created items
-	 * @throws CreateException  if a provider fails to create
-	 */
-	public static <T> List<T> listFromBeans( List<? extends Provider<T>> listIn ) throws CreateException {
-		List<T> listOut = new ArrayList<>();
-		addFromBeanList(listIn,listOut);
-		return listOut;
-	}
-	
-	/**
-	 * Creates items from a list of providers, and adds them to an output-list
-	 * 
-	 * @param listIn input-list
-	 * @param listOut output-list
-	 * @throws CreateException if a provider fails to create 
-	 */
-	private static <T> void addFromBeanList( List<? extends Provider<T>> listIn, List<T> listOut ) throws CreateException {
-		for( Provider<T> provider : listIn ) {
-			listOut.add(provider.create());
-		}
-	}
+
+    /**
+     * Creates a list of ProviderType from Beans
+     *
+     * @param listIn input-list
+     * @return a newly-created list containing the newly created items
+     * @throws CreateException if a provider fails to create
+     */
+    public static <T> List<T> listFromBeans(List<? extends Provider<T>> listIn)
+            throws CreateException {
+        List<T> listOut = new ArrayList<>();
+        addFromBeanList(listIn, listOut);
+        return listOut;
+    }
+
+    /**
+     * Creates items from a list of providers, and adds them to an output-list
+     *
+     * @param listIn input-list
+     * @param listOut output-list
+     * @throws CreateException if a provider fails to create
+     */
+    private static <T> void addFromBeanList(List<? extends Provider<T>> listIn, List<T> listOut)
+            throws CreateException {
+        for (Provider<T> provider : listIn) {
+            listOut.add(provider.create());
+        }
+    }
 }

@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
-
-import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +24,11 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -36,36 +36,15 @@ import org.anchoranalysis.image.extent.ImageResolution;
 
 public class MaxWithConstant extends ScalarProposer {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ScalarProposer scalarProposer;
-	
-	@BeanField
-	private double constant = 1.0;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ScalarProposer scalarProposer;
 
-	@Override
-	public double propose(RandomNumberGenerator re, ImageResolution res)
-			throws OperationFailedException {
+    @BeanField @Getter @Setter private double constant = 1.0;
+    // END BEAN PROPERTIES
 
-		double value = scalarProposer.propose(re, res); 
-		return Math.max(value,constant);
-	}
-
-	public ScalarProposer getScalarProposer() {
-		return scalarProposer;
-	}
-
-	public void setScalarProposer(ScalarProposer scalarProposer) {
-		this.scalarProposer = scalarProposer;
-	}
-
-	public double getConstant() {
-		return constant;
-	}
-
-	public void setConstant(double constant) {
-		this.constant = constant;
-	}
-
+    @Override
+    public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+            throws OperationFailedException {
+        return Math.max(scalarProposer.propose(randomNumberGenerator, res), constant);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,29 +24,33 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
+
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=true)
-public class CalculateIntersecting extends CalculateInputFromDelegate<FeatureInputPairObjects, FeatureInputSingleObject, ObjectCollection> {
+@EqualsAndHashCode(callSuper = true)
+public class CalculateIntersecting
+        extends CalculateInputFromDelegate<
+                FeatureInputPairObjects, FeatureInputSingleObject, ObjectCollection> {
 
-	private int index;
-	
-	public CalculateIntersecting(ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting, int index) {
-		super(intersecting);
-		this.index = index;
-	}
-	
-	@Override
-	protected FeatureInputPairObjects deriveFromDelegate(FeatureInputSingleObject input, ObjectCollection delegate) {
-		return new FeatureInputPairObjects(
-			input.getObjectMask(),
-			delegate.get(index),
-			input.getNrgStackOptional()
-		);
-	}
+    private int index;
+
+    public CalculateIntersecting(
+            ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting,
+            int index) {
+        super(intersecting);
+        this.index = index;
+    }
+
+    @Override
+    protected FeatureInputPairObjects deriveFromDelegate(
+            FeatureInputSingleObject input, ObjectCollection delegate) {
+        return new FeatureInputPairObjects(
+                input.getObject(), delegate.get(index), input.getNrgStackOptional());
+    }
 }

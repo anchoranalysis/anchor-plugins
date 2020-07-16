@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.object.calculation.single;
-
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -37,87 +35,76 @@ import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
  * Implementation of a CachedCalculationMap using a Hash-Map
- * 
- * @author Owen Feehan
- * 
- * TODO integrate into CacheableCalculationMap
  *
+ * @author Owen Feehan
+ *     <p>TODO integrate into CacheableCalculationMap
  * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMapHash<
-	S,
-	T extends FeatureInput,
-	U,
-	E extends Exception
-> extends CacheableCalculationMap<S,T,U,E> {
+public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, E extends Exception>
+        extends CacheableCalculationMap<S, T, U, E> {
 
-	/**
-	 * Caches our results for different Keys
-	 */
-	private Map<U,S> cache;
-	
-	
-	/**
-	 * Creates the class
-	 * @param cacheSize cache-size to use for the keys
-	 */
-	public CacheableCalculationMapHash( int cacheSize ) {
-		cache = new HashMap<>();
-	}
+    /** Caches our results for different Keys */
+    private Map<U, S> cache;
 
-	/**
-	 * Executes the operation and returns a result, either by doing the calculation, or retrieving
-	 *   a cached-result from previously.
-	 * 
-	 * @param If there is no cached-value, and the calculation occurs, these parameters are used. Otherwise ignored.
-	 * @return the result of the calculation
-	 * @throws E if the calculation cannot finish, for whatever reason
-	 */
-	@Override
-	public S getOrCalculate( T input, U key ) throws E {
-		
-		S obj = cache.get(key);
-		if (obj==null) {
-			obj = execute( input, key );
-			put( key, obj );
-		}
-		return obj;
-	}
-	
-	/** Number of items currently stored in cache */
-	public int numItemsCurrentlyStored() {
-		return cache.size();
-	}
-	
-	/**
-	 * Invalidates the cache, removing any items already stored.
-	 */
-	@Override
-	public void invalidate() {
-		cache.clear();	
+    /**
+     * Creates the class
+     *
+     * @param cacheSize cache-size to use for the keys
+     */
+    public CacheableCalculationMapHash(int cacheSize) {
+        cache = new HashMap<>();
+    }
 
-	}
-	
-	/**
-	 *  Gets an existing result for the current params from the cache.
-	 *  
-	 * @param key
-	 * @return a cached-result, or NULL if it doesn't exist
-	 * @throws FeatureCalcException 
-	 * @throws GetOperationFailedException 
-	 */
-	protected S getOrNull( U key ) {
-		return cache.get(key);
-	}
-	
-	protected boolean hasKey( U key ) {
-		return cache.get(key)!=null;
-	}
-	
-	protected void put(U index, S item) {
-		cache.put(index, item);
-	}
+    /**
+     * Executes the operation and returns a result, either by doing the calculation, or retrieving a
+     * cached-result from previously.
+     *
+     * @param If there is no cached-value, and the calculation occurs, these parameters are used.
+     *     Otherwise ignored.
+     * @return the result of the calculation
+     * @throws E if the calculation cannot finish, for whatever reason
+     */
+    @Override
+    public S getOrCalculate(T input, U key) throws E {
 
-	protected abstract S execute( T input, U key ) throws E;
+        S obj = cache.get(key);
+        if (obj == null) {
+            obj = execute(input, key);
+            put(key, obj);
+        }
+        return obj;
+    }
+
+    /** Number of items currently stored in cache */
+    public int numItemsCurrentlyStored() {
+        return cache.size();
+    }
+
+    /** Invalidates the cache, removing any items already stored. */
+    @Override
+    public void invalidate() {
+        cache.clear();
+    }
+
+    /**
+     * Gets an existing result for the current params from the cache.
+     *
+     * @param key
+     * @return a cached-result, or NULL if it doesn't exist
+     * @throws FeatureCalcException
+     * @throws GetOperationFailedException
+     */
+    protected S getOrNull(U key) {
+        return cache.get(key);
+    }
+
+    protected boolean hasKey(U key) {
+        return cache.get(key) != null;
+    }
+
+    protected void put(U index, S item) {
+        cache.put(index, item);
+    }
+
+    protected abstract S execute(T input, U key) throws E;
 }
-

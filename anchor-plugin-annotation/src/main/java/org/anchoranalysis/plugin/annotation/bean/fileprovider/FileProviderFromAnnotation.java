@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.fileprovider;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-plugin-annotation
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,14 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.fileprovider;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.input.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
@@ -43,41 +43,28 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
 
 public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
-		List<File> filesOut = new ArrayList<>();
-		
-		try {
-			List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);
-			for( AnnotationWithStrategy<T> inp : list ) {
-								
-				filesOut.addAll(
-					inp.deriveAssociatedFiles()
-				);
-				
-			}
-			
-		} catch (AnchorIOException e) {
-			throw new FileProviderException(e);
-		}
-		
-		return filesOut;
-	}
-		
-	public AnnotationInputManager<NamedChnlsInputPart,T> getAnnotationInputManager() {
-		return annotationInputManager;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter
+    private AnnotationInputManager<NamedChnlsInputPart, T> annotationInputManager;
+    // END BEAN PROPERTIES
 
-	public void setAnnotationInputManager(
-			AnnotationInputManager<NamedChnlsInputPart,T> annotationInputManager) {
-		this.annotationInputManager = annotationInputManager;
-	}
+    @Override
+    public Collection<File> create(InputManagerParams params) throws FileProviderException {
 
+        List<File> filesOut = new ArrayList<>();
+
+        try {
+            List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);
+            for (AnnotationWithStrategy<T> inp : list) {
+
+                filesOut.addAll(inp.deriveAssociatedFiles());
+            }
+
+        } catch (AnchorIOException e) {
+            throw new FileProviderException(e);
+        }
+
+        return filesOut;
+    }
 }

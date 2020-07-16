@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
 /*-
  * #%L
  * anchor-plugin-ij
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,48 +39,27 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 /** Groups some similar filters that use a 'radius' parameter */
 public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
 
-	// START BEAN PROPERTIES
-	@BeanField @Positive
-	private double radius = 2;
-	
-	@BeanField
-	private boolean radiusInMeters = false;	// Treats radius if it's microns
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		return createFromChnl(
-			chnl,
-			radiusInVoxels(chnl.getDimensions())
-		);
-	}
-	
-	protected abstract Channel createFromChnl(Channel chnl, int radius) throws CreateException;
-	
-	private int radiusInVoxels(ImageDimensions dim) {
-		if (radiusInMeters) {
-			// Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of later)
-			return (int) Math.round(
-				ImageUnitConverter.convertFromMeters( radius, dim.getRes() )
-			);
-		} else {
-			return (int) radius;
-		}
-	}
-	
-	public double getRadius() {
-		return radius;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Positive @Getter @Setter private double radius = 2;
 
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
+    @BeanField @Getter @Setter
+    private boolean radiusInMeters = false; // Treats radius if it's microns
+    // END BEAN PROPERTIES
 
-	public boolean isRadiusInMeters() {
-		return radiusInMeters;
-	}
+    @Override
+    public Channel createFromChnl(Channel chnl) throws CreateException {
+        return createFromChnl(chnl, radiusInVoxels(chnl.getDimensions()));
+    }
 
-	public void setRadiusInMeters(boolean radiusInMeters) {
-		this.radiusInMeters = radiusInMeters;
-	}
+    protected abstract Channel createFromChnl(Channel chnl, int radius) throws CreateException;
+
+    private int radiusInVoxels(ImageDimensions dim) {
+        if (radiusInMeters) {
+            // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
+            // later)
+            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.getRes()));
+        } else {
+            return (int) radius;
+        }
+    }
 }

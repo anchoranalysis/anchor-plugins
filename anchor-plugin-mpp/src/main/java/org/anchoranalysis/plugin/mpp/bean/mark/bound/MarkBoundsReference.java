@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.mark.bound;
-
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
-
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,32 +24,34 @@ import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.mark.bound;
 
+import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkBoundsReference extends MarkBoundsProvider {
 
-	// Start BEAN
-	@BeanField
-	private String id;
-	// End BEAN
-	
-	@Override
-	public MarkBounds create() throws CreateException {
-		try {
-			return getInitializationParameters().getMarkBoundsSet().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new CreateException(e.summarize());
-		}
-	}
+    // Start BEAN
+    @BeanField private String id;
+    // End BEAN
 
-	public String getId() {
-		return id;
-	}
+    @Override
+    public MarkBounds create() throws CreateException {
+        try {
+            return getInitializationParameters().getMarkBoundsSet().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(e.summarize());
+        }
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

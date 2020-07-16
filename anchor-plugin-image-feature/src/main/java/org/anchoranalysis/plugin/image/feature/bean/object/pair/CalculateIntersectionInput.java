@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.pair;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,40 +24,36 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
  * #L%
  */
 
-import java.util.Optional;
+package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
+import java.util.Optional;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
-import lombok.EqualsAndHashCode;
+@EqualsAndHashCode(callSuper = true)
+class CalculateIntersectionInput
+        extends CalculateInputFromDelegateOption<
+                FeatureInputSingleObject, FeatureInputPairObjects, Optional<ObjectMask>> {
+    public CalculateIntersectionInput(
+            ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccIntersection) {
+        super(ccIntersection);
+    }
 
-@EqualsAndHashCode(callSuper=true)
-class CalculateIntersectionInput extends CalculateInputFromDelegateOption<
-	FeatureInputSingleObject,
-	FeatureInputPairObjects,
-	Optional<ObjectMask>
-> {
-	public CalculateIntersectionInput(ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccIntersection) {
-		super(ccIntersection);
-	}
+    @Override
+    protected Optional<FeatureInputSingleObject> deriveFromDelegate(
+            FeatureInputPairObjects input, Optional<ObjectMask> delegate) {
+        if (!delegate.isPresent()) {
+            return Optional.empty();
+        }
 
-	@Override
-	protected Optional<FeatureInputSingleObject> deriveFromDelegate(
-		FeatureInputPairObjects input,
-		Optional<ObjectMask> delegate
-	) {
-		if (!delegate.isPresent()) {
-			return Optional.empty();
-		}
+        assert (delegate.get().hasPixelsGreaterThan(0));
+        assert (delegate.get() != null);
 
-		assert(delegate.get().hasPixelsGreaterThan(0));
-		assert(delegate.get()!=null);
-		
-		return Optional.of( 
-			new FeatureInputSingleObject( delegate.get(), input.getNrgStackOptional() )		
-		);
-	}
+        return Optional.of(
+                new FeatureInputSingleObject(delegate.get(), input.getNrgStackOptional()));
+    }
 }

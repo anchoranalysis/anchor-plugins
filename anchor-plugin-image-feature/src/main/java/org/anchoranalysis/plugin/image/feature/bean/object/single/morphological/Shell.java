@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -36,61 +35,51 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
-public class Shell extends DerivedObjMask {
+public class Shell extends DerivedObject {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int iterationsDilation = 0;
-	
-	@BeanField
-	private int iterationsErosion = 0;
-	
-	@BeanField
-	private boolean do3D = true;
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected FeatureCalculation<ObjectMask,FeatureInputSingleObject> createCachedCalculationForDerived( CalculationResolver<FeatureInputSingleObject> session) throws FeatureCalcException {
-		return CalculateShellObjectMask.createFromCache(
-			session,
-			iterationsDilation,
-			iterationsErosion,
-			0,
-			do3D,
-			false
-		);
-	}
-	
-	@Override
-	public ChildCacheName cacheName() {
-		return new ChildCacheName(
-			Shell.class,
-			iterationsDilation + "_" + iterationsErosion + "_" + do3D
-		);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int iterationsDilation = 0;
 
-	public int getIterationsDilation() {
-		return iterationsDilation;
-	}
+    @BeanField private int iterationsErosion = 0;
 
-	public void setIterationsDilation(int iterationsDilation) {
-		this.iterationsDilation = iterationsDilation;
-	}
+    @BeanField private boolean do3D = true;
+    // END BEAN PROPERTIES
 
-	public int getIterationsErosion() {
-		return iterationsErosion;
-	}
+    @Override
+    protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
+            createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
+                    throws FeatureCalcException {
+        return CalculateShellObjectMask.of(
+                session, iterationsDilation, iterationsErosion, 0, do3D, false);
+    }
 
-	public void setIterationsErosion(int iterationsErosion) {
-		this.iterationsErosion = iterationsErosion;
-	}
+    @Override
+    public ChildCacheName cacheName() {
+        return new ChildCacheName(
+                Shell.class, iterationsDilation + "_" + iterationsErosion + "_" + do3D);
+    }
 
-	public boolean isDo3D() {
-		return do3D;
-	}
+    public int getIterationsDilation() {
+        return iterationsDilation;
+    }
 
-	public void setDo3D(boolean do3D) {
-		this.do3D = do3D;
-	}
+    public void setIterationsDilation(int iterationsDilation) {
+        this.iterationsDilation = iterationsDilation;
+    }
 
+    public int getIterationsErosion() {
+        return iterationsErosion;
+    }
+
+    public void setIterationsErosion(int iterationsErosion) {
+        this.iterationsErosion = iterationsErosion;
+    }
+
+    public boolean isDo3D() {
+        return do3D;
+    }
+
+    public void setDo3D(boolean do3D) {
+        this.do3D = do3D;
+    }
 }

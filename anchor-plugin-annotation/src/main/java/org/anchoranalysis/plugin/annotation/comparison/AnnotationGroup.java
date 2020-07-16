@@ -1,16 +1,8 @@
-package org.anchoranalysis.plugin.annotation.comparison;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.core.text.TypedValue;
-
-/*
+/*-
  * #%L
- * anchor-mpp
+ * anchor-plugin-annotation
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +10,10 @@ import org.anchoranalysis.core.text.TypedValue;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,112 +24,89 @@ import org.anchoranalysis.core.text.TypedValue;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.comparison;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.core.text.TypedValue;
+
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> {
 
-	private int numImagesWithAcceptedAnnotations = 0;
-	private int numImagesWithSkippedAnnotations = 0;
-	private int numImagesWithoutAnnotations = 0;
-	
-	private String identifier;
-	
-	public AnnotationGroup(String identifier) {
-		super();
-		this.identifier = identifier;
-	}
-	
-	@Override
-	public void addSkippedAnnotationImage() {
-		numImagesWithSkippedAnnotations++;
-	}
-	
-	@Override
-	public void addUnannotatedImage() {
-		numImagesWithoutAnnotations++;
-	}
+    // START REQUIRED ARGUMENTS
+    @Getter @EqualsAndHashCode.Include private final String identifier;
+    // END REQUIRED ARGUMENTS
 
-	@Override
-	public void addAcceptedAnnotation( T assignment ) {
-		numImagesWithAcceptedAnnotations++;
-	}
-	
-	public List<String> createHeaders() {
-		List<String> headerNames = new ArrayList<>();
-		headerNames.add("name");
-		
-		headerNames.add("percentAnnotated");
-		headerNames.add("percentSkipped");
-		headerNames.add("cntImages");
-		headerNames.add("cntImagesAnnotations");
-		headerNames.add("cntImagesAcceptedAnnotations");
-		headerNames.add("cntImagesSkippedAnnotations");
-		headerNames.add("cntImagesWithoutAnnotations");
-		return headerNames;
-	}
-	
-	public List<TypedValue> createValues() {
-		
-		List<TypedValue> rowElements = new ArrayList<>();
-		
-		rowElements.add( new TypedValue( getIdentifier(), false ));
-		
-		rowElements.add( new TypedValue( percentAnnotatedImages(), 2 ));
-		rowElements.add( new TypedValue( percentSkippedAnnotations(), 2 ));
-		
-		rowElements.add( new TypedValue( numImagesTotal(), 2 ));
-		rowElements.add( new TypedValue( numImagesAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithAcceptedAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithSkippedAnnotations(), 2 ));
-		rowElements.add( new TypedValue( numImagesWithoutAnnotations(), 2 ));
-		
-		return rowElements;
-	}
-	
-	public int numImagesWithAcceptedAnnotations() {
-		return numImagesWithAcceptedAnnotations;
-	}
-	
-	public int numImagesWithSkippedAnnotations() {
-		return numImagesWithSkippedAnnotations;
-	}
+    @Getter private int numImagesWithAcceptedAnnotations = 0;
 
-	public int numImagesWithoutAnnotations() {
-		return numImagesWithoutAnnotations;
-	}
-	
-	public int numImagesTotal() {
-		return numImagesWithAcceptedAnnotations + numImagesWithoutAnnotations + numImagesWithSkippedAnnotations;
-	}
-	
-	public int numImagesAnnotations() {
-		return numImagesWithAcceptedAnnotations + numImagesWithSkippedAnnotations;
-	}
-	
-	public double percentAnnotatedImages() { 
-		 return ((double) numImagesAnnotations()*100 ) / numImagesTotal();
-	}
-	
-	public double percentSkippedAnnotations() { 
-		 return ((double) (numImagesWithSkippedAnnotations) )*100 / numImagesAnnotations();
-	}
-	
-	
-	public String getIdentifier() {
-		return identifier;
-	}
+    @Getter private int numImagesWithSkippedAnnotations = 0;
 
-	@Override
-	public int hashCode() {
-		return getIdentifier().hashCode();
-	}
+    @Getter private int numImagesWithoutAnnotations = 0;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof AnnotationGroup)) {
-			return false;
-		}
-		@SuppressWarnings("unchecked")
-		AnnotationGroup<T> objCast = (AnnotationGroup<T>) obj;
-		return getIdentifier().equals(objCast.getIdentifier());
-	}
+    @Override
+    public void addSkippedAnnotationImage() {
+        numImagesWithSkippedAnnotations++;
+    }
+
+    @Override
+    public void addUnannotatedImage() {
+        numImagesWithoutAnnotations++;
+    }
+
+    @Override
+    public void addAcceptedAnnotation(T assignment) {
+        numImagesWithAcceptedAnnotations++;
+    }
+
+    public List<String> createHeaders() {
+        return new ArrayList<>(
+                Arrays.asList(
+                        "name",
+                        "percentAnnotated",
+                        "percentSkipped",
+                        "cntImages",
+                        "cntImagesAnnotations",
+                        "cntImagesAcceptedAnnotations",
+                        "cntImagesSkippedAnnotations",
+                        "cntImagesWithoutAnnotations"));
+    }
+
+    public List<TypedValue> createValues() {
+        return new ArrayList<>(
+                Arrays.asList(
+                        new TypedValue(identifier, false),
+                        new TypedValue(percentAnnotatedImages(), 2),
+                        new TypedValue(percentSkippedAnnotations(), 2),
+                        new TypedValue(numImagesTotal(), 2),
+                        new TypedValue(numImagesAnnotations(), 2),
+                        new TypedValue(numImagesWithAcceptedAnnotations(), 2),
+                        new TypedValue(numImagesWithSkippedAnnotations(), 2),
+                        new TypedValue(numImagesWithoutAnnotations(), 2)));
+    }
+
+    public int numImagesTotal() {
+        return numImagesWithAcceptedAnnotations
+                + numImagesWithoutAnnotations
+                + numImagesWithSkippedAnnotations;
+    }
+
+    public int numImagesAnnotations() {
+        return numImagesWithAcceptedAnnotations + numImagesWithSkippedAnnotations;
+    }
+
+    public double percentAnnotatedImages() {
+        return ((double) numImagesAnnotations() * 100) / numImagesTotal();
+    }
+
+    public double percentSkippedAnnotations() {
+        return ((double) (numImagesWithSkippedAnnotations)) * 100 / numImagesAnnotations();
+    }
 }

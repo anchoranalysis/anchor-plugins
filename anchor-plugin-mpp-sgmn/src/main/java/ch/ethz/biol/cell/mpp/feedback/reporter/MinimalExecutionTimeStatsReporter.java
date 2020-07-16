@@ -1,14 +1,8 @@
-package ch.ethz.biol.cell.mpp.feedback.reporter;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-
-/*
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +24,10 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -43,67 +40,66 @@ import org.apache.commons.lang.time.StopWatch;
 
 public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String outputName  = "minimalExecutionTimeStats";
-	// END BEAN PROPERTIES
-	
-	
-	private BoundOutputManagerRouteErrors outputManager = null;
-	private KernelExecutionStats stats;
-	private StopWatch stopWatch;
+    // START BEAN PROPERTIES
+    @BeanField private String outputName = "minimalExecutionTimeStats";
+    // END BEAN PROPERTIES
 
-	@Override
-	public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
-		outputManager = initParams.getInitContext().getOutputManager();
-		stats = new KernelExecutionStats( initParams.getKernelFactoryList().size() );
-		stopWatch = new StopWatch();
-		stopWatch.start();
-	}
+    private BoundOutputManagerRouteErrors outputManager = null;
+    private KernelExecutionStats stats;
+    private StopWatch stopWatch;
 
-	@Override
-	public void reportItr(Reporting<CfgNRGPixelized> reporting) {
-		
-		int kernelID = reporting.getKernel().getID();
-		double executionTime = reporting.getExecutionTime();
-		
-		if (reporting.getProposal().isPresent()) {
-			
-			if (reporting.isAccptd()) {
-				stats.incrAccepted( kernelID, executionTime );
-			} else {
-				stats.incrRejected( kernelID, executionTime );
-			}
-		} else {
-			// No proposal
-			stats.incrNotProposed( kernelID, executionTime );
-		}
-	}
+    @Override
+    public void reportBegin(OptimizationFeedbackInitParams<CfgNRGPixelized> initParams)
+            throws ReporterException {
+        outputManager = initParams.getInitContext().getOutputManager();
+        stats = new KernelExecutionStats(initParams.getKernelFactoryList().size());
+        stopWatch = new StopWatch();
+        stopWatch.start();
+    }
 
-	@Override
-	public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
-		// NOTHING TO DO
-	}
+    @Override
+    public void reportItr(Reporting<CfgNRGPixelized> reporting) {
 
-	@Override
-	public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep) {
-		stats.setTotalExecutionTime( stopWatch.getTime() );
-		stopWatch.stop();
-		
-		outputManager.getWriterCheckIfAllowed().write(
-			outputName,
-			() -> new XStreamGenerator<>(
-				stats,
-				Optional.of("minimalExecutionTimeStats")
-			)
-		);
-	}
+        int kernelID = reporting.getKernel().getID();
+        double executionTime = reporting.getExecutionTime();
 
-	public String getOutputName() {
-		return outputName;
-	}
+        if (reporting.getProposal().isPresent()) {
 
-	public void setOutputName(String outputName) {
-		this.outputName = outputName;
-	}
+            if (reporting.isAccptd()) {
+                stats.incrAccepted(kernelID, executionTime);
+            } else {
+                stats.incrRejected(kernelID, executionTime);
+            }
+        } else {
+            // No proposal
+            stats.incrNotProposed(kernelID, executionTime);
+        }
+    }
+
+    @Override
+    public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep) {
+        stats.setTotalExecutionTime(stopWatch.getTime());
+        stopWatch.stop();
+
+        outputManager
+                .getWriterCheckIfAllowed()
+                .write(
+                        outputName,
+                        () ->
+                                new XStreamGenerator<>(
+                                        stats, Optional.of("minimalExecutionTimeStats")));
+    }
+
+    public String getOutputName() {
+        return outputName;
+    }
+
+    public void setOutputName(String outputName) {
+        this.outputName = outputName;
+    }
 }

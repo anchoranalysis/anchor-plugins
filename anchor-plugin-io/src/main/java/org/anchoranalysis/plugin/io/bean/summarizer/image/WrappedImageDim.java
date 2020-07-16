@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.summarizer.image;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,48 +24,52 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
+
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // Wrap with a nicer toString() representation
+@AllArgsConstructor
 class WrappedImageDim implements Comparable<WrappedImageDim> {
-	
-	private ImageDimensions dim;
-	
-	public WrappedImageDim(ImageDimensions dim) {
-		super();
-		this.dim = dim;
-	}
 
-	@Override
-	public String toString() {
-		// Whether we display in 3d form or 2d is dependent on if there's more than 1 z-slice
-		if (dim.getZ()>1) {
-			return String.format("%dx%dx%d", dim.getX(), dim.getY(), dim.getZ() );
-		} else {
-			return String.format("%dx%d", dim.getX(), dim.getY() );
-		}
-	}
+    private final ImageDimensions dimensions;
 
-	public int hashCode() {
-		return dim.hashCode();
-	}
+    @Override
+    public String toString() {
+        // Whether we display in 3d form or 2d is dependent on if there's more than 1 z-slice
+        if (dimensions.getZ() > 1) {
+            return String.format(
+                    "%dx%dx%d", dimensions.getX(), dimensions.getY(), dimensions.getZ());
+        } else {
+            return String.format("%dx%d", dimensions.getX(), dimensions.getY());
+        }
+    }
 
-	@Override
-	public boolean equals(Object obj) {
+    public int hashCode() {
+        return dimensions.hashCode();
+    }
 
-		if (obj == null) { return false; }
-		if (obj == this) { return true; }
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
-		
-		WrappedImageDim objCast = (WrappedImageDim) obj;
-		return dim.equals(objCast.dim);
-	}
+    @Override
+    public boolean equals(Object obj) {
 
-	@Override
-	public int compareTo(WrappedImageDim othr) {
-		// Order by volume, smaller first
-		return Long.compare(dim.getVolume(), othr.dim.getVolume() );
-	}
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+
+        WrappedImageDim objCast = (WrappedImageDim) obj;
+        return dimensions.equals(objCast.dimensions);
+    }
+
+    @Override
+    public int compareTo(WrappedImageDim other) {
+        // Order by volume, smaller first
+        return Long.compare(dimensions.getVolume(), other.dimensions.getVolume());
+    }
 }

@@ -1,21 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.split;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,45 +24,56 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkSplitProposerReference extends MarkSplitProposer {
 
-	// Start BEAN
-	@BeanField
-	private String id;
-	// End BEAN
-	
-	private MarkSplitProposer delegate = null;
-	
-	@Override
-	public void onInit(MPPInitParams pso) throws InitException {
-		super.onInit(pso);
-		try {
-			delegate = getInitializationParameters().getMarkSplitProposerSet().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}
-	}
+    // Start BEAN
+    @BeanField private String id;
+    // End BEAN
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return delegate.isCompatibleWith(testMark);
-	}
+    private MarkSplitProposer delegate = null;
 
-	public String getId() {
-		return id;
-	}
+    @Override
+    public void onInit(MPPInitParams pso) throws InitException {
+        super.onInit(pso);
+        try {
+            delegate = getInitializationParameters().getMarkSplitProposerSet().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
+        }
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return delegate.isCompatibleWith(testMark);
+    }
 
-	@Override
-	public Optional<PairPxlMarkMemo> propose(VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen) throws ProposalAbnormalFailureException {
-		return delegate.propose(mark, context, cfgGen);
-	}
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public Optional<PairPxlMarkMemo> propose(
+            VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen)
+            throws ProposalAbnormalFailureException {
+        return delegate.propose(mark, context, cfgGen);
+    }
 }

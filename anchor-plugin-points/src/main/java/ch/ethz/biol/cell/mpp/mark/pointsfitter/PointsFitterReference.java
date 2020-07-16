@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.mark.pointsfitter;
-
-/*
+/*-
  * #%L
  * anchor-plugin-points
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,11 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
@@ -40,37 +40,32 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class PointsFitterReference extends PointsFitter {
 
-	// START BEAN
-	@BeanField @Getter @Setter
-	private String id;
-	// END BEAN
+    // START BEAN
+    @BeanField @Getter @Setter private String id;
+    // END BEAN
 
-	private PointsFitter pointsFitter;
+    private PointsFitter pointsFitter;
 
-	@Override
-	public void onInit(PointsInitParams so)
-			throws InitException {
-		super.onInit(so);
-		try {
-			this.pointsFitter = getInitializationParameters().getPointsFitterSet().getException(id);
-		} catch (NamedProviderGetException e) {
-			throw new InitException(e.summarize());
-		}
-	}
+    @Override
+    public void onInit(PointsInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            this.pointsFitter = getInitializationParameters().getPointsFitterSet().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
+        }
+    }
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return pointsFitter.isCompatibleWith(testMark);
-	}
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return pointsFitter.isCompatibleWith(testMark);
+    }
 
-	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
-			throws PointsFitterException, InsufficientPointsException {
-		pointsFitter.fit(points, mark, dim);
-	}
+    @Override
+    public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+            throws PointsFitterException, InsufficientPointsException {
+        pointsFitter.fit(points, mark, dimensions);
+    }
 }

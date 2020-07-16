@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
-
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,41 +24,46 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OrderedRadius extends FeatureMark {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int index;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    // START BEAN PROPERTIES
+    @BeanField private int index;
+    // END BEAN PROPERTIES
 
-		if (input.get().getMark() instanceof MarkConic) {
-			
-			MarkConic markCast = (MarkConic) input.get().getMark();
-			double[] radii = markCast.createRadiiArrayRslvd(input.get().getResRequired());
-			
-			if( index >= radii.length ) {
-				throw new FeatureCalcException(String.format("Feature index %d must be less than radii array length %d",index,radii.length));
-			}
-			
-			return radii[index];
-		}
-		return -1;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 
-	public int getIndex() {
-		return index;
-	}
+        if (input.get().getMark() instanceof MarkConic) {
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+            MarkConic markCast = (MarkConic) input.get().getMark();
+            double[] radii = markCast.createRadiiArrayResolved(input.get().getResRequired());
 
+            if (index >= radii.length) {
+                throw new FeatureCalcException(
+                        String.format(
+                                "Feature index %d must be less than radii array length %d",
+                                index, radii.length));
+            }
+
+            return radii[index];
+        }
+        return -1;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 }

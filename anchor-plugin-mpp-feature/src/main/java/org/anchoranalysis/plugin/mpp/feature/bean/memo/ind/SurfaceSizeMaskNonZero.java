@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,11 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import java.nio.ByteBuffer;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
@@ -48,93 +48,60 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int maskIndex = 0;
-	
-	@BeanField
-	private RegionMap regionMap = RegionMapSingleton.instance();
-	
-	@BeanField
-	private boolean suppressZ = false;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int maskIndex = 0;
 
-	@Override
-	public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+    @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
-		ObjectMask om = createMask(input.get());
-		int surfaceSize = estimateSurfaceSize(
-			input.get().getPxlPartMemo(),
-			om
-		);
-		
-		return rslvArea(
-			surfaceSize,
-			input.get().getResOptional()
-		);
-	}
-	
-	private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
-		ObjectWithProperties omWithProps = input.getPxlPartMemo().getMark().calcMask(
-			input.getDimensionsRequired(),
-			regionMap.membershipWithFlagsForIndex(getRegionID()),
-			BinaryValuesByte.getDefault()
-		);
-		return omWithProps.getMask();
-	}
+    @BeanField @Getter @Setter private boolean suppressZ = false;
+    // END BEAN PROPERTIES
 
-	private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask om) throws FeatureCalcException {
-		
-		VoxelBox<ByteBuffer> vbOutline = calcOutline(om, !suppressZ);
-		
-		Extent extent = om.getBoundingBox().extent();
-		
-		try {
-			int size = 0;
-			for( int z=0; z<extent.getZ(); z++) {
-				VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
-				if( stats.histogram().hasAboveZero() ) {
-					size += vbOutline.extractSlice(z).countEqual( om.getBinaryValues().getOnInt() );
-				}
-			}
-			return size;
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private static VoxelBox<ByteBuffer> calcOutline( ObjectMask objMask, boolean useZ ) {
-		OutlineKernel3 kernel = new OutlineKernel3( objMask.getBinaryValuesByte(), false, useZ );
-		return ApplyKernel.apply(kernel, objMask.getVoxelBox(), objMask.getBinaryValuesByte() );
-	}
-	
-	public int getMaskIndex() {
-		return maskIndex;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 
+        ObjectMask objectMask = createMask(input.get());
+        int surfaceSize = estimateSurfaceSize(input.get().getPxlPartMemo(), objectMask);
 
-	public void setMaskIndex(int maskIndex) {
-		this.maskIndex = maskIndex;
-	}
+        return resolveArea(surfaceSize, input.get().getResOptional());
+    }
 
+    private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
+        ObjectWithProperties omWithProps =
+                input.getPxlPartMemo()
+                        .getMark()
+                        .calcMask(
+                                input.getDimensionsRequired(),
+                                regionMap.membershipWithFlagsForIndex(getRegionID()),
+                                BinaryValuesByte.getDefault());
+        return omWithProps.getMask();
+    }
 
-	public RegionMap getRegionMap() {
-		return regionMap;
-	}
+    private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
+            throws FeatureCalcException {
 
+        VoxelBox<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
 
-	public void setRegionMap(RegionMap regionMap) {
-		this.regionMap = regionMap;
-	}
+        Extent extent = object.getBoundingBox().extent();
 
+        try {
+            int size = 0;
+            for (int z = 0; z < extent.getZ(); z++) {
+                VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
+                if (stats.histogram().hasAboveZero()) {
+                    size +=
+                            vbOutline
+                                    .extractSlice(z)
+                                    .countEqual(object.getBinaryValues().getOnInt());
+                }
+            }
+            return size;
+        } catch (OperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
-
+    private static VoxelBox<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
+        OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, useZ);
+        return ApplyKernel.apply(kernel, object.getVoxelBox(), object.getBinaryValuesByte());
+    }
 }

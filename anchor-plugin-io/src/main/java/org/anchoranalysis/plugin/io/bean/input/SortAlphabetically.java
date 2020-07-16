@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.input;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,12 @@ package org.anchoranalysis.plugin.io.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -40,41 +38,37 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * Sorts the input-items in alphabetical order of their descriptiveName()
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> input-object type
  */
 public class SortAlphabetically<T extends InputFromManager> extends InputManager<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private InputManager<T> input;
-	// END BEAN PROPERITES	
-	
-	@Override
-	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
-		
-		List<T> list = new ArrayList<>();
-		
-		Iterator<T> itr = input.inputObjects(params).iterator();
-		while( itr.hasNext() ) {
-			list.add( itr.next() );
-		}
-		
-		Collections.sort(
-			list,
-			(T o1, T o2) -> o1.descriptiveName().compareTo(o2.descriptiveName()) 
-		);
-		
-		return list;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private InputManager<T> input;
+    // END BEAN PROPERITES
 
-	public InputManager<T> getInput() {
-		return input;
-	}
+    @Override
+    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
-	public void setInput(InputManager<T> input) {
-		this.input = input;
-	}
+        List<T> list = new ArrayList<>();
+
+        Iterator<T> itr = input.inputObjects(params).iterator();
+        while (itr.hasNext()) {
+            list.add(itr.next());
+        }
+
+        Collections.sort(
+                list, (T o1, T o2) -> o1.descriptiveName().compareTo(o2.descriptiveName()));
+
+        return list;
+    }
+
+    public InputManager<T> getInput() {
+        return input;
+    }
+
+    public void setInput(InputManager<T> input) {
+        this.input = input;
+    }
 }

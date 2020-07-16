@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,8 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
@@ -34,36 +34,33 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ChnlConverterBeanScaleByMinMaxValue extends ConvertChannelTo {
 
-	@BeanField @NonNegative
-	private int min = -1;
-	
-	@BeanField @NonNegative
-	private int max = -1;
-	
-	@Override
-	public ChannelConverter<?> createConverter() {
-		return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min,max);
-	}
+    @BeanField @NonNegative private int min = -1;
 
-	public int getMin() {
-		return min;
-	}
+    @BeanField @NonNegative private int max = -1;
 
-	public void setMin(int min) {
-		this.min = min;
-	}
+    @Override
+    public ChannelConverter<?> createConverter() {
+        return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
+    }
 
-	public int getMax() {
-		return max;
-	}
+    public int getMin() {
+        return min;
+    }
 
-	public void setMax(int max) {
-		this.max = max;
-	}
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
 }

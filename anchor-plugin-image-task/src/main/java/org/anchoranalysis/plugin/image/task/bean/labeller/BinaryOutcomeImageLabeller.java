@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.image.task.bean.labeller;
-
-import java.nio.file.Path;
-
 /*-
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.nio.file.Path;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,39 +24,33 @@ import java.nio.file.Path;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.task.bean.labeller;
+
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 
-/**
- * 
- * @author Owen Feehan
- *
- */
+/** @author Owen Feehan */
 public abstract class BinaryOutcomeImageLabeller extends ImageLabeller<NoSharedState> {
 
-	private static final String POSITIVE = "positive";
-	private static final String NEGATIVE = "negative";
-	
-	@Override
-	public NoSharedState init( Path pathForBinding ) throws InitException {
-		return NoSharedState.INSTANCE;
-	}
-	
-	@Override
-	public Set<String> allLabels(NoSharedState sharedState) {
-		return Collections.unmodifiableSet(
-			new HashSet<String>(
-				Arrays.asList(POSITIVE, NEGATIVE)
-			)
-		);
-	}
-	
-	protected static String classificationString( boolean positive ) {
-		return positive ? POSITIVE : NEGATIVE;
-	}
+    private static final String POSITIVE = "positive";
+    private static final String NEGATIVE = "negative";
+
+    @Override
+    public NoSharedState init(Path pathForBinding) throws InitException {
+        return NoSharedState.INSTANCE;
+    }
+
+    @Override
+    public Set<String> allLabels(NoSharedState sharedState) {
+        return Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(POSITIVE, NEGATIVE)));
+    }
+
+    protected static String classificationString(boolean positive) {
+        return positive ? POSITIVE : NEGATIVE;
+    }
 }

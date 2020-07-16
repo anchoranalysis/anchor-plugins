@@ -1,12 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,63 +24,64 @@ import java.util.Optional;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjs;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
 
 public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
-	// START BEAN FIELDS
-	@BeanField @Getter @Setter
-	private UnitValueVolume minVolume = null;
-	
-	@BeanField @Getter @Setter
-	private boolean inverted = false;
-	// END BEAN FIELDS
-	
-	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
-		return createMaskedImage(chnl);
-	}
+    // START BEAN FIELDS
+    @BeanField @Getter @Setter private UnitValueVolume minVolume = null;
 
-	private BinaryChnl createMaskedImage( BinaryChnl bi ) throws CreateException {
+    @BeanField @Getter @Setter private boolean inverted = false;
+    // END BEAN FIELDS
 
-		ObjectCollection objs = connectedComponents(bi, inverted);
-		return BinaryChnlFromObjs.createFromObjs(objs, bi.getDimensions(), bi.getBinaryValues() );
-	}
-	
-	private ObjectCollection connectedComponents( BinaryChnl bi, boolean inverted ) throws CreateException {
-		
-		int rslvMinNum;
-		try {
-			rslvMinNum = (int) Math.floor(
-				minVolume.rslv(
-					Optional.of(bi.getDimensions().getRes())
-				)
-			);
-		} catch (UnitValueException e) {
-			throw new CreateException(e);
-		}
+    @Override
+    public Mask createFromChnl(Mask chnl) throws CreateException {
+        return createMaskedImage(chnl);
+    }
 
-		CreateFromConnectedComponentsFactory createObjMasks = new CreateFromConnectedComponentsFactory(rslvMinNum);
-		if (inverted) {
-			BinaryChnl biInverted = new BinaryChnl(
-				bi.getChannel(),
-				bi.getBinaryValues().createInverted()
-			);	// In case we've inverted the binary values
-			return createObjMasks.createConnectedComponents(biInverted);
-		} else {
-			return createObjMasks.createConnectedComponents(bi);
-		}
-	}
+    private Mask createMaskedImage(Mask bi) throws CreateException {
+
+        return BinaryChnlFromObjects.createFromObjects(
+                connectedComponents(bi, inverted), bi.getDimensions(), bi.getBinaryValues());
+    }
+
+    private ObjectCollection connectedComponents(Mask bi, boolean inverted) throws CreateException {
+
+        int resolveMinNum;
+        try {
+            resolveMinNum =
+                    (int)
+                            Math.floor(
+                                    minVolume.resolveToVoxels(
+                                            Optional.of(bi.getDimensions().getRes())));
+        } catch (UnitValueException e) {
+            throw new CreateException(e);
+        }
+
+        CreateFromConnectedComponentsFactory createObjects =
+                new CreateFromConnectedComponentsFactory(resolveMinNum);
+        if (inverted) {
+            Mask biInverted =
+                    new Mask(
+                            bi.getChannel(),
+                            bi.getBinaryValues()
+                                    .createInverted()); // In case we've inverted the binary values
+            return createObjects.createConnectedComponents(biInverted);
+        } else {
+            return createObjects.createConnectedComponents(bi);
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.strategy;
-
 /*-
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,11 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.plugin.annotation.bean.strategy;
 
+import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -36,25 +37,13 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FilePathGenerator annotationFilePathGenerator;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private FilePathGenerator annotationFilePathGenerator;
+    // END BEAN PROPERTIES
 
-	@Override
-	public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
-		return PathFromGenerator.derivePath(
-			annotationFilePathGenerator,
-			item.pathForBindingRequired()
-		);
-	}
-	
-	public FilePathGenerator getAnnotationFilePathGenerator() {
-		return annotationFilePathGenerator;
-	}
-	
-	public void setAnnotationFilePathGenerator(
-			FilePathGenerator annotationFilePathGenerator) {
-		this.annotationFilePathGenerator = annotationFilePathGenerator;
-	}
+    @Override
+    public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
+        return PathFromGenerator.derivePath(
+                annotationFilePathGenerator, item.pathForBindingRequired());
+    }
 }

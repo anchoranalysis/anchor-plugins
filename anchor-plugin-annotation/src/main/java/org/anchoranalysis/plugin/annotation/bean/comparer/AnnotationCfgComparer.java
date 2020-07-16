@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.comparer;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-plugin-annotation
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,12 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.comparer;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
@@ -47,58 +47,50 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class AnnotationCfgComparer extends Comparer {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FilePathGenerator filePathGenerator;
-	// END BEAN PROPERTIES
-	
-	public AnnotationCfgComparer() {
-		super();
-	}
-	
-	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    // END BEAN PROPERTIES
 
-		Path filePath;
-		try {
-			filePath = filePathGenerator.outFilePath(filePathSource, false);
-		} catch (AnchorIOException e1) {
-			throw new CreateException(e1);
-		}
-		
-		MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
-		Optional<MarkAnnotation> annotation;
-		try {
-			annotation = annotationReader.read( filePath );
-		} catch (AnchorIOException e) {
-			throw new CreateException(e);
-		}
-		
-		if (!annotation.isPresent()) {
-			return new NotFound<>(filePath, "No annotation exists");
-		}
-		
-		if (!annotation.get().isAccepted()) {
-			return new NotFound<>(filePath, "The annotation is NOT accepted");
-		}
-		
-		ObjectCollectionWithProperties omwp = annotation.get().getCfg().calcMask(
-			dim,
-			annotation.get().getRegionMap().membershipWithFlagsForIndex(annotation.get().getRegionID()),
-			BinaryValuesByte.getDefault(),
-			null
-		); 
-		return new Found<>(omwp.withoutProperties());
-	}
+    @Override
+    public Findable<ObjectCollection> createObjects(
+            Path filePathSource, ImageDimensions dimensions, boolean debugMode)
+            throws CreateException {
 
-	public FilePathGenerator getFilePathGenerator() {
-		return filePathGenerator;
-	}
+        Path filePath;
+        try {
+            filePath = filePathGenerator.outFilePath(filePathSource, false);
+        } catch (AnchorIOException e1) {
+            throw new CreateException(e1);
+        }
 
-	public void setFilePathGenerator(FilePathGenerator filePathGenerator) {
-		this.filePathGenerator = filePathGenerator;
-	}
+        MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
+        Optional<MarkAnnotation> annotation;
+        try {
+            annotation = annotationReader.read(filePath);
+        } catch (AnchorIOException e) {
+            throw new CreateException(e);
+        }
 
+        if (!annotation.isPresent()) {
+            return new NotFound<>(filePath, "No annotation exists");
+        }
 
+        if (!annotation.get().isAccepted()) {
+            return new NotFound<>(filePath, "The annotation is NOT accepted");
+        }
 
+        ObjectCollectionWithProperties omwp =
+                annotation
+                        .get()
+                        .getCfg()
+                        .calcMask(
+                                dimensions,
+                                annotation
+                                        .get()
+                                        .getRegionMap()
+                                        .membershipWithFlagsForIndex(
+                                                annotation.get().getRegionID()),
+                                BinaryValuesByte.getDefault());
+        return new Found<>(omwp.withoutProperties());
+    }
 }

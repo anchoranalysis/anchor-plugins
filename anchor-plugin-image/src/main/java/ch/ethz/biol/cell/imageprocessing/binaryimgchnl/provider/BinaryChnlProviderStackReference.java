@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -33,52 +32,48 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 
 public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int chnlIndex = 0;
-	
-	@BeanField
-	private String stackProviderID;
-	// END BEAN PROPERTIES
-	
-	private Channel chnl;
-	
-	@Override
-	public void onInit(ImageInitParams so)
-			throws InitException {
-		super.onInit(so);
-		try {
-			chnl = so.getStackCollection().getException(stackProviderID).getChnl(chnlIndex);
-		} catch (NamedProviderGetException e) {
-			throw InitException.createOrReuse(e.summarize());
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int chnlIndex = 0;
 
-	@Override
-	public BinaryChnl create() throws CreateException {
-		return new BinaryChnl( chnl, BinaryValues.getDefault() );
-	}
+    @BeanField private String stackProviderID;
+    // END BEAN PROPERTIES
 
-	public int getChnlIndex() {
-		return chnlIndex;
-	}
+    private Channel chnl;
 
-	public void setChnlIndex(int chnlIndex) {
-		this.chnlIndex = chnlIndex;
-	}
+    @Override
+    public void onInit(ImageInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            chnl = so.getStackCollection().getException(stackProviderID).getChnl(chnlIndex);
+        } catch (NamedProviderGetException e) {
+            throw InitException.createOrReuse(e.summarize());
+        }
+    }
 
-	public String getStackProviderID() {
-		return stackProviderID;
-	}
+    @Override
+    public Mask create() throws CreateException {
+        return new Mask(chnl, BinaryValues.getDefault());
+    }
 
-	public void setStackProviderID(String stackProviderID) {
-		this.stackProviderID = stackProviderID;
-	}
+    public int getChnlIndex() {
+        return chnlIndex;
+    }
 
+    public void setChnlIndex(int chnlIndex) {
+        this.chnlIndex = chnlIndex;
+    }
+
+    public String getStackProviderID() {
+        return stackProviderID;
+    }
+
+    public void setStackProviderID(String stackProviderID) {
+        this.stackProviderID = stackProviderID;
+    }
 }

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,42 +35,41 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 
 public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 
-	// START BEANS
-	@BeanField
-	private int minIntensity = 40;
-	
-	@BeanField
-	private double minRatio = 0.01;
-	// END BEANS
+    // START BEANS
+    @BeanField private int minIntensity = 40;
 
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		
-		Histogram h = HistogramFactory.create( chnl );
-		
-		double percent = h.percentGreaterEqualTo(minIntensity);
+    @BeanField private double minRatio = 0.01;
+    // END BEANS
 
-		if (percent < minRatio) {
-			throw new CreateException(
-				String.format("Rejecting as %f < %f for intensity %d", percent, minRatio, minIntensity)
-			);
-		}
-		return chnl;
-	}
+    @Override
+    public Channel createFromChnl(Channel chnl) throws CreateException {
 
-	public int getMinIntensity() {
-		return minIntensity;
-	}
+        Histogram h = HistogramFactory.create(chnl);
 
-	public void setMinIntensity(int minIntensity) {
-		this.minIntensity = minIntensity;
-	}
+        double percent = h.percentGreaterEqualTo(minIntensity);
 
-	public double getMinRatio() {
-		return minRatio;
-	}
+        if (percent < minRatio) {
+            throw new CreateException(
+                    String.format(
+                            "Rejecting as %f < %f for intensity %d",
+                            percent, minRatio, minIntensity));
+        }
+        return chnl;
+    }
 
-	public void setMinRatio(double minRatio) {
-		this.minRatio = minRatio;
-	}
+    public int getMinIntensity() {
+        return minIntensity;
+    }
+
+    public void setMinIntensity(int minIntensity) {
+        this.minIntensity = minIntensity;
+    }
+
+    public double getMinRatio() {
+        return minRatio;
+    }
+
+    public void setMinRatio(double minRatio) {
+        this.minRatio = minRatio;
+    }
 }

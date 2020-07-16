@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.channel.Channel;
@@ -36,40 +35,41 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private int value;
-	
-	@BeanField
-	private boolean createShort;	// If True creates an unsigned short-image
-	// END BEAN PROPERTIES
 
-	@Override
-	protected Channel createFromDim(ImageDimensions dim) {
+    // START BEAN PROPERTIES
+    @BeanField private int value;
 
-		VoxelDataType typeOut = createShort ? VoxelDataTypeUnsignedShort.INSTANCE : VoxelDataTypeUnsignedByte.INSTANCE; 
+    @BeanField private boolean createShort; // If True creates an unsigned short-image
+    // END BEAN PROPERTIES
 
-		Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
-		if (value!=0) {
-			chnlNew.getVoxelBox().any().setAllPixelsTo(value);
-		}
-		return chnlNew;
-	}
-	
-	public int getValue() {
-		return value;
-	}
+    @Override
+    protected Channel createFromDim(ImageDimensions dim) {
 
-	public void setValue(int value) {
-		this.value = value;
-	}
+        VoxelDataType typeOut =
+                createShort
+                        ? VoxelDataTypeUnsignedShort.INSTANCE
+                        : VoxelDataTypeUnsignedByte.INSTANCE;
 
-	public boolean isCreateShort() {
-		return createShort;
-	}
+        Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
+        if (value != 0) {
+            chnlNew.getVoxelBox().any().setAllPixelsTo(value);
+        }
+        return chnlNew;
+    }
 
-	public void setCreateShort(boolean createShort) {
-		this.createShort = createShort;
-	}
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public boolean isCreateShort() {
+        return createShort;
+    }
+
+    public void setCreateShort(boolean createShort) {
+        this.createShort = createShort;
+    }
 }

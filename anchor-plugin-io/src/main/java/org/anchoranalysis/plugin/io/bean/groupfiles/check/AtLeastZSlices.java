@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.groupfiles.check;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,29 +24,30 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.groupfiles.check;
 
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.plugin.io.multifile.IntegerRange;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 
 public class AtLeastZSlices extends CheckParsedFilePathBag {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int minNumZSlices = 1;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean accept(ParsedFilePathBag parsedBag) {
-		Optional<IntegerRange> sliceRange = parsedBag.rangeSliceNum();
-		return sliceRange.isPresent() && sliceRange.get().getSize() >= minNumZSlices;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int minNumZSlices = 1;
+    // END BEAN PROPERTIES
 
-	public int getMinNumZSlices() {
-		return minNumZSlices;
-	}
+    @Override
+    public boolean accept(ParsedFilePathBag parsedBag) {
+        Optional<IntegerRange> sliceRange = parsedBag.rangeSliceNum();
+        return sliceRange.isPresent() && sliceRange.get().getSize() >= minNumZSlices;
+    }
 
-	public void setMinNumZSlices(int minNumZSlices) {
-		this.minNumZSlices = minNumZSlices;
-	}
+    public int getMinNumZSlices() {
+        return minNumZSlices;
+    }
+
+    public void setMinNumZSlices(int minNumZSlices) {
+        this.minNumZSlices = minNumZSlices;
+    }
 }

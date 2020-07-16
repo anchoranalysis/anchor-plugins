@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.nrg;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.nrg;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.nrg;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.nrg;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -35,23 +36,12 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 public class CountEqual extends SpecificNRGChannelBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int value = BinaryValues.getDefault().getOnInt();
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int value = BinaryValues.getDefault().getOnInt();
+    // END BEAN PROPERTIES
 
-	@Override
-	protected double calcWithChannel(ObjectMask obj, Channel chnl)
-			throws FeatureCalcException {
-		return chnl.getVoxelBox().any().countEqualMask(value, obj);
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
+    @Override
+    protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalcException {
+        return chnl.getVoxelBox().any().countEqualMask(value, object);
+    }
 }

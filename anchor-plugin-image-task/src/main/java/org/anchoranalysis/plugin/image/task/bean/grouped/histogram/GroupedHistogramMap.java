@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
-
 /*-
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
  * #L%
  */
 
-import java.io.IOException;
+package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
+import java.io.IOException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramArray;
@@ -35,35 +34,27 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
-class GroupedHistogramMap extends GroupMapByName<Histogram,Histogram> {
-	
-	private final GroupedHistogramWriter writer;
-	
-	public GroupedHistogramMap(GroupedHistogramWriter writer, int maxValue) {
-		super(
-			"histogram",
-			"histogram",
-			() -> new HistogramArray( maxValue )
-		);
-		this.writer = writer;
-	}
+class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
 
-	@Override
-	protected void addTo(Histogram ind, Histogram agg) throws OperationFailedException {
-		agg.addHistogram(ind);
-	}
+    private final GroupedHistogramWriter writer;
 
-	@Override
-	protected void writeGroupOutputInSubdirectory(
-		String outputName,
-		Histogram agg,
-		ConsistentChannelChecker chnlChecker,
-		BoundIOContext context
-	) throws IOException {
-		writer.writeHistogramToFile(
-			agg,
-			outputName,
-			context
-		);
-	}
+    public GroupedHistogramMap(GroupedHistogramWriter writer, int maxValue) {
+        super("histogram", "histogram", () -> new HistogramArray(maxValue));
+        this.writer = writer;
+    }
+
+    @Override
+    protected void addTo(Histogram ind, Histogram agg) throws OperationFailedException {
+        agg.addHistogram(ind);
+    }
+
+    @Override
+    protected void writeGroupOutputInSubdirectory(
+            String outputName,
+            Histogram agg,
+            ConsistentChannelChecker chnlChecker,
+            BoundIOContext context)
+            throws IOException {
+        writer.writeHistogramToFile(agg, outputName, context);
+    }
 }

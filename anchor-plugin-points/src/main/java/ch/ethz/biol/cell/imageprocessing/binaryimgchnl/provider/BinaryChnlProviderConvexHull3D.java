@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-points
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,87 +24,88 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import com.github.quickhull3d.Point3d;
+import com.github.quickhull3d.QuickHull3D;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-import com.github.quickhull3d.Point3d;
-import com.github.quickhull3d.QuickHull3D;
-
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
-	@Override
-	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
-		MessageLogger logger = getLogger().messageLogger();
-		List<Point3d> extPnts = pointsFromChnl(outline);
-		
-		Point3d[] pntArr = extPnts.toArray( new Point3d[]{} );
-		
-		QuickHull3D hull = new QuickHull3D();
-		hull.build(pntArr);
-		
-		logger.log("Vertices:");
-		Point3d[] vertices = hull.getVertices();
-		for (int i = 0; i < vertices.length; i++) {
-			Point3d pnt = vertices[i];
-			logger.log(pnt.x + " " + pnt.y + " " + pnt.z);
-		}
+    @Override
+    protected Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException {
+        MessageLogger logger = getLogger().messageLogger();
+        List<Point3d> extPoints = pointsFromChnl(outline);
 
-		logger.log("Faces:");
-		int[][] faceIndices = hull.getFaces();
-		for (int i = 0; i < faceIndices.length; i++) {
-			for (int k = 0; k < faceIndices[i].length; k++) {
-				logger.log(faceIndices[i][k] + " ");
-		    }
-			logger.log("");
-		}
-				
-		// we write the vertices to the outline
-		Channel out = outline.getChannel();
-		VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
-				
-		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
-		for (int i = 0; i < vertices.length; i++) {
-			Point3d pnt = vertices[i];
-			vbOut.setVoxel( (int) pnt.x, (int) pnt.y, (int) pnt.z, outline.getBinaryValues().getOnInt());
-	    }		
-		   
-		return outline;
-	}
+        Point3d[] pointArr = extPoints.toArray(new Point3d[] {});
 
-	// We use it here as it uses the quickHull3D Point3d primitive
-	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) {
-		
-		List<Point3d> listOut = new ArrayList<>();
-		
-		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
-					
-		Extent e = chnl.getVoxelBox().extent();
-		for( int z=0; z<e.getZ(); z++) {
-			
-			ByteBuffer bb = chnl.getVoxelBox().getPixelsForPlane(z).buffer();
-			
-			for( int y=0; y<e.getY(); y++) {
-				for( int x=0; x<e.getX(); x++) {
-					
-					if (bb.get()==bvb.getOnByte()) {
-						listOut.add( new Point3d(x,y,z) );
-					}
-					
-				}
-			}
-		}
-		
-		return listOut;
-	}
+        QuickHull3D hull = new QuickHull3D();
+        hull.build(pointArr);
 
+        logger.log("Vertices:");
+        Point3d[] vertices = hull.getVertices();
+        for (int i = 0; i < vertices.length; i++) {
+            Point3d point = vertices[i];
+            logger.log(point.x + " " + point.y + " " + point.z);
+        }
+
+        logger.log("Faces:");
+        int[][] faceIndices = hull.getFaces();
+        for (int i = 0; i < faceIndices.length; i++) {
+            for (int k = 0; k < faceIndices[i].length; k++) {
+                logger.log(faceIndices[i][k] + " ");
+            }
+            logger.log("");
+        }
+
+        // we write the vertices to the outline
+        Channel out = outline.getChannel();
+        VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
+
+        vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
+        for (int i = 0; i < vertices.length; i++) {
+            Point3d point = vertices[i];
+            vbOut.setVoxel(
+                    (int) point.x,
+                    (int) point.y,
+                    (int) point.z,
+                    outline.getBinaryValues().getOnInt());
+        }
+
+        return outline;
+    }
+
+    // We use it here as it uses the quickHull3D Point3d primitive
+    private static List<Point3d> pointsFromChnl(Mask chnl) {
+
+        List<Point3d> listOut = new ArrayList<>();
+
+        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+
+        Extent e = chnl.getVoxelBox().extent();
+        for (int z = 0; z < e.getZ(); z++) {
+
+            ByteBuffer bb = chnl.getVoxelBox().getPixelsForPlane(z).buffer();
+
+            for (int y = 0; y < e.getY(); y++) {
+                for (int x = 0; x < e.getX(); x++) {
+
+                    if (bb.get() == bvb.getOnByte()) {
+                        listOut.add(new Point3d(x, y, z));
+                    }
+                }
+            }
+        }
+
+        return listOut;
+    }
 }

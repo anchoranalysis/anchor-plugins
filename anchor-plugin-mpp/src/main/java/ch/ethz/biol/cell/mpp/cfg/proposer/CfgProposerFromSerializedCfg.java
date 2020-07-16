@@ -1,21 +1,8 @@
-package ch.ethz.biol.cell.mpp.cfg.proposer;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,43 +24,48 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.cfg.proposer;
 
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.deserializer.ObjectInputStreamDeserializer;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class CfgProposerFromSerializedCfg extends CfgProposer {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String filePath;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String filePath;
+    // END BEAN PROPERTIES
 
-	@Override
-	public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) {
-		
-		ObjectInputStreamDeserializer<Cfg> deserializer = new ObjectInputStreamDeserializer<>();
-		try {
-			Path path = Paths.get(filePath);
-			return Optional.of(
-				deserializer.deserialize(path)
-			);
-		} catch (DeserializationFailedException e) {
-			return Optional.empty();
-		}
-	}
+    @Override
+    public Optional<Cfg> propose(CfgGen cfgGen, ProposerContext context) {
 
-	@Override
-	public String getBeanDscr() {
-		return toString();
-	}
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipse;
-	}
+        ObjectInputStreamDeserializer<Cfg> deserializer = new ObjectInputStreamDeserializer<>();
+        try {
+            Path path = Paths.get(filePath);
+            return Optional.of(deserializer.deserialize(path));
+        } catch (DeserializationFailedException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public String getBeanDscr() {
+        return toString();
+    }
+
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return testMark instanceof MarkEllipse;
+    }
 }

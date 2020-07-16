@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,61 +24,61 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbMask;
+import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 
 /**
  * A scheme for counting touching voxels.
- * 
- * <p>A voxel in the second object is deemed touching if it has 4-connectivity with a voxel on the exterior
- * of the first-object (source)</p>
  *
- * <p>In practice, we do this only where the bounding-boxes (dilated by 1 pixels) intersection, so as to
- * reduce computation-time.</p> 
- * 
+ * <p>A voxel in the second object is deemed touching if it has 4-connectivity with a voxel on the
+ * exterior of the first-object (source)
+ *
+ * <p>In practice, we do this only where the bounding-boxes (dilated by 1 pixels) intersection, so
+ * as to reduce computation-time.
+ *
  * @author Owen Feehan
- *
  */
 public class NumTouchingVoxels extends TouchingVoxels {
 
-	@Override
-	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
-			throws FeatureCalcException {
-		// As this means of measuring the touching pixels can differ slightly depending on om1->om2 or om2->om1, it's done in both directions.
-		try {
-			return Math.max(
-				numTouchingFrom(om1, om2, bboxIntersect),
-				numTouchingFrom(om2, om1, bboxIntersect)
-			);
-			
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
+    @Override
+    protected double calcWithIntersection(
+            ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect)
+            throws FeatureCalcException {
+        // As this means of measuring the touching pixels can differ slightly depending on om1->om2
+        // or om2->om1, it's done in both directions.
+        try {
+            return Math.max(
+                    numTouchingFrom(object1, object2, bboxIntersect),
+                    numTouchingFrom(object2, object1, bboxIntersect));
 
-	private int numTouchingFrom( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersect ) throws OperationFailedException {
-		BoundingBox bboxIntersectRel = RelativeUtilities.createRelBBox(bboxIntersect, omSrc);
-		return calcNghbTouchingPixels( omSrc, omDest, bboxIntersectRel );
-	}
-		
-	private int calcNghbTouchingPixels( ObjectMask omSrc, ObjectMask omDest, BoundingBox bboxIntersectRel ) throws OperationFailedException {
-		
-		ObjectMask omOtherDest = RelativeUtilities.createRelMask( omDest, omSrc );
-		
-		CountKernelNghbMask kernelMatch = new CountKernelNghbMask(
-			isDo3D(),
-			omSrc.getBinaryValuesByte(),
-			omOtherDest,
-			false
-		);
-		return ApplyKernel.applyForCount(kernelMatch, omSrc.getVoxelBox(), bboxIntersectRel );		
-	}
+        } catch (OperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 
+    private int numTouchingFrom(
+            ObjectMask source, ObjectMask destination, BoundingBox bboxIntersect)
+            throws OperationFailedException {
+        BoundingBox bboxIntersectRelative = RelativeUtilities.createRelBBox(bboxIntersect, source);
+        return calcNeighborhoodTouchingPixels(source, destination, bboxIntersectRelative);
+    }
 
+    private int calcNeighborhoodTouchingPixels(
+            ObjectMask source, ObjectMask destination, BoundingBox bboxIntersectRelative)
+            throws OperationFailedException {
+
+        CountKernelNeighborhoodMask kernelMatch =
+                new CountKernelNeighborhoodMask(
+                        isDo3D(),
+                        source.getBinaryValuesByte(),
+                        RelativeUtilities.createRelMask(destination, source),
+                        false);
+        return ApplyKernel.applyForCount(kernelMatch, source.getVoxelBox(), bboxIntersectRelative);
+    }
 }

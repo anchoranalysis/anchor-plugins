@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.mark.region;
-
 /*-
  * #%L
- * anchor-plugin-mpp-feature
+ * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,11 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.mark.region;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
@@ -37,55 +40,44 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * {@link MarkRegion} with a region and an index
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public abstract class IndexedRegionBase extends MarkRegion {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private int index = 0;
-	
-	@BeanField @Getter @Setter
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-	
-	@Override
-	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
-		VoxelizedMark pm = pmm.voxelized();
-		return createStatisticsFor(pm, pmm.getMark(), dim);
-	}
-	
-	protected abstract VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException;
-	
-	protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
-		return pm.statisticsFor(index, regionID, z);
-	}
-	
-	protected BoundingBox boundingBoxForRegion( VoxelizedMark pm ) {
-		return pm.getBoundingBox();
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int index = 0;
 
-	@Override
-	public String uniqueName() {
-		return String.format(
-			"%s_%d_%d",
-			getClass().getCanonicalName(),
-			index,
-			regionID
-		);
-	}
+    @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+    // END BEAN PROPERTIES
+
+    @Override
+    public String toString() {
+        return String.format("regionID=%d,index=%d", regionID, index);
+    }
+
+    @Override
+    public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo memo, ImageDimensions dimensions)
+            throws CreateException {
+        return createStatisticsFor(memo.voxelized(), memo.getMark(), dimensions);
+    }
+
+    protected abstract VoxelStatistics createStatisticsFor(
+            VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException;
+
+    protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
+        return pm.statisticsFor(index, regionID, z);
+    }
+
+    protected BoundingBox boundingBoxForRegion(VoxelizedMark pm) {
+        return pm.getBoundingBox();
+    }
+
+    @Override
+    public String uniqueName() {
+        return String.format("%s_%d_%d", getClass().getCanonicalName(), index, regionID);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.mark.bound;
-
 /*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.bean.mark.bound;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,8 @@ package org.anchoranalysis.plugin.mpp.bean.mark.bound;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.mark.bound;
+
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -33,29 +33,28 @@ import org.anchoranalysis.core.error.CreateException;
 
 public class MarkBoundsDefine extends MarkBoundsProvider {
 
-	// START BEAN FIELDS
-	@BeanField
-	private MarkBounds markBounds;
-	// END BEAN FIELDS
-	
-	public MarkBoundsDefine() {
-		// Standard bean constructor
-	}
-	
-	public MarkBoundsDefine(MarkBounds markBounds) {
-		this.markBounds = markBounds;
-	}
-	
-	@Override
-	public MarkBounds create() throws CreateException {
-		return markBounds;
-	}
+    // START BEAN FIELDS
+    @BeanField private MarkBounds markBounds;
+    // END BEAN FIELDS
 
-	public MarkBounds getMarkBounds() {
-		return markBounds;
-	}
+    public MarkBoundsDefine() {
+        // Standard bean constructor
+    }
 
-	public void setMarkBounds(MarkBounds markBounds) {
-		this.markBounds = markBounds;
-	}
+    public MarkBoundsDefine(MarkBounds markBounds) {
+        this.markBounds = markBounds;
+    }
+
+    @Override
+    public MarkBounds create() throws CreateException {
+        return markBounds;
+    }
+
+    public MarkBounds getMarkBounds() {
+        return markBounds;
+    }
+
+    public void setMarkBounds(MarkBounds markBounds) {
+        this.markBounds = markBounds;
+    }
 }

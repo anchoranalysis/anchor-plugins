@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
-
-import java.util.function.LongBinaryOperator;
-
 /*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.function.LongBinaryOperator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +24,10 @@ import java.util.function.LongBinaryOperator;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
+
+import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
+import java.util.function.LongBinaryOperator;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,83 +38,65 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
-
 public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int maskValue = 255;
-	
-	@BeanField
-	private int nrgIndex = 0;
-	// END BEAN PROPERTIES
-	
-	protected double overlapWithGlobalMask( SessionInput<FeatureInputPairMemo> params ) throws FeatureCalcException {
-		return params.calc(
-			new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue())
-		);
-	}
-	
-	@Override
-	protected double overlappingNumVoxels( SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
-		return input.calc(
-			new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue)
-		);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int maskValue = 255;
 
-	protected double calcVolumeAgg(
-		VoxelizedMarkMemo obj1,
-		VoxelizedMarkMemo obj2,
-		int regionID,
-		RelationBean relationToThreshold,
-		LongBinaryOperator statFunc
-	) {
-		return calcVolumeStat(
-			obj1,
-			obj2,
-			regionID,
-			relationToThreshold,
-			statFunc
-		);
-	}
-	
-	protected double calcVolumeStat(
-		VoxelizedMarkMemo obj1,
-		VoxelizedMarkMemo obj2,
-		int regionID,
-		RelationBean relationToThreshold,
-		LongBinaryOperator statFunc
-	) {
-		
-		long size1 = sizeForObj(obj1, regionID, relationToThreshold);
-		long size2 = sizeForObj(obj2, regionID, relationToThreshold);
-		return statFunc.applyAsLong(size1, size2);
-	}
-	
-	private long sizeForObj( VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
-		VoxelStatistics pxlStats =  obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
-		return pxlStats.countThreshold(
-			new RelationToConstant(
-				relationToThreshold,
-				maskValue
-			)
-		);
-	}
-	
-	public int getNrgIndex() {
-		return nrgIndex;
-	}
+    @BeanField private int nrgIndex = 0;
+    // END BEAN PROPERTIES
 
-	public void setNrgIndex(int nrgIndex) {
-		this.nrgIndex = nrgIndex;
-	}
+    protected double overlapWithGlobalMask(SessionInput<FeatureInputPairMemo> params)
+            throws FeatureCalcException {
+        return params.calc(
+                new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue()));
+    }
 
-	public int getMaskValue() {
-		return maskValue;
-	}
+    @Override
+    protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalcException {
+        return input.calc(new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue));
+    }
 
-	public void setMaskValue(int maskValue) {
-		this.maskValue = maskValue;
-	}
+    protected double calcVolumeAgg(
+            VoxelizedMarkMemo obj1,
+            VoxelizedMarkMemo obj2,
+            int regionID,
+            RelationBean relationToThreshold,
+            LongBinaryOperator statFunc) {
+        return calcVolumeStat(obj1, obj2, regionID, relationToThreshold, statFunc);
+    }
+
+    protected double calcVolumeStat(
+            VoxelizedMarkMemo obj1,
+            VoxelizedMarkMemo obj2,
+            int regionID,
+            RelationBean relationToThreshold,
+            LongBinaryOperator statFunc) {
+
+        long size1 = sizeForObj(obj1, regionID, relationToThreshold);
+        long size2 = sizeForObj(obj2, regionID, relationToThreshold);
+        return statFunc.applyAsLong(size1, size2);
+    }
+
+    private long sizeForObj(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
+        VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
+        return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
+    }
+
+    public int getNrgIndex() {
+        return nrgIndex;
+    }
+
+    public void setNrgIndex(int nrgIndex) {
+        this.nrgIndex = nrgIndex;
+    }
+
+    public int getMaskValue() {
+        return maskValue;
+    }
+
+    public void setMaskValue(int maskValue) {
+        this.maskValue = maskValue;
+    }
 }

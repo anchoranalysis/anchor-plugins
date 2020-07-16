@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,32 +24,39 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
+
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-
 
 /**
- * Calculates the intersecting set of objects from a particular collection (represted by an id) and the object-mask in the params
- * @author Owen Feehan
+ * Calculates the intersecting set of objects from a particular collection (represted by an id) and
+ * the object-mask in the params
  *
+ * @author Owen Feehan
  */
-@RequiredArgsConstructor @EqualsAndHashCode(callSuper=false)
-class CalculateIntersectingObjects extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+class CalculateIntersectingObjects
+        extends FeatureCalculation<ObjectCollection, FeatureInputSingleObject> {
 
-	/** A unique ID that maps 1 to 1 to searchObjs (and is therefore sufficient to uniquely @{code hashCode()}) */
-	private final String id;
-	
-	/** The objects corresponding to id */
-	private final ObjectCollection searchObjs;
+    /**
+     * A unique ID that maps 1 to 1 to {@code searchObjects} (and is therefore sufficient to
+     * uniquely @{code hashCode()})
+     */
+    private final String id;
 
-	@Override
-	protected ObjectCollection execute(FeatureInputSingleObject params) {
+    /** The objects corresponding to id */
+    private final ObjectCollection searchObjects;
 
-		ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree( searchObjs );
-		return bboxRTree.intersectsWith( params.getObjectMask() );
-	}
+    @Override
+    protected ObjectCollection execute(FeatureInputSingleObject params) {
+
+        ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree(searchObjects);
+        return bboxRTree.intersectsWith(params.getObject());
+    }
 }

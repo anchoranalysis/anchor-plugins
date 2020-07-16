@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.comparer;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-plugin-annotation
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,11 @@ package org.anchoranalysis.plugin.annotation.bean.comparer;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.comparer;
 
 import java.nio.file.Path;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.annotation.io.wholeimage.findable.Findable;
 import org.anchoranalysis.annotation.io.wholeimage.findable.Found;
@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -49,79 +49,46 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 public class BinaryChnlComparer extends Comparer {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FilePathGenerator filePathGenerator;
-	
-	@BeanField @DefaultInstance
-	private RasterReader rasterReader;
-	
-	@BeanField
-	private boolean invert=false;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
 
-	public BinaryChnlComparer() {
-		super();
-	}
-	
-	@Override
-	public Findable<ObjectCollection> createObjs(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
-		
-		try {
-			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
-			
-			if (!maskPath.toFile().exists()) {
-				return new NotFound<>(maskPath, "No mask exists");
-			}
-			
-			BinaryChnl chnl = RasterReaderUtilities.openBinaryChnl(
-				rasterReader,
-				maskPath,
-				createBinaryValues()
-			);
-			
-			return new Found<>(
-				convertToObjs( chnl )
-			);
-			
-		} catch (AnchorIOException | RasterIOException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	private BinaryValues createBinaryValues() {
-		if (invert) {
-			return BinaryValues.getDefault().createInverted();
-		} else {
-			return BinaryValues.getDefault();
-		}
-	}
-	
-	private static ObjectCollection convertToObjs( BinaryChnl chnl ) {
-		return ObjectCollectionFactory.from(chnl);
-	}
-	
-	public FilePathGenerator getFilePathGenerator() {
-		return filePathGenerator;
-	}
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-	public void setFilePathGenerator(FilePathGenerator filePathGenerator) {
-		this.filePathGenerator = filePathGenerator;
-	}
+    @BeanField @Getter @Setter private boolean invert = false;
+    // END BEAN PROPERTIES
 
-	public RasterReader getRasterReader() {
-		return rasterReader;
-	}
+    @Override
+    public Findable<ObjectCollection> createObjects(
+            Path filePathSource, ImageDimensions dimensions, boolean debugMode)
+            throws CreateException {
 
-	public void setRasterReader(RasterReader rasterReader) {
-		this.rasterReader = rasterReader;
-	}
+        try {
+            Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
 
-	public boolean isInvert() {
-		return invert;
-	}
+            if (!maskPath.toFile().exists()) {
+                return new NotFound<>(maskPath, "No mask exists");
+            }
 
-	public void setInvert(boolean invert) {
-		this.invert = invert;
-	}
+            Mask chnl =
+                    RasterReaderUtilities.openBinaryChnl(
+                            rasterReader, maskPath, createBinaryValues());
+
+            return new Found<>(convertToObjects(chnl));
+
+        } catch (AnchorIOException | RasterIOException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    private BinaryValues createBinaryValues() {
+        if (invert) {
+            return BinaryValues.getDefault().createInverted();
+        } else {
+            return BinaryValues.getDefault();
+        }
+    }
+
+    private static ObjectCollection convertToObjects(Mask chnl) {
+        return ObjectCollectionFactory.from(chnl);
+    }
 }

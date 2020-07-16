@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,23 +24,22 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-
 /**
  * Width/height/depth of nrg-stack in pixels depending on axis
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature-input-type
  */
 public class Extent<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
-	@Override
-	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
-		return dim.getExtent().getValueByDimension(axis);
-	}
+    @Override
+    protected double calcForAxis(ImageDimensions dimensions, AxisType axis) {
+        return dimensions.getExtent().getValueByDimension(axis);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
-
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.plugin.image.feature.bean.object.table;
 
+import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
@@ -43,49 +42,46 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
 
-	@Override
-	public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
-			List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
-			NamedFeatureStoreFactory storeFactory,
-			boolean suppressErrors
-	) throws CreateException {
-		return new SingleObjTableSession(
-			storeFactory.createNamedFeatureList(list)
-		);
-	}
-	
-	@Override
-	public String uniqueIdentifierFor(FeatureInputSingleObject input) {
-		return UniqueIdentifierUtilities.forObject(input.getObjectMask());
-	}
+    @Override
+    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
+            List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
+            NamedFeatureStoreFactory storeFactory,
+            boolean suppressErrors)
+            throws CreateException {
+        return new SingleObjTableSession(storeFactory.createNamedFeatureList(list));
+    }
 
-	@Override
-	public List<FeatureInputSingleObject> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
-		return objs.stream().mapToList(obj ->
-			new FeatureInputSingleObject(
-				checkObjInsideScene(obj, nrgStack.getDimensions().getExtent()),
-				nrgStack
-			) 
-		);
-	}
-	
-	private ObjectMask checkObjInsideScene( ObjectMask obj, Extent extent) throws CreateException {
-		if (!extent.contains(obj.getBoundingBox())) {
-			throw new CreateException(
-				String.format(
-					"Object is not (perhaps fully) contained inside the scene: %s is not in %s",
-					obj.getBoundingBox(),
-					extent
-				)
-			);
-		}
-		return obj;
-	}
+    @Override
+    public String uniqueIdentifierFor(FeatureInputSingleObject input) {
+        return UniqueIdentifierUtilities.forObject(input.getObject());
+    }
+
+    @Override
+    public List<FeatureInputSingleObject> createListInputs(
+            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            throws CreateException {
+        return objects.stream()
+                .mapToList(
+                        object ->
+                                new FeatureInputSingleObject(
+                                        checkObjectInsideScene(
+                                                object, nrgStack.getDimensions().getExtent()),
+                                        nrgStack));
+    }
+
+    private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)
+            throws CreateException {
+        if (!extent.contains(object.getBoundingBox())) {
+            throw new CreateException(
+                    String.format(
+                            "Object is not (perhaps fully) contained inside the scene: %s is not in %s",
+                            object.getBoundingBox(), extent));
+        }
+        return object;
+    }
 }

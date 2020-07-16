@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,31 +24,32 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
+
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String regex;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Optional<Path> destinationPathRelative(Path pathDelegate) throws AnchorIOException {
-		return destinationPathRelative(pathDelegate, regex);
-	}
-	
-	protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex) throws AnchorIOException;
-		
-	public String getRegex() {
-		return regex;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String regex;
+    // END BEAN PROPERTIES
 
-	public void setRegex(String regex) {
-		this.regex = regex;
-	}
+    @Override
+    public Optional<Path> destinationPathRelative(Path pathDelegate) throws AnchorIOException {
+        return destinationPathRelative(pathDelegate, regex);
+    }
+
+    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex)
+            throws AnchorIOException;
+
+    public String getRegex() {
+        return regex;
+    }
+
+    public void setRegex(String regex) {
+        this.regex = regex;
+    }
 }

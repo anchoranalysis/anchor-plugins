@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.pair;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +24,11 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -40,117 +40,112 @@ import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPai
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 
 /**
- * Combines two object-masks by:
- *   1. dilating objMask1 by iterations1
- *   2. dilating objMask2 by iterations2
- *   3. finding the intersection of 1. and 2.
- *   4. then eroding by iterationsErosion 
- * 
- *  This is NOT commutative:  f(a,b)==f(b,a)
- * 
- * @author Owen Feehan
+ * Procedure to calculate an area of intersection between two objects (termed first and second)
  *
+ * <p>Specifically, this is achieved by:
+ *
+ * <ul>
+ *   <li>dilating {@code first} by {@code iterationsFirst}
+ *   <li>dilating {@code second} by {@code iterationsSecond}
+ *   <li>finding the intersection of 1. and 2.
+ *   <li>then eroding by {@code iterationsErosion}
+ * </ul>
+ *
+ * <p>This is NOT commutative: {@code f(a,b)!=f(b,a)}
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode(callSuper=false)
-class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+class CalculatePairIntersection
+        extends FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> {
 
-	private final boolean do3D;
-	private final int iterationsErosion;
-	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> left;
-	private final ResolvedCalculation<ObjectMask,FeatureInputPairObjects> right;
-	
-	public static ResolvedCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createFromCache(
-		SessionInput<FeatureInputPairObjects> cache,
-		ChildCacheName cacheChildName1,
-		ChildCacheName cacheChildName2,
-		int iterations1,
-		int iterations2,
-		boolean do3D,
-		int iterationsErosion
-	) {
-		// We use two additional caches, for the calculations involving the single objects, as these can be expensive, and we want
-		//  them also cached
-		return cache.resolver().search(
-			new CalculatePairIntersection(
-				do3D,
-				iterationsErosion,
-				cache.resolver().search(
-					CalculateDilatedFromPair.createFromCache(
-						cache.resolver(),
-						cache.forChild(),
-						Extract.FIRST,
-						cacheChildName1,
-						iterations1,
-						do3D
-					)
-				),
-				cache.resolver().search(
-					CalculateDilatedFromPair.createFromCache(
-						cache.resolver(),
-						cache.forChild(),
-						Extract.SECOND,
-						cacheChildName2,
-						iterations2,
-						do3D
-					)
-				)
-			)
-		);
-	}
+    private final boolean do3D;
+    private final int iterationsErosion;
+    private final ResolvedCalculation<ObjectMask, FeatureInputPairObjects> first;
+    private final ResolvedCalculation<ObjectMask, FeatureInputPairObjects> second;
 
-	@Override
-	protected Optional<ObjectMask> execute( FeatureInputPairObjects input ) throws FeatureCalcException {
-	
-		ImageDimensions dim = input.getDimensionsRequired();
-				
-		ObjectMask om1Dilated = left.getOrCalculate(input);
-		ObjectMask om2Dilated = right.getOrCalculate(input);
-		
-		Optional<ObjectMask> omIntersection = om1Dilated.intersect(om2Dilated, dim );
-				
-		if (!omIntersection.isPresent()) {
-			return Optional.empty();
-		}
-		
-		assert( omIntersection.get().hasPixelsGreaterThan(0) );
-		
-		try {
-			if (iterationsErosion>0) {
-				return erode(input, omIntersection.get(), dim);
-			} else {
-				return omIntersection;
-			}
-			
-		} catch (CreateException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	private Optional<ObjectMask> erode( FeatureInputPairObjects params, ObjectMask omIntersection, ImageDimensions dim ) throws CreateException {
+    public static ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> of(
+            SessionInput<FeatureInputPairObjects> cache,
+            ChildCacheName cacheLeft,
+            ChildCacheName cacheRight,
+            int iterationsFirst,
+            int iterationsSecond,
+            boolean do3D,
+            int iterationsErosion) {
+        // We use two additional caches, for the calculations involving the single objects, as these
+        // can be expensive, and we want
+        //  them also cached
+        return cache.resolver()
+                .search(
+                        new CalculatePairIntersection(
+                                do3D,
+                                iterationsErosion,
+                                cache.resolver()
+                                        .search(
+                                                CalculateDilatedFromPair.of(
+                                                        cache.resolver(),
+                                                        cache.forChild(),
+                                                        Extract.FIRST,
+                                                        cacheLeft,
+                                                        iterationsFirst,
+                                                        do3D)),
+                                cache.resolver()
+                                        .search(
+                                                CalculateDilatedFromPair.of(
+                                                        cache.resolver(),
+                                                        cache.forChild(),
+                                                        Extract.SECOND,
+                                                        cacheRight,
+                                                        iterationsSecond,
+                                                        do3D))));
+    }
 
-		ObjectMask omMerged = params.getMerged();
-		
-		// We merge the two masks, and then erode it, and use this as a mask on the input object
-		if (omMerged==null) {
-			omMerged = ObjectMaskMerger.merge( params.getFirst(), params.getSecond() );
-		}
-		
-		ObjectMask omMergedEroded = MorphologicalErosion.createErodedObjMask(
-			omMerged,
-			Optional.of(dim.getExtent()),
-			do3D,
-			iterationsErosion,
-			true,
-			Optional.empty()
-		);
-		
-		Optional<ObjectMask> omIntersect = omIntersection.intersect(omMergedEroded, dim);
-		omIntersect.ifPresent( om-> { assert( om.hasPixelsGreaterThan(0) ); });
-		return omIntersect;
-	}
+    @Override
+    protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
+            throws FeatureCalcException {
+
+        ImageDimensions dimensions = input.getDimensionsRequired();
+
+        ObjectMask object1Dilated = first.getOrCalculate(input);
+        ObjectMask object2Dilated = second.getOrCalculate(input);
+
+        Optional<ObjectMask> omIntersection = object1Dilated.intersect(object2Dilated, dimensions);
+
+        if (!omIntersection.isPresent()) {
+            return Optional.empty();
+        }
+
+        assert (omIntersection.get().hasPixelsGreaterThan(0));
+
+        try {
+            if (iterationsErosion > 0) {
+                return erode(input, omIntersection.get(), dimensions);
+            } else {
+                return omIntersection;
+            }
+
+        } catch (CreateException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
+
+    private Optional<ObjectMask> erode(
+            FeatureInputPairObjects input, ObjectMask intersection, ImageDimensions dimensions)
+            throws CreateException {
+
+        // We erode it, and use this as a mask on the input object
+        ObjectMask eroded =
+                MorphologicalErosion.createErodedObject(
+                        input.getMerged(),
+                        Optional.of(dimensions.getExtent()),
+                        do3D,
+                        iterationsErosion,
+                        true,
+                        Optional.empty());
+
+        return intersection.intersect(eroded, dimensions);
+    }
 }

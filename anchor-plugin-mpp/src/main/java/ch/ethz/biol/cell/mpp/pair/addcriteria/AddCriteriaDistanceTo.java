@@ -1,19 +1,8 @@
-package ch.ethz.biol.cell.mpp.pair.addcriteria;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
-import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +24,17 @@ import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.pair.addcriteria;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
+import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
+import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -43,43 +42,44 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class AddCriteriaDistanceTo extends AddCriteriaPair {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private UnitValueDistance threshold;
-	
-	@BeanField @Getter @Setter
-	private MarkDistance distance;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
-		double d;
-		try {
-			d = distance.distance(mark1.getMark(), mark2.getMark());
-		} catch (UnsupportedMarkTypeException e) {
-			throw new IncludeMarksFailureException(e);
-		}
-		
-		try {
-			double thresholdVal = threshold.rslv(
-				Optional.of(dim.getRes()),
-				mark1.getMark().centerPoint(),
-				mark2.getMark().centerPoint()
-			);
-			return d < thresholdVal;
-			
-		} catch (OperationFailedException e) {
-			throw new IncludeMarksFailureException(e);
-		}
-	}
 
-	@Override
-	public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
-		return Optional.empty();
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private UnitValueDistance threshold;
+
+    @BeanField @Getter @Setter private MarkDistance distance;
+    // END BEAN PROPERTIES
+
+    @Override
+    public boolean includeMarks(
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
+            ImageDimensions dimensions,
+            Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
+            boolean do3D)
+            throws IncludeMarksFailureException {
+        double d;
+        try {
+            d = distance.distance(mark1.getMark(), mark2.getMark());
+        } catch (UnsupportedMarkTypeException e) {
+            throw new IncludeMarksFailureException(e);
+        }
+
+        try {
+            double thresholdVal =
+                    threshold.resolve(
+                            Optional.of(dimensions.getRes()),
+                            mark1.getMark().centerPoint(),
+                            mark2.getMark().centerPoint());
+            return d < thresholdVal;
+
+        } catch (OperationFailedException e) {
+            throw new IncludeMarksFailureException(e);
+        }
+    }
+
+    @Override
+    public Optional<FeatureList<FeatureInputPairMemo>> orderedListOfFeatures() {
+        return Optional.empty();
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.strategy;
-
 /*-
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,12 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.strategy;
+
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.gui.annotation.bean.label.AnnotationLabel;
@@ -36,34 +37,28 @@ import org.anchoranalysis.gui.annotation.bean.label.GroupedAnnotationLabels;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private List<AnnotationLabel> labels;
-	
-	@BeanField @Getter @Setter
-	private int weightWidthDescription;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private List<AnnotationLabel> labels;
 
-	@Override
-	public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
-		return ReadAnnotationFromFile.readCheckExists(
-			annotationPathFor(item)
-		).map(WholeImageLabelAnnotation::getLabel);
-	}
-	
-	// This is actually called twice during a typically opening of an annotation
-	// But overhead is minor (assuming not very many labels)
-	public GroupedAnnotationLabels groupedLabels() {
-		return new GroupedAnnotationLabels(labels);
-	}
-	
-	@Override
-	public int weightWidthDescription() {
-		return weightWidthDescription;
-	}
+    @BeanField @Getter @Setter private int weightWidthDescription;
+    // END BEAN PROPERTIES
+
+    @Override
+    public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
+        return ReadAnnotationFromFile.readCheckExists(annotationPathFor(item))
+                .map(WholeImageLabelAnnotation::getLabel);
+    }
+
+    // This is actually called twice during a typically opening of an annotation
+    // But overhead is minor (assuming not very many labels)
+    public GroupedAnnotationLabels groupedLabels() {
+        return new GroupedAnnotationLabels(labels);
+    }
+
+    @Override
+    public int weightWidthDescription() {
+        return weightWidthDescription;
+    }
 }

@@ -1,17 +1,8 @@
-package ch.ethz.biol.cell.mpp.mark.check;
-
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
-import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidUtilities;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-
 /*-
  * #%L
- * anchor-mpp-feature
+ * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,47 +24,60 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.mark.check;
+
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
+import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.conic.EllipsoidUtilities;
+import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class EllipsoidBoundsCheck extends CheckMark {
 
-	
-	
-	// START BEAN PROPERTIES
-	
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
 
-	
-	@Override
-	public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) throws CheckException {
-		
-		try {
-			MarkEllipsoid me = (MarkEllipsoid) mark;
-			
-			double minBound = getInitializationParameters().getMarkBounds().getMinRslvd(nrgStack.getDimensions().getRes(), true);
-			double maxBound = getInitializationParameters().getMarkBounds().getMaxRslvd(nrgStack.getDimensions().getRes(), true);
-			
-			double[] normalisedRadii = EllipsoidUtilities.normalisedRadii( me, nrgStack.getDimensions().getRes() );
-			
-			for( int i=0; i<3; i++) {
-				if (normalisedRadii[i] < minBound) {
-					return false;
-				}
-				if (normalisedRadii[i] > maxBound) {
-					return false;
-				}		
-			}
-			
-		} catch (NamedProviderGetException e) {
-			throw new CheckException("Cannot establish bounds", e.summarize());
-		}
-		
-		return true;
-	}
+    // END BEAN PROPERTIES
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkEllipsoid;
-	}
+    @Override
+    public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack)
+            throws CheckException {
+
+        try {
+            MarkEllipsoid me = (MarkEllipsoid) mark;
+
+            double minBound =
+                    getInitializationParameters()
+                            .getMarkBounds()
+                            .getMinResolved(nrgStack.getDimensions().getRes(), true);
+            double maxBound =
+                    getInitializationParameters()
+                            .getMarkBounds()
+                            .getMaxResolved(nrgStack.getDimensions().getRes(), true);
+
+            double[] normalisedRadii =
+                    EllipsoidUtilities.normalisedRadii(me, nrgStack.getDimensions().getRes());
+
+            for (int i = 0; i < 3; i++) {
+                if (normalisedRadii[i] < minBound) {
+                    return false;
+                }
+                if (normalisedRadii[i] > maxBound) {
+                    return false;
+                }
+            }
+
+        } catch (NamedProviderGetException e) {
+            throw new CheckException("Cannot establish bounds", e.summarize());
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return testMark instanceof MarkEllipsoid;
+    }
 }

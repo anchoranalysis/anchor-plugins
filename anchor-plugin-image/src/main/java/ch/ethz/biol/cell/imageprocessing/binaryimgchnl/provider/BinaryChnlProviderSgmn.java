@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,19 +24,22 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
+
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.nonbean.error.SgmnFailedException;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.bean.segmentation.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -48,74 +49,43 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private BinarySegmentation sgmn;
-	
-	@BeanField @OptionalBean 
-	private HistogramProvider histogramProvider;
-	
-	@BeanField @OptionalBean
-	private BinaryChnlProvider mask;
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
-		return new BinaryChnl(
-				sgmnResult(chnlSource),
-				chnlSource.getDimensions().getRes(),
-				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE)
-			);
-	}
-	
-	private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
-		Optional<ObjectMask> omMask = mask(chnl.getDimensions());
-		
-		BinarySegmentationParameters params = createParams(chnl.getDimensions()); 
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private BinarySegmentation sgmn;
 
-		try {
-			return sgmn.sgmn(chnl.getVoxelBox(), params, omMask);
-		
-		} catch (SgmnFailedException e) {
-			throw new CreateException(e);
-		}
-	}
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
 
-	private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
-		return new BinarySegmentationParameters(
-			dim.getRes(),
-			OptionalFactory.create(histogramProvider)
-		);
-	}
-	
-	private Optional<ObjectMask> mask(ImageDimensions dim) throws CreateException {
-		Optional<BinaryChnl> maskChnl = ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
-		return maskChnl.map( chnl->
-			new ObjectMask(chnl.binaryVoxelBox())
-		);
-	}
+    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
+    // END BEAN PROPERTIES
 
-	public BinarySegmentation getSgmn() {
-		return sgmn;
-	}
+    @Override
+    protected Mask createFromSource(Channel chnlSource) throws CreateException {
+        return new Mask(
+                sgmnResult(chnlSource),
+                chnlSource.getDimensions().getRes(),
+                ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE));
+    }
 
-	public void setSgmn(BinarySegmentation sgmn) {
-		this.sgmn = sgmn;
-	}
+    private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
+        Optional<ObjectMask> omMask = mask(chnl.getDimensions());
 
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
+        BinarySegmentationParameters params = createParams(chnl.getDimensions());
 
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
+        try {
+            return sgmn.sgmn(chnl.getVoxelBox(), params, omMask);
 
-	public BinaryChnlProvider getMask() {
-		return mask;
-	}
+        } catch (SegmentationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
 
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
-	}
+    private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
+        return new BinarySegmentationParameters(
+                dim.getRes(), OptionalFactory.create(histogramProvider));
+    }
+
+    private Optional<ObjectMask> mask(ImageDimensions dim) throws CreateException {
+        Optional<Mask> maskChnl =
+                ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
+        return maskChnl.map(chnl -> new ObjectMask(chnl.binaryVoxelBox()));
+    }
 }

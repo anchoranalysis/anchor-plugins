@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -37,52 +38,26 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
+/**
+ * TODO change property names
+ *
+ * @author Owen Feehan
+ */
 public class ChnlProviderEmpty extends ChnlProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int sx = 1024;
-	
-	@BeanField
-	private int sy = 768;
-	
-	@BeanField
-	private int sz = 1;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int sx = 1024;
 
-	@Override
-	public Channel create() throws CreateException {
-		ImageDimensions dim = new ImageDimensions(
-			new Extent(sx,sy,sz),
-			new ImageResolution()
-		); 
-		return ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.INSTANCE );
-	}
+    @BeanField @Getter @Setter private int sy = 768;
 
-	public int getSx() {
-		return sx;
-	}
+    @BeanField @Getter @Setter private int sz = 1;
+    // END BEAN PROPERTIES
 
-	public void setSx(int sx) {
-		this.sx = sx;
-	}
-
-	public int getSy() {
-		return sy;
-	}
-
-	public void setSy(int sy) {
-		this.sy = sy;
-	}
-
-	public int getSz() {
-		return sz;
-	}
-
-	public void setSz(int sz) {
-		this.sz = sz;
-	}
-
-	
-
+    @Override
+    public Channel create() throws CreateException {
+        ImageDimensions dimensions =
+                new ImageDimensions(new Extent(sx, sy, sz), new ImageResolution());
+        return ChannelFactory.instance()
+                .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+    }
 }

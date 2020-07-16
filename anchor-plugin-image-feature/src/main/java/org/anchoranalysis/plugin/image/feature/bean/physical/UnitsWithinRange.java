@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.physical;
-
-import java.util.Optional;
-
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +24,11 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.physical;
+
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
@@ -39,99 +40,57 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
 /**
  * Checks if a value lies within a range defined by units (a minimum and maximum boundary)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature input-type
- * 
  */
 public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
 
-	// START BEAN PROPERTIES
-	/** Returned as a constant if a value lies within the range */
-	@BeanField
-	private double within = 0;
+    // START BEAN PROPERTIES
+    /** Returned as a constant if a value lies within the range */
+    @BeanField @Getter @Setter private double within = 0;
 
-	/** Returned as a constant if a value lies otside the range */
-	@BeanField
-	private double outside = -10;
-	
-	/** 
-	 * Minimum-boundary for acceptable range 
-	 * 
-	 * We default to volume as units, but it could also be area. It's arbitrary for 0-value.
-	 **/
-	@BeanField
-	private UnitValueAreaOrVolume min = new UnitValueVolumeVoxels( 0 );
-	
-	/** 
-	 * Maximum-boundary for acceptable range 
-	 * 
-	 * We default to volume as units, but it could also be area. It's arbitrary for infinity-value.
-	 **/
-	@BeanField
-	private UnitValueAreaOrVolume max = new UnitValueVolumeVoxels( Double.MAX_VALUE );
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected double calcWithRes( double value, ImageResolution res ) throws FeatureCalcException {
-		
-		try {
-			Optional<ImageResolution> resOpt = Optional.of(res);
-			double minVoxels = min.rslv(resOpt);
-			double maxVoxels = max.rslv(resOpt);
-					
-			if (value >= minVoxels && value <= maxVoxels) {
-				return within;
-			} else {
-				return outside;
-			}
-			
-		} catch (UnitValueException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format(
-			"min=%s,max=%s,within=%8.3f outside=%8.3f",
-			min,
-			max,
-			within,
-			outside
-		);
-	}
+    /** Returned as a constant if a value lies otside the range */
+    @BeanField @Getter @Setter private double outside = -10;
 
-	public UnitValueAreaOrVolume getMin() {
-		return min;
-	}
+    /**
+     * Minimum-boundary for acceptable range
+     *
+     * <p>We default to volume as units, but it could also be area. It's arbitrary for 0-value.
+     */
+    @BeanField @Getter @Setter private UnitValueAreaOrVolume min = new UnitValueVolumeVoxels(0);
 
-	public void setMin(UnitValueAreaOrVolume min) {
-		this.min = min;
-	}
+    /**
+     * Maximum-boundary for acceptable range
+     *
+     * <p>We default to volume as units, but it could also be area. It's arbitrary for
+     * infinity-value.
+     */
+    @BeanField @Getter @Setter
+    private UnitValueAreaOrVolume max = new UnitValueVolumeVoxels(Double.MAX_VALUE);
+    // END BEAN PROPERTIES
 
-	public UnitValueAreaOrVolume getMax() {
-		return max;
-	}
+    @Override
+    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
 
-	public void setMax(UnitValueAreaOrVolume max) {
-		this.max = max;
-	}
+        try {
+            Optional<ImageResolution> resOpt = Optional.of(res);
+            double minVoxels = min.resolveToVoxels(resOpt);
+            double maxVoxels = max.resolveToVoxels(resOpt);
 
-	public double getWithin() {
-		return within;
-	}
+            if (value >= minVoxels && value <= maxVoxels) {
+                return within;
+            } else {
+                return outside;
+            }
 
-	public void setWithin(double within) {
-		this.within = within;
-	}
+        } catch (UnitValueException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 
-	public double getOutside() {
-		return outside;
-	}
-
-	public void setOutside(double outside) {
-		this.outside = outside;
-	}
+    @Override
+    public String getParamDscr() {
+        return String.format("min=%s,max=%s,within=%8.3f outside=%8.3f", min, max, within, outside);
+    }
 }

@@ -1,19 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +24,15 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
@@ -45,66 +42,66 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class LongestExtent extends OrientationProposer {
 
-	// START BEAN
-	@BeanField
-	private double incrementDegrees = 1;
-	
-	@BeanField
-	private BoundCalculator boundCalculator;
-	// END BEAN
-	
-	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
-		
-		MarkAbstractPosition markC = (MarkAbstractPosition) mark;
-		
-		double incrementRadians = (incrementDegrees / 180) * Math.PI;
-		
-		double maxExtent = -1;
-		double angleAtMax = 0;
-		
-		// We loop through every positive angle and pick the one with the greatest extent
-		for (double angle=0; angle < Math.PI; angle += incrementRadians) {
-		
-			BidirectionalBound bib;
-			
-			try {
-				bib = boundCalculator.calcBound( markC.getPos(), new Orientation2D( angle ).createRotationMatrix());
-			} catch (OperationFailedException e) {
-				throw new ProposalAbnormalFailureException(e);
-			}
-			
-			double max = bib.getMaxOfMax();
-			
-			if (max>maxExtent) {
-				max = maxExtent;
-				angleAtMax = angle;
-			}
-		}
-		
-		return Optional.of(
-			new Orientation2D( angleAtMax )
-		);
-	}
+    // START BEAN
+    @BeanField private double incrementDegrees = 1;
 
-	public double getIncrementDegrees() {
-		return incrementDegrees;
-	}
+    @BeanField private BoundCalculator boundCalculator;
+    // END BEAN
 
-	public void setIncrementDegrees(double incrementDegrees) {
-		this.incrementDegrees = incrementDegrees;
-	}
+    @Override
+    public Optional<Orientation> propose(
+            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator)
+            throws ProposalAbnormalFailureException {
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return testMark instanceof MarkAbstractPosition;
-	}
+        MarkAbstractPosition markC = (MarkAbstractPosition) mark;
 
-	public BoundCalculator getBoundCalculator() {
-		return boundCalculator;
-	}
+        double incrementRadians = (incrementDegrees / 180) * Math.PI;
 
-	public void setBoundCalculator(BoundCalculator boundCalculator) {
-		this.boundCalculator = boundCalculator;
-	}
+        double maxExtent = -1;
+        double angleAtMax = 0;
+
+        // We loop through every positive angle and pick the one with the greatest extent
+        for (double angle = 0; angle < Math.PI; angle += incrementRadians) {
+
+            BidirectionalBound bib;
+
+            try {
+                bib =
+                        boundCalculator.calcBound(
+                                markC.getPos(), new Orientation2D(angle).createRotationMatrix());
+            } catch (OperationFailedException e) {
+                throw new ProposalAbnormalFailureException(e);
+            }
+
+            double max = bib.getMaxOfMax();
+
+            if (max > maxExtent) {
+                max = maxExtent;
+                angleAtMax = angle;
+            }
+        }
+
+        return Optional.of(new Orientation2D(angleAtMax));
+    }
+
+    public double getIncrementDegrees() {
+        return incrementDegrees;
+    }
+
+    public void setIncrementDegrees(double incrementDegrees) {
+        this.incrementDegrees = incrementDegrees;
+    }
+
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return testMark instanceof MarkAbstractPosition;
+    }
+
+    public BoundCalculator getBoundCalculator() {
+        return boundCalculator;
+    }
+
+    public void setBoundCalculator(BoundCalculator boundCalculator) {
+        this.boundCalculator = boundCalculator;
+    }
 }

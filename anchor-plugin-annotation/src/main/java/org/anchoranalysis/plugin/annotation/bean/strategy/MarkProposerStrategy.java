@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.strategy;
-
 /*-
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,13 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.strategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.MarkEvaluator;
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,109 +41,42 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 /** Annotates each image with a mark */
 public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String markProposerName;
-	
-	@BeanField
-	private String pointsFitterName;
-	
-	@BeanField
-	private String markEvaluatorName;
-	
-	@BeanField @OptionalBean
-	private FilePathGenerator defaultCfgFilePathGenerator;
-	
-	@BeanField @OptionalBean
-	private FilePathGenerator keyValueParamsFilePathGenerator;
-	
-	@BeanField @OptionalBean
-	private List<FilePathGenerator> listDisplayRasters = new ArrayList<>();
-	
-	@BeanField @OptionalBean
-	private MultipleComparer multipleComparer;
-	
-	/** If-defined, mark-evaluator that is added to the GUI to support this annotation */
-	@BeanField @OptionalBean
-	private MarkEvaluator markEvaluator;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String markProposerName;
 
-	public Optional<FilePathGenerator> paramsFilePathGenerator() {
-		return Optional.ofNullable(keyValueParamsFilePathGenerator);
-	}
-	
-	public Optional<FilePathGenerator> cfgFilePathGenerator() {
-		return Optional.ofNullable(defaultCfgFilePathGenerator);
-	}
-	
-	@Override
-	public int weightWidthDescription() {
-		return 1;
-	}
-	
-	@Override
-	public Optional<String> annotationLabelFor(ProvidesStackInput item) {
-		return Optional.empty();
-	}
-	
-	public MarkEvaluator getMarkEvaluator() {
-		return markEvaluator;
-	}
-	public void setMarkEvaluator(MarkEvaluator markEvaluator) {
-		this.markEvaluator = markEvaluator;
-	}
+    @BeanField @Getter @Setter private String pointsFitterName;
 
-	public String getMarkProposerName() {
-		return markProposerName;
-	}
-	public void setMarkProposerName(String markProposerName) {
-		this.markProposerName = markProposerName;
-	}
-	public String getPointsFitterName() {
-		return pointsFitterName;
-	}
-	public void setPointsFitterName(String pointsFitterName) {
-		this.pointsFitterName = pointsFitterName;
-	}
-	
-	public String getMarkEvaluatorName() {
-		return markEvaluatorName;
-	}
-	public void setMarkEvaluatorName(String markEvaluatorName) {
-		this.markEvaluatorName = markEvaluatorName;
-	}
+    @BeanField @Getter @Setter private String markEvaluatorName;
 
-	public FilePathGenerator getDefaultCfgFilePathGenerator() {
-		return defaultCfgFilePathGenerator;
-	}
+    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator defaultCfgFilePathGenerator;
 
-	public void setDefaultCfgFilePathGenerator(
-			FilePathGenerator defaultCfgFilePathGenerator) {
-		this.defaultCfgFilePathGenerator = defaultCfgFilePathGenerator;
-	}
+    @BeanField @OptionalBean @Getter @Setter
+    private FilePathGenerator keyValueParamsFilePathGenerator;
 
-	public FilePathGenerator getKeyValueParamsFilePathGenerator() {
-		return keyValueParamsFilePathGenerator;
-	}
+    @BeanField @OptionalBean @Getter @Setter
+    private List<FilePathGenerator> listDisplayRasters = new ArrayList<>();
 
-	public void setKeyValueParamsFilePathGenerator(
-			FilePathGenerator keyValueParamsFilePathGenerator) {
-		this.keyValueParamsFilePathGenerator = keyValueParamsFilePathGenerator;
-	}
+    @BeanField @OptionalBean @Getter @Setter private MultipleComparer multipleComparer;
 
-	public List<FilePathGenerator> getListDisplayRasters() {
-		return listDisplayRasters;
-	}
+    /** If-defined, mark-evaluator that is added to the GUI to support this annotation */
+    @BeanField @OptionalBean @Getter @Setter private MarkEvaluator markEvaluator;
+    // END BEAN PROPERTIES
 
-	public void setListDisplayRasters(List<FilePathGenerator> listDisplayRasters) {
-		this.listDisplayRasters = listDisplayRasters;
-	}
+    public Optional<FilePathGenerator> paramsFilePathGenerator() {
+        return Optional.ofNullable(keyValueParamsFilePathGenerator);
+    }
 
-	public MultipleComparer getMultipleComparer() {
-		return multipleComparer;
-	}
+    public Optional<FilePathGenerator> cfgFilePathGenerator() {
+        return Optional.ofNullable(defaultCfgFilePathGenerator);
+    }
 
-	public void setMultipleComparer(MultipleComparer multipleComparer) {
-		this.multipleComparer = multipleComparer;
-	}
+    @Override
+    public int weightWidthDescription() {
+        return 1;
+    }
+
+    @Override
+    public Optional<String> annotationLabelFor(ProvidesStackInput item) {
+        return Optional.empty();
+    }
 }

@@ -1,15 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
-
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
-
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -17,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,32 +24,33 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CfgNRGPixelizedFactory {
-	
-	public static CfgNRGPixelized createFromCfg(
-		Cfg cfg,
-		KernelCalcContext context,
-		Logger logger
-	) throws CreateException {
-		try {
-			return new CfgNRGPixelized(
-				new CfgNRG( new CfgWithNRGTotal(cfg, context.getNrgScheme())),
-				context.proposer().getNrgStack(),
-				context.getNrgScheme().getSharedFeatures(),
-				logger
-			);			
-		} catch (FeatureCalcException | InitException e ) {
-			throw new CreateException(e);
-		}
-	}
+
+    public static CfgNRGPixelized createFromCfg(Cfg cfg, KernelCalcContext context, Logger logger)
+            throws CreateException {
+        try {
+            return new CfgNRGPixelized(
+                    new CfgNRG(new CfgWithNRGTotal(cfg, context.getNrgScheme())),
+                    context.proposer().getNrgStack(),
+                    context.getNrgScheme().getSharedFeatures(),
+                    logger);
+        } catch (FeatureCalcException | InitException e) {
+            throw new CreateException(e);
+        }
+    }
 }

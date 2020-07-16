@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.io.multifile;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,93 +24,79 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.multifile;
+
+import java.util.Optional;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 
-
 /**
  * Remembers the different sizes among the files
- * <p>
- * It assumes numbering in ranges begins from 0 inclusive.
- * 
- * @author Owen Feehan
  *
+ * <p>It assumes numbering in ranges begins from 0 inclusive.
+ *
+ * @author Owen Feehan
  */
 public class SizeExtents {
-	
-	private Optional<IntegerRange> rangeZ;
-	private Optional<IntegerRange> rangeC;
-	private Optional<IntegerRange> rangeT;
-	
-	private Integer sizeX = null;
-	private Integer sizeY = null;
-	
-	// Assumes numbering starts from 0
-	public SizeExtents( ParsedFilePathBag fileBag ) {
-		this.rangeZ = fileBag.rangeSliceNum();
-		this.rangeC = fileBag.rangeChnlNum();
-		this.rangeT = fileBag.rangeTimeIndex();
-	}
-	
-	public boolean hasNecessaryExtents() {
-		return rangeC.isPresent() && rangeZ.isPresent() && rangeT.isPresent();
-	}
-	
-	public void populateMissingFromArbitrarySlice( Stack stackArbitrarySlice ) {
-		
-		sizeX = stackArbitrarySlice.getDimensions().getX();
-		sizeY = stackArbitrarySlice.getDimensions().getY();
-		
-		if (!rangeC.isPresent()) {
-			rangeC = Optional.of(
-				new IntegerRange(
-					stackArbitrarySlice.getNumChnl()
-				)
-			);
-		}
-		
-		if (!rangeZ.isPresent()) {
-			rangeZ = Optional.of(
-				new IntegerRange(
-					stackArbitrarySlice.getDimensions().getZ()
-				)
-			);
-		}
-		
-		if (!rangeT.isPresent()) {
-			// If there's no indexes associated with the files, we assume there's a single index
-			rangeT = Optional.of( 
-				new IntegerRange(1)
-			);
-		}
-	}
-	
 
-	public Extent toExtent() {
-		 return new Extent(
-			sizeX,
-			sizeY,
-			rangeZ.get().getSize()
-		);
-	}
+    private Optional<IntegerRange> rangeZ;
+    private Optional<IntegerRange> rangeC;
+    private Optional<IntegerRange> rangeT;
 
-	public IntegerRange getRangeZ() {
-		return rangeZ.get();
-	}
+    private Integer sizeX = null;
+    private Integer sizeY = null;
 
-	public IntegerRange getRangeC() {
-		return rangeC.get();
-	}
+    // Assumes numbering starts from 0
+    public SizeExtents(ParsedFilePathBag fileBag) {
+        this.rangeZ = fileBag.rangeSliceNum();
+        this.rangeC = fileBag.rangeChnlNum();
+        this.rangeT = fileBag.rangeTimeIndex();
+    }
 
-	public IntegerRange getRangeT() {
-		return rangeT.get();
-	}
+    public boolean hasNecessaryExtents() {
+        return rangeC.isPresent() && rangeZ.isPresent() && rangeT.isPresent();
+    }
 
-	public boolean rangeTPresent() {
-		return rangeT.isPresent();
-	}
+    public void populateMissingFromArbitrarySlice(Stack stackArbitrarySlice) {
 
-	public boolean rangeCPresent() {
-		return rangeC.isPresent();
-	}
+        sizeX = stackArbitrarySlice.getDimensions().getX();
+        sizeY = stackArbitrarySlice.getDimensions().getY();
+
+        if (!rangeC.isPresent()) {
+            rangeC = Optional.of(new IntegerRange(stackArbitrarySlice.getNumChnl()));
+        }
+
+        if (!rangeZ.isPresent()) {
+            rangeZ = Optional.of(new IntegerRange(stackArbitrarySlice.getDimensions().getZ()));
+        }
+
+        if (!rangeT.isPresent()) {
+            // If there's no indexes associated with the files, we assume there's a single index
+            rangeT = Optional.of(new IntegerRange(1));
+        }
+    }
+
+    public Extent toExtent() {
+        return new Extent(sizeX, sizeY, rangeZ.map(IntegerRange::getSize).orElse(1));
+    }
+
+    public IntegerRange getRangeZ() {
+        return rangeZ.get();
+    }
+
+    public IntegerRange getRangeC() {
+        return rangeC.get();
+    }
+
+    public IntegerRange getRangeT() {
+        return rangeT.get();
+    }
+
+    public boolean rangeTPresent() {
+        return rangeT.isPresent();
+    }
+
+    public boolean rangeCPresent() {
+        return rangeC.isPresent();
+    }
 }

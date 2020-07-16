@@ -1,17 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,6 +24,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
+
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -40,43 +38,40 @@ import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
-public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg,CfgNRGPixelized> {
+public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, CfgNRGPixelized> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private CreateMarkFromPoints createMark;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public CfgNRGPixelized transform(Cfg in, TransformationContext context) throws OperationFailedException {
-			
-		Optional<Mark> mark = createMark.fitMarkToPointsFromCfg( in, context.getDimensions() );
-		
-		// If we cannot create a mark, there is no proposal
-		Cfg cfg = wrapMark(mark);
-		
-		try {
-			return CfgNRGPixelizedFactory.createFromCfg(
-				cfg,
-				context.getKernelCalcContext(),
-				context.getLogger()
-			);
-		} catch (CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-		
-	public CreateMarkFromPoints getCreateMark() {
-		return createMark;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private CreateMarkFromPoints createMark;
+    // END BEAN PROPERTIES
 
-	public void setCreateMark(CreateMarkFromPoints createMark) {
-		this.createMark = createMark;
-	}
-	
-	private static Cfg wrapMark( Optional<Mark> mark ) {
-		Cfg cfg = new Cfg();
-		mark.ifPresent(cfg::add);
-		return cfg;
-	}
+    @Override
+    public CfgNRGPixelized transform(Cfg in, TransformationContext context)
+            throws OperationFailedException {
+
+        Optional<Mark> mark = createMark.fitMarkToPointsFromCfg(in, context.getDimensions());
+
+        // If we cannot create a mark, there is no proposal
+        Cfg cfg = wrapMark(mark);
+
+        try {
+            return CfgNRGPixelizedFactory.createFromCfg(
+                    cfg, context.getKernelCalcContext(), context.getLogger());
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    public CreateMarkFromPoints getCreateMark() {
+        return createMark;
+    }
+
+    public void setCreateMark(CreateMarkFromPoints createMark) {
+        this.createMark = createMark;
+    }
+
+    private static Cfg wrapMark(Optional<Mark> mark) {
+        Cfg cfg = new Cfg();
+        mark.ifPresent(cfg::add);
+        return cfg;
+    }
 }

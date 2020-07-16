@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,43 +35,38 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class ChnlProviderStack extends ChnlProvider {
 
-	// START
-	@BeanField
-	private int chnlIndex = 0;
-	
-	@BeanField
-	private StackProvider stackProvider;
-	// END
-	
-	public ChnlProviderStack() {
-		
-	}
-	
-	public ChnlProviderStack( StackProvider stackProvider ) {
-		this.stackProvider = stackProvider;
-	}
+    // START
+    @BeanField private int chnlIndex = 0;
 
-	@Override
-	public Channel create() throws CreateException {
-		
-		Stack in = stackProvider.create();
-		return in.getChnl(chnlIndex);
-	}
+    @BeanField private StackProvider stackProvider;
+    // END
 
-	public int getChnlIndex() {
-		return chnlIndex;
-	}
+    public ChnlProviderStack() {}
 
-	public void setChnlIndex(int chnlIndex) {
-		this.chnlIndex = chnlIndex;
-	}
+    public ChnlProviderStack(StackProvider stackProvider) {
+        this.stackProvider = stackProvider;
+    }
 
-	public StackProvider getStackProvider() {
-		return stackProvider;
-	}
+    @Override
+    public Channel create() throws CreateException {
 
-	public void setStackProvider(StackProvider stackProvider) {
-		this.stackProvider = stackProvider;
-	}
+        Stack in = stackProvider.create();
+        return in.getChnl(chnlIndex);
+    }
 
+    public int getChnlIndex() {
+        return chnlIndex;
+    }
+
+    public void setChnlIndex(int chnlIndex) {
+        this.chnlIndex = chnlIndex;
+    }
+
+    public StackProvider getStackProvider() {
+        return stackProvider;
+    }
+
+    public void setStackProvider(StackProvider stackProvider) {
+        this.stackProvider = stackProvider;
+    }
 }

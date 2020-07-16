@@ -1,18 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-
-/*
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,8 +24,14 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
-
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
@@ -43,62 +39,58 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
-	
-	// START BEAN LIST
-	@BeanField
-	private CfgProposer cfgProposer;
-	// END BEAN LIST
-	
-	private Optional<Cfg> lastCfg;
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return cfgProposer.isCompatibleWith(testMark);
-	}
+    // START BEAN LIST
+    @BeanField private CfgProposer cfgProposer;
+    // END BEAN LIST
 
-	@Override
-	public Optional<Cfg> makeProposal(Optional<Cfg> exst, KernelCalcContext context ) throws KernelCalcNRGException {
-		this.lastCfg = InitCfgUtilities.propose(cfgProposer, context);
-		return lastCfg;
-	}
+    private Optional<Cfg> lastCfg;
 
-	@Override
-	public double calcAccptProb(
-		int exstSize,
-		int propSize,
-		double poissonIntensity,
-		ImageDimensions sceneSize,
-		double densityRatio
-	) {
-		// We always accept
-		return 1;
-	}
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return cfgProposer.isCompatibleWith(testMark);
+    }
 
-	@Override
-	public String dscrLast() {
-		return String.format(
-			"initialCfg(size=%d)",
-			this.lastCfg.map(Cfg::size).orElse(-1)
-		);
-	}
+    @Override
+    public Optional<Cfg> makeProposal(Optional<Cfg> exst, KernelCalcContext context)
+            throws KernelCalcNRGException {
+        this.lastCfg = InitCfgUtilities.propose(cfgProposer, context);
+        return lastCfg;
+    }
 
-	@Override
-	public void updateAfterAccpt(ListUpdatableMarkSetCollection updatableMarkSetCollection, Cfg exst, Cfg accptd) throws UpdateMarkSetException {
-		// NOTHING TO DO
-	}
+    @Override
+    public double calcAccptProb(
+            int exstSize,
+            int propSize,
+            double poissonIntensity,
+            ImageDimensions dimensions,
+            double densityRatio) {
+        // We always accept
+        return 1;
+    }
 
-	@Override
-	public int[] changedMarkIDArray() {
-		return this.lastCfg.map(
-			Cfg::createIdArr
-		).orElse( new int[]{} );
-	}
+    @Override
+    public String dscrLast() {
+        return String.format("initialCfg(size=%d)", this.lastCfg.map(Cfg::size).orElse(-1));
+    }
 
-	public CfgProposer getCfgProposer() {
-		return cfgProposer;
-	}
+    @Override
+    public void updateAfterAccpt(
+            ListUpdatableMarkSetCollection updatableMarkSetCollection, Cfg exst, Cfg accptd)
+            throws UpdateMarkSetException {
+        // NOTHING TO DO
+    }
 
-	public void setCfgProposer(CfgProposer cfgProposer) {
-		this.cfgProposer = cfgProposer;
-	}
+    @Override
+    public int[] changedMarkIDArray() {
+        return this.lastCfg.map(Cfg::createIdArr).orElse(new int[] {});
+    }
+
+    public CfgProposer getCfgProposer() {
+        return cfgProposer;
+    }
+
+    public void setCfgProposer(CfgProposer cfgProposer) {
+        this.cfgProposer = cfgProposer;
+    }
 }

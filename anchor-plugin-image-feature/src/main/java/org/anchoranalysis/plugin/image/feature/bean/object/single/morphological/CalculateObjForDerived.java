@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,34 +24,32 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological
  * #L%
  */
 
-import java.util.Optional;
+package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
 
+import java.util.Optional;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
-import lombok.EqualsAndHashCode;
+@EqualsAndHashCode(callSuper = true)
+class CalculateObjForDerived
+        extends CalculateInputFromDelegateOption<
+                FeatureInputSingleObject, FeatureInputSingleObject, ObjectMask> {
+    public CalculateObjForDerived(
+            ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDerived) {
+        super(ccDerived);
+    }
 
-@EqualsAndHashCode(callSuper=true)
-class CalculateObjForDerived extends CalculateInputFromDelegateOption<
-	FeatureInputSingleObject,
-	FeatureInputSingleObject,
-	ObjectMask
-> {
-	public CalculateObjForDerived(ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDerived) {
-		super(ccDerived);
-	}
+    @Override
+    protected Optional<FeatureInputSingleObject> deriveFromDelegate(
+            FeatureInputSingleObject input, ObjectMask delegate) {
 
-	@Override
-	protected Optional<FeatureInputSingleObject> deriveFromDelegate(FeatureInputSingleObject input, ObjectMask delegate) {
-		
-		if (delegate==null || !delegate.hasPixelsGreaterThan(0)) {
-			return Optional.empty();
-		}
-		
-		return Optional.of(
-			new FeatureInputSingleObject( delegate, input.getNrgStackOptional() )
-		);
-	}
+        if (delegate == null || !delegate.hasPixelsGreaterThan(0)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new FeatureInputSingleObject(delegate, input.getNrgStackOptional()));
+    }
 }

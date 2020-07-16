@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.summarizer.image;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,31 +24,31 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.summarizer.image;
+
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.summarizer.FrequencyMap;
 
-
 /**
  * Summarzes {@link NamedChnlsInput} in different ways
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type used for summary in frequency-map
  */
 public abstract class SummarizerNamedChnls<T> extends Summarizer<NamedChnlsInput> {
 
-	private FrequencyMap<T> map = new FrequencyMap<>();
-	
-	@Override
-	public String describe() throws OperationFailedException {
-		return map.describe( describeNoun() );
-	}
-	
-	protected abstract String describeNoun();
+    private FrequencyMap<T> map = new FrequencyMap<>();
 
-	protected void incrCount( T key ) {
-		map.incrCount(key);
-	}
+    @Override
+    public String describe() throws OperationFailedException {
+        return map.describe(describeNoun());
+    }
+
+    protected abstract String describeNoun();
+
+    protected void incrCount(T key) {
+        map.incrCount(key);
+    }
 }

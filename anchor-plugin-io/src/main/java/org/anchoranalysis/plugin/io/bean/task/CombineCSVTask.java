@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.task;
-
-/*
+/*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.task;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,15 +24,15 @@ package org.anchoranalysis.plugin.io.bean.task;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.task;
 
 import java.nio.file.Path;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
@@ -47,118 +45,116 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 
 // At the moment, we don't check if the name number of rows/columns exist
-public class CombineCSVTask extends Task<FileInput,CSVWriter> {
+public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String seperator = ",";
-	
-	@BeanField
-	private boolean firstLineHeaders = true;
-	
-	@BeanField
-	private boolean transposed = false;
-	
-	@BeanField
-	private boolean addName = true;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public CSVWriter beforeAnyJobIsExecuted( BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)	throws ExperimentExecutionException {
-	
-		try {
-			Optional<CSVWriter> writer = CSVWriter.createFromOutputManager(
-				"featureReport",
-				outputManager.getDelegate()
-			);
-			
-			if (!writer.isPresent()) {
-				throw new ExperimentExecutionException("'featureReport' output not enabled, as is required");
-			}
-				
-			return writer.get();
-			
-		} catch (AnchorIOException e) {
-			throw new ExperimentExecutionException(e);
-		}
-	}
-	
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
-	}
-	
-	@Override
-	public InputTypesExpected inputTypesExpected() {
-		return new InputTypesExpected(FileInput.class);
-	}
-		
-	@Override
-	public void doJobOnInputObject(InputBound<FileInput,CSVWriter> params) throws JobExecutionException {
-		
-		FileInput inputObject = params.getInputObject();
-		CSVWriter writer = params.getSharedState();
-		
-		if (writer==null || !writer.isOutputEnabled()) {
-			return;
-		}
-		
-		Path inputPath = inputObject.getFile().toPath();
-		try (ReadByLine readByLine = CSVReaderByLine.open(inputPath,seperator,firstLineHeaders)) {
-			
-			String name = addName?inputObject.descriptiveName():null;	// NULL means no-name is added
-			AddWithName addWithName = new AddWithName(writer,firstLineHeaders,name);
-			
-			if (transposed) {
-				addWithName.addTransposed( readByLine );
-			} else {
-				addWithName.addNonTransposed( readByLine );
-			}
-		
-		} catch (CSVReaderException e) {
-			throw new JobExecutionException(e);
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField private String seperator = ",";
 
-	@Override
-	public void afterAllJobsAreExecuted( CSVWriter writer, BoundIOContext context )
-			throws ExperimentExecutionException {
-		
-		if (writer!=null) {
-			writer.close();
-		}
-	}
+    @BeanField private boolean firstLineHeaders = true;
 
-	public String getSeperator() {
-		return seperator;
-	}
+    @BeanField private boolean transposed = false;
 
-	public void setSeperator(String seperator) {
-		this.seperator = seperator;
-	}
+    @BeanField private boolean addName = true;
+    // END BEAN PROPERTIES
 
-	public boolean isFirstLineHeaders() {
-		return firstLineHeaders;
-	}
+    @Override
+    public CSVWriter beforeAnyJobIsExecuted(
+            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            throws ExperimentExecutionException {
 
-	public void setFirstLineHeaders(boolean firstLineHeaders) {
-		this.firstLineHeaders = firstLineHeaders;
-	}
+        try {
+            Optional<CSVWriter> writer =
+                    CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
 
-	public boolean isTransposed() {
-		return transposed;
-	}
+            if (!writer.isPresent()) {
+                throw new ExperimentExecutionException(
+                        "'featureReport' output not enabled, as is required");
+            }
 
-	public void setTransposed(boolean transposed) {
-		this.transposed = transposed;
-	}
+            return writer.get();
 
-	public boolean isAddName() {
-		return addName;
-	}
+        } catch (AnchorIOException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
 
-	public void setAddName(boolean addName) {
-		this.addName = addName;
-	}
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
 
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(FileInput.class);
+    }
+
+    @Override
+    public void doJobOnInputObject(InputBound<FileInput, CSVWriter> params)
+            throws JobExecutionException {
+
+        FileInput inputObject = params.getInputObject();
+        CSVWriter writer = params.getSharedState();
+
+        if (writer == null || !writer.isOutputEnabled()) {
+            return;
+        }
+
+        Path inputPath = inputObject.getFile().toPath();
+        try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
+
+            String name =
+                    addName ? inputObject.descriptiveName() : null; // NULL means no-name is added
+            AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
+
+            if (transposed) {
+                addWithName.addTransposed(readByLine);
+            } else {
+                addWithName.addNonTransposed(readByLine);
+            }
+
+        } catch (CSVReaderException e) {
+            throw new JobExecutionException(e);
+        }
+    }
+
+    @Override
+    public void afterAllJobsAreExecuted(CSVWriter writer, BoundIOContext context)
+            throws ExperimentExecutionException {
+
+        if (writer != null) {
+            writer.close();
+        }
+    }
+
+    public String getSeperator() {
+        return seperator;
+    }
+
+    public void setSeperator(String seperator) {
+        this.seperator = seperator;
+    }
+
+    public boolean isFirstLineHeaders() {
+        return firstLineHeaders;
+    }
+
+    public void setFirstLineHeaders(boolean firstLineHeaders) {
+        this.firstLineHeaders = firstLineHeaders;
+    }
+
+    public boolean isTransposed() {
+        return transposed;
+    }
+
+    public void setTransposed(boolean transposed) {
+        this.transposed = transposed;
+    }
+
+    public boolean isAddName() {
+        return addName;
+    }
+
+    public void setAddName(boolean addName) {
+        this.addName = addName;
+    }
 }

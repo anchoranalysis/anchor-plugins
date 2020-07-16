@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.feature.plugins;
-
 /*-
  * #%L
  * anchor-test-feature-plugins
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.test.feature.plugins;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,24 +24,25 @@ package org.anchoranalysis.test.feature.plugins;
  * #L%
  */
 
-import static org.junit.Assert.assertTrue;
+package org.anchoranalysis.test.feature.plugins;
 
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import static org.junit.Assert.assertTrue;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.feature.calc.results.ResultsVector;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResultsVectorTestUtilities {
 
-	private static double eps = 1e-16;
-	
-	public static void assertCalc( ResultsVector rv, Object... expectedVals  ) {
-		boolean areEquals = rv.equalsPrecision(eps, expectedVals);
-		if (!areEquals) {
-			System.out.println("assertCalc failed");	// NOSONAR
-			System.out.printf("Results: \t%s%n", rv );	// NOSONAR
-		}
-		assertTrue( areEquals );
-	}
+    private static double eps = 1e-16;
+
+    public static void assertCalc(ResultsVector rv, Object... expectedVals) {
+        boolean areEquals = rv.equalsPrecision(eps, expectedVals);
+        if (!areEquals) {
+            System.out.println("assertCalc failed"); // NOSONAR
+            System.out.printf("Results: \t%s%n", rv); // NOSONAR
+        }
+        assertTrue(areEquals);
+    }
 }

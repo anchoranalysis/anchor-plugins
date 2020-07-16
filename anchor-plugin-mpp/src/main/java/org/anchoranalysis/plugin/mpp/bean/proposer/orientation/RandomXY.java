@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
-
-import java.util.Optional;
-
 /*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +24,9 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
+
+import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Vector3d;
@@ -38,18 +37,17 @@ import org.anchoranalysis.image.orientation.OrientationAxisAngle;
 
 public class RandomXY extends OrientationProposer {
 
-	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator re) {
-		return Optional.of(
-			new OrientationAxisAngle(
-				new Vector3d(0,0,1),
-				re.nextDouble() * Math.PI * 2
-			)
-		);
-	}
+    @Override
+    public Optional<Orientation> propose(
+            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
+        return Optional.of(
+                new OrientationAxisAngle(
+                        new Vector3d(0, 0, 1),
+                        randomNumberGenerator.sampleDoubleFromRange(Math.PI * 2)));
+    }
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return true;
-	}
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return true;
+    }
 }

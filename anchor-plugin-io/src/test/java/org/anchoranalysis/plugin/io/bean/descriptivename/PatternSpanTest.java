@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.descriptivename;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,13 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.descriptivename;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
-import org.anchoranalysis.core.functional.FunctionalUtilities;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
@@ -40,82 +40,67 @@ import org.junit.Test;
 
 public class PatternSpanTest {
 
-	private final static Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
-	
-	@Test
-	public void testSimple() throws AnchorIOException {
-		
-		String inputs[] = {
-			"/a/b/c.txt",
-			"/a/d/c.txt",
-			"/a/e/c.txt"
-		};
+    private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 
-		String expected[] = {"b", "d", "e"};
-		applyTest(inputs, expected);
-	}
-	
-	@Test
-	public void testPaths() throws AnchorIOException {
-		String inputs[] = {
-			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
-			"D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
-		};
-		
-		String expected[] = {
-			"P1210940",
-			"Klosters (Feb 2020)/P1210904"
-		};
+    @Test
+    public void testSimple() throws AnchorIOException {
 
-		applyTest(inputs, expected);
-	}
-	
-	@Test
-	public void testEmptyStr() throws AnchorIOException {
-		String inputs[] = {
-			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
-			"D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
-		};
-		
-		String expected[] = {
-			"P1210940.JPG",
-			"P1210940.JPG.TXT"
-		};
+        String inputs[] = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
 
-		applyTest(inputs, expected);
-	}
-	
-	// When there is no extension, the right-side should be kept
-	@Test
-	public void testWithoutExtension() throws AnchorIOException {
-		
-		String inputs[] = {
-			"/a/b/c",
-			"/a/d/c",
-			"/a/e/c"
-		};
+        String expected[] = {"b", "d", "e"};
+        applyTest(inputs, expected);
+    }
 
-		String expected[] = {"b/c", "d/c", "e/c"};
-		applyTest(inputs, expected);
-	}
-	
-	private static void applyTest( String[] paths, String[] expected ) {
-		List<File> files = filesFromStrs(paths);
-		
-		PatternSpan ps = new PatternSpan();
-		List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown", LOGGER);
-		
-		for( int i=0; i<expected.length; i++ ) {
-			assertIndexEquals( ret, i, expected[i]);
-		}
-	}
-	
-	private static List<File> filesFromStrs( String[] paths ) {
-		return FunctionalUtilities.mapToList(paths, File::new);
-	}
-	
-	private static void assertIndexEquals( List<DescriptiveFile> ret, int index, String expected ) {
-		String actual = ret.get(index).getDescriptiveName();
-		assertEquals( expected, actual );
-	}
+    @Test
+    public void testPaths() throws AnchorIOException {
+        String inputs[] = {
+            "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+            "D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
+        };
+
+        String expected[] = {"P1210940", "Klosters (Feb 2020)/P1210904"};
+
+        applyTest(inputs, expected);
+    }
+
+    @Test
+    public void testEmptyStr() throws AnchorIOException {
+        String inputs[] = {
+            "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
+            "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
+        };
+
+        String expected[] = {"P1210940.JPG", "P1210940.JPG.TXT"};
+
+        applyTest(inputs, expected);
+    }
+
+    // When there is no extension, the right-side should be kept
+    @Test
+    public void testWithoutExtension() throws AnchorIOException {
+
+        String inputs[] = {"/a/b/c", "/a/d/c", "/a/e/c"};
+
+        String expected[] = {"b/c", "d/c", "e/c"};
+        applyTest(inputs, expected);
+    }
+
+    private static void applyTest(String[] paths, String[] expected) {
+        List<File> files = filesFromStrs(paths);
+
+        PatternSpan ps = new PatternSpan();
+        List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown", LOGGER);
+
+        for (int i = 0; i < expected.length; i++) {
+            assertIndexEquals(ret, i, expected[i]);
+        }
+    }
+
+    private static List<File> filesFromStrs(String[] paths) {
+        return FunctionalList.mapToList(paths, File::new);
+    }
+
+    private static void assertIndexEquals(List<DescriptiveFile> ret, int index, String expected) {
+        assertEquals(expected, ret.get(index).getDescriptiveName());
+    }
 }

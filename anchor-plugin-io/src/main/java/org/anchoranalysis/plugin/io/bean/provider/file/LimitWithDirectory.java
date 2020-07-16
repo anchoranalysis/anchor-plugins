@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.provider.file;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,11 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
@@ -39,40 +37,37 @@ import org.anchoranalysis.io.params.InputContextParams;
 
 public class LimitWithDirectory extends FileProviderWithDirectory {
 
-	// START BEANS
-	@BeanField
-	private FileProviderWithDirectory fileProvider;
-	
-	@BeanField
-	private int maxNumItems = 0;
-	// END BEANS
-		
-	@Override
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) throws FileProviderException {
-		return LimitUtilities.apply(
-			fileProvider.matchingFilesForDirectory(directory, params),
-			maxNumItems
-		);
-	}
-	
-	@Override
-	public Path getDirectoryAsPath(InputContextParams inputContext) {
-		return fileProvider.getDirectoryAsPath(inputContext);
-	}
+    // START BEANS
+    @BeanField private FileProviderWithDirectory fileProvider;
 
-	public FileProviderWithDirectory getFileProvider() {
-		return fileProvider;
-	}
+    @BeanField private int maxNumItems = 0;
+    // END BEANS
 
-	public void setFileProvider(FileProviderWithDirectory fileProvider) {
-		this.fileProvider = fileProvider;
-	}
+    @Override
+    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
+            throws FileProviderException {
+        return LimitUtilities.apply(
+                fileProvider.matchingFilesForDirectory(directory, params), maxNumItems);
+    }
 
-	public int getMaxNumItems() {
-		return maxNumItems;
-	}
+    @Override
+    public Path getDirectoryAsPath(InputContextParams inputContext) {
+        return fileProvider.getDirectoryAsPath(inputContext);
+    }
 
-	public void setMaxNumItems(int maxNumItems) {
-		this.maxNumItems = maxNumItems;
-	}
+    public FileProviderWithDirectory getFileProvider() {
+        return fileProvider;
+    }
+
+    public void setFileProvider(FileProviderWithDirectory fileProvider) {
+        this.fileProvider = fileProvider;
+    }
+
+    public int getMaxNumItems() {
+        return maxNumItems;
+    }
+
+    public void setMaxNumItems(int maxNumItems) {
+        this.maxNumItems = maxNumItems;
+    }
 }

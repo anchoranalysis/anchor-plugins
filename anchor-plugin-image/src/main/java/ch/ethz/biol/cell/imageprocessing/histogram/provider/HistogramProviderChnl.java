@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.histogram.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -39,42 +38,37 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 
 public class HistogramProviderChnl extends HistogramProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider chnl;
-	
-	@BeanField @OptionalBean
-	private BinaryChnlProvider mask;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Histogram create() throws CreateException {
+    // START BEAN PROPERTIES
+    @BeanField private ChnlProvider chnl;
 
-		Channel chnlIn = chnl.create();
-		
-		if (mask!=null) {
-			return HistogramFactory.create(
-				chnlIn,
-				mask.create()
-			);
-		} else {
-			return HistogramFactory.create(chnlIn);
-		}
-	}
+    @BeanField @OptionalBean private BinaryChnlProvider mask;
+    // END BEAN PROPERTIES
 
-	public ChnlProvider getChnl() {
-		return chnl;
-	}
+    @Override
+    public Histogram create() throws CreateException {
 
-	public void setChnl(ChnlProvider chnl) {
-		this.chnl = chnl;
-	}
+        Channel chnlIn = chnl.create();
 
-	public BinaryChnlProvider getMask() {
-		return mask;
-	}
+        if (mask != null) {
+            return HistogramFactory.create(chnlIn, mask.create());
+        } else {
+            return HistogramFactory.create(chnlIn);
+        }
+    }
 
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
-	}
+    public ChnlProvider getChnl() {
+        return chnl;
+    }
+
+    public void setChnl(ChnlProvider chnl) {
+        this.chnl = chnl;
+    }
+
+    public BinaryChnlProvider getMask() {
+        return mask;
+    }
+
+    public void setMask(BinaryChnlProvider mask) {
+        this.mask = mask;
+    }
 }

@@ -1,16 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
-
-
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-
-/*
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,8 +24,10 @@ import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
-
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
@@ -45,81 +39,74 @@ import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
-public class OptSchemeUnifPerm<S> extends OptScheme<S,S> {
+public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int numItr = -1;
-	
-	@BeanField
-	private ExtractScoreSize<S> extractScoreSize;
-	// END BEAN PROPERTIES
-	
-	public OptSchemeUnifPerm() {
-		
-	}
-	
-	public OptSchemeUnifPerm(int numItr) {
-		super();
-		this.numItr = numItr;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int numItr = -1;
 
-	// Finds an optimum by generating a certain number of configurations
-	@Override
-	public S findOpt(
-		KernelProposer<S> kernelProposer,
-		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		FeedbackReceiver<S> feedbackReceiver,
-		OptSchemeContext initContext
-	) throws OptTerminatedEarlyException {
-		
-		S best = null;
-		
-		KernelCalcContext context = initContext.calcContext( initContext.cfgGenContext() );
-			
-		try {
-			kernelProposer.initBeforeCalc(context);
-			
-			for( int i=0; i<this.numItr; i++) {
-				Optional<S> cfgNRG = kernelProposer.getInitialKernel().makeProposal(
-					Optional.empty(),
-					context
-				);
-				
-				if (!cfgNRG.isPresent()) {
-					continue;
-				}
-				
-				// We find the maximum
-				if( best==null || extractScore(cfgNRG.get()) > extractScore(best) ) {
-					best = cfgNRG.get();
-				}
-			}
-		} catch (KernelCalcNRGException | InitException e) {
-			throw new OptTerminatedEarlyException("Optimization terminated early", e);
-		}
-	
-		return best;
-	}
-	
-	private double extractScore( S item ) {
-		return extractScoreSize.extractScore(item);
-	}
+    @BeanField private ExtractScoreSize<S> extractScoreSize;
+    // END BEAN PROPERTIES
 
-	public int getNumItr() {
-		return numItr;
-	}
+    public OptSchemeUnifPerm() {}
 
-	public void setNumItr(int numItr) {
-		this.numItr = numItr;
-	}
+    public OptSchemeUnifPerm(int numItr) {
+        super();
+        this.numItr = numItr;
+    }
 
-	public ExtractScoreSize<S> getExtractScoreSize() {
-		return extractScoreSize;
-	}
+    // Finds an optimum by generating a certain number of configurations
+    @Override
+    public S findOpt(
+            KernelProposer<S> kernelProposer,
+            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            FeedbackReceiver<S> feedbackReceiver,
+            OptSchemeContext initContext)
+            throws OptTerminatedEarlyException {
 
-	public void setExtractScoreSize(ExtractScoreSize<S> extractScoreSize) {
-		this.extractScoreSize = extractScoreSize;
-	}
+        S best = null;
 
+        KernelCalcContext context = initContext.calcContext(initContext.cfgGenContext());
+
+        try {
+            kernelProposer.initBeforeCalc(context);
+
+            for (int i = 0; i < this.numItr; i++) {
+                Optional<S> cfgNRG =
+                        kernelProposer.getInitialKernel().makeProposal(Optional.empty(), context);
+
+                if (!cfgNRG.isPresent()) {
+                    continue;
+                }
+
+                // We find the maximum
+                if (best == null || extractScore(cfgNRG.get()) > extractScore(best)) {
+                    best = cfgNRG.get();
+                }
+            }
+        } catch (KernelCalcNRGException | InitException e) {
+            throw new OptTerminatedEarlyException("Optimization terminated early", e);
+        }
+
+        return best;
+    }
+
+    private double extractScore(S item) {
+        return extractScoreSize.extractScore(item);
+    }
+
+    public int getNumItr() {
+        return numItr;
+    }
+
+    public void setNumItr(int numItr) {
+        this.numItr = numItr;
+    }
+
+    public ExtractScoreSize<S> getExtractScoreSize() {
+        return extractScoreSize;
+    }
+
+    public void setExtractScoreSize(ExtractScoreSize<S> extractScoreSize) {
+        this.extractScoreSize = extractScoreSize;
+    }
 }

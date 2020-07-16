@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.util.List;
 import java.util.stream.Stream;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -40,99 +40,82 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 import org.apache.commons.math3.util.Pair;
-
-import ch.ethz.biol.cell.imageprocessing.objmask.matching.ObjMaskMatchUtilities;
 
 // Matches source-objects to target objects, based upon intersection, and assigns the
 //   value in the respective source object to the target object
 public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ObjectCollectionProvider objsSource;
-	
-	@BeanField
-	private ObjectCollectionProvider objsTarget;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		
-		ObjectCollection source = objsSource.create();
-		ObjectCollection target = objsTarget.create();
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ObjectCollectionProvider objectsSource;
 
-		streamIntersectingObjects(source, target).forEach(pair->
-			vb.setPixelsCheckMask(
-				pair.getSecond(),
-				getValForMask( chnl, pair.getFirst() )
-			)
-		);
-		return chnl;
-	}
-		
-	/**
-	 * Matches each object in objsSrc against objsTarget ensuring that it is a one-to-one mapping
-	 * 
-	 * @param source
-	 * @param target
-	 * @return a pair with source object (left) and the matched object (right)
-	 */
-	private static Stream<Pair<ObjectMask,ObjectMask>> streamIntersectingObjects(ObjectCollection source, ObjectCollection target) {
-		
-		List<MatchedObject> matchList = ObjMaskMatchUtilities.matchIntersectingObjects(source, target);
-				
-		return matchList.stream().map( owm->
-			new Pair<>(
-				owm.getSource(),
-				selectBestMatch( owm.getSource(), owm.getMatches() )
-			)
-		);
-	}
-	
-	private static ObjectMask selectBestMatch( ObjectMask source, ObjectCollection matches ) {
-		assert(matches.size()>0);
-		
-		if (matches.size()==1) {
-			return matches.get(0);
-		}
-		
-		int maxIntersection = -1;
-		ObjectMask omMostIntersecting = null;
-		for( ObjectMask om : matches) {
-			int intersectingVoxels = source.countIntersectingVoxels(om);
-			if (intersectingVoxels > maxIntersection) {
-				omMostIntersecting = om;
-				maxIntersection = intersectingVoxels;
-			}
-		}
-		return omMostIntersecting;
-	}
+    @BeanField @Getter @Setter private ObjectCollectionProvider objectsTarget;
+    // END BEAN PROPERTIES
 
-	private static int getValForMask( Channel chnl, ObjectMask om ) {
-		
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
- 
-		return vb.getVoxel(
-			om.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new)
-		);
-	}
-	
-	public ObjectCollectionProvider getObjsSource() {
-		return objsSource;
-	}
+    @Override
+    public Channel createFromChnl(Channel chnl) throws CreateException {
 
-	public void setObjsSource(ObjectCollectionProvider objsSource) {
-		this.objsSource = objsSource;
-	}
+        VoxelBox<?> vb = chnl.getVoxelBox().any();
 
-	public ObjectCollectionProvider getObjsTarget() {
-		return objsTarget;
-	}
+        ObjectCollection source = objectsSource.create();
+        ObjectCollection target = objectsTarget.create();
 
-	public void setObjsTarget(ObjectCollectionProvider objsTarget) {
-		this.objsTarget = objsTarget;
-	}
+        streamIntersectingObjects(source, target)
+                .forEach(
+                        pair ->
+                                vb.setPixelsCheckMask(
+                                        pair.getSecond(), getValForMask(chnl, pair.getFirst())));
+        return chnl;
+    }
+
+    /**
+     * Matches each object in {@code source} against {@code target} ensuring that it is a one-to-one
+     * mapping
+     *
+     * @param source
+     * @param target
+     * @return a pair with source object (left) and the matched object (right)
+     */
+    private static Stream<Pair<ObjectMask, ObjectMask>> streamIntersectingObjects(
+            ObjectCollection source, ObjectCollection target) {
+
+        List<MatchedObject> matchList =
+                MatcherIntersectionHelper.matchIntersectingObjects(source, target);
+
+        return matchList.stream()
+                .map(
+                        owm ->
+                                new Pair<>(
+                                        owm.getSource(),
+                                        selectBestMatch(owm.getSource(), owm.getMatches())));
+    }
+
+    private static ObjectMask selectBestMatch(ObjectMask source, ObjectCollection matches) {
+        assert (matches.size() > 0);
+
+        if (matches.size() == 1) {
+            return matches.get(0);
+        }
+
+        int maxIntersection = -1;
+        ObjectMask mostIntersecting = null;
+        for (ObjectMask object : matches) {
+
+            int intersectingVoxels = source.countIntersectingVoxels(object);
+            if (intersectingVoxels > maxIntersection) {
+                mostIntersecting = object;
+                maxIntersection = intersectingVoxels;
+            }
+        }
+        return mostIntersecting;
+    }
+
+    private static int getValForMask(Channel chnl, ObjectMask object) {
+
+        VoxelBox<?> vb = chnl.getVoxelBox().any();
+
+        return vb.getVoxel(
+                object.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new));
+    }
 }

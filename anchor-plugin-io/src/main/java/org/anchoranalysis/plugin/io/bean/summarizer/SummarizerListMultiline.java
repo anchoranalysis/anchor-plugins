@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.summarizer;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,41 +24,41 @@ package org.anchoranalysis.plugin.io.bean.summarizer;
  * #L%
  */
 
-import org.anchoranalysis.core.error.OperationFailedException;
+package org.anchoranalysis.plugin.io.bean.summarizer;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 
 /**
  * Creates a string where each line is an element (the string representation thereof)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> type of entity to summarize (its string representation is taken)
  */
 public class SummarizerListMultiline<T> extends Summarizer<T> {
 
-	private StringBuilder sb = null;
-	
-	@Override
-	public synchronized void add(T element) throws OperationFailedException {
-				
-		if (sb==null) {
-			// First-line
-			sb = new StringBuilder();
-		} else {
-			// Subsequent lines
-			sb.append( System.lineSeparator() );
-		}
-		
-		sb.append( element.toString() );
-	}
+    private StringBuilder sb = null;
 
-	@Override
-	public synchronized String describe() throws OperationFailedException {
-		
-		if (sb!=null) {
-			return sb.toString();
-		} else {
-			return "";
-		}
-	}
+    @Override
+    public synchronized void add(T element) throws OperationFailedException {
+
+        if (sb == null) {
+            // First-line
+            sb = new StringBuilder();
+        } else {
+            // Subsequent lines
+            sb.append(System.lineSeparator());
+        }
+
+        sb.append(element.toString());
+    }
+
+    @Override
+    public synchronized String describe() throws OperationFailedException {
+
+        if (sb != null) {
+            return sb.toString();
+        } else {
+            return "";
+        }
+    }
 }

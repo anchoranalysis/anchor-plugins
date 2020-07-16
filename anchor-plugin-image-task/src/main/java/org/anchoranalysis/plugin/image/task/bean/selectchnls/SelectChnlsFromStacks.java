@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.task.bean.selectchnls;
-
 /*-
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.task.bean.selectchnls;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,19 +24,21 @@ package org.anchoranalysis.plugin.image.task.bean.selectchnls;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.plugin.image.task.bean.selectchnls;
 
+import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 
-/**
- * Selects a a subset of channels from a set of stacks
- * 
- **/
+/** Selects a a subset of channels from a set of stacks */
 public abstract class SelectChnlsFromStacks extends AnchorBean<SelectChnlsFromStacks> {
 
-	/** Takes a stack-collection and extracts a set of references to particular channels (each with a name) */
-	public abstract List<NamedChnl> selectChnls( ChannelSource source, boolean checkType ) throws OperationFailedException;
+    /**
+     * Takes a stack-collection and extracts a set of references to particular channels (each with a
+     * name)
+     */
+    public abstract List<NamedChnl> selectChnls(ChannelSource source, boolean checkType)
+            throws OperationFailedException;
 }
