@@ -80,8 +80,6 @@ public class OrientationAndRadiiProposer extends MarkProposer {
 
         context = context.addErrorLevel("MarkRadiiProposer");
 
-        assert (context.getDimensions().contains(inputMark.getMark().centerPoint()));
-
         Optional<Point3d> rad =
                 radiiProposer.propose(
                         inputMark.getMark().centerPoint(),
