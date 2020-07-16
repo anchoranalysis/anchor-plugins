@@ -54,20 +54,20 @@ public class IntensityMeanCalculator {
 		
 		BoundingBox bbox = object.getBoundingBox();
 		
-		ReadableTuple3i crnrMin = bbox.cornerMin();
-		ReadableTuple3i crnrMax = bbox.calcCornerMax();
+		ReadableTuple3i cornerMin = bbox.cornerMin();
+		ReadableTuple3i cornerMax = bbox.calcCornerMax();
 		
 		double sum = 0.0;
 		int cnt = 0;
 		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++) {
+		for( int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++) {
 			
 			VoxelBuffer<?> bbIntens = vbIntensity.any().getPixelsForPlane( z );
-			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane( z - crnrMin.getZ() ).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane( z - cornerMin.getZ() ).buffer();
 			
 			int offsetMask = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++) {
+			for( int y=cornerMin.getY(); y<=cornerMax.getY(); y++) {
+				for( int x=cornerMin.getX(); x<=cornerMax.getX(); x++) {
 				
 					if (bbMask.get(offsetMask)==object.getBinaryValuesByte().getOnByte()) {
 						int offsetIntens = vbIntensity.any().extent().offset(x, y);

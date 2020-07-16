@@ -62,13 +62,13 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 		}
 		
 		if (includeZ) {
-			ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
-			if (crnrMin.getZ()==0) {
+			ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+			if (cornerMin.getZ()==0) {
 				return false;
 			}
 
-			ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
-			if (crnrMax.getZ()==(dim.get().getZ()-1)) {
+			ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+			if (cornerMax.getZ()==(dim.get().getZ()-1)) {
 				return false;
 			}
 		}

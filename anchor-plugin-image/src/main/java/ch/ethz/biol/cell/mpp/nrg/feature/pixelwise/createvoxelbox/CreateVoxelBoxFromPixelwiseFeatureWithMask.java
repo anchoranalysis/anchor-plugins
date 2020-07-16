@@ -139,24 +139,24 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 		Extent e = vbOut.extent();
 		Extent eMask = object.binaryVoxelBox().extent();
 		
-		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
+		ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
 		
-		for( int z=crnrMin.getZ();z<=crnrMax.getZ(); z++) {
+		for( int z=cornerMin.getZ();z<=cornerMax.getZ(); z++) {
 			
 			List<VoxelBuffer<?>> bbList = listVoxelBox.bufferListForSlice(z);
 
-			int zRel = z-crnrMin.getZ();
+			int zRel = z-cornerMin.getZ();
 			
 			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(zRel).buffer();
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 			
-			for( int y=crnrMin.getY();y<=crnrMax.getY(); y++) {
-				for( int x=crnrMin.getX();x<=crnrMax.getX(); x++) {
+			for( int y=cornerMin.getY();y<=cornerMax.getY(); y++) {
+				for( int x=cornerMin.getX();x<=cornerMax.getX(); x++) {
 					
 					int offset = e.offset(x, y);
 					
-					int offsetMask = eMask.offset(x-crnrMin.getX(),y-crnrMin.getY());
+					int offsetMask = eMask.offset(x-cornerMin.getX(),y-cornerMin.getY());
 					
 					if (bbMask.get(offsetMask)==maskOn) {
 						BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);

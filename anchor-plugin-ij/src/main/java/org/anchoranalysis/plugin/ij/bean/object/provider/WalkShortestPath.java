@@ -137,16 +137,16 @@ class WalkShortestPath {
 		BinaryValuesByte bvb,
 		Point3i point1,
 		Point3i point2,
-		ReadableTuple3i crnrMin
+		ReadableTuple3i cornerMin
 	) {
 		drawLine4(
 			plane,
 			extent,
 			bvb,
-			point1.getX() - crnrMin.getX(),
-			point1.getY() - crnrMin.getY(),
-			point2.getX() - crnrMin.getX(),
-			point2.getY() - crnrMin.getY()
+			point1.getX() - cornerMin.getX(),
+			point1.getY() - cornerMin.getY(),
+			point2.getX() - cornerMin.getX(),
+			point2.getY() - cornerMin.getY()
 		);
 	}
 	

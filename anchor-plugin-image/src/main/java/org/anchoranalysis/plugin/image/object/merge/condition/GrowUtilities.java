@@ -39,10 +39,10 @@ class GrowUtilities {
 	
 	public static BoundingBox grow( BoundingBox boundingBox ) {
 		
-		Point3i crnrMin = new Point3i(boundingBox.cornerMin());
-		crnrMin.subtract(subExtent);
+		Point3i cornerMin = new Point3i(boundingBox.cornerMin());
+		cornerMin.subtract(subExtent);
 		return new BoundingBox(
-			crnrMin,
+			cornerMin,
 			boundingBox.extent().growBy(2)	
 		);
 	}

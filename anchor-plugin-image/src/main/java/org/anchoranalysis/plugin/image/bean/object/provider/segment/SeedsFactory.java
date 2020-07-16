@@ -59,7 +59,7 @@ class SeedsFactory {
 	public static SeedCollection createSeedsWithMask(
 		ObjectCollection seeds,
 		ObjectMask containingMask,
-		ReadableTuple3i subtractFromCrnrMin,
+		ReadableTuple3i subtractFromCornerMin,
 		ImageDimensions dim
 	) throws CreateException {
 		// We create a collection of seeds localised appropriately
@@ -70,7 +70,7 @@ class SeedsFactory {
 				createSeedWithinMask(
 					object,
 					containingMask.getBoundingBox(),
-					subtractFromCrnrMin,
+					subtractFromCornerMin,
 					dim
 				)
 			);
@@ -87,12 +87,12 @@ class SeedsFactory {
 	private static SeedObjectMask createSeedWithinMask(
 		ObjectMask object,
 		BoundingBox containingBBox,
-		ReadableTuple3i subtractFromCrnrMin,
+		ReadableTuple3i subtractFromCornerMin,
 		ImageDimensions dim
 	) throws CreateException {
 		
 		ObjectMask seed = object.mapBoundingBox( bbox->
-			bbox.shiftBackBy(subtractFromCrnrMin)
+			bbox.shiftBackBy(subtractFromCornerMin)
 		);
 		
 		// If a seed object is partially located outside an object, the above line might fail, so we should test
