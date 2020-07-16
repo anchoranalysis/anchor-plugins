@@ -35,5 +35,5 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 
 public abstract class OutlinePixelsRetriever extends PointsBean<OutlinePixelsRetriever> {
 
-	public abstract void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException;
+	public abstract void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator ) throws TraverseOutlineException;
 }

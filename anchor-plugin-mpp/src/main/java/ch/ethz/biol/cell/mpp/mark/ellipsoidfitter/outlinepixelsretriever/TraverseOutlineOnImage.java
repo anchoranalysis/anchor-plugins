@@ -72,7 +72,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private ObjectMask objectOutline;		// Changed as traversal occurs (visited pixels are removed)
 	
 	@Override
-	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
+	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator ) throws TraverseOutlineException {
 		
 		Mask chnlOutline = createOutline();
 		Mask chnlFilled = createFilled();
@@ -81,12 +81,12 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		
 		useZ = useZ && (chnlOutline.getDimensions().getZ() > 1);
 		
-		callBefore(chnlOutline.getDimensions().getRes(), re);
+		callBefore(chnlOutline.getDimensions().getRes(), randomNumberGenerator);
 		
 		objectOutline = createObjectForPoint(root, chnlOutline);
 			
 		objectFilled = objectForFilled(root, chnlFilled);
-		callAfter(root, chnlOutline.getDimensions().getRes(), re);
+		callAfter(root, chnlOutline.getDimensions().getRes(), randomNumberGenerator);
 		traverseOutline(root, listOut);
 	}
 	
@@ -114,9 +114,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 	}
 	
-	private void callBefore(ImageResolution res, RandomNumberGenerator re) throws TraverseOutlineException {
+	private void callBefore(ImageResolution res, RandomNumberGenerator randomNumberGenerator) throws TraverseOutlineException {
 		try {
-			visitScheduler.beforeCreateObject(re, res);
+			visitScheduler.beforeCreateObject(randomNumberGenerator, res);
 		} catch (InitException e1) {
 			throw new TraverseOutlineException("Failure to call beforeCreateObject on visitScheduler", e1);
 		}
@@ -133,7 +133,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private void callAfter(
 		Point3i root,
 		ImageResolution res,
-		RandomNumberGenerator re
+		RandomNumberGenerator randomNumberGenerator
 	) throws TraverseOutlineException {
 		Point3i rootRelToMask = BoundingBox.relPosTo(
 			root,
@@ -141,7 +141,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 			.cornerMin()
 		);
 		try {
-			visitScheduler.afterCreateObject(rootRelToMask, res, re);
+			visitScheduler.afterCreateObject(rootRelToMask, res, randomNumberGenerator);
 		} catch (InitException e) {
 			throw new TraverseOutlineException("Cannot call afterCreateObject on visitScheduler", e);
 		}

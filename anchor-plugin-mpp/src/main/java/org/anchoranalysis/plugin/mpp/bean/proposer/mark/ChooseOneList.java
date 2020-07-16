@@ -45,7 +45,7 @@ public class ChooseOneList extends MarkProposerFromList {
 	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList)
 			throws ProposalAbnormalFailureException {
 		
-		int index = (int) (context.getRandomNumberGenerator().nextDouble() * markProposerList.size());
+		int index = context.getRandomNumberGenerator().sampleIntFromRange(markProposerList.size());
 		
 		MarkProposer markProposer = markProposerList.get(index); 
 		

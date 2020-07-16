@@ -98,27 +98,18 @@ class OrientationList {
 	// We adopt the following priority
 	//		If there are orientations within the Bounds Ratio, WE SAMPLE UNIFORMLY FROM THEM
 	//		If not, and there are unbounded orientations, WE SAMPLE UNIFORMLY FROM THEM
-	public Optional<Orientation> sample( RandomNumberGenerator re ) {
+	public Optional<Orientation> sample( RandomNumberGenerator randomNumberGenerator ) {
 
 		if (!listOrientationsWithinBoundsRatio.isEmpty()) {
 			return Optional.of(
-				sampleFromList(listOrientationsWithinBoundsRatio,re)
+				randomNumberGenerator.sampleFromList(listOrientationsWithinBoundsRatio)
 			);
 		} else if (!listOrientationsUnbounded.isEmpty()) {
 			return Optional.of(
-				sampleFromList(listOrientationsUnbounded,re)
+				randomNumberGenerator.sampleFromList(listOrientationsUnbounded)
 			);
 		} else {
 			return Optional.empty();
 		}
-	}
-	
-	private static Orientation sampleFromList(
-		List<Orientation> listOrientations,
-		RandomNumberGenerator re
-	) {
-		return listOrientations.get(
-			(int) (re.nextDouble() * listOrientations.size())
-		);
 	}
 }

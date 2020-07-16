@@ -34,38 +34,24 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MaxWithConstant extends ScalarProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScalarProposer scalarProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double constant = 1.0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double propose(RandomNumberGenerator re, ImageResolution res)
-			throws OperationFailedException {
-
-		double value = scalarProposer.propose(re, res); 
-		return Math.max(value,constant);
+	public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)	throws OperationFailedException {
+		return Math.max(
+			scalarProposer.propose(randomNumberGenerator, res),
+			constant
+		);
 	}
-
-	public ScalarProposer getScalarProposer() {
-		return scalarProposer;
-	}
-
-	public void setScalarProposer(ScalarProposer scalarProposer) {
-		this.scalarProposer = scalarProposer;
-	}
-
-	public double getConstant() {
-		return constant;
-	}
-
-	public void setConstant(double constant) {
-		this.constant = constant;
-	}
-
 }

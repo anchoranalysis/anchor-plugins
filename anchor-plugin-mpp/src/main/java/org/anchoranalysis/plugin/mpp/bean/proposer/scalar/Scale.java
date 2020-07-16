@@ -34,38 +34,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Scale extends ScalarProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScalarProposer scalarProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double factor = 1.0;
 	// END BEAN PROPERTIES
 
 	@Override
-	public double propose(RandomNumberGenerator re, ImageResolution res)
+	public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
 			throws OperationFailedException {
-
-		double value = scalarProposer.propose(re, res); 
-		return value*factor;
+		return scalarProposer.propose(randomNumberGenerator, res) * factor; 
 	}
-
-	public double getFactor() {
-		return factor;
-	}
-
-	public void setFactor(double factor) {
-		this.factor = factor;
-	}
-
-	public ScalarProposer getScalarProposer() {
-		return scalarProposer;
-	}
-
-	public void setScalarProposer(ScalarProposer scalarProposer) {
-		this.scalarProposer = scalarProposer;
-	}
-
 }

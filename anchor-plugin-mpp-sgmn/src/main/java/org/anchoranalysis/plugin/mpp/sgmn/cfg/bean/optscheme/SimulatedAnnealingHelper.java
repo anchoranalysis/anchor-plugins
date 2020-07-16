@@ -213,11 +213,11 @@ class SimulatedAnnealingHelper {
 		}
 	}
 	
-	private static <S> KernelWithID<S> proposeKernel( KernelProposer<S> kernelProposer, RandomNumberGenerator re, boolean firstStep ) {
+	private static <S> KernelWithID<S> proposeKernel( KernelProposer<S> kernelProposer, RandomNumberGenerator randomNumberGenerator, boolean firstStep ) {
 		if (firstStep) {
 			return kernelProposer.initialKernel();
 		} else {
-			return kernelProposer.proposeKernel(re);
+			return kernelProposer.proposeKernel(randomNumberGenerator);
 		}
 	}
 

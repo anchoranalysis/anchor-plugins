@@ -184,11 +184,10 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 	}
 	
 	
-	public static Optional<Point3d[]> createNewMarkPos( Orientation2D orientation, MarkEllipse markExst, RandomNumberGenerator re, ImageDimensions sd, double minRadScaleStart, double minRadScaleEnd, boolean wigglePos ) {
+	public static Optional<Point3d[]> createNewMarkPos( Orientation2D orientation, MarkEllipse markExst, RandomNumberGenerator randomNumberGenerator, ImageDimensions sd, double minRadScaleStart, double minRadScaleEnd, boolean wigglePos ) {
 		
-		double interval = minRadScaleEnd-minRadScaleStart;
-		
-		double extent = markExst.getRadii().getX() * ((re.nextDouble() * interval) + minRadScaleStart); 
+		double extent = markExst.getRadii().getX() *
+			randomNumberGenerator.sampleDoubleFromRange(minRadScaleStart,minRadScaleEnd); 
 		
 		RotationMatrix rotMat = orientation.createRotationMatrix();
 		double[] pointArr1 = rotMat.calcRotatedPoint( new double[] { -1 * extent, 0 } );
@@ -199,16 +198,18 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 		
 		if (wigglePos) {
 			// We add some randomness around this point, say 4 pixels
-	    	point1.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
-	    	point2.add( randomPointXY(re, WIGGLE_MAX_SIZE) );
+	    	point1.add( randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE) );
+	    	point2.add( randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE) );
 		}
 		return ifBothPointsInside(sd, point1, point2);
 	}
 	
-	private static Point3d randomPointXY(RandomNumberGenerator re, int wiggleMaxSize) {
-		double randX = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
-    	double randY = (re.nextDouble() * wiggleMaxSize * 2) - wiggleMaxSize;
-    	return new Point3d(randX, randY, 0 );
+	private static Point3d randomPointXY(RandomNumberGenerator randomNumberGenerator, int wiggleMaxSize) {
+    	return new Point3d(
+    		randomNumberGenerator.sampleDoubleFromZeroCenteredRange(wiggleMaxSize),
+    		randomNumberGenerator.sampleDoubleFromZeroCenteredRange(wiggleMaxSize),
+    		0
+    	);
 	}
 	
 	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d point1, Point3d point2) {

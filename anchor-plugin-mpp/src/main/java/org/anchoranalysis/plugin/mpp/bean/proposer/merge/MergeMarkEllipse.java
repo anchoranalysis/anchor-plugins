@@ -44,13 +44,18 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class MergeMarkEllipse extends MarkMergeProposer {
 
+	private static final double JITTER_HALF_WIDTH = 2.0;
+	
 	// START BEAN
-	@BeanField
+	@BeanField @Getter @Setter
 	private MarkProposer markProposer = null;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double mergedPosTolerance = 0.2;	// formerly 0.2
 	// END BEAN
 	
@@ -61,7 +66,13 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 		MarkConic target = (MarkConic) targetPmm.getMark();
 		
 		// We calculate a position for the mark
-		Point3d pos = generateMergedPos( mark1.getMark(), mark2.getMark(), mergedPosTolerance, context.getRandomNumberGenerator(), context.getNrgStack() );
+		Point3d pos = generateMergedPosition(
+			mark1.getMark(),
+			mark2.getMark(),
+			mergedPosTolerance,
+			context.getRandomNumberGenerator(),
+			context.getNrgStack()
+		);
 		
 		target.setMarksExplicit(pos );
 		
@@ -80,31 +91,36 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	
 	
 	
-	 private static Point3d generateMergedPos( Mark mark1, Mark mark2, double posTolerance, RandomNumberGenerator re, NRGStackWithParams nrgStack ) {
+	 private static Point3d generateMergedPosition(
+		Mark mark1,
+		Mark mark2,
+		double posTolerance,
+		RandomNumberGenerator randomNumberGenerator,
+		NRGStackWithParams nrgStack
+	) {
 			
     	Point3d pointNew = new Point3d(mark1.centerPoint());
     	pointNew.subtract( mark2.centerPoint() );
     	
     	// Gives us half way between the marks
     	
-    	double scaleAdd = (re.nextDouble() * 2 * posTolerance) - posTolerance;
-    	
-    	pointNew.scale( 0.5 + scaleAdd );
+    	pointNew.scale(
+    		0.5 + randomNumberGenerator.sampleDoubleFromZeroCenteredRange(posTolerance)
+    	);
     	
     	pointNew.add( mark2.centerPoint() );
     	
-    	// We add some randomness around this point, say 4 pixels
-    	int q = 2;
-    	double randX = (re.nextDouble() * q * 2) - q;
-    	double randY = (re.nextDouble() * q * 2) - q;
-    	double randZ = (re.nextDouble() * q * 2) - q;
-    	
-    	pointNew.add( new Point3d(randX,randY,randZ ) );
+    	// We add some randomness around this point
+    	pointNew.add(
+    		new Point3d(
+    			randomNumberGenerator.sampleDoubleFromZeroCenteredRange(JITTER_HALF_WIDTH),
+    			randomNumberGenerator.sampleDoubleFromZeroCenteredRange(JITTER_HALF_WIDTH),
+    			randomNumberGenerator.sampleDoubleFromZeroCenteredRange(JITTER_HALF_WIDTH)
+    		)
+    	);
     	
     	return PointClipper.clip(pointNew, nrgStack.getDimensions());
 	}
-	 
-	
 	
 	@SuppressWarnings("unused")
 	private static Orientation2D generateOrientationBetweenPoints( Point3d pointA, Point3d pointB ) {
@@ -120,21 +136,5 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return testMark instanceof MarkConic && markProposer.isCompatibleWith(testMark);
-	}
-
-	public double getMergedPosTolerance() {
-		return mergedPosTolerance;
-	}
-
-	public void setMergedPosTolerance(double mergedPosTolerance) {
-		this.mergedPosTolerance = mergedPosTolerance;
-	}
-
-	public MarkProposer getMarkProposer() {
-		return markProposer;
-	}
-
-	public void setMarkProposer(MarkProposer markProposer) {
-		this.markProposer = markProposer;
 	}
 }

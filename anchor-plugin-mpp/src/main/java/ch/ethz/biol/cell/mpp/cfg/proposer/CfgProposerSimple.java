@@ -71,7 +71,7 @@ public class CfgProposerSimple extends CfgProposer {
 		if (numMarks>0) {
 			return numMarks;
 		} else {
-			Poisson distribution = context.getRandomNumberGenerator().generatePossion(
+			Poisson distribution = context.getRandomNumberGenerator().generatePoisson(
 				cfgGen.getReferencePoissonIntensity() * context.getDimensions().getVolume()
 			);
 			return distribution.nextInt();

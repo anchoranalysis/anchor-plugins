@@ -111,26 +111,25 @@ class PositionProposerMemoList implements PositionProposer {
 	}
 	
 	private VoxelizedMarkMemo randomMemo(ProposerContext context) {
-		return listPxlMarkMemo.get(
-			(int) (context.getRandomNumberGenerator().nextDouble() * listPxlMarkMemo.size())
-		);
+		return context.getRandomNumberGenerator().sampleFromList(listPxlMarkMemo);
 	}
 		
-	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator re ) {
+	private static Point3d randomPosition( BoundingBox bbox, RandomNumberGenerator randomNumberGenerator ) {
 		return new Point3d(
-			randomFromExtent(bbox, re, ReadableTuple3i::getX),
-			randomFromExtent(bbox, re, ReadableTuple3i::getY),
-			randomFromExtent(bbox, re, ReadableTuple3i::getZ)
+			randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getX),
+			randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getY),
+			randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getZ)
 		);
 	}
 	
-	private static int randomFromExtent( BoundingBox bbox, RandomNumberGenerator re, ToIntFunction<ReadableTuple3i> extract ) {
+	private static int randomFromExtent( BoundingBox bbox, RandomNumberGenerator randomNumberGenerator, ToIntFunction<ReadableTuple3i> extract ) {
 		int corner = extract.applyAsInt(
 			bbox.cornerMin()
 		);
-		double randomPointWithinExtent = re.nextDouble() * extract.applyAsInt(
-			bbox.extent().asTuple()
+		return corner + randomNumberGenerator.sampleIntFromRange(
+			extract.applyAsInt(
+				bbox.extent().asTuple()
+			)
 		); 
-		return corner + (int) randomPointWithinExtent;
 	}
 }

@@ -52,10 +52,10 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	private double maxDistance;
 
 	@Override
-	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
+	public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
 			throws InitException {
 		try {
-			maxDistance = maxDistanceProposer.propose(re, res);
+			maxDistance = maxDistanceProposer.propose(randomNumberGenerator, res);
 			
 			assert(maxDistance>0);
 		} catch (OperationFailedException e) {
@@ -73,7 +73,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	}
 	
 	@Override
-	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
+	public void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator) throws InitException {
 		// NOTHING TO DO
 	}
 
