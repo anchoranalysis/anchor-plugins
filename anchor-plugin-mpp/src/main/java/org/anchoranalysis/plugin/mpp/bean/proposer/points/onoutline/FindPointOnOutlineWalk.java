@@ -46,6 +46,9 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Walks in a particular direction until the outline is found.
  *
@@ -53,10 +56,10 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
 	// START BEANS
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnl;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private UnitValueDistance maxDistance;
 	// END BEANS
 	
@@ -64,139 +67,140 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 	private Channel chnl;
 	
 	@Override
-	public Optional<Point3i> pointOnOutline(Point3d centrePoint, Orientation orientation) throws OperationFailedException {
+	public Optional<Point3i> pointOnOutline(
+		Point3d centerPoint,
+		Orientation orientation
+	) throws OperationFailedException {	// NOSONAR
 		
+		createBinaryImageIfNecessary();
+		
+		RotationMatrix rotationMatrix = orientation.createRotationMatrix();
+		
+		boolean is3D = rotationMatrix.getNumDim() >= 3;
+		
+		return pointOnOutline(
+			centerPoint,
+			marginalStepFrom(rotationMatrix, is3D),
+			is3D
+		);
+	}
+
+	private Optional<Point3i> pointOnOutline(
+		Point3d centerPoint,
+		Point3d step,
+		boolean useZ
+	) throws OperationFailedException {	// NOSONAR		
+				
+		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
+		
+		Point3d pointDouble = new Point3d(centerPoint);
+		while (true) {
+			pointDouble.increment(step);
+			
+			Point3i point = PointConverter.intFromDouble(pointDouble);
+
+			// We do check
+			if (failsDistanceCondition(centerPoint, pointDouble)) {
+				return Optional.empty();
+			}
+						
+			ImageDimensions dimensions = binaryImage.getDimensions();
+			if (!dimensions.contains(point)) {
+				return Optional.empty();
+			}
+			
+			if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+				return Optional.of(point);
+			}
+			
+			point.incrementX();
+			
+			if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+				return Optional.of(point);
+			}
+			
+			point.decrementX(2);
+			
+			if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+				return Optional.of(point);
+			}
+			
+			point.incrementX();
+			point.decrementY();
+			
+			if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+				return Optional.of(point);
+			}
+			
+			point.incrementY(2);
+			
+			if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+				return Optional.of(point);
+			}
+			
+			point.decrementY();
+			
+			if (useZ) {
+				point.decrementZ();
+				if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+					return Optional.of(point);
+				}
+				
+				point.incrementZ(2);
+				if ( pointIsOutlineVal(point, dimensions, bvb) ) {
+					return Optional.of(point);
+				}
+			}
+		}
+	}
+		
+	private boolean pointIsOutlineVal( Point3i point, ImageDimensions dimensions, BinaryValuesByte bvb ) {
+		
+		if (!dimensions.contains(point)) {
+			return false;
+		}
+
+		ByteBuffer buffer = chnl.getVoxelBox().asByte().getPixelsForPlane(
+			point.getZ()
+		).buffer();
+		return buffer.get(dimensions.offsetSlice(point))== bvb.getOnByte();
+	}
+	
+	private void createBinaryImageIfNecessary() throws OperationFailedException {
 		// The first time, we establish the binaryImage 
 		if (binaryImage==null) {
 			try {
 				binaryImage = binaryChnl.create();
-				assert( binaryImage!=null );
-				
 				chnl = binaryImage.getChannel();
 			} catch (CreateException e) {
 				throw new OperationFailedException(e);
 			}
 		}
 		
-		
-		
-		assert( binaryImage!=null );
-		
-		RotationMatrix rotMatrix = orientation.createRotationMatrix();
-		
-		boolean is3d = rotMatrix.getNumDim() >= 3;
-		
-		Point3d marg = new Point3d(
-			rotMatrix.getMatrix().get(0,0),
-			rotMatrix.getMatrix().get(1,0),
-			is3d ? rotMatrix.getMatrix().get(2,0) : 0
-		);
-		
-		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
-		
-		Point3d pointDouble = new Point3d(centrePoint);
-		while (true) {
-			
-			pointDouble.increment(marg);
-			
-			Point3i point = PointConverter.intFromDouble(pointDouble);
-
-			// We do check
-			if (maxDistance!=null) {
-				assert( binaryImage != null );
-				assert( binaryImage.getDimensions() != null );
-				assert( binaryImage.getDimensions().getRes()!=null );
-				
-				double maxDistanceRslv = maxDistance.resolve(
-					Optional.of(
-						binaryImage.getDimensions().getRes()
-					),
-					centrePoint,
-					pointDouble
-				);
-				double distance = binaryImage.getDimensions().getRes().distanceZRelative(centrePoint, pointDouble);
-				if (distance>maxDistanceRslv) {
-					return Optional.empty();
-				}
-			}
-			
-			ImageDimensions sd = binaryImage.getDimensions();
-			if (!sd.contains(point)) {
-				return Optional.empty();
-			}
-			
-			// TODO replace what follows with a call to IterateVoxels.callEachPointInNghb 
-			
-			if ( pointIsOutlineVal(point, sd, bvb) ) {
-				return Optional.of(point);
-			}
-			
-			point.incrementX();
-			
-			if ( pointIsOutlineVal(point, sd, bvb) ) {
-				return Optional.of(point);
-			}
-			
-			point.decrementX(2);
-			
-			if ( pointIsOutlineVal(point, sd, bvb) ) {
-				return Optional.of(point);
-			}
-			
-			point.incrementX();
-			point.decrementY();
-			
-			if ( pointIsOutlineVal(point, sd, bvb) ) {
-				return Optional.of(point);
-			}
-			
-			point.incrementY(2);
-			
-			if ( pointIsOutlineVal(point, sd, bvb) ) {
-				return Optional.of(point);
-			}
-			
-			point.decrementY();
-			
-			if (is3d) {
-				point.decrementZ();
-				if ( pointIsOutlineVal(point, sd, bvb) ) {
-					return Optional.of(point);
-				}
-				
-				point.incrementZ(2);
-				if ( pointIsOutlineVal(point, sd, bvb) ) {
-					return Optional.of(point);
-				}
-			}
-		}
 	}
-		
-	private boolean pointIsOutlineVal( Point3i point, ImageDimensions sd, BinaryValuesByte bvb ) {
-		
-		if (!sd.contains(point)) {
+	
+	private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {
+		return new Point3d(
+			matrix.getMatrix().get(0,0),
+			matrix.getMatrix().get(1,0),
+			is3d ? matrix.getMatrix().get(2,0) : 0
+		);
+	}
+	
+	private boolean failsDistanceCondition(Point3d centerPoint, Point3d pointDouble) throws OperationFailedException {
+		// We do check
+		if (maxDistance!=null) {
+			double distance = binaryImage.getDimensions().getRes().distanceZRelative(centerPoint, pointDouble); 
+			double maxDistanceResolved = maxDistance.resolve(
+				Optional.of(
+					binaryImage.getDimensions().getRes()
+				),
+				centerPoint,
+				pointDouble
+			);
+			return distance > maxDistanceResolved; 
+		} else {
 			return false;
 		}
-
-		ByteBuffer bb = chnl.getVoxelBox().asByte().getPixelsForPlane(
-			point.getZ()
-		).buffer();
-		return bb.get(sd.offsetSlice(point))== bvb.getOnByte();
-	}
-
-	public UnitValueDistance getMaxDistance() {
-		return maxDistance;
-	}
-
-	public void setMaxDistance(UnitValueDistance maxDistance) {
-		this.maxDistance = maxDistance;
-	}
-
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
-
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
 	}
 }

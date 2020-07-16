@@ -96,11 +96,8 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
 			chnl.getVoxelBox().asByte().getPlaneAccess(),
 			0
 		);
-		return FloodFillHelper.floodFill2D(
-			imageProcessor,
-			bv.getOnByte(),
-			startingIntensity,
-			minimumBoundingBoxVolume
+		return new FloodFillHelper(minimumBoundingBoxVolume, bv.getOnByte(), imageProcessor).floodFill2D(
+			startingIntensity
 		);
 	}
 	
