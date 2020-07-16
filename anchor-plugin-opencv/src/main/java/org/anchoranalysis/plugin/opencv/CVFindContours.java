@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.opencv;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -77,18 +78,23 @@ public class CVFindContours {
 	}
 	
 	private static Contour createContour(MatOfPoint mop, ReadableTuple3i cornerMin) {
-		Contour c = new Contour();
-		for( Point p : mop.toArray() ) {
-			
-			Point3f point = new Point3f(
-				convertAdd(p.x, cornerMin.getX() ),
-				convertAdd(p.y, cornerMin.getY() ),
-				cornerMin.getZ()
-			);
-			
-			c.getPoints().add(point);
-		}
-		return c;
+		Contour contour = new Contour();
+		
+		Arrays.stream(mop.toArray())
+			.map( point ->
+				convert(point, cornerMin)
+			)
+			.forEach(contour.getPoints()::add);
+		
+		return contour;
+	}
+	
+	private static Point3f convert(Point point, ReadableTuple3i cornerMin) {
+		return new Point3f(
+			convertAdd(point.x, cornerMin.getX() ),
+			convertAdd(point.y, cornerMin.getY() ),
+			cornerMin.getZ()
+		);
 	}
 	
 	private static float convertAdd( double in, double add ) {

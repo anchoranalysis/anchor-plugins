@@ -77,7 +77,7 @@ public class ColoredObjectsOnStack extends StackProviderRGBFromObjectBase {
 		
 		if (!colorList.isPresent()) {
 			try {
-				return colorSetGenerator.genColors( size );
+				return colorSetGenerator.generateColors( size );
 			} catch (OperationFailedException e) {
 				throw new CreateException(e);
 			} 

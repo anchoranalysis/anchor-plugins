@@ -78,7 +78,7 @@ public class ColoredObjectsStackCreator {
 			DrawObject drawObject = outline ? new Outline(outlineWidth,force2D) : new Filled();  
 			
 			if (colors==null) {
-				colors = DEFAULT_COLOR_SET_GENERATOR.genColors(objects.size());
+				colors = DEFAULT_COLOR_SET_GENERATOR.generateColors(objects.size());
 			}
 			
 			DrawObjectsGenerator generator = new DrawObjectsGenerator(
