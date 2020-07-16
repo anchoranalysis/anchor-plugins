@@ -95,14 +95,14 @@ public class VisitSchedulerMaxDistSep extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object ) {
+	public boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object ) {
 
-		if (Math.abs(root.getX()-pnt.getX())>maxXRslv) {
+		if (Math.abs(root.getX()-point.getX())>maxXRslv) {
 			return false;
 		}
-		if (Math.abs(root.getY()-pnt.getY())>maxYRslv) {
+		if (Math.abs(root.getY()-point.getY())>maxYRslv) {
 			return false;
 		}
-		return Math.abs(root.getZ()-pnt.getZ())<=maxZRslv;
+		return Math.abs(root.getZ()-point.getZ())<=maxZRslv;
 	}
 }

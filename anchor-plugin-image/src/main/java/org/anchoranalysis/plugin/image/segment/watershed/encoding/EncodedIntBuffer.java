@@ -73,7 +73,7 @@ public final class EncodedIntBuffer {
 	}
 	
 	/** Convert code to connected-component */
-	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, Point3i pnt) {
+	public void convertCode(int indxBuffer, int indxGlobal, EncodedVoxelBox matS, Point3i point) {
 		int crntVal = getCode(indxBuffer);
 		
 		assert( !matS.isPlateau(crntVal) );		// NOSONAR
@@ -90,7 +90,7 @@ public final class EncodedIntBuffer {
 		} else if (matS.isConnectedComponentIDCode(crntVal)) {
 			// NO CHANGE
 		} else {
-			int finalIndex = matS.calculateConnectedComponentID(pnt, crntVal);
+			int finalIndex = matS.calculateConnectedComponentID(point, crntVal);
 			putCode(indxBuffer, finalIndex);
 		}
 	}

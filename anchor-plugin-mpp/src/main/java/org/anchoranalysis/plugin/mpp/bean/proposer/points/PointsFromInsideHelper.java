@@ -49,15 +49,15 @@ import one.util.streamex.IntStreamEx;
 
 class PointsFromInsideHelper {
 
-	private final PointListForConvex pntsConvexRoot;
+	private final PointListForConvex pointsConvexRoot;
 	
 	private final BoundingBox boundingBox;
 	private final BinaryVoxelBox<ByteBuffer> voxelBoxFilled;
 	private final ReadableTuple3i cornerMin;
 	private final ReadableTuple3i cornerMax;
 	
-	public PointsFromInsideHelper(PointListForConvex pntsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
-		this.pntsConvexRoot = pntsConvexRoot;
+	public PointsFromInsideHelper(PointListForConvex pointsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
+		this.pointsConvexRoot = pointsConvexRoot;
 		this.boundingBox = bbox;
 		this.voxelBoxFilled = chnlFilled.binaryVoxelBox();
 		this.cornerMin = bbox.cornerMin();
@@ -66,12 +66,12 @@ class PointsFromInsideHelper {
 	
 	public List<Point3i> convexOnly(
 		Mask chnl,
-		Point3d pntRoot,
+		Point3d pointRoot,
 		int skipAfterSuccessiveEmptySlices
 	) {
 		Preconditions.checkArgument( chnl.getDimensions().contains(boundingBox) );
 	
-		int startZ = (int) Math.floor(pntRoot.getZ());
+		int startZ = (int) Math.floor(pointRoot.getZ());
 		
 		List<Point3i> listOut = new ArrayList<>();
 		
@@ -154,7 +154,7 @@ class PointsFromInsideHelper {
 				if (bb.get(offset)==bvb.getOnByte()) {
 					
 					Point3i point = new Point3i(x,y,z); 
-					if( pntsConvexRoot.convexWithAtLeastOnePoint(point, voxelBoxFilled)) {
+					if( pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelBoxFilled)) {
 						addedToSlice = true;
 						processPoint.accept( point );
 					}

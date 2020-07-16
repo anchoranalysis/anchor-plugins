@@ -143,8 +143,8 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 		
 		for( Point3f p : points) {
 
-			double pntInDim = p.getValueByDimension(dimension);
-			double dist = min ? pntInDim : dimMax - pntInDim;
+			double pointInDim = p.getValueByDimension(dimension);
+			double dist = min ? pointInDim : dimMax - pointInDim;
 			
 			if( dist>maxAllowedDist) {
 				return false;

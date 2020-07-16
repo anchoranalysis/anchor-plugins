@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.plugin.points.calculate.CalculatePntsFromOutline;
+import org.anchoranalysis.plugin.points.calculate.CalculatePointsFromOutline;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -46,18 +46,18 @@ import lombok.EqualsAndHashCode;
 public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllipsoid,FeatureInputSingleObject> {
 
 	private final boolean suppressZCovariance;
-	private final ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts;
+	private final ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPoints;
 
 	public static MarkEllipsoid of(SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance ) throws FeatureCalcException {
 		
-		ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPnts = input.resolver().search(
-			new CalculatePntsFromOutline()
+		ResolvedCalculation<List<Point3i>,FeatureInputSingleObject> ccPoints = input.resolver().search(
+			new CalculatePointsFromOutline()
 		);
 		
 		ResolvedCalculation<MarkEllipsoid,FeatureInputSingleObject> ccEllipsoid = input
 			.resolver()
 			.search(
-				new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPnts )
+				new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPoints )
 			);
 		return input.calc(ccEllipsoid);
 	}
@@ -68,7 +68,7 @@ public class CalculateEllipsoidLeastSquares extends FeatureCalculation<MarkEllip
 		try {
 			// Shell Rad is arbitrary here for now
 			return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-				new CachedCalculationOperation<>(ccPnts,input),
+				new CachedCalculationOperation<>(ccPoints,input),
 				input.getDimensionsRequired(),
 				suppressZCovariance,
 				0.2

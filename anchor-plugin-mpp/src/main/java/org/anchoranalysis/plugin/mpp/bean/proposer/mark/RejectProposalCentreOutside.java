@@ -87,8 +87,8 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 		return true;
 	}
 	
-	private static int getVoxelFromChnl(Channel raster, Point3i pnt) {
-		return raster.getVoxelBox().asByte().getVoxel(pnt);
+	private static int getVoxelFromChnl(Channel raster, Point3i point) {
+		return raster.getVoxelBox().asByte().getVoxel(point);
 	}
 
 	public BinaryChnlProvider getBinaryChnl() {

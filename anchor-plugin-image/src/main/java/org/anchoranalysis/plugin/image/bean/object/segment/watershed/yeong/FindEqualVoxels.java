@@ -147,20 +147,20 @@ final class FindEqualVoxels {
 		this.mask = mask;
 	}
 	
-	public EqualVoxelsPlateau createPlateau(Point3i pnt) {
+	public EqualVoxelsPlateau createPlateau(Point3i point) {
 		
 		EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
 				
 		int valToFind = 
-			bufferValuesToFindEqual.getPixelsForPlane( pnt.getZ() ).getInt(
-				bufferValuesToFindEqual.extent().offsetSlice(pnt)
+			bufferValuesToFindEqual.getPixelsForPlane( point.getZ() ).getInt(
+				bufferValuesToFindEqual.extent().offsetSlice(point)
 			);
 		
 		SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
 		
 		{
 			Deque<Point3i> stack = new LinkedList<>(); 
-			stack.push(pnt);
+			stack.push(point);
 			processStack(stack, rbb, plateau, valToFind);
 		}
 		
@@ -180,25 +180,25 @@ final class FindEqualVoxels {
 		BigNghb nghb = new BigNghb();
 		
 		while( !stack.isEmpty() ) {
-			Point3i pnt = stack.pop();
+			Point3i point = stack.pop();
 			
 			// If we've already visited this point, we skip it
-			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( pnt.getZ() );
-			int offset = slidingBuffer.extent().offsetSlice(pnt);
+			EncodedIntBuffer bbVisited = matS.getPixelsForPlane( point.getZ() );
+			int offset = slidingBuffer.extent().offsetSlice(point);
 			if (bbVisited.isTemporary(offset)) {
 				continue;
 			}
 			
-			slidingBuffer.seek(pnt.getZ());
+			slidingBuffer.seek(point.getZ());
 
-			Optional<Integer> lowestNghbIndex = IterateVoxels.callEachPointInNghb(pnt, nghb, do3D, process, valToFind, offset);
+			Optional<Integer> lowestNghbIndex = IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, valToFind, offset);
 			
 			bbVisited.markAsTemporary(offset);
 						
 			if (lowestNghbIndex.isPresent()) {
-				plateau.addEdge(pnt, lowestNghbIndex.get());
+				plateau.addEdge(point, lowestNghbIndex.get());
 			} else {
-				plateau.addInner(pnt);				
+				plateau.addInner(point);				
 			}
 		}
 	}

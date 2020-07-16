@@ -154,7 +154,7 @@ public final class EncodedVoxelBox {
 	}
 	
 	// Returns the CODED final index (global)
-	public int calculateConnectedComponentID(Point3i pnt, int firstChainCode ) {
+	public int calculateConnectedComponentID(Point3i point, int firstChainCode ) {
 		
 		Extent e = voxelBox.extent();
 		
@@ -162,15 +162,15 @@ public final class EncodedVoxelBox {
 		
 		do {
 			// Get local index from global index
-			pnt = addDirectionFromChainCode(pnt, crntChainCode);
+			point = addDirectionFromChainCode(point, crntChainCode);
 			
-			assert( e.contains(pnt));	// NOSONAR
+			assert( e.contains(point));	// NOSONAR
 			
 			// Replace with intelligence slices buffer?
 			int nextVal = voxelBox.getPixelsForPlane(
-				pnt.getZ()
+				point.getZ()
 			).buffer().get(
-				e.offsetSlice(pnt)
+				e.offsetSlice(point)
 			);
 		
 			assert(nextVal!=WatershedEncoding.CODE_UNVISITED);
@@ -182,7 +182,7 @@ public final class EncodedVoxelBox {
 			
 			if (nextVal==WatershedEncoding.CODE_MINIMA) {
 				return encoding.encodeConnectedComponentID(
-					e.offset(pnt)
+					e.offset(point)
 				);
 			}
 			
@@ -196,8 +196,8 @@ public final class EncodedVoxelBox {
 	 * Adds a direction to a point from a chain-code, without altering the incoming point
 	 * 
 	 * @param point an input-point that is unchanged (immutable)
-	 * @param chainCode a chain-code from which to decode a direction, which is added to pnt
-	 * @return a new point which is the sum of pnt and the decoded-direction
+	 * @param chainCode a chain-code from which to decode a direction, which is added to point
+	 * @return a new point which is the sum of point and the decoded-direction
 	 */
 	private Point3i addDirectionFromChainCode(Point3i point, int chainCode) {
 		Point3i out = encoding.chainCodes(chainCode);

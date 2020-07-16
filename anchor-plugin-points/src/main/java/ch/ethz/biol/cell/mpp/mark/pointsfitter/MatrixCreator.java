@@ -66,11 +66,11 @@ class MatrixCreator {
 		DoubleMatrix2D matrix = DoubleFactory2D.dense.make( points.size(), 10 ); 
 		
 		for( int i=0; i<points.size(); i++) {
-			Point3f pnt = points.get(i);
+			Point3f point = points.get(i);
 			
-			float x = pnt.getX() + inputPointShift;
-			float y = pnt.getY() + inputPointShift;
-			float z = pnt.getZ() + inputPointShift;
+			float x = point.getX() + inputPointShift;
+			float y = point.getY() + inputPointShift;
+			float z = point.getZ() + inputPointShift;
 			
 			matrix.set(i, 0, Math.pow( x, 2) );	// xx
 			matrix.set(i, 1, Math.pow( y, 2) );	// yy

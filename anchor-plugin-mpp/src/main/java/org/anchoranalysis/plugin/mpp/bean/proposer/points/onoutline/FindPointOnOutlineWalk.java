@@ -94,12 +94,12 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 		
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		
-		Point3d pntDouble = new Point3d(centrePoint);
+		Point3d pointDouble = new Point3d(centrePoint);
 		while (true) {
 			
-			pntDouble.increment(marg);
+			pointDouble.increment(marg);
 			
-			Point3i pnt = PointConverter.intFromDouble(pntDouble);
+			Point3i point = PointConverter.intFromDouble(pointDouble);
 
 			// We do check
 			if (maxDistance!=null) {
@@ -112,76 +112,76 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 						binaryImage.getDimensions().getRes()
 					),
 					centrePoint,
-					pntDouble
+					pointDouble
 				);
-				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pntDouble);
+				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pointDouble);
 				if (dist>maxDistRslv) {
 					return Optional.empty();
 				}
 			}
 			
 			ImageDimensions sd = binaryImage.getDimensions();
-			if (!sd.contains(pnt)) {
+			if (!sd.contains(point)) {
 				return Optional.empty();
 			}
 			
 			// TODO replace what follows with a call to IterateVoxels.callEachPointInNghb 
 			
-			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-				return Optional.of(pnt);
+			if ( pointIsOutlineVal(point, sd, bvb) ) {
+				return Optional.of(point);
 			}
 			
-			pnt.incrementX();
+			point.incrementX();
 			
-			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-				return Optional.of(pnt);
+			if ( pointIsOutlineVal(point, sd, bvb) ) {
+				return Optional.of(point);
 			}
 			
-			pnt.decrementX(2);
+			point.decrementX(2);
 			
-			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-				return Optional.of(pnt);
+			if ( pointIsOutlineVal(point, sd, bvb) ) {
+				return Optional.of(point);
 			}
 			
-			pnt.incrementX();
-			pnt.decrementY();
+			point.incrementX();
+			point.decrementY();
 			
-			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-				return Optional.of(pnt);
+			if ( pointIsOutlineVal(point, sd, bvb) ) {
+				return Optional.of(point);
 			}
 			
-			pnt.incrementY(2);
+			point.incrementY(2);
 			
-			if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-				return Optional.of(pnt);
+			if ( pointIsOutlineVal(point, sd, bvb) ) {
+				return Optional.of(point);
 			}
 			
-			pnt.decrementY();
+			point.decrementY();
 			
 			if (is3d) {
-				pnt.decrementZ();
-				if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-					return Optional.of(pnt);
+				point.decrementZ();
+				if ( pointIsOutlineVal(point, sd, bvb) ) {
+					return Optional.of(point);
 				}
 				
-				pnt.incrementZ(2);
-				if ( pntIsOutlineVal(pnt, sd, bvb) ) {
-					return Optional.of(pnt);
+				point.incrementZ(2);
+				if ( pointIsOutlineVal(point, sd, bvb) ) {
+					return Optional.of(point);
 				}
 			}
 		}
 	}
 		
-	private boolean pntIsOutlineVal( Point3i pnt, ImageDimensions sd, BinaryValuesByte bvb ) {
+	private boolean pointIsOutlineVal( Point3i point, ImageDimensions sd, BinaryValuesByte bvb ) {
 		
-		if (!sd.contains(pnt)) {
+		if (!sd.contains(point)) {
 			return false;
 		}
 
 		ByteBuffer bb = chnl.getVoxelBox().asByte().getPixelsForPlane(
-			pnt.getZ()
+			point.getZ()
 		).buffer();
-		return bb.get(sd.offsetSlice(pnt))== bvb.getOnByte();
+		return bb.get(sd.offsetSlice(point))== bvb.getOnByte();
 	}
 
 	public UnitValueDistance getMaxDistance() {

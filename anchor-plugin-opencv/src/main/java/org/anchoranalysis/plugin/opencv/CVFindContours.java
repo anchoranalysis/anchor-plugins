@@ -80,13 +80,13 @@ public class CVFindContours {
 		Contour c = new Contour();
 		for( Point p : mop.toArray() ) {
 			
-			Point3f pnt = new Point3f(
+			Point3f point = new Point3f(
 				convertAdd(p.x, cornerMin.getX() ),
 				convertAdd(p.y, cornerMin.getY() ),
 				cornerMin.getZ()
 			);
 			
-			c.getPoints().add(pnt);
+			c.getPoints().add(point);
 		}
 		return c;
 	}

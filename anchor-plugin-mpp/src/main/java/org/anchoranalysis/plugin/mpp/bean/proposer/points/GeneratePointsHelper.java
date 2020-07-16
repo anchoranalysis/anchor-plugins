@@ -44,37 +44,37 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class GeneratePointsHelper {
 
-	private Point3d pntRoot;
+	private Point3d pointRoot;
 	private final Optional<Mask> chnlFilled;
 	private int maxZDist;
 	private int skipZDist;
 	private Mask chnl;
 	private ImageDimensions dim;
 	
-	public List<Point3i> generatePoints(List<List<Point3i>> pntsXY) throws OperationFailedException {
+	public List<Point3i> generatePoints(List<List<Point3i>> pointsXY) throws OperationFailedException {
 		// We take the first point in each list, as where it intersects with the edge
-		PointListForConvex pointList = pointListForConvex(pntsXY);
+		PointListForConvex pointList = pointListForConvex(pointsXY);
 		
-		List<Point3i> lastPntsAll = new ArrayList<>();
+		List<Point3i> lastPointsAll = new ArrayList<>();
 		
-		for( List<Point3i> contourPnts : pntsXY ) {
-			lastPntsAll.addAll(
+		for( List<Point3i> contourPoints : pointsXY ) {
+			lastPointsAll.addAll(
 				extendedPoints(
-					contourPnts,
+					contourPoints,
 					pointList
 				)
 			);
 		}
-		return lastPntsAll;
+		return lastPointsAll;
 	}
 	
 	
 	private List<Point3i> extendedPoints(
-		List<Point3i> pntsAlongContour,
+		List<Point3i> pointsAlongContour,
 		PointListForConvex pointList
 	) throws OperationFailedException {
 		
-		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
+		BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
 
 		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDist );
 		int zHigh = Math.min(dim.getZ(), bbox.cornerMin().getZ()+maxZDist );
@@ -82,22 +82,22 @@ class GeneratePointsHelper {
 		if (chnlFilled.isPresent()) {
 			return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox).convexOnly(
 				chnl,
-				pntRoot,
+				pointRoot,
 				skipZDist
 			);
 		} else {
 			return PointsFromBinaryChnl.pointsFromChnlInsideBox(
 				chnl,
 				bbox.duplicateChangeZ(zLow, zHigh-zLow),
-				(int) Math.floor(pntRoot.getZ()),
+				(int) Math.floor(pointRoot.getZ()),
 				skipZDist
 			);
 		}
 	}
 	
-	private static PointListForConvex pointListForConvex( List<List<Point3i>> pnts ) {
+	private static PointListForConvex pointListForConvex( List<List<Point3i>> points ) {
 		PointListForConvex pl = new PointListForConvex();
-		for( List<Point3i> list : pnts ) {
+		for( List<Point3i> list : points ) {
 			if (!list.isEmpty()) {
 				pl.add( list.get(0) );
 			}

@@ -144,7 +144,7 @@ public class SplitContourSmoothingSpline {
 	private static ContourList extractSplitContour(
 		SmoothingCubicSpline splineX,
 		SmoothingCubicSpline splineY,
-		int maxEvalPnt,
+		int maxEvalPoint,
 		ContourList out
 	) {
 		double prevDer = Double.NaN;
@@ -153,7 +153,7 @@ public class SplitContourSmoothingSpline {
 		
 		double step = 0.05;
 		double z = 0;
-		while( z <= maxEvalPnt ) { 
+		while( z <= maxEvalPoint ) { 
 			
 			double xEval = splineX.evaluate(z);
 			double yEval = splineY.evaluate(z);

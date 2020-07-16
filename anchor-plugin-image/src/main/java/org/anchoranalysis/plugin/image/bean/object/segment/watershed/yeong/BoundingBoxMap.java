@@ -70,11 +70,11 @@ final class BoundingBoxMap {
 		);
 	}
 		
-	public int addPointForValue(Point3i pnt, int val) {
+	public int addPointForValue(Point3i point, int val) {
 		int reorderedIndex = indexForValue(val);
 		
 		// Add the point to the bounding-box
-		addPointToBox(reorderedIndex, pnt);
+		addPointToBox(reorderedIndex, point);
 		return reorderedIndex;
 	}
 	
@@ -82,12 +82,12 @@ final class BoundingBoxMap {
 	/**
 	 * Get bounding box for a particular index, creating if not already there, and then add a point to the box.
 	 */ 
-	private void addPointToBox(int indx, Point3i pnt) {
+	private void addPointToBox(int indx, Point3i point) {
 		PointRange pointRange = list.get(indx);
 		if (pointRange==null) {
 			pointRange = new PointRange();
 			list.set(indx, pointRange);
 		}
-		pointRange.add(pnt);
+		pointRange.add(point);
 	}
 }

@@ -39,7 +39,7 @@ public class PointsFromContourTraverser {
 	private PointsFromContourTraverser() {}
 
 	/** Extracts a list of points from the outline (contour) of the object-mask */
-	public static List<Point3i> pntsFromContour( ObjectMask object ) throws OperationFailedException {
+	public static List<Point3i> pointsFromContour( ObjectMask object ) throws OperationFailedException {
 		
 		List<Point3i> ptsTraversed = new ArrayList<>();
 		

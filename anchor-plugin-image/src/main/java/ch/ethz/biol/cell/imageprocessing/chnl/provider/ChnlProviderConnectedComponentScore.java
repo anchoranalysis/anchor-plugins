@@ -106,25 +106,25 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 		
 		Extent e = vbIn.extent();
 		
-		Point3d pnt = new Point3d();
+		Point3d point = new Point3d();
 		
 		for( int z=0; z<e.getZ(); z++) {
-			pnt.setZ(z);
+			point.setZ(z);
 			
 			ByteBuffer bbIn = vbIn.getPixelsForPlane(z).buffer();
 			ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 			
 			int index = 0;
 			for( int y=0; y<e.getY(); y++) {
-				pnt.setY( y );
+				point.setY( y );
 				
 				for( int x=0; x<e.getX(); x++) {
-					pnt.setX( x );
+					point.setX( x );
 					
 					int val = ByteConverter.unsignedByteToInt( bbIn.get(index) );
 					
 					// Find closest point
-					LevelResult lr = lrc.findClosestResult(pnt);
+					LevelResult lr = lrc.findClosestResult(point);
 					
 					int out = calcOutValue(val, lr.getLevel() );
 					

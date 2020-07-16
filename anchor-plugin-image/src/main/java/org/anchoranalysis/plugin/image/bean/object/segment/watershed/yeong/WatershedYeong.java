@@ -155,11 +155,11 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 		IterateVoxels.callEachPoint(
 			mask,
 			matS,
-			(Point3i pnt, IntBuffer buffer, int offset) -> {
+			(Point3i point, IntBuffer buffer, int offset) -> {
 				int crntVal = buffer.get(offset);
 				buffer.put(
 					offset,
-					bbm.addPointForValue(pnt, crntVal) + 1
+					bbm.addPointForValue(point, crntVal) + 1
 				);
 			}
 		);

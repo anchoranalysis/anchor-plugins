@@ -78,7 +78,7 @@ public class VisitSchedulerMaxDistZ extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object ) {
-		return Math.abs(root.getZ()-pnt.getZ())<=maxZRslv;
+	public boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object ) {
+		return Math.abs(root.getZ()-point.getZ())<=maxZRslv;
 	}
 }

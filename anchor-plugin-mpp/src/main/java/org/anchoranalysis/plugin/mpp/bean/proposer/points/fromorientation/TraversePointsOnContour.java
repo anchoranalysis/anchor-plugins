@@ -60,8 +60,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	// END BEAN PROPERTIES
 	
 	private boolean do3D;
-	private List<Point3i> lastPntsForward = new ArrayList<>();
-	private List<Point3i> lastPntsReverse = new ArrayList<>();
+	private List<Point3i> lastPointsForward = new ArrayList<>();
+	private List<Point3i> lastPointsReverse = new ArrayList<>();
 	private Optional<Point3i> forwardCentrePoint;
 	private Optional<Point3i> reverseCentrePoint;
 	
@@ -71,28 +71,28 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		
 		this.do3D = do3D;
 		
-		lastPntsForward.clear();
-		lastPntsReverse.clear();
+		lastPointsForward.clear();
+		lastPointsReverse.clear();
 		
-		forwardCentrePoint = addPointsFromOrientation( centrePoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPntsForward, re);
+		forwardCentrePoint = addPointsFromOrientation( centrePoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPointsForward, re);
 	
 		if (!forwardDirectionOnly) {
 			OutlinePixelsRetriever reverseRetriever = outlinePixelsRetrieverReverse!=null ? outlinePixelsRetrieverReverse : outlinePixelsRetriever;
-			reverseCentrePoint = addPointsFromOrientation( centrePoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPntsReverse, re);
+			reverseCentrePoint = addPointsFromOrientation( centrePoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPointsReverse, re);
 			
-			if (lastPntsForward.isEmpty() && lastPntsReverse.isEmpty()) {
+			if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
 				throw new TraverseOutlineException("Cannot find forward or reverse point to traverse");
 			}
 		}
 		
-		if (lastPntsForward.isEmpty() && lastPntsReverse.isEmpty()) {
+		if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
 			throw new TraverseOutlineException("Cannot find outline point");
 		}
 		
 		List<List<Point3i>> combinedLists = new ArrayList<>();
-		combinedLists.add(lastPntsForward);
+		combinedLists.add(lastPointsForward);
 		if (!forwardDirectionOnly) {
-			combinedLists.add(lastPntsReverse);
+			combinedLists.add(lastPointsReverse);
 		}
 		return combinedLists;
 	}
@@ -143,8 +143,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
 	public CreateProposalVisualization proposalVisualization(boolean detailed) {
 		return cfg -> {
-			maybeAddPoints(cfg, lastPntsForward, Color.CYAN);
-			maybeAddPoints(cfg, lastPntsReverse, Color.YELLOW);
+			maybeAddPoints(cfg, lastPointsForward, Color.CYAN);
+			maybeAddPoints(cfg, lastPointsReverse, Color.YELLOW);
 			
 			if (detailed) {
 				maybeAddConic(cfg, forwardCentrePoint, Color.MAGENTA, do3D);
@@ -156,8 +156,8 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
 	@Override
 	public void clearVisualizationState() {
-		lastPntsForward.clear();
-		lastPntsReverse.clear();
+		lastPointsForward.clear();
+		lastPointsReverse.clear();
 		forwardCentrePoint=Optional.empty();
 		reverseCentrePoint=Optional.empty();
 	}

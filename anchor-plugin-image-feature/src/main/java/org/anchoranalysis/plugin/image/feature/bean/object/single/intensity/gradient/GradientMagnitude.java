@@ -52,16 +52,16 @@ public class GradientMagnitude extends IntensityGradientBase {
 		// Calculate the mean
 		double sum = 0.0;
 
-		List<Point3d> pnts = input.calc(
+		List<Point3d> points = input.calc(
 			gradientCalculation()
 		);
 		
-		for( Point3d p : pnts ) {
+		for( Point3d p : points ) {
 			// Calculate the norm of the point
 			sum += p.l2norm();
 		}
 		
-		return sum/pnts.size();
+		return sum/points.size();
 	}
 
 }

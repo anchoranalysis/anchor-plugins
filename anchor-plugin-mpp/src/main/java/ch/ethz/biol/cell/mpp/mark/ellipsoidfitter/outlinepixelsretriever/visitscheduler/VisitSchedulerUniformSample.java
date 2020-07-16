@@ -72,7 +72,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask object) {
-		return selected.considerVisit(pnt, distAlongContour, object);
+	public boolean considerVisit(Point3i point, int distAlongContour, ObjectMask object) {
+		return selected.considerVisit(point, distAlongContour, object);
 	}
 }

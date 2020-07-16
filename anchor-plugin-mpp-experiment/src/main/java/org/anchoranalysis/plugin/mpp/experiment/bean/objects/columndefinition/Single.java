@@ -48,19 +48,19 @@ public class Single extends ColumnDefinition {
 	 * Name of CSV column with X coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnPntX = "insidePnt.x";
+	private String columnPointX = "insidePoint.x";
 
 	/**
 	 * Name of CSV column with Y coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnPntY = "insidePnt.y";
+	private String columnPointY = "insidePoint.y";
 	
 	/**
 	 * Name of CSV column with Z coordinate of point for the first Object
 	 */
 	@BeanField @Getter @Setter
-	private String columnPntZ = "insidePnt.z";
+	private String columnPointZ = "insidePoint.z";
 	
 	/**
 	 * Name of CSV column with the number of pixels for the first Object
@@ -79,7 +79,7 @@ public class Single extends ColumnDefinition {
 		indices = HeaderFinder.findHeadersToDescribeObject(
 			headers,
 			columnNumPixels,
-			Arrays.asList(columnPntX, columnPntY, columnPntZ)
+			Arrays.asList(columnPointX, columnPointY, columnPointZ)
 		);
 	}
 

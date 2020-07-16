@@ -37,11 +37,11 @@ import org.anchoranalysis.image.points.PointsFromObject;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper=false)
-public class CalculatePntsFromOutline extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
+public class CalculatePointsFromOutline extends FeatureCalculation<List<Point3i>, FeatureInputSingleObject> {
 
 	@Override
 	protected List<Point3i> execute(FeatureInputSingleObject params) throws FeatureCalcException {
-		return PointsFromObject.pntsFromMaskOutline(
+		return PointsFromObject.pointsFromMaskOutline(
 			params.getObject()
 		);
 	}

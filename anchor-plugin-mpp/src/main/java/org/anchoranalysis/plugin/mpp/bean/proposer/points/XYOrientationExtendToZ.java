@@ -92,10 +92,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private UnitValueDistance distanceZEndIfEmpty = new UnitValueDistanceVoxels(1000000);
 	// END BEAN PROPERTIES
 
-	private List<Point3i> lastPntsAll;
+	private List<Point3i> lastPointsAll;
 	
 	@Override
-	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
+	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
 		
 		Optional<Orientation> orientation = orientationXYProposer.propose(
@@ -105,7 +105,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		);
 		
 		return orientation.flatMap( or->
-			proposeFromOrientation(or, pnt, dim, re, errorNode)
+			proposeFromOrientation(or, point, dim, re, errorNode)
 		);
 	}
 
@@ -117,9 +117,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );
 
 		list.add( cfg -> {
-			if (lastPntsAll!=null && !lastPntsAll.isEmpty()) {
+			if (lastPointsAll!=null && !lastPointsAll.isEmpty()) {
 				cfg.addChangeID(
-					MarkPointListFactory.createMarkFromPoints3i(lastPntsAll),
+					MarkPointListFactory.createMarkFromPoints3i(lastPointsAll),
 					new RGBColor(Color.ORANGE)
 				);
 			}
@@ -144,7 +144,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				forwardDirectionOnly
 			);
 
-			lastPntsAll = new GeneratePointsHelper(
+			lastPointsAll = new GeneratePointsHelper(
 				point,
 				chnlFilled(),
 				maxZDist(randomNumberGenerator, dimensions.getRes()),
@@ -152,7 +152,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				binaryChnl.create(),
 				dimensions
 			).generatePoints(pointsXY);
-			return Optional.of(lastPntsAll);
+			return Optional.of(lastPointsAll);
 			
 		} catch (CreateException | OperationFailedException | TraverseOutlineException e1) {
 			errorNode.add(e1);

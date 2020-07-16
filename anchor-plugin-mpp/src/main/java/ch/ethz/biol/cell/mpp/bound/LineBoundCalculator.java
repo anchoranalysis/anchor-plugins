@@ -157,10 +157,10 @@ public class LineBoundCalculator extends BoundCalculator {
 		return -1;
 	}
 	
-	private double normZMag( Point3d pnt, double zMult ) {
-		double dx = pnt.getX();
-		double dy = pnt.getY();
-		double dz = pnt.getZ() * zMult;
+	private double normZMag( Point3d point, double zMult ) {
+		double dx = point.getX();
+		double dy = point.getY();
+		double dz = point.getZ() * zMult;
 		return Math.sqrt( (dx*dx) + (dy*dy) + (dz*dz) );
 	}
 }

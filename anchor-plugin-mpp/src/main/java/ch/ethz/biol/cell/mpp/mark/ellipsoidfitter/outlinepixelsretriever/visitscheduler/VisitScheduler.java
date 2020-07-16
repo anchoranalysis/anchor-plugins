@@ -45,5 +45,5 @@ public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 	
 	public abstract void afterCreateObject(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException;
 	
-	public abstract boolean considerVisit( Point3i pnt, int distAlongContour, ObjectMask object );
+	public abstract boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object );
 }

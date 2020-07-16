@@ -65,11 +65,11 @@ class KernelBirthAndKillHelper {
 		
 		ProposerContext propContext = context.proposer();
 		
-		Optional<Point3d> pntAdditionalBirth = pp.propose( propContext );
+		Optional<Point3d> pointAdditionalBirth = pp.propose( propContext );
 	
-		if (pntAdditionalBirth.isPresent()) {
+		if (pointAdditionalBirth.isPresent()) {
 			MarkAbstractPosition markNewAdditional = (MarkAbstractPosition) cfgGen.newTemplateMark();
-			markNewAdditional.setPos( pntAdditionalBirth.get() );
+			markNewAdditional.setPos( pointAdditionalBirth.get() );
 						
 			pmmAdditional = propContext.create(markNewAdditional);
 					

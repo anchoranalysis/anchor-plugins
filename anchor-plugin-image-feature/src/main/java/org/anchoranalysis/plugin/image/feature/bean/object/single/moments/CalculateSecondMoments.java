@@ -97,10 +97,10 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments,FeatureInpu
 		return createPointMatrixInteger( listPts );
 	}
 	
-	private static DoubleMatrix2D createPointMatrixInteger( List<Point3i> pnts ) {
-		DoubleMatrix2D mat = DoubleFactory2D.dense.make( pnts.size(), 3 );
-		for( int i=0; i<pnts.size(); i++ ) {
-			 Point3i p = pnts.get(i);
+	private static DoubleMatrix2D createPointMatrixInteger( List<Point3i> points ) {
+		DoubleMatrix2D mat = DoubleFactory2D.dense.make( points.size(), 3 );
+		for( int i=0; i<points.size(); i++ ) {
+			 Point3i p = points.get(i);
 			 mat.set(i, 0, p.getX());
 			 mat.set(i, 1, p.getY());
 			 mat.set(i, 2, p.getZ());

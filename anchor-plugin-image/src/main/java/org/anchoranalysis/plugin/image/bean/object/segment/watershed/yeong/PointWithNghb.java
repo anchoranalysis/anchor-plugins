@@ -30,17 +30,17 @@ import org.anchoranalysis.core.geometry.Point3i;
 
 // Stores the voxels for a plateau
 class PointWithNghb {
-	private Point3i pnt;
+	private Point3i point;
 	private int nghbIndex;
 	
-	public PointWithNghb(Point3i pnt, int nghbIndex) {
+	public PointWithNghb(Point3i point, int nghbIndex) {
 		super();
-		this.pnt = pnt;
+		this.point = point;
 		this.nghbIndex = nghbIndex;
 	}
 
-	public Point3i getPnt() {
-		return pnt;
+	public Point3i getPoint() {
+		return point;
 	}
 
 	public int getNghbIndex() {

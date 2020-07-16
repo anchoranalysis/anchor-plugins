@@ -61,20 +61,20 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 		ObjectMask object = input.get().getObject();
 		
 		// Get the outline
-		List<Point3i> pntsOutline = createMaskOutlineAsPoints(object, 1);
+		List<Point3i> pointsOutline = createMaskOutlineAsPoints(object, 1);
 
 		// Distances from the center to each point on the outline
 		DoubleArrayList distances = distancesToPoints(
 			object.centerOfGravity(),
-			pntsOutline
+			pointsOutline
 		);
 		
 		return calcStatistic(distances);
 	}
 	
-	private static DoubleArrayList distancesToPoints( Point3d pntFrom, List<Point3i> pntsTo ) {
-		DoubleArrayList distances = new DoubleArrayList( pntsTo.size() );
-		for( Point3i p : pntsTo ) {
+	private static DoubleArrayList distancesToPoints( Point3d pointFrom, List<Point3i> pointsTo ) {
+		DoubleArrayList distances = new DoubleArrayList( pointsTo.size() );
+		for( Point3i p : pointsTo ) {
 			
 			Point3d pShift = new Point3d(
 				p.getX() + 0.5,
@@ -82,7 +82,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
 				p.getZ() + 0.5
 			);
 			
-			double d = pntFrom.distance(pShift);
+			double d = pointFrom.distance(pShift);
 			distances.add(d);
 		}
 		return distances;

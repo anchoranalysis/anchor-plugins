@@ -62,9 +62,9 @@ public class CircleObjectFixture {
 		return new NRGStackWithParams(DIMS);
 	}
 
-	public static boolean sceneContains(Point2i pnt) {
+	public static boolean sceneContains(Point2i point) {
 		return DIMS.contains(
-			PointConverter.convertTo3d(pnt)
+			PointConverter.convertTo3d(point)
 		);
 	}
 }

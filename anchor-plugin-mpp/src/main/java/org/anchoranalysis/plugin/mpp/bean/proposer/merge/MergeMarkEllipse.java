@@ -82,16 +82,16 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 	
 	 private static Point3d generateMergedPos( Mark mark1, Mark mark2, double posTolerance, RandomNumberGenerator re, NRGStackWithParams nrgStack ) {
 			
-    	Point3d pntNew = new Point3d(mark1.centerPoint());
-    	pntNew.subtract( mark2.centerPoint() );
+    	Point3d pointNew = new Point3d(mark1.centerPoint());
+    	pointNew.subtract( mark2.centerPoint() );
     	
     	// Gives us half way between the marks
     	
     	double scaleAdd = (re.nextDouble() * 2 * posTolerance) - posTolerance;
     	
-    	pntNew.scale( 0.5 + scaleAdd );
+    	pointNew.scale( 0.5 + scaleAdd );
     	
-    	pntNew.add( mark2.centerPoint() );
+    	pointNew.add( mark2.centerPoint() );
     	
     	// We add some randomness around this point, say 4 pixels
     	int q = 2;
@@ -99,19 +99,19 @@ public class MergeMarkEllipse extends MarkMergeProposer {
     	double randY = (re.nextDouble() * q * 2) - q;
     	double randZ = (re.nextDouble() * q * 2) - q;
     	
-    	pntNew.add( new Point3d(randX,randY,randZ ) );
+    	pointNew.add( new Point3d(randX,randY,randZ ) );
     	
-    	return PointClipper.clip(pntNew, nrgStack.getDimensions());
+    	return PointClipper.clip(pointNew, nrgStack.getDimensions());
 	}
 	 
 	
 	
 	@SuppressWarnings("unused")
-	private static Orientation2D generateOrientationBetweenPoints( Point3d pntA, Point3d pntB ) {
+	private static Orientation2D generateOrientationBetweenPoints( Point3d pointA, Point3d pointB ) {
 
 		// We get the relative vector between them
-		Point3d rel = new Point3d( pntA );
-		rel.subtract( pntB );
+		Point3d rel = new Point3d( pointA );
+		rel.subtract( pointB );
 		
 		// Calculation an angle from this vector
 		return new Orientation2D( Math.atan2( rel.getY(), rel.getX() ) );

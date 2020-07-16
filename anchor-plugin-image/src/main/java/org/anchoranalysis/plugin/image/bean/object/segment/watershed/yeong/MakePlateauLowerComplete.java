@@ -80,12 +80,12 @@ class MakePlateauLowerComplete {
 		@Override
 		public boolean processPoint(int xChange, int yChange, int x1, int y1, int objectMaskOffset) {
 			
-			Point3i pntRel = new Point3i(x1,y1,z1);
-			foundPoints.add(pntRel);
+			Point3i pointRel = new Point3i(x1,y1,z1);
+			foundPoints.add(pointRel);
 			bb.put(objectMaskOffset,maskValueOff);
 			
 			// We point this value in the direction opposite to which it came
-			matS.setPointDirection(pntRel, xChange*-1,yChange*-1,zChange*-1);
+			matS.setPointDirection(pointRel, xChange*-1,yChange*-1,zChange*-1);
 			
 			return true;
 		}
@@ -133,12 +133,12 @@ class MakePlateauLowerComplete {
 	
 	private void pointEdgeToNeighbouring( EncodedVoxelBox matS ) {
 		// We set them all to their neighbouring points
-		for( PointWithNghb pntNghb : plateau.getPtsEdge()) {
-			assert( pntNghb.getNghbIndex() >= 0 );
+		for( PointWithNghb pointNghb : plateau.getPtsEdge()) {
+			assert( pointNghb.getNghbIndex() >= 0 );
 			
 			// IMPROVE BY SORTING BY Z-VALUE
-			//ByteBuffer bb = rbb.bufferRel( pntNghb.getPnt().getZ() )
-			matS.setPoint( pntNghb.getPnt(), pntNghb.getNghbIndex() );
+			//ByteBuffer bb = rbb.bufferRel( pointNghb.getPoint().getZ() )
+			matS.setPoint( pointNghb.getPoint(), pointNghb.getNghbIndex() );
 		}		
 	}
 		

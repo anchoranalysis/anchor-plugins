@@ -71,8 +71,8 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 		
 		voxels.setAllPixelsTo(off);
 
-		points.forEach( pnt->
-			voxels.setVoxel( pnt.getX(), pnt.getY(), 0, on)
+		points.forEach( point->
+			voxels.setVoxel( point.getX(), point.getY(), 0, on)
 		);
 	}
 }

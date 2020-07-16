@@ -45,7 +45,7 @@ public class LevelResult {
 	@Getter
 	private final Histogram histogram;
 		
-	public double distToSquared( Point3d srcPnt ) {
-		return srcPnt.distanceSquared(object.getBoundingBox().midpoint());
+	public double distToSquared( Point3d srcPoint ) {
+		return srcPoint.distanceSquared(object.getBoundingBox().midpoint());
 	}
 }

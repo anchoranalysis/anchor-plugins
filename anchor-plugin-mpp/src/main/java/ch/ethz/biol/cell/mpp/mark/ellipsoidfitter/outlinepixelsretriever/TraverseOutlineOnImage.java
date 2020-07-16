@@ -151,7 +151,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		try {
 			new OutlineTraverser(
 				objectOutline,
-				(pnt,dist) -> visitScheduler.considerVisit(pnt,dist,objectFilled),
+				(point,dist) -> visitScheduler.considerVisit(point,dist,objectFilled),
 				useZ,
 				nghb8
 			).applyGlobal(
@@ -188,11 +188,11 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 	}
 	
-	private static BoundingBox createBoxAroundPoint(Point3i pnt, Tuple3i width, Extent clipTo) {
+	private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clipTo) {
 		// We create a raster around the point, maxDist*2 in both directions, so long as it doesn't escape the region
 		BoundingBox box = new BoundingBox(
-			Point3i.immutableSubtract(pnt, width),
-			Point3i.immutableAdd(pnt, width)
+			Point3i.immutableSubtract(point, width),
+			Point3i.immutableAdd(point, width)
 		);
 		return box.clipTo(clipTo);
 	}

@@ -60,16 +60,16 @@ public class IsPointConvexToTest {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = bic.binaryVoxelBox();
 		
-		Point3i pntRoot = new Point3i(62,84,15);
+		Point3i pointRoot = new Point3i(62,84,15);
 		
-		Point3i pntCheck0 = new Point3i(57,77,15);
-		assertTrue( VisitSchedulerConvexAboutRoot.isPointConvexTo(pntRoot, pntCheck0, bvb) );
+		Point3i pointCheck0 = new Point3i(57,77,15);
+		assertTrue( VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck0, bvb) );
 		
-		Point3i pntCheck1 = new Point3i(69,89,17);
-		assertTrue( VisitSchedulerConvexAboutRoot.isPointConvexTo(pntRoot, pntCheck1, bvb) );
+		Point3i pointCheck1 = new Point3i(69,89,17);
+		assertTrue( VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck1, bvb) );
 		
-		Point3i pntCheck2 = new Point3i(81,84,16);
-		assertFalse( VisitSchedulerConvexAboutRoot.isPointConvexTo(pntRoot, pntCheck2, bvb) );
+		Point3i pointCheck2 = new Point3i(81,84,16);
+		assertFalse( VisitSchedulerConvexAboutRoot.isPointConvexTo(pointRoot, pointCheck2, bvb) );
 		 
 		
 	}

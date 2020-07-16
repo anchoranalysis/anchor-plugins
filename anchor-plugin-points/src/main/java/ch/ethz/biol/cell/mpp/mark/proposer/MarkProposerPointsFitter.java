@@ -74,24 +74,24 @@ public class MarkProposerPointsFitter extends MarkProposer {
 		
 		inputMark.reset();
 		
-		Point3d pnt = inputMark.getMark().centerPoint();
+		Point3d point = inputMark.getMark().centerPoint();
 		
 		try {
-			Optional<List<Point3i>> pnts = pointsProposer.propose(
-				pnt,
+			Optional<List<Point3i>> points = pointsProposer.propose(
+				point,
 				inputMark.getMark(),
 				context.getDimensions(),
 				context.getRandomNumberGenerator(),
 				context.getErrorNode().add("pointsProposer")
 			);
 			
-			if (!pnts.isPresent()) {
+			if (!points.isPresent()) {
 				return false;	
 			}
 			
 			// Now we create a list of point2d, and run the ellipse fitter on these
 			ArrayList<Point3f> fitList = new ArrayList<>();
-			for( Point3i p : pnts.get()) {
+			for( Point3i p : points.get()) {
 				fitList.add(
 					PointConverter.floatFromInt(p)
 				);

@@ -47,18 +47,18 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 	@Override
 	protected Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException {
 		MessageLogger logger = getLogger().messageLogger();
-		List<Point3d> extPnts = pointsFromChnl(outline);
+		List<Point3d> extPoints = pointsFromChnl(outline);
 		
-		Point3d[] pntArr = extPnts.toArray( new Point3d[]{} );
+		Point3d[] pointArr = extPoints.toArray( new Point3d[]{} );
 		
 		QuickHull3D hull = new QuickHull3D();
-		hull.build(pntArr);
+		hull.build(pointArr);
 		
 		logger.log("Vertices:");
 		Point3d[] vertices = hull.getVertices();
 		for (int i = 0; i < vertices.length; i++) {
-			Point3d pnt = vertices[i];
-			logger.log(pnt.x + " " + pnt.y + " " + pnt.z);
+			Point3d point = vertices[i];
+			logger.log(point.x + " " + point.y + " " + point.z);
 		}
 
 		logger.log("Faces:");
@@ -76,8 +76,8 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 				
 		vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
 		for (int i = 0; i < vertices.length; i++) {
-			Point3d pnt = vertices[i];
-			vbOut.setVoxel( (int) pnt.x, (int) pnt.y, (int) pnt.z, outline.getBinaryValues().getOnInt());
+			Point3d point = vertices[i];
+			vbOut.setVoxel( (int) point.x, (int) point.y, (int) point.z, outline.getBinaryValues().getOnInt());
 	    }		
 		   
 		return outline;

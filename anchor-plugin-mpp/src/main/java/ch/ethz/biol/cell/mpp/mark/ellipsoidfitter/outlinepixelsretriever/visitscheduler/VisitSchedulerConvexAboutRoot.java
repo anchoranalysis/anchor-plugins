@@ -62,22 +62,22 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 		this.root = root;
 	}
 
-	private static Point3d relVector( Point3i root, Point3i pnt ) {
-		// Calculate angle from root to pnt
+	private static Point3d relVector( Point3i root, Point3i point ) {
+		// Calculate angle from root to point
 		Point3d rootSub = PointConverter.doubleFromInt(root);
 		
-		Point3d pntNew = PointConverter.doubleFromInt(pnt);
-		pntNew.subtract(rootSub);
-		return pntNew;
+		Point3d pointNew = PointConverter.doubleFromInt(point);
+		pointNew.subtract(rootSub);
+		return pointNew;
 	}
 	
-	public static boolean isPointConvexTo( Point3i root, Point3i pnt, BinaryVoxelBox<ByteBuffer> bvb ) {
-		return isPointConvexTo(root, pnt, bvb, false);
+	public static boolean isPointConvexTo( Point3i root, Point3i point, BinaryVoxelBox<ByteBuffer> bvb ) {
+		return isPointConvexTo(root, point, bvb, false);
 	}
 	
-	public static boolean isPointConvexTo( Point3i root, Point3i destPnt, BinaryVoxelBox<ByteBuffer> bvb, boolean debug ) {
+	public static boolean isPointConvexTo( Point3i root, Point3i destPoint, BinaryVoxelBox<ByteBuffer> bvb, boolean debug ) {
 		
-		Point3d dist = relVector(root, destPnt);
+		Point3d dist = relVector(root, destPoint);
 		double mag = Math.pow(
 			Math.pow(dist.getX(), 2) + Math.pow(dist.getY(), 2) + Math.pow(dist.getZ(), 2),
 			0.5
@@ -88,14 +88,14 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 		}
 		
 		// Now we keep checking that points are inside the mask until we reach our final point
-		Point3d pnt = PointConverter.doubleFromInt(root);
-		while (!pointEquals(pnt,destPnt)) {
+		Point3d point = PointConverter.doubleFromInt(root);
+		while (!pointEquals(point,destPoint)) {
 			
 			if (debug) {
-				System.out.printf("%s ", pnt.toString());		// NOSONAR
+				System.out.printf("%s ", point.toString());		// NOSONAR
 			}
 
-			if (!isPntOnObj(pnt, bvb.getVoxelBox(), bvb.getBinaryValues() )) {
+			if (!isPointOnObj(point, bvb.getVoxelBox(), bvb.getBinaryValues() )) {
 				
 				if (debug) {
 					System.out.printf("failed%n%n");			// NOSONAR
@@ -103,30 +103,30 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 				return false;
 			}
 			
-			pnt.increment(dist);
+			point.increment(dist);
 		} 
 		
 		return true;
 	}
 	
 	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour,	ObjectMask object) {
-		return isPointConvexTo(root, pnt, object.binaryVoxelBox());
+	public boolean considerVisit(Point3i point, int distAlongContour,	ObjectMask object) {
+		return isPointConvexTo(root, point, object.binaryVoxelBox());
 	}
 	
 	private static boolean pointEquals( Point3d point1, Point3i point2) {
 		return point1.distanceSquared(point2) < 1.0;
 	}
 	
-	private static boolean isPntOnObj( Point3d pnt, VoxelBox<ByteBuffer> vb, BinaryValues bv ) {
+	private static boolean isPointOnObj( Point3d point, VoxelBox<ByteBuffer> vb, BinaryValues bv ) {
 		
-		Point3i pntInt = PointConverter.intFromDouble(pnt);
+		Point3i pointInt = PointConverter.intFromDouble(point);
 		
-		if (!vb.extent().contains(pntInt)) {
+		if (!vb.extent().contains(pointInt)) {
 			return false;
 		}
 		
-		return vb.getVoxel(pntInt)==bv.getOnInt();
+		return vb.getVoxel(pointInt)==bv.getOnInt();
 	}
 	
 }
