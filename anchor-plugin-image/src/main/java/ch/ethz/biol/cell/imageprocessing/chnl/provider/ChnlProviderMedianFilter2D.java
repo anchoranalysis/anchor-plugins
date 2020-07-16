@@ -65,10 +65,10 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 			set.clear();
 		}
 		
-		public void ppltAt( int xCentre, int yMin, int yMax, ByteBuffer bb, Extent e ) {
+		public void ppltAt( int xCenter, int yMin, int yMax, ByteBuffer bb, Extent e ) {
 			
-			int xMin = xCentre - kernelHalfWidth;
-			int xMax = xCentre + kernelHalfWidth;
+			int xMin = xCenter - kernelHalfWidth;
+			int xMax = xCenter + kernelHalfWidth;
 			
 			xMin = Math.max(xMin, 0);
 			xMax = Math.min( xMax, e.getX() - 1 );

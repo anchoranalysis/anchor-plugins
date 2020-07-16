@@ -56,10 +56,10 @@ public class EllipseStandardFormConverter {
 
 	private DoubleMatrix1D matrix;
 	
-	/** Centre-Point x */
+	/** Center-Point x */
 	private double k1; 
 	
-	/** Centre-Point y */
+	/** Center-Point y */
 	private double k2; 
 	
 	/** SEMI-major axis */
@@ -93,7 +93,7 @@ public class EllipseStandardFormConverter {
 	    	throw new CreateException("Not an ellipse");
 	    }
 	    
-	    // STEP 1 (Centre)
+	    // STEP 1 (Center)
 	    double kdem = 2 * ( Math.pow(a12,2) - (a11 * a22) );
 	    assert( kdem!=0 );
 	    k1 = ((a22 * b1)  - (a12 * b2)) / kdem;

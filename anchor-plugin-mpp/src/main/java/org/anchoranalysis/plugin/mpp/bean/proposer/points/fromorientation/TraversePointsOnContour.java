@@ -45,40 +45,42 @@ import static org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.OutlinePixelsRetriever;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
+import lombok.Getter;
+import lombok.Setter;
 
 public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private FindPointOnOutline findOutlinePixelAngle;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private OutlinePixelsRetriever outlinePixelsRetriever;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private OutlinePixelsRetriever outlinePixelsRetrieverReverse;
 	// END BEAN PROPERTIES
 	
 	private boolean do3D;
 	private List<Point3i> lastPointsForward = new ArrayList<>();
 	private List<Point3i> lastPointsReverse = new ArrayList<>();
-	private Optional<Point3i> forwardCentrePoint;
-	private Optional<Point3i> reverseCentrePoint;
+	private Optional<Point3i> forwardCenterPoint;
+	private Optional<Point3i> reverseCenterPoint;
 	
 	// Calculates the points in both directions
 	@Override
-	public List<List<Point3i>> calcPoints( Point3d centrePoint, Orientation orientation, boolean do3D, RandomNumberGenerator re, boolean forwardDirectionOnly ) throws TraverseOutlineException {
+	public List<List<Point3i>> calcPoints( Point3d centerPoint, Orientation orientation, boolean do3D, RandomNumberGenerator re, boolean forwardDirectionOnly ) throws TraverseOutlineException {
 		
 		this.do3D = do3D;
 		
 		lastPointsForward.clear();
 		lastPointsReverse.clear();
 		
-		forwardCentrePoint = addPointsFromOrientation( centrePoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPointsForward, re);
+		forwardCenterPoint = addPointsFromOrientation( centerPoint, orientation, findOutlinePixelAngle, outlinePixelsRetriever, lastPointsForward, re);
 	
 		if (!forwardDirectionOnly) {
 			OutlinePixelsRetriever reverseRetriever = outlinePixelsRetrieverReverse!=null ? outlinePixelsRetrieverReverse : outlinePixelsRetriever;
-			reverseCentrePoint = addPointsFromOrientation( centrePoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPointsReverse, re);
+			reverseCenterPoint = addPointsFromOrientation( centerPoint, orientation.negative(), findOutlinePixelAngle, reverseRetriever, lastPointsReverse, re);
 			
 			if (lastPointsForward.isEmpty() && lastPointsReverse.isEmpty()) {
 				throw new TraverseOutlineException("Cannot find forward or reverse point to traverse");
@@ -98,7 +100,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	}
 	
 	private Optional<Point3i> addPointsFromOrientation(
-		Point3d centrePoint,
+		Point3d centerPoint,
 		Orientation orientation,
 		FindPointOnOutline find,
 		OutlinePixelsRetriever traverseOutline,
@@ -107,7 +109,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	) throws TraverseOutlineException {
 		
 		try {
-			Optional<Point3i> foundPoint = find.pointOnOutline( centrePoint, orientation );
+			Optional<Point3i> foundPoint = find.pointOnOutline( centerPoint, orientation );
 			
 			if (foundPoint.isPresent()) {
 				traverseOutline.traverse(
@@ -124,32 +126,15 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 		}
 	}
 
-	public FindPointOnOutline getFindOutlinePixelAngle() {
-		return findOutlinePixelAngle;
-	}
-
-	public void setFindOutlinePixelAngle(FindPointOnOutline findOutlinePixelAngle) {
-		this.findOutlinePixelAngle = findOutlinePixelAngle;
-	}
-
-	public OutlinePixelsRetriever getOutlinePixelsRetriever() {
-		return outlinePixelsRetriever;
-	}
-
-	public void setOutlinePixelsRetriever(
-			OutlinePixelsRetriever outlinePixelsRetriever) {
-		this.outlinePixelsRetriever = outlinePixelsRetriever;
-	}
-
 	public CreateProposalVisualization proposalVisualization(boolean detailed) {
 		return cfg -> {
 			maybeAddPoints(cfg, lastPointsForward, Color.CYAN);
 			maybeAddPoints(cfg, lastPointsReverse, Color.YELLOW);
 			
 			if (detailed) {
-				maybeAddConic(cfg, forwardCentrePoint, Color.MAGENTA, do3D);
-				maybeAddConic(cfg, reverseCentrePoint, Color.MAGENTA, do3D);
-				maybeAddLineSegment(cfg, forwardCentrePoint, reverseCentrePoint, Color.ORANGE);
+				maybeAddConic(cfg, forwardCenterPoint, Color.MAGENTA, do3D);
+				maybeAddConic(cfg, reverseCenterPoint, Color.MAGENTA, do3D);
+				maybeAddLineSegment(cfg, forwardCenterPoint, reverseCenterPoint, Color.ORANGE);
 			}
 		};
 	}
@@ -158,16 +143,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 	public void clearVisualizationState() {
 		lastPointsForward.clear();
 		lastPointsReverse.clear();
-		forwardCentrePoint=Optional.empty();
-		reverseCentrePoint=Optional.empty();
-	}
-
-	public OutlinePixelsRetriever getOutlinePixelsRetrieverReverse() {
-		return outlinePixelsRetrieverReverse;
-	}
-
-	public void setOutlinePixelsRetrieverReverse(
-			OutlinePixelsRetriever outlinePixelsRetrieverReverse) {
-		this.outlinePixelsRetrieverReverse = outlinePixelsRetrieverReverse;
+		forwardCenterPoint=Optional.empty();
+		reverseCenterPoint=Optional.empty();
 	}
 }

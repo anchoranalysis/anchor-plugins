@@ -43,5 +43,5 @@ import org.anchoranalysis.image.orientation.Orientation;
  **/
 public abstract class FindPointOnOutline extends NullParamsBean<FindPointOnOutline> {
 
-	public abstract Optional<Point3i> pointOnOutline( Point3d centrePoint, Orientation orientation ) throws OperationFailedException;
+	public abstract Optional<Point3i> pointOnOutline( Point3d centerPoint, Orientation orientation ) throws OperationFailedException;
 }
