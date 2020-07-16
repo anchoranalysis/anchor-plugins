@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,36 +24,24 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 
+@AllArgsConstructor
 public class LevelResult {
-	
-	private int level;
-	private ObjectMask objMask;
-	private Histogram histogram;
-	
-	public LevelResult(int level, ObjectMask objMask, Histogram histogram) {
-		super();
-		this.level = level;
-		this.objMask = objMask;
-		this.histogram = histogram;
-	}
-	
-	public double distToSquared( Point3d srcPnt ) {
-		return srcPnt.distanceSquared(objMask.getBoundingBox().midpoint());
-	}
 
-	public int getLevel() {
-		return level;
-	}
+    @Getter private final int level;
 
-	public ObjectMask getObjMask() {
-		return objMask;
-	}
+    @Getter private final ObjectMask object;
 
-	public Histogram getHistogram() {
-		return histogram;
-	}
+    @Getter private final Histogram histogram;
+
+    public double distanceSquaredTo(Point3d srcPoint) {
+        return srcPoint.distanceSquared(object.getBoundingBox().midpoint());
+    }
 }

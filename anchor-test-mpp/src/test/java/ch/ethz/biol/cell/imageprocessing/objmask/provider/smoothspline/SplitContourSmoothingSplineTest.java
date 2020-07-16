@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
-
 /*-
  * #%L
  * anchor-test-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
+
+import static org.junit.Assert.assertEquals;
+
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
@@ -35,22 +37,19 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class SplitContourSmoothingSplineTest {
 
-		
-	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
-	);
-	
-	@Test
-	public void test() throws CreateException, OperationFailedException, SetOperationFailedException {
-		
-		ObjectMask contourIn = LoadUtilities.openLargestObjectBinaryFrom("01", testLoader);
-		
-		ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
-		
-		assertEquals(72, contours.size());
-	}
+    private TestLoaderImageIO testLoader =
+            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+
+    @Test
+    public void test()
+            throws CreateException, OperationFailedException, SetOperationFailedException {
+
+        ObjectMask contourIn = LoadUtilities.openLargestObjectBinaryFrom("01", testLoader);
+
+        ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
+
+        assertEquals(72, contours.size());
+    }
 }

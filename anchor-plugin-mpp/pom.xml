@@ -132,5 +132,12 @@
 	  <version>${colt.version}</version>
 	</dependency>
 	
+	<!-- For Advanced manipulation of streams -->
+	<dependency>
+	    <groupId>one.util</groupId>
+	    <artifactId>streamex</artifactId>
+	    <version>${streamex.version}</version>
+	</dependency>
+	
 </dependencies>
 </project>

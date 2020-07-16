@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
-
-
-
-
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,26 +24,27 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including the original object mask)
- *  and measures the mean intensity of this shell
+ * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including
+ * the original object mask) and measures the mean intensity of this shell
  */
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 
-	@Override
-	protected double calcForShell(ObjectMask om, Channel chnl) throws FeatureCalcException {
-				
-		ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, om, false );
-		
-		if (vai.getIndex()==-1) {
-			return getEmptyValue();
-		}
-	
-		return vai.getValue();
-	}
+    @Override
+    protected double calcForShell(ObjectMask object, Channel chnl) throws FeatureCalcException {
+
+        ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, object, false);
+
+        if (vai.getIndex() == -1) {
+            return getEmptyValue();
+        }
+
+        return vai.getValue();
+    }
 }

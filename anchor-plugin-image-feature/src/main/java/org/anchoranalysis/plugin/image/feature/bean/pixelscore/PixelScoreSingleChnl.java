@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,38 +24,36 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 /**
  * A score that is calculated on a single channel only
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class PixelScoreSingleChnl extends PixelScore {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private int nrgChnlIndex = 0;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc(int[] pixelVals) throws FeatureCalcException {
-		
-		return deriveScoreFromPixelVal(
-			pixelVals[nrgChnlIndex]
-		);
-	}
-	
-	protected abstract double deriveScoreFromPixelVal( int pixelVal );
-	
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private int nrgChnlIndex = 0;
+    // END BEAN PROPERTIES
 
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
+    @Override
+    public double calc(int[] pixelVals) throws FeatureCalcException {
+
+        return deriveScoreFromPixelVal(pixelVals[nrgChnlIndex]);
+    }
+
+    protected abstract double deriveScoreFromPixelVal(int pixelVal);
+
+    public int getNrgChnlIndex() {
+        return nrgChnlIndex;
+    }
+
+    public void setNrgChnlIndex(int nrgChnlIndex) {
+        this.nrgChnlIndex = nrgChnlIndex;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.task.grouped;
-
 /*-
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.task.grouped;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,26 +24,26 @@ package org.anchoranalysis.plugin.image.task.grouped;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.task.grouped;
+
 import org.anchoranalysis.image.channel.Channel;
 
 public class NamedChnl {
 
-	private String name;
-	private Channel chnl;
-	
-	public NamedChnl(String name, Channel chnl) {
-		super();
-		this.name = name;
-		this.chnl = chnl;
-	}
+    private String name;
+    private Channel chnl;
 
-	public String getName() {
-		return name;
-	}
+    public NamedChnl(String name, Channel chnl) {
+        super();
+        this.name = name;
+        this.chnl = chnl;
+    }
 
-	public Channel getChnl() {
-		return chnl;
-	}	
-	
-	
+    public String getName() {
+        return name;
+    }
+
+    public Channel getChnl() {
+        return chnl;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,26 +24,24 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
-
 /**
- * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create an output prefix
- * @author Owen Feehan
+ * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create
+ * an output prefix
  *
+ * @author Owen Feehan
  */
 public class FromDescriptiveName extends FilePathPrefixerAvoidResolve {
 
-	@Override
-	protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) {
-		Path combined = root.resolve(
-			Paths.get( input.getDescriptiveName() )
-		);
-		return new FilePathPrefix(combined);
-	}
-
+    @Override
+    protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root) {
+        Path combined = root.resolve(Paths.get(input.getDescriptiveName()));
+        return new FilePathPrefix(combined);
+    }
 }

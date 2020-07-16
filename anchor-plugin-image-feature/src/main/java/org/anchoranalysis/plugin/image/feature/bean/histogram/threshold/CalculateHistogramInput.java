@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,32 +24,35 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
+
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=true)
-class CalculateHistogramInput extends CalculateInputFromDelegate<FeatureInputHistogram, FeatureInputHistogram, Histogram> {
-	
-	public CalculateHistogramInput(
-			ResolvedCalculation<Histogram, FeatureInputHistogram> ccDelegate) {
-		super(ccDelegate);
-	}
-	
-	public CalculateHistogramInput(FeatureCalculation<Histogram, FeatureInputHistogram> ccDelegate,
-			CalculationResolver<FeatureInputHistogram> cache) {
-		super(ccDelegate, cache);
-	}
+@EqualsAndHashCode(callSuper = true)
+class CalculateHistogramInput
+        extends CalculateInputFromDelegate<
+                FeatureInputHistogram, FeatureInputHistogram, Histogram> {
 
-	@Override
-	protected FeatureInputHistogram deriveFromDelegate(FeatureInputHistogram params, Histogram delegate) {
-		return new FeatureInputHistogram(
-			delegate,
-			params.getResOptional()
-		);
-	}
+    public CalculateHistogramInput(
+            ResolvedCalculation<Histogram, FeatureInputHistogram> ccDelegate) {
+        super(ccDelegate);
+    }
+
+    public CalculateHistogramInput(
+            FeatureCalculation<Histogram, FeatureInputHistogram> ccDelegate,
+            CalculationResolver<FeatureInputHistogram> cache) {
+        super(ccDelegate, cache);
+    }
+
+    @Override
+    protected FeatureInputHistogram deriveFromDelegate(
+            FeatureInputHistogram params, Histogram delegate) {
+        return new FeatureInputHistogram(delegate, params.getResOptional());
+    }
 }

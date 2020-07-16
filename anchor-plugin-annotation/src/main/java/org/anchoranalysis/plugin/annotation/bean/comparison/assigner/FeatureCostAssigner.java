@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
-
 /*-
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,11 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
  * #L%
  */
 
-import org.anchoranalysis.annotation.io.assignment.AssignmentObjMaskFactory;
+package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.annotation.io.assignment.AssignmentObjectFactory;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,106 +40,71 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObjMask;
-import org.anchoranalysis.plugin.annotation.comparison.ObjsToCompare;
+import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
+import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator;
-		
-	@BeanField
-	private double maxCost = 1.0;
-		
-	@BeanField
-	private int numDecimalPlaces = 3;
-		
-	@BeanField
-	private boolean removeTouchingBorderXY = false;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public AssignmentOverlapFromPairs createAssignment(
-		ObjsToCompare objsToCompare,
-		ImageDimensions dim,
-		boolean useMIP,
-		BoundIOContext context
-	) throws CreateException {
-		try {
-			SharedFeaturesInitParams soFeature = SharedFeaturesInitParams.create(
-				context.getLogger(),
-				context.getModelDirectory()
-			);
-			featureEvaluator.initRecursive( soFeature, context.getLogger() );
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter
+    private FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator;
 
-			AssignmentObjMaskFactory assignmentCreator = new AssignmentObjMaskFactory(
-				featureEvaluator,
-				useMIP
-			);
-			
-			AssignmentOverlapFromPairs assignment = assignmentCreator.createAssignment(
-				objsToCompare.getLeft(),
-				objsToCompare.getRight(),
-				maxCost,
-				dim
-			);
-			
-			// We remove any border items from the assignment
-			if (removeTouchingBorderXY) {
-				assignment.removeTouchingBorderXY( dim );
-			}
-			
-			context.getOutputManager().getWriterCheckIfAllowed().write(
-				"costMatrix",
-				() -> new ObjMaskCollectionDistanceMatrixGenerator(assignmentCreator.getCost(), numDecimalPlaces )
-			);
-			
-			return assignment;
-		} catch (FeatureCalcException | InitException e1) {
-			throw new CreateException(e1);
-		}
-	}
+    @BeanField @Getter @Setter private double maxCost = 1.0;
 
-	public FeatureEvaluatorSimple<FeatureInputPairObjects> getFeatureEvaluator() {
-		return featureEvaluator;
-	}
+    @BeanField @Getter @Setter private int numDecimalPlaces = 3;
 
-	public void setFeatureEvaluator(FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator) {
-		this.featureEvaluator = featureEvaluator;
-	}
+    @BeanField @Getter @Setter private boolean removeTouchingBorderXY = false;
+    // END BEAN PROPERTIES
 
-	public double getMaxCost() {
-		return maxCost;
-	}
+    @Override
+    public AssignmentOverlapFromPairs createAssignment(
+            ObjectsToCompare objectsToCompare,
+            ImageDimensions dimensions,
+            boolean useMIP,
+            BoundIOContext context)
+            throws CreateException {
+        try {
+            SharedFeaturesInitParams soFeature =
+                    SharedFeaturesInitParams.create(
+                            context.getLogger(), context.getModelDirectory());
+            featureEvaluator.initRecursive(soFeature, context.getLogger());
 
-	public void setMaxCost(double maxCost) {
-		this.maxCost = maxCost;
-	}
+            AssignmentObjectFactory assignmentCreator =
+                    new AssignmentObjectFactory(featureEvaluator, useMIP);
 
-	public int getNumDecimalPlaces() {
-		return numDecimalPlaces;
-	}
+            AssignmentOverlapFromPairs assignment =
+                    assignmentCreator.createAssignment(
+                            objectsToCompare.getLeft(),
+                            objectsToCompare.getRight(),
+                            maxCost,
+                            dimensions);
 
-	public void setNumDecimalPlaces(int numDecimalPlaces) {
-		this.numDecimalPlaces = numDecimalPlaces;
-	}
+            // We remove any border items from the assignment
+            if (removeTouchingBorderXY) {
+                assignment.removeTouchingBorderXY(dimensions);
+            }
 
-	@Override
-	public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
-		return new AnnotationGroupObjMask(key);
-	}
+            context.getOutputManager()
+                    .getWriterCheckIfAllowed()
+                    .write(
+                            "costMatrix",
+                            () ->
+                                    new ObjectsDistanceMatrixGenerator(
+                                            assignmentCreator.getCost(), numDecimalPlaces));
 
-	@Override
-	public boolean moreThanOneObj() {
-		return true;
-	}
+            return assignment;
+        } catch (FeatureCalcException | InitException e1) {
+            throw new CreateException(e1);
+        }
+    }
 
-	public boolean isRemoveTouchingBorderXY() {
-		return removeTouchingBorderXY;
-	}
+    @Override
+    public AnnotationGroup<AssignmentOverlapFromPairs> groupForKey(String key) {
+        return new AnnotationGroupObject(key);
+    }
 
-	public void setRemoveTouchingBorderXY(boolean removeTouchingBorderXY) {
-		this.removeTouchingBorderXY = removeTouchingBorderXY;
-	}
+    @Override
+    public boolean moreThanOneObj() {
+        return true;
+    }
 }

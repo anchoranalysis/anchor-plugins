@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,31 +24,31 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
+
 class ValueAndIndex {
-	private double value;
-	private int index;
-	
-	public ValueAndIndex(double value, int index) {
-		super();
-		this.value = value;
-		this.index = index;
-	}
+    private double value;
+    private int index;
 
-	public double getValue() {
-		return value;
-	}
+    public ValueAndIndex(double value, int index) {
+        super();
+        this.value = value;
+        this.index = index;
+    }
 
-	public void setValue(double value) {
-		this.value = value;
-	}
+    public double getValue() {
+        return value;
+    }
 
-	public int getIndex() {
-		return index;
-	}
+    public void setValue(double value) {
+        this.value = value;
+    }
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 }

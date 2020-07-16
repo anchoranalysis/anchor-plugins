@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
-
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-plugin-operator-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
  * #L%
  */
 
+package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
@@ -33,56 +32,56 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-
 public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
-	
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean avoidDivideByZero = false;
-	
-	@BeanField
-	private double divideByZeroValue = 1e+15;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public double calc( SessionInput<T> input ) throws FeatureCalcException {
-		
-		int size = getList().size();
-		
-		double result = input.calc( getList().get(0) );
-		
-		for (int i=1; i<size; i++) {
-			double div = input.calc( getList().get(i) );
-			if (div==0.0) {
-				if (avoidDivideByZero) {
-					return divideByZeroValue;
-				} else {
-					throw new FeatureCalcException( String.format("Divide by zero from feature %s", getList().get(i).getFriendlyName() ) );
-				}
-			}
-			result /= div;
-		}
-		return result;
-	}
-	
-	@Override
-	public String getDscrLong() {
-		return descriptionForList("/");
-	}
-	
-	public boolean isAvoidDivideByZero() {
-		return avoidDivideByZero;
-	}
 
-	public void setAvoidDivideByZero(boolean avoidDivideByZero) {
-		this.avoidDivideByZero = avoidDivideByZero;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private boolean avoidDivideByZero = false;
 
-	public double getDivideByZeroValue() {
-		return divideByZeroValue;
-	}
+    @BeanField private double divideByZeroValue = 1e+15;
+    // END BEAN PROPERTIES
 
-	public void setDivideByZeroValue(double divideByZeroValue) {
-		this.divideByZeroValue = divideByZeroValue;
-	}
+    @Override
+    public double calc(SessionInput<T> input) throws FeatureCalcException {
+
+        int size = getList().size();
+
+        double result = input.calc(getList().get(0));
+
+        for (int i = 1; i < size; i++) {
+            double div = input.calc(getList().get(i));
+            if (div == 0.0) {
+                if (avoidDivideByZero) {
+                    return divideByZeroValue;
+                } else {
+                    throw new FeatureCalcException(
+                            String.format(
+                                    "Divide by zero from feature %s",
+                                    getList().get(i).getFriendlyName()));
+                }
+            }
+            result /= div;
+        }
+        return result;
+    }
+
+    @Override
+    public String getDscrLong() {
+        return descriptionForList("/");
+    }
+
+    public boolean isAvoidDivideByZero() {
+        return avoidDivideByZero;
+    }
+
+    public void setAvoidDivideByZero(boolean avoidDivideByZero) {
+        this.avoidDivideByZero = avoidDivideByZero;
+    }
+
+    public double getDivideByZeroValue() {
+        return divideByZeroValue;
+    }
+
+    public void setDivideByZeroValue(double divideByZeroValue) {
+        this.divideByZeroValue = divideByZeroValue;
+    }
 }

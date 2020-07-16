@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
-
 /*-
  * #%L
- * anchor-image-feature
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.plugin.image.feature.bean.object.table;
 
+import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -43,32 +42,36 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * A feature-table describing objects defined by columns (features) and rows (inputs).
- * 
- * <p>A row may represent a single object, or a pair of objects, or any other derived inputs from an object-collection</p>.
- * 
+ *
+ * <p>A row may represent a single object, or a pair of objects, or any other derived inputs from an
+ * object-collection.
+ *
  * @author Owen Feehan
  * @param T type of fexture used in the table
- *
  */
-public abstract class FeatureTableObjects<T extends FeatureInput> extends AnchorBean<FeatureTableObjects<T>> {
+public abstract class FeatureTableObjects<T extends FeatureInput>
+        extends AnchorBean<FeatureTableObjects<T>> {
 
-	/**
-	 * Creates features that will be applied on the objMasks. Features should always be duplicated from the input list.
-	 * 
-	 * @param list
-	 * @param storeFactory TODO
-	 * @param suppressErrors TODO
-	 * @return
-	 * @throws CreateException
-	 */
-	public abstract FeatureTableCalculator<T> createFeatures( List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list, NamedFeatureStoreFactory storeFactory, boolean suppressErrors ) throws CreateException, InitException;
-		
-	/** Generates a unique identifier for a particular input */
-	public abstract String uniqueIdentifierFor(T input);
-	
-	public abstract List<T> createListInputs(
-		ObjectCollection objs,
-		NRGStackWithParams nrgStack,
-		Logger logger
-	) throws CreateException;
+    /**
+     * Creates features that will be applied on the objects. Features should always be duplicated
+     * from the input list.
+     *
+     * @param list
+     * @param storeFactory
+     * @param suppressErrors
+     * @return
+     * @throws CreateException
+     */
+    public abstract FeatureTableCalculator<T> createFeatures(
+            List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
+            NamedFeatureStoreFactory storeFactory,
+            boolean suppressErrors)
+            throws CreateException, InitException;
+
+    /** Generates a unique identifier for a particular input */
+    public abstract String uniqueIdentifierFor(T input);
+
+    public abstract List<T> createListInputs(
+            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            throws CreateException;
 }

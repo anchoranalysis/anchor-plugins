@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,23 +24,23 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
+
 import org.anchoranalysis.bean.annotation.BeanField;
 
-public abstract class FeatureIntersectingObjectsThreshold extends FeatureIntersectingObjectsSingleElement {
+public abstract class FeatureIntersectingObjectsThreshold
+        extends FeatureIntersectingObjectsSingleElement {
 
-	// START BEAN PROPERTIES
-	/**
-	 * Only considers values greater or equal to the threshold
-	 */
-	@BeanField
-	private double threshold = 0.0;
-	// END BEAN PROPERTIES
-	
-	public double getThreshold() {
-		return threshold;
-	}
+    // START BEAN PROPERTIES
+    /** Only considers values greater or equal to the threshold */
+    @BeanField private double threshold = 0.0;
+    // END BEAN PROPERTIES
 
-	public void setThreshold(double threshold) {
-		this.threshold = threshold;
-	}
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
 }

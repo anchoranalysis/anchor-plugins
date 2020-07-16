@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
-
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,14 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.table;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -45,152 +46,141 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
-import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
 /**
- * Creates a set of features, that creates pairs of neighbouring-objects and applies a mixture of single-object features
- *    and pair features. 
- * 
- * Specifically:
- * 1. Creates a graph of neighbouring-objects
- * 2. Passes each pair of immediately-neighbouring as params, together with their merged object
- * 
- * Features are formed by duplicating the input-feature list (inputfeatures, single-object features only):
+ * Creates a set of features, that creates pairs of neighboring-objects and applies a mixture of
+ * single-object features and pair features.
+ *
+ * <p>Specifically:
+ *
+ * <ul>
+ *   <li>Creates a graph of neighboring-objects
+ *   <li>Passes each pair of immediately-neighboring as params, together with their merged object
+ * </ul>
+ *
+ * <p>Features are formed by duplicating the input-feature list (inputfeatures, single-object
+ * features only):
+ *
+ * <pre>
  *   a) First.inputfeatures     applies the features to the first-object in the pair
  *   b) Second.inputfeatures    applies the features to the second-object in the pair
  *   c) Merged.inputfeatures    applies the features to the merged-object
+ * </pre>
  *
- * Features (that are not duplicated) are also possible:
+ * <p>Features (that are not duplicated) are also possible:
+ *
+ * <pre>
  *   d) Image.					additional single-object features that don't depend on any individual-object, only the image
- *   e) Pair.					additional pair-features (FeatureObjMaskParamsPair)
- *   
- *   The column order output is:  Image, First, Second, Pair, Merged.
- * 
- *  For First and Second, we use a cache, to avoid repeated feature values
- *    
- *  TODO This latter caching-step, could also be avoided in @see ch.ethz.biol.cell.countchrom.experiment.ExportFeaturesObjMaskTask , due to knowledge of the topology of the repeated features in the resulting output
- *    but for now, it's done by putting a cache on each feature.
- * 
- * @author Owen Feehan
+ *   e) Pair.					additional pair-features ({@link FeatureInputPairObjects})
+ * </pre>
  *
+ * <p>The column order output is: <code>Image, First, Second, Pair, Merged</code>
+ *
+ * <p>For <code>First</code> and <code>Second</code>, we use a cache, to avoid repeated
+ * calculations.
+ *
+ * <p>TODO This latter caching-step, could also be avoided in {@link
+ * org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask} due to knowledge of the topology of
+ * the repeated features in the resulting output but for now, it's done by putting a cache on each
+ * feature.
+ *
+ * @author Owen Feehan
  */
 public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
 
-	// START BEAN PROPERTIES
-	/**
-	 * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
-	 */
-	@BeanField @Getter @Setter
-	private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair = new ArrayList<>();
-	
-	/**
-	 * Additional features that only depend on the image, so do not need to be replicated for every object.
-	 */
-	@BeanField @Getter @Setter
-	private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage = new ArrayList<>();
-	
-	/**
-	 * Include features for the First-object of the pair
-	 */
-	@BeanField @Getter @Setter
-	private boolean includeFirst = true;
+    // START BEAN PROPERTIES
+    /**
+     * Additional features that are processed on the pair of images (i.e. First+Second as a pair)
+     */
+    @BeanField @Getter @Setter
+    private List<NamedBean<FeatureListProvider<FeatureInputPairObjects>>> featuresPair =
+            new ArrayList<>();
 
-	/**
-	 * Include features for the Second-object of the pair
-	 */
-	@BeanField @Getter @Setter
-	private boolean includeSecond = true;
-	
-	/**
-	 * Include features for the Merged-object of the pair
-	 */
-	@BeanField @Getter @Setter
-	private boolean includeMerged = true;
-	
-	/**
-	 * If true, no overlapping objects are treated as pairs
-	 */
-	@BeanField @Getter @Setter
-	private boolean avoidOverlappingObjects = false;
-	
-	@BeanField @Getter @Setter
-	private boolean do3D = true;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public FeatureTableCalculator<FeatureInputPairObjects> createFeatures(
-		List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
-		NamedFeatureStoreFactory storeFactory,
-		boolean suppressErrors
-	) throws CreateException {
-		
-		try {
-			FeatureListCustomNameHelper helper = new FeatureListCustomNameHelper(storeFactory);
-			
-			MergedPairsFeatures features = new MergedPairsFeatures(
-				helper.copyFeaturesCreateCustomName(featuresImage),
-				helper.copyFeaturesCreateCustomName(list),
-				helper.copyFeaturesCreateCustomName(featuresPair)
-			);
-			
-			return new FeatureCalculatorMergedPairs(
-				features,
-				new MergedPairsInclude(includeFirst, includeSecond, includeMerged),				
-				suppressErrors
-			);
-			
-		} catch (BeanDuplicateException | OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	@Override
-	public List<FeatureInputPairObjects> createListInputs(ObjectCollection objs,
-			NRGStackWithParams nrgStack, Logger logger) throws CreateException {
+    /**
+     * Additional features that only depend on the image, so do not need to be replicated for every
+     * object.
+     */
+    @BeanField @Getter @Setter
+    private List<NamedBean<FeatureListProvider<FeatureInputStack>>> featuresImage =
+            new ArrayList<>();
 
-		List<FeatureInputPairObjects> out = new ArrayList<>();
-		
-		// We create a neighbour-graph of our input objects
-		CreateNeighborGraph<ObjectMask> graphCreator = new CreateNeighborGraph<>(
-			new EdgeAdderParameters(avoidOverlappingObjects)
-		);
-		GraphWithEdgeTypes<ObjectMask,Integer> graphNghb = graphCreator.createGraph(
-			objs.asList(),
-			Function.identity(),
-			(v1, v2, numPixels) -> numPixels,
-			nrgStack.getNrgStack().getDimensions().getExtent(),
-			do3D
-		);
-		
-		// We iterate through every edge in the graph, edges can exist in both directions
-		for( EdgeTypeWithVertices<ObjectMask,Integer> e : graphNghb.edgeSetUnique() ) {
-			out.add(
-				new FeatureInputPairObjects(
-					e.getNode1(),
-					e.getNode2(),
-					Optional.of(nrgStack)
-				)
-			);
-		}
-		
-		return out;
-	}
+    /** Include features for the First-object of the pair */
+    @BeanField @Getter @Setter private boolean includeFirst = true;
 
-	@Override
-	public String uniqueIdentifierFor(FeatureInputPairObjects input) {
-		return UniqueIdentifierUtilities.forObjectPair(
-			input.getFirst(),
-			input.getSecond()
-		);
-	}
+    /** Include features for the Second-object of the pair */
+    @BeanField @Getter @Setter private boolean includeSecond = true;
+
+    /** Include features for the Merged-object of the pair */
+    @BeanField @Getter @Setter private boolean includeMerged = true;
+
+    /** If true, no overlapping objects are treated as pairs */
+    @BeanField @Getter @Setter private boolean avoidOverlappingObjects = false;
+
+    @BeanField @Getter @Setter private boolean do3D = true;
+    // END BEAN PROPERTIES
+
+    @Override
+    public FeatureTableCalculator<FeatureInputPairObjects> createFeatures(
+            List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
+            NamedFeatureStoreFactory storeFactory,
+            boolean suppressErrors)
+            throws CreateException {
+
+        try {
+            FeatureListCustomNameHelper helper = new FeatureListCustomNameHelper(storeFactory);
+
+            MergedPairsFeatures features =
+                    new MergedPairsFeatures(
+                            helper.copyFeaturesCreateCustomName(featuresImage),
+                            helper.copyFeaturesCreateCustomName(list),
+                            helper.copyFeaturesCreateCustomName(featuresPair));
+
+            return new FeatureCalculatorMergedPairs(
+                    features,
+                    new MergedPairsInclude(includeFirst, includeSecond, includeMerged),
+                    suppressErrors);
+
+        } catch (BeanDuplicateException | OperationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
+
+    @Override
+    public List<FeatureInputPairObjects> createListInputs(
+            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            throws CreateException {
+
+        List<FeatureInputPairObjects> out = new ArrayList<>();
+
+        // We create a neighbor-graph of our input objects
+        CreateNeighborGraph<ObjectMask> graphCreator =
+                new CreateNeighborGraph<>(new EdgeAdderParameters(avoidOverlappingObjects));
+        GraphWithEdgeTypes<ObjectMask, Integer> graphNeighbors =
+                graphCreator.createGraph(
+                        objects.asList(),
+                        Function.identity(),
+                        (v1, v2, numberVoxels) -> numberVoxels,
+                        nrgStack.getNrgStack().getDimensions().getExtent(),
+                        do3D);
+
+        // We iterate through every edge in the graph, edges can exist in both directions
+        for (EdgeTypeWithVertices<ObjectMask, Integer> e : graphNeighbors.edgeSetUnique()) {
+            out.add(new FeatureInputPairObjects(e.getNode1(), e.getNode2(), Optional.of(nrgStack)));
+        }
+
+        return out;
+    }
+
+    @Override
+    public String uniqueIdentifierFor(FeatureInputPairObjects input) {
+        return UniqueIdentifierUtilities.forObjectPair(input.getFirst(), input.getSecond());
+    }
 }

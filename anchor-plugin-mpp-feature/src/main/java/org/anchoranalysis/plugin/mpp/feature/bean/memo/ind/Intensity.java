@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
-
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +24,11 @@ import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
+import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -41,62 +39,53 @@ import org.anchoranalysis.image.feature.histogram.Mean;
 
 public class Intensity extends FeatureSingleMemo {
 
-	// START BEAN
-	/** Feature to apply to the histogram */
-	@BeanField
-	private Feature<FeatureInputHistogram> item = new Mean();
-	
-	/** If TRUE, zeros are excluded from considering in the histogram */
-	@BeanField
-	private boolean excludeZero = false;
-	
-	@BeanField
-	private MarkRegion region;
-	// END BEAN
-			
-	@Override
-	public double calc( SessionInput<FeatureInputSingleMemo> input ) throws FeatureCalcException {
+    // START BEAN
+    /** Feature to apply to the histogram */
+    @BeanField private Feature<FeatureInputHistogram> item = new Mean();
 
-		return input.forChild().calc(
-			item,
-			new CalculateHistogramInputFromMemo(region, excludeZero),
-			cacheName()
-		);
-	}
-	
-	private ChildCacheName cacheName() {
-		return new ChildCacheName(
-			Intensity.class,
-			region.uniqueName()
-		);
-	}
+    /** If TRUE, zeros are excluded from considering in the histogram */
+    @BeanField private boolean excludeZero = false;
 
-	@Override
-	public String getParamDscr() {
-		return region.getBeanDscr();
-	}
+    @BeanField private MarkRegion region;
+    // END BEAN
 
-	public boolean isExcludeZero() {
-		return excludeZero;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
 
-	public void setExcludeZero(boolean excludeZero) {
-		this.excludeZero = excludeZero;
-	}
+        return input.forChild()
+                .calc(item, new CalculateHistogramInputFromMemo(region, excludeZero), cacheName());
+    }
 
-	public MarkRegion getRegion() {
-		return region;
-	}
+    private ChildCacheName cacheName() {
+        return new ChildCacheName(Intensity.class, region.uniqueName());
+    }
 
-	public void setRegion(MarkRegion region) {
-		this.region = region;
-	}
+    @Override
+    public String getParamDscr() {
+        return region.getBeanDscr();
+    }
 
-	public Feature<FeatureInputHistogram> getItem() {
-		return item;
-	}
+    public boolean isExcludeZero() {
+        return excludeZero;
+    }
 
-	public void setItem(Feature<FeatureInputHistogram> item) {
-		this.item = item;
-	}
+    public void setExcludeZero(boolean excludeZero) {
+        this.excludeZero = excludeZero;
+    }
+
+    public MarkRegion getRegion() {
+        return region;
+    }
+
+    public void setRegion(MarkRegion region) {
+        this.region = region;
+    }
+
+    public Feature<FeatureInputHistogram> getItem() {
+        return item;
+    }
+
+    public void setItem(Feature<FeatureInputHistogram> item) {
+        this.item = item;
+    }
 }

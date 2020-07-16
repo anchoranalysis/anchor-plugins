@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
-
-/*
+/*-
  * #%L
  * anchor-plugin-ij
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,10 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
 
 import ij.ImageStack;
-
 import java.util.Optional;
-
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
@@ -42,53 +39,53 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Converts a RasterGenerator into a ImageStackGenerator
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> iteration-type
  */
-public class RasterConverterIterableGenerator<T> extends ImageStackGenerator implements IterableObjectGenerator<T, ImageStack> {
+public class RasterConverterIterableGenerator<T> extends ImageStackGenerator
+        implements IterableObjectGenerator<T, ImageStack> {
 
-	private IterableObjectGenerator<T,Stack> rasterGenerator;
-	
-	public RasterConverterIterableGenerator(IterableObjectGenerator<T,Stack> rasterGenerator) {
-		super();
-		this.rasterGenerator = rasterGenerator;
-	}
+    private IterableObjectGenerator<T, Stack> rasterGenerator;
 
-	@Override
-	public ImageStack generate() throws OutputWriteFailedException {
-		Stack stack = rasterGenerator.getGenerator().generate();
-		return IJWrap.createColorProcessorStack( new RGBStack(stack) );
-	}
+    public RasterConverterIterableGenerator(IterableObjectGenerator<T, Stack> rasterGenerator) {
+        super();
+        this.rasterGenerator = rasterGenerator;
+    }
 
-	@Override
-	public Optional<ManifestDescription> createManifestDescription() {
-		return rasterGenerator.getGenerator().createManifestDescription();
-	}
+    @Override
+    public ImageStack generate() throws OutputWriteFailedException {
+        Stack stack = rasterGenerator.getGenerator().generate();
+        return IJWrap.createColorProcessorStack(new RGBStack(stack));
+    }
 
-	@Override
-	public void start() throws OutputWriteFailedException {
-		rasterGenerator.start();
-	}
+    @Override
+    public Optional<ManifestDescription> createManifestDescription() {
+        return rasterGenerator.getGenerator().createManifestDescription();
+    }
 
-	@Override
-	public void end() throws OutputWriteFailedException {
-		rasterGenerator.end();
-	}
+    @Override
+    public void start() throws OutputWriteFailedException {
+        rasterGenerator.start();
+    }
 
-	@Override
-	public T getIterableElement() {
-		return rasterGenerator.getIterableElement();
-	}
+    @Override
+    public void end() throws OutputWriteFailedException {
+        rasterGenerator.end();
+    }
 
-	@Override
-	public void setIterableElement(T element) throws SetOperationFailedException {
-		this.rasterGenerator.setIterableElement(element);
-	}
+    @Override
+    public T getIterableElement() {
+        return rasterGenerator.getIterableElement();
+    }
 
-	@Override
-	public ObjectGenerator<ImageStack> getGenerator() {
-		return this;
-	}
+    @Override
+    public void setIterableElement(T element) throws SetOperationFailedException {
+        this.rasterGenerator.setIterableElement(element);
+    }
 
+    @Override
+    public ObjectGenerator<ImageStack> getGenerator() {
+        return this;
+    }
 }

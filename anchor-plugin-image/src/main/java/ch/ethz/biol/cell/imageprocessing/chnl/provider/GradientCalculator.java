@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,9 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
-import java.nio.FloatBuffer;
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import java.nio.FloatBuffer;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -39,155 +34,155 @@ import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.convert.ImgLib2Wrap;
+import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
 /**
  * Calculates the gradient in one or more dimensions
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 class GradientCalculator {
 
-	private boolean[] dimensions;
-	private float scaleFactor;
-	private int addSum;
-	 
-	/** calculate central-difference instead of backward-difference (finite differences) */
-	private boolean centralDiff = false;
-	
+    private boolean[] dimensions;
+    private float scaleFactor;
+    private int addSum;
 
-	/** iff TRUE, we apply a l2norm to our difference (useful for getting magnitude if working with more than 1 dimension)? */
-	private boolean norm = true;
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param dimensions a boolean array indicating whether a dimension (X,Y,Z) should be included in the calculation
-	 * @param scaleFactor the gradient is multiplied by this constant in the output
-	 * @param addSum adds a constant after scale-factor has been applied (useful for shifting negative numbers into a positive range)
-	 */
-	public GradientCalculator(boolean[] dimensions, float scaleFactor, int addSum) {
-		super();
-		this.dimensions = dimensions;
-		this.scaleFactor = scaleFactor;
-		this.addSum = addSum;
-	}
+    /** calculate central-difference instead of backward-difference (finite differences) */
+    private boolean centralDiff = false;
 
+    /**
+     * iff TRUE, we apply a l2norm to our difference (useful for getting magnitude if working with
+     * more than 1 dimension)?
+     */
+    private boolean norm = true;
 
-	/**
-	 * Calculates the gradient of a channel
-	 * 
-	 * @param signalIn where to calculate gradient from
-	 * @param gradientOut where to output the gradient to
+    /**
+     * Constructor
+     *
+     * @param dimensions a boolean array indicating whether a dimension (X,Y,Z) should be included
+     *     in the calculation
+     * @param scaleFactor the gradient is multiplied by this constant in the output
+     * @param addSum adds a constant after scale-factor has been applied (useful for shifting
+     *     negative numbers into a positive range)
+     */
+    public GradientCalculator(boolean[] dimensions, float scaleFactor, int addSum) {
+        super();
+        this.dimensions = dimensions;
+        this.scaleFactor = scaleFactor;
+        this.addSum = addSum;
+    }
 
-	 * @throws CreateException
-	 */
-	public void calculateGradient(VoxelBoxWrapper signalIn, VoxelBox<FloatBuffer> gradientOut) {
-		
-		calcGradientImgLib2(
-			ImgLib2Wrap.wrap(signalIn),				// Input channel
-			ImgLib2Wrap.wrapFloat(gradientOut)		// Output channel
-		);
-	}
+    /**
+     * Calculates the gradient of a channel
+     *
+     * @param signalIn where to calculate gradient from
+     * @param gradientOut where to output the gradient to
+     * @throws CreateException
+     */
+    public void calculateGradient(VoxelBoxWrapper signalIn, VoxelBox<FloatBuffer> gradientOut) {
 
-	public boolean isCentralDiff() {
-		return centralDiff;
-	}
+        calcGradientImgLib2(
+                ImgLib2Wrap.wrap(signalIn), // Input channel
+                ImgLib2Wrap.wrapFloat(gradientOut) // Output channel
+                );
+    }
 
+    public boolean isCentralDiff() {
+        return centralDiff;
+    }
 
-	public void setCentralDiff(boolean centralDiff) {
-		this.centralDiff = centralDiff;
-	}
+    public void setCentralDiff(boolean centralDiff) {
+        this.centralDiff = centralDiff;
+    }
 
+    public boolean isNorm() {
+        return norm;
+    }
 
-	public boolean isNorm() {
-		return norm;
-	}
+    public void setNorm(boolean norm) {
+        this.norm = norm;
+    }
 
-	public void setNorm(boolean norm) {
-		this.norm = norm;
-	}
-	
+    /**
+     * Uses ImgLib2 to calculate gradient
+     *
+     * <p>See <a
+     * href="https://github.com/imglib/imglib2-algorithm-gpl/blob/master/src/main/java/net/imglib2/algorithm/pde/Gradient.java>ImgLib2</a>
+     *
+     * @param input input-image
+     * @param output output-image
+     */
+    private void calcGradientImgLib2(Img<? extends RealType<?>> input, Img<FloatType> output) {
 
-	/**
-	 * Uses ImgLib2 to calculate gradient
-	 * 
-	 * <p>See <a href="https://github.com/imglib/imglib2-algorithm-gpl/blob/master/src/main/java/net/imglib2/algorithm/pde/Gradient.java>ImgLib2</a></p>
-	 * 
-	 * @param input input-image
-	 * @param output output-image
-	 */
-	private void calcGradientImgLib2( Img<? extends RealType<?>> input, Img<FloatType> output ) {
-		
-		Cursor<? extends RealType<?>> in = Views.iterable(input).localizingCursor();
-		RandomAccess<FloatType> oc = output.randomAccess();
-		
-		OutOfBounds<? extends RealType<?>> ra = Views.extendMirrorDouble(input).randomAccess(); 
-		
- 		while (in.hasNext()) {
-			in.fwd();
+        Cursor<? extends RealType<?>> in = Views.iterable(input).localizingCursor();
+        RandomAccess<FloatType> oc = output.randomAccess();
 
-			// Position neighborhood cursor
-			ra.setPosition( in );
+        OutOfBounds<? extends RealType<?>> ra = Views.extendMirrorDouble(input).randomAccess();
 
-			// Position output cursor
-			for (int i = 0; i < input.numDimensions(); i++ ) {
-				oc.setPosition( in.getLongPosition( i ), i );
-			}
-			
-			double diffSum = processDimensions(
-				ra,
-				input.numDimensions(),
-				in.get().getRealFloat()		// central value
-			);
-			
-			oc.get().set(
-				calculateOutputPixel(diffSum)
-			);
-		}
+        while (in.hasNext()) {
+            in.fwd();
 
-	}
-	
-	private double processDimensions(OutOfBounds<? extends RealType<?>> ra, int numDims, float central) {
-		
-		double diffSum = 0.0;
-		
-		for (int i=0; i<numDims; i++) {
-			
-			// Skip any dimension that isn't included
-			if ( !dimensions[i] )	{
-				continue;
-			}
-			
-			ra.fwd(i);
-			float diff = central - ra.get().getRealFloat();
-			ra.bck(i);
-			
-			if (centralDiff) {
-				ra.bck(i);
-				diff += ra.get().getRealFloat();
-				ra.fwd(i);
-			}
-							
-			if (norm) {
-				diffSum += Math.pow(diff,2.0);
-			} else {
-				diffSum += diff;
-			}
-		}
-		return diffSum;
-	}
-	
-	private float calculateOutputPixel( double diffSum ) {
-		float diffOut = (float) maybeNorm(diffSum);
-		return (diffOut*scaleFactor)+addSum;
-	}
-	
-	private double maybeNorm( double diffSum ) {
-		if (norm) {
-			return Math.sqrt( diffSum );
-		} else {
-			return diffSum;
-		}
-	}
+            // Position neighborhood cursor
+            ra.setPosition(in);
+
+            // Position output cursor
+            for (int i = 0; i < input.numDimensions(); i++) {
+                oc.setPosition(in.getLongPosition(i), i);
+            }
+
+            double diffSum =
+                    processDimensions(
+                            ra, input.numDimensions(), in.get().getRealFloat() // central value
+                            );
+
+            oc.get().set(calculateOutputPixel(diffSum));
+        }
+    }
+
+    private double processDimensions(
+            OutOfBounds<? extends RealType<?>> ra, int numDims, float central) {
+
+        double diffSum = 0.0;
+
+        for (int i = 0; i < numDims; i++) {
+
+            // Skip any dimension that isn't included
+            if (!dimensions[i]) {
+                continue;
+            }
+
+            ra.fwd(i);
+            float diff = central - ra.get().getRealFloat();
+            ra.bck(i);
+
+            if (centralDiff) {
+                ra.bck(i);
+                diff += ra.get().getRealFloat();
+                ra.fwd(i);
+            }
+
+            if (norm) {
+                diffSum += Math.pow(diff, 2.0);
+            } else {
+                diffSum += diff;
+            }
+        }
+        return diffSum;
+    }
+
+    private float calculateOutputPixel(double diffSum) {
+        float diffOut = (float) maybeNorm(diffSum);
+        return (diffOut * scaleFactor) + addSum;
+    }
+
+    private double maybeNorm(double diffSum) {
+        if (norm) {
+            return Math.sqrt(diffSum);
+        } else {
+            return diffSum;
+        }
+    }
 }

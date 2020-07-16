@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.multifile;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.multifile;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.io.multifile;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.multifile;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,55 +33,50 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
 import org.anchoranalysis.core.functional.OptionalUtilities;
 
 public class ParsedFilePathBag implements Iterable<FileDetails> {
-	
-	private List<FileDetails> list = new ArrayList<>();
 
-	// chnlNum and sliceNum can be null, indicating that we don't know the values
-	public void add( FileDetails fileDetails ) {
-		list.add(fileDetails);
-	}
+    private List<FileDetails> list = new ArrayList<>();
 
-	public Iterator<FileDetails> iterator() {
-		return list.iterator();
-	}
-	
-	public Optional<IntegerRange> rangeChnlNum() {
-		return range(FileDetails::getChnlNum);
-	}
-	
-	public Optional<IntegerRange> rangeSliceNum() {
-		return range(FileDetails::getSliceNum);
-	}
-	
-	public Optional<IntegerRange> rangeTimeIndex() {
-		return range(FileDetails::getTimeIndex);
-	}
-		
-	private Optional<IntegerRange> range( Function<FileDetails,Optional<Integer>> func ) {
-		return OptionalUtilities.mapBoth(
-			getMin(func),
-			getMax(func),
-			IntegerRange::new
-		);
-	}
-	
-	private Optional<Integer> getMax( Function<FileDetails,Optional<Integer>> func ) {
-		return fileDetailsStream(func).max(Comparator.naturalOrder());
-	}
-	
-	public Optional<Integer> getMin( Function<FileDetails,Optional<Integer>> func ) {
-		return fileDetailsStream(func).min(Comparator.naturalOrder());
-	}
-	
-	private Stream<Integer> fileDetailsStream( Function<FileDetails,Optional<Integer>> func ) {
-		return list.stream().map(func).filter(Optional::isPresent).map(Optional::get);
-	}
+    // chnlNum and sliceNum can be null, indicating that we don't know the values
+    public void add(FileDetails fileDetails) {
+        list.add(fileDetails);
+    }
 
-	public int size() {
-		return list.size();
-	}	
+    public Iterator<FileDetails> iterator() {
+        return list.iterator();
+    }
+
+    public Optional<IntegerRange> rangeChnlNum() {
+        return range(FileDetails::getChnlNum);
+    }
+
+    public Optional<IntegerRange> rangeSliceNum() {
+        return range(FileDetails::getSliceNum);
+    }
+
+    public Optional<IntegerRange> rangeTimeIndex() {
+        return range(FileDetails::getTimeIndex);
+    }
+
+    private Optional<IntegerRange> range(Function<FileDetails, Optional<Integer>> func) {
+        return OptionalUtilities.mapBoth(getMin(func), getMax(func), IntegerRange::new);
+    }
+
+    private Optional<Integer> getMax(Function<FileDetails, Optional<Integer>> func) {
+        return fileDetailsStream(func).max(Comparator.naturalOrder());
+    }
+
+    public Optional<Integer> getMin(Function<FileDetails, Optional<Integer>> func) {
+        return fileDetailsStream(func).min(Comparator.naturalOrder());
+    }
+
+    private Stream<Integer> fileDetailsStream(Function<FileDetails, Optional<Integer>> func) {
+        return list.stream().map(func).filter(Optional::isPresent).map(Optional::get);
+    }
+
+    public int size() {
+        return list.size();
+    }
 }

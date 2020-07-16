@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
@@ -37,21 +35,25 @@ import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisual
 import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 public class OrderedList extends MarkProposerFromList {
-	
-	@Override
-	protected boolean propose(VoxelizedMarkMemo inputMark, ProposerContext context, List<MarkProposer> markProposerList) throws ProposalAbnormalFailureException {
-		for (MarkProposer markProposer : markProposerList) {
-			// Calculate position
-	        if(!markProposer.propose(inputMark, context)) {
-	        	return false;
-	        }
-		}
-		return true;
-	}
 
-	@Override
-	protected Optional<CreateProposalVisualization> proposalVisualization(boolean detailed,
-			List<MarkProposer> markProposerList) {
-		return Optional.empty();
-	}
+    @Override
+    protected boolean propose(
+            VoxelizedMarkMemo inputMark,
+            ProposerContext context,
+            List<MarkProposer> markProposerList)
+            throws ProposalAbnormalFailureException {
+        for (MarkProposer markProposer : markProposerList) {
+            // Calculate position
+            if (!markProposer.propose(inputMark, context)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected Optional<CreateProposalVisualization> proposalVisualization(
+            boolean detailed, List<MarkProposer> markProposerList) {
+        return Optional.empty();
+    }
 }

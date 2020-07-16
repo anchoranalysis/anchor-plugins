@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.input.chnl;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,36 +24,38 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  * #L%
  */
 
-import java.nio.file.Path;
+package org.anchoranalysis.plugin.io.bean.input.chnl;
 
+import java.nio.file.Path;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 class AdditionalChnl {
-	private String chnlName;
-	private int chnlIndex;
-	private Operation<Path,AnchorIOException> filePath;
-	
-	public AdditionalChnl(String chnlName, int chnlIndex, Operation<Path,AnchorIOException> filePath) {
-		super();
-		this.chnlName = chnlName;
-		this.chnlIndex = chnlIndex;
-		this.filePath = filePath;
-	}
+    private String chnlName;
+    private int chnlIndex;
+    private Operation<Path, AnchorIOException> filePath;
 
-	public Path getFilePath() throws AnchorIOException {
-		return filePath.doOperation();
-	}
-	
-	public ImgChnlMap createChnlMap() {
-		ImgChnlMap map = new ImgChnlMap();
-		map.add( new ImgChnlMapEntry(chnlName, chnlIndex) );
-		return map;
-	}
+    public AdditionalChnl(
+            String chnlName, int chnlIndex, Operation<Path, AnchorIOException> filePath) {
+        super();
+        this.chnlName = chnlName;
+        this.chnlIndex = chnlIndex;
+        this.filePath = filePath;
+    }
 
-	public String getChnlName() {
-		return chnlName;
-	}
+    public Path getFilePath() throws AnchorIOException {
+        return filePath.doOperation();
+    }
+
+    public ImgChnlMap createChnlMap() {
+        ImgChnlMap map = new ImgChnlMap();
+        map.add(new ImgChnlMapEntry(chnlName, chnlIndex));
+        return map;
+    }
+
+    public String getChnlName() {
+        return chnlName;
+    }
 }

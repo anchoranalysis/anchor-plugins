@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.bean.params;
-
 /*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.bean.params;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,10 @@ package org.anchoranalysis.plugin.image.bean.params;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.bean.params;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
@@ -34,51 +36,22 @@ import org.anchoranalysis.image.bean.ImageBean;
 
 /**
  * A key and associated value
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class KeyValueCondition extends ImageBean<KeyValueCondition> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private KeyValueParamsProvider params;
-	
-	@BeanField
-	private String key = "";
-	
-	@BeanField
-	private String value = "";
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private KeyValueParamsProvider params;
 
-	public boolean isConditionTrue() throws CreateException {
-		KeyValueParams kvp = params.create();
-		
-		return value.equals(
-			kvp.getProperty(key)
-		);
-	}
-	
-	public String getKey() {
-		return key;
-	}
+    @BeanField @Getter @Setter private String key = "";
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+    @BeanField @Getter @Setter private String value = "";
+    // END BEAN PROPERTIES
 
-	public String getValue() {
-		return value;
-	}
+    public boolean isConditionTrue() throws CreateException {
+        KeyValueParams kvp = params.create();
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public KeyValueParamsProvider getParams() {
-		return params;
-	}
-
-	public void setParams(KeyValueParamsProvider params) {
-		this.params = params;
-	}
+        return value.equals(kvp.getProperty(key));
+    }
 }

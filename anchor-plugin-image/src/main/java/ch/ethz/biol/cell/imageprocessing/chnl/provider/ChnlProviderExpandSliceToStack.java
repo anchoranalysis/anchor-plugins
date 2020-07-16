@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,11 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
@@ -42,43 +42,36 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
 public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider slice;
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected Channel createFromDim(ImageDimensions dim) throws CreateException {
-				
-		Channel chnl = slice.create();
-		
-		ImageDimensions sdSrc = chnl.getDimensions();
-		
-		if (sdSrc.getX()!=dim.getX()) {
-			throw new CreateException("x dimension is not equal");
-		}
-		if (sdSrc.getY()!=dim.getY()) {
-			throw new CreateException("y dimension is not equal");
-		}
-		
-		Channel chnlOut = ChannelFactory.instance().createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
-		
-		VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte(); 
-		VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
-		
-		for( int z=0; z<chnlOut.getDimensions().getZ(); z++) {
-			VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);
-			vbOut.setPixelsForPlane(z, bb );
-		}
-		
-		return chnlOut;
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ChnlProvider slice;
+    // END BEAN PROPERTIES
 
-	public ChnlProvider getSlice() {
-		return slice;
-	}
+    @Override
+    protected Channel createFromDim(ImageDimensions dim) throws CreateException {
 
-	public void setSlice(ChnlProvider slice) {
-		this.slice = slice;
-	}
+        Channel chnl = slice.create();
+
+        ImageDimensions sdSrc = chnl.getDimensions();
+
+        if (sdSrc.getX() != dim.getX()) {
+            throw new CreateException("x dimension is not equal");
+        }
+        if (sdSrc.getY() != dim.getY()) {
+            throw new CreateException("y dimension is not equal");
+        }
+
+        Channel chnlOut =
+                ChannelFactory.instance()
+                        .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
+
+        VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+
+        for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
+            VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);
+            vbOut.setPixelsForPlane(z, bb);
+        }
+
+        return chnlOut;
+    }
 }

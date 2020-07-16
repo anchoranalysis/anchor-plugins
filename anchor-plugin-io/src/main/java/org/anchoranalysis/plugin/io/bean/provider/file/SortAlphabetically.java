@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.provider.file;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
 import java.util.Collection;
@@ -36,23 +35,20 @@ import org.anchoranalysis.io.error.FileProviderException;
 
 public class SortAlphabetically extends FileProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FileProvider fileProvider;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Collection<File> create(InputManagerParams params) throws FileProviderException {
-		return SortUtilities.sortFiles(
-			fileProvider.create(params)
-		);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private FileProvider fileProvider;
+    // END BEAN PROPERTIES
 
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
+    @Override
+    public Collection<File> create(InputManagerParams params) throws FileProviderException {
+        return SortUtilities.sortFiles(fileProvider.create(params));
+    }
 
-	public void setFileProvider(FileProvider fileProvider) {
-		this.fileProvider = fileProvider;
-	}
+    public FileProvider getFileProvider() {
+        return fileProvider;
+    }
+
+    public void setFileProvider(FileProvider fileProvider) {
+        this.fileProvider = fileProvider;
+    }
 }

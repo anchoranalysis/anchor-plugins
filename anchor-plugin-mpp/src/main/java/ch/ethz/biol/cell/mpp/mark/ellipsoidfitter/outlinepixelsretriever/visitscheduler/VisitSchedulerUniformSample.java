@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,13 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -40,44 +40,36 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
-
 public class VisitSchedulerUniformSample extends VisitScheduler {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<VisitScheduler> list = new ArrayList<>();
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private List<VisitScheduler> list = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-	private VisitScheduler selected;
-	
-	@Override
-	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
-		return selected.maxDistFromRootPoint(res);
-	}
-	
-	@Override
-	public void beforeCreateObjMask(RandomNumberGenerator re, ImageResolution res)
-			throws InitException {
-		int rand = (int) (re.nextDouble() * list.size());
-		selected = list.get(rand);
-		selected.beforeCreateObjMask(re, res);
-	}
-	
-	@Override
-	public void afterCreateObjMask(Point3i root, ImageResolution res, RandomNumberGenerator re) throws InitException {
-		selected.afterCreateObjMask(root, res, re);
-	}
+    private VisitScheduler selected;
 
-	@Override
-	public boolean considerVisit(Point3i pnt, int distAlongContour, ObjectMask objMask) {
-		return selected.considerVisit(pnt, distAlongContour, objMask);
-	}
+    @Override
+    public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res)
+            throws OperationFailedException {
+        return selected.maxDistanceFromRootPoint(res);
+    }
 
-	public List<VisitScheduler> getList() {
-		return list;
-	}
+    @Override
+    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+            throws InitException {
+        selected = randomNumberGenerator.sampleFromList(list);
+        selected.beforeCreateObject(randomNumberGenerator, res);
+    }
 
-	public void setList(List<VisitScheduler> list) {
-		this.list = list;
-	}
+    @Override
+    public void afterCreateObject(
+            Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator)
+            throws InitException {
+        selected.afterCreateObject(root, res, randomNumberGenerator);
+    }
+
+    @Override
+    public boolean considerVisit(Point3i point, int distanceAlongContour, ObjectMask object) {
+        return selected.considerVisit(point, distanceAlongContour, object);
+    }
 }

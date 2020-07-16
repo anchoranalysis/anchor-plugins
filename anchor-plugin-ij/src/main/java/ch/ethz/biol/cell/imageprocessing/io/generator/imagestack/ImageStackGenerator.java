@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
-
-/*
+/*-
  * #%L
  * anchor-plugin-ij
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,25 +24,26 @@ package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.io.generator.imagestack;
 
 import ij.ImageStack;
-
 import java.nio.file.Path;
-
 import org.anchoranalysis.image.io.generator.raster.RasterWriterUtilities;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class ImageStackGenerator extends ObjectGenerator<ImageStack> {
-	
-	@Override
-	public void writeToFile( OutputWriteSettings outputWriteSettings, Path filePath ) throws OutputWriteFailedException {
-		throw new OutputWriteFailedException("writing out using an ImageStackGenerator is currently disabled");
-	}
-	
-	@Override
-	public String getFileExtension( OutputWriteSettings outputWriteSettings ) {
-		return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
-	}
+
+    @Override
+    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+            throws OutputWriteFailedException {
+        throw new OutputWriteFailedException(
+                "writing out using an ImageStackGenerator is currently disabled");
+    }
+
+    @Override
+    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+        return RasterWriterUtilities.getDefaultRasterFileExtension(outputWriteSettings);
+    }
 }

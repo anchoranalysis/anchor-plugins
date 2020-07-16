@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,58 +35,57 @@ import org.anchoranalysis.image.stack.Stack;
 
 public class ChnlProviderStackReference extends ChnlProvider {
 
-	// START
-	@BeanField
-	private int chnlIndex = 0;
-	
-	@BeanField
-	private String stackProviderID;
-	// END
-	
-	private Channel chnl;
+    // START
+    @BeanField private int chnlIndex = 0;
 
-	@Override
-	public Channel create() throws CreateException {
-		
-		try {
-			if (chnl==null) {
-				Stack stack = getInitializationParameters().getStackCollection().getException(stackProviderID);
-				
-				chnl = stack.getChnl(chnlIndex);
-				if (chnl==null) {
-					throw new CreateException( String.format("chnl %d cannot be found", chnlIndex));
-				}
-			}
-		} catch (NamedProviderGetException e) {
-			throw new CreateException(e);
-		}
-		
-		
-		return chnl;
-	}
+    @BeanField private String stackProviderID;
+    // END
 
-	public int getChnlIndex() {
-		return chnlIndex;
-	}
+    private Channel chnl;
 
-	public void setChnlIndex(int chnlIndex) {
-		this.chnlIndex = chnlIndex;
-	}
+    @Override
+    public Channel create() throws CreateException {
 
-	public String getStackProviderID() {
-		return stackProviderID;
-	}
+        try {
+            if (chnl == null) {
+                Stack stack =
+                        getInitializationParameters()
+                                .getStackCollection()
+                                .getException(stackProviderID);
 
-	public void setStackProviderID(String stackProviderID) {
-		this.stackProviderID = stackProviderID;
-	}
+                chnl = stack.getChnl(chnlIndex);
+                if (chnl == null) {
+                    throw new CreateException(String.format("chnl %d cannot be found", chnlIndex));
+                }
+            }
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(e);
+        }
 
-	public Channel getChnl() {
-		return chnl;
-	}
+        return chnl;
+    }
 
-	public void setChnl(Channel chnl) {
-		this.chnl = chnl;
-	}
+    public int getChnlIndex() {
+        return chnlIndex;
+    }
 
+    public void setChnlIndex(int chnlIndex) {
+        this.chnlIndex = chnlIndex;
+    }
+
+    public String getStackProviderID() {
+        return stackProviderID;
+    }
+
+    public void setStackProviderID(String stackProviderID) {
+        this.stackProviderID = stackProviderID;
+    }
+
+    public Channel getChnl() {
+        return chnl;
+    }
+
+    public void setChnl(Channel chnl) {
+        this.chnl = chnl;
+    }
 }

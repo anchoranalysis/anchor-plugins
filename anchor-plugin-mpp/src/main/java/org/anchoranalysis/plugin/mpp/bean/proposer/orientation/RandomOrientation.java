@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
-
-import java.util.Optional;
-
-
-
 /*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,6 +24,9 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
+
+import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds;
@@ -41,36 +38,35 @@ import org.anchoranalysis.image.orientation.Orientation;
 
 public class RandomOrientation extends OrientationProposer {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private RotationBounds bounds;
-	// END BEAN PROPERTIES
-	
-	public RandomOrientation() {
-		// Standard bean constructor
-	}
-	
-	public RandomOrientation(RotationBounds bounds) {
-		this.bounds = bounds;
-	}
-	
-	@Override
-	public Optional<Orientation> propose(Mark mark,	ImageDimensions dim, RandomNumberGenerator re) throws ProposalAbnormalFailureException {
-		return Optional.of(
-			bounds.randomOrientation(re, dim.getRes())
-		);
-	}
+    // START BEAN PROPERTIES
+    @BeanField private RotationBounds bounds;
+    // END BEAN PROPERTIES
 
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return true;
-	}
+    public RandomOrientation() {
+        // Standard bean constructor
+    }
 
-	public RotationBounds getBounds() {
-		return bounds;
-	}
+    public RandomOrientation(RotationBounds bounds) {
+        this.bounds = bounds;
+    }
 
-	public void setBounds(RotationBounds bounds) {
-		this.bounds = bounds;
-	}
+    @Override
+    public Optional<Orientation> propose(
+            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator)
+            throws ProposalAbnormalFailureException {
+        return Optional.of(bounds.randomOrientation(randomNumberGenerator, dimensions.getRes()));
+    }
+
+    @Override
+    public boolean isCompatibleWith(Mark testMark) {
+        return true;
+    }
+
+    public RotationBounds getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(RotationBounds bounds) {
+        this.bounds = bounds;
+    }
 }

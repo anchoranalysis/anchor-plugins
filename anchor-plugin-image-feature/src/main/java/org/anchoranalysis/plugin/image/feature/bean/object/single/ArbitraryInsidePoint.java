@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single;
-
-import java.util.Optional;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +24,12 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -38,39 +39,32 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
- * Calculates deterministicly a point that is definitely inside the object mask. A selected axis is outputted.
- * 
- * @author Owen Feehan
+ * Calculates deterministicly a point that is definitely inside the object mask. A selected axis is
+ * outputted.
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class ArbitraryInsidePoint extends FeatureSingleObject {
-	
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private String axis = "x";
-	
-	@BeanField @Getter @Setter
-	private double emptyValue = 0;
-	// END BEAN PROPERTIES
-	
-	public ArbitraryInsidePoint( String axis ) {
-		this.axis = axis;
-	}
-	
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-				
-		AxisType axisType = AxisTypeConverter.createFromString(axis);
-		
-		Optional<Point3i> arbPoint = input.get().getObjectMask().findArbitraryOnVoxel();
-		return arbPoint.map( pnt->
-			(double) pnt.getValueByDimension(axisType)
-		).orElse(emptyValue);
-	}
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String axis = "x";
+
+    @BeanField @Getter @Setter private double emptyValue = 0;
+    // END BEAN PROPERTIES
+
+    public ArbitraryInsidePoint(String axis) {
+        this.axis = axis;
+    }
+
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+
+        AxisType axisType = AxisTypeConverter.createFromString(axis);
+
+        Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
+        return arbPoint.map(point -> (double) point.getValueByDimension(axisType))
+                .orElse(emptyValue);
+    }
 }

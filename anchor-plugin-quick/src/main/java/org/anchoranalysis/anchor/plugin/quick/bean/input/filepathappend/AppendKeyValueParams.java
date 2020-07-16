@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
-
 /*-
  * #%L
  * anchor-plugin-quick
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,8 +24,9 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
 
+import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,64 +36,57 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
 public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean includeFileName = false;
-	
-	// If non-empty this directory is appended to make the out path string
-	@BeanField @AllowEmpty
-	private String subDirectory = "";
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
-			throws BeanMisconfiguredException {
-		return inputManager.getListAppendKeyValueParams();
-	}
+    // START BEAN PROPERTIES
+    @BeanField private boolean includeFileName = false;
 
-	@Override
-	protected String createOutPathString() throws BeanMisconfiguredException {
-		
-		String firstPart = selectMaybeDir(
-			selectFirstPart()
-		);
-				
-		return String.format(
-			"%s/keyValueParams.xml",
-			firstPart
-		);
-	}
-	
-	private String selectMaybeDir( String firstPart ) {
-		
-		if (!subDirectory.isEmpty()) {
-			return String.format("%s/%s", firstPart, subDirectory);
-		} else {
-			return firstPart;
-		}
-	}
-	
-	private String selectFirstPart() {
-		if (includeFileName) {
-			return firstPartWithFilename();
-		} else {
-			return firstPart();
-		}
-	}
+    // If non-empty this directory is appended to make the out path string
+    @BeanField @AllowEmpty private String subDirectory = "";
+    // END BEAN PROPERTIES
 
-	public boolean isIncludeFileName() {
-		return includeFileName;
-	}
+    @Override
+    protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
+            throws BeanMisconfiguredException {
+        return inputManager.getListAppendKeyValueParams();
+    }
 
-	public void setIncludeFileName(boolean includeFileName) {
-		this.includeFileName = includeFileName;
-	}
+    @Override
+    protected String createOutPathString() throws BeanMisconfiguredException {
 
-	public String getSubDirectory() {
-		return subDirectory;
-	}
+        String firstPart = selectMaybeDir(selectFirstPart());
 
-	public void setSubDirectory(String subDirectory) {
-		this.subDirectory = subDirectory;
-	}
+        return String.format("%s/keyValueParams.xml", firstPart);
+    }
+
+    private String selectMaybeDir(String firstPart) {
+
+        if (!subDirectory.isEmpty()) {
+            return String.format("%s/%s", firstPart, subDirectory);
+        } else {
+            return firstPart;
+        }
+    }
+
+    private String selectFirstPart() {
+        if (includeFileName) {
+            return firstPartWithFilename();
+        } else {
+            return firstPart();
+        }
+    }
+
+    public boolean isIncludeFileName() {
+        return includeFileName;
+    }
+
+    public void setIncludeFileName(boolean includeFileName) {
+        this.includeFileName = includeFileName;
+    }
+
+    public String getSubDirectory() {
+        return subDirectory;
+    }
+
+    public void setSubDirectory(String subDirectory) {
+        this.subDirectory = subDirectory;
+    }
 }

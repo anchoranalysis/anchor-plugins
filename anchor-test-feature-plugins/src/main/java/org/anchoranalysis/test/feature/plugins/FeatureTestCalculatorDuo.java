@@ -1,10 +1,8 @@
-package org.anchoranalysis.test.feature.plugins;
-
 /*-
  * #%L
  * anchor-test-feature-plugins
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.test.feature.plugins;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,66 +24,51 @@ package org.anchoranalysis.test.feature.plugins;
  * #L%
  */
 
+package org.anchoranalysis.test.feature.plugins;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /** Tests that consider two possibilities: positive and negative */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculatorDuo {
 
-	public static <T extends FeatureInput> void assertDoubleResult(
-		String message,
-		Feature<T> feature,
-		T paramsPositive,
-		T paramsNegative,
-		double expectedResultPositive,
-		double expectedResultNegative
-	) throws FeatureCalcException {
-		FeatureTestCalculator.assertDoubleResult(
-			positiveMessage(message),
-			feature,
-			paramsPositive,
-			expectedResultPositive
-		);
-		FeatureTestCalculator.assertDoubleResult(
-			negativeMessage(message),
-			feature,
-			paramsNegative,
-			expectedResultNegative
-		);
-	}
-	
-	public static <T extends FeatureInput> void assertIntResult(
-		String message,
-		Feature<T> feature,
-		T paramsPositive,
-		T paramsNegative,
-		int expectedResultPositive,
-		int expectedResultNegative
-	) throws FeatureCalcException {
-		FeatureTestCalculator.assertIntResult(
-			positiveMessage(message),
-			feature,
-			paramsPositive,
-			expectedResultPositive
-		);
-		FeatureTestCalculator.assertIntResult(
-			negativeMessage(message),
-			feature,
-			paramsNegative,
-			expectedResultNegative
-		);
-	}
-	
-	private static String positiveMessage(String message) {
-		return message + " (positive case)";
-	}
-	
-	private static String negativeMessage(String message) {
-		return message + " (negative case)";
-	}
+    public static <T extends FeatureInput> void assertDoubleResult(
+            String message,
+            Feature<T> feature,
+            T paramsPositive,
+            T paramsNegative,
+            double expectedResultPositive,
+            double expectedResultNegative)
+            throws FeatureCalcException {
+        FeatureTestCalculator.assertDoubleResult(
+                positiveMessage(message), feature, paramsPositive, expectedResultPositive);
+        FeatureTestCalculator.assertDoubleResult(
+                negativeMessage(message), feature, paramsNegative, expectedResultNegative);
+    }
+
+    public static <T extends FeatureInput> void assertIntResult(
+            String message,
+            Feature<T> feature,
+            T paramsPositive,
+            T paramsNegative,
+            int expectedResultPositive,
+            int expectedResultNegative)
+            throws FeatureCalcException {
+        FeatureTestCalculator.assertIntResult(
+                positiveMessage(message), feature, paramsPositive, expectedResultPositive);
+        FeatureTestCalculator.assertIntResult(
+                negativeMessage(message), feature, paramsNegative, expectedResultNegative);
+    }
+
+    private static String positiveMessage(String message) {
+        return message + " (positive case)";
+    }
+
+    private static String negativeMessage(String message) {
+        return message + " (negative case)";
+    }
 }

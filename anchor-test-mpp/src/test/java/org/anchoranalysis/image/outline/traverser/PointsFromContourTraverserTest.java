@@ -1,10 +1,8 @@
-package org.anchoranalysis.image.outline.traverser;
-
 /*-
  * #%L
  * anchor-test-mpp
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.image.outline.traverser;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,11 @@ package org.anchoranalysis.image.outline.traverser;
  * #L%
  */
 
+package org.anchoranalysis.image.outline.traverser;
+
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
@@ -44,35 +43,33 @@ import org.anchoranalysis.test.mpp.LoadUtilities;
 import org.junit.Test;
 
 public class PointsFromContourTraverserTest {
-	
-	private static int MIN_NUM_CONTOUR_PNTS = 30;
-	
-	private TestLoaderImageIO testLoader = new TestLoaderImageIO(
-		TestLoader.createFromMavenWorkingDir()
-	);
-	
-	@Test
-	public void test01() throws CreateException, OperationFailedException, SetOperationFailedException {
-		testFor("01");
-	}
-		
-	private void testFor( String suffix ) throws CreateException, OperationFailedException {
 
-		ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
-		
-		// Checks that first and last points are neighbours
-		List<Contour> contours = CVFindContours.contourForObjMask(objIn, MIN_NUM_CONTOUR_PNTS);
-		for( Contour c : contours ) {
-			List<Point3i> pts = c.pointsDiscrete();
-			assertTrue( areFirstLastNghb(pts) );
-			assertTrue( PointsListNeighborUtilities.areNghbDistinct(pts) );
-			assertTrue( PointsListNeighborUtilities.areAllPointsInBigNghb(pts) );
-		}
-	}
-		
-	private static boolean areFirstLastNghb( List<Point3i> pts ) {
-		Point3i first = pts.get(0);
-		Point3i last = pts.get( pts.size() -1 );
-		return PointsListNeighborUtilities.arePointsNghb(first, last );		
-	}
+    private TestLoaderImageIO testLoader =
+            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+
+    @Test
+    public void test01()
+            throws CreateException, OperationFailedException, SetOperationFailedException {
+        testFor("01");
+    }
+
+    private void testFor(String suffix) throws CreateException, OperationFailedException {
+
+        ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
+
+        // Checks that first and last points are neighbors
+        List<Contour> contours = CVFindContours.contoursForObject(objIn);
+        for (Contour contour : contours) {
+            List<Point3i> points = contour.pointsDiscrete();
+            assertTrue(doesFirstNeighborLast(points));
+            assertTrue(PointsListNeighborUtilities.areNeighborsDistinct(points));
+            assertTrue(PointsListNeighborUtilities.areAllPointsInBigNeighborhood(points));
+        }
+    }
+
+    private static boolean doesFirstNeighborLast(List<Point3i> points) {
+        Point3i first = points.get(0);
+        Point3i last = points.get(points.size() - 1);
+        return PointsListNeighborUtilities.arePointsNeighbors(first, last);
+    }
 }

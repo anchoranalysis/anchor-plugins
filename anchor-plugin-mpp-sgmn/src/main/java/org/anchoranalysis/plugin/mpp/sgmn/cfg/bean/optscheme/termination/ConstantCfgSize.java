@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
-
-/*
+/*-
  * #%L
- * anchor-plugin-mpp
+ * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,58 +24,55 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 
-
 /**
- * 
  * TODO consider renaming to constant size
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ConstantCfgSize extends TerminationCondition {
 
-	// BEAN PARAMETERS
-	@BeanField
-	private int numRep = -1;
-	// END BEAN PARAMETERS
-	
-	private int prevSize = 0;
-	private int rep = 0;
-	
-	public ConstantCfgSize() {
-		super();
-	}
-	
-	@Override
-	public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
-		
-		// We increase our repetition counter, if the energy total is identical to the last time
-		if (size == prevSize) {
-			rep++;
-		} else {
-			rep = 0;
-		}
+    // BEAN PARAMETERS
+    @BeanField private int numRep = -1;
+    // END BEAN PARAMETERS
 
-		prevSize = size;
+    private int prevSize = 0;
+    private int rep = 0;
 
-		if (rep < numRep) {
-			return true;
-		} else {
-			logger.log("ConstantCfgSize returned false");
-			return false;
-		}
-	}
+    public ConstantCfgSize() {
+        super();
+    }
 
-	public int getNumRep() {
-		return numRep;
-	}
+    @Override
+    public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
 
-	public void setNumRep(int numRep) {
-		this.numRep = numRep;
-	}
+        // We increase our repetition counter, if the energy total is identical to the last time
+        if (size == prevSize) {
+            rep++;
+        } else {
+            rep = 0;
+        }
+
+        prevSize = size;
+
+        if (rep < numRep) {
+            return true;
+        } else {
+            logger.log("ConstantCfgSize returned false");
+            return false;
+        }
+    }
+
+    public int getNumRep() {
+        return numRep;
+    }
+
+    public void setNumRep(int numRep) {
+        this.numRep = numRep;
+    }
 }

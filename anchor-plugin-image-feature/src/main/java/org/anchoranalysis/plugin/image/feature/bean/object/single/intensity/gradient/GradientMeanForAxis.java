@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,9 +24,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -38,49 +36,43 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular direction
- * 
- * An NRG channel is present for X, Y and optionally Z intensity-gradients.
- * 
- * A constant is subtracted from the NRG channel (all positive) to centre around 0
- * 
- * @author Owen Feehan
+ * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular
+ * direction
  *
+ * <p>An NRG channel is present for X, Y and optionally Z intensity-gradients.
+ *
+ * <p>A constant is subtracted from the NRG channel (all positive) to center around 0
+ *
+ * @author Owen Feehan
  */
 public class GradientMeanForAxis extends IntensityGradientBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private String axis="";
-	// END BEAN PROPERTIES
-		
-	@Override
-	public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
-		
-		AxisType axisType = AxisTypeConverter.createFromString( axis );
-		
-		// Calculate the mean
-		double sum = 0.0;
+    // START BEAN PROPERTIES
+    @BeanField private String axis = "";
+    // END BEAN PROPERTIES
 
-		List<Point3d> pnts = input.calc(
-			gradientCalculation()
-		);
-		
-		for( Point3d p : pnts ) {
-			sum += p.getValueByDimension(axisType);
-		}
-		
-		return sum/pnts.size();
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
 
-	public String getAxis() {
-		return axis;
-	}
+        AxisType axisType = AxisTypeConverter.createFromString(axis);
 
+        // Calculate the mean
+        double sum = 0.0;
 
-	public void setAxis(String axis) {
-		this.axis = axis;
-	}
+        List<Point3d> points = input.calc(gradientCalculation());
 
+        for (Point3d point : points) {
+            sum += point.getValueByDimension(axisType);
+        }
 
+        return sum / points.size();
+    }
+
+    public String getAxis() {
+        return axis;
+    }
+
+    public void setAxis(String axis) {
+        this.axis = axis;
+    }
 }

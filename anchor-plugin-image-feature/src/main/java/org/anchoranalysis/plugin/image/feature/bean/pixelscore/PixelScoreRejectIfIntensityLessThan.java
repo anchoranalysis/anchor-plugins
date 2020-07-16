@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -33,50 +32,47 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private PixelScore item;
-	
-	@BeanField
-	private int nrgChnlIndex = 0;
-	
-	@BeanField
-	private int minIntensity = 0;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField private PixelScore item;
 
-	@Override
-	public double calc(int[] pixelVals)	throws FeatureCalcException {
-		
-		int intensity = pixelVals[nrgChnlIndex];
-		
-		if (intensity < minIntensity) {
-			return 0;
-		}
-		
-		return item.calc(pixelVals);
-	}
+    @BeanField private int nrgChnlIndex = 0;
 
-	public PixelScore getItem() {
-		return item;
-	}
+    @BeanField private int minIntensity = 0;
+    // END BEAN PROPERTIES
 
-	public void setItem(PixelScore item) {
-		this.item = item;
-	}
+    @Override
+    public double calc(int[] pixelVals) throws FeatureCalcException {
 
-	public int getNrgChnlIndex() {
-		return nrgChnlIndex;
-	}
+        int intensity = pixelVals[nrgChnlIndex];
 
-	public void setNrgChnlIndex(int nrgChnlIndex) {
-		this.nrgChnlIndex = nrgChnlIndex;
-	}
+        if (intensity < minIntensity) {
+            return 0;
+        }
 
-	public int getMinIntensity() {
-		return minIntensity;
-	}
+        return item.calc(pixelVals);
+    }
 
-	public void setMinIntensity(int minIntensity) {
-		this.minIntensity = minIntensity;
-	}
+    public PixelScore getItem() {
+        return item;
+    }
+
+    public void setItem(PixelScore item) {
+        this.item = item;
+    }
+
+    public int getNrgChnlIndex() {
+        return nrgChnlIndex;
+    }
+
+    public void setNrgChnlIndex(int nrgChnlIndex) {
+        this.nrgChnlIndex = nrgChnlIndex;
+    }
+
+    public int getMinIntensity() {
+        return minIntensity;
+    }
+
+    public void setMinIntensity(int minIntensity) {
+        this.minIntensity = minIntensity;
+    }
 }

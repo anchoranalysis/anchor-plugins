@@ -1,13 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.pair;
-
-import java.util.Optional;
-
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,10 +10,10 @@ import java.util.Optional;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,7 +24,11 @@ import java.util.Optional;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -41,63 +40,52 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegateOption;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Finds the intersection of two objects and calculates a feature on it
- *  
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Intersection extends FeatureDeriveFromPair {
 
-	// START BEAN PROPERTIES
-	@BeanField @Positive @Getter @Setter
-	private int iterationsDilation = 0;
-	
-	@BeanField @Getter @Setter
-	private int iterationsErosion = 0;
-		
-	@BeanField @Getter @Setter
-	private boolean do3D = true;
-	
-	@BeanField @Getter @Setter
-	private double emptyValue = 255;
-	// END BEAN PROPERTIES
-		
-	@Override
-	public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
-		
-		return CalculateInputFromDelegateOption.calc(
-			input,
-			createCalculation(input),
-			CalculateIntersectionInput::new,
-			getItem(),
-			cacheIntersectionName(),
-			emptyValue
-		);
-	}
-	
-	/** A unique cache-name for the intersection of how we find a parameterization */
-	private ChildCacheName cacheIntersectionName() {
-		String id = String.format(
-			"intersection_%d_%d_%d",
-			iterationsDilation,
-			iterationsErosion,
-			do3D ? 1 : 0
-		);
-		return new ChildCacheName(Intersection.class, id);
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Positive @Getter @Setter private int iterationsDilation = 0;
 
-	private FeatureCalculation<Optional<ObjectMask>,FeatureInputPairObjects> createCalculation(SessionInput<FeatureInputPairObjects> input) {
-		return CalculatePairIntersectionCommutative.createFromCache(
-			input,
-			CACHE_NAME_FIRST,
-			CACHE_NAME_SECOND,
-			iterationsDilation,
-			iterationsErosion,
-			do3D
-		);
-	}
+    @BeanField @Getter @Setter private int iterationsErosion = 0;
+
+    @BeanField @Getter @Setter private boolean do3D = true;
+
+    @BeanField @Getter @Setter private double emptyValue = 255;
+    // END BEAN PROPERTIES
+
+    @Override
+    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
+
+        return CalculateInputFromDelegateOption.calc(
+                input,
+                createCalculation(input),
+                CalculateIntersectionInput::new,
+                getItem(),
+                cacheIntersectionName(),
+                emptyValue);
+    }
+
+    /** A unique cache-name for the intersection of how we find a parameterization */
+    private ChildCacheName cacheIntersectionName() {
+        String id =
+                String.format(
+                        "intersection_%d_%d_%d",
+                        iterationsDilation, iterationsErosion, do3D ? 1 : 0);
+        return new ChildCacheName(Intersection.class, id);
+    }
+
+    private FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> createCalculation(
+            SessionInput<FeatureInputPairObjects> input) {
+        return CalculatePairIntersectionCommutative.of(
+                input,
+                CACHE_NAME_FIRST,
+                CACHE_NAME_SECOND,
+                iterationsDilation,
+                iterationsErosion,
+                do3D);
+    }
 }

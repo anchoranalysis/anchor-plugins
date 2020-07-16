@@ -1,10 +1,8 @@
-package org.anchoranalysis.anchor.plugin.quick.bean.input;
-
 /*-
  * #%L
- * anchor-image-io
+ * anchor-plugin-quick
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,35 +24,34 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.anchor.plugin.quick.bean.input;
+
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 
 public class AdjacentFile extends AnchorBean<AdjacentFile> {
 
-	// START BEAN PROPERTIES
-	/** A name to describe the adjacent file */
-	@BeanField
-	private String name;
-	
-	/** The replacement string used to determine the file */ 
-	@BeanField
-	private String replacement;
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    /** A name to describe the adjacent file */
+    @BeanField private String name;
 
-	public String getName() {
-		return name;
-	}
+    /** The replacement string used to determine the file */
+    @BeanField private String replacement;
+    // END BEAN PROPERTIES
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getReplacement() {
-		return replacement;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setReplacement(String replacement) {
-		this.replacement = replacement;
-	}
+    public String getReplacement() {
+        return replacement;
+    }
 
+    public void setReplacement(String replacement) {
+        this.replacement = replacement;
+    }
 }

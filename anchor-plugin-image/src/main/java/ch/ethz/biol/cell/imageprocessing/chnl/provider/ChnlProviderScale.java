@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,56 +42,40 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ChnlProviderScale extends ChnlProviderOne {
 
-	// Start BEAN PROPERTIES
-	@BeanField
-	private ScaleCalculator scaleCalculator;
-	
-	@BeanField
-	private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
-	// End BEAN PROPERTIES
-	
-	@Override
-	public Channel createFromChnl(Channel chnl) throws CreateException {
-		return scale(
-			chnl,
-			scaleCalculator,
-			interpolator.create(),
-			getLogger().messageLogger()
-		);
-	}
-	
-	public static Channel scale( Channel chnl, ScaleCalculator scaleCalculator, Interpolator interpolator, MessageLogger logger) throws CreateException {
-		try {
-			logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes() );
-			
-			ScaleFactor sf = scaleCalculator.calc( chnl.getDimensions() );
-			
-			logger.logFormatted("Scale Factor: %s\n", sf.toString() );
-			
-			Channel chnlOut = chnl.scaleXY( sf.getX(), sf.getY(), interpolator);
-			
-			logger.logFormatted("outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes() );
-			
-			return chnlOut;
-			
-		} catch (OperationFailedException e) {
-			throw new CreateException(e);
-		}
-	}
-	
-	public ScaleCalculator getScaleCalculator() {
-		return scaleCalculator;
-	}
+    // Start BEAN PROPERTIES
+    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-	public void setScaleCalculator(ScaleCalculator scaleCalculator) {
-		this.scaleCalculator = scaleCalculator;
-	}
+    @BeanField @Getter @Setter
+    private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
+    // End BEAN PROPERTIES
 
-	public InterpolatorBean getInterpolator() {
-		return interpolator;
-	}
+    @Override
+    public Channel createFromChnl(Channel chnl) throws CreateException {
+        return scale(chnl, scaleCalculator, interpolator.create(), getLogger().messageLogger());
+    }
 
-	public void setInterpolator(InterpolatorBean interpolator) {
-		this.interpolator = interpolator;
-	}
+    public static Channel scale(
+            Channel chnl,
+            ScaleCalculator scaleCalculator,
+            Interpolator interpolator,
+            MessageLogger logger)
+            throws CreateException {
+        try {
+            logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes());
+
+            ScaleFactor scaleFactor = scaleCalculator.calc(chnl.getDimensions());
+
+            logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
+
+            Channel chnlOut = chnl.scaleXY(scaleFactor, interpolator);
+
+            logger.logFormatted(
+                    "outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes());
+
+            return chnlOut;
+
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
+    }
 }

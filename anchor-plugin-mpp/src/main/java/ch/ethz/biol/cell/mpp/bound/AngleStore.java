@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.mpp.bound;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.mpp.bound;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,39 +24,36 @@ package ch.ethz.biol.cell.mpp.bound;
  * #L%
  */
 
+package ch.ethz.biol.cell.mpp.bound;
 
 import java.util.HashMap;
-
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> store-type
  */
 @RequiredArgsConstructor
 class AngleStore<T> {
-	
-	private final int precisionMultiplier;
-	
-	private HashMap<Integer,T> map = new HashMap<>(); 
-	
-	public int cnvrtToIndex( double angle ) {
-		return (int) (angle * precisionMultiplier);
-	}
-	
-	public double cnvrtToAngle( int index ) {
-		double dbl = index;
-		return dbl / precisionMultiplier;
-	}
-	
-	public T get( int index ) {
-		return map.get( index );
-	}
-	
-	public void put( int index, T item ) {
-		map.put( index, item );
-	}
-	
+
+    private final int precisionMultiplier;
+
+    private HashMap<Integer, T> map = new HashMap<>();
+
+    public int cnvrtToIndex(double angle) {
+        return (int) (angle * precisionMultiplier);
+    }
+
+    public double cnvrtToAngle(int index) {
+        double dbl = index;
+        return dbl / precisionMultiplier;
+    }
+
+    public T get(int index) {
+        return map.get(index);
+    }
+
+    public void put(int index, T item) {
+        map.put(index, item);
+    }
 }

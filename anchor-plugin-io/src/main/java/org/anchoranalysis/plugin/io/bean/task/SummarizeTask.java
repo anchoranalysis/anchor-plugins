@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.task;
-
 /*-
  * #%L
  * anchor-plugin-io
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.task;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.plugin.io.bean.task;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.plugin.io.bean.task;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,77 +41,70 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
-public abstract class SummarizeTask<T extends InputFromManager,S> extends Task<T,Summarizer<S>> {
+public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private Summarizer<S> summarizer = new SummarizerCount<>();
-	// END BEAN PROPERTIES
-	
-	@Override
-	public Summarizer<S> beforeAnyJobIsExecuted(
-			BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
-			throws ExperimentExecutionException {
+    // START BEAN PROPERTIES
+    @BeanField private Summarizer<S> summarizer = new SummarizerCount<>();
+    // END BEAN PROPERTIES
 
-		if (params.isDetailedLogging()) {
-			summarizeExperimentArguments(
-				params.getLoggerExperiment(),
-				params.getExperimentArguments()
-			);
-		}
-		
-		return summarizer;
-	}
-	
-	@Override
-	public void doJobOnInputObject(InputBound<T, Summarizer<S>> params) throws JobExecutionException {
-		try {
-			params.getSharedState().add( extractObjectForSummary(params.getInputObject()) );
-		} catch (OperationFailedException e) {
-			throw new JobExecutionException(
-				String.format("Cannot summarize %s", params.getInputObject().pathForBinding()),
-				e
-			);
-		}
-	}
+    @Override
+    public Summarizer<S> beforeAnyJobIsExecuted(
+            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            throws ExperimentExecutionException {
 
-	@Override
-	public void afterAllJobsAreExecuted(Summarizer<S> sharedState, BoundIOContext context) throws ExperimentExecutionException {
-		
-		try {
-			context.getLogReporter().log(
-				sharedState.describe()
-			);
-		} catch (OperationFailedException e) {
-			throw new ExperimentExecutionException(e);
-		}
-	}
-		
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return true;
-	}
-		
-	// Extract object for summary
-	protected abstract S extractObjectForSummary( T input );
-		
-	private void summarizeExperimentArguments( MessageLogger log, ExperimentExecutionArguments eea ) {
-		
-		eea.getInputDirectory().ifPresent( dir->
-			log.logFormatted("An input-directory has been set as %s", dir)
-		);
-		
-		eea.getOutputDirectory().ifPresent( dir->
-			log.logFormatted("An output-directory has been set as %s", dir)
-		);
-	}
+        if (params.isDetailedLogging()) {
+            summarizeExperimentArguments(
+                    params.getLoggerExperiment(), params.getExperimentArguments());
+        }
 
-	public Summarizer<S> getSummarizer() {
-		return summarizer;
-	}
+        return summarizer;
+    }
 
-	public void setSummarizer(Summarizer<S> summarizer) {
-		this.summarizer = summarizer;
-	}
+    @Override
+    public void doJobOnInputObject(InputBound<T, Summarizer<S>> params)
+            throws JobExecutionException {
+        try {
+            params.getSharedState().add(extractObjectForSummary(params.getInputObject()));
+        } catch (OperationFailedException e) {
+            throw new JobExecutionException(
+                    String.format("Cannot summarize %s", params.getInputObject().pathForBinding()),
+                    e);
+        }
+    }
 
+    @Override
+    public void afterAllJobsAreExecuted(Summarizer<S> sharedState, BoundIOContext context)
+            throws ExperimentExecutionException {
+
+        try {
+            context.getLogReporter().log(sharedState.describe());
+        } catch (OperationFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return true;
+    }
+
+    // Extract object for summary
+    protected abstract S extractObjectForSummary(T input);
+
+    private void summarizeExperimentArguments(MessageLogger log, ExperimentExecutionArguments eea) {
+
+        eea.getInputDirectory()
+                .ifPresent(dir -> log.logFormatted("An input-directory has been set as %s", dir));
+
+        eea.getOutputDirectory()
+                .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
+    }
+
+    public Summarizer<S> getSummarizer() {
+        return summarizer;
+    }
+
+    public void setSummarizer(Summarizer<S> summarizer) {
+        this.summarizer = summarizer;
+    }
 }

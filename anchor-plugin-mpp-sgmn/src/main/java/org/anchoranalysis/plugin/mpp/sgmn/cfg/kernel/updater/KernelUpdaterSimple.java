@@ -1,15 +1,8 @@
-package org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.updater;
-
-import java.util.Optional;
-
-import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-
 /*-
  * #%L
  * anchor-plugin-mpp-sgmn
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -17,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,6 +24,11 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.updater;
+
+import java.util.Optional;
+import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
@@ -39,56 +37,58 @@ import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 
-public class KernelUpdaterSimple<S,T> implements KernelUpdater<S,T> {
+public class KernelUpdaterSimple<S, T> implements KernelUpdater<S, T> {
 
-	private ListUpdatableMarkSetCollection updatableMarkSetCollection;
-	private WeightedKernelList<S> allKernels;
-	private StateTransformer<Optional<T>,Optional<S>> funcExtractCfgNRG;
-	
-	public KernelUpdaterSimple(
-		ListUpdatableMarkSetCollection updatableMarkSetCollection,
-		WeightedKernelList<S> allKernels,
-		StateTransformer<Optional<T>,Optional<S>> funcExtractCfgNRG
-	) {
-		super();
-		this.updatableMarkSetCollection = updatableMarkSetCollection;
-		this.allKernels = allKernels;
-		this.funcExtractCfgNRG = funcExtractCfgNRG;
-	}	
-	
-	@Override
-	public void kernelAccepted( Kernel<S> kernel, Optional<T> crnt, T proposed, TransformationContext context ) throws UpdateMarkSetException {
-		try {
-			Optional<S> crntConv = OptionalUtilities.flatMap(
-				crnt,
-				c -> funcExtractCfgNRG.transform(crnt, context)
-			);
-			S proposedConv = funcExtractCfgNRG.transform(Optional.of(proposed), context).orElseThrow( ()->
-				new UpdateMarkSetException("Transform returned empty, which is not allowed")
-			);
-			
-			updateAfterAccept(kernel, crntConv, proposedConv);
-			
-			informAllKernelsAfterAccept( proposedConv );
-			
-		} catch (OperationFailedException e) {
-			throw new UpdateMarkSetException(e);
-		}
-	}
-	
-	private void updateAfterAccept(Kernel<S> kernel, Optional<S> crnt, S proposed)
-			throws UpdateMarkSetException {
-		OptionalUtilities.ifPresent(
-			crnt,
-			c-> kernel.updateAfterAccpt( updatableMarkSetCollection, c, proposed )
-		);
-	}
+    private ListUpdatableMarkSetCollection updatableMarkSetCollection;
+    private WeightedKernelList<S> allKernels;
+    private StateTransformer<Optional<T>, Optional<S>> funcExtractCfgNRG;
 
-	private void informAllKernelsAfterAccept(S cfgNRG) {
-		// We inform ALL kernels of the new NRG
-		for( WeightedKernel<S> wk : allKernels ) {
-			// INFORM KERNEL
-			wk.getKernel().informLatestState( cfgNRG );
-		}
-	}
+    public KernelUpdaterSimple(
+            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            WeightedKernelList<S> allKernels,
+            StateTransformer<Optional<T>, Optional<S>> funcExtractCfgNRG) {
+        super();
+        this.updatableMarkSetCollection = updatableMarkSetCollection;
+        this.allKernels = allKernels;
+        this.funcExtractCfgNRG = funcExtractCfgNRG;
+    }
+
+    @Override
+    public void kernelAccepted(
+            Kernel<S> kernel, Optional<T> crnt, T proposed, TransformationContext context)
+            throws UpdateMarkSetException {
+        try {
+            Optional<S> crntConv =
+                    OptionalUtilities.flatMap(
+                            crnt, c -> funcExtractCfgNRG.transform(crnt, context));
+            S proposedConv =
+                    funcExtractCfgNRG
+                            .transform(Optional.of(proposed), context)
+                            .orElseThrow(
+                                    () ->
+                                            new UpdateMarkSetException(
+                                                    "Transform returned empty, which is not allowed"));
+
+            updateAfterAccept(kernel, crntConv, proposedConv);
+
+            informAllKernelsAfterAccept(proposedConv);
+
+        } catch (OperationFailedException e) {
+            throw new UpdateMarkSetException(e);
+        }
+    }
+
+    private void updateAfterAccept(Kernel<S> kernel, Optional<S> crnt, S proposed)
+            throws UpdateMarkSetException {
+        OptionalUtilities.ifPresent(
+                crnt, c -> kernel.updateAfterAccpt(updatableMarkSetCollection, c, proposed));
+    }
+
+    private void informAllKernelsAfterAccept(S cfgNRG) {
+        // We inform ALL kernels of the new NRG
+        for (WeightedKernel<S> wk : allKernels) {
+            // INFORM KERNEL
+            wk.getKernel().informLatestState(cfgNRG);
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,51 +24,51 @@ package org.anchoranalysis.plugin.image.feature.bean.object.table;
  * #L%
  */
 
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
+package org.anchoranalysis.plugin.image.feature.bean.object.table;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Generates unique identifiers for object-masks
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class UniqueIdentifierUtilities {
-	
-	/**
-	 * Generates a unique identifier (unique within a particular collection) for an object based upon
-	 *  an assumption that there are no overlapping objects in this collection.
-	 * 
-	 * @param obj object to generate identifier for
-	 * @return a string encoded with an arbitrary point that lies on the object, or "none" if the object has no points
-	 */
-	public static String forObject(ObjectMask obj) {
-		return obj.findArbitraryOnVoxel().map(
-			UniqueIdentifierUtilities::forPoint
-		).orElse("none");
-	}
-	
-	/**
-	 * Generates a unique identifier (unique within a particular collection) for a pair of objects based upon
-	 *  an assumption that there are no overlapping objects in this collection.
-	 *  
-	 * @param obj1 first object
-	 * @param obj2 second object
-	 * @return a string that combines a unique identifier for the first object and one for the second object 
-	 */
-	public static String forObjectPair(ObjectMask obj1, ObjectMask obj2) {
-		StringBuilder sb = new StringBuilder();
-		sb.append( forObject(obj1) );
-		sb.append("_and_");
-		sb.append( forObject(obj2) );
-		return sb.toString();
-	}
-	
-	private static String forPoint(Point3i pnt) {
-		return String.format("%d_%d_%d", pnt.getX(), pnt.getY(), pnt.getZ());
-	}
+
+    /**
+     * Generates a unique identifier (unique within a particular collection) for an object based
+     * upon an assumption that there are no overlapping objects in this collection.
+     *
+     * @param obj object to generate identifier for
+     * @return a string encoded with an arbitrary point that lies on the object, or "none" if the
+     *     object has no points
+     */
+    public static String forObject(ObjectMask obj) {
+        return obj.findArbitraryOnVoxel().map(UniqueIdentifierUtilities::forPoint).orElse("none");
+    }
+
+    /**
+     * Generates a unique identifier (unique within a particular collection) for a pair of objects
+     * based upon an assumption that there are no overlapping objects in this collection.
+     *
+     * @param obj1 first object
+     * @param obj2 second object
+     * @return a string that combines a unique identifier for the first object and one for the
+     *     second object
+     */
+    public static String forObjectPair(ObjectMask obj1, ObjectMask obj2) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(forObject(obj1));
+        sb.append("_and_");
+        sb.append(forObject(obj2));
+        return sb.toString();
+    }
+
+    private static String forPoint(Point3i point) {
+        return String.format("%d_%d_%d", point.getX(), point.getY(), point.getZ());
+    }
 }

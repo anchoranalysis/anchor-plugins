@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
-
 /*-
  * #%L
  * anchor-plugin-image-task
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -41,42 +41,45 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
 class ExtractFromProvider {
-	
-	private ExtractFromProvider() {}
-	
-	public static NRGStackWithParams extractStack( StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger ) throws OperationFailedException {
-		
-		try {
-			// Extract the NRG stack
-			StackProvider nrgStackProviderLoc = nrgStackProvider.duplicateBean();
-			nrgStackProviderLoc.initRecursive(initParams, logger);
-			
-			return new NRGStackWithParams(nrgStackProviderLoc.create());
-		} catch (InitException | CreateException e) {
-			throw new OperationFailedException(e);
-		}
-	}
-	
-	/** Creates and initializes a single-feature that is provided via a featureProvider */
-	public static <T extends FeatureInput> Feature<T> extractFeature(
-		FeatureListProvider<T> featureProvider,
-		String featureProviderName,
-		SharedFeaturesInitParams initParams,
-		Logger logger
-	) throws FeatureCalcException {
 
-		try {
-			featureProvider.initRecursive( initParams, logger );
+    private ExtractFromProvider() {}
 
-			FeatureList<T> fl = featureProvider.create();
-			if (fl.size()!=1) {
-				throw new FeatureCalcException(
-					String.format("%s must return exactly one feature from its list. It currently returns %d", featureProviderName, fl.size() )
-				);
-			}
-			return fl.get(0);
-		} catch (CreateException | InitException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
+    public static NRGStackWithParams extractStack(
+            StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger)
+            throws OperationFailedException {
+
+        try {
+            // Extract the NRG stack
+            StackProvider nrgStackProviderLoc = nrgStackProvider.duplicateBean();
+            nrgStackProviderLoc.initRecursive(initParams, logger);
+
+            return new NRGStackWithParams(nrgStackProviderLoc.create());
+        } catch (InitException | CreateException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    /** Creates and initializes a single-feature that is provided via a featureProvider */
+    public static <T extends FeatureInput> Feature<T> extractFeature(
+            FeatureListProvider<T> featureProvider,
+            String featureProviderName,
+            SharedFeaturesInitParams initParams,
+            Logger logger)
+            throws FeatureCalcException {
+
+        try {
+            featureProvider.initRecursive(initParams, logger);
+
+            FeatureList<T> fl = featureProvider.create();
+            if (fl.size() != 1) {
+                throw new FeatureCalcException(
+                        String.format(
+                                "%s must return exactly one feature from its list. It currently returns %d",
+                                featureProviderName, fl.size()));
+            }
+            return fl.get(0);
+        } catch (CreateException | InitException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 }

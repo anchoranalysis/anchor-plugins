@@ -1,14 +1,8 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
-
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-
-
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -16,10 +10,10 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,40 +24,38 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
+import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 
 public class OverlapRatio extends OverlapMIPBase {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private boolean useMax = false;
-	// END BEAN PROPERTIES
-		
-	@Override
-	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
-		
-		FeatureInputPairMemo inputSessionless = input.get();
+    // START BEAN PROPERTIES
+    @BeanField private boolean useMax = false;
+    // END BEAN PROPERTIES
 
-		return OverlapRatioUtilities.calcOverlapRatio(
-			inputSessionless.getObj1(),
-			inputSessionless.getObj2(),
-			overlappingNumVoxels(input),
-			getRegionID(),
-			isMip(),
-			OverlapRatioUtilities.maxOrMin(useMax)
-		);
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 
-	public boolean isUseMax() {
-		return useMax;
-	}
+        FeatureInputPairMemo inputSessionless = input.get();
 
-	public void setUseMax(boolean useMax) {
-		this.useMax = useMax;
-	}
+        return OverlapRatioUtilities.calcOverlapRatio(
+                inputSessionless.getObj1(),
+                inputSessionless.getObj2(),
+                overlappingNumVoxels(input),
+                getRegionID(),
+                isMip(),
+                OverlapRatioUtilities.maxOrMin(useMax));
+    }
 
+    public boolean isUseMax() {
+        return useMax;
+    }
 
+    public void setUseMax(boolean useMax) {
+        this.useMax = useMax;
+    }
 }

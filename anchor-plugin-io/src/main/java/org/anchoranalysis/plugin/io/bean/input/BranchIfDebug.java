@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.input;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,11 @@ package org.anchoranalysis.plugin.io.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -40,58 +38,48 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * Uses one input-manager normally, but a different one if in debug mode
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> input-object type
  */
 public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private InputManager<T> input;
-	
-	// If set to null and we are in debug mode, we take the first item from the normal input
-	@BeanField @OptionalBean
-	private InputManager<T> inputDebug;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public List<T> inputObjects(InputManagerParams params)
-			throws AnchorIOException {
+    // START BEAN PROPERTIES
+    @BeanField private InputManager<T> input;
 
-		if (params.isDebugModeActivated()) {
-			if (inputDebug==null) {
-				// We pick the first
-				Iterator<T> all = input.inputObjects(params).iterator();
-				T firstItem = all.next();
-				return Collections.singletonList(firstItem);
-			}
-			
-			return inputDebug.inputObjects(params);
-		}
-		return input.inputObjects(params);
-	}
+    // If set to null and we are in debug mode, we take the first item from the normal input
+    @BeanField @OptionalBean private InputManager<T> inputDebug;
+    // END BEAN PROPERTIES
 
-	public InputManager<T> getInput() {
-		return input;
-	}
+    @Override
+    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
+        if (params.isDebugModeActivated()) {
+            if (inputDebug == null) {
+                // We pick the first
+                Iterator<T> all = input.inputObjects(params).iterator();
+                T firstItem = all.next();
+                return Collections.singletonList(firstItem);
+            }
 
-	public void setInput(InputManager<T> input) {
-		this.input = input;
-	}
+            return inputDebug.inputObjects(params);
+        }
+        return input.inputObjects(params);
+    }
 
+    public InputManager<T> getInput() {
+        return input;
+    }
 
-	public InputManager<T> getInputDebug() {
-		return inputDebug;
-	}
+    public void setInput(InputManager<T> input) {
+        this.input = input;
+    }
 
+    public InputManager<T> getInputDebug() {
+        return inputDebug;
+    }
 
-	public void setInputDebug(InputManager<T> inputDebug) {
-		this.inputDebug = inputDebug;
-	}
-
-
-
+    public void setInputDebug(InputManager<T> inputDebug) {
+        this.inputDebug = inputDebug;
+    }
 }

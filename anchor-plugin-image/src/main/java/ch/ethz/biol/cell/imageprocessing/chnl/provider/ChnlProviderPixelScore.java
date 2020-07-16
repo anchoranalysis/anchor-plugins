@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeature;
+import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeatureWithMask;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
@@ -40,7 +40,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -51,167 +51,146 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeature;
-import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeatureWithMask;
-
 public class ChnlProviderPixelScore extends ChnlProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private ChnlProvider intensityProvider;
-	
-	@BeanField @OptionalBean
-	private ChnlProvider gradientProvider;
-	
-	// We don't use {@link ChnlProiderMask} as here it's optional.
-	@BeanField @OptionalBean
-	private BinaryChnlProvider mask;
-	
-	@BeanField
-	private PixelScore pixelScore;
-	
-	@BeanField
-	private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
-	
-	@BeanField
-	private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
-	
-	@BeanField @OptionalBean
-	private KeyValueParamsProvider keyValueParamsProvider;
-	// END BEAN PROPERTIES
-	
-	private VoxelBoxList createVoxelBoxList( Channel chnlIntensity ) throws CreateException {
-		
-		VoxelBoxList listOut = new VoxelBoxList();
-		
-		listOut.add( chnlIntensity.getVoxelBox() );
-		
-		if (gradientProvider!=null) {
-			listOut.add( gradientProvider.create().getVoxelBox() );
-		}
-		for( ChnlProvider chnlProvider : listChnlProviderExtra ) {
-			VoxelBoxWrapper vbExtra = chnlProvider!=null ? chnlProvider.create().getVoxelBox() : null;
-			listOut.add(vbExtra);
-		}
-		return listOut;
-	}
-	
-	
-	private Optional<ObjectMask> createMaskOrNull() throws CreateException {
-		if (mask==null) {
-			return Optional.empty();
-		}
-		
-		BinaryChnl binaryChnlMask = mask.create();
-		Channel chnlMask = binaryChnlMask.getChannel();
-		
-		return Optional.of(
-			new ObjectMask(
-				new BoundingBox( chnlMask.getDimensions().getExtent()),
-				chnlMask.getVoxelBox().asByte(),
-				binaryChnlMask.getBinaryValues()
-			)
-		);
-	}
-	
-	@Override
-	public Channel create() throws CreateException {
-		
-		Channel chnlIntensity = intensityProvider.create();
-				
-		VoxelBoxList listVb = createVoxelBoxList( chnlIntensity);
-		List<Histogram> listHistExtra = ProviderBeanUtilities.listFromBeans(listHistogramProviderExtra);
-		
-		Optional<KeyValueParams> kpv;
-		if (keyValueParamsProvider!=null) {
-			kpv = Optional.of(keyValueParamsProvider.create());
-		} else {
-			kpv = Optional.empty();
-		}
+    // START BEAN PROPERTIES
+    @BeanField private ChnlProvider intensityProvider;
 
-		Optional<ObjectMask> objMask = createMaskOrNull();
-		
-		VoxelBox<ByteBuffer> vbPixelScore;
-		if (objMask.isPresent()) {
-			CreateVoxelBoxFromPixelwiseFeatureWithMask creator = new CreateVoxelBoxFromPixelwiseFeatureWithMask(
-				listVb,
-				kpv,
-				listHistExtra
-			);
-			
-			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, objMask.get());
-			
-		} else {
-			CreateVoxelBoxFromPixelwiseFeature creator = new CreateVoxelBoxFromPixelwiseFeature(
-				listVb,
-				kpv,
-				listHistExtra
-			);
-				
-			vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, getLogger() );
-		}
-		
-		return new ChannelFactoryByte().create(vbPixelScore, chnlIntensity.getDimensions().getRes());
-	}
-	
-	public ChnlProvider getIntensityProvider() {
-		return intensityProvider;
-	}
+    @BeanField @OptionalBean private ChnlProvider gradientProvider;
 
-	public void setIntensityProvider(ChnlProvider intensityProvider) {
-		this.intensityProvider = intensityProvider;
-	}
+    // We don't use {@link ChnlProiderMask} as here it's optional.
+    @BeanField @OptionalBean private BinaryChnlProvider mask;
 
-	public ChnlProvider getGradientProvider() {
-		return gradientProvider;
-	}
+    @BeanField private PixelScore pixelScore;
 
-	public void setGradientProvider(ChnlProvider gradientProvider) {
-		this.gradientProvider = gradientProvider;
-	}
+    @BeanField private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
 
-	public PixelScore getPixelScore() {
-		return pixelScore;
-	}
+    @BeanField private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 
-	public void setPixelScore(PixelScore pixelScore) {
-		this.pixelScore = pixelScore;
-	}
+    @BeanField @OptionalBean private KeyValueParamsProvider keyValueParamsProvider;
+    // END BEAN PROPERTIES
 
-	public List<ChnlProvider> getListChnlProviderExtra() {
-		return listChnlProviderExtra;
-	}
+    private VoxelBoxList createVoxelBoxList(Channel chnlIntensity) throws CreateException {
 
-	public void setListChnlProviderExtra(List<ChnlProvider> listChnlProviderExtra) {
-		this.listChnlProviderExtra = listChnlProviderExtra;
-	}
+        VoxelBoxList listOut = new VoxelBoxList();
 
-	public List<HistogramProvider> getListHistogramProviderExtra() {
-		return listHistogramProviderExtra;
-	}
+        listOut.add(chnlIntensity.getVoxelBox());
 
-	public void setListHistogramProviderExtra(
-			List<HistogramProvider> listHistogramProviderExtra) {
-		this.listHistogramProviderExtra = listHistogramProviderExtra;
-	}
+        if (gradientProvider != null) {
+            listOut.add(gradientProvider.create().getVoxelBox());
+        }
+        for (ChnlProvider chnlProvider : listChnlProviderExtra) {
+            VoxelBoxWrapper vbExtra =
+                    chnlProvider != null ? chnlProvider.create().getVoxelBox() : null;
+            listOut.add(vbExtra);
+        }
+        return listOut;
+    }
 
+    private Optional<ObjectMask> createMaskOrNull() throws CreateException {
+        if (mask == null) {
+            return Optional.empty();
+        }
 
-	public KeyValueParamsProvider getKeyValueParamsProvider() {
-		return keyValueParamsProvider;
-	}
+        Mask binaryChnlMask = mask.create();
+        Channel chnlMask = binaryChnlMask.getChannel();
 
+        return Optional.of(
+                new ObjectMask(
+                        new BoundingBox(chnlMask.getDimensions().getExtent()),
+                        chnlMask.getVoxelBox().asByte(),
+                        binaryChnlMask.getBinaryValues()));
+    }
 
-	public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-		this.keyValueParamsProvider = keyValueParamsProvider;
-	}
+    @Override
+    public Channel create() throws CreateException {
 
+        Channel chnlIntensity = intensityProvider.create();
 
-	public BinaryChnlProvider getMask() {
-		return mask;
-	}
+        VoxelBoxList listVb = createVoxelBoxList(chnlIntensity);
+        List<Histogram> listHistExtra =
+                ProviderBeanUtilities.listFromBeans(listHistogramProviderExtra);
 
+        Optional<KeyValueParams> kpv;
+        if (keyValueParamsProvider != null) {
+            kpv = Optional.of(keyValueParamsProvider.create());
+        } else {
+            kpv = Optional.empty();
+        }
 
-	public void setMask(BinaryChnlProvider mask) {
-		this.mask = mask;
-	}
+        Optional<ObjectMask> object = createMaskOrNull();
+
+        VoxelBox<ByteBuffer> vbPixelScore;
+        if (object.isPresent()) {
+            CreateVoxelBoxFromPixelwiseFeatureWithMask creator =
+                    new CreateVoxelBoxFromPixelwiseFeatureWithMask(listVb, kpv, listHistExtra);
+
+            vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, object);
+
+        } else {
+            CreateVoxelBoxFromPixelwiseFeature creator =
+                    new CreateVoxelBoxFromPixelwiseFeature(listVb, kpv, listHistExtra);
+
+            vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, getLogger());
+        }
+
+        return new ChannelFactoryByte()
+                .create(vbPixelScore, chnlIntensity.getDimensions().getRes());
+    }
+
+    public ChnlProvider getIntensityProvider() {
+        return intensityProvider;
+    }
+
+    public void setIntensityProvider(ChnlProvider intensityProvider) {
+        this.intensityProvider = intensityProvider;
+    }
+
+    public ChnlProvider getGradientProvider() {
+        return gradientProvider;
+    }
+
+    public void setGradientProvider(ChnlProvider gradientProvider) {
+        this.gradientProvider = gradientProvider;
+    }
+
+    public PixelScore getPixelScore() {
+        return pixelScore;
+    }
+
+    public void setPixelScore(PixelScore pixelScore) {
+        this.pixelScore = pixelScore;
+    }
+
+    public List<ChnlProvider> getListChnlProviderExtra() {
+        return listChnlProviderExtra;
+    }
+
+    public void setListChnlProviderExtra(List<ChnlProvider> listChnlProviderExtra) {
+        this.listChnlProviderExtra = listChnlProviderExtra;
+    }
+
+    public List<HistogramProvider> getListHistogramProviderExtra() {
+        return listHistogramProviderExtra;
+    }
+
+    public void setListHistogramProviderExtra(List<HistogramProvider> listHistogramProviderExtra) {
+        this.listHistogramProviderExtra = listHistogramProviderExtra;
+    }
+
+    public KeyValueParamsProvider getKeyValueParamsProvider() {
+        return keyValueParamsProvider;
+    }
+
+    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
+        this.keyValueParamsProvider = keyValueParamsProvider;
+    }
+
+    public BinaryChnlProvider getMask() {
+        return mask;
+    }
+
+    public void setMask(BinaryChnlProvider mask) {
+        this.mask = mask;
+    }
 }

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -43,80 +43,75 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
-import lombok.Getter;
-import lombok.Setter;
-
 // Corrects a channel in the following way
 //  For each object:
 //		1. Identify the median value from channelLookup
 //		2. Calculate the difference of each pixel value in channelLookup to Value 1.
 //		3. Adjust each pixel value by Value 2.
-public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjsSource {
+public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjectsSource {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private ChnlProvider chnlLookup;
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
-	
-		Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
-		
-		try {
-			for( ObjectMask om : objsSource ) {
-				Histogram h = HistogramFactory.create(
-					lookup.getVoxelBox(),
-					Optional.of(om)
-				);
-				int objMedian = (int) Math.round(h.mean());
-				adjustObj(om, chnl, lookup, objMedian );
-	
-			}
-			
-			return chnl;
-			
-		} catch (OperationFailedException e) {
-			throw new CreateException("An error occurred calculating the mean", e);
-		}
-	}
-	
-	private void adjustObj( ObjectMask om, Channel chnl, Channel chnlLookup, int objMedian ) {
-		
-		ReadableTuple3i crnrMin = om.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = om.getBoundingBox().calcCornerMax();
-		
-		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
-		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
-			
-			ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
-			ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
-			ByteBuffer bbMask = om.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
-			
-			int maskOffset = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++ ) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++ ) {
-					
-					if( bbMask.get(maskOffset++)==om.getBinaryValuesByte().getOnByte()) {
-						
-						int offset = vb.extent().offset(x, y);
-						
-						int lookupVal = ByteConverter.unsignedByteToInt( bbChnlLookup.get(offset) );
-						int adj = (objMedian - lookupVal);
-						
-						int crntVal = ByteConverter.unsignedByteToInt( bbChnl.get(offset) );
-						int valNew = crntVal - adj;
-						
-						if (valNew<0) valNew = 0;
-						if (valNew>255) valNew = 255;
-						
-						bbChnl.put( offset, (byte) valNew);
-					}
-					
-				}
-			}
-		}
-	}
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private ChnlProvider chnlLookup;
+    // END BEAN PROPERTIES
+
+    @Override
+    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+            throws CreateException {
+
+        Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
+
+        try {
+            for (ObjectMask object : objectsSource) {
+
+                Histogram histogram =
+                        HistogramFactory.create(lookup.getVoxelBox(), Optional.of(object));
+                adjustObject(object, chnl, lookup, (int) Math.round(histogram.mean()));
+            }
+
+            return chnl;
+
+        } catch (OperationFailedException e) {
+            throw new CreateException("An error occurred calculating the mean", e);
+        }
+    }
+
+    private void adjustObject(
+            ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
+
+        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+
+        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
+
+        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+
+            ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask =
+                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+
+            int maskOffset = 0;
+            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
+                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+
+                    if (bbMask.get(maskOffset++) == object.getBinaryValuesByte().getOnByte()) {
+
+                        int offset = vb.extent().offset(x, y);
+
+                        int lookupVal = ByteConverter.unsignedByteToInt(bbChnlLookup.get(offset));
+                        int adj = (medianFromObject - lookupVal);
+
+                        int crntVal = ByteConverter.unsignedByteToInt(bbChnl.get(offset));
+                        int valNew = crntVal - adj;
+
+                        if (valNew < 0) valNew = 0;
+                        if (valNew > 255) valNew = 255;
+
+                        bbChnl.put(offset, (byte) valNew);
+                    }
+                }
+            }
+        }
+    }
 }

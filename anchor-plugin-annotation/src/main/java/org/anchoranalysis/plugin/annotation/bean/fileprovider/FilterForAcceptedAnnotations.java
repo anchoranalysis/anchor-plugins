@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.fileprovider;
-
-/*
+/*-
  * #%L
- * anchor-annotation
+ * anchor-plugin-annotation
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.annotation.bean.fileprovider;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.fileprovider;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,7 +32,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -45,66 +45,46 @@ import org.anchoranalysis.io.error.FileProviderException;
 
 public class FilterForAcceptedAnnotations extends FileProvider {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private FileProvider fileProvider;
-	
-	@BeanField
-	private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private FileProvider fileProvider;
 
-	private MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
-	
-	@Override
-	public Collection<File> create(InputManagerParams params) throws FileProviderException {
-		try {
-			Collection<File> filesIn = fileProvider.create(params);
-			
-			List<File> filesOut = new ArrayList<>();
-			
-			for( File f : filesIn ) {
-				
-				if (isFileAccepted(f)) {
-					filesOut.add(f);
-				}
-				
-			}
-			
-			return filesOut;
-		} catch (AnchorIOException e) {
-			throw new FileProviderException(e);
-		}
-	}
+    @BeanField @Getter @Setter
+    private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-	public List<FilePathGenerator> getListFilePathGenerator() {
-		return listFilePathGenerator;
-	}
+    private MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
 
-	public void setListFilePathGenerator(
-			List<FilePathGenerator> listFilePathGenerator) {
-		this.listFilePathGenerator = listFilePathGenerator;
-	}
+    @Override
+    public Collection<File> create(InputManagerParams params) throws FileProviderException {
+        try {
+            Collection<File> filesIn = fileProvider.create(params);
 
-	public FileProvider getFileProvider() {
-		return fileProvider;
-	}
+            List<File> filesOut = new ArrayList<>();
 
-	public void setFileProvider(FileProvider fileProvider) {
-		this.fileProvider = fileProvider;
-	}
+            for (File f : filesIn) {
 
-	private boolean isFileAccepted( File file) throws AnchorIOException {
-		
-		for( FilePathGenerator fpg : listFilePathGenerator ) {
-			Path annotationPath = fpg.outFilePath( file.toPath(), false );
-			
-			Optional<MarkAnnotation> annotation = annotationReader.read( annotationPath );
-			
-			if (!annotation.isPresent() || !annotation.get().isAccepted()) {
-				return false;
-			}
-		}
-		return true;
-	}
+                if (isFileAccepted(f)) {
+                    filesOut.add(f);
+                }
+            }
 
+            return filesOut;
+        } catch (AnchorIOException e) {
+            throw new FileProviderException(e);
+        }
+    }
+
+    private boolean isFileAccepted(File file) throws AnchorIOException {
+
+        for (FilePathGenerator fpg : listFilePathGenerator) {
+            Path annotationPath = fpg.outFilePath(file.toPath(), false);
+
+            Optional<MarkAnnotation> annotation = annotationReader.read(annotationPath);
+
+            if (!annotation.isPresent() || !annotation.get().isAccepted()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.input;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.input;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.plugin.io.bean.input;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.List;
 import java.util.ListIterator;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -39,51 +37,47 @@ import org.anchoranalysis.io.input.InputFromManager;
 
 /**
  * Excludes all inputs that match a regular expression
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public class Exclude<T extends InputFromManager> extends InputManager<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private InputManager<T> input;
-	
-	@BeanField
-	private RegEx regEx;
-	// END BEAN PROPERITES	
-	
-	@Override
-	public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
-		
-		List<T> list = input.inputObjects(params);
-		
-		ListIterator<T> itr = list.listIterator();
-		while( itr.hasNext() ) {
-			
-			if (regEx.hasMatch(itr.next().descriptiveName())) {
-				itr.remove();
-			}
-		}
-		
-		return list;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private InputManager<T> input;
 
-	public InputManager<T> getInput() {
-		return input;
-	}
+    @BeanField private RegEx regEx;
+    // END BEAN PROPERITES
 
-	public void setInput(InputManager<T> input) {
-		this.input = input;
-	}
+    @Override
+    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
 
-	public RegEx getRegEx() {
-		return regEx;
-	}
+        List<T> list = input.inputObjects(params);
 
-	public void setRegEx(RegEx regEx) {
-		this.regEx = regEx;
-	}
+        ListIterator<T> itr = list.listIterator();
+        while (itr.hasNext()) {
 
+            if (regEx.hasMatch(itr.next().descriptiveName())) {
+                itr.remove();
+            }
+        }
+
+        return list;
+    }
+
+    public InputManager<T> getInput() {
+        return input;
+    }
+
+    public void setInput(InputManager<T> input) {
+        this.input = input;
+    }
+
+    public RegEx getRegEx() {
+        return regEx;
+    }
+
+    public void setRegEx(RegEx regEx) {
+        this.regEx = regEx;
+    }
 }

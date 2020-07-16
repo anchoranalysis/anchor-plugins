@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.input.chnl;
-
-/*
+/*-
  * #%L
- * anchor-image-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +24,12 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -48,127 +46,125 @@ import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Appends another channel to an existing NamedChnlInputBase
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> voxel data-type buffer
  */
 class AppendPart extends NamedChnlsInputPart {
 
-	private NamedChnlsInputPart delegate;
-	private AdditionalChnl additionalChnl;
-	private RasterReader rasterReader;
-	
-	private OpenedRaster openedRasterMemo;
-	
-	public AppendPart(
-			NamedChnlsInputPart delegate,
-			String chnlName, int chnlIndex, Operation<Path,AnchorIOException> filePath, RasterReader rasterReader ) {
-		super();
-		this.delegate = delegate;
-		this.additionalChnl = new AdditionalChnl(chnlName, chnlIndex, filePath);
-		this.rasterReader = rasterReader;
-	}
+    private NamedChnlsInputPart delegate;
+    private AdditionalChnl additionalChnl;
+    private RasterReader rasterReader;
 
-	@Override
-	public int numSeries() throws RasterIOException {
-		return delegate.numSeries();
-	}
-	
+    private OpenedRaster openedRasterMemo;
 
-	@Override
-	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
-		return delegate.dim(seriesIndex);
-	}
+    public AppendPart(
+            NamedChnlsInputPart delegate,
+            String chnlName,
+            int chnlIndex,
+            Operation<Path, AnchorIOException> filePath,
+            RasterReader rasterReader) {
+        super();
+        this.delegate = delegate;
+        this.additionalChnl = new AdditionalChnl(chnlName, chnlIndex, filePath);
+        this.rasterReader = rasterReader;
+    }
 
-	@Override
-	public boolean hasChnl(String chnlName) throws RasterIOException {
-		
-		if (additionalChnl.getChnlName().equals(chnlName)) {
-			return true;
-		}
-		return delegate.hasChnl(chnlName);
-	}
+    @Override
+    public int numSeries() throws RasterIOException {
+        return delegate.numSeries();
+    }
 
-	@Override
-	public NamedChnlCollectionForSeries createChnlCollectionForSeries(
-			int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
-		
-		NamedChnlCollectionForSeries exst = delegate.createChnlCollectionForSeries(seriesNum, progressReporter );
-		
-		openRasterIfNecessary();
-		
-		NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
-		out.add( exst );
-		out.add(
-			new NamedChnlCollectionForSeriesMap(
-				openedRasterMemo,
-				additionalChnl.createChnlMap(),
-				seriesNum
-			)
-		);
-		return out;
-	}
-	
-	private void openRasterIfNecessary() throws RasterIOException {
-		try {
-			Path filePathAdditional = additionalChnl.getFilePath();
-			
-			if (openedRasterMemo==null) {
-				openedRasterMemo = rasterReader.openFile( filePathAdditional );
-			}
-			
-		} catch (AnchorIOException e) {
-			throw new RasterIOException(e);
-		}
-	}
+    @Override
+    public ImageDimensions dim(int seriesIndex) throws RasterIOException {
+        return delegate.dim(seriesIndex);
+    }
 
-	@Override
-	public String descriptiveName() {
-		return delegate.descriptiveName();
-	}
-	
-	@Override
-	public List<Path> pathForBindingForAllChannels() throws GetOperationFailedException {
-		try {
-			List<Path> list = delegate.pathForBindingForAllChannels();
-			list.add( additionalChnl.getFilePath() );
-			return list;
-			
-		} catch (AnchorIOException e) {
-			throw new GetOperationFailedException(e);
-		}
-	}
+    @Override
+    public boolean hasChnl(String chnlName) throws RasterIOException {
 
-	@Override
-	public Optional<Path> pathForBinding() {
-		return delegate.pathForBinding();
-	}
+        if (additionalChnl.getChnlName().equals(chnlName)) {
+            return true;
+        }
+        return delegate.hasChnl(chnlName);
+    }
 
-	@Override
-	public File getFile() {
-		return delegate.getFile();
-	}
+    @Override
+    public NamedChnlCollectionForSeries createChnlCollectionForSeries(
+            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
 
-	@Override
-	public int numChnl() throws RasterIOException {
-		return delegate.numChnl();
-	}
+        NamedChnlCollectionForSeries exst =
+                delegate.createChnlCollectionForSeries(seriesNum, progressReporter);
 
-	@Override
-	public int bitDepth() throws RasterIOException {
-		return delegate.bitDepth();
-	}
-	
-	@Override
-	public void close(ErrorReporter errorReporter) {
-		if (openedRasterMemo!=null) {
-			try {
-				openedRasterMemo.close();
-			} catch (RasterIOException e) {
-				errorReporter.recordError(AppendPart.class, e);
-			}
-		}
-		delegate.close(errorReporter);
-	}
+        openRasterIfNecessary();
+
+        NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
+        out.add(exst);
+        out.add(
+                new NamedChnlCollectionForSeriesMap(
+                        openedRasterMemo, additionalChnl.createChnlMap(), seriesNum));
+        return out;
+    }
+
+    private void openRasterIfNecessary() throws RasterIOException {
+        try {
+            Path filePathAdditional = additionalChnl.getFilePath();
+
+            if (openedRasterMemo == null) {
+                openedRasterMemo = rasterReader.openFile(filePathAdditional);
+            }
+
+        } catch (AnchorIOException e) {
+            throw new RasterIOException(e);
+        }
+    }
+
+    @Override
+    public String descriptiveName() {
+        return delegate.descriptiveName();
+    }
+
+    @Override
+    public List<Path> pathForBindingForAllChannels() throws GetOperationFailedException {
+        try {
+            List<Path> list = delegate.pathForBindingForAllChannels();
+            list.add(additionalChnl.getFilePath());
+            return list;
+
+        } catch (AnchorIOException e) {
+            throw new GetOperationFailedException(e);
+        }
+    }
+
+    @Override
+    public Optional<Path> pathForBinding() {
+        return delegate.pathForBinding();
+    }
+
+    @Override
+    public File getFile() {
+        return delegate.getFile();
+    }
+
+    @Override
+    public int numChnl() throws RasterIOException {
+        return delegate.numChnl();
+    }
+
+    @Override
+    public int bitDepth() throws RasterIOException {
+        return delegate.bitDepth();
+    }
+
+    @Override
+    public void close(ErrorReporter errorReporter) {
+        if (openedRasterMemo != null) {
+            try {
+                openedRasterMemo.close();
+            } catch (RasterIOException e) {
+                errorReporter.recordError(AppendPart.class, e);
+            }
+        }
+        delegate.close(errorReporter);
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
-
-/*
+/*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,11 +24,13 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gra
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
@@ -45,119 +45,119 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 
 /**
- * When the image-gradient is supplied as multiple channels in an NRG stack, this converts it into a list of 
- *  points
- *  
- * A constant is subtracted from the (all positive) image-channels, to make positive or negative values
- * 
- * @author Owen Feehan
+ * When the image-gradient is supplied as multiple channels in an NRG stack, this converts it into a
+ * list of points
  *
+ * <p>A constant is subtracted from the (all positive) image-channels, to make positive or negative
+ * values
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor @EqualsAndHashCode(callSuper = false)
-class CalculateGradientFromMultipleChnls extends FeatureCalculation<List<Point3d>,FeatureInputSingleObject> {
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+class CalculateGradientFromMultipleChnls
+        extends FeatureCalculation<List<Point3d>, FeatureInputSingleObject> {
 
-	private int nrgIndexX;
-	
-	private int nrgIndexY;
-	
-	// If -1, then no z-gradient is considered, and all z-values are 0
-	private int nrgIndexZ;
-	
-	private int subtractConstant = 0;
-	
-	@Override
-	protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalcException {
+    private int nrgIndexX;
 
-		if (nrgIndexX==-1 || nrgIndexY==-1) {
-			throw new FeatureCalcException(
-				new InitException("nrgIndexX and nrgIndexY must both be nonZero")
-			);
-		}
-		
-		// create a list of points
-		List<Point3d> out = new ArrayList<>();
-		
-		NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
-		
-		putGradientValue( input.getObjectMask(), out, 0, nrgStack.getChnl(nrgIndexX) );
-		putGradientValue( input.getObjectMask(), out, 1, nrgStack.getChnl(nrgIndexY) );
-		
-		if (nrgIndexZ!=-1) {
-			putGradientValue( input.getObjectMask(), out, 2, nrgStack.getChnl(nrgIndexZ) );
-		}
-		
-		return out;
-	}
-	
-	// Always iterates over the list in the same-order
-	private void putGradientValue( ObjectMask om, List<Point3d> pnts, int axisIndex, Channel chnl ) {
-		
-		BinaryVoxelBox<ByteBuffer> bvb = om.binaryVoxelBox();
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		BoundingBox bbox = om.getBoundingBox();
+    private int nrgIndexY;
 
+    // If -1, then no z-gradient is considered, and all z-values are 0
+    private int nrgIndexZ;
 
-		Extent e = vb.extent();
-		Extent eMask = bbox.extent();
-		
-		BinaryValuesByte bvbMask = bvb.getBinaryValues().createByte();
-		
-		// Tracks where are writing to on the output list.
-		int pointIndex = 0;
-		
-		for( int z=0; z<eMask.getZ(); z++) {
-			
-			VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.cornerMin().getZ() );
-			VoxelBuffer<ByteBuffer> bbMask = bvb.getPixelsForPlane(z);
-			
-			for( int y=0; y<eMask.getY(); y++) {
-				for( int x=0; x<eMask.getX(); x++) {
-					
-					int offsetMask = eMask.offset( x, y);
-					
-					if (bbMask.buffer().get(offsetMask)==bvbMask.getOnByte()) {
-					
-						int offset = e.offset(x + bbox.cornerMin().getX(), y + bbox.cornerMin().getY());
-						
-						int gradVal = bb.getInt(offset) - subtractConstant;
-						
-						modifyOrAddPoint( pnts, pointIndex, gradVal, axisIndex );
-						pointIndex++;
-					}
-				}
-			}
-			
-		}
-		assert( pnts.size()==pointIndex );
-	}
-	
-	private static void modifyOrAddPoint( List<Point3d> pnts, int pointIndex, int gradVal, int axisIndex ) {
-		Point3d out=null;
-		if (pointIndex==pnts.size()) {
-			out = new Point3d(0,0,0);
-			pnts.add(out);
-		} else {
-			out = pnts.get(pointIndex);
-		}
-		assert(out!=null);
-		
-		switch (axisIndex) {
-		case 0:
-			out.setX(gradVal);
-			return;
-		case 1:
-			out.setY(gradVal);
-			return;	
-		case 2:
-			out.setZ(gradVal);
-			return;	
-		default:
-			assert false;
-			return;
-		}
-	}
+    private int subtractConstant = 0;
+
+    @Override
+    protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalcException {
+
+        if (nrgIndexX == -1 || nrgIndexY == -1) {
+            throw new FeatureCalcException(
+                    new InitException("nrgIndexX and nrgIndexY must both be nonZero"));
+        }
+
+        // create a list of points
+        List<Point3d> out = new ArrayList<>();
+
+        NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+
+        putGradientValue(input.getObject(), out, 0, nrgStack.getChnl(nrgIndexX));
+        putGradientValue(input.getObject(), out, 1, nrgStack.getChnl(nrgIndexY));
+
+        if (nrgIndexZ != -1) {
+            putGradientValue(input.getObject(), out, 2, nrgStack.getChnl(nrgIndexZ));
+        }
+
+        return out;
+    }
+
+    // Always iterates over the list in the same-order
+    private void putGradientValue(
+            ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl) {
+
+        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
+        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        BoundingBox bbox = object.getBoundingBox();
+
+        Extent e = vb.extent();
+        Extent eMask = bbox.extent();
+
+        BinaryValuesByte bvbMask = bvb.getBinaryValues().createByte();
+
+        // Tracks where are writing to on the output list.
+        int pointIndex = 0;
+
+        for (int z = 0; z < eMask.getZ(); z++) {
+
+            VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.cornerMin().getZ());
+            VoxelBuffer<ByteBuffer> bbMask = bvb.getPixelsForPlane(z);
+
+            for (int y = 0; y < eMask.getY(); y++) {
+                for (int x = 0; x < eMask.getX(); x++) {
+
+                    int offsetMask = eMask.offset(x, y);
+
+                    if (bbMask.buffer().get(offsetMask) == bvbMask.getOnByte()) {
+
+                        int offset =
+                                e.offset(x + bbox.cornerMin().getX(), y + bbox.cornerMin().getY());
+
+                        int gradVal = bb.getInt(offset) - subtractConstant;
+
+                        modifyOrAddPoint(points, pointIndex, gradVal, axisIndex);
+                        pointIndex++;
+                    }
+                }
+            }
+        }
+        assert (points.size() == pointIndex);
+    }
+
+    private static void modifyOrAddPoint(
+            List<Point3d> points, int pointIndex, int gradVal, int axisIndex) {
+        Point3d out = null;
+        if (pointIndex == points.size()) {
+            out = new Point3d(0, 0, 0);
+            points.add(out);
+        } else {
+            out = points.get(pointIndex);
+        }
+        assert (out != null);
+
+        switch (axisIndex) {
+            case 0:
+                out.setX(gradVal);
+                return;
+            case 1:
+                out.setY(gradVal);
+                return;
+            case 2:
+                out.setZ(gradVal);
+                return;
+            default:
+                assert false;
+                return;
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.operator.feature.bean.list;
-
 /*-
  * #%L
  * anchor-plugin-operator-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.operator.feature.bean.list;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,21 +24,23 @@ package org.anchoranalysis.plugin.operator.feature.bean.list;
  * #L%
  */
 
-import java.util.List;
+package org.anchoranalysis.plugin.operator.feature.bean.list;
 
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ListChecker {
 
-	public static <T extends FeatureInput> void checkNonEmpty( List<Feature<T>> list ) throws FeatureCalcException {
-		if (list.isEmpty()) {
-			throw new FeatureCalcException("There are 0 items in the list so this feature cannot be calculated");
-		}
-	}
+    public static <T extends FeatureInput> void checkNonEmpty(List<Feature<T>> list)
+            throws FeatureCalcException {
+        if (list.isEmpty()) {
+            throw new FeatureCalcException(
+                    "There are 0 items in the list so this feature cannot be calculated");
+        }
+    }
 }

@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
@@ -34,27 +33,30 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 // Assigns a unique id number to each objects
-// Note behaviour is undefined when objects overlap with each other. An ID of either object arbitrarily will be assigned.
-public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjsSource {
+// Note behaviour is undefined when objects overlap with each other. An ID of either object
+// arbitrarily will be assigned.
+public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
 
-	@Override
-	protected Channel createFromChnl(Channel chnl, ObjectCollection objsSource) throws CreateException {
+    @Override
+    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+            throws CreateException {
 
-		VoxelBox<?> vb = chnl.getVoxelBox().any();
-		
-		if (objsSource.size()>255) {
-			throw new CreateException(
-				String.format("A maximum of 255 objs is allowed. There are %d",objsSource.size())
-			);
-		}
-		
-		vb.setAllPixelsTo(0);
-		
-		int index = 1;
-		for(ObjectMask om : objsSource) {
-			vb.setPixelsCheckMask(om, index++);
-		}
-		
-		return chnl;
-	}
+        VoxelBox<?> vb = chnl.getVoxelBox().any();
+
+        if (objectsSource.size() > 255) {
+            throw new CreateException(
+                    String.format(
+                            "A maximum of 255 objects is allowed. There are %d",
+                            objectsSource.size()));
+        }
+
+        vb.setAllPixelsTo(0);
+
+        int index = 1;
+        for (ObjectMask objects : objectsSource) {
+            vb.setPixelsCheckMask(objects, index++);
+        }
+
+        return chnl;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +23,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
  * THE SOFTWARE.
  * #L%
  */
+
+package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -37,41 +37,37 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
-	// START BEAN PARAMETERS
-	@BeanField
-	private String axis = "x";
-	// END BEAN PARAMETERS
-	
-	@Override
-	public double calc( SessionInput<FeatureInputSingleObject> input ) throws FeatureCalcException {
-		
-		FeatureInputSingleObject inputSessionless = input.get();
-		
-		ReadableTuple3i pnt = extractTupleForBoundingBox(
-			inputSessionless.getObjectMask().getBoundingBox()
-		);
-		
-		return calcAxisValue(pnt);
-	}
-	
-	protected abstract ReadableTuple3i extractTupleForBoundingBox( BoundingBox bbox );
-	
-	private double calcAxisValue(ReadableTuple3i pnt) {
-		return pnt.getValueByDimension(
-			AxisTypeConverter.createFromString(axis)
-		);
-	}
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%s", axis);
-	}
-	
-	public String getAxis() {
-		return axis;
-	}
+    // START BEAN PARAMETERS
+    @BeanField private String axis = "x";
+    // END BEAN PARAMETERS
 
-	public void setAxis(String axis) {
-		this.axis = axis;
-	}
+    @Override
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+
+        FeatureInputSingleObject inputSessionless = input.get();
+
+        ReadableTuple3i point =
+                extractTupleForBoundingBox(inputSessionless.getObject().getBoundingBox());
+
+        return calcAxisValue(point);
+    }
+
+    protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox);
+
+    private double calcAxisValue(ReadableTuple3i point) {
+        return point.getValueByDimension(AxisTypeConverter.createFromString(axis));
+    }
+
+    @Override
+    public String getParamDscr() {
+        return String.format("%s", axis);
+    }
+
+    public String getAxis() {
+        return axis;
+    }
+
+    public void setAxis(String axis) {
+        this.axis = axis;
+    }
 }

@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
-
-/*
+/*-
  * #%L
  * anchor-plugin-mpp-experiment
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,20 +24,20 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
  * #L%
  */
 
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
+import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -48,79 +46,76 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
-
 public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
-	// END BEAN PROPERTIES
+    // START BEAN PROPERTIES
+    @BeanField
+    private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
+    // END BEAN PROPERTIES
 
-	@Override
-	public InputTypesExpected inputTypesExpected() {
-		return new InputTypesExpected(ManifestCouplingDefinition.class);
-	}
-		
-	@Override
-	public void doJobOnInputObject(InputBound<ManifestCouplingDefinition,NoSharedState> params ) throws JobExecutionException {
-		
-		Logger logger = params.getLogger();
-		ManifestCouplingDefinition input = params.getInputObject();
-		BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
-		
-		Optional<CSVWriter> writer;
-		try {
-			writer = CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
-		} catch (AnchorIOException e1) {
-			throw new JobExecutionException(e1);
-		}
-		
-		try {
-					
-			if (!writer.isPresent()) {
-				return;
-			}
-			
-			writer.get().writeHeaders(
-				ReportFeatureUtilities.genHeaderNames( listReportFeatures, logger )
-			);
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(ManifestCouplingDefinition.class);
+    }
 
-			
-			Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
-			while ( itr.hasNext() ) {
-				
-				CoupledManifests mr = itr.next();
+    @Override
+    public void doJobOnInputObject(InputBound<ManifestCouplingDefinition, NoSharedState> params)
+            throws JobExecutionException {
 
-				List<TypedValue> rowElements = ReportFeatureUtilities.genElementList(
-					listReportFeatures,
-					mr.getFileManifest(),
-					logger
-				); 
+        Logger logger = params.getLogger();
+        ManifestCouplingDefinition input = params.getInputObject();
+        BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
 
-				try {
-					writer.get().writeRow( rowElements );
-				} catch (NumberFormatException e) {
-					throw new JobExecutionException(e);
-				}
-			}
-			
-		} finally {
-			writer.get().close();
-		}
-		
-	}
-	
-	@Override
-	public boolean hasVeryQuickPerInputExecution() {
-		return false;
-	}
+        Optional<CSVWriter> writer;
+        try {
+            writer =
+                    CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
+        } catch (AnchorIOException e1) {
+            throw new JobExecutionException(e1);
+        }
 
-	public List<ReportFeature<ManifestRecorderFile>> getListReportFeatures() {
-		return listReportFeatures;
-	}
+        try {
 
-	public void setListReportFeatures(
-			List<ReportFeature<ManifestRecorderFile>> listReportFeatures) {
-		this.listReportFeatures = listReportFeatures;
-	}
+            if (!writer.isPresent()) {
+                return;
+            }
+
+            writer.get()
+                    .writeHeaders(
+                            ReportFeatureUtilities.genHeaderNames(listReportFeatures, logger));
+
+            Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
+            while (itr.hasNext()) {
+
+                CoupledManifests mr = itr.next();
+
+                List<TypedValue> rowElements =
+                        ReportFeatureUtilities.genElementList(
+                                listReportFeatures, mr.getFileManifest(), logger);
+
+                try {
+                    writer.get().writeRow(rowElements);
+                } catch (NumberFormatException e) {
+                    throw new JobExecutionException(e);
+                }
+            }
+
+        } finally {
+            writer.get().close();
+        }
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
+
+    public List<ReportFeature<ManifestRecorderFile>> getListReportFeatures() {
+        return listReportFeatures;
+    }
+
+    public void setListReportFeatures(
+            List<ReportFeature<ManifestRecorderFile>> listReportFeatures) {
+        this.listReportFeatures = listReportFeatures;
+    }
 }

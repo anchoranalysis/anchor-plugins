@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,32 +24,29 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
+
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder;
 
 class ShapeRegularityCalculator {
 
-	private ShapeRegularityCalculator() {}
-	
-	public static double calcShapeRegularity( ObjectMask om ) {
-		double area = om.numberVoxelsOn();
-		int perimeter = NumberVoxelsAtBorder.numBorderPixels(
-			om,
-			false,
-			false,
-			false
-		);
-		return calcValues(area, perimeter);
-	}
-	
-	private static double calcValues(double area, int perimeter) {
+    private ShapeRegularityCalculator() {}
 
-		if (perimeter==0) {
-			return 0.0;
-		}
-		
-		double val = ((2 * Math.PI) * Math.sqrt(area/Math.PI)) / perimeter;
-		assert( !Double.isNaN(val) );
-		return val;
-	}
+    public static double calcShapeRegularity(ObjectMask object) {
+        double area = object.numberVoxelsOn();
+        int perimeter = NumberVoxelsAtBorder.numBorderPixels(object, false, false, false);
+        return calcValues(area, perimeter);
+    }
+
+    private static double calcValues(double area, int perimeter) {
+
+        if (perimeter == 0) {
+            return 0.0;
+        }
+
+        double val = ((2 * Math.PI) * Math.sqrt(area / Math.PI)) / perimeter;
+        assert (!Double.isNaN(val));
+        return val;
+    }
 }

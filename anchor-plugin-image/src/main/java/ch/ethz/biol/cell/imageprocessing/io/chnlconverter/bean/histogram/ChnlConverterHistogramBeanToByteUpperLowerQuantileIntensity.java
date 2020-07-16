@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
@@ -33,60 +32,56 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.ChnlConverterHistogramUpperLowerQuantileIntensity;
 
-public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {
+public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity
+        extends ConvertChannelToWithHistogram {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private double quantileLower = 0.0;
-	
-	@BeanField
-	private double quantileUpper = 1.0;
+    // START BEAN PROPERTIES
+    @BeanField private double quantileLower = 0.0;
 
-	/** Sets the min by multiplying the quantileLower by this constant */
-	@BeanField
-	private double scaleLower = 1.0;
-	
-	/** Sets the max by multiplying the quantileUpper by this constant */
-	@BeanField
-	private double scaleUpper = 1.0;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public ChnlConverterAttached<Histogram, ?> createConverter() {
-		return new ChnlConverterHistogramUpperLowerQuantileIntensity(quantileLower, quantileUpper, scaleLower, scaleUpper);
-	}
+    @BeanField private double quantileUpper = 1.0;
 
-	public double getQuantileLower() {
-		return quantileLower;
-	}
+    /** Sets the min by multiplying the quantileLower by this constant */
+    @BeanField private double scaleLower = 1.0;
 
-	public void setQuantileLower(double quantileLower) {
-		this.quantileLower = quantileLower;
-	}
+    /** Sets the max by multiplying the quantileUpper by this constant */
+    @BeanField private double scaleUpper = 1.0;
+    // END BEAN PROPERTIES
 
-	public double getQuantileUpper() {
-		return quantileUpper;
-	}
+    @Override
+    public ChnlConverterAttached<Histogram, ?> createConverter() {
+        return new ChnlConverterHistogramUpperLowerQuantileIntensity(
+                quantileLower, quantileUpper, scaleLower, scaleUpper);
+    }
 
-	public void setQuantileUpper(double quantileUpper) {
-		this.quantileUpper = quantileUpper;
-	}
+    public double getQuantileLower() {
+        return quantileLower;
+    }
 
-	public double getScaleLower() {
-		return scaleLower;
-	}
+    public void setQuantileLower(double quantileLower) {
+        this.quantileLower = quantileLower;
+    }
 
-	public void setScaleLower(double scaleLower) {
-		this.scaleLower = scaleLower;
-	}
+    public double getQuantileUpper() {
+        return quantileUpper;
+    }
 
-	public double getScaleUpper() {
-		return scaleUpper;
-	}
+    public void setQuantileUpper(double quantileUpper) {
+        this.quantileUpper = quantileUpper;
+    }
 
-	public void setScaleUpper(double scaleUpper) {
-		this.scaleUpper = scaleUpper;
-	}
-		
+    public double getScaleLower() {
+        return scaleLower;
+    }
 
+    public void setScaleLower(double scaleLower) {
+        this.scaleLower = scaleLower;
+    }
+
+    public double getScaleUpper() {
+        return scaleUpper;
+    }
+
+    public void setScaleUpper(double scaleUpper) {
+        this.scaleUpper = scaleUpper;
+    }
 }

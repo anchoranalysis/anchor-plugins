@@ -1,12 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
-
-
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +24,8 @@ package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.obj.pair.overlap;
+
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
@@ -36,13 +34,11 @@ import org.junit.Test;
 
 public class OverlapRelativeToFirstTest {
 
-	@Test
-	public void testOverlapping() throws FeatureCalcException, InitException {
-		ParamsFixtureHelper.testTwoSizesOverlappingDouble(
-			new OverlapRelativeToFirst(),
-			0.8713222261609358,
-			ParamsFixtureHelper.OVERLAP_RATIO_TO_OTHER_SAME_SIZE
-		);
-	}
+    @Test
+    public void testOverlapping() throws FeatureCalcException, InitException {
+        ParamsFixtureHelper.testTwoSizesOverlappingDouble(
+                new OverlapRelativeToFirst(),
+                0.8713222261609358,
+                ParamsFixtureHelper.OVERLAP_RATIO_TO_OTHER_SAME_SIZE);
+    }
 }
-

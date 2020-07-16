@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.opencv.bean.feature;
-
 /*-
  * #%L
  * anchor-plugin-opencv
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,44 +24,48 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
  * #L%
  */
 
-import java.util.function.ToIntFunction;
+package org.anchoranalysis.plugin.opencv.bean.feature;
 
+import java.util.function.ToIntFunction;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DivideUtilities {
-	
-	/** Integer division of a value extracted by another value extracted */
-	public static int divide(SizeXY big, SizeXY divider, ToIntFunction<SizeXY> func ) {
-		return func.applyAsInt(big) / func.applyAsInt(divider);
-	}
-		
-	public static void checkDivisibleBy(SizeXY biggerNumber, SizeXY divisor, String biggerText, String divisorText) throws FeatureCalcException {
-		if (!isDivisibleBy(biggerNumber.getWidth(), divisor.getWidth())) {
-			throw notDivisibleException(biggerText, divisorText, "width");
-		}
-		
-		if (!isDivisibleBy(biggerNumber.getHeight(), divisor.getHeight())) {
-			throw notDivisibleException(biggerText, divisorText, "height");
-		}
-	}
-	
-	public static FeatureCalcException notDivisibleException(String biggerText, String divisorText, String propertyText) {
-		return new FeatureCalcException(
-			String.format("%s %s must be divisible by %s %s.", biggerText, propertyText, divisorText, propertyText)
-		);
-	}
-		
-	public static int ceilDiv( double toDivide, int divisor ) {
-		return (int) Math.ceil(toDivide / divisor);
-	}
-		
-	/** Is a big-number divisible by the divider? */
-	private static boolean isDivisibleBy(int bigNumber, int divider) {
-		return (bigNumber % divider)==0;
-	}
+
+    /** Integer division of a value extracted by another value extracted */
+    public static int divide(SizeXY big, SizeXY divider, ToIntFunction<SizeXY> func) {
+        return func.applyAsInt(big) / func.applyAsInt(divider);
+    }
+
+    public static void checkDivisibleBy(
+            SizeXY biggerNumber, SizeXY divisor, String biggerText, String divisorText)
+            throws FeatureCalcException {
+        if (!isDivisibleBy(biggerNumber.getWidth(), divisor.getWidth())) {
+            throw notDivisibleException(biggerText, divisorText, "width");
+        }
+
+        if (!isDivisibleBy(biggerNumber.getHeight(), divisor.getHeight())) {
+            throw notDivisibleException(biggerText, divisorText, "height");
+        }
+    }
+
+    public static FeatureCalcException notDivisibleException(
+            String biggerText, String divisorText, String propertyText) {
+        return new FeatureCalcException(
+                String.format(
+                        "%s %s must be divisible by %s %s.",
+                        biggerText, propertyText, divisorText, propertyText));
+    }
+
+    public static int ceilDiv(double toDivide, int divisor) {
+        return (int) Math.ceil(toDivide / divisor);
+    }
+
+    /** Is a big-number divisible by the divider? */
+    private static boolean isDivisibleBy(int bigNumber, int divider) {
+        return (bigNumber % divider) == 0;
+    }
 }

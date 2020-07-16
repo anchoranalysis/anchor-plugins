@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.provider.file;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,7 +32,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -41,28 +39,27 @@ import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectoryString;
 
 public class FileSetFromStringSet extends FileProviderWithDirectoryString {
 
-	// START BEAN PROPERTIES
-	@BeanField
-	private StringSet filePaths;
-	// END BEAN PROPERTIES
-	
-	public Collection<File> matchingFilesForDirectory( Path directory, InputManagerParams params ) {
-		
-		List<File> files = new ArrayList<>();
-		
-		for( String s : filePaths ) {
-			Path relPath = Paths.get(s);
-			files.add( directory.resolve(relPath).toFile() );
-		}
-		
-		return files;
-	}
+    // START BEAN PROPERTIES
+    @BeanField private StringSet filePaths;
+    // END BEAN PROPERTIES
 
-	public StringSet getFilePaths() {
-		return filePaths;
-	}
+    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
 
-	public void setFilePaths(StringSet filePaths) {
-		this.filePaths = filePaths;
-	}
+        List<File> files = new ArrayList<>();
+
+        for (String s : filePaths) {
+            Path relPath = Paths.get(s);
+            files.add(directory.resolve(relPath).toFile());
+        }
+
+        return files;
+    }
+
+    public StringSet getFilePaths() {
+        return filePaths;
+    }
+
+    public void setFilePaths(StringSet filePaths) {
+        this.filePaths = filePaths;
+    }
 }

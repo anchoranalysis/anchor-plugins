@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
-
-/*
+/*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +24,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
@@ -36,38 +35,41 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 
 /**
  * A simple scheme for counting the touching voxels.
- * 
- *  A voxel in the second object is touching if it has 4-connectivity with a voxel on the exterior of the first-object (source)
  *
- * In practice, we do this only where the bounding-boxes (dilated by 1 pixels) intersect. So as not to waste computation-time in useless areas. 
- * 
+ * <p>A voxel in the second object is touching if it has 4-connectivity with a voxel on the exterior
+ * of the first-object (source)
+ *
+ * <p>In practice, we do this only where the bounding-boxes (dilated by 1 pixels) intersect. So as
+ * not to waste computation-time in useless areas.
+ *
  * @author Owen Feehan
- *
  */
 public class HasTouchingVoxels extends TouchingVoxels {
 
-	@Override
-	protected double calcWithIntersection(ObjectMask om1, ObjectMask om2, BoundingBox bboxIntersect)
-			throws FeatureCalcException {
-		return convertToInt(
-			calculateHasTouchingRelative(
-				om1,
-				RelativeUtilities.createRelMask( om2, om1 ),
-				RelativeUtilities.createRelBBox(bboxIntersect, om1)
-			)
-		);
-	}
+    @Override
+    protected double calcWithIntersection(
+            ObjectMask first, ObjectMask second, BoundingBox bboxIntersect)
+            throws FeatureCalcException {
+        return convertToInt(
+                calculateHasTouchingRelative(
+                        first,
+                        RelativeUtilities.createRelMask(second, first),
+                        RelativeUtilities.createRelBBox(bboxIntersect, first)));
+    }
 
-	private boolean calculateHasTouchingRelative(ObjectMask om1, ObjectMask om2Rel, BoundingBox bboxIntersectRel) throws FeatureCalcException {
-		CountKernel kernelMatch = createCountKernelMask(om1, om2Rel);
-		try {
-			return ApplyKernel.applyUntilPositive(kernelMatch, om1.getVoxelBox(), bboxIntersectRel );
-		} catch (OperationFailedException e) {
-			throw new FeatureCalcException(e);
-		}
-	}
+    private boolean calculateHasTouchingRelative(
+            ObjectMask first, ObjectMask secondRelative, BoundingBox bboxIntersectRel)
+            throws FeatureCalcException {
+        CountKernel kernelMatch = createCountKernelMask(first, secondRelative);
+        try {
+            return ApplyKernel.applyUntilPositive(
+                    kernelMatch, first.getVoxelBox(), bboxIntersectRel);
+        } catch (OperationFailedException e) {
+            throw new FeatureCalcException(e);
+        }
+    }
 
-	private static int convertToInt( boolean b) {
-		return b ? 1 : 0;
-	}
+    private static int convertToInt(boolean b) {
+        return b ? 1 : 0;
+    }
 }

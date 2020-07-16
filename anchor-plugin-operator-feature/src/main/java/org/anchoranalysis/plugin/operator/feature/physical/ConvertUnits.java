@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.operator.feature.physical;
-
-/*
+/*-
  * #%L
- * anchor-feature
+ * anchor-plugin-operator-feature
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.operator.feature.physical;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +24,10 @@ package org.anchoranalysis.plugin.operator.feature.physical;
  * #L%
  */
 
+package org.anchoranalysis.plugin.operator.feature.physical;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
@@ -35,29 +36,26 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-import lombok.Getter;
-import lombok.Setter;
-
-// 
+//
 public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
-	// START BEAN PROPERTIES
-	@BeanField @AllowEmpty @Getter @Setter
-	private String unitTypeFrom = "";
-	
-	@BeanField @AllowEmpty @Getter @Setter
-	private String unitTypeTo = "";
-	// END BEAN PROPERTIES
-	
-	@Override
-	protected double calc(SessionInput<T> input) throws FeatureCalcException {
-		
-		double value = input.calc( getItem() );
-		
-		SpatialConversionUtilities.UnitSuffix typeFrom = SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
-		SpatialConversionUtilities.UnitSuffix typeTo = SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);
-		
-		double valueBaseUnits = SpatialConversionUtilities.convertFromUnits( value, typeFrom );
-		return SpatialConversionUtilities.convertToUnits( valueBaseUnits, typeTo );
-	}
+    // START BEAN PROPERTIES
+    @BeanField @AllowEmpty @Getter @Setter private String unitTypeFrom = "";
+
+    @BeanField @AllowEmpty @Getter @Setter private String unitTypeTo = "";
+    // END BEAN PROPERTIES
+
+    @Override
+    protected double calc(SessionInput<T> input) throws FeatureCalcException {
+
+        double value = input.calc(getItem());
+
+        SpatialConversionUtilities.UnitSuffix typeFrom =
+                SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
+        SpatialConversionUtilities.UnitSuffix typeTo =
+                SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);
+
+        double valueBaseUnits = SpatialConversionUtilities.convertFromUnits(value, typeFrom);
+        return SpatialConversionUtilities.convertToUnits(valueBaseUnits, typeTo);
+    }
 }

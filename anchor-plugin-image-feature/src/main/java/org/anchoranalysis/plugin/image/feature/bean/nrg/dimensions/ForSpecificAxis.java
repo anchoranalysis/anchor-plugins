@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
-
 /*-
  * #%L
  * anchor-plugin-image-feature
  * %%
- * Copyright (C) 2010 - 2020 Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,41 +24,37 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
  * #L%
  */
 
+package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Dimensions-calculation for one specific axis only.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> feature-input-type
  */
 public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
-	// START BEAN PARAMETERS
-	@BeanField @Getter @Setter
-	private String axis = "x";
-	// END BEAN PARAMETERS
+    // START BEAN PARAMETERS
+    @BeanField @Getter @Setter private String axis = "x";
+    // END BEAN PARAMETERS
 
-	@Override
-	protected double calcFromDims(ImageDimensions dim) {
-		return calcForAxis(
-			dim,
-			AxisTypeConverter.createFromString(axis)
-		);
-	}
-	
-	protected abstract double calcForAxis( ImageDimensions dim, AxisType axis );
-	
-	@Override
-	public String getParamDscr() {
-		return String.format("%s", axis);
-	}
+    @Override
+    protected double calcFromDims(ImageDimensions dim) {
+        return calcForAxis(dim, AxisTypeConverter.createFromString(axis));
+    }
+
+    protected abstract double calcForAxis(ImageDimensions dimensions, AxisType axis);
+
+    @Override
+    public String getParamDscr() {
+        return String.format("%s", axis);
+    }
 }

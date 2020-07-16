@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.rasterreader;
-
-/*
+/*-
  * #%L
- * anchor-io
+ * anchor-plugin-io
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,10 +24,10 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
  * #L%
  */
 
+package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -39,89 +37,89 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 class OpenedRasterAlterDimensions extends OpenedRaster {
-	
-	private OpenedRaster delegate;
-	private ConsiderUpdatedImageRes processor;
 
-	@FunctionalInterface
-	public static interface ConsiderUpdatedImageRes {
-		
-		/**
-		 * A possibly-updated image resolution
-		 * 
-		 * @param res the existing image resolution
-		 * @return a new image resolution or empty if no change should occur
-		 * @throws RasterIOException
-		 */
-		Optional<ImageResolution> maybeUpdatedResolution( ImageResolution res ) throws RasterIOException;
-	}
-	
-	public OpenedRasterAlterDimensions(OpenedRaster delegate, ConsiderUpdatedImageRes processor ) {
-		super();
-		this.delegate = delegate;
-		this.processor = processor;
-	}
+    private OpenedRaster delegate;
+    private ConsiderUpdatedImageRes processor;
 
-	@Override
-	public int numSeries() {
-		return delegate.numSeries();
-	}
+    @FunctionalInterface
+    public static interface ConsiderUpdatedImageRes {
 
-	@Override
-	public TimeSequence open(int seriesIndex,
-			ProgressReporter progressReporter)
-			throws RasterIOException {
-		TimeSequence ts = delegate.open(seriesIndex, progressReporter);
-		
-		for( Stack stack : ts ) {
-			Optional<ImageResolution> res = processor.maybeUpdatedResolution( stack.getDimensions().getRes() );
-			res.ifPresent(stack::updateResolution);
-		}
-		return ts;
-	}
+        /**
+         * A possibly-updated image resolution
+         *
+         * @param res the existing image resolution
+         * @return a new image resolution or empty if no change should occur
+         * @throws RasterIOException
+         */
+        Optional<ImageResolution> maybeUpdatedResolution(ImageResolution res)
+                throws RasterIOException;
+    }
 
-	@Override
-	public Optional<List<String>> channelNames() {
-		return delegate.channelNames();
-	}
+    public OpenedRasterAlterDimensions(OpenedRaster delegate, ConsiderUpdatedImageRes processor) {
+        super();
+        this.delegate = delegate;
+        this.processor = processor;
+    }
 
-	@Override
-	public int numChnl() throws RasterIOException {
-		return delegate.numChnl();
-	}
+    @Override
+    public int numSeries() {
+        return delegate.numSeries();
+    }
 
-	@Override
-	public ImageDimensions dim(int seriesIndex) throws RasterIOException {
-		
-		ImageDimensions sd = delegate.dim(seriesIndex);
-		
-		Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.getRes());
-		
-		if (res.isPresent()) {
-			return sd.duplicateChangeRes(res.get());
-		} else {
-			return sd;	
-		}
-	}
+    @Override
+    public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
+            throws RasterIOException {
+        TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 
-	@Override
-	public int numFrames() throws RasterIOException {
-		return delegate.numFrames();
-	}
-	
-	@Override
-	public boolean isRGB() throws RasterIOException {
-		return delegate.isRGB();
-	}
+        for (Stack stack : ts) {
+            Optional<ImageResolution> res =
+                    processor.maybeUpdatedResolution(stack.getDimensions().getRes());
+            res.ifPresent(stack::updateResolution);
+        }
+        return ts;
+    }
 
-	@Override
-	public int bitDepth() throws RasterIOException {
-		return delegate.bitDepth();
-	}
+    @Override
+    public Optional<List<String>> channelNames() {
+        return delegate.channelNames();
+    }
 
-	@Override
-	public void close() throws RasterIOException {
-		delegate.close();
-		
-	}
+    @Override
+    public int numChnl() throws RasterIOException {
+        return delegate.numChnl();
+    }
+
+    @Override
+    public ImageDimensions dim(int seriesIndex) throws RasterIOException {
+
+        ImageDimensions sd = delegate.dim(seriesIndex);
+
+        Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.getRes());
+
+        if (res.isPresent()) {
+            return sd.duplicateChangeRes(res.get());
+        } else {
+            return sd;
+        }
+    }
+
+    @Override
+    public int numFrames() throws RasterIOException {
+        return delegate.numFrames();
+    }
+
+    @Override
+    public boolean isRGB() throws RasterIOException {
+        return delegate.isRGB();
+    }
+
+    @Override
+    public int bitDepth() throws RasterIOException {
+        return delegate.bitDepth();
+    }
+
+    @Override
+    public void close() throws RasterIOException {
+        delegate.close();
+    }
 }

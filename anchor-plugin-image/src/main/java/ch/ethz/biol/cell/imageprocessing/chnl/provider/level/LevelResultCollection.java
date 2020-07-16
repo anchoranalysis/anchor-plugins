@@ -1,10 +1,8 @@
-package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
-
-/*
+/*-
  * #%L
- * anchor-image
+ * anchor-plugin-image
  * %%
- * Copyright (C) 2016 ETH Zurich, University of Zurich, Owen Feehan
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,39 +24,39 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
  * #L%
  */
 
+package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.anchoranalysis.core.geometry.Point3d;
 
 public class LevelResultCollection implements Iterable<LevelResult> {
-	
-	private List<LevelResult> list = new ArrayList<>();
 
-	public boolean add(LevelResult arg0) {
-		return list.add(arg0);
-	}
-	
-	public LevelResult findClosestResult( Point3d pnt ) {
-		
-		double minDist = Double.MAX_VALUE;
-		LevelResult min = null;
-		
-		for( LevelResult lr : list) {
-			
-			double dist = lr.distToSquared(pnt);
-			if (dist<minDist) {
-				minDist = dist;
-				min = lr;
-			}
-		}
-		return min;
-	}
-	
-	@Override
-	public Iterator<LevelResult> iterator() {
-		return list.iterator();
-	}
+    private List<LevelResult> list = new ArrayList<>();
+
+    public boolean add(LevelResult arg0) {
+        return list.add(arg0);
+    }
+
+    public LevelResult findClosestResult(Point3d point) {
+
+        double minDistance = Double.MAX_VALUE;
+        LevelResult min = null;
+
+        for (LevelResult levelResult : list) {
+
+            double distance = levelResult.distanceSquaredTo(point);
+            if (distance < minDistance) {
+                minDistance = distance;
+                min = levelResult;
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public Iterator<LevelResult> iterator() {
+        return list.iterator();
+    }
 }

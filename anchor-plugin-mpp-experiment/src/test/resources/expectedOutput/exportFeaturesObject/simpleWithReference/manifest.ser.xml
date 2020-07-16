@@ -1,0 +1,102 @@
+<org.anchoranalysis.io.manifest.ManifestRecorder>
+  <rootFolder>
+    <folders>
+      <org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+        <parentFolder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../../.."/>
+        <folders/>
+        <manifestFolderDescription>
+          <fileDescription>
+            <type>raster</type>
+            <function>stackFromCollection</function>
+          </fileDescription>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.SetSequenceType">
+            <set>
+              <string>input</string>
+            </set>
+          </sequenceType>
+        </manifestFolderDescription>
+        <path>stackCollection</path>
+        <outputName class="org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle">
+          <outputName>stackCollection</outputName>
+          <outputFormatString>%s</outputFormatString>
+        </outputName>
+        <template>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription reference="../../../manifestFolderDescription/fileDescription"/>
+            <fileExtension>tif</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </template>
+      </org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+      <org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+        <parentFolder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../../.."/>
+        <folders/>
+        <manifestFolderDescription>
+          <fileDescription>
+            <type>hdf5</type>
+            <function>objects</function>
+          </fileDescription>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.SetSequenceType">
+            <set>
+              <string>objectsTest</string>
+            </set>
+          </sequenceType>
+        </manifestFolderDescription>
+        <path>objects</path>
+        <outputName class="org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle">
+          <outputName>objects</outputName>
+          <outputFormatString>%s</outputFormatString>
+        </outputName>
+        <template>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription reference="../../../manifestFolderDescription/fileDescription"/>
+            <fileExtension>h5</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </template>
+      </org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+      <org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+        <parentFolder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../../.."/>
+        <folders/>
+        <manifestFolderDescription>
+          <fileDescription>
+            <type>raster</type>
+            <function>nrgStack</function>
+          </fileDescription>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType">
+            <end>2</end>
+            <start>0</start>
+            <incrementSize>1</incrementSize>
+          </sequenceType>
+        </manifestFolderDescription>
+        <path>nrgStack</path>
+        <outputName class="org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle">
+          <outputName>nrgStack</outputName>
+          <numDigits>2</numDigits>
+        </outputName>
+        <template>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription>
+              <type>raster</type>
+              <function>nrgStackChnl</function>
+            </manifestDescription>
+            <fileExtension>tif</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </template>
+      </org.anchoranalysis.io.manifest.folder.FolderWriteIndexableOutputName>
+    </folders>
+    <delegate>
+      <folder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../.."/>
+      <files>
+        <org.anchoranalysis.io.manifest.file.FileWrite>
+          <parentFolder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../../../.."/>
+          <fileName>nrgStackParams.xml</fileName>
+          <outputName>nrgStackParams</outputName>
+          <manifestDescription>
+            <type>keyvalueparams</type>
+            <function>nrgStackParams</function>
+          </manifestDescription>
+          <index></index>
+        </org.anchoranalysis.io.manifest.file.FileWrite>
+      </files>
+    </delegate>
+  </rootFolder>
+</org.anchoranalysis.io.manifest.ManifestRecorder>

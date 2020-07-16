@@ -1,10 +1,8 @@
-package org.anchoranalysis.plugin.annotation.bean.strategy;
-
 /*-
  * #%L
  * anchor-plugin-annotation
  * %%
- * Copyright (C) 2010 - 2019 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann la Roche
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,10 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,18 +24,21 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
  * #L%
  */
 
+package org.anchoranalysis.plugin.annotation.bean.strategy;
+
 import java.nio.file.Path;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 public class PathFromGenerator {
 
-	/** The debug-mode for everything that isn't the main input */
-	private static final boolean DEBUG_MODE_NON_INPUT = false;
-	
-	private PathFromGenerator() {}
-	
-	public static Path derivePath( FilePathGenerator generator, Path pathForBinding ) throws AnchorIOException {
-		return generator.outFilePath( pathForBinding, DEBUG_MODE_NON_INPUT );
-	}
+    /** The debug-mode for everything that isn't the main input */
+    private static final boolean DEBUG_MODE_NON_INPUT = false;
+
+    private PathFromGenerator() {}
+
+    public static Path derivePath(FilePathGenerator generator, Path pathForBinding)
+            throws AnchorIOException {
+        return generator.outFilePath(pathForBinding, DEBUG_MODE_NON_INPUT);
+    }
 }
