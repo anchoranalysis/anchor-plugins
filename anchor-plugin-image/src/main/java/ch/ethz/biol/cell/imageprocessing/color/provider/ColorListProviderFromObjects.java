@@ -60,7 +60,7 @@ public class ColorListProviderFromObjects extends ColorListProvider {
 		}
 		
 		try {
-			return colorSetGenerator.genColors(objectCollection.size());
+			return colorSetGenerator.generateColors(objectCollection.size());
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

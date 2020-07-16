@@ -77,7 +77,7 @@ public class StackProviderOutlineFromCfg extends StackProvider {
 		Cfg cfg = cfgProvider.create();
 		
 		try {
-			ColorList colorList = colorSetGenerator.genColors(cfg.size());
+			ColorList colorList = colorSetGenerator.generateColors(cfg.size());
 			
 			ColoredCfg coloredCfg = new ColoredCfg(cfg, colorList);
 			

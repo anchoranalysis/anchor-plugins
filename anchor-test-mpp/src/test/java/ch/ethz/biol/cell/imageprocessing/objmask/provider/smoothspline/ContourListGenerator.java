@@ -65,7 +65,9 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 	private DisplayStack stack;
 	private ColorIndex colorIndex;
 	
-	public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR = new ShuffleColorSetGenerator( new HSBColorSetGenerator() );
+	public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR = new ShuffleColorSetGenerator(
+		new HSBColorSetGenerator()
+	);
 	
 	public ContourListGenerator( DisplayStack stack ) {
 		this( new Outline(1,true), null, stack );
@@ -103,10 +105,11 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 		Cfg cfg = new Cfg();
 		
 		for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext();) {
-			Contour c = itr.next();
-			
-			Mark mark = createMarkForContour(c, false);
-			cfg.add(mark);
+			Contour contour = itr.next();
+
+			cfg.add(
+				createMarkForContour(contour, false)
+			);
 		}
 		return cfg;
 	}
@@ -132,26 +135,31 @@ class ContourListGenerator extends RasterGenerator implements IterableObjectGene
 		this.contourList = element;
 		
 		try {
-			ColoredCfg cfg =  new ColoredCfg( createCfgFromContourList( contourList ), genColors(contourList.size()), new IDGetterIter<Mark>() );
-			delegate.setIterableElement( new ColoredCfgWithDisplayStack(cfg, stack) );
+			ColoredCfg cfg =  new ColoredCfg(
+				createCfgFromContourList( contourList ),
+				generateColors(contourList.size()),
+				new IDGetterIter<>()
+			);
+			delegate.setIterableElement(
+				new ColoredCfgWithDisplayStack(cfg, stack)
+			);
 			
 		} catch (OperationFailedException e) {
 			throw new SetOperationFailedException(e);
-		}
-		
-	}
-	
-	private ColorIndex genColors(int size) throws OperationFailedException {
-		if (colorIndex!=null) {
-			return colorIndex;
-		} else {
-			return DEFAULT_COLOR_SET_GENERATOR.genColors(size);
 		}
 	}
 
 	@Override
 	public ObjectGenerator<Stack> getGenerator() {
 		return delegate.getGenerator();
+	}
+		
+	private ColorIndex generateColors(int size) throws OperationFailedException {
+		if (colorIndex!=null) {
+			return colorIndex;
+		} else {
+			return DEFAULT_COLOR_SET_GENERATOR.generateColors(size);
+		}
 	}
 	
 	private static MarkPointList createMarkForContour(Contour c, boolean round ) {

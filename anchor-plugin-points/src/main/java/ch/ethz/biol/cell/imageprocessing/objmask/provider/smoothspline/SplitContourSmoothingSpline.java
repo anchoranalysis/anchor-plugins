@@ -77,8 +77,8 @@ public class SplitContourSmoothingSpline {
 
 		ContourList out = new ContourList();
 		
-		for( Contour c : contoursTraversed ) {
-			addSplinesFor(c, out, fitter, minimumNumberPoints);
+		for( Contour contour : contoursTraversed ) {
+			addSplinesFor(contour, out, fitter, minimumNumberPoints);
 		}
 		
 		return out;

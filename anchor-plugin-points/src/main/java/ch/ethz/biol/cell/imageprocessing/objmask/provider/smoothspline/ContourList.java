@@ -50,8 +50,8 @@ public class ContourList extends ArrayList<Contour> {
 	
 	public int numberFoundFrom( Set<Contour> set ) {
 		int cnt = 0;
-		for( Contour c : this ) {
-			if (set.contains(c)) {
+		for( Contour contour : this ) {
+			if (set.contains(contour)) {
 				cnt++;
 			}
 		}
@@ -81,8 +81,8 @@ public class ContourList extends ArrayList<Contour> {
 		StringBuilder sb = new StringBuilder();
 		sb.append("--" + newLine);
 		for (int i=0; i<size(); i++) {
-			Contour c = get(i);
-			sb.append( c.summaryStr() + newLine);
+			Contour contour = get(i);
+			sb.append( contour.summaryStr() + newLine);
 		}
 		
 		sb.append("--" + newLine);
