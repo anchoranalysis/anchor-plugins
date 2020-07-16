@@ -71,9 +71,9 @@ public class CVFindContours {
 		}
 	}
 	
-	private static List<Contour> convertMatOfPoint( List<MatOfPoint> contours, ReadableTuple3i crnrMin ) {
+	private static List<Contour> convertMatOfPoint( List<MatOfPoint> contours, ReadableTuple3i cornerMin ) {
 		return FunctionalList.mapToList(contours, points ->
-			CVFindContours.createContour(points, crnrMin)
+			CVFindContours.createContour(points, cornerMin)
 		);
 	}
 	

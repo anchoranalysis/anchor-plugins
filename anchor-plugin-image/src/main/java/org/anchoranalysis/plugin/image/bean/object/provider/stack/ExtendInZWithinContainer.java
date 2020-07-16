@@ -101,9 +101,9 @@ public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContai
 		int zHigh = container.getBoundingBox().calcCornerMax().getZ();
 		
 		Extent extent = objectFlattened.getBoundingBox().extent().duplicateChangeZ(zHigh-zLow+1);
-		ReadableTuple3i crnrMin = objectFlattened.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
+		ReadableTuple3i cornerMin = objectFlattened.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
 		
-		return new BoundingBox( crnrMin, extent ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
+		return new BoundingBox( cornerMin, extent ).intersection().with( container.getBoundingBox() ).orElseThrow( ()->
 			new CreateException("Bounding boxes don't intersect")	
 		);
 	}

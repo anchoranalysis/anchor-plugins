@@ -88,21 +88,21 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
 	
 	private void adjustObject( ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject ) {
 		
-		ReadableTuple3i crnrMin = object.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrMax = object.getBoundingBox().calcCornerMax();
+		ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
+		ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
 		
 		VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
 		
-		for( int z=crnrMin.getZ(); z<=crnrMax.getZ(); z++ ) {
+		for( int z=cornerMin.getZ(); z<=cornerMax.getZ(); z++ ) {
 			
 			ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
 			ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
-			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-crnrMin.getZ()).buffer();
+			ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(z-cornerMin.getZ()).buffer();
 			
 			int maskOffset = 0;
-			for( int y=crnrMin.getY(); y<=crnrMax.getY(); y++ ) {
-				for( int x=crnrMin.getX(); x<=crnrMax.getX(); x++ ) {
+			for( int y=cornerMin.getY(); y<=cornerMax.getY(); y++ ) {
+				for( int x=cornerMin.getX(); x<=cornerMax.getX(); x++ ) {
 					
 					if( bbMask.get(maskOffset++)==object.getBinaryValuesByte().getOnByte()) {
 						
