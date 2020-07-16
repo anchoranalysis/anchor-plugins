@@ -85,11 +85,11 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 		);
 	}
 
-	private Optional<Point3i> pointOnOutline(
+	private Optional<Point3i> pointOnOutline(		// NOSONAR
 		Point3d centerPoint,
 		Point3d step,
 		boolean useZ
-	) throws OperationFailedException {	// NOSONAR		
+	) throws OperationFailedException {		
 				
 		BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
 		
