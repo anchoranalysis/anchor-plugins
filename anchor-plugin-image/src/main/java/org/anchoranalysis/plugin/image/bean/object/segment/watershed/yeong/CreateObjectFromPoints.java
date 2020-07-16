@@ -50,7 +50,7 @@ class CreateObjectFromPoints {
 			
 			for( int i=0; i<points.size(); i++) {
 								
-				object.binaryVoxelBox().setHigh(
+				object.binaryVoxelBox().setOn(
 					Point3i.immutableSubtract(
 						points.get(i),
 						object.getBoundingBox().cornerMin()
