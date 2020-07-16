@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
@@ -64,7 +64,7 @@ public class LongestExtentWithin extends OrientationProposer {
 	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator re ) throws ProposalAbnormalFailureException {
 		
 		try {
-			RslvdBound minMaxBound = getInitializationParameters().getMarkBounds().calcMinMax(dim.getRes(), dim.getZ()>1 );
+			ResolvedBound minMaxBound = getInitializationParameters().getMarkBounds().calcMinMax(dim.getRes(), dim.getZ()>1 );
 			return findAllOrientations(mark, minMaxBound, dim).sample(re);
 			
 		} catch (NamedProviderGetException e) {
@@ -77,7 +77,7 @@ public class LongestExtentWithin extends OrientationProposer {
 		return testMark instanceof MarkAbstractPosition;
 	}
 	
-	private OrientationList findAllOrientations2D(Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+	private OrientationList findAllOrientations2D(Mark mark, ResolvedBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -96,7 +96,7 @@ public class LongestExtentWithin extends OrientationProposer {
 	}
 	
 	
-	private OrientationList findAllOrientations3D(Mark mark, RslvdBound minMaxBound) throws ProposalAbnormalFailureException {
+	private OrientationList findAllOrientations3D(Mark mark, ResolvedBound minMaxBound) throws ProposalAbnormalFailureException {
 		
 		double incrementRadians = (incrementDegrees / 180) * Math.PI;
 		
@@ -120,7 +120,7 @@ public class LongestExtentWithin extends OrientationProposer {
 	}
 	
 	
-	private OrientationList findAllOrientations(Mark mark, RslvdBound minMaxBound, ImageDimensions dim) throws ProposalAbnormalFailureException {
+	private OrientationList findAllOrientations(Mark mark, ResolvedBound minMaxBound, ImageDimensions dim) throws ProposalAbnormalFailureException {
 		
 		if (dim.getZ()>1 && !rotateOnlyIn2DPlane) {
 			return findAllOrientations3D(mark, minMaxBound);

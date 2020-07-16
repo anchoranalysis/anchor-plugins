@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
 import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;

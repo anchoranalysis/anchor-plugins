@@ -74,7 +74,7 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
 	}
 	
 	private void setUpDelegate( Extent e, ImageResolution res ) {
-		double minBound = markBounds.getMinRslvd( res, e.getZ()>1 && !suppress3D );
+		double minBound = markBounds.getMinResolved( res, e.getZ()>1 && !suppress3D );
 
 		int threshold = (int) Math.floor(minBound);
 		

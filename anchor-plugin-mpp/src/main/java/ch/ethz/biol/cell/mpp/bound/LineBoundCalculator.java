@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.RslvdBound;
+import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -67,7 +67,7 @@ public class LineBoundCalculator extends BoundCalculator {
 			Channel outlineChnl = outlineProvider.create().getChannel();
 			assert(outlineChnl!=null);
 			
-			RslvdBound minMax = getInitializationParameters().getMarkBounds().calcMinMax(
+			ResolvedBound minMax = getInitializationParameters().getMarkBounds().calcMinMax(
 				outlineChnl.getDimensions().getRes(),
 				rotMatrix.getNumDim() >= 3
 			);
@@ -99,7 +99,7 @@ public class LineBoundCalculator extends BoundCalculator {
 		}
 	}
 
-	private static Optional<RslvdBound> createBoundForDirection( double min, double maxDirection ) {
+	private static Optional<ResolvedBound> createBoundForDirection( double min, double maxDirection ) {
 		
 		if (maxDirection==-1 || min==-1) {
 			return Optional.empty();
@@ -107,7 +107,7 @@ public class LineBoundCalculator extends BoundCalculator {
 		
 		if (min <= maxDirection) {
 			return Optional.of(
-				new RslvdBound(min, maxDirection)
+				new ResolvedBound(min, maxDirection)
 			);
 		} else {
 			return Optional.empty();

@@ -68,9 +68,9 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 	
 	private ObjectCollection connectedComponents( Mask bi, boolean inverted ) throws CreateException {
 		
-		int rslvMinNum;
+		int resolveMinNum;
 		try {
-			rslvMinNum = (int) Math.floor(
+			resolveMinNum = (int) Math.floor(
 				minVolume.resolveToVoxels(
 					Optional.of(bi.getDimensions().getRes())
 				)
@@ -79,7 +79,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 			throw new CreateException(e);
 		}
 
-		CreateFromConnectedComponentsFactory createObjects = new CreateFromConnectedComponentsFactory(rslvMinNum);
+		CreateFromConnectedComponentsFactory createObjects = new CreateFromConnectedComponentsFactory(resolveMinNum);
 		if (inverted) {
 			Mask biInverted = new Mask(
 				bi.getChannel(),
