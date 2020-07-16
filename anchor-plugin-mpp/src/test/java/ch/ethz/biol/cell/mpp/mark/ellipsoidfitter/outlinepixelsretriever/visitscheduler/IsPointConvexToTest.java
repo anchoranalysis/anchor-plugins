@@ -1,4 +1,3 @@
-/* (C)2020 */
 package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler;
 /*-
  * #%L
