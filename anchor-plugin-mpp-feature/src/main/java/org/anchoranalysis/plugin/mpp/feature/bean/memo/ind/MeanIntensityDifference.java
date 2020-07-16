@@ -50,12 +50,12 @@ public class MeanIntensityDifference extends FeatureSingleMemo {
 
         VoxelizedMark pm = params.get().getPxlPartMemo().voxelized();
 
-        double mean_in =
+        double meanInside =
                 pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
-        double mean_shell =
+        double meanShell =
                 pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
 
-        return ((mean_in - mean_shell) - minDiff) / 255;
+        return ((meanInside - meanShell) - minDiff) / 255;
     }
 
     @Override
