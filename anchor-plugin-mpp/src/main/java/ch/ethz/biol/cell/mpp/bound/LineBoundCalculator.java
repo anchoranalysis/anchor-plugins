@@ -151,7 +151,7 @@ public class LineBoundCalculator extends BoundCalculator {
 				
 			if (v>0) {
 				// We calculate how far we have travelled in total
-				return extra + normZMag(runningDbl, voxels.getDimensions().getRes().getZRelRes() );
+				return extra + normZMag(runningDbl, voxels.getDimensions().getRes().getZRelativeResolution() );
 			}
 		}
 		return -1;

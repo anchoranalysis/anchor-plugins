@@ -51,10 +51,10 @@ import org.apache.commons.math3.util.Pair;
  */
 public class PartitionedCfg {
 
-	private Set<Mark> available;
-	private Set<Mark> accepted;
-	private ToDoubleFunction<Mark> funcExtractWeight;
-	private Optional<EnumeratedDistribution<Mark>> dist;
+	private final Set<Mark> available;
+	private final Set<Mark> accepted;
+	private final ToDoubleFunction<Mark> funcExtractWeight;
+	private Optional<EnumeratedDistribution<Mark>> distance;
 	
 	/**
 	 * Constructor
@@ -66,7 +66,7 @@ public class PartitionedCfg {
 		this.available = new HashSet<>(cfg.getMarks());
 		this.accepted = new HashSet<>();
 		this.funcExtractWeight = funcExtractWeight;
-		dist = createSamplingDistribution();
+		distance = createSamplingDistribution();
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class PartitionedCfg {
 	 * @return if marks were sampled
 	 */
 	public Optional<Set<Mark>> sampleFromAvailable( ProposerContext propContext, int idealNumItems) {
-		return dist.map( d->{
+		return distance.map( d->{
 			int numToSample = Math.min(idealNumItems, available.size());
 			
 			Mark[] arr = new Mark[numToSample];
@@ -91,7 +91,7 @@ public class PartitionedCfg {
 		for(Mark item : list) {
 			moveAvailableToAccepted(item);
 		}
-		dist = createSamplingDistribution();
+		distance = createSamplingDistribution();
 	}
 	
 	@Override
@@ -100,16 +100,14 @@ public class PartitionedCfg {
 	}
 	
 	private void moveAvailableToAccepted( Mark pxlMark ) {
-		assert( available.contains(pxlMark) );
 		available.remove( pxlMark );
 		accepted.add(pxlMark);
 	}
 	
 	public void moveAcceptedToAvailable( Mark pxlMark ) {
-		assert( accepted.contains(pxlMark) );
 		accepted.remove( pxlMark );
 		available.add(pxlMark);
-		dist = createSamplingDistribution();
+		distance = createSamplingDistribution();
 	}
 	
 	private Optional<EnumeratedDistribution<Mark>> createSamplingDistribution() {
@@ -138,6 +136,4 @@ public class PartitionedCfg {
 		CollectionUtils.addAll(set, arr);
 		return set;
 	}
-
-
 }

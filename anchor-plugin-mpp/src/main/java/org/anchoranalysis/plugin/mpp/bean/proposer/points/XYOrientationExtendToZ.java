@@ -128,6 +128,11 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		return Optional.of(list);
 	}
 	
+	@Override
+	public boolean isCompatibleWith(Mark testMark) {
+		return orientationXYProposer.isCompatibleWith(testMark);
+	}
+	
 	private Optional<List<Point3i>> proposeFromOrientation(
 		Orientation orientation,
 		Point3d point,
@@ -147,8 +152,8 @@ public class XYOrientationExtendToZ extends PointsProposer {
 			lastPointsAll = new GeneratePointsHelper(
 				point,
 				chnlFilled(),
-				maxZDist(randomNumberGenerator, dimensions.getRes()),
-				skipZDist(dimensions.getRes()),
+				maxZDistance(randomNumberGenerator, dimensions.getRes()),
+				skipZDistance(dimensions.getRes()),
 				binaryChnl.create(),
 				dimensions
 			).generatePoints(pointsXY);
@@ -160,17 +165,17 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		}
 	}
 	
-	private int maxZDist(RandomNumberGenerator randomNumberGenerator, ImageResolution resolution) throws OperationFailedException {
-		int maxZDist = (int) Math.round(
+	private int maxZDistance(RandomNumberGenerator randomNumberGenerator, ImageResolution resolution) throws OperationFailedException {
+		int maxZDistance = (int) Math.round(
 			maxDistanceZ.propose(randomNumberGenerator, resolution)
 		);
-		maxZDist = Math.max(maxZDist, minNumSlices);
-		return maxZDist;
+		maxZDistance = Math.max(maxZDistance, minNumSlices);
+		return maxZDistance;
 	}
 	
-	private int skipZDist(ImageResolution res) throws OperationFailedException {
+	private int skipZDistance(ImageResolution res) throws OperationFailedException {
 		return (int) Math.round(
-			distanceZEndIfEmpty.rslvForAxis(
+			distanceZEndIfEmpty.resolveForAxis(
 				Optional.of(res),
 				AxisType.Z
 			)
@@ -179,10 +184,5 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	
 	private Optional<Mask> chnlFilled() throws CreateException {
 		return binaryChnlFilled!=null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
-	}
-	
-	@Override
-	public boolean isCompatibleWith(Mark testMark) {
-		return orientationXYProposer.isCompatibleWith(testMark);
 	}
 }

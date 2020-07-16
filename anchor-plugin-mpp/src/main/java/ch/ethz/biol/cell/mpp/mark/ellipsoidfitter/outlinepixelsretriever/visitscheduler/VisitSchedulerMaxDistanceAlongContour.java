@@ -38,38 +38,37 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScalarProposer maxDistanceProposer;
 	// END BEAN PROPERTIES
 			
-	private double maxDist;
-	
-	public VisitSchedulerMaxDistanceAlongContour() {
-		super();
-	}
+	private double maxDistance;
 
 	@Override
 	public void beforeCreateObject(RandomNumberGenerator re, ImageResolution res)
 			throws InitException {
 		try {
-			maxDist = maxDistanceProposer.propose(re, res);
+			maxDistance = maxDistanceProposer.propose(re, res);
 			
-			assert(maxDist>0);
+			assert(maxDistance>0);
 		} catch (OperationFailedException e) {
 			throw new InitException(e);
 		}	
 	}
 	
 	@Override
-	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
-		int maxDistInt = (int) Math.ceil(this.maxDist);
-		assert(maxDistInt>0);
+	public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res) {
+		int maxDistanceInt = (int) Math.ceil(this.maxDistance);
+		assert(maxDistanceInt>0);
 		return Optional.of(
-			new Point3i(maxDistInt,maxDistInt,maxDistInt)
+			new Point3i(maxDistanceInt,maxDistanceInt,maxDistanceInt)
 		);
 	}
 	
@@ -79,20 +78,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit( Point3i point, int distAlongContour, ObjectMask object ) {
-		return (distAlongContour <= maxDist);
+	public boolean considerVisit( Point3i point, int distanceAlongContour, ObjectMask object ) {
+		return (distanceAlongContour <= maxDistance);
 	}
-	
-	public ScalarProposer getMaxDistanceProposer() {
-		return maxDistanceProposer;
-	}
-
-
-	public void setMaxDistanceProposer(ScalarProposer maxDistanceProposer) {
-		this.maxDistanceProposer = maxDistanceProposer;
-	}
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 
@@ -45,11 +45,10 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
  * @author Owen Feehan
  *
  */
-public class BBoxZDist extends FeaturePairMemoSingleRegion {
+public class BoundingBoxZDistance extends FeaturePairMemoSingleRegion {
 	
 	@Override
-	public double calc(SessionInput<FeatureInputPairMemo> input)
-			throws FeatureCalcException {
+	public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
 
 		FeatureInputPairMemo inputSessionless = input.get();
 		
@@ -61,10 +60,10 @@ public class BBoxZDist extends FeaturePairMemoSingleRegion {
 			return 0.0;
 		}
 		
-		return calcZDist(bbox1, bbox2);
+		return calcZDistance(bbox1, bbox2);
 	}
 	
-	private double calcZDist(BoundingBox bbox1, BoundingBox bbox2) {
+	private double calcZDistance(BoundingBox bbox1, BoundingBox bbox2) {
 		int z1Min = bbox1.cornerMin().getZ();
 		int z1Max = bbox1.calcCornerMax().getZ();
 		

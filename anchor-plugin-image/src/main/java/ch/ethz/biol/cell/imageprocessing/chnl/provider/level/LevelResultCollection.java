@@ -43,15 +43,15 @@ public class LevelResultCollection implements Iterable<LevelResult> {
 	
 	public LevelResult findClosestResult( Point3d point ) {
 		
-		double minDist = Double.MAX_VALUE;
+		double minDistance = Double.MAX_VALUE;
 		LevelResult min = null;
 		
-		for( LevelResult lr : list) {
+		for( LevelResult levelResult : list) {
 			
-			double dist = lr.distToSquared(point);
-			if (dist<minDist) {
-				minDist = dist;
-				min = lr;
+			double distance = levelResult.distanceSquaredTo(point);
+			if (distance<minDistance) {
+				minDistance = distance;
+				min = levelResult;
 			}
 		}
 		return min;
