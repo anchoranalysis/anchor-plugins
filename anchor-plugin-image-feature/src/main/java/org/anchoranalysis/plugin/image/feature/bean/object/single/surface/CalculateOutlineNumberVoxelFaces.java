@@ -38,7 +38,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
-import org.anchoranalysis.image.voxel.kernel.count.CountKernelNghbIgnoreOutsideScene;
+import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodIgnoreOutsideScene;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
@@ -51,7 +51,7 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 	private final boolean mip;
 	
 	/**
-	 * Whether to suppress 3D calculations (only consider XY neighbours). Doesn't make sense if mip=TRUE, and will then be ignroed.
+	 * Whether to suppress 3D calculations (only consider XY neighbors). Doesn't make sense if mip=TRUE, and will then be ignroed.
 	 */
 	private final boolean suppress3D;
 	
@@ -61,13 +61,13 @@ class CalculateOutlineNumberVoxelFaces extends FeatureCalculation<Integer,Featur
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(false, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
+			CountKernel kernel = new CountKernelNeighborhoodIgnoreOutsideScene(false, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
 			
 			VoxelBox<ByteBuffer> mipVb = object.getVoxelBox().maxIntensityProj();
 			return ApplyKernel.applyForCount(kernel, mipVb );
 			
 		} else {
-			CountKernel kernel = new CountKernelNghbIgnoreOutsideScene(do3D, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
+			CountKernel kernel = new CountKernelNeighborhoodIgnoreOutsideScene(do3D, object.getBinaryValuesByte(), true, dim.getExtent(), object.getBoundingBox().cornerMin() );
 			return ApplyKernel.applyForCount(kernel, object.getVoxelBox() );
 		}
 	}

@@ -41,10 +41,10 @@ import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
-import org.anchoranalysis.image.voxel.nghb.BigNghb;
-import org.anchoranalysis.image.voxel.nghb.Nghb;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
 
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
@@ -100,13 +100,13 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 		
 		BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 
-		ProcessVoxelNeighbour<?> process = ProcessVoxelNeighbourFactory.within(
+		ProcessVoxelNeighbor<?> process = ProcessVoxelNeighborFactory.within(
 			containingMask,
 			extent,
 			new PointProcessor(sbMarker, sbMask, sbFinalized, queue, bvFinalized )
 		);
 		
-		Nghb nghb = new BigNghb(false);
+		Neighborhood neighborhood = NeighborhoodFactory.of(false);
 		boolean do3D = extent.getZ() > 1;
 		
 		for( int nextVal=queue.nextValue(); nextVal!=-1; nextVal=queue.nextValue() ) {
@@ -118,9 +118,9 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 			sbFinalized.seek(point.getZ());
 			
 			// We have a point, and a value
-			// Now we iterate through the neighbours (but only if they haven't been finalised)
+			// Now we iterate through the neighbors (but only if they haven't been finalised)
 			// Makes sure that it includes its center point
-			IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, nextVal, extent.offsetSlice(point));
+			IterateVoxels.callEachPointInNeighborhood(point, neighborhood, do3D, process, nextVal, extent.offsetSlice(point));
 		}
 	}
 		

@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
  */
 public class DescribeGraph {
 
-	private NeighbourGraph graph;
+	private NeighborGraph graph;
 	private boolean includePayload;
 	
 	
@@ -47,7 +47,7 @@ public class DescribeGraph {
 	 * @param graph the graph to describe
 	 * @param includePayload whether to include payload values in the log messages
 	 */
-	public DescribeGraph(NeighbourGraph graph, boolean includePayload) {
+	public DescribeGraph(NeighborGraph graph, boolean includePayload) {
 		super();
 		this.graph = graph;
 		this.includePayload = includePayload;

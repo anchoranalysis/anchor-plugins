@@ -36,14 +36,14 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
 /**
- * A condition placed to determine if two objects could be potential neighbours are not (i.e. potential candidates for merging)
+ * A condition placed to determine if two objects could be potential neighbors are not (i.e. potential candidates for merging)
  * 
  * @author Owen Feehan
  *
  */
-public class NeighbourhoodCond implements UpdatableBeforeCondition {
+public class NeighborhoodCondition implements UpdatableBeforeCondition {
 
-	private boolean requireBBoxNeighbours;
+	private boolean requireBBoxNeighbors;
 	private boolean requireTouching;
 	
 	// START TEMPORARY objects, updated after every call to updateSrcObj
@@ -55,21 +55,21 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	// END TEMPORARY objects
 	
 			
-	public NeighbourhoodCond(boolean requireBBoxNeighbours, boolean requireTouching) {
+	public NeighborhoodCondition(boolean requireBBoxNeighbors, boolean requireTouching) {
 		super();
 		
-		this.requireBBoxNeighbours = requireBBoxNeighbours;
+		this.requireBBoxNeighbors = requireBBoxNeighbors;
 		this.requireTouching = requireTouching;
 					
 		if (requireTouching) {
-			this.requireBBoxNeighbours = false;	// We don't need this check, if we're testing actual object intersection
+			this.requireBBoxNeighbors = false;	// We don't need this check, if we're testing actual object intersection
 		}
 	}
 
 	@Override
 	public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res) throws OperationFailedException {
 
-		bboxSrcGrown = requireBBoxNeighbours ? boundingBoxGrown( source ) : null;
+		bboxSrcGrown = requireBBoxNeighbors ? boundingBoxGrown( source ) : null;
 		
 		try {
 			if (requireTouching) {
@@ -93,7 +93,7 @@ public class NeighbourhoodCond implements UpdatableBeforeCondition {
 	public boolean accept(ObjectMask destination) {
 		
 		// If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
-		if (requireBBoxNeighbours && !bboxSrcGrown.intersection().existsWith(destination.getBoundingBox())) {
+		if (requireBBoxNeighbors && !bboxSrcGrown.intersection().existsWith(destination.getBoundingBox())) {
 			return false;
 		}
 		

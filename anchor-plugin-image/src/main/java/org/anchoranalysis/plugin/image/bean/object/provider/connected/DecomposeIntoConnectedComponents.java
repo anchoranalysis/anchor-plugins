@@ -45,15 +45,15 @@ import lombok.Setter;
 public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUnary {
 
 	// START BEAN PROPERTIES
-	/** if TRUE, uses 8 neighbourhood instead of 4, and similarly in 3d */
+	/** if TRUE, uses 8 neighborhood instead of 4, and similarly in 3d */
 	@BeanField @Getter @Setter
-	private boolean bigNghb = false;
+	private boolean bigNeighborhood = false;
 	// END BEAN PROPERTIES
 	
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 				
-		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(bigNghb, 1);
+		CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory(bigNeighborhood, 1);
 		
 		return objects.stream().flatMapWithException(
 			CreateException.class,

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 //   * A number of constants
 //   * 27 Directions representing [-1,0,-1]X[-1,0,-1]X[-1,0,-1]
 //   * A sequence of connected components IDs starting at 0
-public class WatershedEncoding implements IEncodeDirection {
+public class WatershedEncoding implements EncodeDirection {
 	
 	public static final int CODE_UNVISITED = 0;
 	public static final int CODE_TEMPORARY = 1;

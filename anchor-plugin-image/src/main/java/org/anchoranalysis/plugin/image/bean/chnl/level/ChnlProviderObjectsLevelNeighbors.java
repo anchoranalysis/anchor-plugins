@@ -44,8 +44,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.nghb.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.nghb.EdgeAdderParameters;
+import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
+import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,15 +54,15 @@ import lombok.Setter;
  *  Calculates a threshold-level for each object collectively based on other objects
  *  
  *  <p>
- *  A neighbourhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
+ *  A neighborhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
  *  </p>
  */
 public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
 
 	// START BEAN
-	/** How many neighbours to include by distance (distance==1 -> all directly touching neighbours, distance==2 -> those touching the directly touching etc.) */
+	/** How many neighbors to include by distance (distance==1 -> all directly touching neighbors, distance==2 -> those touching the directly touching etc.) */
 	@BeanField @Positive @Getter @Setter
-	private int distance;		// Determines the neighbour distance
+	private int distance;		// Determines the neighbor distance
 	// END BEAN
 	
 	@Override
@@ -99,9 +99,9 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
 	private static Collection<ObjectMaskWithHistogram> verticesWithinDistance(
 		GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph,
 		ObjectMaskWithHistogram om,
-		int neighbourDistance
+		int neighborDistance
 	) {
-		if (neighbourDistance==1) {
+		if (neighborDistance==1) {
 			return graph.adjacentVertices(om);
 		} else {
 			
@@ -110,7 +110,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
 			List<ObjectMaskWithHistogram> toVisit = new ArrayList<>();
 			toVisit.add(om);
 			
-			for( int i=0; i<neighbourDistance; i++) {
+			for( int i=0; i<neighborDistance; i++) {
 				List<ObjectMaskWithHistogram> currentVisit = toVisit;
 				toVisit = new ArrayList<>();
 				visit( graph, currentVisit, toVisit, visited);
@@ -157,22 +157,22 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
 			for( ObjectMaskWithHistogram om : graph.vertexSet() ) {
 		
 				getLogger().messageLogger().logFormatted(
-					"Setting for %s against neighbourhood",
+					"Setting for %s against neighborhood",
 					om.getObject().centerOfGravity()
 				);
 				
 				// Get the neighbors of the current object
-				Collection<ObjectMaskWithHistogram> vertices = verticesWithinDistance(graph, om, neighborDistance);
+				Collection<ObjectMaskWithHistogram> vertexNeighbors = verticesWithinDistance(graph, om, neighborDistance);
 				
-				for( ObjectMaskWithHistogram nghb : vertices ) {
+				for( ObjectMaskWithHistogram neighbor : vertexNeighbors ) {
 					getLogger().messageLogger().logFormatted(
-						"Including neighbour %s",
-						nghb.getObject().centerOfGravity()
+						"Including neighbor %s",
+						neighbor.getObject().centerOfGravity()
 					);
 				}
 				
 				// Level calculated from combined histograms
-				int level = calcLevelCombinedHist(om, vertices);
+				int level = calcLevelCombinedHist(om, vertexNeighbors);
 				
 				vbOutput.setPixelsCheckMask(
 					om.getObject(),

@@ -40,9 +40,9 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
  * with another mask.</p>
  * 
  * <p>However, intersection(a*,b)!=intersection(a,b*) where * is the dilation operator.
- * Different counts occur as a single-voxel can have multiple edges with the neighbour.</p>
+ * Different counts occur as a single-voxel can have multiple edges with the neighbor.</p>
  * 
- * <p>So it's better if we can iterate with a kernel over the edge pixels, and count the number of neighbours
+ * <p>So it's better if we can iterate with a kernel over the edge pixels, and count the number of neighbors
  * 
  * We do this only where the bounding-boxes (dilated by 1 pixels) intersection. So as not to waste computation-time in useless areas.</p>
  * 

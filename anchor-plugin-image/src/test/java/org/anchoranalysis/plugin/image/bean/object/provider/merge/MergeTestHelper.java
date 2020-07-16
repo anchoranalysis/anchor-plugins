@@ -53,7 +53,7 @@ class MergeTestHelper {
 	
 	/** Linear intersection (intersects with left and right neighbor) among the first 8 objects, and then 3 more than don't intersect
 	 * 
-	 * <pre>i.e. a pattern     a--b--c--d--e--f--g--h i j k   where  --  represents a neighbour hood relation</pre>
+	 * <pre>i.e. a pattern     a--b--c--d--e--f--g--h i j k   where  --  represents a neighbor hood relation</pre>
 	 * 
 	 * <pre>The sizes of the 11 objects increase i.e. 81, 149, 253, 377, 529, ....., 1653, 1961
 	 */

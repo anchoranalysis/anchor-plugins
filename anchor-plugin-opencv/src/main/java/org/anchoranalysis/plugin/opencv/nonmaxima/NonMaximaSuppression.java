@@ -91,7 +91,7 @@ public abstract class NonMaximaSuppression<T> {
 	/** A score calculating the overlap between two items */
 	protected abstract double overlapScoreFor( T item1, T item2);
 
-	/** Finds possible neighbours for a particular object efficiently */
+	/** Finds possible neighbors for a particular object efficiently */
 	protected abstract Predicate<T> possibleOverlappingObjects( T src, Iterable<WithConfidence<T>> others );
 	
 	

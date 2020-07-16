@@ -48,7 +48,7 @@ import lombok.NoArgsConstructor;
 /** 
  * Traces out the shortest-path (a line) between two points in an object-mask.
  * 
- *  This ensures the two points are connected (4/6 neighbourhood)
+ *  This ensures the two points are connected (4/6 neighborhood)
  *  
  * @author feehano
  *

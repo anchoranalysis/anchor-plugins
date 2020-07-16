@@ -40,42 +40,34 @@ import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCon
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
+import lombok.RequiredArgsConstructor;
+
 /** 
- * A graph of objects that neighbour each other, according to conditions
+ * A graph of objects that neighbor each other, according to conditions
  * 
  **/
-class NeighbourGraph {
+@RequiredArgsConstructor
+class NeighborGraph {
 	
-	private UpdatableBeforeCondition beforeCondition;
-	private Optional<ImageResolution> res;
+	// START REQUIRED ARGUMENTS
+	private final UpdatableBeforeCondition beforeCondition;
+	private final Optional<ImageResolution> res;
+	// END REQUIRED ARGUMENTS
 	
 	private GraphWithEdgeTypes<ObjectVertex, PrioritisedVertex> graph = new GraphWithEdgeTypes<>(true);
-	
+		
 	/**
-	 * Constructor
-	 * 
-	 * @param beforeCondition
-	 * @param imageRes
-	 * @param prioritizer
-	 */
-	public NeighbourGraph(UpdatableBeforeCondition beforeCondition, Optional<ImageResolution> imageRes) {
-		super();
-		this.beforeCondition = beforeCondition;
-		this.res = imageRes;
-	}
-	
-	/**
-	 * Adds a vertex to the graph, adding appropriate edges where neighbourhood conditions
-	 *   are fulfilled with any of the objects in possibleNghbs
+	 * Adds a vertex to the graph, adding appropriate edges where neighborhood conditions
+	 *   are fulfilled with any of the objects in possible neighbors
 	 * 
 	 * @param om an object already in the graph
-	 * @param possibleNghbs other vertices in the graph that are possibly neighbours
+	 * @param possibleNeighbors other vertices in the graph that are possibly neighbors
 	 * @param logger
 	 * @throws OperationFailedException
 	 */
 	public void addVertex(
 		ObjectVertex om,
-		Collection<ObjectVertex> possibleNghbs,
+		Collection<ObjectVertex> possibleNeighbors,
 		AssignPriority prioritizer,
 		GraphLogger logger
 	) throws OperationFailedException {
@@ -84,16 +76,16 @@ class NeighbourGraph {
 		
 		beforeCondition.updateSourceObject(om.getObject(), res);
 				
-		for( ObjectVertex possibleNghb : possibleNghbs ) {
-			maybeAddEdge(om, possibleNghb, prioritizer, logger);
+		for( ObjectVertex possibleNeighbor : possibleNeighbors ) {
+			maybeAddEdge(om, possibleNeighbor, prioritizer, logger);
 		}
 	}
 	
-	/** Get a set of all neighbouring vertices of the vertices on a particular edge (not including the vertices associated with the edge) */
-	public Set<ObjectVertex> neighbourNodesFor( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge ) {
+	/** Get a set of all neighboring vertices of the vertices on a particular edge (not including the vertices associated with the edge) */
+	public Set<ObjectVertex> neighborNodesFor( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge ) {
 		Set<ObjectVertex> setOut = new HashSet<>();
-		addNghbsToSet( edge.getNode1(), setOut );
-		addNghbsToSet( edge.getNode2(), setOut );
+		addNeighborsToSet( edge.getNode1(), setOut );
+		addNeighborsToSet( edge.getNode2(), setOut );
 		setOut.remove( edge.getNode1() );
 		setOut.remove( edge.getNode2() );
 		return setOut;
@@ -107,15 +99,15 @@ class NeighbourGraph {
 		);
 	}
 	
-	private void addNghbsToSet( ObjectVertex vertex, Set<ObjectVertex> setPossibleNghbs ) {
+	private void addNeighborsToSet( ObjectVertex vertex, Set<ObjectVertex> setPossibleNeighbors ) {
 		
 		// Remove the nodes associated with this edge
 		for( EdgeTypeWithVertices<ObjectVertex,PrioritisedVertex> edge : graph.edgesOf(vertex) ) {
 			if(!edge.getNode1().equals(vertex)) {
-				setPossibleNghbs.add(edge.getNode1());
+				setPossibleNeighbors.add(edge.getNode1());
 			}
 			if(!edge.getNode2().equals(vertex)) {
-				setPossibleNghbs.add(edge.getNode2());
+				setPossibleNeighbors.add(edge.getNode2());
 			}
 		}
 	}

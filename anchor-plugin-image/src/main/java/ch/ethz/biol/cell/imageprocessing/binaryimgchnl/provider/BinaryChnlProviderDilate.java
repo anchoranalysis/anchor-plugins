@@ -39,6 +39,9 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * Performs an dilation morphological operation on a binary-image
@@ -46,11 +49,11 @@ import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 public class BinaryChnlProviderDilate extends BinaryChnlProviderMorphOp {
 
 	// START
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean zOnly = false;		// Only dilates in the z-direction
 	
-	@BeanField
-	private boolean bigNghb = false;
+	@BeanField @Getter @Setter
+	private boolean bigNeighborhood = false;
 	// END
 	
 	//! Checks that a mark's initial parameters are correct
@@ -75,7 +78,7 @@ public class BinaryChnlProviderDilate extends BinaryChnlProviderMorphOp {
 			zOnly,
 			false,
 			Optional.empty(),
-			bigNghb
+			bigNeighborhood
 		);
 		
 		try {
@@ -83,21 +86,5 @@ public class BinaryChnlProviderDilate extends BinaryChnlProviderMorphOp {
 		} catch (IncorrectImageSizeException e) {
 			assert false;
 		}
-	}
-
-	public boolean iszOnly() {
-		return zOnly;
-	}
-
-	public void setzOnly(boolean zOnly) {
-		this.zOnly = zOnly;
-	}
-
-	public boolean isBigNghb() {
-		return bigNghb;
-	}
-
-	public void setBigNghb(boolean bigNghb) {
-		this.bigNghb = bigNghb;
 	}
 }

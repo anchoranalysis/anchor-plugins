@@ -28,22 +28,16 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 
 import org.anchoranalysis.core.geometry.Point3i;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 // Stores the voxels for a plateau
-class PointWithNghb {
-	private Point3i point;
-	private int nghbIndex;
+@AllArgsConstructor
+class PointWithNeighbor {
 	
-	public PointWithNghb(Point3i point, int nghbIndex) {
-		super();
-		this.point = point;
-		this.nghbIndex = nghbIndex;
-	}
-
-	public Point3i getPoint() {
-		return point;
-	}
-
-	public int getNghbIndex() {
-		return nghbIndex;
-	}
+	@Getter
+	private final Point3i point;
+	
+	@Getter
+	private final int neighborIndex;
 }

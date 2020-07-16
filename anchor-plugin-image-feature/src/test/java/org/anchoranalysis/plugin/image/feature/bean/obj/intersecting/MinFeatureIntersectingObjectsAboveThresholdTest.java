@@ -40,7 +40,7 @@ public class MinFeatureIntersectingObjectsAboveThresholdTest {
 	); 
 	
 	/**
-	 * We expect always the same number of pixels apart from the last object which has 0 neighbours
+	 * We expect always the same number of pixels apart from the last object which has 0 neighbors
 	 * 
 	 * @throws FeatureCalcException
 	 * @throws InitException
@@ -60,7 +60,7 @@ public class MinFeatureIntersectingObjectsAboveThresholdTest {
 	}
 
 	/**
-	 * We expect a growing number of pixels apart from the last object which has 0 neighbours
+	 * We expect a growing number of pixels apart from the last object which has 0 neighbors
 	 * 
 	 * @throws FeatureCalcException
 	 * @throws InitException

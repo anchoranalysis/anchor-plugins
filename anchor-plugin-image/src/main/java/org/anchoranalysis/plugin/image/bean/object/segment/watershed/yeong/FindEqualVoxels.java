@@ -37,24 +37,25 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbour;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourAbsoluteWithSlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbourFactory;
-import org.anchoranalysis.image.voxel.nghb.BigNghb;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
 
 final class FindEqualVoxels {
 	
-	private static class PointTester extends ProcessVoxelNeighbourAbsoluteWithSlidingBuffer<Optional<Integer>> {
+	private static class PointTester extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Optional<Integer>> {
 
 		private Deque<Point3i> stack;
 		
 		private EncodedVoxelBox matS;
 		
 		// Arguments for each point
-		private int lowestNghbVal;
-		private int lowestNghbIndex = -1;
+		private int lowestNeighborVal;
+		private int lowestNeighborIndex = -1;
 				
 		private EncodedIntBuffer bufS;
 		private int z1;
@@ -68,15 +69,15 @@ final class FindEqualVoxels {
 		@Override
 		public void initSource( int sourceVal, int sourceOffsetXY) {
 			super.initSource(sourceVal, sourceOffsetXY);
-			this.lowestNghbVal = sourceVal;
-			this.lowestNghbIndex = - 1;
+			this.lowestNeighborVal = sourceVal;
+			this.lowestNeighborIndex = - 1;
 		}
 
-		/** The lowestNghbIndex if it exists */
+		/** The lowestNeighborIndex if it exists */
 		@Override
 		public Optional<Integer> collectResult() {
-			if (lowestNghbIndex!=-1) {
-				return Optional.of(lowestNghbIndex);
+			if (lowestNeighborIndex!=-1) {
+				return Optional.of(lowestNeighborIndex);
 			} else {
 				return Optional.empty();
 			}
@@ -95,20 +96,20 @@ final class FindEqualVoxels {
 			int offset = changedOffset(xChange,yChange);
 			int valPoint = getInt(offset);
 			
-			// If we already have a connected component ID as a neighbour, it must because
+			// If we already have a connected component ID as a neighbor, it must because
 			//   we have imposed seeds.  So we always point towards it, irrespective of
 			//   its value
 			if (bufS.isConnectedComponentID(offset)) {
 				
-				if (lowestNghbIndex==-1) {
+				if (lowestNeighborIndex==-1) {
 					// We take anything
-					lowestNghbVal = valPoint;
-					lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+					lowestNeighborVal = valPoint;
+					lowestNeighborIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 					return false;
 				} else {
-					if (valPoint<lowestNghbVal) {
-						lowestNghbVal = valPoint;
-						lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+					if (valPoint<lowestNeighborVal) {
+						lowestNeighborVal = valPoint;
+						lowestNeighborIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 					}
 					return false;	
 				}
@@ -118,12 +119,12 @@ final class FindEqualVoxels {
 				stack.push( new Point3i(x1, y1, z1) );
 				return true;
 			} else {
-				// We test if the neighbour is less
+				// We test if the neighbor is less
 				// NB we also force a check that it's less than the value to find, as this value
 				//   might have been forced up by the connected component
-				if (valPoint<sourceVal && valPoint<lowestNghbVal) {
-					lowestNghbVal = valPoint;
-					lowestNghbIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+				if (valPoint<sourceVal && valPoint<lowestNeighborVal) {
+					lowestNeighborVal = valPoint;
+					lowestNeighborIndex = matS.getEncoding().encodeDirection(xChange, yChange, zChange);
 				}
 				return false;
 			}
@@ -171,13 +172,13 @@ final class FindEqualVoxels {
 	
 	private void processStack( Deque<Point3i> stack, SlidingBuffer<?> slidingBuffer, EqualVoxelsPlateau plateau, int valToFind ) {
 				
-		ProcessVoxelNeighbour<Optional<Integer>> process = ProcessVoxelNeighbourFactory.within(
+		ProcessVoxelNeighbor<Optional<Integer>> process = ProcessVoxelNeighborFactory.within(
 			mask,
 			slidingBuffer.extent(),
 			new PointTester(stack, slidingBuffer, matS)
 		);
 				
-		BigNghb nghb = new BigNghb();
+		Neighborhood neighborhood = NeighborhoodFactory.of(true);
 		
 		while( !stack.isEmpty() ) {
 			Point3i point = stack.pop();
@@ -191,12 +192,12 @@ final class FindEqualVoxels {
 			
 			slidingBuffer.seek(point.getZ());
 
-			Optional<Integer> lowestNghbIndex = IterateVoxels.callEachPointInNghb(point, nghb, do3D, process, valToFind, offset);
+			Optional<Integer> lowestNeighborIndex = IterateVoxels.callEachPointInNeighborhood(point, neighborhood, do3D, process, valToFind, offset);
 			
 			bbVisited.markAsTemporary(offset);
 						
-			if (lowestNghbIndex.isPresent()) {
-				plateau.addEdge(point, lowestNghbIndex.get());
+			if (lowestNeighborIndex.isPresent()) {
+				plateau.addEdge(point, lowestNeighborIndex.get());
 			} else {
 				plateau.addInner(point);				
 			}
