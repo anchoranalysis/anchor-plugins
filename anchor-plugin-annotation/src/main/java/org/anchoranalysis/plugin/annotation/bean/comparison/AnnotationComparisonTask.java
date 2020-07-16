@@ -1,32 +1,9 @@
-/*-
- * #%L
- * anchor-plugin-annotation
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
@@ -61,22 +38,22 @@ public class AnnotationComparisonTask<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField private String backgroundChnlName = "Image";
+    @BeanField @Getter @Setter private String backgroundChnlName = "Image";
 
     // If a non-empty string it is used to split the descriptive name into groups
-    @BeanField private String splitDescriptiveNameRegex = "";
+    @BeanField @Getter @Setter private String splitDescriptiveNameRegex = "";
 
-    @BeanField private int maxSplitGroups = 5;
+    @BeanField @Getter @Setter private int maxSplitGroups = 5;
 
-    @BeanField private int numLevelsGrouping = 0;
+    @BeanField @Getter @Setter private int numLevelsGrouping = 0;
 
-    @BeanField private boolean useMIP = false;
+    @BeanField @Getter @Setter private boolean useMIP = false;
 
-    @BeanField private int outlineWidth = 1;
+    @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    @BeanField private AnnotationComparisonAssigner<T> assigner;
+    @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
 
-    @BeanField private boolean replaceMatchesWithSolids = true;
+    @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
     // END BEAN PROPERTIES
 
     private ColorSetGenerator colorSetGeneratorUnpaired = new VeryBrightColorSetGenerator();
@@ -272,70 +249,6 @@ public class AnnotationComparisonTask<T extends Assignment>
         } catch (AnchorIOException e) {
             throw new ExperimentExecutionException(e);
         }
-    }
-
-    public String getBackgroundChnlName() {
-        return backgroundChnlName;
-    }
-
-    public void setBackgroundChnlName(String backgroundChnlName) {
-        this.backgroundChnlName = backgroundChnlName;
-    }
-
-    public String getSplitDescriptiveNameRegex() {
-        return splitDescriptiveNameRegex;
-    }
-
-    public void setSplitDescriptiveNameRegex(String splitDescriptiveNameRegex) {
-        this.splitDescriptiveNameRegex = splitDescriptiveNameRegex;
-    }
-
-    public int getMaxSplitGroups() {
-        return maxSplitGroups;
-    }
-
-    public void setMaxSplitGroups(int maxSplitGroups) {
-        this.maxSplitGroups = maxSplitGroups;
-    }
-
-    public int getNumLevelsGrouping() {
-        return numLevelsGrouping;
-    }
-
-    public void setNumLevelsGrouping(int numLevelsGrouping) {
-        this.numLevelsGrouping = numLevelsGrouping;
-    }
-
-    public boolean isUseMIP() {
-        return useMIP;
-    }
-
-    public void setUseMIP(boolean useMIP) {
-        this.useMIP = useMIP;
-    }
-
-    public int getOutlineWidth() {
-        return outlineWidth;
-    }
-
-    public void setOutlineWidth(int outlineWidth) {
-        this.outlineWidth = outlineWidth;
-    }
-
-    public AnnotationComparisonAssigner<T> getAssigner() {
-        return assigner;
-    }
-
-    public void setAssigner(AnnotationComparisonAssigner<T> assigner) {
-        this.assigner = assigner;
-    }
-
-    public boolean isReplaceMatchesWithSolids() {
-        return replaceMatchesWithSolids;
-    }
-
-    public void setReplaceMatchesWithSolids(boolean replaceMatchesWithSolids) {
-        this.replaceMatchesWithSolids = replaceMatchesWithSolids;
     }
 
     @Override
