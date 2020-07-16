@@ -116,13 +116,10 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
 	private static List<Point3f> reflectInDimension( List<Point3f> pointsIn, Extent extent, int dimension, boolean min ) {
 		return FunctionalList.flatMapToList(
 			pointsIn,
-			point -> {
-				// Both the existing point and the reflected point
-				return Stream.of(
-					point,
-					reflectPoint(point, extent, dimension, min)
-				);
-			}
+			point -> Stream.of(		// Both the existing point and the reflected point
+				point,
+				reflectPoint(point, extent, dimension, min)
+			) 
 		);
 	}
 	

@@ -35,7 +35,6 @@ import java.util.function.ToDoubleFunction;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -72,12 +71,11 @@ public class PartitionedCfg {
 	/**
 	 * Samples from the available marks
 	 * 
-	 * @param propContext
 	 * @param idealNumItems number of items to be sampled (if they are available, otherwise as many as available are returned)
 	 * @param sampleArr an array to put the samples into (should be of size k)
 	 * @return if marks were sampled
 	 */
-	public Optional<Set<Mark>> sampleFromAvailable( ProposerContext propContext, int idealNumItems) {
+	public Optional<Set<Mark>> sampleFromAvailable( int idealNumItems) {
 		return distance.map( d->{
 			int numToSample = Math.min(idealNumItems, available.size());
 			

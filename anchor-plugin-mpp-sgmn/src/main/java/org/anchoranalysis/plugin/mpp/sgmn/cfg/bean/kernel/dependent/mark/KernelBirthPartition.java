@@ -53,7 +53,7 @@ public class KernelBirthPartition extends KernelBirth<CfgFromPartition> {
 	protected Optional<Set<Mark>> proposeNewMarks(CfgFromPartition exst, int number, KernelCalcContext context) {
 		assert( exst!= null);
 		assert( exst.getPartition()!= null);
-		return exst.getPartition().sampleFromAvailable(context.proposer(), number);
+		return exst.getPartition().sampleFromAvailable(number);
 	}
 	
 	@Override

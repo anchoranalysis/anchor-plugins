@@ -37,10 +37,13 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class StackProviderConcatenation extends StackProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<BeanImgStackProvider<?,?>> list = new ArrayList<>();
 	// END BEAN PROPERTIES
 		
@@ -66,14 +69,4 @@ public class StackProviderConcatenation extends StackProvider {
 			throw new CreateException(e);
 		}
 	}
-
-	public List<BeanImgStackProvider<?,?>> getList() {
-		return list;
-	}
-
-	public void setList(List<BeanImgStackProvider<?,?>> list) {
-		this.list = list;
-	}
-
-
 }
