@@ -40,7 +40,7 @@ import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
 public class CfgSizeFromManifest extends ReportFeatureForManifest {
 
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger)
+	public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger)
 			throws OperationFailedException {
 
 		FinderSerializedObject<Cfg> finder = new FinderSerializedObject<>(

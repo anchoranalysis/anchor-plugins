@@ -159,8 +159,13 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 	
 	
 	@Override
-	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntensity, ImageDimensions dim, double densityRatio) {
+	public double calcAccptProb(
+		int exstSize,
+		int propSize,
+		double poissonIntensity,
+		ImageDimensions dimensions,
+		double densityRatio
+	) {
 		return densityRatio;
 	}
 

@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
 public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
 
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger)
+	public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger)
 			throws OperationFailedException {
 
 		Path executionTimePath = obj.getRootPath().resolve( getFileName() + ".txt" );

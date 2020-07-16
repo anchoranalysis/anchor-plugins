@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 public class MaxNonZero extends IndexedRegionBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(VoxelizedMark voxelizedMark, Mark mark, ImageDimensions dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(VoxelizedMark voxelizedMark, Mark mark, ImageDimensions dimensions) throws CreateException {
 
 		RelationToThreshold nonZero = new RelationToConstant(
 			new GreaterThanBean(),

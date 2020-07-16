@@ -56,12 +56,12 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		
-		ImageDimensions dim = createDimensions();
+		ImageDimensions dimensions = createDimensions();
 		
 		return objects.stream().map( objectMask->
 			expandZ(
 				objectMask.flattenZ(),
-				dim
+				dimensions
 			)
 		);
 	}

@@ -50,9 +50,14 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer,FeatureInp
 	 */
 	private boolean suppress3D;
 		
-	private static int calcSurfaceSize(ObjectMask object, ImageDimensions dim, boolean mip, boolean suppress3D) {
+	private static int calcSurfaceSize(
+		ObjectMask object,
+		ImageDimensions dimensions,
+		boolean mip,
+		boolean suppress3D
+	) {
 		
-		boolean do3D = (dim.getZ() > 1) && !suppress3D;
+		boolean do3D = (dimensions.getZ() > 1) && !suppress3D;
 		
 		if (do3D && mip) {
 			// If we're in 3D mode AND MIP mode, then we get a maximum intensity projection

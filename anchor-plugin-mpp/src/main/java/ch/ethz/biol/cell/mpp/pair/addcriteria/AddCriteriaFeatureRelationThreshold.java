@@ -64,7 +64,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 	public boolean includeMarks(
 		VoxelizedMarkMemo mark1,
 		VoxelizedMarkMemo mark2,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
 		boolean do3D
 	) throws IncludeMarksFailureException {
@@ -73,7 +73,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 			FeatureInputPairMemo params = new FeatureInputPairMemo(
 				mark1,
 				mark2,
-				new NRGStackWithParams(dim)
+				new NRGStackWithParams(dimensions)
 			);
 			
 			double featureVal = session.orElseThrow( ()->

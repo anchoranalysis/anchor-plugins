@@ -41,7 +41,7 @@ import lombok.EqualsAndHashCode;
 public class CenterSlice extends CenterSliceBase {
 
 	@Override
-	protected VoxelStatistics createStatisticsForBBox(VoxelizedMark pm, ImageDimensions dim, BoundingBox bbox, int zCenter) {
+	protected VoxelStatistics createStatisticsForBBox(VoxelizedMark pm, ImageDimensions dimensions, BoundingBox bbox, int zCenter) {
 		
 		if (zCenter<0 || zCenter>=bbox.extent().getZ()) {
 			return new VoxelStatisticsCombined();

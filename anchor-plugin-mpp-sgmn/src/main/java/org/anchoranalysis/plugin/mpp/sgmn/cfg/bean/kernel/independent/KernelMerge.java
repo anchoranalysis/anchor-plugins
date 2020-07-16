@@ -186,7 +186,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
+			double poissonIntensity, ImageDimensions dimensions, double densityRatio) {
 		return densityRatio;
 	}
 	

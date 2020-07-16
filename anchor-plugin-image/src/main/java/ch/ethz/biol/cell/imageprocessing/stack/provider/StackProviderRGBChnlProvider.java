@@ -95,10 +95,15 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 		return sd;
 	}
 	
-	private static void addToStack( Stack stack, Channel chnl, ImageDimensions dim, VoxelDataType outputChnlType ) throws IncorrectImageSizeException, CreateException {
+	private static void addToStack(
+		Stack stack,
+		Channel chnl,
+		ImageDimensions dimensions,
+		VoxelDataType outputChnlType
+	) throws IncorrectImageSizeException, CreateException {
 		
 		if (chnl==null) {
-			chnl = ChannelFactory.instance().createEmptyInitialised(dim, outputChnlType);
+			chnl = ChannelFactory.instance().createEmptyInitialised(dimensions, outputChnlType);
 		}
 		
 		if(!outputChnlType.equals(chnl.getVoxelDataType())) {

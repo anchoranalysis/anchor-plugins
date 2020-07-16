@@ -43,14 +43,14 @@ public class BBoxRatio extends FeatureSingleMemo {
 		
 		MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
 		
-		ImageDimensions dim = input.get().getDimensionsRequired();
+		ImageDimensions dimensions = input.get().getDimensionsRequired();
 		
-		BoundingBox bb = markCast.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE );
+		BoundingBox bb = markCast.bbox(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE );
 		
 		int[] extent = bb.extent().createOrderedArray();
 		
 		// Let's change the z-dimension to include the relative-resolution
-		extent[2] = (int) (bb.extent().getZ() * dim.getRes().getZRelativeResolution());
+		extent[2] = (int) (bb.extent().getZ() * dimensions.getRes().getZRelativeResolution());
 		
 		int len = extent.length;
 		assert(len>=2);

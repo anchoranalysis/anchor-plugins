@@ -55,11 +55,11 @@ public class Scale extends ObjectCollectionProviderWithDimensions {
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objectCollection) throws CreateException {
 		
-		ImageDimensions dim = createDimensions();
+		ImageDimensions dimensions = createDimensions();
 		
 		ScaleFactor scaleFactor;
 		try {
-			scaleFactor = scaleCalculator.calc(dim);
+			scaleFactor = scaleCalculator.calc(dimensions);
 		} catch (OperationFailedException e) {
 			throw new CreateException(e);
 		}

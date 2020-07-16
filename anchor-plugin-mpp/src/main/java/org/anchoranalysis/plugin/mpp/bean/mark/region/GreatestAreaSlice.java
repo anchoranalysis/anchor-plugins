@@ -51,7 +51,7 @@ public class GreatestAreaSlice extends IndexedRegionBase {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException {
+	protected VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
 
 		BoundingBox bbox = boundingBoxForRegion(pm);
 		

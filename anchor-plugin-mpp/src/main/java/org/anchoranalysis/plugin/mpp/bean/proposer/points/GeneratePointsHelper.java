@@ -49,7 +49,7 @@ class GeneratePointsHelper {
 	private int maxZDistance;
 	private int skipZDistance;
 	private Mask chnl;
-	private ImageDimensions dim;
+	private ImageDimensions dimensions;
 	
 	public List<Point3i> generatePoints(List<List<Point3i>> pointsXY) throws OperationFailedException {
 		// We take the first point in each list, as where it intersects with the edge
@@ -77,7 +77,7 @@ class GeneratePointsHelper {
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
 
 		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDistance );
-		int zHigh = Math.min(dim.getZ(), bbox.cornerMin().getZ()+maxZDistance );
+		int zHigh = Math.min(dimensions.getZ(), bbox.cornerMin().getZ()+maxZDistance );
 
 		if (chnlFilled.isPresent()) {
 			return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox).convexOnly(

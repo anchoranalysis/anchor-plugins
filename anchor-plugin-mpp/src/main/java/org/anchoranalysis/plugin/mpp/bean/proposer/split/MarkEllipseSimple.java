@@ -212,12 +212,12 @@ public class MarkEllipseSimple extends MarkSplitProposer {
     	);
 	}
 	
-	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dim, Point3d point1, Point3d point2) {
-		if (!dim.contains(point1)) {
+	private static Optional<Point3d[]> ifBothPointsInside(ImageDimensions dimensions, Point3d point1, Point3d point2) {
+		if (!dimensions.contains(point1)) {
 			return Optional.empty();
 		}
 		
-		if (!dim.contains(point2)) {
+		if (!dimensions.contains(point2)) {
 			return Optional.empty();
 		}
 		

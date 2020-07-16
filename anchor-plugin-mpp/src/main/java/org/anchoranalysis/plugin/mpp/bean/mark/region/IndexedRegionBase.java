@@ -12,10 +12,10 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,49 +43,43 @@ import lombok.Setter;
 
 /**
  * {@link MarkRegion} with a region and an index
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public abstract class IndexedRegionBase extends MarkRegion {
 
-	// START BEAN PROPERTIES
-	@BeanField @Getter @Setter
-	private int index = 0;
-	
-	@BeanField @Getter @Setter
-	private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
-	// END BEAN PROPERTIES
-	
-	@Override
-	public String toString() {
-		return String.format("regionID=%d,index=%d", regionID, index);
-	}
-	
-	@Override
-	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
-		VoxelizedMark pm = pmm.voxelized();
-		return createStatisticsFor(pm, pmm.getMark(), dim);
-	}
-	
-	protected abstract VoxelStatistics createStatisticsFor(VoxelizedMark pm, Mark mark, ImageDimensions dim) throws CreateException;
-	
-	protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
-		return pm.statisticsFor(index, regionID, z);
-	}
-	
-	protected BoundingBox boundingBoxForRegion( VoxelizedMark pm ) {
-		return pm.getBoundingBox();
-	}
+  // START BEAN PROPERTIES
+  @BeanField @Getter @Setter private int index = 0;
 
-	@Override
-	public String uniqueName() {
-		return String.format(
-			"%s_%d_%d",
-			getClass().getCanonicalName(),
-			index,
-			regionID
-		);
-	}
+  @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+  // END BEAN PROPERTIES
+
+  @Override
+  public String toString() {
+    return String.format("regionID=%d,index=%d", regionID, index);
+  }
+
+  @Override
+  public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo memo, ImageDimensions dimensions)
+      throws CreateException {
+    VoxelizedMark pm = memo.voxelized();
+    return createStatisticsFor(pm, memo.getMark(), dimensions);
+  }
+
+  protected abstract VoxelStatistics createStatisticsFor(
+      VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException;
+
+  protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
+    return pm.statisticsFor(index, regionID, z);
+  }
+
+  protected BoundingBox boundingBoxForRegion(VoxelizedMark pm) {
+    return pm.getBoundingBox();
+  }
+
+  @Override
+  public String uniqueName() {
+    return String.format("%s_%d_%d", getClass().getCanonicalName(), index, regionID);
+  }
 }

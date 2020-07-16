@@ -53,10 +53,10 @@ public class RemoveTouchingBorder extends ObjectCollectionProviderWithDimensions
 	@Override
 	public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 		
-		ImageDimensions dim = createDimensions();
+		ImageDimensions dimensions = createDimensions();
 		
 		return objects.stream().filter( objectMask ->
-			!atBorder(objectMask, dim)
+			!atBorder(objectMask, dimensions)
 		);
 	}
 	

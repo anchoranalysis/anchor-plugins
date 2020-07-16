@@ -67,7 +67,7 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
 		int exstSize,
 		int propSize,
 		double poissonIntensity,
-		ImageDimensions sceneSize,
+		ImageDimensions dimensions,
 		double densityRatio
 	) {
 		// We always accept

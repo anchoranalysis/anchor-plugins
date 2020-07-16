@@ -3,7 +3,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+
 
 /*-
  * #%L
@@ -42,10 +42,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-	public static double calc( ObjectMask object, Mark mark, ImageDimensions dim ) throws FeatureCalcException {
+	public static double calc(ObjectMask object, Mark mark, ImageDimensions dimensions) {
 		return calc(
 			object,
-			maskCompare(mark, dim)
+			maskCompare(mark, dimensions)
 		);
 	}
 	

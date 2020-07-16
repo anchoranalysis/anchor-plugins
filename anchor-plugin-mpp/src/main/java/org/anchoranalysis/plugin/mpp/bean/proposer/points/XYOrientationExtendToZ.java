@@ -95,17 +95,17 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	private List<Point3i> lastPointsAll;
 	
 	@Override
-	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode) throws ProposalAbnormalFailureException {
+	public Optional<List<Point3i>> propose(Point3d point, Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
 		
 		Optional<Orientation> orientation = orientationXYProposer.propose(
 			mark,
-			dim,
+			dimensions,
 			randomNumberGenerator
 		);
 		
 		return orientation.flatMap( or->
-			proposeFromOrientation(or, point, dim, randomNumberGenerator, errorNode)
+			proposeFromOrientation(or, point, dimensions, randomNumberGenerator, errorNode)
 		);
 	}
 

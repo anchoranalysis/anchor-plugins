@@ -69,8 +69,8 @@ public class PointsFitterReference extends PointsFitter {
 	}
 
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
 			throws PointsFitterException, InsufficientPointsException {
-		pointsFitter.fit(points, mark, dim);
+		pointsFitter.fit(points, mark, dimensions);
 	}
 }

@@ -40,7 +40,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitterBase {
 	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
 			throws PointsFitterException {
 		
 		if (points.size() < minNumPoints()) {
@@ -50,12 +50,16 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
 		DoubleMatrix2D coefficients = solveNormalEquation(
 			createDesignMatrix(points)
 		);
-		applyCoefficientsToMark( coefficients, mark, dim);
+		applyCoefficientsToMark(coefficients, mark, dimensions);
 	}
 	
 	protected abstract int minNumPoints();
 	
-	protected abstract void applyCoefficientsToMark(DoubleMatrix2D matrixV, Mark mark, ImageDimensions dim ) throws PointsFitterException;
+	protected abstract void applyCoefficientsToMark(
+		DoubleMatrix2D matrixV,
+		Mark mark,
+		ImageDimensions dimensions
+	) throws PointsFitterException;
 	
 	protected abstract DoubleMatrix2D createDesignMatrix( List<Point3f> points );
 

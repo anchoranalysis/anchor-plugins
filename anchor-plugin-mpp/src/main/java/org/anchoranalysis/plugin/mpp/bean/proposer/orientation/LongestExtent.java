@@ -54,7 +54,7 @@ public class LongestExtent extends OrientationProposer {
 	// END BEAN
 	
 	@Override
-	public Optional<Orientation> propose(Mark mark, ImageDimensions dim, RandomNumberGenerator randomNumberGenerator ) throws ProposalAbnormalFailureException {
+	public Optional<Orientation> propose(Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator ) throws ProposalAbnormalFailureException {
 		
 		MarkAbstractPosition markC = (MarkAbstractPosition) mark;
 		

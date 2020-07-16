@@ -64,7 +64,7 @@ public class BinaryChnlComparer extends Comparer {
 	// END BEAN PROPERTIES
 
 	@Override
-	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dimensions, boolean debugMode) throws CreateException {
 		
 		try {
 			Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);

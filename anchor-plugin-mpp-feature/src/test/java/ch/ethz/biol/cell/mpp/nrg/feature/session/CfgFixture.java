@@ -32,10 +32,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class CfgFixture {
 
-	private MarkFixture markFixture;
+	private final MarkFixture markFixture;
 	
-	public CfgFixture( ImageDimensions dim ) {
-		this.markFixture = new MarkFixture(dim);
+	public CfgFixture( ImageDimensions dimensions ) {
+		this.markFixture = new MarkFixture(dimensions);
 	}
 	
 	public Cfg createCfg1() {

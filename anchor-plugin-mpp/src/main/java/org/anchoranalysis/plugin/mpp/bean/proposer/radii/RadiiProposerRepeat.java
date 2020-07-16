@@ -54,7 +54,7 @@ public class RadiiProposerRepeat extends RadiiProposer {
 	public Optional<Point3d> propose(
 		Point3d pos,
 		RandomNumberGenerator randomNumberGenerator,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		Orientation orientation
 	) throws ProposalAbnormalFailureException {
 		
@@ -62,7 +62,7 @@ public class RadiiProposerRepeat extends RadiiProposer {
 			Optional<Point3d> point = radiiProposer.propose(
 				pos,
 				randomNumberGenerator,
-				dim,
+				dimensions,
 				orientation
 			);
 			if (point.isPresent()) {

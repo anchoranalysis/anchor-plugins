@@ -101,12 +101,16 @@ class SeedsFactory {
 		);
 	}
 	
-	private static ObjectMask ensureInsideContainer( ObjectMask seed, BoundingBox containingBBox, ImageDimensions dim ) throws CreateException {
+	private static ObjectMask ensureInsideContainer(
+		ObjectMask seed,
+		BoundingBox containingBBox,
+		ImageDimensions dimensions
+	) throws CreateException {
 		if (!containingBBox.contains().box( seed.getBoundingBox())) {
 			// We only take the part of the seed object that intersects with our bbox
 			BoundingBox bboxIntersect = containingBBox
 				.intersection()
-				.withInside( seed.getBoundingBox(), dim.getExtent() )
+				.withInside( seed.getBoundingBox(), dimensions.getExtent() )
 				.orElseThrow( ()->
 					new CreateException("No bounding box intersection exists between seed and containing bounding-box")
 				);

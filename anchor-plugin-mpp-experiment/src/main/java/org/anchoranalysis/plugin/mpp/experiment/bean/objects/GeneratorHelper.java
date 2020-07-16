@@ -33,7 +33,7 @@ class GeneratorHelper {
 	private final StringSet outputRGBOutlineMIP;
 	
 	public IterableCombinedListGenerator<ObjectMask> buildGenerator(
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		NamedImgStackCollection stacks,
 		NamedImgStackCollection stacksFlattened,
 		Function<Stack,ExtractedBoundingBoxGenerator> generatorFunction
@@ -41,7 +41,7 @@ class GeneratorHelper {
 		IterableCombinedListGenerator<ObjectMask> out = new IterableCombinedListGenerator<>(
 			new SimpleNameValue<>(
 				"mask",
-				new ObjWithBoundingBoxGenerator(dim.getRes())
+				new ObjWithBoundingBoxGenerator(dimensions.getRes())
 			)
 		);
 				

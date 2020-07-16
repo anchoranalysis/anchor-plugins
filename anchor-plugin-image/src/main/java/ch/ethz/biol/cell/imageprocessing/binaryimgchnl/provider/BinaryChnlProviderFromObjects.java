@@ -61,11 +61,11 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
 		);
 	}
 	
-	private static Mask create(ObjectCollection objects, ImageDimensions dim, boolean invert ) {
+	private static Mask create(ObjectCollection objects, ImageDimensions dimensions, boolean invert ) {
 
 		BinaryValues bv = BinaryValues.getDefault();
 		
-		Mask maskedImage = createChannelFromObjectsMultiplex(objects, dim, bv, invert);
+		Mask maskedImage = createChannelFromObjectsMultiplex(objects, dimensions, bv, invert);
 		return new Mask(maskedImage.getChannel(), bv);	
 	}
 	

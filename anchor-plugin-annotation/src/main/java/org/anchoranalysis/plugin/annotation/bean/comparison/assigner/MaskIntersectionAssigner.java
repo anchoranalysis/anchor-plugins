@@ -40,7 +40,7 @@ public class MaskIntersectionAssigner extends AnnotationComparisonAssigner<Assig
 	@Override
 	public AssignmentMaskIntersection createAssignment(
 		ObjectsToCompare objectsToCompare, 
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		boolean useMIP,
 		BoundIOContext context
 	) throws CreateException {

@@ -64,7 +64,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 	@Override
 	public AssignmentOverlapFromPairs createAssignment(
 		ObjectsToCompare objectsToCompare,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		boolean useMIP,
 		BoundIOContext context
 	) throws CreateException {
@@ -84,12 +84,12 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 				objectsToCompare.getLeft(),
 				objectsToCompare.getRight(),
 				maxCost,
-				dim
+				dimensions
 			);
 			
 			// We remove any border items from the assignment
 			if (removeTouchingBorderXY) {
-				assignment.removeTouchingBorderXY( dim );
+				assignment.removeTouchingBorderXY( dimensions );
 			}
 			
 			context.getOutputManager().getWriterCheckIfAllowed().write(

@@ -146,13 +146,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 				return;
 			}
 			
-			ImageDimensions dim = stackCollection.getArbitraryElement().getDimensions();
+			ImageDimensions dimensions = stackCollection.getArbitraryElement().getDimensions();
 			
 			outputGeneratorSeq(
-				createGenerator(dim, stackCollection, stackCollectionMIP),
+				createGenerator(dimensions, stackCollection, stackCollectionMIP),
 				maybeExtendZObjects(
 					inputObjects(paramsInit, logger),
-					dim.getZ()
+					dimensions.getZ()
 				),
 				context
 			);
@@ -204,7 +204,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
 	private NamedImgStackCollection createStackCollection( ImageInitParams so, Logger logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDimensions dim = null;
+		ImageDimensions dimensions = null;
 		NamedImgStackCollection stacks = new NamedImgStackCollection();
 			
 			
@@ -222,12 +222,12 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			
 			Stack stack = ni.getValue().create();
 			
-			if (dim==null) {
-				dim = stack.getDimensions();
+			if (dimensions==null) {
+				dimensions = stack.getDimensions();
 			} else {
-				if (!stack.getDimensions().equals(dim)) {
+				if (!stack.getDimensions().equals(dimensions)) {
 					throw new CreateException(
-						String.format("Channel dimensions are not uniform across the channels (%s vs %s)", stack.getDimensions(), dim )
+						String.format("Channel dimensions are not uniform across the channels (%s vs %s)", stack.getDimensions(), dimensions )
 					);
 				}
 			}
@@ -247,7 +247,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	
 	private NamedImgStackCollection createStackCollectionMIP( ImageInitParams so, Logger logger ) throws CreateException {
 		// Get named image stack collection
-		ImageDimensions dim = null;
+		ImageDimensions dimensions = null;
 		NamedImgStackCollection stackCollection = new NamedImgStackCollection();
 			
 			
@@ -264,10 +264,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			
 			Stack stack = ni.getValue().create();
 			
-			if (dim==null) {
-				dim = stack.getDimensions();
+			if (dimensions==null) {
+				dimensions = stack.getDimensions();
 			} else {
-				if (!stack.getDimensions().equals(dim)) {
+				if (!stack.getDimensions().equals(dimensions)) {
 					throw new CreateException("Stack dimensions do not match");
 				}
 			}
@@ -282,7 +282,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 	}
 	
 	private IterableGenerator<ObjectMask> createGenerator(
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		NamedImgStackCollection stacks,
 		NamedImgStackCollection stacksFlattened
 	) throws CreateException {
@@ -292,7 +292,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			outputRGBOutline,
 			outputRGBOutlineMIP
 		).buildGenerator(
-			dim,
+			dimensions,
 			stacks,
 			stacksFlattened,
 			stack -> createBoundingBoxGeneratorForStack(stack, MANIFEST_FUNCTION)
@@ -304,9 +304,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 			out,
 			object -> {
 				if (keepEntireImage) {
-					return extractObjectKeepEntireImage(object, dim);
+					return extractObjectKeepEntireImage(object, dimensions);
 				} else {
-					return maybePadObject(object, dim);
+					return maybePadObject(object, dimensions);
 				}
 			}
 		);
@@ -331,10 +331,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 		);
 	}
 	
-	private static ObjectMask extractObjectKeepEntireImage( ObjectMask object, ImageDimensions dim ) {
+	private static ObjectMask extractObjectKeepEntireImage( ObjectMask object, ImageDimensions dimensions ) {
 		return BoundingBoxUtilities.createObjectForBoundingBox(
 			object,
-			new BoundingBox(dim.getExtent())
+			new BoundingBox(dimensions.getExtent())
 		);
 	}
 	

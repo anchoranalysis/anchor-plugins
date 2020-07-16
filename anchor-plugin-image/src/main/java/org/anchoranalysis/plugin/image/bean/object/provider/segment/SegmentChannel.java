@@ -89,7 +89,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
 	}
 	
 	private Optional<SeedCollection> createSeeds(
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		Optional<ObjectMask> maskAsObject
 	) throws CreateException {
 		return OptionalUtilities.map(
@@ -97,7 +97,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
 			objects-> createSeeds(
 				objects,
 				maskAsObject,
-				dim
+				dimensions
 			) 
 		);
 	}

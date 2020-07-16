@@ -57,7 +57,7 @@ public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDim
 		);
 	}
 	
-	protected abstract double calcForAxis( ImageDimensions dim, AxisType axis );
+	protected abstract double calcForAxis( ImageDimensions dimensions, AxisType axis );
 	
 	@Override
 	public String getParamDscr() {

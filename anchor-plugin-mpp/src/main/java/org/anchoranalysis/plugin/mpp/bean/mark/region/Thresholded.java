@@ -50,8 +50,8 @@ public class Thresholded extends MarkRegion {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo pmm, ImageDimensions dim) throws CreateException {
-		return region.createStatisticsFor(pmm, dim).threshold(threshold);
+	public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo memo, ImageDimensions dimensions) throws CreateException {
+		return region.createStatisticsFor(memo, dimensions).threshold(threshold);
 	}
 
 	@Override

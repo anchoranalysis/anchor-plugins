@@ -33,13 +33,12 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class MarkFixture {
 
-	private ImageDimensions dim;
-	
-	public MarkFixture( ImageDimensions dim ) {
-		this.dim = dim;
-	}
+	private final ImageDimensions dimensions;
 	
 	// Intersects with Ellipsoid2
 	public MarkEllipsoid createEllipsoid1() {
@@ -83,6 +82,6 @@ public class MarkFixture {
 	}
 	
 	private boolean nonZeroBBoxVolume(MarkEllipsoid ell) {
-		return !ell.bbox(dim, GlobalRegionIdentifiers.SUBMARK_INSIDE).extent().isEmpty();
+		return !ell.bbox(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE).extent().isEmpty();
 	}
 }

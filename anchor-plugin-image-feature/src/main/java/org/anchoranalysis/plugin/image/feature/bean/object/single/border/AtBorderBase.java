@@ -52,5 +52,5 @@ public abstract class AtBorderBase extends FeatureSingleObject {
 		);
 	}
 	
-	protected abstract boolean isBoundingBoxAtBorder( BoundingBox boundingBox, ImageDimensions dim );
+	protected abstract boolean isBoundingBoxAtBorder( BoundingBox boundingBox, ImageDimensions dimensions );
 }

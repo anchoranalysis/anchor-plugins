@@ -50,5 +50,5 @@ public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends Feat
 		);
 	}
 	
-	protected abstract double calcFromDims( ImageDimensions dim );
+	protected abstract double calcFromDims( ImageDimensions dimensions );
 }

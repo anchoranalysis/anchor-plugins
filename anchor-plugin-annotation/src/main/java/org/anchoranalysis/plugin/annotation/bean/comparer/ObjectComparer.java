@@ -60,7 +60,7 @@ public class ObjectComparer extends Comparer {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dimensions, boolean debugMode) throws CreateException {
 		
 		try {
 			Path objectsPath = filePathGenerator.outFilePath(filePathSource, debugMode);

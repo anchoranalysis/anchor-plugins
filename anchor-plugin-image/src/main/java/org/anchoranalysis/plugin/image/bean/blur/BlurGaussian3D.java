@@ -41,14 +41,14 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class BlurGaussian3D extends BlurStrategy {
 
 	@Override
-	public void blur( VoxelBoxWrapper voxelBox, ImageDimensions dim, MessageLogger logger ) throws OperationFailedException {
+	public void blur( VoxelBoxWrapper voxelBox, ImageDimensions dimensions, MessageLogger logger ) throws OperationFailedException {
 		
-		double sigma = calcSigma(dim, logger);
+		double sigma = calcSigma(dimensions, logger);
 		
 		GaussianBlurUtilities.applyBlur(
 			ImgLib2Wrap.wrap( voxelBox ),
-			dim.getRes(),
-			new double[]{ sigma, sigma, sigma/dim.getRes().getZRelativeResolution() }	// Sigma-array
+			dimensions.getRes(),
+			new double[]{ sigma, sigma, sigma/dimensions.getRes().getZRelativeResolution() }	// Sigma-array
 		);
 	}
 }

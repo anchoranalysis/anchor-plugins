@@ -66,7 +66,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 	// END BEAN
 	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException, InsufficientPointsException {
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions) throws PointsFitterException, InsufficientPointsException {
 		
 		List<Point2D_F64> pointsConvert = FunctionalList.mapToList(
 			points,

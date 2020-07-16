@@ -36,13 +36,13 @@ import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 
 public class MultiBufferSized {
 
-	private ImageDimensions dim;
+	private ImageDimensions dimensions;
 	private int sizeT;
 	private MultiBuffer buffers;
 	
 	public MultiBufferSized( Stack stack, SizeExtents size ) {
 		buffers = new MultiBuffer( stack, size );
-		dim = new ImageDimensions(
+		dimensions = new ImageDimensions(
 			size.toExtent(),
 			stack.getDimensions().getRes()
 		);
@@ -73,7 +73,7 @@ public class MultiBufferSized {
 		TimeSequence tsOut = new TimeSequence();
 		for( int t=0; t<sizeT; t++) {
 			tsOut.add(
-				buffers.createStackForIndex(t, dim, dataType)
+				buffers.createStackForIndex(t, dimensions, dataType)
 			);
 		}
 		return tsOut;
