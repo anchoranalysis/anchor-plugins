@@ -42,52 +42,64 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DistanceCondition implements BeforeCondition {
 
-	private final UnitValueDistance maxDist;
+	private final Optional<UnitValueDistance> maxDistance;
 	private final boolean suppressZ;
 	private final MessageLogger logger;
 	
 	@Override
 	public boolean accept(ObjectMask source, ObjectMask destination, Optional<ImageResolution> res) throws OperationFailedException {
 		
-		// We impose a max dist condition if necessary
-		if (maxDist!=null) {
-			return isWithinMaxDist(source,destination,res);
+		// We impose a maximum distance condition if necessary
+		if (maxDistance.isPresent()) {
+			return isWithinMaxDistance(source,destination,res);
 		} else {
 			return true;
 		}
 	}
 	
-	private boolean isWithinMaxDist( ObjectMask source, ObjectMask destination, Optional<ImageResolution> res ) throws OperationFailedException {
+	private boolean isWithinMaxDistance( ObjectMask source, ObjectMask destination, Optional<ImageResolution> res ) throws OperationFailedException {
 		
-		double dist = BoundingBoxDistance.distance( source.getBoundingBox(), destination.getBoundingBox(), !suppressZ );
+		double distance = BoundingBoxDistance.distance(
+			source.getBoundingBox(),
+			destination.getBoundingBox(),
+			!suppressZ
+		);
 		
-		double maxDistRslv = rslvDist(
+		double maxDistanceResolved = resolveDistance(
 			res,
 			source.getBoundingBox().midpoint(),
 			destination.getBoundingBox().midpoint()
 		);
 		
-		if (dist>=maxDistRslv) {
+		if (distance>=maxDistanceResolved) {
 			return false;
 		} else {
 		
 			logger.logFormatted(
-				"Maybe merging %s and %s with dist %f (<%f)",
+				"Maybe merging %s and %s with distance %f (<%f)",
 				source.getBoundingBox().midpoint(),
 				destination.getBoundingBox().midpoint(),
-				dist,
-				maxDistRslv
+				distance,
+				maxDistanceResolved
 			);
 			
 			return true;
 		}
 	}
 	
-	private double rslvDist( Optional<ImageResolution> res, Point3d point1, Point3d point2 ) throws OperationFailedException {
+	private double resolveDistance( Optional<ImageResolution> res, Point3d point1, Point3d point2 ) throws OperationFailedException {
 		if (suppressZ) {
-			return maxDist.rslv(res, new Point3d(point1.getX(),point1.getY(),0), new Point3d(point2.getX(),point2.getY(),0) );
+			return maxDistance.get().resolve(	// NOSONAR
+				res,
+				point1.dropZ(),
+				point2.dropZ()
+			);
 		} else {
-			return maxDist.rslv(res, point1, point2 );
+			return maxDistance.get().resolve(	// NOSONAR
+				res,
+				point1,
+				point2
+			);
 		}
 	}
 }

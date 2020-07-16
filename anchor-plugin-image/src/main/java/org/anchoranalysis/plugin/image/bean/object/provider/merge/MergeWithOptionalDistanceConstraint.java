@@ -2,6 +2,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
 
 
+import java.util.Optional;
+
 /*-
  * #%L
  * anchor-plugin-image
@@ -51,10 +53,14 @@ public abstract class MergeWithOptionalDistanceConstraint extends MergeBase {
 	
 	/** An optional maximum distance */
 	@BeanField @OptionalBean @Getter @Setter
-	private UnitValueDistance maxDist; 
+	private UnitValueDistance maxDistance; 
 	// END BEAN FIELDS
 	
 	protected BeforeCondition maybeDistanceCondition() {
-		return new DistanceCondition(getMaxDist(), suppressZ, getLogger().messageLogger() );
+		return new DistanceCondition(
+			Optional.ofNullable(maxDistance),
+			suppressZ,
+			getLogger().messageLogger()
+		);
 	}
 }

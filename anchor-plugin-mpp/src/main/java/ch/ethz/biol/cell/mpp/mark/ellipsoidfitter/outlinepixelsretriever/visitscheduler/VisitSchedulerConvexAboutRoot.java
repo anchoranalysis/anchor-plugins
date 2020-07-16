@@ -47,7 +47,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	private Point3i root;
 	
 	@Override
-	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) {
+	public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res) {
 		return Optional.empty();
 	}
 
@@ -77,14 +77,14 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 	
 	public static boolean isPointConvexTo( Point3i root, Point3i destPoint, BinaryVoxelBox<ByteBuffer> bvb, boolean debug ) {
 		
-		Point3d dist = relVector(root, destPoint);
+		Point3d distance = relVector(root, destPoint);
 		double mag = Math.pow(
-			Math.pow(dist.getX(), 2) + Math.pow(dist.getY(), 2) + Math.pow(dist.getZ(), 2),
+			Math.pow(distance.getX(), 2) + Math.pow(distance.getY(), 2) + Math.pow(distance.getZ(), 2),
 			0.5
 		); 
 		
 		if (mag>0.0) {
-			dist.scale( 1/mag );
+			distance.scale( 1/mag );
 		}
 		
 		// Now we keep checking that points are inside the mask until we reach our final point
@@ -103,14 +103,14 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 				return false;
 			}
 			
-			point.increment(dist);
+			point.increment(distance);
 		} 
 		
 		return true;
 	}
 	
 	@Override
-	public boolean considerVisit(Point3i point, int distAlongContour,	ObjectMask object) {
+	public boolean considerVisit(Point3i point, int distanceAlongContour,	ObjectMask object) {
 		return isPointConvexTo(root, point, object.binaryVoxelBox());
 	}
 	

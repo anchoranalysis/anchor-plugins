@@ -151,7 +151,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		try {
 			new OutlineTraverser(
 				objectOutline,
-				(point,dist) -> visitScheduler.considerVisit(point,dist,objectFilled),
+				(point,distance) -> visitScheduler.considerVisit(point,distance,objectFilled),
 				useZ,
 				nghb8
 			).applyGlobal(
@@ -166,14 +166,16 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	private ObjectMask createObjectForPoint( Point3i root, Mask chnl ) throws TraverseOutlineException {
 				
 		try {
-			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()).orElseThrow( ()->
-				new CreateException("An undefined maxDist is not supported")
+			Tuple3i maxDistance = visitScheduler.maxDistanceFromRootPoint(
+				chnl.getDimensions().getRes()
+			).orElseThrow( ()->
+				new CreateException("An undefined max-distance is not supported")
 			);
 			
 			// We make sure the box is within our scene boundaries
 			BoundingBox box = createBoxAroundPoint(
 				root,
-				maxDist,
+				maxDistance,
 				chnl.getDimensions().getExtent()
 			);
 			
@@ -189,7 +191,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	}
 	
 	private static BoundingBox createBoxAroundPoint(Point3i point, Tuple3i width, Extent clipTo) {
-		// We create a raster around the point, maxDist*2 in both directions, so long as it doesn't escape the region
+		// We create a raster around the point, maxDistance*2 in both directions, so long as it doesn't escape the region
 		BoundingBox box = new BoundingBox(
 			Point3i.immutableSubtract(point, width),
 			Point3i.immutableAdd(point, width)

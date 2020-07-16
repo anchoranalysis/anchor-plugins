@@ -30,19 +30,22 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.histogram.Histogram;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
 	
 	// START BEAN PROPERTIES
-	@BeanField
-	private double distMax = 20;
+	@BeanField @Getter @Setter
+	private double distanceMax = 20;
 	// END BEAN PROPERTIES
 	
-	private double distMaxDivider;
+	private double distanceMaxDivider;
 
 	@Override
 	protected void beforeCalcSetup(Histogram hist, int level) {
-		// We divide by twice the distMax so we always get a figure bounded [0,0.5]
-		distMaxDivider = distMax*2;
+		// We divide by twice the distanceMax so we always get a figure bounded [0,0.5]
+		distanceMaxDivider = distanceMax*2;
 	}
 	
 	@Override
@@ -52,32 +55,21 @@ public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
 			
 			int diff = level - pxlValue;
 			
-			if (diff>distMax) {
+			if (diff>distanceMax) {
 				return 0;
 			}
 			
-			double mem = diff/distMaxDivider;
+			double mem = diff/distanceMaxDivider;
 			return 0.5 - mem;
 		} else {
 			int diff = pxlValue-level;
 			
-			if (diff>distMax) {
+			if (diff>distanceMax) {
 				return 1;
 			}
 
-			double mem = diff/distMaxDivider;
+			double mem = diff/distanceMaxDivider;
 			return 0.5 + mem;
 		}
 	}
-	
-	public double getDistMax() {
-		return distMax;
-	}
-
-	public void setDistMax(double distMax) {
-		this.distMax = distMax;
-	}
-
-
-
 }

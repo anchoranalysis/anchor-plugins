@@ -46,8 +46,8 @@ class GeneratePointsHelper {
 
 	private Point3d pointRoot;
 	private final Optional<Mask> chnlFilled;
-	private int maxZDist;
-	private int skipZDist;
+	private int maxZDistance;
+	private int skipZDistance;
 	private Mask chnl;
 	private ImageDimensions dim;
 	
@@ -76,21 +76,21 @@ class GeneratePointsHelper {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
 
-		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDist );
-		int zHigh = Math.min(dim.getZ(), bbox.cornerMin().getZ()+maxZDist );
+		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDistance );
+		int zHigh = Math.min(dim.getZ(), bbox.cornerMin().getZ()+maxZDistance );
 
 		if (chnlFilled.isPresent()) {
 			return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox).convexOnly(
 				chnl,
 				pointRoot,
-				skipZDist
+				skipZDistance
 			);
 		} else {
 			return PointsFromBinaryChnl.pointsFromChnlInsideBox(
 				chnl,
 				bbox.duplicateChangeZ(zLow, zHigh-zLow),
 				(int) Math.floor(pointRoot.getZ()),
-				skipZDist
+				skipZDistance
 			);
 		}
 	}

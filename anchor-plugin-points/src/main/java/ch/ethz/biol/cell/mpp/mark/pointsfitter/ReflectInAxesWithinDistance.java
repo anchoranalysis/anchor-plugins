@@ -27,8 +27,8 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
@@ -36,24 +36,33 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-// Reflects points in each axes if all points are within a certain distance from it
-public class ReflectInAxesWithinDist extends PointsFitter {
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Reflects points in each axes if all points are within a certain distance from it
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ReflectInAxesWithinDistance extends PointsFitter {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private PointsFitter pointsFitter;
 	
-	@BeanField @NonNegative
+	@BeanField @NonNegative @Getter @Setter
 	private double distanceX = -1;	// Forces user to set a default
 	
-	@BeanField @NonNegative
+	@BeanField @NonNegative @Getter @Setter
 	private double distanceY = -1;	// Forces user to set a default
 	
-	@BeanField @NonNegative
+	@BeanField @NonNegative @Getter @Setter
 	private double distanceZ = -1;	// Forces user to set a default
 	// END BEAN PROPERTIES
 	
@@ -63,8 +72,7 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	}
 
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim)
-			throws PointsFitterException, InsufficientPointsException {
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException, InsufficientPointsException {
 
 		if (points.isEmpty()) {
 			pointsFitter.fit(points, mark, dim);
@@ -82,15 +90,13 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 			for(int side=0; side<1; side++) {
 			
 				// Are all points within
-				boolean insideDist = arePointsWithinDistOfBorder(
+				if (arePointsWithinDistanceOfBorder(
 					points,
 					extent,
 					d,
 					side==0,
 					arrDistances
-				);
-				if (insideDist) {
-					
+				)){
 					pointsCurrent = reflectInDimension(
 						pointsCurrent,
 						extent,
@@ -108,29 +114,39 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 	}
 	
 	private static List<Point3f> reflectInDimension( List<Point3f> pointsIn, Extent extent, int dimension, boolean min ) {
-		
-		ArrayList<Point3f> pointsOut = new ArrayList<>();
-		
-		for( Point3f p : pointsIn ) {
-			pointsOut.add(p);
-			
-			Point3f pDup = new Point3f( p );
-			
-			if( min) {
-				pDup.setValueByDimension(dimension, pDup.getValueByDimension(dimension)*-1 );
-			} else {
-				float eMax = extent.getValueByDimension(dimension);
-				pDup.setValueByDimension(dimension, (2*eMax) - pDup.getValueByDimension(dimension) );
+		return FunctionalList.flatMapToList(
+			pointsIn,
+			point -> {
+				// Both the existing point and the reflected point
+				return Stream.of(
+					point,
+					reflectPoint(point, extent, dimension, min)
+				);
 			}
-			
-			pointsOut.add(pDup);
-		}
-		return pointsOut;
+		);
 	}
 	
-
+	private static Point3f reflectPoint(Point3f point, Extent extent, int dimension, boolean min) {
+		Point3f pointReflected = new Point3f(point);
+		pointReflected.setValueByDimension(
+			dimension,
+			reflectedValue(point, extent, dimension, min)
+		);
+		return pointReflected;
+	}
+	
+	private static float reflectedValue( Point3f point, Extent extent, int dimension, boolean min ) {
+		float unreflectedValue = point.getValueByDimension(dimension);
+		if (min) {
+			return unreflectedValue * -1;
+		} else {
+			float extentInDimension = extent.getValueByDimension(dimension);
+			return (2*extentInDimension) - unreflectedValue;
+		}
+	}
+	
 	// Min=true means the lower side,  Min=false means the higher side of the dimension
-	private static boolean arePointsWithinDistOfBorder(
+	private static boolean arePointsWithinDistanceOfBorder(
 		List<Point3f> points,
 		Extent extent,
 		int dimension,
@@ -138,53 +154,18 @@ public class ReflectInAxesWithinDist extends PointsFitter {
 		double[] arrDistances
 	) {
 		
-		double dimMax = extent.getValueByDimension(dimension);
-		double maxAllowedDist = arrDistances[dimension];
+		double dimensionMax = extent.getValueByDimension(dimension);
+		double maxAllowedDistance = arrDistances[dimension];
 		
-		for( Point3f p : points) {
+		for( Point3f point : points) {
 
-			double pointInDim = p.getValueByDimension(dimension);
-			double dist = min ? pointInDim : dimMax - pointInDim;
+			double valueForDimension = point.getValueByDimension(dimension);
+			double distance = min ? valueForDimension : dimensionMax - valueForDimension;
 			
-			if( dist>maxAllowedDist) {
+			if( distance>maxAllowedDistance) {
 				return false;
 			}
-			
 		}
 		return true;
 	}
-
-	public PointsFitter getPointsFitter() {
-		return pointsFitter;
-	}
-
-	public void setPointsFitter(PointsFitter pointsFitter) {
-		this.pointsFitter = pointsFitter;
-	}
-
-	public double getDistanceX() {
-		return distanceX;
-	}
-
-	public void setDistanceX(double distanceX) {
-		this.distanceX = distanceX;
-	}
-
-	public double getDistanceY() {
-		return distanceY;
-	}
-
-	public void setDistanceY(double distanceY) {
-		this.distanceY = distanceY;
-	}
-
-	public double getDistanceZ() {
-		return distanceZ;
-	}
-
-	public void setDistanceZ(double distanceZ) {
-		this.distanceZ = distanceZ;
-	}
-
-
 }

@@ -107,15 +107,15 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 				assert( binaryImage.getDimensions() != null );
 				assert( binaryImage.getDimensions().getRes()!=null );
 				
-				double maxDistRslv = maxDistance.rslv(
+				double maxDistanceRslv = maxDistance.resolve(
 					Optional.of(
 						binaryImage.getDimensions().getRes()
 					),
 					centrePoint,
 					pointDouble
 				);
-				double dist = binaryImage.getDimensions().getRes().distZRel(centrePoint, pointDouble);
-				if (dist>maxDistRslv) {
+				double distance = binaryImage.getDimensions().getRes().distanceZRelative(centrePoint, pointDouble);
+				if (distance>maxDistanceRslv) {
 					return Optional.empty();
 				}
 			}

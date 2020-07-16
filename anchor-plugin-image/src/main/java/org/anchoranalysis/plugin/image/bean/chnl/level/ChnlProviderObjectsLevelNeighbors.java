@@ -54,21 +54,21 @@ import lombok.Setter;
  *  Calculates a threshold-level for each object collectively based on other objects
  *  
  *  <p>
- *  A neighbourhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours that have dist < nghbDist (e.g. nghbDist==1 are all the immediate neighbours).
+ *  A neighbourhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
  *  </p>
  */
-public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
+public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
 
 	// START BEAN
 	/** How many neighbours to include by distance (distance==1 -> all directly touching neighbours, distance==2 -> those touching the directly touching etc.) */
 	@BeanField @Positive @Getter @Setter
-	private int nghbDist;		// Determines the neighbour distance
+	private int distance;		// Determines the neighbour distance
 	// END BEAN
 	
 	@Override
 	protected Channel createFor(Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput) throws CreateException {
 		try {
-			setAgainstNghb( chnlIntensity, chnlOutput, objects, nghbDist );
+			setAgainstNeighbor( chnlIntensity, chnlOutput, objects, distance );
 			
 			return chnlOutput;
 			
@@ -96,12 +96,12 @@ public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
 		}
 	}
 	
-	private static Collection<ObjectMaskWithHistogram> verticesWithinDist(
+	private static Collection<ObjectMaskWithHistogram> verticesWithinDistance(
 		GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph,
 		ObjectMaskWithHistogram om,
-		int nghbDist
+		int neighbourDistance
 	) {
-		if (nghbDist==1) {
+		if (neighbourDistance==1) {
 			return graph.adjacentVertices(om);
 		} else {
 			
@@ -110,7 +110,7 @@ public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
 			List<ObjectMaskWithHistogram> toVisit = new ArrayList<>();
 			toVisit.add(om);
 			
-			for( int i=0; i<nghbDist; i++) {
+			for( int i=0; i<neighbourDistance; i++) {
 				List<ObjectMaskWithHistogram> currentVisit = toVisit;
 				toVisit = new ArrayList<>();
 				visit( graph, currentVisit, toVisit, visited);
@@ -129,7 +129,12 @@ public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
 		return out;
 	}
 	
-	private void setAgainstNghb( Channel chnlIntensity, Channel chnlOutput, ObjectCollection objects, int nghbDist ) throws OperationFailedException {
+	private void setAgainstNeighbor(
+		Channel chnlIntensity,
+		Channel chnlOutput,
+		ObjectCollection objects,
+		int neighborDistance
+	) throws OperationFailedException {
 		
 		try {
 			CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator = new CreateNeighborGraph<>(
@@ -139,7 +144,7 @@ public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
 			GraphWithEdgeTypes<ObjectMaskWithHistogram,Integer> graph = graphCreator.createGraph(
 				objectsWithHistograms(objects, chnlIntensity),
 				ObjectMaskWithHistogram::getObject,
-				(v1, v2, numPixels) -> numPixels,
+				(v1, v2, numberVoxels) -> numberVoxels,
 				chnlIntensity.getDimensions().getExtent(),
 				true
 			);
@@ -157,7 +162,7 @@ public class ChnlProviderObjectsLevelNeighbours extends ChnlProviderLevel {
 				);
 				
 				// Get the neighbors of the current object
-				Collection<ObjectMaskWithHistogram> vertices = verticesWithinDist(graph, om, nghbDist);
+				Collection<ObjectMaskWithHistogram> vertices = verticesWithinDistance(graph, om, neighborDistance);
 				
 				for( ObjectMaskWithHistogram nghb : vertices ) {
 					getLogger().messageLogger().logFormatted(

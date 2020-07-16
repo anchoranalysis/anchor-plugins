@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
 import java.util.Optional;
 
@@ -51,7 +51,7 @@ import lombok.Setter;
  * It is only calculated if there is overlap of the bounding boxes in XYZ, else 0 is returned
  */
 
-public class BBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
+public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
 	// START BEAN PROPERTIES
 	@BeanField @Getter @Setter

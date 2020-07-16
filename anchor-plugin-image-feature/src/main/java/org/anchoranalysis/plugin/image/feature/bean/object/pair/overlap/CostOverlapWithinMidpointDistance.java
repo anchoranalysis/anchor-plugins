@@ -40,6 +40,9 @@ import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * 
@@ -51,13 +54,13 @@ import org.anchoranalysis.image.orientation.DirectionVector;
 public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance maxDistance;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private double minOverlap = 0.6;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean suppressZ = true;
 	// END BEAN PROPERTIES
 	
@@ -66,7 +69,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 
 		FeatureInputPairObjects inputSessionless = input.get();
 		
-		if (isDistMoreThanMax(inputSessionless)) {
+		if (isDistanceMoreThanMax(inputSessionless)) {
 			return 1.0;
 		}
 				
@@ -79,7 +82,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 		}
 	}
 	
-	private boolean isDistMoreThanMax( FeatureInputPairObjects params ) throws FeatureCalcException {
+	private boolean isDistanceMoreThanMax( FeatureInputPairObjects params ) throws FeatureCalcException {
 		
 		if (!params.getResOptional().isPresent()) {
 			throw new FeatureCalcException("This feature requires an Image-Res in the input");
@@ -88,21 +91,19 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 		Point3d cog1 = params.getFirst().centerOfGravity();
 		Point3d cog2 = params.getSecond().centerOfGravity();
 		
-		double dist = calcDist(cog1, cog2);
+		double distance = calcDistance(cog1, cog2);
 		try {
-			double maxDist = calcMaxDist(
+			return distance > calcMaxDistance(
 				cog1,
 				cog2,
 				params.getResOptional()
 			);
-			
-			return dist > maxDist;
 		} catch (OperationFailedException e) {
 			throw new FeatureCalcException(e);
 		}
 	}
 	
-	private double calcDist( Point3d cog1, Point3d cog2 ) {
+	private double calcDistance( Point3d cog1, Point3d cog2 ) {
 		if (suppressZ) {
 			cog1.setZ(0);
 			cog2.setZ(0);
@@ -111,33 +112,8 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 	}
 
 	// We measure the euclidian distance between centre-points
-	private double calcMaxDist( Point3d cog1, Point3d cog2, Optional<ImageResolution> res ) throws OperationFailedException {
+	private double calcMaxDistance( Point3d cog1, Point3d cog2, Optional<ImageResolution> res ) throws OperationFailedException {
 		DirectionVector vec = DirectionVector.createBetweenTwoPoints( cog1, cog2 );
 		return maxDistance.resolve(res, vec);
 	}
-
-	public UnitValueDistance getMaxDistance() {
-		return maxDistance;
-	}
-
-	public void setMaxDistance(UnitValueDistance maxDistance) {
-		this.maxDistance = maxDistance;
-	}
-
-	public double getMinOverlap() {
-		return minOverlap;
-	}
-
-	public void setMinOverlap(double minOverlap) {
-		this.minOverlap = minOverlap;
-	}
-
-	public boolean isSuppressZ() {
-		return suppressZ;
-	}
-
-	public void setSuppressZ(boolean suppressZ) {
-		this.suppressZ = suppressZ;
-	}
-
 }

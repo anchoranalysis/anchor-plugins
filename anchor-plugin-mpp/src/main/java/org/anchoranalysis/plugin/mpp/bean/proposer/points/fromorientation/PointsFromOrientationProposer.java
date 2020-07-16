@@ -44,6 +44,6 @@ public abstract class PointsFromOrientationProposer extends NullParamsBean<Point
 	
 	public abstract void clearVisualizationState();
 	
-	// Optionally one can specify a maxDist used to find a contour point, -1 disables
+	// Optionally one can specify a maxDistance used to find a contour point, -1 disables
 	public abstract List<List<Point3i>> calcPoints( Point3d centrePoint, Orientation orientation, boolean do3D, RandomNumberGenerator re, boolean forwardDirectionOnly ) throws TraverseOutlineException;
 }

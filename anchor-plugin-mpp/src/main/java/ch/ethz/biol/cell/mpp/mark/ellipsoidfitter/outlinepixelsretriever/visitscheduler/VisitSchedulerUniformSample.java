@@ -54,8 +54,8 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	private VisitScheduler selected;
 	
 	@Override
-	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
-		return selected.maxDistFromRootPoint(res);
+	public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res) throws OperationFailedException {
+		return selected.maxDistanceFromRootPoint(res);
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i point, int distAlongContour, ObjectMask object) {
-		return selected.considerVisit(point, distAlongContour, object);
+	public boolean considerVisit(Point3i point, int distanceAlongContour, ObjectMask object) {
+		return selected.considerVisit(point, distanceAlongContour, object);
 	}
 }

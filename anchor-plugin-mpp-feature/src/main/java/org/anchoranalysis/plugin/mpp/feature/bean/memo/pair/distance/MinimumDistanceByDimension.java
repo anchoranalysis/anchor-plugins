@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.dist;
+package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
  * @author Owen Feehan
  *
  */
-public class MinDistByDim extends FeaturePairMemo {
+public class MinimumDistanceByDimension extends FeaturePairMemo {
 
 	@Override
 	public double calc( SessionInput<FeatureInputPairMemo> input ) {

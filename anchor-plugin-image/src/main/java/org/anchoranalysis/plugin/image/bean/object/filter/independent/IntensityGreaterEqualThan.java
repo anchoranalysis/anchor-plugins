@@ -117,7 +117,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
 	private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
 		return (int) Math.ceil(
-			threshold.rslvForAxis(
+			threshold.resolveForAxis(
 				dim.map(ImageDimensions::getRes),
 				AxisType.X
 			)

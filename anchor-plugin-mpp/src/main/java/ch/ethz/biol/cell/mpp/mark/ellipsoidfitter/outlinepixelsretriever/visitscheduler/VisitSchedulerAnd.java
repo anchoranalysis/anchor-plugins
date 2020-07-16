@@ -48,31 +48,31 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public Optional<Tuple3i> maxDistFromRootPoint(ImageResolution res) throws OperationFailedException {
+	public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res) throws OperationFailedException {
 		
-		Optional<Tuple3i> maxDist = Optional.empty();
+		Optional<Tuple3i> maxDistance = Optional.empty();
 		
 		for( VisitScheduler vs : list ) {
 			
-			Optional<Tuple3i> dist = vs.maxDistFromRootPoint(res);
+			Optional<Tuple3i> distance = vs.maxDistanceFromRootPoint(res);
 			
-			// Skip if it doesn't return a maxDist
-			if (!dist.isPresent()) {
+			// Skip if it doesn't return a max-distance
+			if (!distance.isPresent()) {
 				continue;
 			}
 			
-			if (!maxDist.isPresent()) {
-				maxDist = Optional.of(
-					new Point3i(dist.get())
+			if (!maxDistance.isPresent()) {
+				maxDistance = Optional.of(
+					new Point3i(distance.get())
 				);
 			} else {
-				maxDist = Optional.of(
-					maxDist.get().min(dist.get())
+				maxDistance = Optional.of(
+					maxDistance.get().min(distance.get())
 				);
 			}
 		}
 		
-		return maxDist;
+		return maxDistance;
 	}
 
 	@Override
@@ -95,9 +95,9 @@ public class VisitSchedulerAnd extends VisitScheduler {
 	}
 
 	@Override
-	public boolean considerVisit(Point3i point, int distAlongContour, ObjectMask object) {
+	public boolean considerVisit(Point3i point, int distanceAlongContour, ObjectMask object) {
 		for( VisitScheduler vs : list ) {
-			if (!vs.considerVisit(point, distAlongContour, object)) {
+			if (!vs.considerVisit(point, distanceAlongContour, object)) {
 				return false;
 			}
 		}
