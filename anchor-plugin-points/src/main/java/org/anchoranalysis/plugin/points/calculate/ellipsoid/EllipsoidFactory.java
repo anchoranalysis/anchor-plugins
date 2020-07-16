@@ -27,7 +27,6 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
  */
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;

@@ -30,7 +30,6 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.contour.Contour;
 
 public class ContourList extends ArrayList<Contour> {
