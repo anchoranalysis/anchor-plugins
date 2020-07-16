@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 import lombok.Getter;
@@ -56,7 +56,7 @@ public class BinaryChannelAsSingleObject<T extends FeatureInputNRG> extends Feat
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
-	private BinaryChnl chnl;
+	private Mask chnl;
 	
 	@Override
 	protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {

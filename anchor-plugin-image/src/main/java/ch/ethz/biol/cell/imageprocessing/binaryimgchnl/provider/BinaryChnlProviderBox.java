@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -58,7 +58,7 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl bic ) throws CreateException {
+	public Mask createFromChnl( Mask bic ) throws CreateException {
 		
 		if (slicesSeperately) {
 			Extent e = bic.getDimensions().getExtent();

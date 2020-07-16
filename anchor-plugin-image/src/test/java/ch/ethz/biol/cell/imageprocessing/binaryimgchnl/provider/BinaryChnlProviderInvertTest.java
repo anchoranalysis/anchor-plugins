@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.junit.Test;
 import static ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlFixture.*;
@@ -89,9 +89,9 @@ public class BinaryChnlProviderInvertTest {
 	
 	private static void testRectangle(boolean do3D, boolean mask, long expectedNumPixelsAfter) throws CreateException {
 		
-		BinaryChnl chnlBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
+		Mask chnlBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
 		
-		Optional<BinaryChnl> chnlMask = createMask(do3D, mask);
+		Optional<Mask> chnlMask = createMask(do3D, mask);
 		
 		assertPixelsOn(
 			"before",
@@ -99,7 +99,7 @@ public class BinaryChnlProviderInvertTest {
 			chnlBefore
 		);
 		
-		BinaryChnl chnlAfter = createProviderInvert(chnlBefore, chnlMask).create(); 
+		Mask chnlAfter = createProviderInvert(chnlBefore, chnlMask).create(); 
 		
 		assertPixelsOn(
 			"after",
@@ -108,7 +108,7 @@ public class BinaryChnlProviderInvertTest {
 		);
 	}
 	
-	private static Optional<BinaryChnl> createMask(boolean do3D, boolean mask) throws CreateException {
+	private static Optional<Mask> createMask(boolean do3D, boolean mask) throws CreateException {
 		if (mask) {
 			return Optional.of(
 				createWithRectangle(CORNER_MASK, do3D)		
@@ -118,7 +118,7 @@ public class BinaryChnlProviderInvertTest {
 		}
 	}
 	
-	private static BinaryChnlProvider createProviderInvert(BinaryChnl chnl, Optional<BinaryChnl> mask) {
+	private static BinaryChnlProvider createProviderInvert(Mask chnl, Optional<Mask> mask) {
 		BinaryChnlProviderInvert provider = new BinaryChnlProviderInvert();
 		provider.setBinaryChnl(
 			ProviderFixture.providerFor(chnl)
@@ -131,7 +131,7 @@ public class BinaryChnlProviderInvertTest {
 		return provider;
 	}
 	
-	private static void assertPixelsOn(String messagePrefix, long expectedNumPixels, BinaryChnl chnl ) {
+	private static void assertPixelsOn(String messagePrefix, long expectedNumPixels, Mask chnl ) {
 		assertEquals( messagePrefix + "PixelsOn", expectedNumPixels, chnl.binaryVoxelBox().countOn() );
 	}
 	

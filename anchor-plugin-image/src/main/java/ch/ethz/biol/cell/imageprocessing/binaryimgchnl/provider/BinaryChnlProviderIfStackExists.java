@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 
 // If a param is equal to a particular value, do soemthing
@@ -41,7 +41,7 @@ public class BinaryChnlProviderIfStackExists extends BinaryChnlProviderElseBase 
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected boolean condition(BinaryChnl chnl) throws CreateException {
+	protected boolean condition(Mask chnl) throws CreateException {
 		return getInitializationParameters().getChnlCollection().keys().contains(stackID);
 	}
 	

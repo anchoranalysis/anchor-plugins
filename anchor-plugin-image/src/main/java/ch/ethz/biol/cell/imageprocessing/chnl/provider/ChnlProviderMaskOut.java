@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 	
 	@Override
-	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
 
 		VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
 		

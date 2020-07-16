@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -52,7 +52,7 @@ class HistogramExtracter {
 		
 		try {
 			if (!keyMask.isEmpty()) {
-				BinaryChnl mask = extractMask(keyMask);
+				Mask mask = extractMask(keyMask);
 				return HistogramFactory.create( chnl, mask );
 			} else {
 				return HistogramFactory.create( chnl );	
@@ -63,10 +63,10 @@ class HistogramExtracter {
 		}
 	}
 		
-	private BinaryChnl extractMask( String stackName ) throws JobExecutionException {
+	private Mask extractMask( String stackName ) throws JobExecutionException {
 		try {
 			Channel chnl = source.extractChnl(stackName, false);
-			return new BinaryChnl(chnl, createMaskBinaryValues() );
+			return new Mask(chnl, createMaskBinaryValues() );
 			
 		} catch (OperationFailedException e) {
 			throw new JobExecutionException(e);

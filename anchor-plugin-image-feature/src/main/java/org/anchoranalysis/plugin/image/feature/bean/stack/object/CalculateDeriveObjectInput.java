@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -54,7 +54,7 @@ public class CalculateDeriveObjectInput extends FeatureCalculation<FeatureInputS
 		
 		NRGStackWithParams nrgStack = input.getNrgStackRequired();
 
-		BinaryChnl binary = new BinaryChnl(
+		Mask binary = new Mask(
 			nrgStack.getChnl(nrgIndex),
 			BinaryValues.getDefault()
 		);

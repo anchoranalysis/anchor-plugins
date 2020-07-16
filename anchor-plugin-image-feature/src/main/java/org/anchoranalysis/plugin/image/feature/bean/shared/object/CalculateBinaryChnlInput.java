@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -44,7 +44,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor @EqualsAndHashCode(callSuper=false)
 class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalculation<FeatureInputSingleObject, T> {
 
-	private final BinaryChnl chnl;
+	private final Mask chnl;
 
 	@Override
 	protected FeatureInputSingleObject execute(T input) throws FeatureCalcException {
@@ -57,7 +57,7 @@ class CalculateBinaryChnlInput<T extends FeatureInputNRG> extends FeatureCalcula
 		);
 	}
 	
-	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( BinaryChnl bic ) throws FeatureCalcException {
+	private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox( Mask bic ) throws FeatureCalcException {
 		VoxelBox<ByteBuffer> vb;
 		try {
 			vb = bic.getChannel().getVoxelBox().asByte();

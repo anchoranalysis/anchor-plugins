@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -52,7 +52,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromMaskedChnl(Channel chnlSrc, BinaryChnl binaryImgChnl) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnlSrc, Mask binaryImgChnl) throws CreateException {
 				
 		assign(
 			chnlSrc,
@@ -63,7 +63,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
 		return chnlSrc;
 	}
 	
-	private void assign( Channel chnlSrc, Channel chnlAssignFrom, BinaryChnl mask) {
+	private void assign( Channel chnlSrc, Channel chnlAssignFrom, Mask mask) {
 		
 		ObjectMask object = CreateFromEntireChnlFactory.createObject(mask);
 		BoundingBox bbox = new BoundingBox( chnlSrc.getDimensions().getExtent() );

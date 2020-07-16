@@ -52,41 +52,43 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class XYOrientationExtendToZ extends PointsProposer {
 	
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private OrientationProposer orientationXYProposer;		// Should find an orientation in the XY plane
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private BinaryChnlProvider binaryChnl;
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private BinaryChnlProvider binaryChnlFilled;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private ScalarProposer maxDistanceZ;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private int minNumSlices = 3;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private boolean forwardDirectionOnly = false;
 	
 	// If we reach this amount of slices without adding a point, we consider our job over
-	@BeanField
+	@BeanField @Getter @Setter
 	private UnitValueDistance distanceZEndIfEmpty = new UnitValueDistanceVoxels(1000000);
 	// END BEAN PROPERTIES
 
@@ -95,6 +97,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	@Override
 	public Optional<List<Point3i>> propose(Point3d pnt, Mark mark, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) throws ProposalAbnormalFailureException {
 		pointsFromOrientationXYProposer.clearVisualizationState();
+		
 		Optional<Orientation> orientation = orientationXYProposer.propose(
 			mark,
 			dim,
@@ -110,6 +113,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 	public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
 		
 		CreateProposeVisualizationList list = new CreateProposeVisualizationList();
+		
 		list.add( pointsFromOrientationXYProposer.proposalVisualization(detailed) );
 
 		list.add( cfg -> {
@@ -120,22 +124,34 @@ public class XYOrientationExtendToZ extends PointsProposer {
 				);
 			}
 		});
+		
 		return Optional.of(list);
 	}
 	
-	private Optional<List<Point3i>> proposeFromOrientation(Orientation orientation, Point3d pnt, ImageDimensions dim, RandomNumberGenerator re, ErrorNode errorNode) {
+	private Optional<List<Point3i>> proposeFromOrientation(
+		Orientation orientation,
+		Point3d point,
+		ImageDimensions dimensions,
+		RandomNumberGenerator randomNumberGenerator,
+		ErrorNode errorNode
+	) {
 		try {
-			List<List<Point3i>> pntsXY = getPointsFromOrientationXYProposer().calcPoints( pnt, orientation, dim.getZ()>1, re, forwardDirectionOnly );
-
-			lastPntsAll = GeneratePointsHelper.generatePoints(
-				pnt,
-				pntsXY,
-				maxZDist(re, dim.getRes()),
-				skipZDist(dim.getRes()),
-				binaryChnl.create(),
-				chnlFilled(),
-				dim
+			List<List<Point3i>> pointsXY = getPointsFromOrientationXYProposer().calcPoints(
+				point,
+				orientation,
+				dimensions.getZ()>1,
+				randomNumberGenerator,
+				forwardDirectionOnly
 			);
+
+			lastPntsAll = new GeneratePointsHelper(
+				point,
+				chnlFilled(),
+				maxZDist(randomNumberGenerator, dimensions.getRes()),
+				skipZDist(dimensions.getRes()),
+				binaryChnl.create(),
+				dimensions
+			).generatePoints(pointsXY);
 			return Optional.of(lastPntsAll);
 			
 		} catch (CreateException | OperationFailedException | TraverseOutlineException e1) {
@@ -144,9 +160,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		}
 	}
 	
-	private int maxZDist(RandomNumberGenerator re, ImageResolution res) throws OperationFailedException {
+	private int maxZDist(RandomNumberGenerator randomNumberGenerator, ImageResolution resolution) throws OperationFailedException {
 		int maxZDist = (int) Math.round(
-			maxDistanceZ.propose(re, res)
+			maxDistanceZ.propose(randomNumberGenerator, resolution)
 		);
 		maxZDist = Math.max(maxZDist, minNumSlices);
 		return maxZDist;
@@ -161,77 +177,12 @@ public class XYOrientationExtendToZ extends PointsProposer {
 		);
 	}
 	
-	private Optional<BinaryChnl> chnlFilled() throws CreateException {
+	private Optional<Mask> chnlFilled() throws CreateException {
 		return binaryChnlFilled!=null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
 	}
 	
 	@Override
 	public boolean isCompatibleWith(Mark testMark) {
 		return orientationXYProposer.isCompatibleWith(testMark);
-	}
-
-	public UnitValueDistance getDistanceZEndIfEmpty() {
-		return distanceZEndIfEmpty;
-	}
-
-	public void setDistanceZEndIfEmpty(UnitValueDistance distanceZEndIfEmpty) {
-		this.distanceZEndIfEmpty = distanceZEndIfEmpty;
-	}
-
-	public int getMinNumSlices() {
-		return minNumSlices;
-	}
-
-	public void setMinNumSlices(int minNumSlices) {
-		this.minNumSlices = minNumSlices;
-	}
-
-	public ScalarProposer getMaxDistanceZ() {
-		return maxDistanceZ;
-	}
-
-	public void setMaxDistanceZ(ScalarProposer maxDistanceZ) {
-		this.maxDistanceZ = maxDistanceZ;
-	}
-
-	public boolean isForwardDirectionOnly() {
-		return forwardDirectionOnly;
-	}
-
-	public void setForwardDirectionOnly(boolean forwardDirectionOnly) {
-		this.forwardDirectionOnly = forwardDirectionOnly;
-	}
-		
-	public OrientationProposer getOrientationXYProposer() {
-		return orientationXYProposer;
-	}
-
-	public void setOrientationXYProposer(OrientationProposer orientationXYProposer) {
-		this.orientationXYProposer = orientationXYProposer;
-	}
-
-	public PointsFromOrientationProposer getPointsFromOrientationXYProposer() {
-		return pointsFromOrientationXYProposer;
-	}
-
-	public void setPointsFromOrientationXYProposer(
-			PointsFromOrientationProposer pointsFromOrientationXYProposer) {
-		this.pointsFromOrientationXYProposer = pointsFromOrientationXYProposer;
-	}
-
-	public BinaryChnlProvider getBinaryChnl() {
-		return binaryChnl;
-	}
-
-	public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-		this.binaryChnl = binaryChnl;
-	}
-
-	public BinaryChnlProvider getBinaryChnlFilled() {
-		return binaryChnlFilled;
-	}
-
-	public void setBinaryChnlFilled(BinaryChnlProvider binaryChnlFilled) {
-		this.binaryChnlFilled = binaryChnlFilled;
 	}
 }

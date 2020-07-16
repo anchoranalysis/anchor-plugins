@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.IJWrap;
@@ -85,13 +85,13 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 	}
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl binaryChnl ) throws CreateException {
+	public Mask createFromChnl( Mask binaryChnl ) throws CreateException {
 		
 		BinaryVoxelBox<ByteBuffer> bvb = binaryChnl.binaryVoxelBox();
 		
 		try {
 			BinaryVoxelBox<ByteBuffer> bvbOut = doCommand( bvb, command, iterations); 
-			return new BinaryChnl(
+			return new Mask(
 				bvbOut,
 				binaryChnl.getDimensions().getRes(),
 				ChannelFactory.instance().get( VoxelDataTypeUnsignedByte.INSTANCE )

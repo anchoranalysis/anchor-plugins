@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -87,7 +87,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 		ObjectCollection masks = seeds.createMasks();
 				
 		// We need 255 for the landini algorithms to work
-		BinaryChnl markerMask = BinaryChnlFromObjects.createFromObjects(
+		Mask markerMask = BinaryChnlFromObjects.createFromObjects(
 			masks,
 			chnl.getDimensions(),
 			masks.getFirstBinaryValues()

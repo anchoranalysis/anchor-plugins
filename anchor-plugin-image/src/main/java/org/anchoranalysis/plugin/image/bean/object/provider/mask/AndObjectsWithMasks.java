@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -68,14 +68,14 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
 		);
 	}
 	
-	private ObjectCollection createFromObjects(ObjectCollection objects, BinaryChnl mask) {
+	private ObjectCollection createFromObjects(ObjectCollection objects, Mask mask) {
 		objects.forEach( objectMask ->
 			applyMask(objectMask, mask)
 		);
 		return objects;
 	}
 	
-	private static void applyMask( ObjectMask object, BinaryChnl mask ) {
+	private static void applyMask( ObjectMask object, Mask mask ) {
 		
 		// Just the portion of the mask that matches the bounding box of our object
 		ObjectMask maskObject = mask.region(object.getBoundingBox(), true);

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -51,7 +51,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 	// END BEAN PROPERTIES
 
 	@Override
-	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
+	public Mask createFromChnl(Mask chnl) throws CreateException {
 		
 		Channel chnlIn = chnl.getChannel();
 		VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
@@ -76,7 +76,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 			}
 		}
 		
-		return new BinaryChnl( chnlOut, chnl.getBinaryValues() );
+		return new Mask( chnlOut, chnl.getBinaryValues() );
 	}
 
 	public ImageDimProvider getDim() {

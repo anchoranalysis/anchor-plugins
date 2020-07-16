@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +51,7 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 	private boolean duplicate=false;
 	// END BEAN PROPERTIES
 	
-	private BinaryChnl bi;
+	private Mask bi;
 	
 	public BinaryChnlProviderReference(String id) {
 		super();
@@ -59,7 +59,7 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 	}
 
 	@Override
-	public BinaryChnl create() throws CreateException {
+	public Mask create() throws CreateException {
 		assert( this.isInitialized() );
 		if (bi==null) {
 			bi = createChnl();
@@ -67,9 +67,9 @@ public class BinaryChnlProviderReference extends BinaryChnlProvider {
 		return bi;
 	}
 	
-	private BinaryChnl createChnl() throws CreateException {
+	private Mask createChnl() throws CreateException {
 		try {
-			BinaryChnl chnl = getInitializationParameters().getBinaryImageCollection().getException(id);
+			Mask chnl = getInitializationParameters().getBinaryImageCollection().getException(id);
 			
 			if (duplicate) {
 				return chnl.duplicate();

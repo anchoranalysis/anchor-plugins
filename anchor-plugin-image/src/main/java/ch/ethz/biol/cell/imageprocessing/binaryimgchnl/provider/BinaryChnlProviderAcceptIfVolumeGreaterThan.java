@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,7 +42,7 @@ public class BinaryChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProvi
 	// END BEAN PROPERTIES
 
 	@Override
-	protected BinaryChnl createFromChnlReceive(BinaryChnl larger, BinaryChnl smaller) throws CreateException {
+	protected Mask createFromChnlReceive(Mask larger, Mask smaller) throws CreateException {
 		int countLarger = larger.countHighValues();
 		int countSmaller = smaller.countHighValues();
 		

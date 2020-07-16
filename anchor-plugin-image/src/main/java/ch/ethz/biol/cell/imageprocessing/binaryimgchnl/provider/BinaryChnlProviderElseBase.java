@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
 
@@ -40,7 +40,7 @@ public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
+	protected Mask createFromChnl(Mask chnl) throws CreateException {
 		if (condition(chnl)) {
 			return chnl;
 		} else {
@@ -49,7 +49,7 @@ public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
 	}
 	
 	/** If this evaluates true, the binary-channel will be returned as-is, otherwise {@link binaryChnlElse} is returned */
-	protected abstract boolean condition(BinaryChnl chnl) throws CreateException;
+	protected abstract boolean condition(Mask chnl) throws CreateException;
 	
 	public BinaryChnlProvider getBinaryChnlElse() {
 		return binaryChnlElse;

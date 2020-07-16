@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
@@ -61,7 +61,7 @@ class CalcOutlineRGB {
 	 * @throws InitException
 	 */
 	public static Stack apply(
-		BinaryChnl outline,
+		Mask outline,
 		DisplayStack background,
 		Channel blueToAssign,
 		boolean createShort	
@@ -90,7 +90,7 @@ class CalcOutlineRGB {
 	
 	
 	public static Stack apply(
-		BinaryChnl outline,
+		Mask outline,
 		Channel backgroundRed,
 		Channel backgroundGreen,
 		Channel backgroundBlue,
@@ -120,7 +120,7 @@ class CalcOutlineRGB {
 		);
 	}
 	
-	private static Channel imposeOutlineOnChnl(BinaryChnl outline, Channel chnl,VoxelDataType outputType) {
+	private static Channel imposeOutlineOnChnl(Mask outline, Channel chnl,VoxelDataType outputType) {
 				
 		double multFact = (double) outputType.maxValue() / outline.getChannel().getVoxelDataType().maxValue();
 		
@@ -132,7 +132,7 @@ class CalcOutlineRGB {
 		);
 	}
 	
-	private static void zeroPixels( BinaryChnl outline, Channel[] chnlArr ) {
+	private static void zeroPixels( Mask outline, Channel[] chnlArr ) {
 		ObjectMask objectOutline = CreateFromEntireChnlFactory.createObject(outline);
 		for( Channel chnl : chnlArr ) {
 			chnl.getVoxelBox().any().setPixelsCheckMask(objectOutline, 0);

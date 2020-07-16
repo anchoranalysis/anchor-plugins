@@ -40,7 +40,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -181,7 +181,7 @@ public class ScaleTask extends RasterTask {
 				
 				Channel chnlOut;
 				if (forceBinary) {
-					BinaryChnl binaryImg = new BinaryChnl(chnlIn, BinaryValues.getDefault() );
+					Mask binaryImg = new Mask(chnlIn, BinaryValues.getDefault() );
 					chnlOut = BinaryChnlProviderScaleXY.scale(
 						binaryImg,
 						scaleCalculator,

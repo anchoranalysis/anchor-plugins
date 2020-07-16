@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -68,7 +68,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 	@Override
 	public Stack create() throws CreateException {
 		
-		BinaryChnl maskChnl = mask.create();
+		Mask maskChnl = mask.create();
 				
 		try {
 			boolean do3D = !mip || maskChnl.getDimensions().getZ()==1;
@@ -102,14 +102,14 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
 		}
 	}
 	
-	private BinaryChnl calcOutline( BinaryChnl mask ) throws OperationFailedException {
-		BinaryChnl maskIn = mip ? mask.maxIntensityProj() : mask.duplicate(); 
+	private Mask calcOutline( Mask mask ) throws OperationFailedException {
+		Mask maskIn = mip ? mask.maxIntensityProj() : mask.duplicate(); 
 		
 		// We calculate outline of mask
 		return createOutline(maskIn);
 	}
 	
-	private BinaryChnl createOutline( BinaryChnl maskIn ) throws OperationFailedException {
+	private Mask createOutline( Mask maskIn ) throws OperationFailedException {
 		// We calculate outline of mask
 		BinaryChnlProviderOutline cpOutline = new BinaryChnlProviderOutline();
 		cpOutline.setForce2D(force2D);

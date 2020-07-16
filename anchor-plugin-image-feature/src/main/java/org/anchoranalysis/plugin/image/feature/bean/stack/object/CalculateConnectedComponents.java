@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -47,7 +47,7 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
 	protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalcException {
 		
 		try {
-			BinaryChnl binaryImgChnl = new BinaryChnl(
+			Mask binaryImgChnl = new Mask(
 				input.getNrgStackRequired().getChnl(nrgChnlIndex),
 				BinaryValues.getDefault()
 			);

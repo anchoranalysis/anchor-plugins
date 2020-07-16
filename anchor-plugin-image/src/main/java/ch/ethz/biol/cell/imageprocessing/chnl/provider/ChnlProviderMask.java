@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 
 /**
@@ -50,11 +50,11 @@ public abstract class ChnlProviderMask extends ChnlProvider {
 	
 	@Override
 	public Channel create() throws CreateException {
-		BinaryChnl maskChnl = mask.create();
+		Mask maskChnl = mask.create();
 		return createFromMask(maskChnl);
 	}
 	
-	protected abstract Channel createFromMask(BinaryChnl mask) throws CreateException;
+	protected abstract Channel createFromMask(Mask mask) throws CreateException;
 
 	public BinaryChnlProvider getMask() {
 		return mask;
