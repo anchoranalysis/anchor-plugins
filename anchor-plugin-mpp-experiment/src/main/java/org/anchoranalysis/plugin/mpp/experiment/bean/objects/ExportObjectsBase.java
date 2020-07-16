@@ -56,11 +56,11 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 	 * Adds padding (if set) to an object-mask
 	 * 
 	 * @param object object-mask to be padded
-	 * @param dim size of image
+	 * @param dimensions size of image
 	 * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
 	 * @throws OutputWriteFailedException
 	 */
-	protected ObjectMask maybePadObject( ObjectMask object, ImageDimensions dim ) {
+	protected ObjectMask maybePadObject( ObjectMask object, ImageDimensions dimensions ) {
 		
 		if (paddingXY==0 && paddingZ==0) {
 			return object;
@@ -68,7 +68,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
 		
 		BoundingBox bboxToExtract = object.getBoundingBox().growBy(
 			new Point3i(paddingXY, paddingXY, paddingZ),
-			dim.getExtent()
+			dimensions.getExtent()
 		);
 		
 		return BoundingBoxUtilities.createObjectForBoundingBox(object, bboxToExtract);

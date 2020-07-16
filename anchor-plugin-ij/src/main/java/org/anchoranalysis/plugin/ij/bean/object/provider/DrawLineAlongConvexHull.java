@@ -54,9 +54,9 @@ public class DrawLineAlongConvexHull extends ObjectCollectionProviderWithDimensi
 	
 	@Override
 	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
-		ImageDimensions dim = createDimensions();
+		ImageDimensions dimensions = createDimensions();
 		return objects.stream().map( object ->
-			transform(object,dim)
+			transform(object,dimensions)
 		);
 	}
 	

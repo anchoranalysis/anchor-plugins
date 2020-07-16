@@ -74,8 +74,7 @@ public class FromCfg extends ObjectCollectionProvider {
 		return cfg.calcMask(
 			dims,
 			regionMap.membershipWithFlagsForIndex(regionID),
-			BinaryValuesByte.getDefault(),
-			null
+			BinaryValuesByte.getDefault()
 		).withoutProperties();
 	}
 

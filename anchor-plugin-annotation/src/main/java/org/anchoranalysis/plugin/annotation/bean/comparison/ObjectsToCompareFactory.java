@@ -52,14 +52,14 @@ class ObjectsToCompareFactory {
 	public static Optional<ObjectsToCompare> create(
 		AnnotationComparisonInput<ProvidesStackInput> input,
 		IAddAnnotation<?> addAnnotation,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		BoundIOContext context
 	) throws JobExecutionException {
 
 		// Both objects need to be found
 		return OptionalUtilities.mapBoth(
-			createObjects(true, "leftObj", addAnnotation, input, dim, context),
-			createObjects(false,"rightObj", addAnnotation, input, dim, context),
+			createObjects(true, "leftObj", addAnnotation, input, dimensions, context),
+			createObjects(false,"rightObj", addAnnotation, input, dimensions, context),
 			ObjectsToCompare::new
 		);
 	}
@@ -69,10 +69,10 @@ class ObjectsToCompareFactory {
 		String objName,
 		IAddAnnotation<?> addAnnotation,
 		AnnotationComparisonInput<ProvidesStackInput> input,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		BoundIOContext context
 	) throws JobExecutionException {
-		Findable<ObjectCollection> findable = createFindable(left, input, dim, context.isDebugEnabled() );
+		Findable<ObjectCollection> findable = createFindable(left, input, dimensions, context.isDebugEnabled() );
 		return foundOrLogAddUnnannotated(findable, objName, addAnnotation, context.getLogger());
 	}
 	
@@ -92,13 +92,13 @@ class ObjectsToCompareFactory {
 	private static Findable<ObjectCollection> createFindable(
 		boolean left,
 		AnnotationComparisonInput<ProvidesStackInput> input,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		boolean debugMode
 	) throws JobExecutionException {
 		try {
 			return input.getComparerMultiplex(left).createObjects(
 				input.pathForBindingRequired(),
-				dim,
+				dimensions,
 				debugMode
 			);
 		} catch (CreateException | AnchorIOException e) {

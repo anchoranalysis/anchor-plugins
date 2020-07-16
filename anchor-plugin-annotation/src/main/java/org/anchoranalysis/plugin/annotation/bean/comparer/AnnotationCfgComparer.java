@@ -57,7 +57,7 @@ public class AnnotationCfgComparer extends Comparer {
 	}
 	
 	@Override
-	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dimensions, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {
@@ -83,10 +83,9 @@ public class AnnotationCfgComparer extends Comparer {
 		}
 		
 		ObjectCollectionWithProperties omwp = annotation.get().getCfg().calcMask(
-			dim,
+			dimensions,
 			annotation.get().getRegionMap().membershipWithFlagsForIndex(annotation.get().getRegionID()),
-			BinaryValuesByte.getDefault(),
-			null
+			BinaryValuesByte.getDefault()
 		); 
 		return new Found<>(omwp.withoutProperties());
 	}

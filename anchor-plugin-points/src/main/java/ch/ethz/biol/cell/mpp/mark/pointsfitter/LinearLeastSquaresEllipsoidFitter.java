@@ -73,7 +73,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 	}
 	
 	@Override
-	public void fit(List<Point3f> points, Mark mark, ImageDimensions dim) throws PointsFitterException {
+	public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions) throws PointsFitterException {
 
 		DoubleMatrix2D matCInverse = InverseHelper.inverseFor(
 			MatrixCreator.createConstraintMatrix().viewPart(0, 0, 6, 6)
@@ -85,7 +85,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 		
 		createFitResultFromMatS(matS, matCInverse).applyFitResultToMark(
 			(MarkEllipsoid) mark,
-			dim,
+			dimensions,
 			getShellRad()
 		);
 	}

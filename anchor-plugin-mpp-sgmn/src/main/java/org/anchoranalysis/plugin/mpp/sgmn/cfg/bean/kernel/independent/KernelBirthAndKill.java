@@ -145,9 +145,9 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
+			double poissonIntensity, ImageDimensions dimensions, double densityRatio) {
 		
-        double num = getProbNeg() * sceneSize.getVolume() * poissonIntensity;
+        double num = getProbNeg() * dimensions.getVolume() * poissonIntensity;
         double dem = getProbPos() * propSize;
         
         assert num>0;

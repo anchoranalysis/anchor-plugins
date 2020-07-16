@@ -48,16 +48,16 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class GuessDimFromInputImage extends ImageDimProvider {
 
-	private ImageDimensions dim;
+	private ImageDimensions dimensions;
 
 	@Override
 	public ImageDimensions create() throws CreateException {
 
-		if (dim==null) {
-			dim = takeDimFromStackCollection( getInitializationParameters().getStackCollection() );
+		if (dimensions==null) {
+			dimensions = takeDimFromStackCollection( getInitializationParameters().getStackCollection() );
 		}
 		
-		return dim;
+		return dimensions;
 	}
 	
 	private ImageDimensions takeDimFromStackCollection( NamedProviderStore<Stack> stackCollection ) throws CreateException {

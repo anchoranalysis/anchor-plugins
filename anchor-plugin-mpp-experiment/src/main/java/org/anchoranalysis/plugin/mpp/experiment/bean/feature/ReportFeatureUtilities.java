@@ -65,7 +65,7 @@ class ReportFeatureUtilities {
 		for( ReportFeature<T> feat : list) {
 			String value;
 			try {
-				value = feat.genFeatureStrFor( obj, logger );
+				value = feat.genFeatureStringFor( obj, logger );
 			} catch (OperationFailedException e) {
 				value = "error";
 				logger.errorReporter().recordError(ReportFeatureUtilities.class, e);

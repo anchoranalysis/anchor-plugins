@@ -28,28 +28,26 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.image.extent.ImageDimensions;
 
+import lombok.AllArgsConstructor;
+
 // Wrap with a nicer toString() representation
+@AllArgsConstructor
 class WrappedImageDim implements Comparable<WrappedImageDim> {
 	
-	private ImageDimensions dim;
+	private final ImageDimensions dimensions;
 	
-	public WrappedImageDim(ImageDimensions dim) {
-		super();
-		this.dim = dim;
-	}
-
 	@Override
 	public String toString() {
 		// Whether we display in 3d form or 2d is dependent on if there's more than 1 z-slice
-		if (dim.getZ()>1) {
-			return String.format("%dx%dx%d", dim.getX(), dim.getY(), dim.getZ() );
+		if (dimensions.getZ()>1) {
+			return String.format("%dx%dx%d", dimensions.getX(), dimensions.getY(), dimensions.getZ() );
 		} else {
-			return String.format("%dx%d", dim.getX(), dim.getY() );
+			return String.format("%dx%d", dimensions.getX(), dimensions.getY() );
 		}
 	}
 
 	public int hashCode() {
-		return dim.hashCode();
+		return dimensions.hashCode();
 	}
 
 	@Override
@@ -62,12 +60,12 @@ class WrappedImageDim implements Comparable<WrappedImageDim> {
 		}
 		
 		WrappedImageDim objCast = (WrappedImageDim) obj;
-		return dim.equals(objCast.dim);
+		return dimensions.equals(objCast.dimensions);
 	}
 
 	@Override
 	public int compareTo(WrappedImageDim other) {
 		// Order by volume, smaller first
-		return Long.compare(dim.getVolume(), other.dim.getVolume() );
+		return Long.compare(dimensions.getVolume(), other.dimensions.getVolume() );
 	}
 }

@@ -80,7 +80,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 	}
 
 	@Override
-	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDimensions sceneSize,
+	public double calcAccptProb(int exstSize, int propSize, double poissonIntens, ImageDimensions dimensions,
 			double densityRatio) {
 		return Math.min( densityRatio, 1.0 );
 	}

@@ -49,16 +49,19 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private PixelScore pixelScore;
 	
-	@BeanField
+	@BeanField @Getter @Setter
 	private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
 	
-	@BeanField @OptionalBean
+	@BeanField @OptionalBean @Getter @Setter
 	private HistogramProvider histogramProvider;
 	// END BEAN PROPERTIES
 	
@@ -142,42 +145,17 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 		return out;
 	}
 
-	private List<Channel> additionalChnls( ImageDimensions dim ) throws CreateException {
+	private List<Channel> additionalChnls( ImageDimensions dimensions ) throws CreateException {
 		List<Channel> listAdditional = new ArrayList<>();
 		for( ChnlProvider cp : listAdditionalChnlProviders ) {
 			Channel chnlAdditional = cp.create();
 			
-			if (!chnlAdditional.getDimensions().equals(dim)) {
+			if (!chnlAdditional.getDimensions().equals(dimensions)) {
 				throw new CreateException("Dimensions of additional channel are not equal to main channel");
 			}
 			
 			listAdditional.add( chnlAdditional);
 		}
 		return listAdditional;
-	}
-	
-	public List<ChnlProvider> getListAdditionalChnlProviders() {
-		return listAdditionalChnlProviders;
-	}
-
-	public void setListAdditionalChnlProviders(
-			List<ChnlProvider> listAdditionalChnlProviders) {
-		this.listAdditionalChnlProviders = listAdditionalChnlProviders;
-	}
-
-	public HistogramProvider getHistogramProvider() {
-		return histogramProvider;
-	}
-
-	public void setHistogramProvider(HistogramProvider histogramProvider) {
-		this.histogramProvider = histogramProvider;
-	}
-
-	public PixelScore getPixelScore() {
-		return pixelScore;
-	}
-
-	public void setPixelScore(PixelScore pixelScore) {
-		this.pixelScore = pixelScore;
 	}
 }

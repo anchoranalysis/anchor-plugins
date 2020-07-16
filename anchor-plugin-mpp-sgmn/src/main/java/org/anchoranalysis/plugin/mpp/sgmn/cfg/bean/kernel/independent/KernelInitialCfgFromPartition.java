@@ -85,7 +85,7 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 		int exstSize,
 		int propSize,
 		double poissonIntensity,
-		ImageDimensions sceneSize,
+		ImageDimensions dimensions,
 		double densityRatio
 	) {
 		// We always accept

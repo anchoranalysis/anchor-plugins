@@ -57,7 +57,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dim, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
+	public boolean includeMarks(VoxelizedMarkMemo mark1, VoxelizedMarkMemo mark2, ImageDimensions dimensions, Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session, boolean do3D) throws IncludeMarksFailureException {
 		double d;
 		try {
 			d = distance.distance(mark1.getMark(), mark2.getMark());
@@ -67,7 +67,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
 		
 		try {
 			double thresholdVal = threshold.resolve(
-				Optional.of(dim.getRes()),
+				Optional.of(dimensions.getRes()),
 				mark1.getMark().centerPoint(),
 				mark2.getMark().centerPoint()
 			);

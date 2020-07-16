@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class VoxelPhysicalSize<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
 	@Override
-	protected double calcForAxis(ImageDimensions dim, AxisType axis) {
-		return dim.getRes().getValueByDimension(axis);
+	protected double calcForAxis(ImageDimensions dimensions, AxisType axis) {
+		return dimensions.getRes().getValueByDimension(axis);
 	}
 }

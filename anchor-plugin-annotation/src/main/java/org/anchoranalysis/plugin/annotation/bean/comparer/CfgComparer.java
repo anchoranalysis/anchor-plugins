@@ -62,7 +62,7 @@ public class CfgComparer extends Comparer {
 	);
 
 	@Override
-	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dim, boolean debugMode) throws CreateException {
+	public Findable<ObjectCollection> createObjects(Path filePathSource, ImageDimensions dimensions, boolean debugMode) throws CreateException {
 
 		Path filePath;
 		try {
@@ -84,10 +84,9 @@ public class CfgComparer extends Comparer {
 		}
 		
 		ObjectCollection mask = cfg.calcMask(
-			dim,
+			dimensions,
 			REGION_MEMBERSHIP,
-			BinaryValuesByte.getDefault(),
-			null
+			BinaryValuesByte.getDefault()
 		).withoutProperties();
 		return new Found<>(mask);
 	}

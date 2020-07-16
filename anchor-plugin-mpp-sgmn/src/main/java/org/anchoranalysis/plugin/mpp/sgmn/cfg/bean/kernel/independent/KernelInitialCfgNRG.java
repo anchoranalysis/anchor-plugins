@@ -106,7 +106,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntensity, ImageDimensions sceneSize, double densityRatio) {
+			double poissonIntensity, ImageDimensions dimensions, double densityRatio) {
 		// We always accept
 		return 1;
 	}

@@ -70,11 +70,11 @@ public class CfgProviderPointsFitterFromObjects extends CfgProvider {
 	@Override
 	public Cfg create() throws CreateException {
 		
-		ImageDimensions dim = pointsFitter.createDim();
+		ImageDimensions dimensions = pointsFitter.createDim();
 
 		return new Cfg(
 			pointsFitter.createObjects().stream().mapToListOptional(
-				object -> createMarkFromObject(object,dim)
+				object -> createMarkFromObject(object,dimensions)
 			)
 		);
 	}

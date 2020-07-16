@@ -94,13 +94,13 @@ class MultiBuffer {
 		}	
 	}
 
-	public Stack createStackForIndex( int t, ImageDimensions dim, VoxelDataType dataType) {
+	public Stack createStackForIndex( int t, ImageDimensions dimensions, VoxelDataType dataType) {
 		
 		Stack stack = new Stack();
 		
 		for( int c=0; c<size.getRangeC().getSize(); c++) {
 			
-			Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dim,dataType);
+			Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dimensions,dataType);
 			copyAllBuffersTo(t, c, chnl.getVoxelBox());
 			
 			try {

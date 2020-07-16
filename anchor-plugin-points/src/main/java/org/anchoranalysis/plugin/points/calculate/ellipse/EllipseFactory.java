@@ -54,7 +54,7 @@ class EllipseFactory {
 	
 	public MarkEllipse create(
 		ObjectMask object,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		double shellRad
 	) throws CreateException, InsufficientPointsException {
 
@@ -68,7 +68,7 @@ class EllipseFactory {
 			);
 		}
 
-		return createEllipse(points, dim);
+		return createEllipse(points, dimensions);
 	}
 	
 	private MarkEllipse createEllipse(Set<Point3i> points, ImageDimensions dim) throws InsufficientPointsException, CreateException {

@@ -57,7 +57,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 	
 	@Override
 	public double calcAccptProb(int exstSize, int propSize,
-			double poissonIntens, ImageDimensions sceneSize, double densityRatio) {
+			double poissonIntens, ImageDimensions dimensions, double densityRatio) {
 
 		if (exstSize<=1) {
 			return Math.min(1.0, densityRatio);
@@ -67,7 +67,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 		double num = getProbNeg() * exstSize;
 		
 		// Death prob
-        double dem = getProbPos() * sceneSize.getVolume() * poissonIntens;
+        double dem = getProbPos() * dimensions.getVolume() * poissonIntens;
          
         return Math.min(1.0, densityRatio * num / dem );
 	}

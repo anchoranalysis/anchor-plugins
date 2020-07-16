@@ -66,7 +66,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 		
 		ObjectCollection objectsSplitByCollection = objectsSplitBy.create();
 
-		ImageDimensions dim = createDimensions();
+		ImageDimensions dimensions = createDimensions();
 		
 		try {
 			return objectCollection.stream().flatMapWithException(
@@ -74,7 +74,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 				object -> splitObject(
 					object,
 					objectsSplitByCollection.findObjectsWithIntersectingBBox(object),
-					dim
+					dimensions
 				)
 			);
 		} catch (OperationFailedException e) {

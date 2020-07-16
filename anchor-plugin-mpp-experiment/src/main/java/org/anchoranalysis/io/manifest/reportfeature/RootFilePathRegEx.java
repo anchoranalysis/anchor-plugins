@@ -45,7 +45,7 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger) throws OperationFailedException {
+	public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger) throws OperationFailedException {
 
 		// We get the last three 
 		Path path = obj.getRootPath();

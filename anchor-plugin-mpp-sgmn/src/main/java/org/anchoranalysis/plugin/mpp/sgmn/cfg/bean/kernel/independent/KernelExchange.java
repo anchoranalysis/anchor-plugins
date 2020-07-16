@@ -61,7 +61,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 		int exstSize,
 		int propSize,
 		double poissonIntensity,
-		ImageDimensions sceneSize,
+		ImageDimensions dimensions,
 		double densityRatio
 	) {
 		return Math.min(1.0, densityRatio );

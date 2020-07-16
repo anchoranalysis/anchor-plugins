@@ -38,7 +38,7 @@ public abstract class AnnotationComparisonAssigner<T extends Assignment> extends
 
 	public abstract T createAssignment(
 		ObjectsToCompare objectsToCompare,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		boolean useMIP,
 		BoundIOContext context
 	) throws CreateException;

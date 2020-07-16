@@ -36,18 +36,15 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
 	// START BEAN PROPERTIES
-	@BeanField
+	@BeanField @Getter @Setter
 	private ChnlProvider chnl;
 	// END BEAN PROPERTIES
-	
-	private void addToStack( Stack stack, Channel chnl, ImageDimensions dim ) throws IncorrectImageSizeException {
-		stack.addChnl(
-			chnl.duplicate()
-		);
-	}
 	
 	@Override
 	public Stack create() throws CreateException {
@@ -66,12 +63,10 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 			throw new CreateException(e);
 		}
 	}
-
-	public ChnlProvider getChnl() {
-		return chnl;
-	}
-
-	public void setChnl(ChnlProvider chnl) {
-		this.chnl = chnl;
+	
+	private void addToStack( Stack stack, Channel chnl, ImageDimensions dimensions ) throws IncorrectImageSizeException {
+		stack.addChnl(
+			chnl.duplicate()
+		);
 	}
 }

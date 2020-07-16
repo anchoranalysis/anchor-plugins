@@ -109,12 +109,12 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 	@Override
 	protected Optional<ObjectMask> execute( FeatureInputPairObjects input ) throws FeatureCalcException {
 	
-		ImageDimensions dim = input.getDimensionsRequired();
+		ImageDimensions dimensions = input.getDimensionsRequired();
 				
 		ObjectMask object1Dilated = first.getOrCalculate(input);
 		ObjectMask object2Dilated = second.getOrCalculate(input);
 		
-		Optional<ObjectMask> omIntersection = object1Dilated.intersect(object2Dilated, dim );
+		Optional<ObjectMask> omIntersection = object1Dilated.intersect(object2Dilated, dimensions );
 				
 		if (!omIntersection.isPresent()) {
 			return Optional.empty();
@@ -124,7 +124,7 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		
 		try {
 			if (iterationsErosion>0) {
-				return erode(input, omIntersection.get(), dim);
+				return erode(input, omIntersection.get(), dimensions);
 			} else {
 				return omIntersection;
 			}
@@ -134,18 +134,22 @@ class CalculatePairIntersection extends FeatureCalculation<Optional<ObjectMask>,
 		}
 	}
 	
-	private Optional<ObjectMask> erode( FeatureInputPairObjects input, ObjectMask intersection, ImageDimensions dim ) throws CreateException {
+	private Optional<ObjectMask> erode(
+		FeatureInputPairObjects input,
+		ObjectMask intersection,
+		ImageDimensions dimensions
+	) throws CreateException {
 		
 		// We erode it, and use this as a mask on the input object
 		ObjectMask eroded = MorphologicalErosion.createErodedObject(
 			input.getMerged(),
-			Optional.of(dim.getExtent()),
+			Optional.of(dimensions.getExtent()),
 			do3D,
 			iterationsErosion,
 			true,
 			Optional.empty()
 		);
 		
-		return intersection.intersect(eroded, dim);
+		return intersection.intersect(eroded, dimensions);
 	}
 }

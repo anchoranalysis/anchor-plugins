@@ -120,12 +120,15 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
 	}
 	
 	private Channel createOutputChnl(
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		ObjectCollection objectsSource,
 		FeatureCalculatorSingle<FeatureInputSingleObject> session,
 		NRGStackWithParams nrgStackParams
 	) throws FeatureCalcException {
-		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised( dim, VoxelDataTypeUnsignedByte.INSTANCE );
+		Channel chnlOut = ChannelFactory.instance().createEmptyInitialised(
+			dimensions,
+			VoxelDataTypeUnsignedByte.INSTANCE
+		);
 		chnlOut.getVoxelBox().any().setAllPixelsTo( valueNoObject );
 		for( ObjectMask object : objectsSource ) {
 

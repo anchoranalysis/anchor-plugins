@@ -36,7 +36,7 @@ import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
 public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileBase {
 
 	@Override
-	public String genFeatureStrFor(ManifestRecorderFile obj, Logger logger)	throws OperationFailedException {
+	public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger)	throws OperationFailedException {
 
 		FinderFileAsText finder = new FinderFileAsText( getFileName(),null);
 		

@@ -56,16 +56,16 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 	@Override
 	public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
 		
-		ImageDimensions dim = input.get().getDimensionsRequired();
+		ImageDimensions dimensions = input.get().getDimensionsRequired();
 		
 		BoundingBox bbox = input.get().getMark().bbox(
-			dim,
+			dimensions,
 			getRegionID()
 		);
 		
 		return resolveDistance(
 			bbox,
-			Optional.of(dim.getRes()),
+			Optional.of(dimensions.getRes()),
 			AxisTypeConverter.createFromString(axis)
 		);
 	}

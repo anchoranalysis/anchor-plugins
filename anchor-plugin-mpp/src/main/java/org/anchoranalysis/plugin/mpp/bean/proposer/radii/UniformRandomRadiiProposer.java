@@ -64,14 +64,14 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
 	public Optional<Point3d> propose(
 		Point3d pos,
 		RandomNumberGenerator randomNumberGenerator,
-		ImageDimensions dim,
+		ImageDimensions dimensions,
 		Orientation orientation
 	) throws ProposalAbnormalFailureException {
 		return Optional.of(
 			RadiiRandomizer.randomizeRadii(
 				radiusBound,
 				randomNumberGenerator,
-				dim.getRes(),
+				dimensions.getRes(),
 				do3D
 			)
 		);
