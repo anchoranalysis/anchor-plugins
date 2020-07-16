@@ -146,7 +146,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 			new BinaryValues(0, voxelEqualTo)
 		);
 
-		// for every object we add the objToSplit Bounding Box crnr, to restore it to global co-ordinates
+		// for every object we add the objToSplit Bounding Box crnr, to restore it to global coordinates
 		return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
 	}
 }

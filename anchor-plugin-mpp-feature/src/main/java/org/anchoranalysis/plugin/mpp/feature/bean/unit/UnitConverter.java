@@ -121,7 +121,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
 	}
 	
 	/** 
-	 *  Do we desire to convert to NON-physical co-ordinates? If it's physical, check that image-resolution is present as required.
+	 *  Do we desire to convert to NON-physical coordinates? If it's physical, check that image-resolution is present as required.
 	 * 
 	 *  @throws FeatureCalcException if physical is set, but the resolution is not
 	 *  @return true iff the target-units for conversion are non-physical
