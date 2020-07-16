@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
@@ -53,11 +53,11 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 	// END BEAN FIELDS
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+	public Mask createFromChnl( Mask chnl ) throws CreateException {
 		return createMaskedImage(chnl);
 	}
 
-	private BinaryChnl createMaskedImage( BinaryChnl bi ) throws CreateException {
+	private Mask createMaskedImage( Mask bi ) throws CreateException {
 
 		return BinaryChnlFromObjects.createFromObjects(
 			connectedComponents(bi, inverted),
@@ -66,7 +66,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 		);
 	}
 	
-	private ObjectCollection connectedComponents( BinaryChnl bi, boolean inverted ) throws CreateException {
+	private ObjectCollection connectedComponents( Mask bi, boolean inverted ) throws CreateException {
 		
 		int rslvMinNum;
 		try {
@@ -81,7 +81,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
 		CreateFromConnectedComponentsFactory createObjects = new CreateFromConnectedComponentsFactory(rslvMinNum);
 		if (inverted) {
-			BinaryChnl biInverted = new BinaryChnl(
+			Mask biInverted = new Mask(
 				bi.getChannel(),
 				bi.getBinaryValues().createInverted()
 			);	// In case we've inverted the binary values

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -38,14 +38,14 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
 
 	@Override
-	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
+	protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
 				
 		Channel chnl = ChannelFactory.instance().createEmptyInitialised(
 			dimSource,
 			VoxelDataTypeUnsignedByte.INSTANCE
 		);
 		
-		BinaryChnl bic = new BinaryChnl(chnl, BinaryValues.getDefault());
+		Mask bic = new Mask(chnl, BinaryValues.getDefault());
 		bic.binaryVoxelBox().setAllPixelsToOn();
 		return bic;
 	}

@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -63,7 +63,7 @@ public class PairedWithBinaryChannel extends FeatureSingleObject {
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN PROPERTIES
 	
-	private BinaryChnl chnl;
+	private Mask chnl;
 	
 	@Override
 	protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {

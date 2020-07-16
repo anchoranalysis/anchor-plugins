@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
@@ -50,7 +50,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 
 	@Override
-	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
 		
 		Histogram hist = HistogramFactory.create(chnl, mask );
 		

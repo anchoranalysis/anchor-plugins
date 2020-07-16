@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 
 // Rejects a proposal if its centre is not found on a particular prob map
@@ -50,7 +50,7 @@ public class RejectProposalCentreOutside extends MarkProposerOne {
 	private BinaryChnlProvider binaryChnl;
 	// END BEAN
 
-	private BinaryChnl binaryImgChnl;
+	private Mask binaryImgChnl;
 
 	@Override
 	public void onInit(MPPInitParams pso) throws InitException {

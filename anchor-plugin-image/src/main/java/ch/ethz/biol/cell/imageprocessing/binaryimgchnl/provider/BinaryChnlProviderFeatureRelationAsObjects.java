@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -66,9 +66,9 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
+	protected Mask createFromSource(Channel chnlSource) throws CreateException {
 
-		BinaryChnl channel = binaryChnlMain.create();
+		Mask channel = binaryChnlMain.create();
 		
 		ObjectMask objectMain = CreateFromEntireChnlFactory.createObject( channel );
 		ObjectMask objectCompareTo = CreateFromEntireChnlFactory.createObject(
@@ -98,10 +98,10 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
 		}
 	}
 	
-	private BinaryChnl calcRelation(
+	private Mask calcRelation(
 		ObjectMask objectMain,
 		ObjectMask objectCompareTo,
-		BinaryChnl chnlMain,
+		Mask chnlMain,
 		FeatureCalculatorSingle<FeatureInputSingleObject> calculator
 	) throws CreateException {
 		try {

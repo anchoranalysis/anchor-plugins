@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -74,7 +74,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 	@Override
 	public ObjectCollection create() throws CreateException {
 	
-		BinaryChnl bi = binaryChnl.create();
+		Mask bi = binaryChnl.create();
 		
 		StopWatch sw = new StopWatch();
 		sw.start();
@@ -101,12 +101,12 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 		return new CreateFromConnectedComponentsFactory(bigNghb, minNumberVoxels);
 	}
 	
-	private ObjectCollection createObjects3D( BinaryChnl bi, int minNumberVoxels ) throws CreateException {
+	private ObjectCollection createObjects3D( Mask bi, int minNumberVoxels ) throws CreateException {
 		CreateFromConnectedComponentsFactory objectCreator = createFactory(minNumberVoxels);
 		return objectCreator.createConnectedComponents(bi);
 	}
 	
-	private ObjectCollection createObjectsBySlice(BinaryChnl chnl, int minNumberVoxels) throws CreateException {
+	private ObjectCollection createObjectsBySlice(Mask chnl, int minNumberVoxels) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 	
@@ -122,7 +122,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 		);
 	}
 	
-	private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(BinaryChnl chnl, int z) {
+	private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(Mask chnl, int z) {
 		return new BinaryVoxelBoxByte(
 			chnl.getVoxelBox().extractSlice(z),
 			chnl.getBinaryValues()

@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -47,7 +47,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 	private boolean interpolate = true;
 	// END BEAN PROPERTIES
 	
-	public static BinaryChnl scale( BinaryChnl chnl, ScaleCalculator scaleCalculator, Interpolator interpolator ) throws CreateException {
+	public static Mask scale( Mask chnl, ScaleCalculator scaleCalculator, Interpolator interpolator ) throws CreateException {
 		
 		ScaleFactor scaleFactor;
 		try {
@@ -65,7 +65,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 	}
 
 	@Override
-	public BinaryChnl createFromChnl(BinaryChnl chnl) throws CreateException {
+	public Mask createFromChnl(Mask chnl) throws CreateException {
 		Interpolator interpolator = interpolate ? InterpolatorFactory.getInstance().binaryResizing() : InterpolatorFactory.getInstance().noInterpolation();
 		return scale( chnl, scaleCalculator, interpolator );
 	}

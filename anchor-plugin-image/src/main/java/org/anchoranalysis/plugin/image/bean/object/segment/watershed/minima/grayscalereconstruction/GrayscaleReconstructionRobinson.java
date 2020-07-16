@@ -155,21 +155,21 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 	
 	private void populateQueueFromNonZeroPixelsMask( PriorityQueueIndexRangeDownhill<Point3i> queue, VoxelBox<?> vb, VoxelBox<ByteBuffer> vbFinalized, ObjectMask containingMask ) {
 
-		ReadableTuple3i crnrPntMin = containingMask.getBoundingBox().cornerMin();
-		ReadableTuple3i crnrPntMax = containingMask.getBoundingBox().calcCornerMax();
+		ReadableTuple3i crnrpointMin = containingMask.getBoundingBox().cornerMin();
+		ReadableTuple3i crnrpointMax = containingMask.getBoundingBox().calcCornerMax();
 		
 		byte maskOn = containingMask.getBinaryValuesByte().getOnByte(); 
 				
 		Extent e = vb.extent();
-		for (int z=crnrPntMin.getZ(); z<=crnrPntMax.getZ(); z++) {
+		for (int z=crnrpointMin.getZ(); z<=crnrpointMax.getZ(); z++) {
 			
 			VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
 			VoxelBuffer<ByteBuffer> bbFinalized = vbFinalized.getPixelsForPlane(z);
-			VoxelBuffer<ByteBuffer> bbMask = containingMask.getVoxelBox().getPixelsForPlane(z-crnrPntMin.getZ());
+			VoxelBuffer<ByteBuffer> bbMask = containingMask.getVoxelBox().getPixelsForPlane(z-crnrpointMin.getZ());
 			
 			int offset = 0;
-			for (int y=crnrPntMin.getY(); y<=crnrPntMax.getY(); y++) {
-				for (int x=crnrPntMin.getX(); x<=crnrPntMax.getX(); x++) {
+			for (int y=crnrpointMin.getY(); y<=crnrpointMax.getY(); y++) {
+				for (int x=crnrpointMin.getX(); x<=crnrpointMax.getX(); x++) {
 					if (bbMask.buffer().get(offset)==maskOn) {
 						
 						int offsetGlobal = e.offset(x, y);

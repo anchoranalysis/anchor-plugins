@@ -33,7 +33,7 @@ import java.util.List;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
@@ -45,7 +45,7 @@ import com.github.quickhull3d.QuickHull3D;
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
 	@Override
-	protected BinaryChnl createFromChnl(BinaryChnl chnlIn, BinaryChnl outline) throws CreateException {
+	protected Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException {
 		MessageLogger logger = getLogger().messageLogger();
 		List<Point3d> extPnts = pointsFromChnl(outline);
 		
@@ -84,7 +84,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 	}
 
 	// We use it here as it uses the quickHull3D Point3d primitive
-	private static List<Point3d> pointsFromChnl( BinaryChnl chnl ) {
+	private static List<Point3d> pointsFromChnl( Mask chnl ) {
 		
 		List<Point3d> listOut = new ArrayList<>();
 		

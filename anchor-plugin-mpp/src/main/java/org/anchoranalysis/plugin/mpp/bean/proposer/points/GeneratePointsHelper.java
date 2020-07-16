@@ -33,27 +33,25 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@AllArgsConstructor
 class GeneratePointsHelper {
+
+	private Point3d pntRoot;
+	private final Optional<Mask> chnlFilled;
+	private int maxZDist;
+	private int skipZDist;
+	private Mask chnl;
+	private ImageDimensions dim;
 	
-	public static List<Point3i> generatePoints(
-		Point3d pntRoot,
-		List<List<Point3i>> pntsXY,
-		int maxZDist,
-		int skipZDist,
-		BinaryChnl chnl,
-		Optional<BinaryChnl> chnlFilled,
-		ImageDimensions dim
-	) throws OperationFailedException {
+	public List<Point3i> generatePoints(List<List<Point3i>> pntsXY) throws OperationFailedException {
 		// We take the first point in each list, as where it intersects with the edge
 		PointListForConvex pointList = pointListForConvex(pntsXY);
 		
@@ -63,13 +61,7 @@ class GeneratePointsHelper {
 			lastPntsAll.addAll(
 				extendedPoints(
 					contourPnts,
-					pntRoot,
-					pointList,
-					maxZDist,
-					skipZDist,
-					chnl,
-					chnlFilled,
-					dim
+					pointList
 				)
 			);
 		}
@@ -77,29 +69,20 @@ class GeneratePointsHelper {
 	}
 	
 	
-	private static List<Point3i> extendedPoints(
+	private List<Point3i> extendedPoints(
 		List<Point3i> pntsAlongContour,
-		Point3d pntRoot,
-		PointListForConvex pl,
-		int maxZDist,
-		int skipZDist,
-		BinaryChnl chnl,
-		Optional<BinaryChnl> chnlFilled,
-		ImageDimensions sceneDim
+		PointListForConvex pointList
 	) throws OperationFailedException {
 		
 		BoundingBox bbox = BoundingBoxFromPoints.forList(pntsAlongContour);
 
 		int zLow = Math.max(0, bbox.cornerMin().getZ()-maxZDist );
-		int zHigh = Math.min(sceneDim.getZ(), bbox.cornerMin().getZ()+maxZDist );
+		int zHigh = Math.min(dim.getZ(), bbox.cornerMin().getZ()+maxZDist );
 
 		if (chnlFilled.isPresent()) {
-			return PointsFromInsideHelper.convexOnly(
+			return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox).convexOnly(
 				chnl,
-				chnlFilled.get(),
-				bbox,
 				pntRoot,
-				pl,
 				skipZDist
 			);
 		} else {

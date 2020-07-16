@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -46,7 +46,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) throws CreateException {
+	protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
 
 		double mean = calculateMean(chnl, mask);
 		
@@ -61,7 +61,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 		return chnl;
 	}
 	
-	private double calculateMean( Channel chnl, BinaryChnl mask ) {
+	private double calculateMean( Channel chnl, Mask mask ) {
 		
 		VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
@@ -102,7 +102,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 	}
 	
 	
-	private void subtractMeanMask( Channel chnl, BinaryChnl mask, int mean ) {
+	private void subtractMeanMask( Channel chnl, Mask mask, int mean ) {
 		
 		VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
 		VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();

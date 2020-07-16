@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
@@ -44,12 +44,12 @@ public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected Channel createFromMaskedChnl(Channel chnl, BinaryChnl mask) {
+	protected Channel createFromMaskedChnl(Channel chnl, Mask mask) {
 		assignScalar(chnl, mask, (int) value);
 		return chnl;
 	}
 	
-	private void assignScalar(Channel chnlSrc, BinaryChnl mask, int value) {
+	private void assignScalar(Channel chnlSrc, Mask mask, int value) {
 		chnlSrc.getVoxelBox().any().setPixelsCheckMask(
 			CreateFromEntireChnlFactory.createObject(mask),
 			value

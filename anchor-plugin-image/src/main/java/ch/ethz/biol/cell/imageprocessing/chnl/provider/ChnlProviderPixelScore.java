@@ -40,7 +40,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -102,7 +102,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 			return Optional.empty();
 		}
 		
-		BinaryChnl binaryChnlMask = mask.create();
+		Mask binaryChnlMask = mask.create();
 		Channel chnlMask = binaryChnlMask.getChannel();
 		
 		return Optional.of(

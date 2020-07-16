@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -53,7 +53,7 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
 	// END BEAN
 
 	@Override
-	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
+	protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
 		return create(
 			objects.create(),
 			dimSource,
@@ -61,15 +61,15 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
 		);
 	}
 	
-	private static BinaryChnl create(ObjectCollection objects, ImageDimensions dim, boolean invert ) {
+	private static Mask create(ObjectCollection objects, ImageDimensions dim, boolean invert ) {
 
 		BinaryValues bv = BinaryValues.getDefault();
 		
-		BinaryChnl maskedImage = createChannelFromObjectsMultiplex(objects, dim, bv, invert);
-		return new BinaryChnl(maskedImage.getChannel(), bv);	
+		Mask maskedImage = createChannelFromObjectsMultiplex(objects, dim, bv, invert);
+		return new Mask(maskedImage.getChannel(), bv);	
 	}
 	
-	private static BinaryChnl createChannelFromObjectsMultiplex(
+	private static Mask createChannelFromObjectsMultiplex(
 		ObjectCollection objects,
 		ImageDimensions sd,
 		BinaryValues outVal,

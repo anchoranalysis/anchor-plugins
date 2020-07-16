@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public class BinaryChnlProviderAlternativeIfEmpty extends BinaryChnlProviderElseBase {
 
 	@Override
-	protected boolean condition(BinaryChnl chnl) throws CreateException {
+	protected boolean condition(Mask chnl) throws CreateException {
 		return chnl.hasHighValues();
 	}
 }

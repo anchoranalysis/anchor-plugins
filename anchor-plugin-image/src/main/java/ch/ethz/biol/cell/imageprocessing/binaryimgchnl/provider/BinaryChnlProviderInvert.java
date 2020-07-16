@@ -37,8 +37,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
-import org.anchoranalysis.image.binary.BinaryChnlInverter;
+import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.MaskInverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
@@ -53,9 +53,9 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 	// END BEAN FIELDS
 
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+	public Mask createFromChnl( Mask chnl ) throws CreateException {
 		
-		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
+		Optional<Mask> maskChnl = OptionalFactory.create(mask);
 		
 		if (maskChnl.isPresent()) {
 			invertWithMask(chnl, maskChnl.get());
@@ -63,9 +63,9 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 		}
 		
 		if (forceChangeBytes) {
-			BinaryChnlInverter.invertChnl( chnl );
+			MaskInverter.invertChnl( chnl );
 		} else {
-			return new BinaryChnl(
+			return new Mask(
 				chnl.getChannel(),
 				chnl.getBinaryValues().createInverted()
 			);			
@@ -73,7 +73,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 		return chnl;
 	}
 		
-	private void invertWithMask( BinaryChnl chnl, BinaryChnl mask ) {
+	private void invertWithMask( Mask chnl, Mask mask ) {
 
 		BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 		final byte byteOn = bvb.getOnByte();

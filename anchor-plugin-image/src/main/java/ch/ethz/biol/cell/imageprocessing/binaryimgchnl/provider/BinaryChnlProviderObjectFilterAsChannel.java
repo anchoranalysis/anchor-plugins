@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,7 +51,7 @@ public class BinaryChnlProviderObjectFilterAsChannel extends BinaryChnlProviderE
 	// END BEAN PROPERTIES
 
 	@Override
-	protected boolean condition(BinaryChnl chnl) throws CreateException {
+	protected boolean condition(Mask chnl) throws CreateException {
 
 		ObjectMask objectMask = CreateFromEntireChnlFactory.createObject( chnl );
 		

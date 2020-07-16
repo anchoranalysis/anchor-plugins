@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -74,8 +74,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	@Override
 	public void traverse( Point3i root, List<Point3i> listOut, RandomNumberGenerator re ) throws TraverseOutlineException {
 		
-		BinaryChnl chnlOutline = createOutline();
-		BinaryChnl chnlFilled = createFilled();
+		Mask chnlOutline = createOutline();
+		Mask chnlFilled = createFilled();
 		
 		checkDimensions(chnlOutline.getDimensions(), chnlFilled.getDimensions());
 		
@@ -90,7 +90,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		traverseOutline(root, listOut);
 	}
 	
-	private BinaryChnl createOutline() throws TraverseOutlineException {
+	private Mask createOutline() throws TraverseOutlineException {
 		try {
 			return binaryChnlOutline.create();
 		} catch (CreateException e) {
@@ -98,7 +98,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}
 	}
 	
-	private BinaryChnl createFilled() throws TraverseOutlineException {
+	private Mask createFilled() throws TraverseOutlineException {
 		try {
 			return binaryChnlFilled.create(); 
 		} catch (CreateException e) {
@@ -123,7 +123,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 	}
 	
 	
-	private ObjectMask objectForFilled(Point3i root, BinaryChnl chnlFilled) throws TraverseOutlineException {
+	private ObjectMask objectForFilled(Point3i root, Mask chnlFilled) throws TraverseOutlineException {
 		// Important, so we can use the contains function later
 		return createObjectForPoint(root, chnlFilled ).mapBoundingBox( bbox->
 			bbox.shiftTo( new Point3i(0,0,0) )
@@ -163,7 +163,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 		}		
 	}
 	
-	private ObjectMask createObjectForPoint( Point3i root, BinaryChnl chnl ) throws TraverseOutlineException {
+	private ObjectMask createObjectForPoint( Point3i root, Mask chnl ) throws TraverseOutlineException {
 				
 		try {
 			Tuple3i maxDist = visitScheduler.maxDistFromRootPoint(chnl.getDimensions().getRes()).orElseThrow( ()->

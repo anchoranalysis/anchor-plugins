@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -60,7 +60,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 	private UnitValueDistance maxDistance;
 	// END BEANS
 	
-	private BinaryChnl binaryImage = null;
+	private Mask binaryImage = null;
 	private Channel chnl;
 	
 	@Override

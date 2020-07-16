@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderOne {
 
@@ -43,7 +43,7 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl binaryImgChnl ) throws CreateException {
+	public Mask createFromChnl( Mask binaryImgChnl ) throws CreateException {
 		if (bySlice) {
 			for( int z=0; z<binaryImgChnl.getDimensions().getZ(); z++) {
 				testChnl( binaryImgChnl.extractSlice(z) );
@@ -54,7 +54,7 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
 		return binaryImgChnl;
 	}
 	
-	private void testChnl( BinaryChnl binaryImgChnl ) throws CreateException {
+	private void testChnl( Mask binaryImgChnl ) throws CreateException {
 		int cnt = binaryImgChnl.countHighValues();
 		long volume = binaryImgChnl.getDimensions().getVolume();
 		

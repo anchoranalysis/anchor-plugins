@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -47,7 +47,7 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(ImageDimensions dimSource) throws CreateException {
+	protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
 		Channel chnl = ChannelFactory.instance().createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
 
 		BinaryValues bvOut = BinaryValues.getDefault();
@@ -55,7 +55,7 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 		if (createOn) {
 			chnl.getVoxelBox().any().setAllPixelsTo( bvOut.getOnInt() );	
 		}
-		return new BinaryChnl(chnl, bvOut);
+		return new Mask(chnl, bvOut);
 	}
 
 	public boolean isCreateOn() {

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParame
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -60,8 +60,8 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 	// END BEAN PROPERTIES
 	
 	@Override
-	protected BinaryChnl createFromSource(Channel chnlSource) throws CreateException {
-		return new BinaryChnl(
+	protected Mask createFromSource(Channel chnlSource) throws CreateException {
+		return new Mask(
 				sgmnResult(chnlSource),
 				chnlSource.getDimensions().getRes(),
 				ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE)
@@ -89,7 +89,7 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 	}
 	
 	private Optional<ObjectMask> mask(ImageDimensions dim) throws CreateException {
-		Optional<BinaryChnl> maskChnl = ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
+		Optional<Mask> maskChnl = ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
 		return maskChnl.map( chnl->
 			new ObjectMask(chnl.binaryVoxelBox())
 		);

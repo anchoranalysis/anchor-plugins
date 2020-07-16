@@ -31,7 +31,7 @@ import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.points.PointsFromBinaryChnl;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 	
 	@Override
-	protected BinaryChnl createFromChnl(BinaryChnl mask, BinaryChnl outline) throws CreateException {
+	protected Mask createFromChnl(Mask mask, Mask outline) throws CreateException {
 		try {
 			List<Point2i> pointsOnConvexHull = ConvexHullUtilities.convexHull2D(
 				PointsFromBinaryChnl.pointsFromChnl2D(outline)
@@ -63,7 +63,7 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 		}
 	}
 	
-	private void changeMaskToShowPointsOnly(BinaryChnl mask, List<Point2i> points) {
+	private void changeMaskToShowPointsOnly(Mask mask, List<Point2i> points) {
 		VoxelBox<?> voxels = mask.getChannel().getVoxelBox().any();
 
 		int on = mask.getBinaryValues().getOnInt();

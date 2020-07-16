@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -68,7 +68,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 	@Override
 	public ObjectCollection createFromObjects( ObjectCollection objects ) throws CreateException {
 		
-		Optional<BinaryChnl> maskChnl = OptionalFactory.create(mask);
+		Optional<Mask> maskChnl = OptionalFactory.create(mask);
 		
 		for( ObjectMask objectMask : objects ) {
 			

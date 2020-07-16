@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.outline.FindOutline;
 
 /**
@@ -51,7 +51,7 @@ public class BinaryChnlProviderOutline extends BinaryChnlProviderOne {
 	
 
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+	public Mask createFromChnl( Mask chnl ) throws CreateException {
 		boolean do3D = chnl.getDimensions().getZ() > 1 && !force2D;
 		return FindOutline.outline(chnl, do3D, erodeEdges);
 	}

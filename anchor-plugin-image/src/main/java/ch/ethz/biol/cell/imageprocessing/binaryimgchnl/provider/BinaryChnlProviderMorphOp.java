@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
 /**
@@ -57,10 +57,10 @@ public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
 	private boolean suppress3D = false;
 	// END PROPERTIES
 	
-	protected abstract void applyMorphOp( BinaryChnl imgChnl, boolean do3D ) throws CreateException;
+	protected abstract void applyMorphOp( Mask imgChnl, boolean do3D ) throws CreateException;
 	
 	@Override
-	public BinaryChnl createFromChnl( BinaryChnl chnl ) throws CreateException {
+	public Mask createFromChnl( Mask chnl ) throws CreateException {
 		
 		// Gets outline
 		applyMorphOp( chnl, (chnl.getDimensions().getZ() > 1)&&!suppress3D );

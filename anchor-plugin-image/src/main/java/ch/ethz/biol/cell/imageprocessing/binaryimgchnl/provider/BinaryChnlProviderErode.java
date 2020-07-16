@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
@@ -49,7 +49,7 @@ public class BinaryChnlProviderErode extends BinaryChnlProviderMorphOp {
 	
 	// Assumes imgChnlOut has the same ImgChnlRegions
 	@Override
-	protected void applyMorphOp( BinaryChnl imgChnl, boolean do3D ) throws CreateException{
+	protected void applyMorphOp( Mask imgChnl, boolean do3D ) throws CreateException{
 		
 		BinaryVoxelBox<ByteBuffer> out = MorphologicalErosion.erode(
 			imgChnl.binaryVoxelBox(),

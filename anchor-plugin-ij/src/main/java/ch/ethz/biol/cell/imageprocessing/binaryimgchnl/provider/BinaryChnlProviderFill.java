@@ -36,9 +36,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
-import org.anchoranalysis.image.binary.BinaryChnl;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.logical.BinaryChnlOr;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -61,9 +61,9 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	// END BEAN PROPERTIES
 	
 	@Override
-	public BinaryChnl createFromChnl(BinaryChnl bic) throws CreateException {
+	public Mask createFromChnl(Mask bic) throws CreateException {
 		
-		BinaryChnl bicDup = fillChnl(bic);
+		Mask bicDup = fillChnl(bic);
 
 		return fillHoles(
 			filterObjectsFromBinaryImage(bicDup),
@@ -73,10 +73,10 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		);
 	}
 	
-	private BinaryChnl fillChnl( BinaryChnl bic ) throws CreateException {
-		BinaryChnl bicInv = new BinaryChnl( bic.getChannel(), bic.getBinaryValues().createInverted() );
+	private Mask fillChnl( Mask bic ) throws CreateException {
+		Mask bicInv = new Mask( bic.getChannel(), bic.getBinaryValues().createInverted() );
 		
-		BinaryChnl bicDup = bic.duplicate();
+		Mask bicDup = bic.duplicate();
 		
 		try {
 			BinaryChnlProviderIJBinary.fill(bicDup.binaryVoxelBox());
@@ -90,7 +90,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 	}
 	
 	
-	private ObjectCollection filterObjectsFromBinaryImage( BinaryChnl bi ) throws CreateException {
+	private ObjectCollection filterObjectsFromBinaryImage( Mask bi ) throws CreateException {
 		
 		CreateFromConnectedComponentsFactory objectCreator = new CreateFromConnectedComponentsFactory();
 				
@@ -133,8 +133,8 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 		return maxVolume==null || object.numberVoxelsOn()<=maxVolumeRslvd;
 	}
 	
-	private static BinaryChnl fillHoles( ObjectCollection filled, BinaryChnl src, ImageDimensions sd, BinaryValues bvOut ) {
-		BinaryChnl bcSelected = BinaryChnlFromObjects.createFromObjects(filled, sd, bvOut);
+	private static Mask fillHoles( ObjectCollection filled, Mask src, ImageDimensions sd, BinaryValues bvOut ) {
+		Mask bcSelected = BinaryChnlFromObjects.createFromObjects(filled, sd, bvOut);
 		BinaryChnlOr.binaryOr(bcSelected,src);
 		return bcSelected;
 	}

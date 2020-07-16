@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -89,7 +89,7 @@ public class WatershedYeongTest {
 	}
 	
 	private ObjectMask mask(String path) {
-		BinaryChnl chnl = new BinaryChnl(
+		Mask chnl = new Mask(
 			chnl(PATH_MASK),
 			BinaryValues.getDefault()
 		);

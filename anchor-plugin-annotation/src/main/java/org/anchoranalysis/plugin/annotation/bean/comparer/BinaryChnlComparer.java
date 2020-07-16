@@ -36,7 +36,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -73,7 +73,7 @@ public class BinaryChnlComparer extends Comparer {
 				return new NotFound<>(maskPath, "No mask exists");
 			}
 			
-			BinaryChnl chnl = RasterReaderUtilities.openBinaryChnl(
+			Mask chnl = RasterReaderUtilities.openBinaryChnl(
 				rasterReader,
 				maskPath,
 				createBinaryValues()
@@ -96,7 +96,7 @@ public class BinaryChnlComparer extends Comparer {
 		}
 	}
 	
-	private static ObjectCollection convertToObjects( BinaryChnl chnl ) {
+	private static ObjectCollection convertToObjects( Mask chnl ) {
 		return ObjectCollectionFactory.from(chnl);
 	}
 }

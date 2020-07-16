@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -90,7 +90,7 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 	}
 
 	private ObjectCollection createFromBinaryVoxelBox( BinaryVoxelBox<ByteBuffer> bvb, ImageResolution res, Optional<ReadableTuple3i> maskShiftBy ) throws SegmentationFailedException {
-		BinaryChnl bic = new BinaryChnl(
+		Mask bic = new Mask(
 			ChannelFactory.instance().create(bvb.getVoxelBox(), res),
 			bvb.getBinaryValues()
 		);

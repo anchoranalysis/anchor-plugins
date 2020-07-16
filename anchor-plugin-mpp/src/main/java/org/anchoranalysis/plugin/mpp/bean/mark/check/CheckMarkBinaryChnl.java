@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class CheckMarkBinaryChnl extends CheckMark {
 
@@ -49,7 +49,7 @@ public abstract class CheckMarkBinaryChnl extends CheckMark {
 	private boolean acceptOutsideScene = false;
 	// END BEAN PROPERTIES
 
-	protected BinaryChnl createChnl() throws CheckException {
+	protected Mask createChnl() throws CheckException {
 		try {
 			return binaryChnl.create();
 		} catch (CreateException e) {
@@ -66,7 +66,7 @@ public abstract class CheckMarkBinaryChnl extends CheckMark {
 			return acceptOutsideScene;
 		}
 		
-		BinaryChnl bi = createChnl();
+		Mask bi = createChnl();
 		return bi.isPointOn(
 			deriveFunc.apply(cp)
 		);

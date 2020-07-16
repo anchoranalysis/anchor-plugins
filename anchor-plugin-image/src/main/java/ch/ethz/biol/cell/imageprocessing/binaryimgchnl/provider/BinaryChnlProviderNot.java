@@ -30,7 +30,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import java.nio.ByteBuffer;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 
@@ -39,7 +39,7 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
 
 	// ASSUMES REGIONS ARE IDENTICAL
 	@Override
-	protected BinaryChnl createFromChnlReceive(BinaryChnl chnlCrnt, BinaryChnl chnlReceiver) throws CreateException {
+	protected Mask createFromChnlReceive(Mask chnlCrnt, Mask chnlReceiver) throws CreateException {
 	
 		BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
 		BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();

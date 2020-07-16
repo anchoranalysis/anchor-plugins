@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -39,7 +39,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class DimChecker {
 	
-	public static void check(Channel chnl, BinaryChnl mask) throws CreateException {
+	public static void check(Channel chnl, Mask mask) throws CreateException {
 		if (!chnl.getDimensions().equals(mask.getDimensions())) {
 			throw new CreateException( String.format("chnl (%s) and mask (%s) must have the same dimensions", chnl.getDimensions().toString(), mask.getDimensions().toString() ) );
 		}
@@ -72,7 +72,7 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static void check(BinaryChnl chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl) throws CreateException {
+	public static void check(Mask chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl) throws CreateException {
 		check(
 			chnlToCheck.getDimensions(),
 			chnlToCheckName,
@@ -106,9 +106,9 @@ public class DimChecker {
 	 * @return the newly created channel
 	 * @throws CreateException
 	 */
-	public static BinaryChnl createSameSize(BinaryChnlProvider provider, String providerName, Channel chnlSameSize) throws CreateException {
+	public static Mask createSameSize(BinaryChnlProvider provider, String providerName, Channel chnlSameSize) throws CreateException {
 		
-		BinaryChnl chnlNew = provider.create();
+		Mask chnlNew = provider.create();
 		check(chnlNew, providerName, chnlSameSize.getDimensions());
 		return chnlNew;
 	}

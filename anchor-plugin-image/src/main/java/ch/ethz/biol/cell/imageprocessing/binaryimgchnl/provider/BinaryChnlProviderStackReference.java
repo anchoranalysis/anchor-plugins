@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.binary.BinaryChnl;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 
@@ -61,8 +61,8 @@ public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
 	}
 
 	@Override
-	public BinaryChnl create() throws CreateException {
-		return new BinaryChnl( chnl, BinaryValues.getDefault() );
+	public Mask create() throws CreateException {
+		return new Mask( chnl, BinaryValues.getDefault() );
 	}
 
 	public int getChnlIndex() {
