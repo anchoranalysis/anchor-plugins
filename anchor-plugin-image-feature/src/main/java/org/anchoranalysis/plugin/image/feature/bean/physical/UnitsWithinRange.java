@@ -1,32 +1,9 @@
-/*-
- * #%L
- * anchor-plugin-image-feature
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.plugin.image.feature.bean.physical;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
@@ -46,17 +23,17 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */
-    @BeanField private double within = 0;
+    @BeanField @Getter @Setter private double within = 0;
 
     /** Returned as a constant if a value lies otside the range */
-    @BeanField private double outside = -10;
+    @BeanField @Getter @Setter private double outside = -10;
 
     /**
      * Minimum-boundary for acceptable range
      *
      * <p>We default to volume as units, but it could also be area. It's arbitrary for 0-value.
      */
-    @BeanField private UnitValueAreaOrVolume min = new UnitValueVolumeVoxels(0);
+    @BeanField @Getter @Setter private UnitValueAreaOrVolume min = new UnitValueVolumeVoxels(0);
 
     /**
      * Maximum-boundary for acceptable range
@@ -64,7 +41,8 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
      * <p>We default to volume as units, but it could also be area. It's arbitrary for
      * infinity-value.
      */
-    @BeanField private UnitValueAreaOrVolume max = new UnitValueVolumeVoxels(Double.MAX_VALUE);
+    @BeanField @Getter @Setter
+    private UnitValueAreaOrVolume max = new UnitValueVolumeVoxels(Double.MAX_VALUE);
     // END BEAN PROPERTIES
 
     @Override
@@ -89,37 +67,5 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     @Override
     public String getParamDscr() {
         return String.format("min=%s,max=%s,within=%8.3f outside=%8.3f", min, max, within, outside);
-    }
-
-    public UnitValueAreaOrVolume getMin() {
-        return min;
-    }
-
-    public void setMin(UnitValueAreaOrVolume min) {
-        this.min = min;
-    }
-
-    public UnitValueAreaOrVolume getMax() {
-        return max;
-    }
-
-    public void setMax(UnitValueAreaOrVolume max) {
-        this.max = max;
-    }
-
-    public double getWithin() {
-        return within;
-    }
-
-    public void setWithin(double within) {
-        this.within = within;
-    }
-
-    public double getOutside() {
-        return outside;
-    }
-
-    public void setOutside(double outside) {
-        this.outside = outside;
     }
 }

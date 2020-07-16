@@ -1,33 +1,10 @@
-/*-
- * #%L
- * anchor-plugin-ij
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import ij.ImagePlus;
 import ij.plugin.MontageMaker;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,22 +21,22 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
      *
      * <p>The number of rows is automatically calculated.
      */
-    @BeanField private int columns = 0;
+    @BeanField @Getter @Setter private int columns = 0;
 
     /** Whether to increase or reduce the size of the images */
-    @BeanField private double scale = 1;
+    @BeanField @Getter @Setter private double scale = 1;
 
     /** First slice. If negative, disabled and set to minimum. */
-    @BeanField private int sliceFirst = -1;
+    @BeanField @Getter @Setter private int sliceFirst = -1;
 
     /** Last slice. If negative, disabled and set to maximum. */
-    @BeanField private int sliceLast = -1;
+    @BeanField @Getter @Setter private int sliceLast = -1;
 
     /** Adds a border around each part of the montage */
-    @BeanField private int borderWidth = 0;
+    @BeanField @Getter @Setter private int borderWidth = 0;
 
     /** If true a label is added beside every image showing the slice index */
-    @BeanField private boolean label = false;
+    @BeanField @Getter @Setter private boolean label = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -137,53 +114,5 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
 
     private static int calcRowsForColumns(int totalNumSlices, int columns) {
         return (int) Math.ceil(((double) totalNumSlices) / columns);
-    }
-
-    public int getColumns() {
-        return columns;
-    }
-
-    public void setColumns(int columns) {
-        this.columns = columns;
-    }
-
-    public double getScale() {
-        return scale;
-    }
-
-    public void setScale(double scale) {
-        this.scale = scale;
-    }
-
-    public int getSliceFirst() {
-        return sliceFirst;
-    }
-
-    public void setSliceFirst(int sliceFirst) {
-        this.sliceFirst = sliceFirst;
-    }
-
-    public int getSliceLast() {
-        return sliceLast;
-    }
-
-    public void setSliceLast(int sliceLast) {
-        this.sliceLast = sliceLast;
-    }
-
-    public int getBorderWidth() {
-        return borderWidth;
-    }
-
-    public void setBorderWidth(int borderWidth) {
-        this.borderWidth = borderWidth;
-    }
-
-    public boolean isLabel() {
-        return label;
-    }
-
-    public void setLabel(boolean label) {
-        this.label = label;
     }
 }

@@ -1,33 +1,10 @@
-/*-
- * #%L
- * anchor-plugin-quick
- * %%
- * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
- * %%
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
- */
 /* (C)2020 */
 package org.anchoranalysis.anchor.plugin.quick.bean.structure;
 
 import java.io.File;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,53 +27,53 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
 
     // START BEAN PROPERTIES
     /** The name of the experiment including version suffix */
-    @BeanField private String datasetName;
+    @BeanField @Getter @Setter private String datasetName;
 
     /** A version-suffix appended to the dataset name extracted from the reg exp */
-    @BeanField private String datasetVersion;
+    @BeanField @Getter @Setter private String datasetVersion;
 
     /**
      * A folder identifying the type of experiment (where the outputs are all put in the same
      * directory
      */
-    @BeanField private String experimentType;
+    @BeanField @Getter @Setter private String experimentType;
 
     /** Root-name assuming multi-rooted strucutre */
-    @BeanField private String rootName;
+    @BeanField @Getter @Setter private String rootName;
 
     /** Files to search for */
-    @BeanField private String fileFilter = "*";
+    @BeanField @Getter @Setter private String fileFilter = "*";
 
     /**
      * If true the directory structure is
      * ROOT/experiments/${ROOT_NAME}/${DATASET_NAME}_${DATASET_SUFFIX} If false, the directory
      * structure is ROOT/experiments/${DATASET_NAME}_${DATASET_SUFFIX}
      */
-    @BeanField private boolean rootInStructure = false;
+    @BeanField @Getter @Setter private boolean rootInStructure = false;
 
     /**
      * If rootInStructure==TRUE, the rootName is placed in the folder structure. If this is
      * non-empty, a different rootName is inserted into this structure instead of the default
      * rootName
      */
-    @BeanField @AllowEmpty private String rootNameForStructure = "";
+    @BeanField @AllowEmpty @Getter @Setter private String rootNameForStructure = "";
 
     /**
      * If non-empty than an additional sub-directory is appended as a suffix
      * ${DATASET_NAME}_${DATASET_SUFFIX}/${SUBDIRECTORY}/
      */
-    @BeanField @AllowEmpty private String subdirectory = "";
+    @BeanField @AllowEmpty @Getter @Setter private String subdirectory = "";
 
     /**
      * If true the datasetName is appended as a sub-directory e.g.
      * ${DATASET_NAME}_${DATASET_SUFFIX}/${DATASET_NAME}
      */
-    @BeanField private boolean datasetNameSubdirectory = false;
+    @BeanField @Getter @Setter private boolean datasetNameSubdirectory = false;
 
     /** Whether to apply the search recursively or not */
-    @BeanField private boolean recursive = false;
+    @BeanField @Getter @Setter private boolean recursive = false;
 
-    @BeanField private int maxDirectoryDepth;
+    @BeanField @Getter @Setter private int maxDirectoryDepth;
     // END BEAN PROPERTIES
 
     private Rooted delegate;
@@ -182,93 +159,5 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
     @Override
     public Collection<File> create(InputManagerParams params) throws FileProviderException {
         return delegate.create(params);
-    }
-
-    public String getExperimentType() {
-        return experimentType;
-    }
-
-    public void setExperimentType(String experimentType) {
-        this.experimentType = experimentType;
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
-    }
-
-    public String getFileFilter() {
-        return fileFilter;
-    }
-
-    public void setFileFilter(String fileFilter) {
-        this.fileFilter = fileFilter;
-    }
-
-    public String getDatasetName() {
-        return datasetName;
-    }
-
-    public void setDatasetName(String datasetName) {
-        this.datasetName = datasetName;
-    }
-
-    public boolean isRootInStructure() {
-        return rootInStructure;
-    }
-
-    public void setRootInStructure(boolean rootInStructure) {
-        this.rootInStructure = rootInStructure;
-    }
-
-    public boolean isDatasetNameSubdirectory() {
-        return datasetNameSubdirectory;
-    }
-
-    public void setDatasetNameSubdirectory(boolean datasetNameSubdirectory) {
-        this.datasetNameSubdirectory = datasetNameSubdirectory;
-    }
-
-    public String getDatasetVersion() {
-        return datasetVersion;
-    }
-
-    public void setDatasetVersion(String datasetVersion) {
-        this.datasetVersion = datasetVersion;
-    }
-
-    public String getSubdirectory() {
-        return subdirectory;
-    }
-
-    public void setSubdirectory(String subdirectory) {
-        this.subdirectory = subdirectory;
-    }
-
-    public String getRootNameForStructure() {
-        return rootNameForStructure;
-    }
-
-    public void setRootNameForStructure(String rootNameForStructure) {
-        this.rootNameForStructure = rootNameForStructure;
-    }
-
-    public boolean isRecursive() {
-        return recursive;
-    }
-
-    public void setRecursive(boolean recursive) {
-        this.recursive = recursive;
-    }
-
-    public int getMaxDirectoryDepth() {
-        return maxDirectoryDepth;
-    }
-
-    public void setMaxDirectoryDepth(int maxDirectoryDepth) {
-        this.maxDirectoryDepth = maxDirectoryDepth;
     }
 }
