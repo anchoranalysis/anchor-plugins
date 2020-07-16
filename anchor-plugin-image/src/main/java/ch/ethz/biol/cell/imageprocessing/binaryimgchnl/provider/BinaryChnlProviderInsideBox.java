@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
-/** Creates a binary img-chnl where all pixels are 'on' within a certain x, y, z co-ordinate range
+/** Creates a binary img-chnl where all pixels are 'on' within a certain x, y, z coordinate range
  * 
  * This effectively creates a mask that is a box
  * 
@@ -45,27 +45,27 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
 
 	// START BEAN PROPERTIES
-	/** Minimum X co-ordinate inclusive */
+	/** Minimum X coordinate inclusive */
 	@BeanField
 	private int minX = 0;
 	
-	/** Maximum X co-ordinate inclusive */
+	/** Maximum X coordinate inclusive */
 	@BeanField
 	private int maxX = Integer.MAX_VALUE;
 	
-	/** Minimum Y co-ordinate inclusive */
+	/** Minimum Y coordinate inclusive */
 	@BeanField
 	private int minY = 0;
 	
-	/** Maximum Y co-ordinate inclusive */
+	/** Maximum Y coordinate inclusive */
 	@BeanField
 	private int maxY = Integer.MAX_VALUE;
 	
-	/** Minimum Z co-ordinate inclusive */
+	/** Minimum Z coordinate inclusive */
 	@BeanField
 	private int minZ = 0;
 	
-	/** Maximum Z co-ordinate inclusive */
+	/** Maximum Z coordinate inclusive */
 	@BeanField
 	private int maxZ = Integer.MAX_VALUE;
 	// END BEAN PROPERTIES
