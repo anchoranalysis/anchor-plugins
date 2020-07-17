@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import lombok.Getter;
 import lombok.Setter;

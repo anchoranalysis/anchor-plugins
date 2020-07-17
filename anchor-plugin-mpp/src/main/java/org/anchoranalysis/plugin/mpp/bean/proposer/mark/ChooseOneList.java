@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 
 // Chooses one from a list
 public class ChooseOneList extends MarkProposerFromList {

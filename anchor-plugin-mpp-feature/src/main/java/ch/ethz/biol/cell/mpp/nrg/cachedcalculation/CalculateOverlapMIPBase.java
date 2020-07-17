@@ -30,9 +30,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 
 @AllArgsConstructor

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkRegion;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.MarkRegion;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
