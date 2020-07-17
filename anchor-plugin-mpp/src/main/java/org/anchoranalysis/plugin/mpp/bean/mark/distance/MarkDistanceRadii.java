@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.bean.mark.distance;
 
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkDistance;
 import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkCircle;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;

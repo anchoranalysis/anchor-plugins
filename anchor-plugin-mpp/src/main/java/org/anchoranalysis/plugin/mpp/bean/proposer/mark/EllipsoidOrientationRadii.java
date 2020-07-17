@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds3D;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds3D;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
