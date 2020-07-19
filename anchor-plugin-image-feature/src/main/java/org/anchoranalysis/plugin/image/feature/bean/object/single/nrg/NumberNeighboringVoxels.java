@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
@@ -61,7 +61,7 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalcException {
+    protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalculationException {
 
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
@@ -69,13 +69,13 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
         return ApplyKernel.applyForCount(kernelMatch, object.getVoxelBox());
     }
 
-    private BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Channel chnl) throws FeatureCalcException {
+    private BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Channel chnl) throws FeatureCalculationException {
         try {
             VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
             return new BinaryVoxelBoxByte(vb, BinaryValues.getDefault());
 
         } catch (IncorrectVoxelDataTypeException e) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format("nrgStack channel %d has incorrect data type", getNrgIndex()), e);
         }
     }

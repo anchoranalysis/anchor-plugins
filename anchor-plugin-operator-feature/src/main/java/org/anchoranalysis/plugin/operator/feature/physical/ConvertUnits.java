@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 //
@@ -46,7 +46,7 @@ public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleEl
     // END BEAN PROPERTIES
 
     @Override
-    protected double calc(SessionInput<T> input) throws FeatureCalcException {
+    protected double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         double value = input.calc(getItem());
 

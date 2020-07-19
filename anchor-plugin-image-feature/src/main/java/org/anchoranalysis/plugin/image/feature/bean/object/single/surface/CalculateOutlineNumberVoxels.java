@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -69,7 +69,7 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
     }
 
     @Override
-    protected Integer execute(FeatureInputSingleObject input) throws FeatureCalcException {
+    protected Integer execute(FeatureInputSingleObject input) throws FeatureCalculationException {
         return calcSurfaceSize(input.getObject(), input.getDimensionsRequired(), mip, suppress3D);
     }
 }

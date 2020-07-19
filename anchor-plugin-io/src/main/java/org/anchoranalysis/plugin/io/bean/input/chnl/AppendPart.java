@@ -30,6 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -125,14 +126,14 @@ class AppendPart extends NamedChnlsInputPart {
     }
 
     @Override
-    public List<Path> pathForBindingForAllChannels() throws GetOperationFailedException {
+    public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
         try {
             List<Path> list = delegate.pathForBindingForAllChannels();
             list.add(additionalChnl.getFilePath());
             return list;
 
         } catch (AnchorIOException e) {
-            throw new GetOperationFailedException(e);
+            throw new OperationFailedException(e);
         }
     }
 

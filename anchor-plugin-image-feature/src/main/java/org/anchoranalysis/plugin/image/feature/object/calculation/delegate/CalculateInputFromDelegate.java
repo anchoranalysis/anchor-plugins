@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -64,7 +64,7 @@ public abstract class CalculateInputFromDelegate<S, T extends FeatureInput, U>
     }
 
     @Override
-    public S execute(T input) throws FeatureCalcException {
+    public S execute(T input) throws FeatureCalculationException {
 
         U delegate = ccDelegate.getOrCalculate(input);
         return deriveFromDelegate(input, delegate);

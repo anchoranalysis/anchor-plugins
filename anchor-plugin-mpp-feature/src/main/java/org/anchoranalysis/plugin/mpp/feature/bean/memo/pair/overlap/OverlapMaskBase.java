@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
@@ -49,14 +49,14 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
     // END BEAN PROPERTIES
 
     protected double overlapWithGlobalMask(SessionInput<FeatureInputPairMemo> params)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return params.calc(
                 new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue()));
     }
 
     @Override
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue));
     }
 

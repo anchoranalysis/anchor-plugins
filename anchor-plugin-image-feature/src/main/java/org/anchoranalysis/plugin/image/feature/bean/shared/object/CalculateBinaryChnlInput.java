@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -48,19 +48,19 @@ class CalculateBinaryChnlInput<T extends FeatureInputNRG>
     private final Mask chnl;
 
     @Override
-    protected FeatureInputSingleObject execute(T input) throws FeatureCalcException {
+    protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
         BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(chnl);
 
         return new FeatureInputSingleObject(new ObjectMask(bvb), input.getNrgStackOptional());
     }
 
-    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask bic) throws FeatureCalcException {
+    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask bic) throws FeatureCalculationException {
         VoxelBox<ByteBuffer> vb;
         try {
             vb = bic.getChannel().getVoxelBox().asByte();
         } catch (IncorrectVoxelDataTypeException e1) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     "binaryImgChnlProvider returned incompatible data type", e1);
         }
 

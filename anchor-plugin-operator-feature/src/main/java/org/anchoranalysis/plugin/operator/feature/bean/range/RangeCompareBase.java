@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,15 +46,15 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
         return calcForVal(input.calc(featureToCalcInputVal()), input);
     }
 
     /** Boundary to define the minimum accepted value in the range */
-    protected abstract double boundaryMin(SessionInput<T> input) throws FeatureCalcException;
+    protected abstract double boundaryMin(SessionInput<T> input) throws FeatureCalculationException;
 
     /** Boundary to define the maximum accepted value in the range */
-    protected abstract double boundaryMax(SessionInput<T> input) throws FeatureCalcException;
+    protected abstract double boundaryMax(SessionInput<T> input) throws FeatureCalculationException;
 
     /**
      * Which feature to calculate the input-value? The result is then passed to {@link #calcForVal}
@@ -63,7 +63,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
 
     /** What value to return if the value is inside the range */
     protected abstract double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     /**
      * Calculates for an input-value, return constant values if its outside the range, or otherwise
@@ -72,9 +72,9 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
      * @param val input-value
      * @return either a constant-value if outside the range, or else the result of the
      *     withinRangeValue function
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
-    private double calcForVal(double val, SessionInput<T> input) throws FeatureCalcException {
+    private double calcForVal(double val, SessionInput<T> input) throws FeatureCalculationException {
 
         if (val < boundaryMin(input)) {
             return belowMinValue;

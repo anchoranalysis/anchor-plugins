@@ -30,15 +30,15 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 public class MaxRatioRadii extends FeatureMark {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof MarkEllipse)) {
-            throw new FeatureCalcException("Mark must be of type " + MarkEllipse.class.getName());
+            throw new FeatureCalculationException("Mark must be of type " + MarkEllipse.class.getName());
         }
 
         MarkEllipse mark = (MarkEllipse) input.get().getMark();

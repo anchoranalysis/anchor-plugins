@@ -31,7 +31,7 @@ import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,7 +51,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         return deriveScore(
                 input.calc(getItem()), input.calc(itemMean), () -> input.calc(itemStdDev));
@@ -64,11 +64,11 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
      * @param mean the mean
      * @param stdDev a means to get the std-deviation (if needed)
      * @return
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     protected abstract double deriveScore(
-            double featureValue, double mean, Operation<Double, FeatureCalcException> stdDev)
-            throws FeatureCalcException;
+            double featureValue, double mean, Operation<Double, FeatureCalculationException> stdDev)
+            throws FeatureCalculationException;
 
     @Override
     public String getParamDscr() {

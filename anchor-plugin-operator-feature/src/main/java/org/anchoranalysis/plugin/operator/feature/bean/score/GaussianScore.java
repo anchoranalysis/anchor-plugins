@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.score;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 import lombok.Getter;
@@ -54,8 +54,8 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     @Override
     protected double deriveScore(
-            double featureValue, double mean, Operation<Double, FeatureCalcException> stdDev)
-            throws FeatureCalcException {
+            double featureValue, double mean, Operation<Double, FeatureCalculationException> stdDev)
+            throws FeatureCalculationException {
 
         if (ignoreHigherSide && featureValue > mean) {
             return 1.0;

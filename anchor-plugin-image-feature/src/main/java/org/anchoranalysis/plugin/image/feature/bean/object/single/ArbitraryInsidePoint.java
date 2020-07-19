@@ -33,9 +33,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -59,12 +60,17 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
-        AxisType axisType = AxisTypeConverter.createFromString(axis);
-
-        Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
-        return arbPoint.map(point -> (double) point.getValueByDimension(axisType))
-                .orElse(emptyValue);
+        try {
+            AxisType axisType = AxisTypeConverter.createFromString(axis);
+    
+            Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
+            return arbPoint.map(point -> (double) point.getValueByDimension(axisType))
+                    .orElse(emptyValue);
+            
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 }

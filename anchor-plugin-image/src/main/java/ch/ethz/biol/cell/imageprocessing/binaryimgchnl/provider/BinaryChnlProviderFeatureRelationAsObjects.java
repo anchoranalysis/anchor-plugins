@@ -31,8 +31,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -84,7 +85,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
                     new FeatureInitParams(),
                     getInitializationParameters().getFeature().getSharedFeatureSet(),
                     getLogger());
-        } catch (FeatureCalcException e1) {
+        } catch (InitException e1) {
             throw new CreateException(e1);
         }
     }
@@ -104,7 +105,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
             } else {
                 return binaryChnlElse.create();
             }
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }

@@ -32,18 +32,18 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class FeatureMarkEccentricity extends FeatureMark {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         Mark mark = input.get().getMark();
 
         if (!(mark instanceof MarkConic)) {
-            throw new FeatureCalcException("mark must be of type MarkAbstractRadii");
+            throw new FeatureCalculationException("mark must be of type MarkAbstractRadii");
         }
 
         double[] radii = ((MarkConic) mark).radiiOrdered();
@@ -53,7 +53,7 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
         } else {
 
             if (!(mark instanceof MarkEllipsoid)) {
-                throw new FeatureCalcException("mark must be of type MarkEllipsoid");
+                throw new FeatureCalculationException("mark must be of type MarkEllipsoid");
             }
 
             return calcEccentricityForEllipsoid(radii, ((MarkEllipsoid) mark).getOrientation());

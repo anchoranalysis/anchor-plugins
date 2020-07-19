@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageResolution;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class RadiiRatio extends FeatureMark {
     private ImageResolution uniformRes = new ImageResolution();
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         MarkConic markCast = (MarkConic) input.get().getMark();
 

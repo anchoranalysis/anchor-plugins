@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -74,7 +74,7 @@ public abstract class CalculateInputFromDelegateOption<
      * @param cacheName a sub-cache of the main cache to use for calculating the output feature
      * @param emptyValue what to return if the parameters are empty
      * @return the result of the feature calculation
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     public static <S extends FeatureInput, T extends FeatureInput, U> double calc(
             SessionInput<T> input,
@@ -84,7 +84,7 @@ public abstract class CalculateInputFromDelegateOption<
             Feature<S> feature,
             ChildCacheName cacheName,
             double emptyValue)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         FeatureCalculation<Optional<S>, T> ccParamsDerived =
                 funcCreateFromDelegate.apply(input.resolver().search(delegate));

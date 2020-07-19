@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange;
 import org.anchoranalysis.plugin.operator.feature.bean.range.RangeCompareBase;
@@ -61,18 +61,18 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
     }
 
     @Override
-    protected double boundaryMin(SessionInput<T> input) throws FeatureCalcException {
+    protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
         return input.calc(min);
     }
 
     @Override
-    protected double boundaryMax(SessionInput<T> input) throws FeatureCalcException {
+    protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
         return input.calc(max);
     }
 
     @Override
     protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return withinValue;
     }
 

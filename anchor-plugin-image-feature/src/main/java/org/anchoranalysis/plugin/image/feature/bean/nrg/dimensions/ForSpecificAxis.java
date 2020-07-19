@@ -31,6 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -47,8 +49,12 @@ public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDim
     // END BEAN PARAMETERS
 
     @Override
-    protected double calcFromDims(ImageDimensions dim) {
-        return calcForAxis(dim, AxisTypeConverter.createFromString(axis));
+    protected double calcFromDims(ImageDimensions dim) throws FeatureCalculationException {
+        try {
+            return calcForAxis(dim, AxisTypeConverter.createFromString(axis));
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 
     protected abstract double calcForAxis(ImageDimensions dimensions, AxisType axis);

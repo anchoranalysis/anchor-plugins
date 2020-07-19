@@ -31,14 +31,14 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 public class AsCfg extends FeatureSingleElem<FeatureInputAllMemo, FeatureInputCfg> {
 
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCfg.class);
 
     @Override
-    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
         return input.forChild().calc(getItem(), new CalculateDeriveCfgInput(), CACHE_NAME);
     }
 }

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -67,7 +67,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
     @Override
     protected double calc(
             CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         if (objectCollection == null) {
             objectCollection = createObjects();
@@ -79,11 +79,11 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
 
     protected abstract double deriveStatistic(DoubleArrayList featureVals);
 
-    private ObjectCollection createObjects() throws FeatureCalcException {
+    private ObjectCollection createObjects() throws FeatureCalculationException {
         try {
             return objects.create();
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
             Feature<FeatureInputSingleObject> feature,
             CalcForChild<T> calcForChild,
             ObjectCollection objectCollection)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         DoubleArrayList featureVals = new DoubleArrayList();
 
         // Calculate a feature on each obj mask

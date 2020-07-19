@@ -31,8 +31,9 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -50,14 +51,18 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         ImageDimensions dimensions = input.get().getDimensionsRequired();
 
         BoundingBox bbox = input.get().getMark().bbox(dimensions, getRegionID());
 
-        return resolveDistance(
-                bbox, Optional.of(dimensions.getRes()), AxisTypeConverter.createFromString(axis));
+        try {
+            return resolveDistance(
+                    bbox, Optional.of(dimensions.getRes()), AxisTypeConverter.createFromString(axis));
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 
     @Override
@@ -67,11 +72,15 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     
     private double resolveDistance(
             BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType)
-            throws FeatureCalcException {
-        return unit.resolveDistance(
-                bbox.extent().getValueByDimension(axisType),
-                res,
-                unitVector(AxisTypeConverter.dimensionIndexFor(axisType)));
+            throws FeatureCalculationException {
+        try {
+            return unit.resolveDistance(
+                    bbox.extent().getValueByDimension(axisType),
+                    res,
+                    unitVector(AxisTypeConverter.dimensionIndexFor(axisType)));
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 
     private DirectionVector unitVector(int dimIndex) {

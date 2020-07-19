@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,7 +45,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
 
         MemoCollection memoMarks = input.get().getPxlPartMemo();
 
@@ -57,7 +57,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     }
 
     private double calcStatistic(SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         double[] vals = new double[memoMarks.size()];
 
@@ -73,7 +73,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     /** Calculates the feature on each mark separately, populating vals, and returns the mean */
     private double calcForEachItem(
             SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double[] vals)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         double sum = 0.0;
 

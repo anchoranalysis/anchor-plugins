@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
@@ -48,11 +48,11 @@ public class LevelFromHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalculationException {
         try {
             return calculateLevel.calculateLevel(input.get().getHistogram());
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

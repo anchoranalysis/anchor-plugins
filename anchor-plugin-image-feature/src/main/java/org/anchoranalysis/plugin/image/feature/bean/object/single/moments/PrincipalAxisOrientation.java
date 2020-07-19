@@ -28,7 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.core.axis.AxisTypeException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,14 +48,18 @@ public class PrincipalAxisOrientation extends SpecificAxisBase {
 
     @Override
     protected double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
-            throws FeatureCalcException {
-        int axisIndex =
-                AxisTypeConverter.dimensionIndexFor(AxisTypeConverter.createFromString(axis));
-        return moment.getEigenvector().get(axisIndex);
+            throws FeatureCalculationException {
+        try {
+            int axisIndex =
+                    AxisTypeConverter.dimensionIndexFor(AxisTypeConverter.createFromString(axis));
+            return moment.getEigenvector().get(axisIndex);
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 
     @Override
-    protected double resultIfTooFewPixels() throws FeatureCalcException {
-        throw new FeatureCalcException("Too few voxels to determine axis-orientation");
+    protected double resultIfTooFewPixels() throws FeatureCalculationException {
+        throw new FeatureCalculationException("Too few voxels to determine axis-orientation");
     }
 }

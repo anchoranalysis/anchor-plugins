@@ -33,7 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -65,21 +65,21 @@ class ExtractFromProvider {
             String featureProviderName,
             SharedFeaturesInitParams initParams,
             Logger logger)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         try {
             featureProvider.initRecursive(initParams, logger);
 
             FeatureList<T> fl = featureProvider.create();
             if (fl.size() != 1) {
-                throw new FeatureCalcException(
+                throw new FeatureCalculationException(
                         String.format(
                                 "%s must return exactly one feature from its list. It currently returns %d",
                                 featureProviderName, fl.size()));
             }
             return fl.get(0);
         } catch (CreateException | InitException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +52,7 @@ public class Range<T extends FeatureInput> extends FeatureDoubleElem<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         double val1 = input.calc(getItem1());
         double val2 = input.calc(getItem2());

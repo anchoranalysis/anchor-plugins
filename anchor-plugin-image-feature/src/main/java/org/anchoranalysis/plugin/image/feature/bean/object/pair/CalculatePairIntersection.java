@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -105,7 +105,7 @@ class CalculatePairIntersection
 
     @Override
     protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ImageDimensions dimensions = input.getDimensionsRequired();
 
@@ -128,7 +128,7 @@ class CalculatePairIntersection
             }
 
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

@@ -30,14 +30,14 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveCfgInput
         extends FeatureCalculation<FeatureInputCfg, FeatureInputAllMemo> {
 
     @Override
-    protected FeatureInputCfg execute(FeatureInputAllMemo input) throws FeatureCalcException {
+    protected FeatureInputCfg execute(FeatureInputAllMemo input) throws FeatureCalculationException {
         return new FeatureInputCfg(input.getPxlPartMemo().asCfg(), input.getDimensionsOptional());
     }
 }

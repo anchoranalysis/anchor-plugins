@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 // Returns the maximum area of each slice
 public final class MaxSliceArea extends FeatureSingleMemoRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
 
         VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
 

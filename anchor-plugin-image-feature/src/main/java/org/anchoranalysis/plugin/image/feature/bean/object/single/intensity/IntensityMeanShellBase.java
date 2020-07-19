@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
@@ -87,7 +87,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     @Override
     protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
 
@@ -108,7 +108,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(
                 CalculateShellObjectMask.of(
                         input.resolver(),
@@ -124,7 +124,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     protected abstract double calcForShell(ObjectMask shell, Channel chnl)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     private ObjectMask createNrgMask(NRGStack nrgStack) {
         return new ObjectMask(

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -85,11 +85,11 @@ public class HOGFeature extends FeatureStack {
     }
 
     @Override
-    protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+    protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
         float[] arr = input.calc(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 
         if (index >= arr.length) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format(
                             "Index %d is out-of-bounds as the hog-descriptor has %d elements",
                             index, arr.length));

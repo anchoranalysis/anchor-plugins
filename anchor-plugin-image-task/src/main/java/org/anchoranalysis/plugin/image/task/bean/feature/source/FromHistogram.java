@@ -39,8 +39,9 @@ import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -103,7 +104,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             FeatureList<FeatureInputHistogram> features,
             FeatureNameList featureNames,
             BoundIOContext context)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
 
         // Reads histogram from file-system
         try {
@@ -122,8 +123,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
             return rv;
 
-        } catch (CSVReaderException | BeanDuplicateException | OperationFailedException e) {
-            throw new FeatureCalcException(e);
+        } catch (CSVReaderException | BeanDuplicateException | OperationFailedException | InitException e) {
+            throw new NamedFeatureCalculationException(e);
         }
     }
 
@@ -155,7 +156,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
             FeatureList<FeatureInputHistogram> features, Path modelDirectory, Logger logger)
-            throws FeatureCalcException {
+            throws InitException {
         return FeatureSession.with(
                 features,
                 new FeatureInitParams(),

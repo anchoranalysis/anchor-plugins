@@ -42,7 +42,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -82,7 +82,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
                     FeatureSession.with(
                             feature, new FeatureInitParams(kpv), sharedFeatureSet, getLogger());
 
-        } catch (CreateException | FeatureCalcException e) {
+        } catch (CreateException | InitException e) {
             session = null;
             throw new OperationFailedException(e);
         }
@@ -101,7 +101,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 
             return (nrg >= minVal);
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
 
             throw new CheckException(String.format("Error calculating feature:%n%s", e));
         }

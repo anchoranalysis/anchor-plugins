@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.opencv.core.Size;
@@ -110,7 +110,7 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
         return convertOr(Optional.ofNullable(windowSize), imageSize);
     }
 
-    public void checkSize(Extent extent) throws FeatureCalcException {
+    public void checkSize(Extent extent) throws FeatureCalculationException {
 
         SizeXY extentAsSize = new SizeXY(extent);
 
@@ -121,11 +121,11 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
 
         if (windowSize != null) {
             if (extent.getX() < windowSize.getWidth()) {
-                throw new FeatureCalcException(
+                throw new FeatureCalculationException(
                         "Image width is smaller than HOG window width. This is not permitted.");
             }
             if (extent.getY() < windowSize.getHeight()) {
-                throw new FeatureCalcException(
+                throw new FeatureCalculationException(
                         "Image height is smaller than HOG window height. This is not permitted.");
             }
         }

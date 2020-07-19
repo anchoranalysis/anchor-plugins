@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -50,7 +50,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
     protected double valueFor(
             SessionInput<FeatureInputSingleObject> params,
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         return aggregateResults(calcResults(params, intersecting));
     }
@@ -60,7 +60,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
     private List<Double> calcResults(
             SessionInput<FeatureInputSingleObject> paramsExst,
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> ccIntersecting)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         int size = paramsExst.calc(ccIntersecting).size();
 

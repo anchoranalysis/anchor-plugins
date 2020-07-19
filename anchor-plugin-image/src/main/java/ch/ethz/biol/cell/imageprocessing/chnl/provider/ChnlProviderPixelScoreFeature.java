@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.provider.ChnlProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
@@ -69,7 +69,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
             pixelScore.init(histograms(), Optional.empty());
             calcScoresIntoVoxelBox(chnl.getVoxelBox(), listAdditional, pixelScore);
 
-        } catch (FeatureCalcException | InitException e) {
+        } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
 
@@ -86,7 +86,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
     private static void calcScoresIntoVoxelBox(
             VoxelBoxWrapper vb, List<Channel> listAdditional, PixelScore pixelScore)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];
 

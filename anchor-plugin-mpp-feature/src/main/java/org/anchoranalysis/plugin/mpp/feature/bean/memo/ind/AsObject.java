@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -48,7 +48,7 @@ public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureI
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
         return input.forChild()
                 .calc(
                         getItem(),

@@ -67,12 +67,13 @@ public class FromCSVSharedState {
                 this.csvFilePathRead = csvFilePath;
 
             } catch (CreateException | CSVReaderException e) {
-                throw new GetOperationFailedException(e);
+                throw new GetOperationFailedException(csvFilePath.toString(), e);
             }
         }
 
         if (!csvFilePath.equals(csvFilePathRead)) {
             throw new GetOperationFailedException(
+                    csvFilePath.toString(),
                     String.format(
                             "A previous thread read the CSV file '%s', but this thread looks for '%s'. These files must be identical for all inputs",
                             csvFilePathRead, csvFilePath));

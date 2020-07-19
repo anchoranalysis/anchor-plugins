@@ -35,7 +35,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.MetadataHeaders;
@@ -49,6 +50,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import lombok.AllArgsConstructor;
 
 /**
  * Base class for exporting features, where features are calculated per-image using a
@@ -58,23 +60,15 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * @param T input-manager type
  * @param S feature-input type
  */
+@AllArgsConstructor
 public abstract class SingleRowPerInput<T extends InputFromManager, S extends FeatureInput>
         extends FeatureSource<T, FeatureList<S>, S> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
 
+    /** The first column-name in the CSV file that is outputted. */
     private String firstResultHeader;
-
-    /**
-     * Default constructor
-     *
-     * @param firstResultHeader the first column-name in the CSV file that is outputted
-     */
-    public SingleRowPerInput(String firstResultHeader) {
-        super();
-        this.firstResultHeader = firstResultHeader;
-    }
 
     @Override
     public SharedStateExportFeatures<FeatureList<S>> createSharedState(
@@ -87,7 +81,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             return new SharedStateExportFeatures<>(
                     metadataHeaders,
                     store.createFeatureNames(),
-                    () -> store.deepCopy().listFeatures(),
+                    store.deepCopy()::listFeatures,
                     context);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
@@ -116,7 +110,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             addResultsFor.accept(
                     identifierFor(input.descriptiveName(), groupGeneratorName), results);
 
-        } catch (BeanDuplicateException | FeatureCalcException e) {
+        } catch (BeanDuplicateException | NamedFeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -126,7 +120,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             FeatureList<S> features,
             FeatureNameList featureNames,
             BoundIOContext context)
-            throws FeatureCalcException;
+            throws NamedFeatureCalculationException;
 
     private static StringLabelsForCsvRow identifierFor(
             String descriptiveName, Optional<String> groupGeneratorName)

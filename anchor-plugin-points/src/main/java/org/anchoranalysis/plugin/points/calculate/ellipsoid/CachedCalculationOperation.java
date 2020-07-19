@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.Operation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -58,7 +58,7 @@ class CachedCalculationOperation<S, T extends FeatureInput>
     public S doOperation() throws CreateException {
         try {
             return cachedCalculation.getOrCalculate(params);
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }

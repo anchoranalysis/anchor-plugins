@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -42,11 +42,11 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
     private final int nrgIndex;
 
     @Override
-    protected Histogram execute(FeatureInputStack input) throws FeatureCalcException {
+    protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             return HistogramFactory.create(input.getNrgStackRequired().getChnl(nrgIndex));
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

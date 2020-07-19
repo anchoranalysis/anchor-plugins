@@ -28,7 +28,7 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -48,7 +48,7 @@ public class MockFeatureWithCalculation extends FeatureOperator<FeatureInput> {
     static int countCalcCalled = 0;
 
     @Override
-    protected double calc(SessionInput<FeatureInput> input) throws FeatureCalcException {
+    protected double calc(SessionInput<FeatureInput> input) throws FeatureCalculationException {
         countCalcCalled++; // NOSONAR
         return input.calc(new MockCalculation());
     }

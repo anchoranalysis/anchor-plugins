@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -41,7 +42,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -140,16 +141,19 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
             throws OperationFailedException {
 
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
-
-        double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
-
-        int optimaSliceIndex = findOptimaSlice(scores);
-
-        logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
-
-        params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
-
-        return optimaSliceIndex;
+        try {
+            double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
+    
+            int optimaSliceIndex = findOptimaSlice(scores);
+    
+            logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
+    
+            params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
+    
+            return optimaSliceIndex;
+        } catch (FeatureCalculationException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     private void deriveSlicesAndOutput(
@@ -197,9 +201,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     }
 
     private double[] calcScoreForEachSlice(
-            Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger)
-            throws OperationFailedException {
-
+            Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger) throws FeatureCalculationException
+    {
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(scoreFeature, logger);
@@ -220,8 +223,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
             return results;
 
-        } catch (FeatureCalcException e) {
-            throw new OperationFailedException(e);
+        } catch (InitException | FeatureCalculationException e) {
+            throw new FeatureCalculationException(e);
         }
     }
 

@@ -40,7 +40,8 @@ import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -122,7 +123,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         CfgNRGPixelized newNRG = exst.shallowCopy();
         try {
             newNRG.rmv(markExstIndex, nrgStack);
-        } catch (FeatureCalcException e1) {
+        } catch (NamedFeatureCalculationException e1) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove index %d", markExstIndex), e1);
         }
@@ -130,7 +131,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         try {
             newNRG.add(pair.getSource(), nrgStack);
             newNRG.add(pair.getDestination(), nrgStack);
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException("Cannot add source and destination", e);
         }
 

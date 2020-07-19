@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -44,7 +44,7 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
     private final int nrgChnlIndex;
 
     @Override
-    protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalcException {
+    protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalculationException {
 
         try {
             Mask binaryImgChnl =
@@ -57,7 +57,7 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
             return creator.createConnectedComponents(binaryImgChnl);
 
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

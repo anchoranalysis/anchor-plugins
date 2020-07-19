@@ -29,10 +29,13 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
@@ -75,7 +78,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             FeatureList<FeatureInputStack> features,
             FeatureNameList featureNames,
             BoundIOContext context)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         return createCalculator(inputObject, features, context).calc(new FeatureInputStack());
     }
 
@@ -83,14 +86,14 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             ProvidesStackInput inputObject,
             FeatureList<FeatureInputStack> features,
             BoundIOContext context)
-            throws FeatureCalcException {
+            throws NamedFeatureCalculationException {
         try {
             FeatureCalculatorFromProviderFactory<FeatureInputStack> featCalc =
                     new FeatureCalculatorFromProviderFactory<>(
                             inputObject, Optional.ofNullable(getNrgStackProvider()), context);
             return featCalc.calculatorForAll(features);
-        } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+        } catch (InitException | OperationFailedException e) {
+            throw new NamedFeatureCalculationException(e);
         }
     }
 }
