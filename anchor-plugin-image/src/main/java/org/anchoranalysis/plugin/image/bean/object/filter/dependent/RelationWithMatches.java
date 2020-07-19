@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedSingle;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
@@ -109,7 +109,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
         try {
             double val = evaluatorForSource.calc(new FeatureInputSingleObject(object));
             return doesMatchAllAssociatedObjects(val, matches.get(object), relation);
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -124,7 +124,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
     private boolean doesMatchAllAssociatedObjects(
             double val, ObjectCollection matches, RelationToValue relation)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         for (ObjectMask match : matches) {
 

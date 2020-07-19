@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -48,7 +48,7 @@ class CalculateHistogramInputFromMemo
 
     @Override
     protected FeatureInputHistogram execute(FeatureInputSingleMemo input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         try {
             VoxelStatistics stats =
@@ -59,7 +59,7 @@ class CalculateHistogramInputFromMemo
 
             return new FeatureInputHistogram(hist, input.getResOptional());
         } catch (CreateException | OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

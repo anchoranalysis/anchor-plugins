@@ -48,10 +48,6 @@ public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileB
                     String.format("Cannot find '%s' in manifest", getFileName()));
         }
 
-        try {
-            return finder.get().trim().trim();
-        } catch (GetOperationFailedException e) {
-            throw new OperationFailedException(e);
-        }
+        return finder.get().trim().trim();
     }
 }

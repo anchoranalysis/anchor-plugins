@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,7 +42,7 @@ class DivideUtilities {
 
     public static void checkDivisibleBy(
             SizeXY biggerNumber, SizeXY divisor, String biggerText, String divisorText)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         if (!isDivisibleBy(biggerNumber.getWidth(), divisor.getWidth())) {
             throw notDivisibleException(biggerText, divisorText, "width");
         }
@@ -52,9 +52,9 @@ class DivideUtilities {
         }
     }
 
-    public static FeatureCalcException notDivisibleException(
+    public static FeatureCalculationException notDivisibleException(
             String biggerText, String divisorText, String propertyText) {
-        return new FeatureCalcException(
+        return new FeatureCalculationException(
                 String.format(
                         "%s %s must be divisible by %s %s.",
                         biggerText, propertyText, divisorText, propertyText));

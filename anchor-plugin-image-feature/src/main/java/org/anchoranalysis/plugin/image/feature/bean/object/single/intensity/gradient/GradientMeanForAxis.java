@@ -30,9 +30,10 @@ import java.util.List;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,19 +55,18 @@ public class GradientMeanForAxis extends IntensityGradientBase {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
-        AxisType axisType = AxisTypeConverter.createFromString(axis);
+        try {
+            AxisType axisType = AxisTypeConverter.createFromString(axis);
+    
+            List<Point3d> points = input.calc(gradientCalculation());
 
-        // Calculate the mean
-        double sum = 0.0;
-
-        List<Point3d> points = input.calc(gradientCalculation());
-
-        for (Point3d point : points) {
-            sum += point.getValueByDimension(axisType);
+            double sum = points.stream().mapToDouble(point->point.getValueByDimension(axisType)).sum();
+            return sum / points.size();
+            
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }
-
-        return sum / points.size();
     }
 }

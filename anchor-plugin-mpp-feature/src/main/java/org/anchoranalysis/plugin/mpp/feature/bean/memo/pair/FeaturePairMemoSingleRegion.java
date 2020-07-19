@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
@@ -47,14 +47,14 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
     // END BEAN PROPERTIES
 
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(new CalculateOverlap(regionID));
     }
 
     protected BoundingBox bbox(
             FeatureInputPairMemo input,
             Function<FeatureInputPairMemo, VoxelizedMarkMemo> funcExtract)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         ImageDimensions sd = input.getDimensionsRequired();
         return funcExtract.apply(input).getMark().bbox(sd, getRegionID());
     }

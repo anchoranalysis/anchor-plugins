@@ -46,7 +46,8 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -151,7 +152,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.rmvTwo(srcIndex, destIndex, nrgStack.getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove indexes %d and %d", srcIndex, destIndex), e);
         }
@@ -160,7 +161,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.add(pmm, nrgStack.getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException("Cannot add pmm", e);
         }
 

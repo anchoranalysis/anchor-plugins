@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -59,7 +59,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalcException {
+    protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalculationException {
 
         try {
             ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);
@@ -73,7 +73,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
                     Optional.empty());
 
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

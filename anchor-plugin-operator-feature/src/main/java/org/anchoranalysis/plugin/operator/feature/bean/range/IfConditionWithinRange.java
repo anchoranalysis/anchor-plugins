@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +54,7 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
 
     @Override
     protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         // If the condition lies within the range, then we calculate the derived feature as intended
         return input.calc(getItem());
     }

@@ -30,7 +30,7 @@ import java.util.function.ToDoubleFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -49,10 +49,10 @@ class StatsHelper {
      * @param object
      * @param excludeZero
      * @return
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     public static ValueAndIndex calcMaxSliceMean(
-            Channel chnl, ObjectMask object, boolean excludeZero) throws FeatureCalcException {
+            Channel chnl, ObjectMask object, boolean excludeZero) throws FeatureCalculationException {
 
         double max = Double.NEGATIVE_INFINITY;
         int index = -1;

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +43,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         int size = getList().size();
 
@@ -55,7 +55,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
                 if (avoidDivideByZero) {
                     return divideByZeroValue;
                 } else {
-                    throw new FeatureCalcException(
+                    throw new FeatureCalculationException(
                             String.format(
                                     "Divide by zero from feature %s",
                                     getList().get(i).getFriendlyName()));

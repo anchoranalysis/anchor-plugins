@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
@@ -71,7 +71,7 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalcException {
+    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalculationException {
 
         try {
             Optional<ImageResolution> resOpt = Optional.of(res);
@@ -85,7 +85,7 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
             }
 
         } catch (UnitValueException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

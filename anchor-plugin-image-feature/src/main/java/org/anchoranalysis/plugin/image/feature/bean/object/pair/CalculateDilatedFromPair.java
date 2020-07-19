@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculation.CalcForChild;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -73,7 +73,7 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputPairObjects input) throws FeatureCalcException {
+    protected ObjectMask execute(FeatureInputPairObjects input) throws FeatureCalculationException {
         return resolverForChild.calc(
                 childCacheName,
                 calcInput.getOrCalculate(input),

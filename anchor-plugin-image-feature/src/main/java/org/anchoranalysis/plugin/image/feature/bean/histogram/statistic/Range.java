@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -48,13 +48,13 @@ public class Range extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
             double high = histogram.quantile(quantileHigh);
             double low = histogram.quantile(quantileLow);
             return high - low;
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

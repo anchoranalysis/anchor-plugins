@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
@@ -43,7 +43,7 @@ public abstract class FeatureResultsFromIndex extends FeatureResults {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(FeatureInputResults params) throws FeatureCalcException {
+    public double calc(FeatureInputResults params) throws FeatureCalculationException {
 
         try {
             int index = params.getFeatureNameIndex().indexOf(id);
@@ -51,19 +51,19 @@ public abstract class FeatureResultsFromIndex extends FeatureResults {
             ResultsVectorCollection rvc = params.getResultsVectorCollection();
 
             if (rvc.size() == 0) {
-                throw new FeatureCalcException(
+                throw new FeatureCalculationException(
                         "No feature-values exist, so this operation is undefined");
             }
 
             return calcStatisticFromFeatureVal(arrayListFrom(rvc, index));
 
         } catch (GetOperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
     protected abstract double calcStatisticFromFeatureVal(DoubleArrayList featureVals)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     private static DoubleArrayList arrayListFrom(ResultsVectorCollection rvc, int index) {
         DoubleArrayList featureVals = new DoubleArrayList();

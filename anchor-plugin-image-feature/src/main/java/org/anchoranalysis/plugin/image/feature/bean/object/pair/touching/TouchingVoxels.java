@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -51,7 +51,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 
@@ -68,14 +68,14 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
 
     protected abstract double calcWithIntersection(
             ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     /**
      * The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the
      * other
      */
     private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(new CalculateIntersectionOfDilatedBoundingBox(do3D));
     }
 

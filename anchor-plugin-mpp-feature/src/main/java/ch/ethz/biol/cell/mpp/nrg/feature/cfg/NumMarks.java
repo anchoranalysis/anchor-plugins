@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 public class NumMarks extends FeatureCfg {
 
     @Override
-    public double calc(FeatureInputCfg params) throws FeatureCalcException {
+    public double calc(FeatureInputCfg params) throws FeatureCalculationException {
         return params.getCfg().size();
     }
 }

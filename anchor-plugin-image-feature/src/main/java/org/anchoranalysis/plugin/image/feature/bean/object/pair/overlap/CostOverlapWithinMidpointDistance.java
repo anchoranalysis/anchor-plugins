@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
@@ -56,7 +56,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 
@@ -74,10 +74,10 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     }
 
     private boolean isDistanceMoreThanMax(FeatureInputPairObjects params)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         if (!params.getResOptional().isPresent()) {
-            throw new FeatureCalcException("This feature requires an Image-Res in the input");
+            throw new FeatureCalculationException("This feature requires an Image-Res in the input");
         }
 
         Point3d cog1 = params.getFirst().centerOfGravity();
@@ -87,7 +87,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
         try {
             return distance > calcMaxDistance(cog1, cog2, params.getResOptional());
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

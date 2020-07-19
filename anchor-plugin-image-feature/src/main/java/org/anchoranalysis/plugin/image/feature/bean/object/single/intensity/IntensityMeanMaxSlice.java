@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import lombok.Getter;
@@ -44,7 +44,7 @@ public class IntensityMeanMaxSlice extends FeatureNrgChnl {
 
     @Override
     protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ValueAndIndex vai =
                 StatsHelper.calcMaxSliceMean(chnl, input.get().getObject(), excludeZero);

@@ -27,12 +27,13 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -77,21 +78,25 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
      * Calculates a single-feature that comes from a provider (but can reference the other features
      * from the store)
      *
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     public FeatureCalculatorSingle<T> calculatorSingleFromProvider(
-            FeatureListProvider<T> provider, String providerName) throws FeatureCalcException {
+            FeatureListProvider<T> provider, String providerName) throws OperationFailedException {
 
-        Feature<T> feature =
-                ExtractFromProvider.extractFeature(
-                        provider, providerName, initParams.getFeature(), logger);
-
-        return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+        try {
+            Feature<T> feature =
+                    ExtractFromProvider.extractFeature(
+                            provider, providerName, initParams.getFeature(), logger);
+    
+            return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+        } catch (InitException | FeatureCalculationException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
-            throws FeatureCalcException {
+            throws InitException {
         return createMultiCalculator(features, initParams.getFeature().getSharedFeatureSet());
     }
 
@@ -111,14 +116,14 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
 
     private FeatureCalculatorMulti<T> createMultiCalculator(
             FeatureList<T> features, SharedFeatureMulti sharedFeatures)
-            throws FeatureCalcException {
+            throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
-            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws FeatureCalcException {
+            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorSingleChangeInput<>(
                 FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));

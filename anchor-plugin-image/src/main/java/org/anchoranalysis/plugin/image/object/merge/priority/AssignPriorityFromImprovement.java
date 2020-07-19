@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.object.merge.priority;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
@@ -71,7 +71,7 @@ public class AssignPriorityFromImprovement extends AssignPriority {
             throws OperationFailedException {
         try {
             return payloadCalculator.calc(object);
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }

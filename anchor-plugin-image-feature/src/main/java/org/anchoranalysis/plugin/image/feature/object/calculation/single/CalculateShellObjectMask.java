@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -69,7 +69,7 @@ public class CalculateShellObjectMask
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject input) throws FeatureCalcException {
+    protected ObjectMask execute(FeatureInputSingleObject input) throws FeatureCalculationException {
 
         ImageDimensions dimensions = input.getDimensionsRequired();
 
@@ -112,7 +112,7 @@ public class CalculateShellObjectMask
             ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion,
             int iterationsErosionSecond,
             boolean do3D)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ObjectMask objectDilated = ccDilation.getOrCalculate(input).duplicate();
         ObjectMask objectEroded = ccErosion.getOrCalculate(input);
@@ -125,7 +125,7 @@ public class CalculateShellObjectMask
                                     objectDilated, null, do3D, iterationsErosionSecond, true, null)
                             : objectDilated;
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
 
         ObjectMask relMask = objectEroded.relMaskTo(objectDilated.getBoundingBox());

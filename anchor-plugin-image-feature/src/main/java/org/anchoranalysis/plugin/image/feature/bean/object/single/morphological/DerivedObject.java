@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,7 +49,7 @@ public abstract class DerivedObject extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
         ChildCacheName cacheName = cacheName();
 
@@ -64,7 +64,7 @@ public abstract class DerivedObject extends FeatureSingleObject {
 
     protected abstract FeatureCalculation<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
-                    throws FeatureCalcException;
+                    throws FeatureCalculationException;
 
     protected abstract ChildCacheName cacheName();
 }

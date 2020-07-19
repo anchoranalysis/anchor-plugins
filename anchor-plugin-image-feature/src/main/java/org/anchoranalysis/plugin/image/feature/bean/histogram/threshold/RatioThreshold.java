@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         if (histogram.size() == 0) {
             return 0.0;
         }

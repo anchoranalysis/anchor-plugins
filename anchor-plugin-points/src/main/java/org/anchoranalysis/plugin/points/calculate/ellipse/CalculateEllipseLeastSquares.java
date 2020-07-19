@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsExcept
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,7 +49,7 @@ public class CalculateEllipseLeastSquares
 
     @Override
     protected ObjectWithEllipse execute(FeatureInputSingleObject input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         try {
             NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
@@ -61,7 +61,7 @@ public class CalculateEllipseLeastSquares
 
             return new ObjectWithEllipse(object, mark);
         } catch (CreateException | InsufficientPointsException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

@@ -32,9 +32,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -78,7 +79,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
                     createSession(feature),
                     new NRGStackWithParams(nrgStack));
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
     }
@@ -106,7 +107,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     }
 
     private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(
-            Feature<FeatureInputSingleObject> feature) throws FeatureCalcException {
+            Feature<FeatureInputSingleObject> feature) throws InitException {
         return FeatureSession.with(
                 feature,
                 new FeatureInitParams(),
@@ -119,7 +120,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             ObjectCollection objectsSource,
             FeatureCalculatorSingle<FeatureInputSingleObject> session,
             NRGStackWithParams nrgStackParams)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);

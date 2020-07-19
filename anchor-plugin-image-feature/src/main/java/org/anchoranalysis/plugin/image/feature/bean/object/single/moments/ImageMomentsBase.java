@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.ImageMoments;
@@ -55,7 +55,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
         if (input.get().getObject().numPixelsLessThan(MIN_NUM_VOXELS)) {
             return resultIfTooFewPixels();
@@ -65,12 +65,12 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     }
 
     protected abstract double calcFeatureResultFromMoments(ImageMoments moments)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
-    protected abstract double resultIfTooFewPixels() throws FeatureCalcException;
+    protected abstract double resultIfTooFewPixels() throws FeatureCalculationException;
 
     private ImageMoments calcMoments(SessionInput<FeatureInputSingleObject> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ImageMoments moments = input.calc(new CalculateSecondMoments(suppressZ));
 

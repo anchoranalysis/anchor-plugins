@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -57,10 +57,10 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof MarkEllipsoid)) {
-            throw new FeatureCalcException("Only supports MarkEllipsoids");
+            throw new FeatureCalculationException("Only supports MarkEllipsoids");
         }
 
         MarkEllipsoid mark = (MarkEllipsoid) input.get().getMark();
@@ -75,5 +75,5 @@ public abstract class FeatureMarkDirection extends FeatureMark {
             Orientation orientation,
             RotationMatrix rotMatrix,
             Vector3d directionVector)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 }

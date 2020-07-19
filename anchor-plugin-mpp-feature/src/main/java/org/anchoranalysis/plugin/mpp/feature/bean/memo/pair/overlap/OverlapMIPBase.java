@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
 public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
@@ -43,7 +43,7 @@ public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
 
     @Override
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         if (mip) {
             return input.calc(new CalculateOverlapMIPRatio(getRegionID()));
         } else {

@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
@@ -50,7 +50,7 @@ public class Shell extends DerivedObject {
     @Override
     protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
-                    throws FeatureCalcException {
+                    throws FeatureCalculationException {
         return CalculateShellObjectMask.of(
                 session, iterationsDilation, iterationsErosion, 0, do3D, false);
     }

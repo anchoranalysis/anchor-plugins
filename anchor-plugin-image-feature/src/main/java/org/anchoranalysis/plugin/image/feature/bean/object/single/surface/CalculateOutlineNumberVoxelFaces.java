@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -86,12 +86,12 @@ class CalculateOutlineNumberVoxelFaces
     }
 
     @Override
-    protected Integer execute(FeatureInputSingleObject params) throws FeatureCalcException {
+    protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
         try {
             return calcSurfaceSize(
                     params.getObject(), params.getDimensionsRequired(), mip, suppress3D);
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

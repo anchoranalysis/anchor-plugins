@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +43,7 @@ public class PixelScoreOutsideRange extends PixelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalcException {
+    public double calc(int[] pixelVals) throws FeatureCalculationException {
 
         double val = pixelVals[nrgIndex];
         if (val < min) {

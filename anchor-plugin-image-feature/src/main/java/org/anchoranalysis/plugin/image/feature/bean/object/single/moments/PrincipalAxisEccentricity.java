@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.math.moment.ImageMoments;
 
 /**
@@ -48,7 +48,7 @@ public class PrincipalAxisEccentricity extends ImageMomentsBase {
 
     @Override
     protected double calcFeatureResultFromMoments(ImageMoments moments)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         moments.removeClosestToUnitZ();
 
@@ -60,7 +60,7 @@ public class PrincipalAxisEccentricity extends ImageMomentsBase {
         }
 
         if (moments0 == 0.0 || moments1 == 0.0) {
-            throw new FeatureCalcException("All moments are 0");
+            throw new FeatureCalculationException("All moments are 0");
         }
 
         double eccentricity = calcEccentricity(moments1, moments0);

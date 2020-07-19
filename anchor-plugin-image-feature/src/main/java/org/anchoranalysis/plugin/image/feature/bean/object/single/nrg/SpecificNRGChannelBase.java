@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -44,11 +44,11 @@ public abstract class SpecificNRGChannelBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
         return calcWithChannel(
                 input.get().getObject(), input.get().getNrgStackRequired().getChnl(nrgIndex));
     }
 
     protected abstract double calcWithChannel(ObjectMask object, Channel chnl)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 }

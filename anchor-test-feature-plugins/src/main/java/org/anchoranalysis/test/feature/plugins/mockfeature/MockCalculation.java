@@ -28,7 +28,7 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import java.util.function.ToDoubleFunction;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import lombok.EqualsAndHashCode;
 
@@ -46,7 +46,7 @@ class MockCalculation extends FeatureCalculation<Double, FeatureInput> {
     static ToDoubleFunction<FeatureInput> funcCalculation;
 
     @Override
-    protected Double execute(FeatureInput input) throws FeatureCalcException {
+    protected Double execute(FeatureInput input) throws FeatureCalculationException {
         assert (funcCalculation != null); // NOSONAR
         countExecuteCalled++; // NOSONAR
         return funcCalculation.applyAsDouble(input); // NOSONAR

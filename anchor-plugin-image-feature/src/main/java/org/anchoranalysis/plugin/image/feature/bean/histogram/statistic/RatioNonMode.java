@@ -30,7 +30,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
             int startV = ignoreZero ? 1 : 0;
 
@@ -76,7 +76,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
 
             return ((double) nonModalCnt) / totalCnt;
         } catch (IndexOutOfBoundsException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

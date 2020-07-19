@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
@@ -70,7 +70,7 @@ public class BinaryChannelAsSingleObject<T extends FeatureInputNRG>
     @Override
     protected double calc(
             CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return calcForChild.calc(
                 featureForSingleObject,
                 new CalculateBinaryChnlInput<>(chnl),

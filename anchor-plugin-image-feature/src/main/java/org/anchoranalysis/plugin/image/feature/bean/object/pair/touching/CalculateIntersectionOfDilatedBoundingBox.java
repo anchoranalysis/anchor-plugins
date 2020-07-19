@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -45,7 +45,7 @@ class CalculateIntersectionOfDilatedBoundingBox
 
     @Override
     protected Optional<BoundingBox> execute(FeatureInputPairObjects input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return findIntersectionOfDilatedBoundingBox(
                 input.getFirst(), input.getSecond(), input.getDimensionsRequired().getExtent());
     }
