@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

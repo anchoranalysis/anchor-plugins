@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
@@ -41,16 +41,18 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
- * A feature-table describing objects defined by columns (features) and rows (inputs).
- *
- * <p>A row may represent a single object, or a pair of objects, or any other derived inputs from an
- * object-collection.
+ * A way to combine (or not combine) objects so that they provide a feature-table.
+ * <p>
+ * Columns in the feature-table always represent features.
+ * <p>
+ * A row may represent a single object, or a pair of objects, or any other derived inputs from an
+ * object-collection, depending on the implementation of the sub-class.
  *
  * @author Owen Feehan
- * @param T type of fexture used in the table
+ * @param T type of feature used in the table
  */
-public abstract class FeatureTableObjects<T extends FeatureInput>
-        extends AnchorBean<FeatureTableObjects<T>> {
+public abstract class CombineObjectsForFeatures<T extends FeatureInput>
+        extends AnchorBean<CombineObjectsForFeatures<T>> {
 
     /**
      * Creates features that will be applied on the objects. Features should always be duplicated
