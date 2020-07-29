@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
  *
  * @author Owen Feehan
  */
-public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
+public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObjects> {
 
     // START BEAN PROPERTIES
     /**

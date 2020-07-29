@@ -60,7 +60,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
@@ -101,7 +101,7 @@ public class FromObjects<T extends FeatureInput>
     @BeanField @Getter @Setter
     private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
 
-    @BeanField @Getter @Setter private FeatureTableObjects<T> table;
+    @BeanField @Getter @Setter private CombineObjectsForFeatures<T> combine;
 
     @BeanField @Getter @Setter private boolean suppressErrors = false;
     // END BEAN PROPERTIES
@@ -119,7 +119,7 @@ public class FromObjects<T extends FeatureInput>
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
-                    table.createFeatures(features, STORE_FACTORY, suppressErrors);
+                    combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return new SharedStateExportFeatures<>(
                     metadataHeaders,
                     tableCalculator.createFeatureNames(),
@@ -185,7 +185,7 @@ public class FromObjects<T extends FeatureInput>
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(
-                        table,
+                        combine,
                         startCalculator(calculator, imageInit, nrgStack, logger),
                         addResultsFor,
                         imageInit,
@@ -227,7 +227,7 @@ public class FromObjects<T extends FeatureInput>
                     input ->
                             identifierFor(
                                     descriptiveName,
-                                    table.uniqueIdentifierFor(input),
+                                    combine.uniqueIdentifierFor(input),
                                     groupGeneratorName,
                                     ni.getName()));
         }

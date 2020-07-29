@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.object.ObjectMask;
  *
  * @author Owen Feehan
  */
-public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
+public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureInputSingleObject> {
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(

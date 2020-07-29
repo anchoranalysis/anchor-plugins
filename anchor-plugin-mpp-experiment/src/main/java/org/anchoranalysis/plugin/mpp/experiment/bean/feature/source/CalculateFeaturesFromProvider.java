@@ -42,11 +42,11 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
-    private final FeatureTableObjects<T> table;
+    private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
     private final BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor;
     private final ImageInitParams imageInitParams;
@@ -55,7 +55,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final Logger logger;
 
     public CalculateFeaturesFromProvider(
-            FeatureTableObjects<T> table,
+            CombineObjectsForFeatures<T> table,
             FeatureCalculatorMulti<T> calculator,
             BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
             ImageInitParams imageInitParams,
