@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
+import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public class FromUnitValueDistance extends ScalarProposer {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private UnitValueDistance unitValueDistance;
 
-    @BeanField @Getter @Setter private DirectionVectorBean directionVector;
+    @BeanField @Getter @Setter private VectorInDirection directionVector;
     // END BEAN PROPERTIES
 
     @Override

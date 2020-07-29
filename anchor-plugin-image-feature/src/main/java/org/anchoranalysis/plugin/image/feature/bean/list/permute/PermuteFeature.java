@@ -95,7 +95,9 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
                 list =
                         new ApplyPermutations<Feature<T>>(
                                         Feature::getCustomName,
-                                        (feat, name) -> feat.setCustomName(name))
+                                        (feat, name) -> {
+                                            feat.setCustomName(name);   
+                                        })
                                 .applyPermutationsToCreateDuplicates(list, pp, permutationSetter);
             } catch (PermutationSetterException e) {
                 throw new CreateException(

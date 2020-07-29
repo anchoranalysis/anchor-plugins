@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.image.bean.orientation.DirectionVectorBean;
+import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -45,7 +45,7 @@ import lombok.Setter;
 public abstract class FeatureMarkDirection extends FeatureMark {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DirectionVectorBean directionVector;
+    @BeanField @Getter @Setter private VectorInDirection directionVector;
     // END BEAN PROPERTIES
 
     private DirectionVector dv;
