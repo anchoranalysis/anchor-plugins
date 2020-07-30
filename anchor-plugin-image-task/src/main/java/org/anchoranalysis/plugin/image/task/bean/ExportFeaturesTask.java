@@ -58,7 +58,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
@@ -137,7 +137,9 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                             input.getInputObject().pathForBindingRequired(),
                             input.context().isDebugEnabled());
             
-            ExportFeatureFromInputContext context = new ExportFeatureFromInputContext(
+            InputProcessContext<S> context = new InputProcessContext<>(
+                input.getSharedState().addResultsFor(),
+                input.getSharedState().duplicateForNewThread(),
                 input.getSharedState().getFeatureNames(),
                 groupName,
                 thumbnails,
@@ -146,8 +148,6 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
             
             source.processInput(
                     input.getInputObject(),
-                    input.getSharedState().addResultsFor(),
-                    input.getSharedState().duplicateForNewThread(),
                     context);
             
         } catch (OperationFailedException | AnchorIOException e) {

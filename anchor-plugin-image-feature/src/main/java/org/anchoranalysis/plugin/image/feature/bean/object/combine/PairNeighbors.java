@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
+import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -143,7 +143,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                             helper.copyFeaturesCreateCustomName(list),
                             helper.copyFeaturesCreateCustomName(featuresPair));
 
-            return new FeatureCalculatorMergedPairs(
+            return new PairsTableCalculator(
                     features,
                     new MergedPairsInclude(includeFirst, includeSecond, includeMerged),
                     suppressErrors);

@@ -46,9 +46,7 @@ import org.anchoranalysis.feature.io.csv.name.CombinedName;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -59,10 +57,10 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 
 /**
  * Extracts features for each object in a collection.
@@ -85,7 +83,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * <p>TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to
  * anchor-plugin-image-task??
  *
- * @param <T> the feature input-type supported by the FlexiFeatureTable
+ * @param <T> the feature input-type supported by the {@link FeatureTableCalculator}
  */
 public class FromObjects<T extends FeatureInput>
         extends FeatureSource<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> {
@@ -132,9 +130,7 @@ public class FromObjects<T extends FeatureInput>
     @Override
     public void processInput(
             MultiInput input,
-            ExportFeatureResultsAdder addResultsFor,
-            FeatureTableCalculator<T> rowSource,
-            ExportFeatureFromInputContext context)
+            InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         define.processInput(
                 input,
@@ -142,12 +138,8 @@ public class FromObjects<T extends FeatureInput>
                 (initParams, nrgStack) ->
                         calculateFeaturesForImage(
                                 input.descriptiveName(),
-                                rowSource,
-                                addResultsFor,
-                                context.getGroupGeneratorName(),
-                                initParams,
-                                nrgStack,
-                                context.getLogger()));
+                                new InitParamsWithNrgStack(initParams, nrgStack),
+                                context));
     }
 
     @Override
@@ -172,24 +164,19 @@ public class FromObjects<T extends FeatureInput>
 
     private int calculateFeaturesForImage(
             String descriptiveName,
-            FeatureTableCalculator<T> calculator,
-            ExportFeatureResultsAdder addResultsFor,
-            Optional<String> groupGeneratorName,
-            ImageInitParams imageInit,
-            NRGStackWithParams nrgStack,
-            Logger logger)
+            InitParamsWithNrgStack initParams,
+            InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(
                         combine,
-                        startCalculator(calculator, imageInit, nrgStack, logger),
-                        addResultsFor,
-                        imageInit,
-                        nrgStack,
+                        startCalculator(context.getRowSource(), initParams, context.getLogger()),
+                        initParams,
                         suppressErrors,
-                        logger);
-        processAllProviders(descriptiveName, groupGeneratorName, fromProviderCalculator);
+                        input -> Optional.empty(),
+                        context);
+        processAllProviders(descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;
@@ -197,13 +184,12 @@ public class FromObjects<T extends FeatureInput>
 
     private FeatureCalculatorMulti<T> startCalculator(
             FeatureTableCalculator<T> calculator,
-            ImageInitParams imageInit,
-            NRGStackWithParams nrgStack,
+            InitParamsWithNrgStack initParams,
             Logger logger)
             throws OperationFailedException {
 
         try {
-            calculator.start(imageInit, Optional.of(nrgStack), logger);
+            calculator.start(initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }
@@ -221,12 +207,11 @@ public class FromObjects<T extends FeatureInput>
         for (NamedBean<ObjectCollectionProvider> ni : objects) {
             calculator.processProvider(
                     ni.getValue(),
-                    input ->
-                            identifierFor(
-                                    descriptiveName,
-                                    combine.uniqueIdentifierFor(input),
-                                    groupGeneratorName,
-                                    ni.getName()));
+                    input -> identifierFor(
+                        descriptiveName,
+                        combine.uniqueIdentifierFor(input),
+                        groupGeneratorName,
+                        ni.getName()));
         }
     }
 
