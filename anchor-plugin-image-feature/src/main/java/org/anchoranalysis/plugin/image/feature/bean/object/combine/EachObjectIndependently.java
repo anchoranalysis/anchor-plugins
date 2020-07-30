@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.SingleObjectTableSession;
+import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -53,7 +53,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
             throws CreateException {
-        return new SingleObjectTableSession(storeFactory.createNamedFeatureList(list));
+        return new SingleTableCalculator(storeFactory.createNamedFeatureList(list));
     }
 
     @Override

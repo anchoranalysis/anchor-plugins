@@ -44,8 +44,7 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
@@ -95,15 +94,13 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     @Override
     public void processInput(
             T input,
-            ExportFeatureResultsAdder adder,
-            FeatureList<S> rowSource,
-            ExportFeatureFromInputContext context)
+            InputProcessContext<FeatureList<S>> context)
             throws OperationFailedException {
         try {
             ResultsVectorWithThumbnail results =
-                    calcResultsVectorForInputObject(input, rowSource, context);
+                    calculateResultsForInput(input, context);
 
-            adder.addResultsFor(
+            context.addResultsFor(
                     identifierFor(input.descriptiveName(), context.getGroupGeneratorName()),
                     results 
             );
@@ -113,10 +110,9 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
         }
     }
 
-    protected abstract ResultsVectorWithThumbnail calcResultsVectorForInputObject(
+    protected abstract ResultsVectorWithThumbnail calculateResultsForInput(
         T inputObject,
-        FeatureList<S> features,
-        ExportFeatureFromInputContext context
+        InputProcessContext<FeatureList<S>> context
     ) throws NamedFeatureCalculationException;
     
     private static StringLabelsForCsvRow identifierFor(

@@ -44,7 +44,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.task.bean.thumbnail.stack.ThumbnailFromStack;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
 import lombok.Getter;
@@ -80,16 +80,15 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     @Override
-    protected ResultsVectorWithThumbnail calcResultsVectorForInputObject(
+    protected ResultsVectorWithThumbnail calculateResultsForInput(
             ProvidesStackInput inputObject,
-            FeatureList<FeatureInputStack> features,
-            ExportFeatureFromInputContext context)
-            throws NamedFeatureCalculationException {
+            InputProcessContext<FeatureList<FeatureInputStack>> context)
+        throws NamedFeatureCalculationException {
         
         FeatureCalculatorFromProvider<FeatureInputStack> factory = createCalculator(inputObject, context.getContext());
         
         // Calculate the results for the current stack
-        ResultsVector results = calculateResults(factory, features);
+        ResultsVector results = calculateResults(factory, context.getRowSource());
         
         thumbnail.start();
         

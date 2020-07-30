@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -39,10 +40,13 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -50,19 +54,20 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
-    private final ExportFeatureResultsAdder addResultsFor;
-    private final ImageInitParams imageInitParams;
-    private final NRGStackWithParams nrgStack;
+    private final InitParamsWithNrgStack initParams;
+    
+    /** iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to the log */
     private final boolean suppressErrors;
-    private final Logger logger;
+    private final Function<T,Optional<DisplayStack>> thumbnailForInput;
+    private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public void processProvider(
             ObjectCollectionProvider provider,
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         calculateFeaturesForProvider(
-                objectsFromProvider(provider, imageInitParams, logger),
-                nrgStack,
+                objectsFromProvider(provider, initParams.getImageInit(), context.getLogger()),
+                initParams.getNrgStack(),
                 identifierFromInput);
     }
 
@@ -72,9 +77,9 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         try {
-            List<T> listParams = table.createListInputs(objects, nrgStack, logger);
+            List<T> listParams = table.createListInputs(objects, nrgStack, context.getLogger());
 
-            calculateManyFeaturesInto(listParams, identifierFromInput, suppressErrors, logger);
+            calculateManyFeaturesInto(listParams, identifierFromInput);
         } catch (CreateException | OperationFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -89,16 +94,11 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      * @param session for calculating features
      * @param listInputs a list of parameters. Each parameters creates a new result (e.g. a new row
      *     in a feature-table)
-     * @param suppressErrors iff TRUE no exceptions are thrown when an error occurs, but rather a
-     *     message is written to the log
-     * @param logger the log
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
             List<T> listInputs,
-            Function<T, StringLabelsForCsvRow> labelsForInput,
-            boolean suppressErrors,
-            Logger logger)
+            Function<T, StringLabelsForCsvRow> labelsForInput)
             throws OperationFailedException {
 
         try {
@@ -106,15 +106,16 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
                 T input = listInputs.get(i);
 
-                logger.messageLogger()
+                context.getLogger().messageLogger()
                         .logFormatted(
                                 "Calculating input %d of %d: %s",
                                 i + 1, listInputs.size(), input.toString());
 
-                addResultsFor.addResultsFor(
+                context.addResultsFor(
                         labelsForInput.apply(input),
                         new ResultsVectorWithThumbnail(
-                           calculator.calc(input, logger.errorReporter(), suppressErrors)
+                           calculator.calc(input, context.getLogger().errorReporter(), suppressErrors),
+                           thumbnailForInput.apply(input)
                         )
                 );
             }

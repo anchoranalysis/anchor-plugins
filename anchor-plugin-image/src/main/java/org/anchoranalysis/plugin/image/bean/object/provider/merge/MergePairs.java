@@ -47,7 +47,7 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
+import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
@@ -107,8 +107,8 @@ public class MergePairs extends MergeWithFeature {
         try {
             Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
 
-            FeatureCalculatorMergedPairs session =
-                    new FeatureCalculatorMergedPairs(
+            PairsTableCalculator session =
+                    new PairsTableCalculator(
                             new MergedPairsFeatures(
                                     FeatureListFactory.fromProvider(
                                             featureEvaluatorMerge.getFeatureProvider())));

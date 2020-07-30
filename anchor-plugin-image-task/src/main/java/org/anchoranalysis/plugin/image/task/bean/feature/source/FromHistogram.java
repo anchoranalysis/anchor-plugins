@@ -54,7 +54,7 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import lombok.Getter;
 import lombok.Setter;
@@ -99,10 +99,9 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     }
     
     @Override
-    protected ResultsVectorWithThumbnail calcResultsVectorForInputObject(
+    protected ResultsVectorWithThumbnail calculateResultsForInput(
             FileInput inputObject,
-            FeatureList<FeatureInputHistogram> features,
-            ExportFeatureFromInputContext context)
+            InputProcessContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculationException {
 
         // Reads histogram from file-system
@@ -114,7 +113,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             }
 
             ResultsVector results =
-                    createCalculator(features, context.getModelDirectory(), context.getLogger())
+                    createCalculator(context.getRowSource(), context.getModelDirectory(), context.getLogger())
                             .calc(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
@@ -134,7 +133,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
         try {
             histogramProviderDuplicated.initRecursive(
-                    createImageInitParmas(inputtedHistogram, context), context.getLogger());
+                    createImageInitParams(inputtedHistogram, context), context.getLogger());
 
             return histogramProviderDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
@@ -143,7 +142,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
-    private ImageInitParams createImageInitParmas(Histogram inputtedHist, BoundIOContext context)
+    private ImageInitParams createImageInitParams(Histogram inputtedHist, BoundIOContext context)
             throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
@@ -153,7 +152,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         return paramsInit;
     }
 
-    private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
+    private static FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
             FeatureList<FeatureInputHistogram> features, Path modelDirectory, Logger logger)
             throws InitException {
         return FeatureSession.with(
