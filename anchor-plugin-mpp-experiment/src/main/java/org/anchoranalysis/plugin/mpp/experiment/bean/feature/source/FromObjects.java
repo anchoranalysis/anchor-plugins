@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -40,15 +39,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.io.csv.name.CombinedName;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -62,6 +59,8 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
@@ -113,7 +112,7 @@ public class FromObjects<T extends FeatureInput>
 
     @Override
     public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
-            MetadataHeaders metadataHeaders,
+            LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
             BoundIOContext context)
             throws CreateException {
@@ -131,23 +130,21 @@ public class FromObjects<T extends FeatureInput>
     }
 
     @Override
-    public void calcAllResultsForInput(
+    public void processInput(
             MultiInput input,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            FeatureTableCalculator<T> featureSourceSupplier,
-            FeatureNameList featureNames,
-            Optional<String> groupGeneratorName,
-            BoundIOContext context)
+            ExportFeatureResultsAdder addResultsFor,
+            FeatureTableCalculator<T> rowSource,
+            ExportFeatureFromInputContext context)
             throws OperationFailedException {
         define.processInput(
                 input,
-                context,
+                context.getContext(),
                 (initParams, nrgStack) ->
                         calculateFeaturesForImage(
                                 input.descriptiveName(),
-                                featureSourceSupplier,
+                                rowSource,
                                 addResultsFor,
-                                groupGeneratorName,
+                                context.getGroupGeneratorName(),
                                 initParams,
                                 nrgStack,
                                 context.getLogger()));
@@ -176,7 +173,7 @@ public class FromObjects<T extends FeatureInput>
     private int calculateFeaturesForImage(
             String descriptiveName,
             FeatureTableCalculator<T> calculator,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
+            ExportFeatureResultsAdder addResultsFor,
             Optional<String> groupGeneratorName,
             ImageInitParams imageInit,
             NRGStackWithParams nrgStack,

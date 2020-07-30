@@ -94,14 +94,14 @@ class MultiFile {
     private void checkChnlNum(Stack stackForFile, Optional<Integer> chnlNum, Path filePath)
             throws RasterIOException {
         if (chnlNum.isPresent()) {
-            if (stackForFile.getNumChnl() != 1) {
+            if (stackForFile.getNumberChannels() != 1) {
                 throw new RasterIOException(
                         String.format(
                                 "A chnlNum %d is specified, but the file '%s' has more than one channel",
                                 chnlNum.get(), filePath));
             }
         } else {
-            if (stackForFile.getNumChnl() != size.getRangeC().getSize()) {
+            if (stackForFile.getNumberChannels() != size.getRangeC().getSize()) {
                 throw new RasterIOException(
                         String.format("File '%s' has an incorrect number of channels", filePath));
             }

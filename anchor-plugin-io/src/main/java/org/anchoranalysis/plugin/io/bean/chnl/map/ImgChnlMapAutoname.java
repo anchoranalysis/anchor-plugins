@@ -65,10 +65,10 @@ public class ImgChnlMapAutoname extends ImgChnlMapCreator {
         Optional<List<String>> names = openedRaster.channelNames();
 
         try {
-            boolean rgb = openedRaster.isRGB() && openedRaster.numChnl() == 3;
+            boolean rgb = openedRaster.isRGB() && openedRaster.numberChannels() == 3;
 
             // The insertion order is critical here to remember R, G, B
-            for (int c = 0; c < openedRaster.numChnl(); c++) {
+            for (int c = 0; c < openedRaster.numberChannels(); c++) {
                 map.add(new ImgChnlMapEntry(nameFor(c, names, rgb), c));
             }
 

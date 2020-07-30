@@ -41,7 +41,7 @@ import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
@@ -59,16 +59,16 @@ public class SharedObjectsFromChnlTask extends RasterTask {
             NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException {
 
-        NamedChnlCollectionForSeries ncc;
+        NamedChannelsForSeries ncc;
         try {
-            ncc = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            ncc = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
         } catch (RasterIOException e1) {
             throw new JobExecutionException(e1);
         }
 
         try {
             Optional<Channel> inputImage =
-                    ncc.getChnlOrNull(
+                    ncc.getChannelOptional(
                             ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
             inputImage.ifPresent(
                     image ->

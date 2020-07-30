@@ -129,7 +129,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     private ObjectMask createNrgMask(NRGStack nrgStack) {
         return new ObjectMask(
                 new BoundingBox(nrgStack.getDimensions().getExtent()),
-                nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
+                nrgStack.getChannel(nrgIndexMask).getVoxelBox().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()
                         : BinaryValues.getDefault());

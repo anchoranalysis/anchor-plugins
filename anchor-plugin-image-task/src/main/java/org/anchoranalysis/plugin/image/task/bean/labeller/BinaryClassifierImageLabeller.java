@@ -41,7 +41,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -63,8 +63,8 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
             throws OperationFailedException {
 
         try {
-            FeatureCalculatorFromProviderFactory<FeatureInputStack> featureCalculator =
-                    new FeatureCalculatorFromProviderFactory<>(
+            FeatureCalculatorFromProvider<FeatureInputStack> featureCalculator =
+                    new FeatureCalculatorFromProvider<>(
                             input, Optional.of(getNrgStackProvider()), context);
 
             double classificationVal =
@@ -76,9 +76,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
             // If classification val is >= 0, then it is POSITIVE
             // If classification val is < 0, then it is NEGATIVE
-            boolean classificationPositive = classificationVal >= 0;
-
-            return classificationString(classificationPositive);
+            return classificationString(classificationVal >= 0);
 
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);

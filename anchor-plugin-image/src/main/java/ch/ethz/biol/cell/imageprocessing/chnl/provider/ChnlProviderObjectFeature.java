@@ -97,7 +97,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             }
 
             try {
-                nrgStack.asStack().addChnl(chnlAdditional);
+                nrgStack.asStack().addChannel(chnlAdditional);
             } catch (IncorrectImageSizeException e) {
                 throw new CreateException(e);
             }

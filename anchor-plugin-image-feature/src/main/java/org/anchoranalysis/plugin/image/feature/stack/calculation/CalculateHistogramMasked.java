@@ -67,11 +67,11 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
     }
 
     private Channel extractChnl(NRGStack nrgStack) {
-        return nrgStack.getChnl(nrgIndexSignal);
+        return nrgStack.getChannel(nrgIndexSignal);
     }
 
     private Mask extractMask(NRGStack nrgStack) {
-        Channel chnl = nrgStack.getChnl(nrgIndexMask);
+        Channel chnl = nrgStack.getChannel(nrgIndexMask);
         return new Mask(chnl, BinaryValues.getDefault());
     }
 }

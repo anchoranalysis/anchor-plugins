@@ -49,7 +49,7 @@ public class CalculateOverlapMask extends FeatureCalculation<Double, FeatureInpu
         VoxelizedMarkMemo mark1 = input.getObj1();
         VoxelizedMarkMemo mark2 = input.getObj2();
 
-        Channel chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+        Channel chnl = input.getNrgStackRequired().getNrgStack().getChannel(nrgIndex);
 
         return OverlapUtilities.overlapWithMaskGlobal(
                 mark1, mark2, regionID, chnl.getVoxelBox().asByte(), maskOnValue);

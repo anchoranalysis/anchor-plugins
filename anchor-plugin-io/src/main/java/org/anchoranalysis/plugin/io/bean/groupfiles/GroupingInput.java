@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
@@ -67,16 +67,16 @@ class GroupingInput extends NamedChnlsInput {
 
     @Override
     public int numSeries() throws RasterIOException {
-        return openedRaster.numSeries();
+        return openedRaster.numberSeries();
     }
 
     @Override
     public ImageDimensions dim(int seriesIndex) throws RasterIOException {
-        return openedRaster.dim(seriesIndex);
+        return openedRaster.dimensionsForSeries(seriesIndex);
     }
 
     @Override
-    public NamedChnlCollectionForSeries createChnlCollectionForSeries(
+    public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
         ensureChnlMapExists();
         return new NamedChnlCollectionForSeriesMap(openedRaster, chnlMap, seriesNum);

@@ -42,7 +42,6 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -55,6 +54,8 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -96,47 +97,46 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
         return groupGeneratorDefined;
     }
-
+    
     @Override
-    protected ResultsVector calcResultsVectorForInputObject(
+    protected ResultsVectorWithThumbnail calcResultsVectorForInputObject(
             FileInput inputObject,
             FeatureList<FeatureInputHistogram> features,
-            FeatureNameList featureNames,
-            BoundIOContext context)
+            ExportFeatureFromInputContext context)
             throws NamedFeatureCalculationException {
 
         // Reads histogram from file-system
         try {
-            Histogram hist = readHistogramFromCsv(inputObject);
+            Histogram histogram = readHistogramFromCsv(inputObject);
 
             if (histogramProvider != null) {
-                hist = filterHistogramFromProvider(hist, context);
+                histogram = filterHistogramFromProvider(histogram, context.getContext());
             }
 
-            ResultsVector rv =
+            ResultsVector results =
                     createCalculator(features, context.getModelDirectory(), context.getLogger())
-                            .calc(new FeatureInputHistogram(hist, Optional.empty()));
+                            .calc(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
-            KeyValueParamsExporter.export(featureNames, rv, context);
+            KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());
 
-            return rv;
+            return new ResultsVectorWithThumbnail(results);
 
         } catch (CSVReaderException | BeanDuplicateException | OperationFailedException | InitException e) {
             throw new NamedFeatureCalculationException(e);
         }
     }
-
-    private Histogram filterHistogramFromProvider(Histogram inputtedHist, BoundIOContext context)
+    
+    private Histogram filterHistogramFromProvider(Histogram inputtedHistogram, BoundIOContext context)
             throws OperationFailedException {
 
-        HistogramProvider histProviderDup = histogramProvider.duplicateBean();
+        HistogramProvider histogramProviderDuplicated = histogramProvider.duplicateBean();
 
         try {
-            histProviderDup.initRecursive(
-                    createImageInitParmas(inputtedHist, context), context.getLogger());
+            histogramProviderDuplicated.initRecursive(
+                    createImageInitParmas(inputtedHistogram, context), context.getLogger());
 
-            return histProviderDup.create();
+            return histogramProviderDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
             throw new OperationFailedException(
                     "Cannot retrieve a histogram from histogramProvider", e);

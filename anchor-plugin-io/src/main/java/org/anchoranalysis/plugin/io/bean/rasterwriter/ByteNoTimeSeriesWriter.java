@@ -67,7 +67,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
     public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
 
-        if (!(stack.getNumChnl() == 1 || stack.getNumChnl() == 3)) {
+        if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new RasterIOException("Stack must have 1 or 3 channels");
         }
 
@@ -76,7 +76,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
             writer.setMetadataRetrieve(
                     MetadataUtilities.createMetadata(
                             stack.getDimensions(),
-                            stack.getNumChnl(),
+                            stack.getNumberChannels(),
                             PixelType.UINT8,
                             makeRGB,
                             false));
@@ -87,7 +87,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
                 throw new RasterIOException("The writer must support stacks for Z > 1");
             }
 
-            if (makeRGB && stack.getNumChnl() == 3) {
+            if (makeRGB && stack.getNumberChannels() == 3) {
                 writeRGB(writer, stack);
             } else {
                 writeSeperateChnl(writer, stack);
@@ -107,8 +107,8 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
             throws FormatException, IOException {
 
         int cnt = 0;
-        for (int c = 0; c < stack.getNumChnl(); c++) {
-            Channel chnl = stack.getChnl(c);
+        for (int c = 0; c < stack.getNumberChannels(); c++) {
+            Channel chnl = stack.getChannel(c);
             VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
 
             for (int z = 0; z < stack.getDimensions().getZ(); z++) {

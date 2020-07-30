@@ -37,9 +37,9 @@ import org.anchoranalysis.image.stack.TimeSequence;
  *
  * @author Owen Feehan
  */
-public abstract class StackSequenceInput extends ProvidesStackInput {
+public interface StackSequenceInput extends ProvidesStackInput {
 
     // Creates a TimeSequence of ImgStack for a particular series number
-    public abstract OperationWithProgressReporter<TimeSequence, OperationFailedException>
+    OperationWithProgressReporter<TimeSequence, OperationFailedException>
             createStackSequenceForSeries(int seriesNum) throws RasterIOException;
 }

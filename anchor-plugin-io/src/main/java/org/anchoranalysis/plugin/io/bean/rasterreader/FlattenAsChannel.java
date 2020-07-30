@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,29 +24,33 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.chnl.convert;
+package org.anchoranalysis.plugin.io.bean.rasterreader;
 
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.chnl.ChannelGetter;
+import java.nio.file.Path;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import lombok.Getter;
+import lombok.Setter;
 
-public class ChnlGetterForTimepoint {
+/**
+ * Combines all series and frames returned by a reader by converting them into multiple channels in
+ * the same image
+ *
+ * <p>It assumes that the underlying rasterReader will only return images with: 1. a constant number
+ * of chnls 2. a constant number of frames
+ *
+ * @author Owen Feehan
+ */
+public class FlattenAsChannel extends RasterReader {
 
-    private ChannelGetter getter;
-    private int t;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private RasterReader rasterReader;
+    // END BEAN PROPERTIES
 
-    public ChnlGetterForTimepoint(ChannelGetter getter, int t) {
-        super();
-        this.getter = getter;
-        this.t = t;
-    }
-
-    public boolean hasChnl(String chnlName) {
-        return getter.hasChannel(chnlName);
-    }
-
-    public Channel getChnl(String chnlName) throws GetOperationFailedException {
-        return getter.getChannel(chnlName, t, ProgressReporterNull.get());
+    @Override
+    public OpenedRaster openFile(Path filepath) throws RasterIOException {
+        return new FlattenAsChannelOpenedRaster( rasterReader.openFile(filepath) );
     }
 }

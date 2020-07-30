@@ -54,9 +54,9 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
     protected void writeRGB(IFormatWriter writer, Stack stack)
             throws FormatException, IOException, RasterIOException {
 
-        Channel chnlRed = stack.getChnl(0);
-        Channel chnlGreen = stack.getChnl(1);
-        Channel chnlBlue = stack.getChnl(2);
+        Channel chnlRed = stack.getChannel(0);
+        Channel chnlGreen = stack.getChannel(1);
+        Channel chnlBlue = stack.getChannel(2);
 
         VoxelBox<ByteBuffer> vbRed = chnlRed.getVoxelBox().asByte();
         VoxelBox<ByteBuffer> vbGreen = chnlGreen.getVoxelBox().asByte();

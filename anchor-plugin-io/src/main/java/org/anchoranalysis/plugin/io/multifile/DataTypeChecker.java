@@ -37,8 +37,8 @@ class DataTypeChecker {
 
     public void check(Stack stackForFile) throws RasterIOException {
 
-        VoxelDataType stackDataType = stackForFile.getChnl(0).getVoxelDataType();
-        if (!stackForFile.allChnlsHaveType(stackDataType)) {
+        VoxelDataType stackDataType = stackForFile.getChannel(0).getVoxelDataType();
+        if (!stackForFile.allChannelsHaveType(stackDataType)) {
             throw new RasterIOException("Channels have different data types");
         }
 

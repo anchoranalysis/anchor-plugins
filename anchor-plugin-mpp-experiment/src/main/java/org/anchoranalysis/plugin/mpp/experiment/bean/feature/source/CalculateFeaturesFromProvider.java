@@ -27,14 +27,12 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -43,34 +41,20 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
-    private final BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor;
+    private final ExportFeatureResultsAdder addResultsFor;
     private final ImageInitParams imageInitParams;
     private final NRGStackWithParams nrgStack;
     private final boolean suppressErrors;
     private final Logger logger;
-
-    public CalculateFeaturesFromProvider(
-            CombineObjectsForFeatures<T> table,
-            FeatureCalculatorMulti<T> calculator,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            ImageInitParams imageInitParams,
-            NRGStackWithParams nrgStack,
-            boolean suppressErrors,
-            Logger logger) {
-        super();
-        this.table = table;
-        this.calculator = calculator;
-        this.addResultsFor = addResultsFor;
-        this.imageInitParams = imageInitParams;
-        this.nrgStack = nrgStack;
-        this.suppressErrors = suppressErrors;
-        this.logger = logger;
-    }
 
     public void processProvider(
             ObjectCollectionProvider provider,
@@ -105,8 +89,6 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      * @param session for calculating features
      * @param listInputs a list of parameters. Each parameters creates a new result (e.g. a new row
      *     in a feature-table)
-     * @param resultsConsumer called with the results
-     * @param extractIdentifier extracts an identifier from each object that is calculated
      * @param suppressErrors iff TRUE no exceptions are thrown when an error occurs, but rather a
      *     message is written to the log
      * @param logger the log
@@ -114,7 +96,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      */
     private void calculateManyFeaturesInto(
             List<T> listInputs,
-            Function<T, StringLabelsForCsvRow> identifierFromObjName,
+            Function<T, StringLabelsForCsvRow> labelsForInput,
             boolean suppressErrors,
             Logger logger)
             throws OperationFailedException {
@@ -129,9 +111,12 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
                                 "Calculating input %d of %d: %s",
                                 i + 1, listInputs.size(), input.toString());
 
-                addResultsFor.accept(
-                        identifierFromObjName.apply(input),
-                        calculator.calc(input, logger.errorReporter(), suppressErrors));
+                addResultsFor.addResultsFor(
+                        labelsForInput.apply(input),
+                        new ResultsVectorWithThumbnail(
+                           calculator.calc(input, logger.errorReporter(), suppressErrors)
+                        )
+                );
             }
 
         } catch (NamedFeatureCalculationException e) {
@@ -144,12 +129,12 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             throws OperationFailedException {
 
         try {
-            ObjectCollectionProvider providerLoc = provider.duplicateBean();
+            ObjectCollectionProvider providerDuplicated = provider.duplicateBean();
 
             // Initialise
-            providerLoc.initRecursive(imageInitParams, logger);
+            providerDuplicated.initRecursive(imageInitParams, logger);
 
-            return providerLoc.create();
+            return providerDuplicated.create();
 
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);

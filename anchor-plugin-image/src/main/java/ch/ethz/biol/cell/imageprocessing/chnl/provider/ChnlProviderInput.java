@@ -52,6 +52,6 @@ public class ChnlProviderInput extends ChnlProvider {
 
     @Override
     public Channel create() throws CreateException {
-        return inputStack.getChnl(0);
+        return inputStack.getChannel(0);
     }
 }

@@ -58,7 +58,7 @@ public class RejectIfConditionXYResolution extends RasterReader {
     // END BEAN PROPERTIES
 
     private static class MaybeRejectProcessor
-            implements OpenedRasterAlterDimensions.ConsiderUpdatedImageRes {
+            implements OpenedRasterAlterDimensions.ConsiderUpdatedImageResolution {
 
         private RelationToValue relation;
         private double value;

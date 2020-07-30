@@ -50,7 +50,7 @@ import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
 import org.anchoranalysis.image.stack.Stack;
@@ -88,9 +88,9 @@ public class ScaleTask extends RasterTask {
             throws JobExecutionException {
 
         // Input
-        NamedChnlCollectionForSeries nccfs;
+        NamedChannelsForSeries nccfs;
         try {
-            nccfs = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            nccfs = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
         } catch (RasterIOException e1) {
             throw new JobExecutionException(e1);
         }
@@ -100,7 +100,7 @@ public class ScaleTask extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            nccfs.addAsSeparateChnls(
+            nccfs.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(soImage.getStackCollection()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
@@ -165,7 +165,7 @@ public class ScaleTask extends RasterTask {
             }
 
             try {
-                Channel chnlIn = so.getStackCollection().getException(chnlName).getChnl(0);
+                Channel chnlIn = so.getStackCollection().getException(chnlName).getChannel(0);
 
                 Channel chnlOut;
                 if (forceBinary) {

@@ -29,19 +29,24 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
+import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProviderFactory;
+import org.anchoranalysis.plugin.image.task.bean.thumbnail.stack.ScaleToSize;
+import org.anchoranalysis.plugin.image.task.bean.thumbnail.stack.ThumbnailFromStack;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
+import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,7 +58,11 @@ import lombok.Setter;
 public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInputStack> {
 
     // START BEAN PROPERTIES
+    /** Optionally defines a nrg-stack for feature calculation (if not set, the nrg-stack is considered to be the input stacks) */
     @BeanField @OptionalBean @Getter @Setter private StackProvider nrgStackProvider;
+    
+    /** Method to generate a thumbnail for images */
+    @BeanField @Getter @Setter private ThumbnailFromStack thumbnail = new ScaleToSize();
     // END BEAN PROPERTIES
 
     public FromImage() {
@@ -71,26 +80,53 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     @Override
-    protected ResultsVector calcResultsVectorForInputObject(
+    protected ResultsVectorWithThumbnail calcResultsVectorForInputObject(
             ProvidesStackInput inputObject,
             FeatureList<FeatureInputStack> features,
-            FeatureNameList featureNames,
-            BoundIOContext context)
+            ExportFeatureFromInputContext context)
             throws NamedFeatureCalculationException {
-        return createCalculator(inputObject, features, context).calc(new FeatureInputStack());
+        
+        FeatureCalculatorFromProvider<FeatureInputStack> factory = createCalculator(inputObject, context.getContext());
+        
+        // Calculate the results for the current stack
+        ResultsVector results = calculateResults(factory, features);
+        
+        thumbnail.start();
+        
+        try {
+            return new ResultsVectorWithThumbnail(
+                  results,
+                  extractThumbnail(factory.getNrgStack(), thumbnails)
+            );
+        } catch (CreateException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
+    }
+    
+    private ResultsVector calculateResults(FeatureCalculatorFromProvider<FeatureInputStack> factory, FeatureList<FeatureInputStack> features) throws NamedFeatureCalculationException {
+        try {
+            return factory.calculatorForAll(features).calc(new FeatureInputStack());
+        } catch (InitException e) {
+            throw new NamedFeatureCalculationException(e);
+        }
     }
 
-    private FeatureCalculatorMulti<FeatureInputStack> createCalculator(
+    private Optional<DisplayStack> extractThumbnail(NRGStackWithParams nrgStack, boolean thumbnails) throws CreateException {
+        if (thumbnails) {
+            return Optional.of( thumbnail.thumbnailFor(nrgStack.getNrgStack().asStack()) );
+        } else {
+            return Optional.empty();
+        }
+    }
+    
+    private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
             ProvidesStackInput inputObject,
-            FeatureList<FeatureInputStack> features,
             BoundIOContext context)
             throws NamedFeatureCalculationException {
         try {
-            FeatureCalculatorFromProviderFactory<FeatureInputStack> featCalc =
-                    new FeatureCalculatorFromProviderFactory<>(
+            return new FeatureCalculatorFromProvider<>(
                             inputObject, Optional.ofNullable(getNrgStackProvider()), context);
-            return featCalc.calculatorForAll(features);
-        } catch (InitException | OperationFailedException e) {
+        } catch (OperationFailedException e) {
             throw new NamedFeatureCalculationException(e);
         }
     }

@@ -105,6 +105,6 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
     }
 
     private static Channel firstChnl(Stack stack) {
-        return stack.getChnl(0);
+        return stack.getChannel(0);
     }
 }

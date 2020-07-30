@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -111,14 +111,14 @@ public class MovieFromSlicesTask extends RasterTask {
             throws JobExecutionException {
 
         try {
-            NamedChnlCollectionForSeries ncc =
-                    inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            NamedChannelsForSeries ncc =
+                    inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
 
             ProgressReporter progressReporter = ProgressReporterNull.get();
 
-            Channel red = ncc.getChnl("red", 0, progressReporter);
-            Channel blue = ncc.getChnl("blue", 0, progressReporter);
-            Channel green = ncc.getChnl("green", 0, progressReporter);
+            Channel red = ncc.getChannel("red", 0, progressReporter);
+            Channel blue = ncc.getChannel("blue", 0, progressReporter);
+            Channel green = ncc.getChannel("green", 0, progressReporter);
 
             //
             if (!red.getDimensions().equals(blue.getDimensions())

@@ -66,7 +66,7 @@ class ExtractProjectedStack {
     private void extractAndProjectChnl(Channel chnl, int z, Stack stack)
             throws IncorrectImageSizeException {
         Channel chnlProjected = createProjectedChnl(chnl.extractSlice(z));
-        stack.addChnl(chnlProjected);
+        stack.addChannel(chnlProjected);
     }
 
     private Channel createProjectedChnl(Channel chnlIn) {

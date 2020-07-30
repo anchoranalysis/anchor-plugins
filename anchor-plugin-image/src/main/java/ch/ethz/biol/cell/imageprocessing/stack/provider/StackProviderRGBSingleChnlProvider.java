@@ -63,6 +63,6 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
     private void addToStack(Stack stack, Channel chnl, ImageDimensions dimensions)
             throws IncorrectImageSizeException {
-        stack.addChnl(chnl.duplicate());
+        stack.addChannel(chnl.duplicate());
     }
 }

@@ -49,7 +49,7 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
         try {
             Mask binaryImgChnl =
                     new Mask(
-                            input.getNrgStackRequired().getChnl(nrgChnlIndex),
+                            input.getNrgStackRequired().getChannel(nrgChnlIndex),
                             BinaryValues.getDefault());
 
             CreateFromConnectedComponentsFactory creator =
