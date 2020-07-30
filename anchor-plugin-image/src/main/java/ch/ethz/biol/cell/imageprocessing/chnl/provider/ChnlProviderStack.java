@@ -53,6 +53,6 @@ public class ChnlProviderStack extends ChnlProvider {
     public Channel create() throws CreateException {
 
         Stack in = stackProvider.create();
-        return in.getChnl(chnlIndex);
+        return in.getChannel(chnlIndex);
     }
 }

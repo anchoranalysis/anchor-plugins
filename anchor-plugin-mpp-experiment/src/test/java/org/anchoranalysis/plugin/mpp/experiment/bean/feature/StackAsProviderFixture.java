@@ -35,17 +35,13 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
+import lombok.AllArgsConstructor;
 
-class StackAsProviderFixture extends ProvidesStackInput {
+@AllArgsConstructor
+class StackAsProviderFixture implements ProvidesStackInput {
 
     private Stack stack;
     private String name;
-
-    public StackAsProviderFixture(Stack stack, String name) {
-        super();
-        this.stack = stack;
-        this.name = name;
-    }
 
     @Override
     public String descriptiveName() {
@@ -58,7 +54,7 @@ class StackAsProviderFixture extends ProvidesStackInput {
     }
 
     @Override
-    public void addToStore(
+    public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesNum,
             ProgressReporter progressReporter)
@@ -77,7 +73,7 @@ class StackAsProviderFixture extends ProvidesStackInput {
     }
 
     @Override
-    public int numFrames() throws OperationFailedException {
+    public int numberFrames() throws OperationFailedException {
         return 1;
     }
 }

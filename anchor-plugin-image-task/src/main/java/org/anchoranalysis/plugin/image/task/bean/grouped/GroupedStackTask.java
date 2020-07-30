@@ -32,7 +32,6 @@ import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -41,7 +40,6 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -165,15 +163,12 @@ public abstract class GroupedStackTask<S, T>
 
     private static NamedImgStackCollection extractInputStacks(ProvidesStackInput inputObject)
             throws JobExecutionException {
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
         try {
-            inputObject.addToStore(
-                    new WrapStackAsTimeSequenceStore(stackCollection),
-                    0,
-                    ProgressReporterNull.get());
+            NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+            inputObject.addToStoreInferNames(stackCollection);
+            return stackCollection;
         } catch (OperationFailedException e1) {
             throw new JobExecutionException("An error occurred creating inputs to the task", e1);
         }
-        return stackCollection;
     }
 }

@@ -27,21 +27,17 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class GenerateHeadersForCSV {
 
     private final String[] results;
     private final Optional<String> additionalGroupHeader;
-
-    public GenerateHeadersForCSV(String[] results, Optional<String> additionalGroupHeader) {
-        super();
-        this.results = results;
-        this.additionalGroupHeader = additionalGroupHeader;
-    }
-
-    public MetadataHeaders createMetadataHeaders(boolean groupGeneratorDefined) {
-        return new MetadataHeaders(headersForGroup(groupGeneratorDefined), results);
+ 
+    public LabelHeaders createMetadataHeaders(boolean groupGeneratorDefined) {
+        return new LabelHeaders(headersForGroup(groupGeneratorDefined), results);
     }
 
     private String[] headersForGroup(boolean groupGeneratorDefined) {

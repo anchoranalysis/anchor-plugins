@@ -50,12 +50,7 @@ public class StackProviderConcatenation extends StackProvider {
             Stack out = new Stack();
 
             for (BeanImgStackProvider<?, ?> provider : list) {
-
-                Stack crnt = provider.createStack();
-
-                for (int c = 0; c < crnt.getNumChnl(); c++) {
-                    out.addChnl(crnt.getChnl(c));
-                }
+                out.addChannelsFrom( provider.createStack() );
             }
 
             return out;

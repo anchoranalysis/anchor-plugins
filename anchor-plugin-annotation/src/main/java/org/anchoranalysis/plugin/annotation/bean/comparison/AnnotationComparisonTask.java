@@ -38,7 +38,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -48,7 +47,6 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -168,14 +166,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
         try {
             NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-
-            inputObject
-                    .getInputObject()
-                    .addToStore(
-                            new WrapStackAsTimeSequenceStore(stackCollection),
-                            0,
-                            ProgressReporterNull.get());
-
+            inputObject.getInputObject().addToStoreInferNames(stackCollection);
             return DisplayStack.create(stackCollection.getException(backgroundChnlName));
 
         } catch (CreateException | OperationFailedException e) {

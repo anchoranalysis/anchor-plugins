@@ -57,7 +57,7 @@ public class OpenCVPngWriter extends RasterWriter {
     public synchronized void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
 
-        if (stack.getNumChnl() == 3 && !makeRGB) {
+        if (stack.getNumberChannels() == 3 && !makeRGB) {
             throw new RasterIOException("3-channel images can only be created as RGB");
         }
 

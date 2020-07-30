@@ -101,10 +101,10 @@ public class RGB extends ChnlConversionStyle {
             throws CreateException {
         try {
             if (chnlGetter.hasChnl(chnlName)) {
-                stackRearranged.addChnl(chnlGetter.getChnl(chnlName));
+                stackRearranged.addChannel(chnlGetter.getChnl(chnlName));
             } else {
                 logger.logFormatted(String.format("Adding a blank channel for %s", chnlName));
-                stackRearranged.addBlankChnl();
+                stackRearranged.addBlankChannel();
             }
         } catch (IncorrectImageSizeException
                 | OperationFailedException

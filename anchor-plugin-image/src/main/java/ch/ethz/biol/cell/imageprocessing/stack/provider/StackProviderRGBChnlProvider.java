@@ -112,7 +112,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
                             chnl.getVoxelDataType(), outputChnlType));
         }
 
-        stack.addChnl(chnl);
+        stack.addChannel(chnl);
     }
 
     private static String voxelDataTypeString(Channel chnl) {

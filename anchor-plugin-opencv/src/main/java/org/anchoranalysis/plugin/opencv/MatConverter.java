@@ -54,7 +54,7 @@ public class MatConverter {
 
     public static Mat fromStack(Stack stack) throws CreateException {
 
-        if (!(stack.getNumChnl() == 1 || stack.getNumChnl() == 3)) {
+        if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new CreateException("Stack must have 1 or 3 channels");
         }
 
@@ -63,26 +63,26 @@ public class MatConverter {
                     "Stacks with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
-        if (stack.getNumChnl() == 3) {
+        if (stack.getNumberChannels() == 3) {
             return makeRGBStack(stack);
         } else {
             // Single channel
-            return makeGrayscale(stack.getChnl(0));
+            return makeGrayscale(stack.getChannel(0));
         }
     }
 
     public static Mat makeRGBStack(Stack stack) throws CreateException {
-        if (stack.getNumChnl() != 3) {
+        if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
-        return matFromRGB(stack.getChnl(0), stack.getChnl(1), stack.getChnl(2));
+        return matFromRGB(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
     }
 
     public static void matToRGB(Mat mat, Stack stack) throws CreateException {
-        if (stack.getNumChnl() != 3) {
+        if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
-        matToRGB(mat, stack.getChnl(0), stack.getChnl(1), stack.getChnl(2));
+        matToRGB(mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
     }
 
     private static Mat makeGrayscale(Channel chnl) throws CreateException {

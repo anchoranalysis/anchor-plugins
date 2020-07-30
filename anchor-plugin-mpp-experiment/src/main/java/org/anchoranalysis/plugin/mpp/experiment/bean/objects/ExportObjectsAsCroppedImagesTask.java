@@ -56,10 +56,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalWriter;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.IntegerPrefixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -80,15 +78,15 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
+    /** The channels we apply the masks to - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProvider =
-            new ArrayList<>(); // The channels we apply the masks to - all assumed to be of same
-    // dimension
+            new ArrayList<>();
 
+    /** The channels we apply the masks to - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProviderMIP =
-            new ArrayList<>(); // The channels we apply the masks to - all assumed to be of same
-    // dimension
+            new ArrayList<>();
 
     @BeanField @Getter @Setter private StringSet outputRGBOutline = new StringSet();
 
@@ -96,10 +94,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
+    /** Extends the objects in z-dimension (uses maximum intensity for the segmentation, but in all slices) */
     @BeanField @Getter @Setter
-    private boolean extendInZ =
-            false; // Extends the objects in z-dimension (uses maximum intensity for the
-    // segmentation, but in all slices)
+    private boolean extendInZ = false; 
 
     /**
      * If true, rather than writing out a bounding-box around the object mask, the entire image is
@@ -138,19 +135,19 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedImgStackCollection stackCollection = createStackCollection(paramsInit, logger);
-            NamedImgStackCollection stackCollectionMIP =
-                    createStackCollectionMIP(paramsInit, logger);
+            NamedImgStackCollection stacks = createStacks(paramsInit, logger);
+            NamedImgStackCollection stacksProjected =
+                    createStacksMaximumIntensityProjection(paramsInit, logger);
 
-            if (stackCollection.keys().isEmpty()) {
+            if (stacks.keys().isEmpty()) {
                 // Nothing to do
                 return;
             }
 
-            ImageDimensions dimensions = stackCollection.getArbitraryElement().getDimensions();
+            ImageDimensions dimensions = stacks.getArbitraryElement().getDimensions();
 
             outputGeneratorSeq(
-                    createGenerator(dimensions, stackCollection, stackCollectionMIP),
+                    createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.getZ()),
                     context);
         } catch (CreateException | InitException e) {
@@ -176,27 +173,22 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
             ObjectCollection objects,
             BoundIOContext context) {
         GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq =
-                createGeneratorSequence(generator, context);
+                GeneratorSequenceFactory.createIncremental("extractedObjects", "object", generator, context);
 
         generatorSeq.start();
-
-        for (ObjectMask objectMask : objects) {
-            generatorSeq.add(objectMask);
-        }
-
+        objects.streamStandardJava().forEach(generatorSeq::add);
         generatorSeq.end();
     }
 
-    private ObjectCollection maybeExtendZObjects(ObjectCollection objectCollection, int sizeZ) {
-
+    private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ) {
         if (extendInZ) {
-            objectCollection = extendObjectsInZ(objectCollection, sizeZ);
+            return extendObjectsInZ(objects, sizeZ);
+        } else {
+            return objects;    
         }
-
-        return objectCollection;
     }
 
-    private NamedImgStackCollection createStackCollection(ImageInitParams so, Logger logger)
+    private NamedImgStackCollection createStacks(ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         ImageDimensions dimensions = null;
@@ -237,7 +229,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks;
     }
 
-    private NamedImgStackCollection createStackCollectionMIP(ImageInitParams so, Logger logger)
+    private NamedImgStackCollection createStacksMaximumIntensityProjection(ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         ImageDimensions dimensions = null;
@@ -299,22 +291,6 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                         return maybePadObject(object, dimensions);
                     }
                 });
-    }
-
-    private static GeneratorSequenceIncrementalRerouteErrors<ObjectMask> createGeneratorSequence(
-            IterableGenerator<ObjectMask> generator, BoundIOContext context) {
-        IndexableOutputNameStyle outputNameStyle =
-                new IntegerPrefixOutputNameStyle("extractedObjects", 6);
-
-        return new GeneratorSequenceIncrementalRerouteErrors<>(
-                new GeneratorSequenceIncrementalWriter<>(
-                        context.getOutputManager().getDelegate(),
-                        outputNameStyle.getOutputName(),
-                        outputNameStyle,
-                        generator,
-                        0,
-                        true),
-                context.getErrorReporter());
     }
 
     private static ObjectMask extractObjectKeepEntireImage(

@@ -126,11 +126,11 @@ public class SegmentText extends ObjectCollectionProvider {
 
         Stack stack = stackProvider.create();
 
-        if (stack.getNumChnl() != 3) {
+        if (stack.getNumberChannels() != 3) {
             throw new CreateException(
                     String.format(
                             "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumChnl()));
+                            stack.getNumberChannels()));
         }
 
         if (stack.getDimensions().getZ() > 1) {

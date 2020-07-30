@@ -53,7 +53,7 @@ public class TextureScore extends FeatureNrgChnl {
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
-        Channel chnlGradient = input.get().getNrgStackRequired().getChnl(nrgIndexGradient);
+        Channel chnlGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
 
         return scoreFromMeans(
                 IntensityMeanCalculator.calcMeanIntensityObject(chnl, object),

@@ -61,7 +61,7 @@ class CalcOutlineRGB {
             Mask outline, DisplayStack background, Channel blueToAssign, boolean createShort)
             throws CreateException {
 
-        if (background.getNumChnl() == 3) {
+        if (background.getNumberChannels() == 3) {
             return apply(
                     outline,
                     background.createChnlDuplicate(0),

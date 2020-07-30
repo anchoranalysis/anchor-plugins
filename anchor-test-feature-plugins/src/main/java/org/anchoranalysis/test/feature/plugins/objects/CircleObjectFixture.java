@@ -35,14 +35,13 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CircleObjectFixture {
 
-    private static final ImageDimensions DIMS = new ImageDimensions(new Extent(800, 600, 1));
+    private static final ImageDimensions DIMS = new ImageDimensions(800, 600, 1);
 
     public static ObjectMask circleAt(Point2i center, double radius) {
         MarkCircle mark = new MarkCircle();

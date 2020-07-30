@@ -52,7 +52,7 @@ public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            chnl = so.getStackCollection().getException(stackProviderID).getChnl(chnlIndex);
+            chnl = so.getStackCollection().getException(stackProviderID).getChannel(chnlIndex);
         } catch (NamedProviderGetException e) {
             throw InitException.createOrReuse(e.summarize());
         }

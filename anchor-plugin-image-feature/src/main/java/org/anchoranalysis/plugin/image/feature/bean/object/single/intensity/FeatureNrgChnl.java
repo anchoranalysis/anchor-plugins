@@ -50,7 +50,7 @@ public abstract class FeatureNrgChnl extends FeatureSingleObject {
     @Override
     public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
 
-        Channel chnl = input.get().getNrgStackRequired().getChnl(nrgIndex);
+        Channel chnl = input.get().getNrgStackRequired().getChannel(nrgIndex);
         return calcForChnl(input, chnl);
     }
 

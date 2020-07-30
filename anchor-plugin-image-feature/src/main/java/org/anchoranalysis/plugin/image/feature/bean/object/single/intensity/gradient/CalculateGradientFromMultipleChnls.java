@@ -82,11 +82,11 @@ class CalculateGradientFromMultipleChnls
 
         NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 
-        putGradientValue(input.getObject(), out, 0, nrgStack.getChnl(nrgIndexX));
-        putGradientValue(input.getObject(), out, 1, nrgStack.getChnl(nrgIndexY));
+        putGradientValue(input.getObject(), out, 0, nrgStack.getChannel(nrgIndexX));
+        putGradientValue(input.getObject(), out, 1, nrgStack.getChannel(nrgIndexY));
 
         if (nrgIndexZ != -1) {
-            putGradientValue(input.getObject(), out, 2, nrgStack.getChnl(nrgIndexZ));
+            putGradientValue(input.getObject(), out, 2, nrgStack.getChannel(nrgIndexZ));
         }
 
         return out;

@@ -92,7 +92,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();
-            return stack.mapChnl(chnl -> chnl.resizeXY(size.getWidth(), size.getHeight()));
+            return stack.mapChannel(chnl -> chnl.resizeXY(size.getWidth(), size.getHeight()));
         } else {
             return stack;
         }

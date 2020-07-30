@@ -70,7 +70,7 @@ public class ChannelSource {
             // We make a single histogram
             Stack stack = stackStore.getException(stackName);
 
-            if (stack.getNumChnl() > 1) {
+            if (stack.getNumberChannels() > 1) {
                 throw new OperationFailedException("Each stack may only have a single channel");
             }
 
@@ -100,7 +100,7 @@ public class ChannelSource {
     public Channel extractChnl(Stack stack, boolean checkType, int index)
             throws OperationFailedException {
         try {
-            Channel chnl = stack.getChnl(index);
+            Channel chnl = stack.getChannel(index);
 
             if (checkType) {
                 chnlChecker.checkChannelType(chnl.getVoxelDataType());

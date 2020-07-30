@@ -84,7 +84,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
             throw new CreateException(e);
         }
 
-        Channel chnl = stack.getChnl(0);
+        Channel chnl = stack.getChannel(0);
         if (chnl == null) {
             throw new CreateException(
                     String.format(

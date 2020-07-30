@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -90,11 +90,11 @@ class AppendPart extends NamedChnlsInputPart {
     }
 
     @Override
-    public NamedChnlCollectionForSeries createChnlCollectionForSeries(
+    public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
 
-        NamedChnlCollectionForSeries exst =
-                delegate.createChnlCollectionForSeries(seriesNum, progressReporter);
+        NamedChannelsForSeries exst =
+                delegate.createChannelsForSeries(seriesNum, progressReporter);
 
         openRasterIfNecessary();
 

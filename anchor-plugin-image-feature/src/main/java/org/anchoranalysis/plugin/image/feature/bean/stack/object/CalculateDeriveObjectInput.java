@@ -54,7 +54,7 @@ public class CalculateDeriveObjectInput
 
         NRGStackWithParams nrgStack = input.getNrgStackRequired();
 
-        Mask binary = new Mask(nrgStack.getChnl(nrgIndex), BinaryValues.getDefault());
+        Mask binary = new Mask(nrgStack.getChannel(nrgIndex), BinaryValues.getDefault());
 
         return new ObjectMask(binary.binaryVoxelBox());
     }

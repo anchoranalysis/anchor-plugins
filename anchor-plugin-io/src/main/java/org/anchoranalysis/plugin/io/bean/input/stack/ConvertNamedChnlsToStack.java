@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -44,7 +45,7 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -71,14 +72,10 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
      *
      * @author Owen Feehan
      */
-    private class ConvertInputObject extends StackSequenceInput {
+    @AllArgsConstructor
+    private class ConvertInputObject implements StackSequenceInput {
 
         private NamedChnlsInput in;
-
-        public ConvertInputObject(NamedChnlsInput in) {
-            super();
-            this.in = in;
-        }
 
         @Override
         public String descriptiveName() {
@@ -102,12 +99,12 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public void addToStore(
+        public void addToStoreInferNames(
                 NamedProviderStore<TimeSequence> stackCollection,
                 int seriesNum,
                 ProgressReporter progressReporter)
                 throws OperationFailedException {
-            in.addToStore(stackCollection, seriesNum, progressReporter);
+            in.addToStoreInferNames(stackCollection, seriesNum, progressReporter);
         }
 
         @Override
@@ -121,8 +118,8 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public int numFrames() throws OperationFailedException {
-            return in.numFrames();
+        public int numberFrames() throws OperationFailedException {
+            return in.numberFrames();
         }
     }
 
@@ -131,33 +128,27 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
      *
      * @author Owen Feehan
      */
+    @AllArgsConstructor
     private class OperationConvert
             implements OperationWithProgressReporter<TimeSequence, OperationFailedException> {
 
-        private int seriesNum;
         private NamedChnlsInput in;
-
-        public OperationConvert(NamedChnlsInput in, int seriesNum) {
-            super();
-            this.seriesNum = seriesNum;
-            this.in = in;
-        }
-
+        private int seriesNum;
+                
         @Override
         public TimeSequence doOperation(ProgressReporter progressReporter)
                 throws OperationFailedException {
 
             try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 
-                NamedChnlCollectionForSeries ncc =
-                        in.createChnlCollectionForSeries(
+                NamedChannelsForSeries ncc =
+                        in.createChannelsForSeries(
                                 seriesNum, new ProgressReporterOneOfMany(prm));
                 prm.incrWorker();
-                Channel chnl = ncc.getChnl(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
 
-                TimeSequence ts = new TimeSequence();
-                ts.add(new Stack(chnl));
-                return ts;
+                Channel channel = ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+                return new TimeSequence( new Stack(channel) );
+
             } catch (RasterIOException | GetOperationFailedException e) {
                 throw new OperationFailedException(e);
             }

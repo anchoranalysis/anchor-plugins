@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,18 +35,19 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureFromInputContext;
+import org.anchoranalysis.plugin.image.task.feature.ExportFeatureResultsAdder;
 import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import lombok.AllArgsConstructor;
 
@@ -71,7 +71,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
 
     @Override
     public SharedStateExportFeatures<FeatureList<S>> createSharedState(
-            MetadataHeaders metadataHeaders,
+            LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<S>>> features,
             BoundIOContext context)
             throws CreateException {
@@ -93,34 +93,32 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     @Override
-    public void calcAllResultsForInput(
+    public void processInput(
             T input,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            FeatureList<S> featureSourceSupplier,
-            FeatureNameList featureNames,
-            Optional<String> groupGeneratorName,
-            BoundIOContext context)
+            ExportFeatureResultsAdder adder,
+            FeatureList<S> rowSource,
+            ExportFeatureFromInputContext context)
             throws OperationFailedException {
         try {
-            ResultsVector results =
-                    calcResultsVectorForInputObject(
-                            input, featureSourceSupplier, featureNames, context);
+            ResultsVectorWithThumbnail results =
+                    calcResultsVectorForInputObject(input, rowSource, context);
 
-            addResultsFor.accept(
-                    identifierFor(input.descriptiveName(), groupGeneratorName), results);
+            adder.addResultsFor(
+                    identifierFor(input.descriptiveName(), context.getGroupGeneratorName()),
+                    results 
+            );
 
         } catch (BeanDuplicateException | NamedFeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    protected abstract ResultsVector calcResultsVectorForInputObject(
-            T inputObject,
-            FeatureList<S> features,
-            FeatureNameList featureNames,
-            BoundIOContext context)
-            throws NamedFeatureCalculationException;
-
+    protected abstract ResultsVectorWithThumbnail calcResultsVectorForInputObject(
+        T inputObject,
+        FeatureList<S> features,
+        ExportFeatureFromInputContext context
+    ) throws NamedFeatureCalculationException;
+    
     private static StringLabelsForCsvRow identifierFor(
             String descriptiveName, Optional<String> groupGeneratorName)
             throws OperationFailedException {

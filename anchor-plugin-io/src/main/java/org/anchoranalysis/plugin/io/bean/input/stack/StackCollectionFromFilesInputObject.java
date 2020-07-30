@@ -39,45 +39,48 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.input.FileInput;
+import lombok.RequiredArgsConstructor;
 
-class StackCollectionFromFilesInputObject extends StackSequenceInput {
+@RequiredArgsConstructor
+class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
+    /** The root object that is used to provide the descriptiveName and pathForBinding */
     private FileInput delegate;
+    
     private RasterReader rasterReader;
+       
+    /**
+     * Uses the last series (from all series) only, and ignores any other series-numbers
+     * <p>
+     * This is to correct for a problem with formats such as czi where the seriesIndex doesn't
+     * indicate the total number of series but rather is incremented with each acquisition, so for our
+     * purposes we treat it as if its 0
+     */
+    private boolean useLastSeriesIndexOnly;
 
     // We cache a certain amount of stacks read for particular series
     private OpenedRaster openedRasterMemo = null;
-
-    // This is to correct for a problem with formats such as czi where the seriesIndex doesn't
-    // indicate
-    //   the total number of series but rather is incremented with each acquisition, so for our
-    // purposes
-    //   we treat it as if its 0
-    private boolean useLastSeriesIndexOnly = false;
-
-    // The root object that is used to provide the descriptiveName and pathForBinding
+    
     public StackCollectionFromFilesInputObject(
             FileInput delegate, RasterReader rasterReader, boolean useLastSeriesIndexOnly) {
-        super();
-        assert (rasterReader != null);
         this.delegate = delegate;
         this.rasterReader = rasterReader;
         this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
     }
 
-    public int numSeries() throws RasterIOException {
+    public int numberSeries() throws RasterIOException {
         if (useLastSeriesIndexOnly) {
             return 1;
         } else {
-            return getOpenedRaster().numSeries();
+            return getOpenedRaster().numberSeries();
         }
     }
 
     @Override
-    public int numFrames() throws OperationFailedException {
+    public int numberFrames() throws OperationFailedException {
 
         try {
-            return getOpenedRaster().numFrames();
+            return getOpenedRaster().numberFrames();
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);
         }
@@ -88,13 +91,13 @@ class StackCollectionFromFilesInputObject extends StackSequenceInput {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesNum = getOpenedRaster().numSeries() - 1;
+            seriesNum = getOpenedRaster().numberSeries() - 1;
         }
         return openRasterAsOperation(getOpenedRaster(), seriesNum);
     }
 
     @Override
-    public void addToStore(
+    public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
             int seriesNum,
             ProgressReporter progressReporter)

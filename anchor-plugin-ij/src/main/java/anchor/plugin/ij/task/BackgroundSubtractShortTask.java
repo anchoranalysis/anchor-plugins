@@ -42,7 +42,7 @@ import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
@@ -78,10 +78,10 @@ public class BackgroundSubtractShortTask extends RasterTask {
         ProgressReporter progressReporter = ProgressReporterNull.get();
 
         try {
-            NamedChnlCollectionForSeries ncc =
-                    inputObject.createChnlCollectionForSeries(0, progressReporter);
+            NamedChannelsForSeries ncc =
+                    inputObject.createChannelsForSeries(0, progressReporter);
 
-            Channel inputImage = ncc.getChnl(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+            Channel inputImage = ncc.getChannel(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(

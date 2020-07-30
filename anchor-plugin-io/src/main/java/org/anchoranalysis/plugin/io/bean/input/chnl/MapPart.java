@@ -41,7 +41,7 @@ import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -76,7 +76,7 @@ class MapPart extends NamedChnlsInputPart {
 
     @Override
     public ImageDimensions dim(int seriesIndex) throws RasterIOException {
-        return openedRaster().dim(seriesIndex);
+        return openedRaster().dimensionsForSeries(seriesIndex);
     }
 
     @Override
@@ -84,7 +84,7 @@ class MapPart extends NamedChnlsInputPart {
         if (useLastSeriesIndexOnly) {
             return 1;
         } else {
-            return openedRaster().numSeries();
+            return openedRaster().numberSeries();
         }
     }
 
@@ -95,12 +95,12 @@ class MapPart extends NamedChnlsInputPart {
 
     // Where most of our time is being taken up when opening a raster
     @Override
-    public NamedChnlCollectionForSeries createChnlCollectionForSeries(
+    public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesNum = openedRaster().numSeries() - 1;
+            seriesNum = openedRaster().numberSeries() - 1;
         }
 
         NamedChnlCollectionForSeriesConcatenate out = new NamedChnlCollectionForSeriesConcatenate();
@@ -132,7 +132,7 @@ class MapPart extends NamedChnlsInputPart {
 
     @Override
     public int numChnl() throws RasterIOException {
-        return openedRaster().numChnl();
+        return openedRaster().numberChannels();
     }
 
     @Override

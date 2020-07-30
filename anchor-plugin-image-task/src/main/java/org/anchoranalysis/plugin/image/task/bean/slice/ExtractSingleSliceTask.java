@@ -32,7 +32,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -51,7 +50,6 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -180,8 +178,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     private static NamedImgStackCollection collectionFromInput(NamedChnlsInput inputObject)
             throws OperationFailedException {
         NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-        inputObject.addToStore(
-                new WrapStackAsTimeSequenceStore(stackCollection), 0, ProgressReporterNull.get());
+        inputObject.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 
@@ -223,7 +220,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
             return results;
 
-        } catch (InitException | FeatureCalculationException e) {
+        } catch (InitException | FeatureCalculationException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }

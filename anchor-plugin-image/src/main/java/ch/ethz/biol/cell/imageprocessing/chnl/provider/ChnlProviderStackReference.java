@@ -55,7 +55,7 @@ public class ChnlProviderStackReference extends ChnlProvider {
                                 .getStackCollection()
                                 .getException(stackProviderID);
 
-                chnl = stack.getChnl(chnlIndex);
+                chnl = stack.getChannel(chnlIndex);
                 if (chnl == null) {
                     throw new CreateException(String.format("chnl %d cannot be found", chnlIndex));
                 }
