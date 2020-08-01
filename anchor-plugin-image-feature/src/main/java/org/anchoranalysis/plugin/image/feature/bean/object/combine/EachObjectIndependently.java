@@ -27,8 +27,10 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -39,6 +41,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.stack.DisplayStack;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
@@ -83,5 +86,21 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                             object.getBoundingBox(), extent));
         }
         return object;
+    }
+
+    @Override
+    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input){
+        try {
+            return OptionalUtilities.map(
+                 input.getNrgStackOptional().map(
+                    stack->stack.asStack().getChannel(0).resizeXY(200, 200)
+                 ),
+                 DisplayStack::create
+            );
+        } catch (CreateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
     }
 }

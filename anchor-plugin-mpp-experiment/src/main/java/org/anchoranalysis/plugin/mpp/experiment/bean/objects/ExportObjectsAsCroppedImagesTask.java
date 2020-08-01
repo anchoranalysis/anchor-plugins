@@ -51,7 +51,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
@@ -64,16 +64,15 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 
 /**
- * Exports a cropped image for each object-mask showing its context iwthin an image
+ * Exports a cropped image for each object-mask showing its context within an image
  *
- * <p>Specifically, a bounding-box is placed around an object-mask, maybe padded and extended, and
- * this is shown
+ * <p>The context is defined by a bounding-box is placed around an object-mask, and optionally padded.
  *
  * @author Owen Feehan
  */
 public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput, NoSharedState> {
-
-    private static final String MANIFEST_FUNCTION = "rasterExtract";
+    
+    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY = new GeneratorSequenceFactory("extractedObjects","object");
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
@@ -89,8 +88,8 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
             new ArrayList<>();
 
     @BeanField @Getter @Setter private StringSet outputRGBOutline = new StringSet();
-
-    @BeanField @Getter @Setter private StringSet outputRGBOutlineMIP = new StringSet();
+    
+    @BeanField @Getter @Setter private StringSet outputRGBOutlineFlattened = new StringSet();
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
@@ -99,8 +98,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     private boolean extendInZ = false; 
 
     /**
-     * If true, rather than writing out a bounding-box around the object mask, the entire image is
-     * written
+     * If true, rather than writing out a bounding-box around the object mask, the entire image is written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;
     // END BEAN PROPERTIES
@@ -129,32 +127,6 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return false;
     }
 
-    private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
-            throws OperationFailedException {
-
-        try {
-            Logger logger = context.getLogger();
-
-            NamedImgStackCollection stacks = createStacks(paramsInit, logger);
-            NamedImgStackCollection stacksProjected =
-                    createStacksMaximumIntensityProjection(paramsInit, logger);
-
-            if (stacks.keys().isEmpty()) {
-                // Nothing to do
-                return;
-            }
-
-            ImageDimensions dimensions = stacks.getArbitraryElement().getDimensions();
-
-            outputGeneratorSeq(
-                    createGenerator(dimensions, stacks, stacksProjected),
-                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.getZ()),
-                    context);
-        } catch (CreateException | InitException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
             BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
@@ -173,7 +145,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
             ObjectCollection objects,
             BoundIOContext context) {
         GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq =
-                GeneratorSequenceFactory.createIncremental("extractedObjects", "object", generator, context);
+                GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
         generatorSeq.start();
         objects.streamStandardJava().forEach(generatorSeq::add);
@@ -188,11 +160,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         }
     }
 
-    private NamedImgStackCollection createStacks(ImageInitParams so, Logger logger)
+    private NamedStackCollection createStacks(ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         ImageDimensions dimensions = null;
-        NamedImgStackCollection stacks = new NamedImgStackCollection();
+        NamedStackCollection stacks = new NamedStackCollection();
 
         for (NamedBean<StackProvider> ni : listStackProvider) {
 
@@ -229,11 +201,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks;
     }
 
-    private NamedImgStackCollection createStacksMaximumIntensityProjection(ImageInitParams so, Logger logger)
+    private NamedStackCollection createStacksMaximumIntensityProjection(ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         ImageDimensions dimensions = null;
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+        NamedStackCollection stackCollection = new NamedStackCollection();
 
         for (NamedBean<StackProvider> ni : listStackProviderMIP) {
 
@@ -267,19 +239,17 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     private IterableGenerator<ObjectMask> createGenerator(
             ImageDimensions dimensions,
-            NamedImgStackCollection stacks,
-            NamedImgStackCollection stacksFlattened)
+            NamedStackCollection stacks,
+            NamedStackCollection stacksFlattened)
             throws CreateException {
 
         IterableCombinedListGenerator<ObjectMask> out =
-                new GeneratorHelper(outlineWidth, outputRGBOutline, outputRGBOutlineMIP)
-                        .buildGenerator(
+                new GeneratorHelper(outlineWidth)
+                        .buildGeneratorsForStacks(
                                 dimensions,
-                                stacks,
-                                stacksFlattened,
-                                stack ->
-                                        createBoundingBoxGeneratorForStack(
-                                                stack, MANIFEST_FUNCTION));
+                                stacks.subset(outputRGBOutline),
+                                stacksFlattened.subset(outputRGBOutlineFlattened)
+                                );
 
         // Maybe we need to change the objectMask to a padded version
         return new IterableGeneratorBridge<>(
@@ -301,5 +271,31 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz) {
         return objects.stream().map(objectMask -> objectMask.flattenZ().growToZ(sz));
+    }
+
+    private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
+            throws OperationFailedException {
+
+        try {
+            Logger logger = context.getLogger();
+
+            NamedStackCollection stacks = createStacks(paramsInit, logger);
+            NamedStackCollection stacksProjected =
+                    createStacksMaximumIntensityProjection(paramsInit, logger);
+
+            if (stacks.keys().isEmpty()) {
+                // Nothing to do
+                return;
+            }
+
+            ImageDimensions dimensions = stacks.getArbitraryElement().getDimensions();
+
+            outputGeneratorSeq(
+                    createGenerator(dimensions, stacks, stacksProjected),
+                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.getZ()),
+                    context);
+        } catch (CreateException | InitException e) {
+            throw new OperationFailedException(e);
+        }
     }
 }

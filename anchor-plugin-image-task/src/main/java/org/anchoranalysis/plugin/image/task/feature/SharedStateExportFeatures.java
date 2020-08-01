@@ -54,11 +54,9 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 public class SharedStateExportFeatures<S> {
 
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
-
-    private static final String THUMBNAIL_FILE_PREFIX = "thumbnail";
     
-    private static final String THUMBNAIL_SUBDIRECTORY = "thumbnails";
-    
+    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY = new GeneratorSequenceFactory("thumbnails","thumbnail");  // NOSONAR
+        
     private final GroupedResultsVectorCollection groupedResults;
 
     @Getter private final FeatureNameList featureNames;
@@ -150,9 +148,7 @@ public class SharedStateExportFeatures<S> {
     
     private void addThumbnail(DisplayStack thumbnail, BoundIOContext context) {
         if (thumbnailGenerator == null) {
-            thumbnailGenerator = GeneratorSequenceFactory.createIncremental(
-               THUMBNAIL_SUBDIRECTORY,
-               THUMBNAIL_FILE_PREFIX,
+            thumbnailGenerator = GENERATOR_SEQUENCE_FACTORY.createIncremental(
                new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL),
                context
             );

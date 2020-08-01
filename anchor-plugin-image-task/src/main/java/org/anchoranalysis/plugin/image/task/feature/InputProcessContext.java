@@ -18,6 +18,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class InputProcessContext<S> {
 
+    private static final String OUTPUT_THUMBNAILS = "thumbnails";
+    
     ExportFeatureResultsAdder adder;
     
     @Getter S rowSource;
@@ -25,8 +27,6 @@ public class InputProcessContext<S> {
     @Getter FeatureNameList featureNames;
     
     @Getter Optional<String> groupGeneratorName;
-    
-    @Getter boolean thumbnails;
     
     @Getter BoundIOContext context;
     
@@ -38,5 +38,9 @@ public class InputProcessContext<S> {
     }
     public void addResultsFor(StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results) {
         adder.addResultsFor(labels, results);
+    }
+    
+    public boolean isThumbnails() {
+        return context.getOutputManager().isOutputAllowed(OUTPUT_THUMBNAILS);
     }
 }

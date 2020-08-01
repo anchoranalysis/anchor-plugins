@@ -32,7 +32,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class ChannelSource {
 
-    private final NamedImgStackCollection stackStore;
+    private final NamedStackCollection stackStore;
     private final ConsistentChannelChecker chnlChecker;
     private final Optional<SizeXY> resizeTo;
 
@@ -54,7 +54,7 @@ public class ChannelSource {
      * @param resizeTo optionally resizes all extracted channels in XY
      */
     public ChannelSource(
-            NamedImgStackCollection stackStore,
+            NamedStackCollection stackStore,
             ConsistentChannelChecker chnlChecker,
             Optional<SizeXY> resizeTo) {
         super();
@@ -121,7 +121,7 @@ public class ChannelSource {
         }
     }
 
-    public NamedImgStackCollection getStackStore() {
+    public NamedStackCollection getStackStore() {
         return stackStore;
     }
 }
