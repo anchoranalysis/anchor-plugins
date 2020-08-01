@@ -52,7 +52,7 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -113,8 +113,8 @@ public class ScaleTask extends RasterTask {
     private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
             throws JobExecutionException {
         // Our output collections
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-        NamedImgStackCollection stackCollectionMIP = new NamedImgStackCollection();
+        NamedStackCollection stackCollection = new NamedStackCollection();
+        NamedStackCollection stackCollectionMIP = new NamedStackCollection();
 
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
@@ -149,8 +149,8 @@ public class ScaleTask extends RasterTask {
 
     private void populateOutputCollectionsFromSharedObjects(
             ImageInitParams so,
-            NamedImgStackCollection stackCollection,
-            NamedImgStackCollection stackCollectionMIP,
+            NamedStackCollection stackCollection,
+            NamedStackCollection stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 

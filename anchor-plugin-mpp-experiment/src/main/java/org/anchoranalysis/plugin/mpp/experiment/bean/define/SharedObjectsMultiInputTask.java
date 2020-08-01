@@ -41,7 +41,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
@@ -111,7 +111,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
                 oft.initRecursive(so, context.getLogger());
                 oft.output(context);
             } catch (IOException | InitException e) {
-                context.getErrorReporter().recordError(NamedImgStackCollection.class, e);
+                context.getErrorReporter().recordError(NamedStackCollection.class, e);
             }
         }
     }

@@ -82,7 +82,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  */
 public class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput>
         extends Task<T, SharedStateExportFeatures<S>> {
-
+    
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
 
@@ -106,12 +106,6 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
     /** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
-    
-    /** 
-     * Iff true, a thumbnail-image is generated as a visualization of each row that is exported
-     *   (but only if supported by source). 
-     */
-    @BeanField @Getter @Setter private boolean thumbnails = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -120,7 +114,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
-                    source.headers().createMetadataHeaders(isGroupGeneratorDefined()),
+                    source.headers().createHeaders(isGroupGeneratorDefined()),
                     features,
                     params.getContext());
         } catch (CreateException e) {
@@ -142,7 +136,6 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                 input.getSharedState().duplicateForNewThread(),
                 input.getSharedState().getFeatureNames(),
                 groupName,
-                thumbnails,
                 input.context()
             );
             

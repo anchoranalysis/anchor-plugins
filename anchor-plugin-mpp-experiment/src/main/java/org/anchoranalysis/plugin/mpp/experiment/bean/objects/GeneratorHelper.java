@@ -27,10 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.awt.Color;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.bean.StringSet;
-import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -39,102 +36,73 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBoundingBoxGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedObjectGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.ObjWithBoundingBoxGenerator;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 
+/**
+ * Builds a generator for all relevant stacks, outputting only if a predicate succeeds
+ * 
+ * @author Owen Feehan
+ *
+ */
 @AllArgsConstructor
 class GeneratorHelper {
 
-    private final int outlineWidth;
-    private final StringSet outputRGBOutline;
-    private final StringSet outputRGBOutlineMIP;
+    private static final String MANIFEST_FUNCTION = "extractedObjectOutline";
+    
+    private static final String MANIFEST_FUNCTION_EXTRACTED_BOUNDING_BOX = "boundingBoxExtract";
 
-    public IterableCombinedListGenerator<ObjectMask> buildGenerator(
+    private static final ColorList COLORS = new ColorList(Color.GREEN);
+    
+    /** The width of the outline of the object (e.g. 1 pixel) */
+    private final int outlineWidth;
+
+    public IterableCombinedListGenerator<ObjectMask> buildGeneratorsForStacks(
             ImageDimensions dimensions,
-            NamedImgStackCollection stacks,
-            NamedImgStackCollection stacksFlattened,
-            Function<Stack, ExtractedBoundingBoxGenerator> generatorFunction)
+            NamedStackCollection stacks,
+            NamedStackCollection stacksFlattened
+            )
             throws CreateException {
         IterableCombinedListGenerator<ObjectMask> out =
                 new IterableCombinedListGenerator<>(
                         new SimpleNameValue<>(
-                                "mask", new ObjWithBoundingBoxGenerator(dimensions.getRes())));
+                                "mask", new ObjectWithBoundingBoxGenerator(dimensions.getRes())));
 
-        ColorList colors = new ColorList(Color.GREEN);
         try {
-            addGeneratorForEachKey(stacks, colors, generatorFunction, out, false);
-            addGeneratorForEachKey(stacksFlattened, colors, generatorFunction, out, true);
+            addGeneratorForEachStack(stacks, out, false);
+            addGeneratorForEachStack(stacksFlattened, out, true);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }
         return out;
     }
 
-    private void addGeneratorForEachKey(
-            NamedImgStackCollection stacks,
-            ColorList colors,
-            Function<Stack, ExtractedBoundingBoxGenerator> generatorFunction,
+    private void addGeneratorForEachStack(
+            NamedStackCollection stacks,
             IterableCombinedListGenerator<ObjectMask> out,
             boolean mip)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {
-            Stack stack = stacks.getException(key);
 
-            ExtractedBoundingBoxGenerator generator = generatorFunction.apply(stack);
-
-            out.add(key, wrapBBoxGenerator(generator, mip));
-
-            if (!mip) {
-                maybeOutput(outputRGBOutline, key, "_RGBOutline", generator, colors, out);
-            }
-
-            maybeOutput(outputRGBOutlineMIP, key, "_RGBOutlineMIP", generator, colors, out);
+            // Bounding box-generator
+            ExtractedBoundingBoxGenerator generator = new ExtractedBoundingBoxGenerator(stacks.getException(key), MANIFEST_FUNCTION_EXTRACTED_BOUNDING_BOX);
+            out.add(key, WrapGeneratorHelper.boundingBoxAsObject(generator, mip));
+            
+            // Outline on raster generator
+            String suffix = mip ? "_RGBOutlineMIP" : "_RGBOutline";
+            out.add(key + suffix, createExtractedObjectGenerator(generator) );
         }
     }
-
-    private void maybeOutput(
-            StringSet output,
-            String key,
-            String suffix,
-            IterableObjectGenerator<BoundingBox, Stack> generator,
-            ColorList colors,
-            IterableCombinedListGenerator<ObjectMask> out) {
-        if (output.contains(key)) {
-            out.add(key + suffix, createExtractedObjectGenerator(generator, colors, true));
-        }
-    }
-
+    
     private IterableGenerator<ObjectMask> createExtractedObjectGenerator(
-            IterableObjectGenerator<BoundingBox, Stack> generator,
-            ColorIndex colorIndex,
-            boolean mip) {
-        return new ExtractedObjectGenerator(
-                new DrawObjectsGenerator(new Outline(outlineWidth), colorIndex),
-                generator,
-                "rgbOutline",
-                mip);
-    }
-
-    private static IterableGenerator<ObjectMask> wrapBBoxGenerator(
-            IterableGenerator<BoundingBox> generator, boolean mip) {
-        return new IterableGeneratorBridge<>(
-                generator, sourceObject -> boundingBoxFromObject(sourceObject, mip));
-    }
-
-    private static BoundingBox boundingBoxFromObject(ObjectMask object, boolean mip) {
-        if (mip) {
-            return object.getBoundingBox().flattenZ();
-        } else {
-            return object.getBoundingBox();
-        }
+          IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator
+    ) {
+        return new ExtractedObjectGenerator(backgroundGenerator, outlineWidth, COLORS, true, MANIFEST_FUNCTION);
     }
 }

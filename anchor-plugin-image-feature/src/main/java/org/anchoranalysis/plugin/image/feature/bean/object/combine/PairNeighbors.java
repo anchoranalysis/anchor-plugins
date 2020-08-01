@@ -52,6 +52,7 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
@@ -167,13 +168,13 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                 graphCreator.createGraph(
                         objects.asList(),
                         Function.identity(),
-                        (v1, v2, numberVoxels) -> numberVoxels,
+                        (vector1, vector2, numberVoxels) -> numberVoxels,
                         nrgStack.getNrgStack().getDimensions().getExtent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
-        for (EdgeTypeWithVertices<ObjectMask, Integer> e : graphNeighbors.edgeSetUnique()) {
-            out.add(new FeatureInputPairObjects(e.getNode1(), e.getNode2(), Optional.of(nrgStack)));
+        for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
+            out.add(new FeatureInputPairObjects(edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
         }
 
         return out;
@@ -182,5 +183,10 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     @Override
     public String uniqueIdentifierFor(FeatureInputPairObjects input) {
         return UniqueIdentifierUtilities.forObjectPair(input.getFirst(), input.getSecond());
+    }
+
+    @Override
+    public Optional<DisplayStack> createThumbailFor(FeatureInputPairObjects input) {
+        return Optional.empty();
     }
 }

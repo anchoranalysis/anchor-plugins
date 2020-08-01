@@ -45,7 +45,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import lombok.AllArgsConstructor;
@@ -87,8 +87,8 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     @Override
-    public GenerateHeadersForCSV headers() {
-        return new GenerateHeadersForCSV(new String[] {firstResultHeader}, Optional.empty());
+    public GenerateLabelHeadersForCSV headers() {
+        return new GenerateLabelHeadersForCSV(new String[] {firstResultHeader}, Optional.empty());
     }
 
     @Override

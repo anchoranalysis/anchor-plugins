@@ -39,7 +39,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStackCollection;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -105,7 +105,7 @@ public abstract class GroupedStackTask<S, T>
         Optional<String> groupName =
                 extractGroupName(inputObject.pathForBinding(), context.isDebugEnabled());
 
-        NamedImgStackCollection store = GroupedStackTask.extractInputStacks(inputObject);
+        NamedStackCollection store = GroupedStackTask.extractInputStacks(inputObject);
 
         processKeys(store, groupName, params.getSharedState(), context);
     }
@@ -138,7 +138,7 @@ public abstract class GroupedStackTask<S, T>
     protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker chnlChecker);
 
     protected abstract void processKeys(
-            NamedImgStackCollection store,
+            NamedStackCollection store,
             Optional<String> groupName,
             GroupedSharedState<S, T> sharedState,
             BoundIOContext context)
@@ -161,10 +161,10 @@ public abstract class GroupedStackTask<S, T>
         }
     }
 
-    private static NamedImgStackCollection extractInputStacks(ProvidesStackInput inputObject)
+    private static NamedStackCollection extractInputStacks(ProvidesStackInput inputObject)
             throws JobExecutionException {
         try {
-            NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+            NamedStackCollection stackCollection = new NamedStackCollection();
             inputObject.addToStoreInferNames(stackCollection);
             return stackCollection;
         } catch (OperationFailedException e1) {

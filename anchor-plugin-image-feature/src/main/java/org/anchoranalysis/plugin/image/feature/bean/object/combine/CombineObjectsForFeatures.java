@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,6 +40,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.stack.DisplayStack;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.
@@ -76,4 +78,13 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public abstract List<T> createListInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException;
+    
+    
+    /**
+     * Creates a thumbnail for a particular input
+     * 
+     * @param input the input
+     * @return the thumbnail (if its supported)
+     */
+    public abstract Optional<DisplayStack> createThumbailFor(T input);
 }

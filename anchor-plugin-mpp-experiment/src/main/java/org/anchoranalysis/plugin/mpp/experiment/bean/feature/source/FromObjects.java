@@ -58,7 +58,7 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 
@@ -90,7 +90,11 @@ public class FromObjects<T extends FeatureInput>
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();
+    
+    private static final String[] NON_GROUP_HEADERS = new String[] {"image", "unique_pixel_in_object"};
 
+    private static final String ADDITONAL_GROUP_HEADER = "object_collection";
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
     private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
@@ -143,10 +147,10 @@ public class FromObjects<T extends FeatureInput>
     }
 
     @Override
-    public GenerateHeadersForCSV headers() {
-        return new GenerateHeadersForCSV(
-                new String[] {"image", "unique_pixel_in_object"},
-                moreThanOneProvider() ? Optional.of("object_collection") : Optional.empty());
+    public GenerateLabelHeadersForCSV headers() {
+        return new GenerateLabelHeadersForCSV(
+                NON_GROUP_HEADERS,
+                moreThanOneProvider() ? Optional.of(ADDITONAL_GROUP_HEADER) : Optional.empty());
     }
 
     /**
@@ -174,7 +178,7 @@ public class FromObjects<T extends FeatureInput>
                         startCalculator(context.getRowSource(), initParams, context.getLogger()),
                         initParams,
                         suppressErrors,
-                        input -> Optional.empty(),
+                        combine::createThumbailFor,
                         context);
         processAllProviders(descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
