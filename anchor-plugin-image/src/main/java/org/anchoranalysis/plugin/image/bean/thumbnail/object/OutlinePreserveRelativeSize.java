@@ -109,7 +109,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
         
         // Create a generator that draws objects on the background
-        generator = new DrawObjectOnStackGenerator(backgroundScaled, outlineWidth);
+        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth);
     }
     
     /** Derives a background-stack from a stack that is a source of possible backgrounds */
