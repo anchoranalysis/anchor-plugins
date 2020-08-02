@@ -65,7 +65,7 @@ class StatsHelper {
             int zTarget =
                     slice.getBoundingBox().cornerMin().getZ()
                             + object.getBoundingBox().cornerMin().getZ();
-            slice = slice.mapBoundingBox(bbox -> bbox.shiftToZ(zTarget));
+            slice = slice.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftToZ(zTarget));
 
             if (slice.hasPixelsGreaterThan(0)) {
                 double mean =

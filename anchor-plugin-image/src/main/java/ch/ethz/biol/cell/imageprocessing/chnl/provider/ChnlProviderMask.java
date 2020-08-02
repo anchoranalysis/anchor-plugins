@@ -28,26 +28,26 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * A base class for a {@link ChnlProvider} which also uses a binary-mask, but which doesn't use any
- * other {@link ChnlProvider} as an input.
+ * A base class for a {@link ChannelProvider} which also uses a binary-mask, but which doesn't use any
+ * other {@link ChannelProvider} as an input.
  *
- * <p>Note for classes that use both a binary-mask AND another {@link ChnlProvider}, see {@link
+ * <p>Note for classes that use both a binary-mask AND another {@link ChannelProvider}, see {@link
  * ChnlProviderOneMask}.
  *
  * @author Owen Feehan
  */
-public abstract class ChnlProviderMask extends ChnlProvider {
+public abstract class ChnlProviderMask extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
     @Override

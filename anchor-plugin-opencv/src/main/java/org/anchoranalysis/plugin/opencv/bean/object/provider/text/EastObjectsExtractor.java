@@ -72,7 +72,7 @@ class EastObjectsExtractor {
         int width = (int) matrix.size().width;
         int height = (int) matrix.size().height;
 
-        return new ImageDimensions(new Extent(width, height, 1), res);
+        return new ImageDimensions(new Extent(width, height), res);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
     @Override

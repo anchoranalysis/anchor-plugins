@@ -31,14 +31,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BinaryChnlProviderStackReference extends BinaryChnlProvider {
+public class BinaryChnlProviderStackReference extends MaskProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int chnlIndex = 0;

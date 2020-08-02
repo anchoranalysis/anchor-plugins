@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -54,7 +54,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter private String id = "";
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
     // END BEAN PROPERTIES
 
     @Override

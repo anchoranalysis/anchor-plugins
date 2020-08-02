@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
+import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
 /** Creates a BinaryImgChannel from a collection of object masks */
 public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
@@ -63,9 +63,9 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
     private static Mask createChannelFromObjectsMultiplex(
             ObjectCollection objects, ImageDimensions sd, BinaryValues outVal, boolean invert) {
         if (invert) {
-            return BinaryChnlFromObjects.createFromNotObjects(objects, sd, outVal);
+            return MaskFromObjects.createFromNotObjects(objects, sd, outVal);
         } else {
-            return BinaryChnlFromObjects.createFromObjects(objects, sd, outVal);
+            return MaskFromObjects.createFromObjects(objects, sd, outVal);
         }
     }
 }

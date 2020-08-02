@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -53,7 +53,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider chnlThreshold;
+    @BeanField @Getter @Setter private ChannelProvider chnlThreshold;
 
     @BeanField @Getter @Setter private boolean clearOutsideMask = true;
     // END BEAN PROPERTIES

@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.image.task.bean.thumbnail.stack;
+package org.anchoranalysis.plugin.image.bean.thumbnail.stack;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;

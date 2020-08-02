@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -47,9 +47,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @Getter @Setter private MaskProvider mask;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnlBlue;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBlue;
 
     @BeanField @Getter @Setter private boolean mip = false;
 

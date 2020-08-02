@@ -37,7 +37,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -69,7 +69,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
         try {
             Optional<Channel> inputImage =
                     ncc.getChannelOptional(
-                            ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
+                            StackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
             inputImage.ifPresent(
                     image ->
                             context.getOutputManager()

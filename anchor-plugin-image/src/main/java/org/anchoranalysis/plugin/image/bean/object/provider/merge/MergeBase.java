@@ -102,7 +102,7 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 
     private static ObjectCollection mergeAll(MergeObjects merger, ObjectCollection objects)
             throws OperationFailedException {
-        return ObjectCollectionFactory.from(merger.mergeObjects(objects));
+        return ObjectCollectionFactory.of(merger.mergeObjects(objects));
     }
 
     private static ObjectCollection mergeInContainer(

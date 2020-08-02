@@ -155,7 +155,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public List<FeatureInputPairObjects> createListInputs(
+    public List<FeatureInputPairObjects> deriveInputsFromObjects(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException {
 

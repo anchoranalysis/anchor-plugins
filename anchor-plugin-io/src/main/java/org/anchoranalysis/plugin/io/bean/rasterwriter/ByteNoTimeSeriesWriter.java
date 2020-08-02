@@ -37,7 +37,7 @@ import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
+import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 
     @Override
-    public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB)
+    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
             throws RasterIOException {
         throw new RasterIOException(
                 "Writing time-series is unsupported by this " + RasterWriter.class.getSimpleName());

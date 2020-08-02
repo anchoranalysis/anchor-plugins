@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
@@ -42,7 +42,7 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
     @BeanField @Getter @Setter private KeyValueCondition condition;
     // END BEAN PROPERTIES
 
-    @BeanField @Getter @Setter private ChnlProvider chnlElse;
+    @BeanField @Getter @Setter private ChannelProvider chnlElse;
     // END BEAN PROPERTIES
 
     @Override

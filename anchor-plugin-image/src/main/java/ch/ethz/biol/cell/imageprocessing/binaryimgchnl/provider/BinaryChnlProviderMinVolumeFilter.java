@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
+import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
 public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
@@ -54,7 +54,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
 
     private Mask createMaskedImage(Mask bi) throws CreateException {
 
-        return BinaryChnlFromObjects.createFromObjects(
+        return MaskFromObjects.createFromObjects(
                 connectedComponents(bi, inverted), bi.getDimensions(), bi.getBinaryValues());
     }
 

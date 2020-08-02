@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.junit.Test;
@@ -92,7 +92,7 @@ public class BinaryChnlProviderInvertTest {
         }
     }
 
-    private static BinaryChnlProvider createProviderInvert(Mask chnl, Optional<Mask> mask) {
+    private static MaskProvider createProviderInvert(Mask chnl, Optional<Mask> mask) {
         BinaryChnlProviderInvert provider = new BinaryChnlProviderInvert();
         provider.setBinaryChnl(ProviderFixture.providerFor(chnl));
         mask.ifPresent(m -> provider.setMask(ProviderFixture.providerFor(m)));

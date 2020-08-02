@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
+import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
 public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 
@@ -125,7 +125,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
 
     private static Mask fillHoles(
             ObjectCollection filled, Mask src, ImageDimensions sd, BinaryValues bvOut) {
-        Mask bcSelected = BinaryChnlFromObjects.createFromObjects(filled, sd, bvOut);
+        Mask bcSelected = MaskFromObjects.createFromObjects(filled, sd, bvOut);
         BinaryChnlOr.binaryOr(bcSelected, src);
         return bcSelected;
     }

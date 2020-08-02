@@ -45,7 +45,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -94,7 +94,7 @@ class SgmnMPPHelper {
             NamedProvider<Stack> stackCollection, KeyValueParams params) throws CreateException {
         try {
             NRGStack nrgStack =
-                    new NRGStack(stackCollection.getException(ImgStackIdentifiers.NRG_STACK));
+                    new NRGStack(stackCollection.getException(StackIdentifiers.NRG_STACK));
             return new NRGStackWithParams(nrgStack, params);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);

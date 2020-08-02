@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
@@ -43,11 +43,11 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 public class FromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
     // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection create() throws CreateException {
-        return ObjectCollectionFactory.from(binaryChnl.create());
+        return ObjectCollectionFactory.of(binaryChnl.create());
     }
 }

@@ -32,14 +32,12 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -73,10 +71,6 @@ public class ImageAssignLabelTask<T>
     @BeanField @OptionalBean @SkipInit @Getter @Setter private StackProvider outputStackProvider;
     // END BEAN PROPERTIES
 
-    public ImageAssignLabelTask() {
-        super();
-    }
-
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
             BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
@@ -108,14 +102,22 @@ public class ImageAssignLabelTask<T>
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
-                        StackInputInitParamsCreator.createInitParams(
-                                params.getInputObject(), params.context()),
+                        createFromProviderWith(outputStackProvider, params.getInputObject(), params.context()),
                         params.getInputObject().descriptiveName(),
-                        params.getSharedState(),
-                        params.getLogger());
+                        params.getSharedState()
+                        );
             }
-        } catch (OperationFailedException e) {
+        } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);
+        }
+    }
+    
+    private static Stack createFromProviderWith(StackProvider provider, ProvidesStackInput stack, BoundIOContext context) throws CreateException {
+        try {
+            provider.initRecursive(StackInputInitParamsCreator.createInitParams(stack, context), context.getLogger());
+            return provider.create();
+        } catch (InitException | OperationFailedException e) {
+            throw new CreateException(e);
         }
     }
 
@@ -133,26 +135,18 @@ public class ImageAssignLabelTask<T>
 
     private void outputStack(
             String groupIdentifier,
-            ImageInitParams initParams,
+            Stack stack,
             String outputName,
-            SharedStateFilteredImageOutput<T> sharedState,
-            Logger logger)
-            throws JobExecutionException {
-
-        try {
-            outputStackProvider.initRecursive(initParams, logger);
+            SharedStateFilteredImageOutput<T> sharedState
+    )
+    {
 
             BoundOutputManagerRouteErrors outputSub =
                     sharedState.getOutputManagerFor(groupIdentifier);
-
-            Stack stack = outputStackProvider.create();
 
             // Copies the file into the output
             outputSub
                     .getWriterAlwaysAllowed()
                     .write(outputName, () -> new StackGenerator(stack, true, "raster"));
-        } catch (InitException | CreateException e) {
-            throw new JobExecutionException(e);
-        }
     }
 }

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -46,11 +46,11 @@ import lombok.Setter;
 public class StackProviderRGBChnlProvider extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider red;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider red;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider green;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider green;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider blue;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider blue;
     // END BEAN PROPERTIES
 
     @Override

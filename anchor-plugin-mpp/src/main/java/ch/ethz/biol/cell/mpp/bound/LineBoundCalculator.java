@@ -40,7 +40,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -50,7 +50,7 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class LineBoundCalculator extends BoundCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider outlineProvider;
+    @BeanField @Getter @Setter private MaskProvider outlineProvider;
 
     @BeanField @Getter @Setter private double extra = 0;
     // END BEAN PROPERTIES

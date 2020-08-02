@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.series.ImgStackSeries;
+import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class WriteResolutionXml extends RasterWriter {
     }
 
     @Override
-    public void writeTimeSeriesStackByte(ImgStackSeries stackSeries, Path filePath, boolean makeRGB)
+    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
             throws RasterIOException {
         writer.writeTimeSeriesStackByte(stackSeries, filePath, makeRGB);
 

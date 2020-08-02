@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 
 @NoArgsConstructor
-public class ChnlProviderReference extends ChnlProvider {
+public class ChnlProviderReference extends ChannelProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String id = "";
