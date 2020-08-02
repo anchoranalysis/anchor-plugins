@@ -26,6 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -51,7 +52,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(chnl.getDimensions());
+            scaleFactor = scaleCalculator.calc(Optional.of(chnl.getDimensions()));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

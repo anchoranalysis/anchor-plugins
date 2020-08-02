@@ -26,11 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -40,11 +42,11 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class RatioNonMode extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean ignoreZero = false;
+    @BeanField @Getter @Setter private boolean ignoreZero = false;
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalcException {
+    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
             int startV = ignoreZero ? 1 : 0;
 
@@ -74,7 +76,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
 
             return ((double) nonModalCnt) / totalCnt;
         } catch (IndexOutOfBoundsException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
@@ -95,13 +97,5 @@ public class RatioNonMode extends FeatureHistogramStatistic {
             }
         }
         return maxIndex;
-    }
-
-    public boolean isIgnoreZero() {
-        return ignoreZero;
-    }
-
-    public void setIgnoreZero(boolean ignoreZero) {
-        this.ignoreZero = ignoreZero;
     }
 }

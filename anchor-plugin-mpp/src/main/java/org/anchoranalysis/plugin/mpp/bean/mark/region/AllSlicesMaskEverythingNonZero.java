@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;

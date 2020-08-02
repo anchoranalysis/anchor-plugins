@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -48,9 +50,9 @@ import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -68,9 +70,9 @@ public class ScaleTask extends RasterTask {
     private static final String KEY_OUTPUT_STACK = "stack";
 
     // START BEAN PROPERTIES
-    @BeanField private ScaleCalculator scaleCalculator;
+    @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField private boolean forceBinary = false;
+    @BeanField @Getter @Setter private boolean forceBinary = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -86,9 +88,9 @@ public class ScaleTask extends RasterTask {
             throws JobExecutionException {
 
         // Input
-        NamedChnlCollectionForSeries nccfs;
+        NamedChannelsForSeries nccfs;
         try {
-            nccfs = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            nccfs = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
         } catch (RasterIOException e1) {
             throw new JobExecutionException(e1);
         }
@@ -98,7 +100,7 @@ public class ScaleTask extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            nccfs.addAsSeparateChnls(
+            nccfs.addAsSeparateChannels(
                     new WrapStackAsTimeSequenceStore(soImage.getStackCollection()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
@@ -111,8 +113,8 @@ public class ScaleTask extends RasterTask {
     private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
             throws JobExecutionException {
         // Our output collections
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-        NamedImgStackCollection stackCollectionMIP = new NamedImgStackCollection();
+        NamedStacks stackCollection = new NamedStacks();
+        NamedStacks stackCollectionMIP = new NamedStacks();
 
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
@@ -147,8 +149,8 @@ public class ScaleTask extends RasterTask {
 
     private void populateOutputCollectionsFromSharedObjects(
             ImageInitParams so,
-            NamedImgStackCollection stackCollection,
-            NamedImgStackCollection stackCollectionMIP,
+            NamedStacks stackCollection,
+            NamedStacks stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 
@@ -163,7 +165,7 @@ public class ScaleTask extends RasterTask {
             }
 
             try {
-                Channel chnlIn = so.getStackCollection().getException(chnlName).getChnl(0);
+                Channel chnlIn = so.getStackCollection().getException(chnlName).getChannel(0);
 
                 Channel chnlOut;
                 if (forceBinary) {
@@ -199,21 +201,5 @@ public class ScaleTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         // NOTHING TO DO
-    }
-
-    public ScaleCalculator getScaleCalculator() {
-        return scaleCalculator;
-    }
-
-    public void setScaleCalculator(ScaleCalculator scaleCalculator) {
-        this.scaleCalculator = scaleCalculator;
-    }
-
-    public boolean isForceBinary() {
-        return forceBinary;
-    }
-
-    public void setForceBinary(boolean forceBinary) {
-        this.forceBinary = forceBinary;
     }
 }

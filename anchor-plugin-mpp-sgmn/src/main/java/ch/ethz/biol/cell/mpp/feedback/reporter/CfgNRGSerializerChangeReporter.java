@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -49,13 +51,13 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 public class CfgNRGSerializerChangeReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
     // START BEAN PARAMETERS
-    @BeanField private String manifestFunction = "cfgNRG";
+    @BeanField @Getter @Setter private String manifestFunction = "cfgNRG";
 
-    @BeanField private String outputName;
+    @BeanField @Getter @Setter private String outputName;
 
-    @BeanField private int bundleSize = 1000;
+    @BeanField @Getter @Setter private int bundleSize = 1000;
 
-    @BeanField private boolean best = false;
+    @BeanField @Getter @Setter private boolean best = false;
     // END BEAN PARAMETERS
 
     private GeneratorSequenceNonIncrementalWriter<CfgNRG> sequenceWriter;
@@ -154,37 +156,5 @@ public class CfgNRGSerializerChangeReporter extends FeedbackReceiverBean<CfgNRGP
         if (cfgNRGAfter.isPresent()) {
             sequenceWriter.add(cfgNRGAfter.get().getCfgNRG(), String.valueOf(iter));
         }
-    }
-
-    public String getManifestFunction() {
-        return manifestFunction;
-    }
-
-    public void setManifestFunction(String manifestFunction) {
-        this.manifestFunction = manifestFunction;
-    }
-
-    public String getOutputName() {
-        return outputName;
-    }
-
-    public void setOutputName(String outputName) {
-        this.outputName = outputName;
-    }
-
-    public int getBundleSize() {
-        return bundleSize;
-    }
-
-    public void setBundleSize(int bundleSize) {
-        this.bundleSize = bundleSize;
-    }
-
-    public boolean isBest() {
-        return best;
-    }
-
-    public void setBest(boolean best) {
-        this.best = best;
     }
 }

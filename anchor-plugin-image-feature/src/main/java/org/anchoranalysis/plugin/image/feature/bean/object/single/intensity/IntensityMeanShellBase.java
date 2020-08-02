@@ -27,12 +27,14 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
@@ -49,27 +51,28 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     // START BEAN PROPERTIES
-    @BeanField @NonNegative private int iterationsErosion = 0;
+    @BeanField @NonNegative @Getter @Setter private int iterationsErosion = 0;
 
-    @BeanField private int iterationsDilation = 0;
+    @BeanField @Getter @Setter private int iterationsDilation = 0;
 
     /**
      * Iff TRUE, calculates instead on the inverse of the mask (what's left when the shell is
      * removed)
      */
-    @BeanField private boolean inverse = false;
+    @BeanField @Getter @Setter private boolean inverse = false;
 
     /**
      * A channel of the nrgStack that is used as an additional mask using default byte values for ON
      * and OFF
      */
-    @BeanField private int nrgIndexMask = -1;
+    @BeanField @Getter @Setter private int nrgIndexMask = -1;
 
-    @BeanField private boolean inverseMask = false; // Uses the inverse of the passed mask
+    @BeanField @Getter @Setter
+    private boolean inverseMask = false; // Uses the inverse of the passed mask
 
-    @BeanField private double emptyValue = 255;
+    @BeanField @Getter @Setter private double emptyValue = 255;
 
-    @BeanField private boolean do3D = true;
+    @BeanField @Getter @Setter private boolean do3D = true;
 
     // END BEAN PROPERTIES
 
@@ -85,7 +88,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     @Override
     protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
 
@@ -106,7 +109,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(
                 CalculateShellObjectMask.of(
                         input.resolver(),
@@ -122,12 +125,12 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     protected abstract double calcForShell(ObjectMask shell, Channel chnl)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     private ObjectMask createNrgMask(NRGStack nrgStack) {
         return new ObjectMask(
                 new BoundingBox(nrgStack.getDimensions().getExtent()),
-                nrgStack.getChnl(nrgIndexMask).getVoxelBox().asByte(),
+                nrgStack.getChannel(nrgIndexMask).getVoxelBox().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()
                         : BinaryValues.getDefault());
@@ -142,61 +145,5 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
                 iterationsErosion,
                 inverse ? "true" : "false",
                 do3D ? "true" : "false");
-    }
-
-    public int getIterationsDilation() {
-        return iterationsDilation;
-    }
-
-    public void setIterationsDilation(int iterationsDilation) {
-        this.iterationsDilation = iterationsDilation;
-    }
-
-    public boolean isInverse() {
-        return inverse;
-    }
-
-    public void setInverse(boolean inverse) {
-        this.inverse = inverse;
-    }
-
-    public int getNrgIndexMask() {
-        return nrgIndexMask;
-    }
-
-    public void setNrgIndexMask(int nrgIndexMask) {
-        this.nrgIndexMask = nrgIndexMask;
-    }
-
-    public boolean isInverseMask() {
-        return inverseMask;
-    }
-
-    public void setInverseMask(boolean inverseMask) {
-        this.inverseMask = inverseMask;
-    }
-
-    public double getEmptyValue() {
-        return emptyValue;
-    }
-
-    public void setEmptyValue(double emptyValue) {
-        this.emptyValue = emptyValue;
-    }
-
-    public int getIterationsErosion() {
-        return iterationsErosion;
-    }
-
-    public void setIterationsErosion(int iterationsErosion) {
-        this.iterationsErosion = iterationsErosion;
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3D) {
-        this.do3D = do3D;
     }
 }

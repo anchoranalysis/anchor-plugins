@@ -26,24 +26,27 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 public class OverlapRatioMask extends OverlapMaskBase {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean useMax = false;
+    @BeanField @Getter @Setter private boolean useMax = false;
     // END BEAN PROPERTIES
 
     private RelationBean relationToThreshold = new EqualToBean();
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
@@ -68,13 +71,5 @@ public class OverlapRatioMask extends OverlapMaskBase {
                         relationToThreshold,
                         OverlapRatioUtilities.maxOrMin(useMax));
         return overlap / volume;
-    }
-
-    public boolean isUseMax() {
-        return useMax;
-    }
-
-    public void setUseMax(boolean useMax) {
-        this.useMax = useMax;
     }
 }

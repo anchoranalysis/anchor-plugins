@@ -31,12 +31,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
-public abstract class ChnlProviderDimSource extends ChnlProvider {
+public abstract class ChnlProviderDimSource extends ChannelProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();

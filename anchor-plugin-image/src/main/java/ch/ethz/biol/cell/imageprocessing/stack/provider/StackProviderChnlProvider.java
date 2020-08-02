@@ -26,27 +26,29 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
 
+@NoArgsConstructor
 public class StackProviderChnlProvider extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private ChnlProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
 
-    @BeanField @OptionalBean private BinaryChnlProvider binaryChnl;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnl;
     // END BEAN PROPERTIES
 
-    public StackProviderChnlProvider() {}
-
-    public StackProviderChnlProvider(ChnlProvider chnlProvider) {
+    public StackProviderChnlProvider(ChannelProvider chnlProvider) {
         this.chnl = chnlProvider;
     }
 
@@ -71,21 +73,5 @@ public class StackProviderChnlProvider extends StackProvider {
         } else {
             return new Stack(binaryChnl.create().getChannel());
         }
-    }
-
-    public ChnlProvider getChnl() {
-        return chnl;
-    }
-
-    public void setChnl(ChnlProvider chnl) {
-        this.chnl = chnl;
-    }
-
-    public BinaryChnlProvider getBinaryChnl() {
-        return binaryChnl;
-    }
-
-    public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-        this.binaryChnl = binaryChnl;
     }
 }

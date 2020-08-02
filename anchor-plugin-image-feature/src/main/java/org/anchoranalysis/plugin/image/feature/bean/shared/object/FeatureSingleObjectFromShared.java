@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
@@ -64,13 +64,13 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
             throws InitException;
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
         return calc(input.forChild(), item);
     }
 
     protected abstract double calc(
             CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
-            throws FeatureCalcException;
+            throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {

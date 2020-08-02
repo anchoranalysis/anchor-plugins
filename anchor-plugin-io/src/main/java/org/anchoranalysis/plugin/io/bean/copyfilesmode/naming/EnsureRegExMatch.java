@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.error.AnchorIOException;
 
@@ -43,7 +45,7 @@ public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {
      * Iff TRUE, then a file is rejected if regEx matches and vice-versa (opposite to normal
      * behaviour)
      */
-    @BeanField private boolean invert = false;
+    @BeanField @Getter @Setter private boolean invert = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -64,13 +66,5 @@ public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {
         } else {
             return matches;
         }
-    }
-
-    public boolean isInvert() {
-        return invert;
-    }
-
-    public void setInvert(boolean invert) {
-        this.invert = invert;
     }
 }

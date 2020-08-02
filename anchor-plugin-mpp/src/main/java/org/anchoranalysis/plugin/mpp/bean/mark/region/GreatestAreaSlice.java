@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;

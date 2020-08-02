@@ -26,10 +26,12 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -41,11 +43,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PARAMETERS
-    @BeanField private double max = 100;
+    @BeanField @Getter @Setter private double max = 100;
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
         return Math.min((1 / input.calc(getItem())), max);
     }
 
@@ -57,13 +59,5 @@ public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleEle
     @Override
     public String getDscrLong() {
         return "(1/" + getItem().getBeanName() + ")[max=" + max + "]";
-    }
-
-    public double getMax() {
-        return max;
-    }
-
-    public void setMax(double max) {
-        this.max = max;
     }
 }

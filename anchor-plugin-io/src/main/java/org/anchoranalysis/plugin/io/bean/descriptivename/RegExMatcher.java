@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import java.io.File;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
@@ -34,7 +36,7 @@ import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndepen
 public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 
     // START BEAN PROPERTIES
-    @BeanField private RegEx regEx;
+    @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERTIES
 
     @Override
@@ -49,13 +51,5 @@ public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 
     private static String buildStrFromComponents(String[] components) {
         return String.join("/", components);
-    }
-
-    public RegEx getRegEx() {
-        return regEx;
-    }
-
-    public void setRegEx(RegEx regEx) {
-        this.regEx = regEx;
     }
 }

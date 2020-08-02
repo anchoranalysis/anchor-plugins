@@ -28,6 +28,8 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.AppendStack;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -62,9 +64,10 @@ public class NamedChnlsQuick extends NamedChnlsBase {
 
     // START BEAN PROPERTIES
     /** A path to the main channel of each file */
-    @BeanField private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
-    @BeanField private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
+    @BeanField @Getter @Setter
+    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
 
     /**
      * This needs to be set if there is at least one adjacentChnl
@@ -73,7 +76,7 @@ public class NamedChnlsQuick extends NamedChnlsBase {
      * path returned by fileProvider This only needs to be set if at least one adjacentChnl is
      * specified
      */
-    @BeanField @AllowEmpty private String regexAdjacent = "";
+    @BeanField @AllowEmpty @Getter @Setter private String regexAdjacent = "";
 
     /**
      * This should be a regex that is searched for in the path returned by fileProvider and returns
@@ -88,39 +91,39 @@ public class NamedChnlsQuick extends NamedChnlsBase {
      * correspond to the unique name of the dataset. The third group should correspond to the unique
      * name of the experiment.
      */
-    @BeanField @AllowEmpty private String regexAppend = "";
+    @BeanField @AllowEmpty @Getter @Setter private String regexAppend = "";
 
     /** The name of the channel provided by the rasters in file Provider */
-    @BeanField private String mainChnlName;
+    @BeanField @Getter @Setter private String mainChnlName;
 
     /** Index of the mainChnl */
-    @BeanField private int mainChnlIndex = 0;
+    @BeanField @Getter @Setter private int mainChnlIndex = 0;
 
     /** Additional channels other than the main one, which are located in the main raster file */
-    @BeanField private List<ImgChnlMapEntry> additionalChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ImgChnlMapEntry> additionalChnls = new ArrayList<>();
 
     /** Channels that are located in a separate raster file adjacent to the main raster file */
-    @BeanField private List<AdjacentFile> adjacentChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AdjacentFile> adjacentChnls = new ArrayList<>();
 
     /**
      * Channels that are located in a separate raster file somewhere else in the project's structure
      */
-    @BeanField private List<AppendStack> appendChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AppendStack> appendChnls = new ArrayList<>();
 
     /** If non-empty then a rooted file-system is used with this root */
-    @BeanField @AllowEmpty private String rootName = "";
+    @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     /** If set, a CSV is read with two columns: the names of images and a */
-    @BeanField @OptionalBean private MatchedAppendCsv filterFilesCsv;
+    @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
 
     /** The raster-reader to use for opening the main image */
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
     /** The raster-reader to use for opening any appended-channels */
-    @BeanField @DefaultInstance private RasterReader rasterReaderAppend;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAppend;
 
     /** The raster-reader to use for opening any adjacent-channels */
-    @BeanField @DefaultInstance private RasterReader rasterReaderAdjacent;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAdjacent;
     // END BEAN PROPERTIES
 
     private InputManager<NamedChnlsInputPart> append;
@@ -242,109 +245,5 @@ public class NamedChnlsQuick extends NamedChnlsBase {
     private NamedBean<FilePathGenerator> convertAppendStack(AppendStack stack)
             throws BeanMisconfiguredException {
         return stack.createFilePathGenerator(rootName, regexAppend);
-    }
-
-    public FileProviderWithDirectory getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProviderWithDirectory fileProvider) {
-        this.fileProvider = fileProvider;
-    }
-
-    public DescriptiveNameFromFile getDescriptiveNameFromFile() {
-        return descriptiveNameFromFile;
-    }
-
-    public void setDescriptiveNameFromFile(DescriptiveNameFromFile descriptiveNameFromFile) {
-        this.descriptiveNameFromFile = descriptiveNameFromFile;
-    }
-
-    public String getMainChnlName() {
-        return mainChnlName;
-    }
-
-    public void setMainChnlName(String mainChnlName) {
-        this.mainChnlName = mainChnlName;
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
-    }
-
-    public List<AdjacentFile> getAdjacentChnls() {
-        return adjacentChnls;
-    }
-
-    public void setAdjacentChnls(List<AdjacentFile> adjacentChnls) {
-        this.adjacentChnls = adjacentChnls;
-    }
-
-    public List<ImgChnlMapEntry> getAdditionalChnls() {
-        return additionalChnls;
-    }
-
-    public void setAdditionalChnls(List<ImgChnlMapEntry> additionalChnls) {
-        this.additionalChnls = additionalChnls;
-    }
-
-    public int getMainChnlIndex() {
-        return mainChnlIndex;
-    }
-
-    public void setMainChnlIndex(int mainChnlIndex) {
-        this.mainChnlIndex = mainChnlIndex;
-    }
-
-    public String getRegexAdjacent() {
-        return regexAdjacent;
-    }
-
-    public void setRegexAdjacent(String regexAdjacent) {
-        this.regexAdjacent = regexAdjacent;
-    }
-
-    public String getRegexAppend() {
-        return regexAppend;
-    }
-
-    public void setRegexAppend(String regexAppend) {
-        this.regexAppend = regexAppend;
-    }
-
-    public List<AppendStack> getAppendChnls() {
-        return appendChnls;
-    }
-
-    public void setAppendChnls(List<AppendStack> appendChnls) {
-        this.appendChnls = appendChnls;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public RasterReader getRasterReaderAppend() {
-        return rasterReaderAppend;
-    }
-
-    public void setRasterReaderAppend(RasterReader rasterReaderAppend) {
-        this.rasterReaderAppend = rasterReaderAppend;
-    }
-
-    public RasterReader getRasterReaderAdjacent() {
-        return rasterReaderAdjacent;
-    }
-
-    public void setRasterReaderAdjacent(RasterReader rasterReaderAdjacent) {
-        this.rasterReaderAdjacent = rasterReaderAdjacent;
     }
 }

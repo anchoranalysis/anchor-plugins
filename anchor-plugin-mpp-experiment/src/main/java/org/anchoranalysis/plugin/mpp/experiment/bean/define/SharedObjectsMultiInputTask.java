@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -41,7 +43,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
@@ -49,13 +51,14 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
-    @BeanField private DefineOutputterMPP define;
+    @BeanField @Getter @Setter private DefineOutputterMPP define;
 
     // Allows feature tables to be also outputted
-    @BeanField private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
 
     /** If non-empty, A keyValueParams is treated as part of the nrgStack */
-    @BeanField @AllowEmpty private String nrgParamsName = "";
+    @BeanField @AllowEmpty @Getter @Setter private String nrgParamsName = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -109,7 +112,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
                 oft.initRecursive(so, context.getLogger());
                 oft.output(context);
             } catch (IOException | InitException e) {
-                context.getErrorReporter().recordError(NamedImgStackCollection.class, e);
+                context.getErrorReporter().recordError(NamedStacks.class, e);
             }
         }
     }
@@ -125,29 +128,5 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
             }
             oft.output(context);
         }
-    }
-
-    public List<OutputFeatureTable> getListOutputFeatureTable() {
-        return listOutputFeatureTable;
-    }
-
-    public void setListOutputFeatureTable(List<OutputFeatureTable> listOutputFeatureTable) {
-        this.listOutputFeatureTable = listOutputFeatureTable;
-    }
-
-    public String getNrgParamsName() {
-        return nrgParamsName;
-    }
-
-    public void setNrgParamsName(String nrgParamsName) {
-        this.nrgParamsName = nrgParamsName;
-    }
-
-    public DefineOutputterMPP getDefine() {
-        return define;
-    }
-
-    public void setDefine(DefineOutputterMPP define) {
-        this.define = define;
     }
 }

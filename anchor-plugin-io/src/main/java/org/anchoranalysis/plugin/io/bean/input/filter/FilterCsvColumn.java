@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -52,11 +54,11 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
 
-    @BeanField private FilePathGenerator csvFilePath;
+    @BeanField @Getter @Setter private FilePathGenerator csvFilePath;
 
-    @BeanField private String match;
+    @BeanField @Getter @Setter private String match;
     // END BEAN PROPERTIES
 
     @Override
@@ -102,29 +104,5 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
                 itr.remove();
             }
         }
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
-    }
-
-    public String getMatch() {
-        return match;
-    }
-
-    public void setMatch(String match) {
-        this.match = match;
-    }
-
-    public FilePathGenerator getCsvFilePath() {
-        return csvFilePath;
-    }
-
-    public void setCsvFilePath(FilePathGenerator csvFilePath) {
-        this.csvFilePath = csvFilePath;
     }
 }

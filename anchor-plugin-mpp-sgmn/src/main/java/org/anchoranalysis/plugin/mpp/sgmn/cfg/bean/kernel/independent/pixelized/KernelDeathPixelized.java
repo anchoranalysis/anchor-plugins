@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelDeath;
 
@@ -79,7 +79,7 @@ public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
 
         try {
             newNRG.rmv(index, propContext.getNrgStack().getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException(String.format("Cannot remove index %d", index), e);
         }
 

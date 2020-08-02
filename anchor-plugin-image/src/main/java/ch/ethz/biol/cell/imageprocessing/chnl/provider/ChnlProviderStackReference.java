@@ -26,20 +26,22 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 
-public class ChnlProviderStackReference extends ChnlProvider {
+public class ChnlProviderStackReference extends ChannelProvider {
 
-    // START
-    @BeanField private int chnlIndex = 0;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private int chnlIndex = 0;
 
-    @BeanField private String stackProviderID;
-    // END
+    @BeanField @Getter @Setter private String stackProviderID;
+    // END BEAN PROPERTIES
 
     private Channel chnl;
 
@@ -53,7 +55,7 @@ public class ChnlProviderStackReference extends ChnlProvider {
                                 .getStackCollection()
                                 .getException(stackProviderID);
 
-                chnl = stack.getChnl(chnlIndex);
+                chnl = stack.getChannel(chnlIndex);
                 if (chnl == null) {
                     throw new CreateException(String.format("chnl %d cannot be found", chnlIndex));
                 }
@@ -63,29 +65,5 @@ public class ChnlProviderStackReference extends ChnlProvider {
         }
 
         return chnl;
-    }
-
-    public int getChnlIndex() {
-        return chnlIndex;
-    }
-
-    public void setChnlIndex(int chnlIndex) {
-        this.chnlIndex = chnlIndex;
-    }
-
-    public String getStackProviderID() {
-        return stackProviderID;
-    }
-
-    public void setStackProviderID(String stackProviderID) {
-        this.stackProviderID = stackProviderID;
-    }
-
-    public Channel getChnl() {
-        return chnl;
-    }
-
-    public void setChnl(Channel chnl) {
-        this.chnl = chnl;
     }
 }

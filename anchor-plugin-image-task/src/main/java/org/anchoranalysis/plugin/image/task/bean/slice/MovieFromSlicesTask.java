@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -38,7 +40,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -50,17 +52,17 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class MovieFromSlicesTask extends RasterTask {
 
     // START BEAN PROPERTIES
-    @BeanField private int delaySizeAtEnd = 0;
+    @BeanField @Getter @Setter private int delaySizeAtEnd = 0;
 
-    @BeanField private String filePrefix = "movie";
+    @BeanField @Getter @Setter private String filePrefix = "movie";
 
-    @BeanField private int width = -1;
+    @BeanField @Getter @Setter private int width = -1;
 
-    @BeanField private int height = -1;
+    @BeanField @Getter @Setter private int height = -1;
 
-    @BeanField private int startIndex = 0; // this does nothing atm
+    @BeanField @Getter @Setter private int startIndex = 0; // this does nothing atm
 
-    @BeanField private int repeat = 1;
+    @BeanField @Getter @Setter private int repeat = 1;
     // END BEAN PROPERTIES
 
     private int index = 0;
@@ -109,14 +111,14 @@ public class MovieFromSlicesTask extends RasterTask {
             throws JobExecutionException {
 
         try {
-            NamedChnlCollectionForSeries ncc =
-                    inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            NamedChannelsForSeries ncc =
+                    inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
 
             ProgressReporter progressReporter = ProgressReporterNull.get();
 
-            Channel red = ncc.getChnl("red", 0, progressReporter);
-            Channel blue = ncc.getChnl("blue", 0, progressReporter);
-            Channel green = ncc.getChnl("green", 0, progressReporter);
+            Channel red = ncc.getChannel("red", 0, progressReporter);
+            Channel blue = ncc.getChannel("blue", 0, progressReporter);
+            Channel green = ncc.getChannel("green", 0, progressReporter);
 
             //
             if (!red.getDimensions().equals(blue.getDimensions())
@@ -155,53 +157,5 @@ public class MovieFromSlicesTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         generatorSeq.end();
-    }
-
-    public int getDelaySizeAtEnd() {
-        return delaySizeAtEnd;
-    }
-
-    public void setDelaySizeAtEnd(int delaySizeAtEnd) {
-        this.delaySizeAtEnd = delaySizeAtEnd;
-    }
-
-    public String getFilePrefix() {
-        return filePrefix;
-    }
-
-    public void setFilePrefix(String filePrefix) {
-        this.filePrefix = filePrefix;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public int getRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(int repeat) {
-        this.repeat = repeat;
     }
 }

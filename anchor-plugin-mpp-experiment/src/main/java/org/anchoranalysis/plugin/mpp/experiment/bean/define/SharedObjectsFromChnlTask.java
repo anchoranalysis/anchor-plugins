@@ -37,11 +37,11 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
@@ -51,7 +51,7 @@ public class SharedObjectsFromChnlTask extends RasterTask {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
-    @BeanField private String outputNameOriginal = "original";
+    @BeanField @Getter @Setter private String outputNameOriginal = "original";
     // END BEAN PROPERTIES
 
     @Override
@@ -59,17 +59,17 @@ public class SharedObjectsFromChnlTask extends RasterTask {
             NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException {
 
-        NamedChnlCollectionForSeries ncc;
+        NamedChannelsForSeries ncc;
         try {
-            ncc = inputObject.createChnlCollectionForSeries(0, ProgressReporterNull.get());
+            ncc = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
         } catch (RasterIOException e1) {
             throw new JobExecutionException(e1);
         }
 
         try {
             Optional<Channel> inputImage =
-                    ncc.getChnlOrNull(
-                            ImgStackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
+                    ncc.getChannelOptional(
+                            StackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
             inputImage.ifPresent(
                     image ->
                             context.getOutputManager()

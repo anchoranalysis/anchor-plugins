@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,10 +41,10 @@ import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.ChnlFilter;
-import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.chnl.ChannelGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -68,13 +70,13 @@ public class FormatConverterTask extends RasterTask {
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
-    @BeanField private ChnlConversionStyle chnlConversionStyle = null;
+    @BeanField @Getter @Setter private ChnlConversionStyle chnlConversionStyle = null;
 
-    @BeanField private boolean suppressSeries = false;
+    @BeanField @Getter @Setter private boolean suppressSeries = false;
 
-    @BeanField @OptionalBean private ChnlFilter chnlFilter = null;
+    @BeanField @OptionalBean @Getter @Setter private ChnlFilter chnlFilter = null;
 
-    @BeanField @OptionalBean private ConvertChannelTo chnlConverter = null;
+    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo chnlConverter = null;
     // END BEAN PROPERTIES
 
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
@@ -112,10 +114,9 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChnlCollectionForSeries createChnlCollection(
-            NamedChnlsInput inputObject, int seriesIndex) throws RasterIOException {
-        return inputObject.createChnlCollectionForSeries(
-                seriesIndex, new ProgressReporterConsole(1));
+    public NamedChannelsForSeries createChnlCollection(NamedChnlsInput inputObject, int seriesIndex)
+            throws RasterIOException {
+        return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
 
     @Override
@@ -127,10 +128,10 @@ public class FormatConverterTask extends RasterTask {
             throws JobExecutionException {
 
         try {
-            NamedChnlCollectionForSeries chnlCollection =
+            NamedChannelsForSeries chnlCollection =
                     createChnlCollection(inputObjectUntyped, seriesIndex);
 
-            ChnlGetter chnlGetter = maybeAddFilter(chnlCollection, context);
+            ChannelGetter chnlGetter = maybeAddFilter(chnlCollection, context);
 
             if (chnlConverter != null) {
                 chnlGetter = maybeAddConverter(chnlGetter);
@@ -138,7 +139,7 @@ public class FormatConverterTask extends RasterTask {
 
             convertEachTimepoint(
                     seriesIndex,
-                    chnlCollection.chnlNames(),
+                    chnlCollection.channelNames(),
                     numSeries,
                     chnlCollection.sizeT(ProgressReporterNull.get()),
                     chnlGetter,
@@ -154,7 +155,7 @@ public class FormatConverterTask extends RasterTask {
             Set<String> chnlNames,
             int numSeries,
             int sizeT,
-            ChnlGetter chnlGetter,
+            ChannelGetter chnlGetter,
             Logger logger)
             throws AnchorIOException {
 
@@ -181,7 +182,7 @@ public class FormatConverterTask extends RasterTask {
         generatorSeq.add(stack, calcOutputName.calcOutputName(name));
     }
 
-    private ChnlGetter maybeAddConverter(ChnlGetter chnlGetter) throws CreateException {
+    private ChannelGetter maybeAddConverter(ChannelGetter chnlGetter) throws CreateException {
         if (chnlConverter != null) {
             return new ConvertingChnlCollection(
                     chnlGetter,
@@ -192,12 +193,12 @@ public class FormatConverterTask extends RasterTask {
         }
     }
 
-    private ChnlGetter maybeAddFilter(
-            NamedChnlCollectionForSeries chnlCollection, BoundIOContext context) {
+    private ChannelGetter maybeAddFilter(
+            NamedChannelsForSeries chnlCollection, BoundIOContext context) {
 
         if (chnlFilter != null) {
 
-            chnlFilter.init((NamedChnlCollectionForSeries) chnlCollection, context);
+            chnlFilter.init((NamedChannelsForSeries) chnlCollection, context);
             return chnlFilter;
         } else {
             return chnlCollection;
@@ -208,37 +209,5 @@ public class FormatConverterTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         generatorSeq.end();
-    }
-
-    public boolean isSuppressSeries() {
-        return suppressSeries;
-    }
-
-    public void setSuppressSeries(boolean supressSeries) {
-        this.suppressSeries = supressSeries;
-    }
-
-    public ChnlFilter getChnlFilter() {
-        return chnlFilter;
-    }
-
-    public void setChnlFilter(ChnlFilter chnlFilter) {
-        this.chnlFilter = chnlFilter;
-    }
-
-    public ConvertChannelTo getChnlConverter() {
-        return chnlConverter;
-    }
-
-    public void setChnlConverter(ConvertChannelTo chnlConverter) {
-        this.chnlConverter = chnlConverter;
-    }
-
-    public ChnlConversionStyle getChnlConversionStyle() {
-        return chnlConversionStyle;
-    }
-
-    public void setChnlConversionStyle(ChnlConversionStyle chnlConversionStyle) {
-        this.chnlConversionStyle = chnlConversionStyle;
     }
 }

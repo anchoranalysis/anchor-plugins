@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
@@ -42,9 +44,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class HistogramProviderBelow extends HistogramProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private int threshold = 0;
+    @BeanField @Getter @Setter private int threshold = 0;
 
-    @BeanField private boolean merge = false;
+    @BeanField @Getter @Setter private boolean merge = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -54,21 +56,5 @@ public class HistogramProviderBelow extends HistogramProviderOne {
             h.transferVal(i, threshold - 1);
         }
         return h;
-    }
-
-    public int getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public boolean isMerge() {
-        return merge;
-    }
-
-    public void setMerge(boolean merge) {
-        this.merge = merge;
     }
 }

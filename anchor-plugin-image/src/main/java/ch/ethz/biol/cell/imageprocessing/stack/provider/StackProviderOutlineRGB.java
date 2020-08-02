@@ -28,13 +28,15 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderHolder;
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderOutline;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -45,15 +47,15 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
     // START BEAN PROPERTIES
-    @BeanField private BinaryChnlProvider mask;
+    @BeanField @Getter @Setter private MaskProvider mask;
 
-    @BeanField @OptionalBean private ChnlProvider chnlBlue;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBlue;
 
-    @BeanField private boolean mip = false;
+    @BeanField @Getter @Setter private boolean mip = false;
 
-    @BeanField private boolean force2D = false;
+    @BeanField @Getter @Setter private boolean force2D = false;
 
-    @BeanField private boolean createShort = false;
+    @BeanField @Getter @Setter private boolean createShort = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,45 +113,5 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    public boolean isMip() {
-        return mip;
-    }
-
-    public void setMip(boolean mip) {
-        this.mip = mip;
-    }
-
-    public boolean isForce2D() {
-        return force2D;
-    }
-
-    public void setForce2D(boolean force2d) {
-        force2D = force2d;
-    }
-
-    public boolean isCreateShort() {
-        return createShort;
-    }
-
-    public void setCreateShort(boolean createShort) {
-        this.createShort = createShort;
-    }
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
-    }
-
-    public ChnlProvider getChnlBlue() {
-        return chnlBlue;
-    }
-
-    public void setChnlBlue(ChnlProvider chnlBlue) {
-        this.chnlBlue = chnlBlue;
     }
 }

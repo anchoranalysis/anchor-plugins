@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -84,7 +84,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
         double val;
         try {
             val = featureSession.calc(new FeatureInputSingleObject(object));
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
 

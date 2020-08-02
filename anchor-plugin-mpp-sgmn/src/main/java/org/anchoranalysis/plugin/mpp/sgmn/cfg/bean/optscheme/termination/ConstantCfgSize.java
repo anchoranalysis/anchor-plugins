@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
@@ -38,15 +40,11 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
 public class ConstantCfgSize extends TerminationCondition {
 
     // BEAN PARAMETERS
-    @BeanField private int numRep = -1;
+    @BeanField @Getter @Setter private int numRep = -1;
     // END BEAN PARAMETERS
 
     private int prevSize = 0;
     private int rep = 0;
-
-    public ConstantCfgSize() {
-        super();
-    }
 
     @Override
     public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
@@ -66,13 +64,5 @@ public class ConstantCfgSize extends TerminationCondition {
             logger.log("ConstantCfgSize returned false");
             return false;
         }
-    }
-
-    public int getNumRep() {
-        return numRep;
-    }
-
-    public void setNumRep(int numRep) {
-        this.numRep = numRep;
     }
 }

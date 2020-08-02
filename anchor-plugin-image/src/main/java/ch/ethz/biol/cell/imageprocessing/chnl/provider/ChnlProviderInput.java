@@ -30,13 +30,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.stack.Stack;
 
 // Simply returns the inputStack
-public class ChnlProviderInput extends ChnlProvider {
+public class ChnlProviderInput extends ChannelProvider {
 
     private Stack inputStack;
 
@@ -44,7 +44,7 @@ public class ChnlProviderInput extends ChnlProvider {
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            inputStack = so.getStackCollection().getException(ImgStackIdentifiers.INPUT_IMAGE);
+            inputStack = so.getStackCollection().getException(StackIdentifiers.INPUT_IMAGE);
         } catch (NamedProviderGetException e) {
             throw InitException.createOrReuse(e.summarize());
         }
@@ -52,6 +52,6 @@ public class ChnlProviderInput extends ChnlProvider {
 
     @Override
     public Channel create() throws CreateException {
-        return inputStack.getChnl(0);
+        return inputStack.getChannel(0);
     }
 }

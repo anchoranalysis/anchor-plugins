@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider slice;
+    @BeanField @Getter @Setter private ChannelProvider slice;
     // END BEAN PROPERTIES
 
     @Override

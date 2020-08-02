@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -44,7 +46,7 @@ import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
 
     // START BEAN PROPERTIES
-    @BeanField private Summarizer<S> summarizer = new SummarizerCount<>();
+    @BeanField @Getter @Setter private Summarizer<S> summarizer = new SummarizerCount<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -98,13 +100,5 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
 
         eea.getOutputDirectory()
                 .ifPresent(dir -> log.logFormatted("An output-directory has been set as %s", dir));
-    }
-
-    public Summarizer<S> getSummarizer() {
-        return summarizer;
-    }
-
-    public void setSummarizer(Summarizer<S> summarizer) {
-        this.summarizer = summarizer;
     }
 }

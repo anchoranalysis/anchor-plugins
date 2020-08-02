@@ -26,12 +26,14 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -42,11 +44,11 @@ public abstract class StackProviderWithBackground extends StackProvider {
 
     // Either chnlProviderBackground or stackProviderBackground should be non-null
     //  but not both
-    @BeanField @OptionalBean private ChnlProvider chnlBackground;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBackground;
 
-    @BeanField @OptionalBean private StackProvider stackBackground;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider stackBackground;
 
-    @BeanField @OptionalBean private ChnlProvider chnlBackgroundMIP;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBackgroundMIP;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,7 +68,7 @@ public abstract class StackProviderWithBackground extends StackProvider {
 
     protected DisplayStack backgroundStack(boolean do3D) throws CreateException {
         if (stackBackground != null) {
-            return DisplayStack.create(stackBackground.createStack());
+            return DisplayStack.create(stackBackground.create());
 
         } else {
             return DisplayStack.create(backgroundChnl(do3D));
@@ -84,29 +86,5 @@ public abstract class StackProviderWithBackground extends StackProvider {
                 return chnlBackground.create().maxIntensityProjection();
             }
         }
-    }
-
-    public ChnlProvider getChnlBackground() {
-        return chnlBackground;
-    }
-
-    public void setChnlBackground(ChnlProvider chnlBackground) {
-        this.chnlBackground = chnlBackground;
-    }
-
-    public StackProvider getStackBackground() {
-        return stackBackground;
-    }
-
-    public void setStackBackground(StackProvider stackBackground) {
-        this.stackBackground = stackBackground;
-    }
-
-    public ChnlProvider getChnlBackgroundMIP() {
-        return chnlBackgroundMIP;
-    }
-
-    public void setChnlBackgroundMIP(ChnlProvider chnlBackgroundMIP) {
-        this.chnlBackgroundMIP = chnlBackgroundMIP;
     }
 }

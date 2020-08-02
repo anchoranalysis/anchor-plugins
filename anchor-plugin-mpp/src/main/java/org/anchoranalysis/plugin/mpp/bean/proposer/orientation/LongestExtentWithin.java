@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
@@ -46,13 +48,13 @@ import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 public class LongestExtentWithin extends OrientationProposer {
 
     // START BEAN
-    @BeanField private double incrementDegrees = 1;
+    @BeanField @Getter @Setter private double incrementDegrees = 1;
 
-    @BeanField private double boundsRatio = 1.1;
+    @BeanField @Getter @Setter private double boundsRatio = 1.1;
 
-    @BeanField private BoundCalculator boundCalculator;
+    @BeanField @Getter @Setter private BoundCalculator boundCalculator;
 
-    @BeanField private boolean rotateOnlyIn2DPlane = false;
+    @BeanField @Getter @Setter private boolean rotateOnlyIn2DPlane = false;
     // END BEAN
 
     @Override
@@ -125,37 +127,5 @@ public class LongestExtentWithin extends OrientationProposer {
         } else {
             return findAllOrientations2D(mark, minMaxBound);
         }
-    }
-
-    public double getIncrementDegrees() {
-        return incrementDegrees;
-    }
-
-    public void setIncrementDegrees(double incrementDegrees) {
-        this.incrementDegrees = incrementDegrees;
-    }
-
-    public BoundCalculator getBoundCalculator() {
-        return boundCalculator;
-    }
-
-    public void setBoundCalculator(BoundCalculator boundCalculator) {
-        this.boundCalculator = boundCalculator;
-    }
-
-    public double getBoundsRatio() {
-        return boundsRatio;
-    }
-
-    public void setBoundsRatio(double boundsRatio) {
-        this.boundsRatio = boundsRatio;
-    }
-
-    public boolean isRotateOnlyIn2DPlane() {
-        return rotateOnlyIn2DPlane;
-    }
-
-    public void setRotateOnlyIn2DPlane(boolean rotateOnlyIn2DPlane) {
-        this.rotateOnlyIn2DPlane = rotateOnlyIn2DPlane;
     }
 }

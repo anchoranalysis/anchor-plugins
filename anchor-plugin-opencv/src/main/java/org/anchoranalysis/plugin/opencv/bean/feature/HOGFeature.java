@@ -27,13 +27,15 @@
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -57,13 +59,13 @@ public class HOGFeature extends FeatureStack {
 
     // START BEAN PROPERTIES
     /** The input is rescaled to this width/height before calculating HOG descriptors */
-    @BeanField @OptionalBean private SizeXY resizeTo;
+    @BeanField @OptionalBean @Getter @Setter private SizeXY resizeTo;
 
     /** Parameters used for calculating HOG */
-    @BeanField private HOGParameters params = new HOGParameters();
+    @BeanField @Getter @Setter private HOGParameters params = new HOGParameters();
 
     /** Which index to return from the HOG descriptor */
-    @BeanField @NonNegative private int index = 0;
+    @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
 
     @Override
@@ -83,41 +85,18 @@ public class HOGFeature extends FeatureStack {
     }
 
     @Override
-    protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalcException {
+    protected double calc(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
         float[] arr = input.calc(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 
         if (index >= arr.length) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format(
                             "Index %d is out-of-bounds as the hog-descriptor has %d elements",
                             index, arr.length));
         }
 
         return arr[index];
-    }
-
-    public SizeXY getResizeTo() {
-        return resizeTo;
-    }
-
-    public void setResizeTo(SizeXY resizeTo) {
-        this.resizeTo = resizeTo;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public HOGParameters getParams() {
-        return params;
-    }
-
-    public void setParams(HOGParameters params) {
-        this.params = params;
     }
 
     @Override

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.points.calculate.CalculatePointsFromOutline;
 
@@ -50,7 +50,7 @@ public class CalculateEllipsoidLeastSquares
 
     public static MarkEllipsoid of(
             SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ResolvedCalculation<List<Point3i>, FeatureInputSingleObject> ccPoints =
                 input.resolver().search(new CalculatePointsFromOutline());
@@ -62,7 +62,8 @@ public class CalculateEllipsoidLeastSquares
     }
 
     @Override
-    protected MarkEllipsoid execute(FeatureInputSingleObject input) throws FeatureCalcException {
+    protected MarkEllipsoid execute(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
 
         try {
             // Shell Rad is arbitrary here for now
@@ -72,7 +73,7 @@ public class CalculateEllipsoidLeastSquares
                     suppressZCovariance,
                     0.2);
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

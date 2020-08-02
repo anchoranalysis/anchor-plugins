@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -127,11 +127,11 @@ public class ExportFeaturesTaskTest {
      *
      * @throws OperationFailedException
      * @throws CreateException
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     @Test
     public void testCachingImageFeatures()
-            throws OperationFailedException, CreateException, FeatureCalcException {
+            throws OperationFailedException, CreateException, FeatureCalculationException {
 
         @SuppressWarnings("unchecked")
         Extent<FeatureInputStack> feature = (Extent<FeatureInputStack>) spy(Extent.class);

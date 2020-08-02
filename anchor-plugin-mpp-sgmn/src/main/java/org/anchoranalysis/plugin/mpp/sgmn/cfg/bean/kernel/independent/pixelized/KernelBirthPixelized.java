@@ -29,17 +29,21 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.pixelized
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
@@ -49,19 +53,13 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirt
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private MarkProposer markProposer;
+    @BeanField @Getter @Setter private MarkProposer markProposer;
     // END BEAN PROPERTIES
-
-    public KernelBirthPixelized() {
-        // Standard bean constructor
-    }
-
-    public KernelBirthPixelized(MarkProposer markProposer) {
-        this.markProposer = markProposer;
-    }
 
     @Override
     protected Optional<Set<Mark>> proposeNewMarks(
@@ -142,19 +140,11 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
             assert (pmmMark != null);
             newNRG.add(pmmMark, propContext.getNrgStack().getNrgStack());
 
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException("Cannot add pmmMarkNew", e);
         }
 
         return newNRG;
-    }
-
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
     }
 
     private Mark proposeNewMark(KernelCalcContext context) {

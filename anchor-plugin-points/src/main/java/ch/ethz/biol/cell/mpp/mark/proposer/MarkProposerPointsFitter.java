@@ -28,16 +28,18 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -49,11 +51,11 @@ import org.anchoranalysis.core.log.Logger;
 public class MarkProposerPointsFitter extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private PointsProposer pointsProposer;
+    @BeanField @Getter @Setter private PointsProposer pointsProposer;
 
-    @BeanField private PointsFitter pointsFitter;
+    @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
-    @BeanField private boolean reportFitterErrors = true;
+    @BeanField @Getter @Setter private boolean reportFitterErrors = true;
     // END BEAN PROPERTIES
 
     @SuppressWarnings("unused")
@@ -105,29 +107,5 @@ public class MarkProposerPointsFitter extends MarkProposer {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         return pointsProposer.proposalVisualization(detailed);
-    }
-
-    public PointsProposer getPointsProposer() {
-        return pointsProposer;
-    }
-
-    public void setPointsProposer(PointsProposer pointsProposer) {
-        this.pointsProposer = pointsProposer;
-    }
-
-    public boolean isReportFitterErrors() {
-        return reportFitterErrors;
-    }
-
-    public void setReportFitterErrors(boolean reportFitterErrors) {
-        this.reportFitterErrors = reportFitterErrors;
-    }
-
-    public PointsFitter getPointsFitter() {
-        return pointsFitter;
-    }
-
-    public void setPointsFitter(PointsFitter pointsFitter) {
-        this.pointsFitter = pointsFitter;
     }
 }

@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
@@ -36,9 +38,9 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
 
     // START BEANS
-    @BeanField private int minIntensity = 40;
+    @BeanField @Getter @Setter private int minIntensity = 40;
 
-    @BeanField private double minRatio = 0.01;
+    @BeanField @Getter @Setter private double minRatio = 0.01;
     // END BEANS
 
     @Override
@@ -55,21 +57,5 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
                             percent, minRatio, minIntensity));
         }
         return chnl;
-    }
-
-    public int getMinIntensity() {
-        return minIntensity;
-    }
-
-    public void setMinIntensity(int minIntensity) {
-        this.minIntensity = minIntensity;
-    }
-
-    public double getMinRatio() {
-        return minRatio;
-    }
-
-    public void setMinRatio(double minRatio) {
-        this.minRatio = minRatio;
     }
 }

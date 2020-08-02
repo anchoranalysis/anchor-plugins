@@ -27,6 +27,9 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -45,17 +48,14 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 
+@NoArgsConstructor
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
 
     // START BEAN LIST
-    @BeanField private CfgProposer cfgProposer;
+    @BeanField @Getter @Setter private CfgProposer cfgProposer;
     // END BEAN LIST
 
-    private Optional<Cfg> lastCfg;
-
-    public KernelInitialCfgNRG() {
-        // Standard bean constuctor
-    }
+    private Optional<Cfg> lastCfg = Optional.empty();
 
     public KernelInitialCfgNRG(CfgProposer cfgProposer) {
         this.cfgProposer = cfgProposer;
@@ -126,13 +126,5 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
     @Override
     public int[] changedMarkIDArray() {
         return this.lastCfg.map(Cfg::createIdArr).orElse(new int[] {});
-    }
-
-    public CfgProposer getCfgProposer() {
-        return cfgProposer;
-    }
-
-    public void setCfgProposer(CfgProposer cfgProposer) {
-        this.cfgProposer = cfgProposer;
     }
 }

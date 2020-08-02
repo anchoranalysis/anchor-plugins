@@ -27,10 +27,12 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // Wrap with a nicer toString() representation
 @AllArgsConstructor
+@EqualsAndHashCode
 class WrappedImageDim implements Comparable<WrappedImageDim> {
 
     private final ImageDimensions dimensions;
@@ -44,27 +46,6 @@ class WrappedImageDim implements Comparable<WrappedImageDim> {
         } else {
             return String.format("%dx%d", dimensions.getX(), dimensions.getY());
         }
-    }
-
-    public int hashCode() {
-        return dimensions.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-
-        WrappedImageDim objCast = (WrappedImageDim) obj;
-        return dimensions.equals(objCast.dimensions);
     }
 
     @Override

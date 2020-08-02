@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -39,7 +41,7 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class MergeLists extends PointsFromOrientationProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private PointsFromOrientationProposer pointsFromOrientationProposer;
+    @BeanField @Getter @Setter private PointsFromOrientationProposer pointsFromOrientationProposer;
     // END BEAN PROPERTIEs
 
     @Override
@@ -77,14 +79,5 @@ public class MergeLists extends PointsFromOrientationProposer {
         List<List<Point3i>> listOfListsNew = new ArrayList<>();
         listOfListsNew.add(combinedList);
         return listOfListsNew;
-    }
-
-    public PointsFromOrientationProposer getPointsFromOrientationProposer() {
-        return pointsFromOrientationProposer;
-    }
-
-    public void setPointsFromOrientationProposer(
-            PointsFromOrientationProposer pointsFromOrientationProposer) {
-        this.pointsFromOrientationProposer = pointsFromOrientationProposer;
     }
 }

@@ -41,7 +41,7 @@ public class PixelsFromByteProcessor implements PixelsForPlane<ByteBuffer> {
     public PixelsFromByteProcessor(ByteProcessor bp) {
         super();
         this.bp = bp;
-        this.extent = new Extent(bp.getWidth(), bp.getHeight(), 1);
+        this.extent = new Extent(bp.getWidth(), bp.getHeight());
     }
 
     @Override

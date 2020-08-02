@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -37,9 +39,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 public class Repeat extends MarkFromCfgProposer {
 
     // START BEAN
-    @BeanField private MarkFromCfgProposer markFromCfgProposer;
+    @BeanField @Getter @Setter private MarkFromCfgProposer markFromCfgProposer;
 
-    @BeanField private int maxIter = 20;
+    @BeanField @Getter @Setter private int maxIter = 20;
     // END BEAN
 
     @Override
@@ -63,21 +65,5 @@ public class Repeat extends MarkFromCfgProposer {
         context.getErrorNode().add("maxIter reached");
 
         return Optional.empty();
-    }
-
-    public MarkFromCfgProposer getMarkFromCfgProposer() {
-        return markFromCfgProposer;
-    }
-
-    public void setMarkFromCfgProposer(MarkFromCfgProposer markFromCfgProposer) {
-        this.markFromCfgProposer = markFromCfgProposer;
-    }
-
-    public int getMaxIter() {
-        return maxIter;
-    }
-
-    public void setMaxIter(int maxIter) {
-        this.maxIter = maxIter;
     }
 }

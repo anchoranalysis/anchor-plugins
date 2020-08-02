@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,7 +46,7 @@ import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 public class ChnlProviderBlur extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private BlurStrategy strategy = new BlurGaussian3D();
+    @BeanField @Getter @Setter private BlurStrategy strategy = new BlurGaussian3D();
     // END BEAN PROPERTIES
 
     @Override
@@ -57,13 +59,5 @@ public class ChnlProviderBlur extends ChnlProviderOne {
         }
 
         return chnl;
-    }
-
-    public BlurStrategy getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(BlurStrategy strategy) {
-        this.strategy = strategy;
     }
 }

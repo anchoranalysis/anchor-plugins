@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import io.vavr.Tuple;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +46,6 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>
         extends InputManager<AnnotationComparisonInput<T>> {
@@ -102,8 +102,8 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                 inputObject ->
                         new AnnotationComparisonInput<>(
                                 inputObject,
-                                Pair.of(comparerLeft, comparerRight),
-                                Pair.of(nameLeft, nameRight),
+                                Tuple.of(comparerLeft, comparerRight),
+                                Tuple.of(nameLeft, nameRight),
                                 rasterReader));
     }
 }

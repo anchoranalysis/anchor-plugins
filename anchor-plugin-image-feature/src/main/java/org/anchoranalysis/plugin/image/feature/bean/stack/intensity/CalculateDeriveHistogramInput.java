@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -50,7 +50,8 @@ class CalculateDeriveHistogramInput
     }
 
     @Override
-    protected FeatureInputHistogram execute(FeatureInputStack input) throws FeatureCalcException {
+    protected FeatureInputHistogram execute(FeatureInputStack input)
+            throws FeatureCalculationException {
         return new FeatureInputHistogram(
                 histogramCalculation.getOrCalculate(input), input.getResOptional());
     }

@@ -26,22 +26,24 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean avoidDivideByZero = false;
+    @BeanField @Getter @Setter private boolean avoidDivideByZero = false;
 
-    @BeanField private double divideByZeroValue = 1e+15;
+    @BeanField @Getter @Setter private double divideByZeroValue = 1e+15;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         int size = getList().size();
 
@@ -53,7 +55,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
                 if (avoidDivideByZero) {
                     return divideByZeroValue;
                 } else {
-                    throw new FeatureCalcException(
+                    throw new FeatureCalculationException(
                             String.format(
                                     "Divide by zero from feature %s",
                                     getList().get(i).getFriendlyName()));
@@ -67,21 +69,5 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
     @Override
     public String getDscrLong() {
         return descriptionForList("/");
-    }
-
-    public boolean isAvoidDivideByZero() {
-        return avoidDivideByZero;
-    }
-
-    public void setAvoidDivideByZero(boolean avoidDivideByZero) {
-        this.avoidDivideByZero = avoidDivideByZero;
-    }
-
-    public double getDivideByZeroValue() {
-        return divideByZeroValue;
-    }
-
-    public void setDivideByZeroValue(double divideByZeroValue) {
-        this.divideByZeroValue = divideByZeroValue;
     }
 }

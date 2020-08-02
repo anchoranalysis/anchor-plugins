@@ -32,14 +32,16 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -51,23 +53,25 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ChnlProviderPixelScore extends ChnlProvider {
+public class ChnlProviderPixelScore extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider intensityProvider;
+    @BeanField @Getter @Setter private ChannelProvider intensityProvider;
 
-    @BeanField @OptionalBean private ChnlProvider gradientProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider gradientProvider;
 
     // We don't use {@link ChnlProiderMask} as here it's optional.
-    @BeanField @OptionalBean private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
-    @BeanField private PixelScore pixelScore;
+    @BeanField @Getter @Setter private PixelScore pixelScore;
 
-    @BeanField private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<ChannelProvider> listChnlProviderExtra = new ArrayList<>();
 
-    @BeanField private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 
-    @BeanField @OptionalBean private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
 
     private VoxelBoxList createVoxelBoxList(Channel chnlIntensity) throws CreateException {
@@ -79,7 +83,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
         if (gradientProvider != null) {
             listOut.add(gradientProvider.create().getVoxelBox());
         }
-        for (ChnlProvider chnlProvider : listChnlProviderExtra) {
+        for (ChannelProvider chnlProvider : listChnlProviderExtra) {
             VoxelBoxWrapper vbExtra =
                     chnlProvider != null ? chnlProvider.create().getVoxelBox() : null;
             listOut.add(vbExtra);
@@ -136,61 +140,5 @@ public class ChnlProviderPixelScore extends ChnlProvider {
 
         return new ChannelFactoryByte()
                 .create(vbPixelScore, chnlIntensity.getDimensions().getRes());
-    }
-
-    public ChnlProvider getIntensityProvider() {
-        return intensityProvider;
-    }
-
-    public void setIntensityProvider(ChnlProvider intensityProvider) {
-        this.intensityProvider = intensityProvider;
-    }
-
-    public ChnlProvider getGradientProvider() {
-        return gradientProvider;
-    }
-
-    public void setGradientProvider(ChnlProvider gradientProvider) {
-        this.gradientProvider = gradientProvider;
-    }
-
-    public PixelScore getPixelScore() {
-        return pixelScore;
-    }
-
-    public void setPixelScore(PixelScore pixelScore) {
-        this.pixelScore = pixelScore;
-    }
-
-    public List<ChnlProvider> getListChnlProviderExtra() {
-        return listChnlProviderExtra;
-    }
-
-    public void setListChnlProviderExtra(List<ChnlProvider> listChnlProviderExtra) {
-        this.listChnlProviderExtra = listChnlProviderExtra;
-    }
-
-    public List<HistogramProvider> getListHistogramProviderExtra() {
-        return listHistogramProviderExtra;
-    }
-
-    public void setListHistogramProviderExtra(List<HistogramProvider> listHistogramProviderExtra) {
-        this.listHistogramProviderExtra = listHistogramProviderExtra;
-    }
-
-    public KeyValueParamsProvider getKeyValueParamsProvider() {
-        return keyValueParamsProvider;
-    }
-
-    public void setKeyValueParamsProvider(KeyValueParamsProvider keyValueParamsProvider) {
-        this.keyValueParamsProvider = keyValueParamsProvider;
-    }
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
     }
 }

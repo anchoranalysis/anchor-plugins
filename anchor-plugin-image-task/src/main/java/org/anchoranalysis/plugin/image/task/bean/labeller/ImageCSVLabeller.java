@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 import java.nio.file.Path;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -48,7 +50,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
      * <p>The CSV file should have two columns: first column = image id (to match the
      * descriptiveName() of an image) second column = a label string
      */
-    @BeanField private FilePathGenerator csvLabelFilePathGenerator;
+    @BeanField @Getter @Setter private FilePathGenerator csvLabelFilePathGenerator;
     // END BEAN PROPERTIES
 
     @Override
@@ -85,13 +87,5 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
         }
 
         return label;
-    }
-
-    public FilePathGenerator getCsvLabelFilePathGenerator() {
-        return csvLabelFilePathGenerator;
-    }
-
-    public void setCsvLabelFilePathGenerator(FilePathGenerator csvLabelFilePathGenerator) {
-        this.csvLabelFilePathGenerator = csvLabelFilePathGenerator;
     }
 }

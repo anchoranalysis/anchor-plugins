@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -70,10 +70,11 @@ class CalculateGradientFromMultipleChnls
     private int subtractConstant = 0;
 
     @Override
-    protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalcException {
+    protected List<Point3d> execute(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
 
         if (nrgIndexX == -1 || nrgIndexY == -1) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     new InitException("nrgIndexX and nrgIndexY must both be nonZero"));
         }
 
@@ -82,11 +83,11 @@ class CalculateGradientFromMultipleChnls
 
         NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 
-        putGradientValue(input.getObject(), out, 0, nrgStack.getChnl(nrgIndexX));
-        putGradientValue(input.getObject(), out, 1, nrgStack.getChnl(nrgIndexY));
+        putGradientValue(input.getObject(), out, 0, nrgStack.getChannel(nrgIndexX));
+        putGradientValue(input.getObject(), out, 1, nrgStack.getChannel(nrgIndexY));
 
         if (nrgIndexZ != -1) {
-            putGradientValue(input.getObject(), out, 2, nrgStack.getChnl(nrgIndexZ));
+            putGradientValue(input.getObject(), out, 2, nrgStack.getChannel(nrgIndexZ));
         }
 
         return out;

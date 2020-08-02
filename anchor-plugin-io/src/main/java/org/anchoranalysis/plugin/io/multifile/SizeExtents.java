@@ -63,7 +63,7 @@ public class SizeExtents {
         sizeY = stackArbitrarySlice.getDimensions().getY();
 
         if (!rangeC.isPresent()) {
-            rangeC = Optional.of(new IntegerRange(stackArbitrarySlice.getNumChnl()));
+            rangeC = Optional.of(new IntegerRange(stackArbitrarySlice.getNumberChannels()));
         }
 
         if (!rangeZ.isPresent()) {

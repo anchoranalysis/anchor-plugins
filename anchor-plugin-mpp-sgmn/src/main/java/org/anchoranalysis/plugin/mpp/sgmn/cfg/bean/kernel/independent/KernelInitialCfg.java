@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -41,7 +43,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
 
     // START BEAN LIST
-    @BeanField private CfgProposer cfgProposer;
+    @BeanField @Getter @Setter private CfgProposer cfgProposer;
     // END BEAN LIST
 
     private Optional<Cfg> lastCfg;
@@ -84,13 +86,5 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
     @Override
     public int[] changedMarkIDArray() {
         return this.lastCfg.map(Cfg::createIdArr).orElse(new int[] {});
-    }
-
-    public CfgProposer getCfgProposer() {
-        return cfgProposer;
-    }
-
-    public void setCfgProposer(CfgProposer cfgProposer) {
-        this.cfgProposer = cfgProposer;
     }
 }

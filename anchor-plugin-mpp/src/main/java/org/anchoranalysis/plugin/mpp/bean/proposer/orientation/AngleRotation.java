@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -39,7 +41,7 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 public class AngleRotation extends OrientationProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private double angleDegrees = 0;
+    @BeanField @Getter @Setter private double angleDegrees = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -51,14 +53,6 @@ public class AngleRotation extends OrientationProposer {
 
         double angleRadians = (angleDegrees / 180) * Math.PI;
         return Optional.of(new Orientation2D(exstOrientation.getAngleRadians() + angleRadians));
-    }
-
-    public double getAngleDegrees() {
-        return angleDegrees;
-    }
-
-    public void setAngleDegrees(double angleDegrees) {
-        this.angleDegrees = angleDegrees;
     }
 
     @Override

@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -39,9 +41,9 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 public class ReadVoxelExtentXml extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField private RasterReader rasterReader;
+    @BeanField @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private boolean acceptNoResolution = true;
+    @BeanField @Getter @Setter private boolean acceptNoResolution = true;
     // END BEAN PROPERTIES
 
     /**
@@ -81,21 +83,5 @@ public class ReadVoxelExtentXml extends RasterReader {
         Optional<ImageResolution> sr = readMetadata(filepath, acceptNoResolution);
 
         return new OpenedRasterAlterDimensions(delegate, res -> sr);
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public boolean isAcceptNoResolution() {
-        return acceptNoResolution;
-    }
-
-    public void setAcceptNoResolution(boolean acceptNoResolution) {
-        this.acceptNoResolution = acceptNoResolution;
     }
 }

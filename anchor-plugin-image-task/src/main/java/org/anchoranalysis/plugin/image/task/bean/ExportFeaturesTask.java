@@ -58,6 +58,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
@@ -85,7 +86,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
 
-    // START BEAN
+    // START BEAN PROPERTIES
     /** Source of feature-values to be exported */
     @BeanField @Getter @Setter private FeatureSource<T, S, U> source;
 
@@ -105,7 +106,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
     /** Features applied to each group to aggregate values (takes FeatureResultsVectorCollection) */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputResults>>> featuresAggregate;
-    // END BEAN
+    // END BEAN PROPERTIES
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
@@ -113,7 +114,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
-                    source.headers().createMetadataHeaders(isGroupGeneratorDefined()),
+                    source.headers().createHeaders(isGroupGeneratorDefined()),
                     features,
                     params.getContext());
         } catch (CreateException e) {
@@ -129,13 +130,17 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                     extractGroupNameFromGenerator(
                             input.getInputObject().pathForBindingRequired(),
                             input.context().isDebugEnabled());
-            source.calcAllResultsForInput(
-                    input.getInputObject(),
-                    input.getSharedState()::addResultsFor,
-                    input.getSharedState().duplicateForNewThread(),
-                    input.getSharedState().getFeatureNames(),
-                    groupName,
-                    input.context());
+
+            InputProcessContext<S> context =
+                    new InputProcessContext<>(
+                            input.getSharedState().addResultsFor(),
+                            input.getSharedState().duplicateForNewThread(),
+                            input.getSharedState().getFeatureNames(),
+                            groupName,
+                            input.context());
+
+            source.processInput(input.getInputObject(), context);
+
         } catch (OperationFailedException | AnchorIOException e) {
             throw new JobExecutionException(e);
         }

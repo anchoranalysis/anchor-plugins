@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
 import java.util.function.Function;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -35,15 +37,15 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 public abstract class CheckMarkBinaryChnl extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
 
-    @BeanField private boolean acceptOutsideScene = false;
+    @BeanField @Getter @Setter private boolean acceptOutsideScene = false;
     // END BEAN PROPERTIES
 
     protected Mask createChnl() throws CheckException {
@@ -70,13 +72,5 @@ public abstract class CheckMarkBinaryChnl extends CheckMark {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return true;
-    }
-
-    public BinaryChnlProvider getBinaryChnl() {
-        return binaryChnl;
-    }
-
-    public void setBinaryChnl(BinaryChnlProvider binaryChnl) {
-        this.binaryChnl = binaryChnl;
     }
 }

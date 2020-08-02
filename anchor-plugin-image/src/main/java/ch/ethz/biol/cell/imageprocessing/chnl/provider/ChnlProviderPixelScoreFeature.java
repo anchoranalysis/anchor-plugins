@@ -37,8 +37,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
@@ -55,7 +55,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     @BeanField @Getter @Setter private PixelScore pixelScore;
 
     @BeanField @Getter @Setter
-    private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
+    private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
     // END BEAN PROPERTIES
@@ -69,7 +69,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
             pixelScore.init(histograms(), Optional.empty());
             calcScoresIntoVoxelBox(chnl.getVoxelBox(), listAdditional, pixelScore);
 
-        } catch (FeatureCalcException | InitException e) {
+        } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
 
@@ -86,7 +86,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
     private static void calcScoresIntoVoxelBox(
             VoxelBoxWrapper vb, List<Channel> listAdditional, PixelScore pixelScore)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];
 
@@ -134,7 +134,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
     private List<Channel> additionalChnls(ImageDimensions dimensions) throws CreateException {
         List<Channel> listAdditional = new ArrayList<>();
-        for (ChnlProvider cp : listAdditionalChnlProviders) {
+        for (ChannelProvider cp : listAdditionalChnlProviders) {
             Channel chnlAdditional = cp.create();
 
             if (!chnlAdditional.getDimensions().equals(dimensions)) {

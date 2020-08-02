@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -38,9 +40,9 @@ import org.anchoranalysis.image.orientation.Orientation2D;
 public class MarkProviderCreateEllipse extends MarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private double shellRad = 0.2;
+    @BeanField @Getter @Setter private double shellRad = 0.2;
 
-    @BeanField private int id = 0;
+    @BeanField @Getter @Setter private int id = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -50,21 +52,5 @@ public class MarkProviderCreateEllipse extends MarkProvider {
         mark.setId(id);
         mark.updateShellRad(shellRad);
         return Optional.of(mark);
-    }
-
-    public double getShellRad() {
-        return shellRad;
-    }
-
-    public void setShellRad(double shellRad) {
-        this.shellRad = shellRad;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

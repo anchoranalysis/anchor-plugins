@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 import ch.ethz.biol.cell.mpp.anneal.AnnealSchemeGeom;
 import ch.ethz.biol.cell.mpp.feedback.reporter.ConsoleAggReporter;
 import ch.ethz.biol.cell.mpp.feedback.reporter.NullReporter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -51,9 +53,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination.NumberI
 import org.anchoranalysis.test.bean.BeanTestChecker;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptSchemeFixture {
-
-    private OptSchemeFixture() {}
 
     /** A simulated annealing scheme using direct-assign mode */
     public static <T> OptScheme<T, T> simulatedAnnealing(

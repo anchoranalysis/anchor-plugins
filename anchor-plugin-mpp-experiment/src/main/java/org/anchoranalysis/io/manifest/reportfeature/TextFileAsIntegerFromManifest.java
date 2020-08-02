@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.manifest.reportfeature;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -41,17 +40,13 @@ public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileB
 
         FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
 
-        ManifestRecorder manifest = obj.doOperation();
+        ManifestRecorder manifest = obj.call();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException(
                     String.format("Cannot find '%s' in manifest", getFileName()));
         }
 
-        try {
-            return finder.get().trim().trim();
-        } catch (GetOperationFailedException e) {
-            throw new OperationFailedException(e);
-        }
+        return finder.get().trim().trim();
     }
 }

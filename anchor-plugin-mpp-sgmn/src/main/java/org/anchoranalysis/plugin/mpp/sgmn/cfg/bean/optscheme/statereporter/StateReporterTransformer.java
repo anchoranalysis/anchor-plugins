@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
@@ -37,9 +39,10 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOp
 public class StateReporterTransformer<T, S> extends StateReporter<Optional<T>, Optional<S>> {
 
     // START BEAN PROPERTIES
-    @BeanField private StateTransformerBean<T, S> transformerPrimary;
+    @BeanField @Getter @Setter private StateTransformerBean<T, S> transformerPrimary;
 
-    @BeanField @OptionalBean private StateTransformerBean<T, S> transformerSecondary;
+    @BeanField @OptionalBean @Getter @Setter
+    private StateTransformerBean<T, S> transformerSecondary;
     // END BEAN PROPERTIES
 
     @Override
@@ -50,21 +53,5 @@ public class StateReporterTransformer<T, S> extends StateReporter<Optional<T>, O
     @Override
     public Optional<StateTransformer<Optional<T>, Optional<S>>> secondaryReport() {
         return Optional.of(new TransformMapOptional<>(transformerSecondary));
-    }
-
-    public StateTransformerBean<T, S> getTransformerPrimary() {
-        return transformerPrimary;
-    }
-
-    public void setTransformerPrimary(StateTransformerBean<T, S> transformerPrimary) {
-        this.transformerPrimary = transformerPrimary;
-    }
-
-    public StateTransformerBean<T, S> getTransformerSecondary() {
-        return transformerSecondary;
-    }
-
-    public void setTransformerSecondary(StateTransformerBean<T, S> transformerSecondary) {
-        this.transformerSecondary = transformerSecondary;
     }
 }

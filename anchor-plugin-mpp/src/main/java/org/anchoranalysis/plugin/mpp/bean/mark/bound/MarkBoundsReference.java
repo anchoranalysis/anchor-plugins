@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.bean.mark.bound;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,7 +37,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 public class MarkBoundsReference extends MarkBoundsProvider {
 
     // Start BEAN
-    @BeanField private String id;
+    @BeanField @Getter @Setter private String id;
     // End BEAN
 
     @Override
@@ -45,13 +47,5 @@ public class MarkBoundsReference extends MarkBoundsProvider {
         } catch (NamedProviderGetException e) {
             throw new CreateException(e.summarize());
         }
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

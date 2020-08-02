@@ -32,15 +32,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -58,7 +59,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> featureProvider;
 
     @BeanField @Getter @Setter
-    private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
+    private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
 
     @BeanField @Getter @Setter private double factor = 1.0;
     // END BEAN PROPERTIES
@@ -78,7 +79,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
                     createSession(feature),
                     new NRGStackWithParams(nrgStack));
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
     }
@@ -87,7 +88,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         NRGStack nrgStack = new NRGStack(chnl);
 
         // add other channels
-        for (ChnlProvider cp : listAdditionalChnlProviders) {
+        for (ChannelProvider cp : listAdditionalChnlProviders) {
             Channel chnlAdditional = cp.create();
 
             if (!chnlAdditional.getDimensions().equals(chnl.getDimensions())) {
@@ -96,7 +97,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             }
 
             try {
-                nrgStack.asStack().addChnl(chnlAdditional);
+                nrgStack.asStack().addChannel(chnlAdditional);
             } catch (IncorrectImageSizeException e) {
                 throw new CreateException(e);
             }
@@ -106,7 +107,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     }
 
     private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(
-            Feature<FeatureInputSingleObject> feature) throws FeatureCalcException {
+            Feature<FeatureInputSingleObject> feature) throws InitException {
         return FeatureSession.with(
                 feature,
                 new FeatureInitParams(),
@@ -119,7 +120,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             ObjectCollection objectsSource,
             FeatureCalculatorSingle<FeatureInputSingleObject> session,
             NRGStackWithParams nrgStackParams)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);

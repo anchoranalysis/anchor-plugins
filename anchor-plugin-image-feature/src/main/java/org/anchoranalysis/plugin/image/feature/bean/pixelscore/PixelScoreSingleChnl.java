@@ -26,8 +26,10 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 /**
@@ -38,22 +40,13 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 public abstract class PixelScoreSingleChnl extends PixelScore {
 
     // START BEAN PROPERTIES
-    @BeanField private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalcException {
-
+    public double calc(int[] pixelVals) throws FeatureCalculationException {
         return deriveScoreFromPixelVal(pixelVals[nrgChnlIndex]);
     }
 
     protected abstract double deriveScoreFromPixelVal(int pixelVal);
-
-    public int getNrgChnlIndex() {
-        return nrgChnlIndex;
-    }
-
-    public void setNrgChnlIndex(int nrgChnlIndex) {
-        this.nrgChnlIndex = nrgChnlIndex;
-    }
 }

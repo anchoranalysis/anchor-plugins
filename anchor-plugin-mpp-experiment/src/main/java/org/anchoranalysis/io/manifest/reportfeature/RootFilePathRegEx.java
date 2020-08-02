@@ -30,6 +30,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -38,7 +40,7 @@ import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 public class RootFilePathRegEx extends ReportFeatureForManifest {
 
     // START BEAN PROPERTIES
-    @BeanField private int groupNum;
+    @BeanField @Getter @Setter private int groupNum;
     // END BEAN PROPERTIES
 
     @Override
@@ -75,14 +77,6 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     @Override
     public boolean isNumeric() {
         return groupNum >= 2;
-    }
-
-    public int getGroupNum() {
-        return groupNum;
-    }
-
-    public void setGroupNum(int groupNum) {
-        this.groupNum = groupNum;
     }
 
     @Override

@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -60,7 +60,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     private final HOGParameters params;
 
     @Override
-    protected float[] execute(FeatureInputStack input) throws FeatureCalcException {
+    protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             Stack stack = extractStack(input);
             Extent extent = stack.getDimensions().getExtent();
@@ -75,14 +75,14 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
             return convertToArray(descriptorValues);
 
         } catch (CreateException | OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
     /**
      * Extracts a stack (that is maybe resized)
      *
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      * @throws OperationFailedException
      */
     private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
@@ -92,15 +92,15 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();
-            return stack.mapChnl(chnl -> chnl.resizeXY(size.getWidth(), size.getHeight()));
+            return stack.mapChannel(chnl -> chnl.resizeXY(size.getWidth(), size.getHeight()));
         } else {
             return stack;
         }
     }
 
-    private void checkSize(Extent extent) throws FeatureCalcException {
+    private void checkSize(Extent extent) throws FeatureCalculationException {
         if (extent.getZ() > 1) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     "The image is 3D, but the feture only supports 2D images");
         }
         params.checkSize(extent);

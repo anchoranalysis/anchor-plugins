@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -48,7 +50,7 @@ public class RGB extends ChnlConversionStyle {
      *
      * <p>If unset, an error is instead thrown in this circumstances
      */
-    @BeanField @OptionalBean private ChnlConversionStyle fallback;
+    @BeanField @OptionalBean @Getter @Setter private ChnlConversionStyle fallback;
     // END BEAN PROPERTIES
 
     @Override
@@ -99,10 +101,10 @@ public class RGB extends ChnlConversionStyle {
             throws CreateException {
         try {
             if (chnlGetter.hasChnl(chnlName)) {
-                stackRearranged.addChnl(chnlGetter.getChnl(chnlName));
+                stackRearranged.addChannel(chnlGetter.getChnl(chnlName));
             } else {
                 logger.logFormatted(String.format("Adding a blank channel for %s", chnlName));
-                stackRearranged.addBlankChnl();
+                stackRearranged.addBlankChannel();
             }
         } catch (IncorrectImageSizeException
                 | OperationFailedException
@@ -124,13 +126,5 @@ public class RGB extends ChnlConversionStyle {
         }
 
         return true;
-    }
-
-    public ChnlConversionStyle getFallback() {
-        return fallback;
-    }
-
-    public void setFallback(ChnlConversionStyle fallback) {
-        this.fallback = fallback;
     }
 }

@@ -28,12 +28,14 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
@@ -41,13 +43,13 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
 
     // START PROPERTIES
-    @BeanField @OptionalBean private ChnlProvider backgroundChnlProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider backgroundChnlProvider;
 
-    @BeanField @Positive private int iterations = 1;
+    @BeanField @Positive @Getter @Setter private int iterations = 1;
 
-    @BeanField private int minIntensityValue = 0;
+    @BeanField @Getter @Setter private int minIntensityValue = 0;
 
-    @BeanField private boolean suppress3D = false;
+    @BeanField @Getter @Setter private boolean suppress3D = false;
     // END PROPERTIES
 
     protected abstract void applyMorphOp(Mask imgChnl, boolean do3D) throws CreateException;
@@ -68,37 +70,5 @@ public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
         } else {
             return Optional.empty();
         }
-    }
-
-    public int getIterations() {
-        return iterations;
-    }
-
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
-
-    public int getMinIntensityValue() {
-        return minIntensityValue;
-    }
-
-    public void setMinIntensityValue(int minIntensityValue) {
-        this.minIntensityValue = minIntensityValue;
-    }
-
-    public ChnlProvider getBackgroundChnlProvider() {
-        return backgroundChnlProvider;
-    }
-
-    public void setBackgroundChnlProvider(ChnlProvider backgroundChnlProvider) {
-        this.backgroundChnlProvider = backgroundChnlProvider;
-    }
-
-    public boolean isSuppress3D() {
-        return suppress3D;
-    }
-
-    public void setSuppress3D(boolean suppress3d) {
-        suppress3D = suppress3d;
     }
 }

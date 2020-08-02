@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -62,18 +62,14 @@ public class ImageAssignLabelTask<T>
 
     // START BEAN PROPERTIES
     /** Maps a label to an image */
-    @BeanField private ImageLabeller<T> imageLabeller;
+    @BeanField @Getter @Setter private ImageLabeller<T> imageLabeller;
 
     /**
      * If it's set, a stack is generated that is outputted into sub-directory corresponding to the
      * groupIdentifier.
      */
-    @BeanField @OptionalBean @SkipInit private StackProvider outputStackProvider;
+    @BeanField @OptionalBean @SkipInit @Getter @Setter private StackProvider outputStackProvider;
     // END BEAN PROPERTIES
-
-    public ImageAssignLabelTask() {
-        super();
-    }
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
@@ -106,14 +102,26 @@ public class ImageAssignLabelTask<T>
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
-                        StackInputInitParamsCreator.createInitParams(
-                                params.getInputObject(), params.context()),
+                        createFromProviderWith(
+                                outputStackProvider, params.getInputObject(), params.context()),
                         params.getInputObject().descriptiveName(),
-                        params.getSharedState(),
-                        params.getLogger());
+                        params.getSharedState());
             }
-        } catch (OperationFailedException e) {
+        } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);
+        }
+    }
+
+    private static Stack createFromProviderWith(
+            StackProvider provider, ProvidesStackInput stack, BoundIOContext context)
+            throws CreateException {
+        try {
+            provider.initRecursive(
+                    StackInputInitParamsCreator.createInitParams(stack, context),
+                    context.getLogger());
+            return provider.create();
+        } catch (InitException | OperationFailedException e) {
+            throw new CreateException(e);
         }
     }
 
@@ -129,44 +137,17 @@ public class ImageAssignLabelTask<T>
         sharedState.close();
     }
 
-    public StackProvider getOutputStackProvider() {
-        return outputStackProvider;
-    }
-
-    public void setOutputStackProvider(StackProvider outputStackProvider) {
-        this.outputStackProvider = outputStackProvider;
-    }
-
-    public ImageLabeller<T> getImageLabeller() {
-        return imageLabeller;
-    }
-
-    public void setImageLabeller(ImageLabeller<T> imageLabeller) {
-        this.imageLabeller = imageLabeller;
-    }
-
     private void outputStack(
             String groupIdentifier,
-            ImageInitParams initParams,
+            Stack stack,
             String outputName,
-            SharedStateFilteredImageOutput<T> sharedState,
-            Logger logger)
-            throws JobExecutionException {
+            SharedStateFilteredImageOutput<T> sharedState) {
 
-        try {
-            outputStackProvider.initRecursive(initParams, logger);
+        BoundOutputManagerRouteErrors outputSub = sharedState.getOutputManagerFor(groupIdentifier);
 
-            BoundOutputManagerRouteErrors outputSub =
-                    sharedState.getOutputManagerFor(groupIdentifier);
-
-            Stack stack = outputStackProvider.create();
-
-            // Copies the file into the output
-            outputSub
-                    .getWriterAlwaysAllowed()
-                    .write(outputName, () -> new StackGenerator(stack, true, "raster"));
-        } catch (InitException | CreateException e) {
-            throw new JobExecutionException(e);
-        }
+        // Copies the file into the output
+        outputSub
+                .getWriterAlwaysAllowed()
+                .write(outputName, () -> new StackGenerator(stack, true, "raster"));
     }
 }

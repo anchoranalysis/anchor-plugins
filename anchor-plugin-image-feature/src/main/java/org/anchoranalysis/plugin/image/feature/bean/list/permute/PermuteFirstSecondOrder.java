@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
@@ -42,7 +44,7 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
 
     // START BEAN PROPERTIES
     /** If true the constant is appended to the param prefix (a dot and a number) */
-    @BeanField private boolean paramPrefixAppendNumber = true;
+    @BeanField @Getter @Setter private boolean paramPrefixAppendNumber = true;
     // END BEAN PROPERTIES
 
     private CreateFirstSecondOrder<T> factory;
@@ -117,13 +119,5 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         permuteProperty.setPropertyPath(
                 String.format("item.item.item.%s", permuteProperty.getPropertyPath()));
         return permuteProperty;
-    }
-
-    public boolean isParamPrefixAppendNumber() {
-        return paramPrefixAppendNumber;
-    }
-
-    public void setParamPrefixAppendNumber(boolean paramPrefixAppendNumber) {
-        this.paramPrefixAppendNumber = paramPrefixAppendNumber;
     }
 }

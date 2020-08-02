@@ -41,7 +41,7 @@ public class PixelsFromShortProcessor implements PixelsForPlane<ShortBuffer> {
     public PixelsFromShortProcessor(ShortProcessor processor) {
         super();
         this.processor = processor;
-        this.extent = new Extent(processor.getWidth(), processor.getHeight(), 1);
+        this.extent = new Extent(processor.getWidth(), processor.getHeight());
     }
 
     @Override

@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -48,9 +50,9 @@ import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 public class SgmnThrshldAboveMinBound extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean suppress3D = false;
+    @BeanField @Getter @Setter private boolean suppress3D = false;
 
-    @BeanField private MarkBounds markBounds;
+    @BeanField @Getter @Setter private MarkBounds markBounds;
     // END BEAN PROPERTIES
 
     private BinarySegmentationThreshold delegate = new BinarySegmentationThreshold();
@@ -84,21 +86,5 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
         thresholder.setCalculateLevel(calculateLevel);
 
         delegate.setThresholder(thresholder);
-    }
-
-    public boolean isSuppress3D() {
-        return suppress3D;
-    }
-
-    public void setSuppress3D(boolean suppress3d) {
-        suppress3D = suppress3d;
-    }
-
-    public MarkBounds getMarkBounds() {
-        return markBounds;
-    }
-
-    public void setMarkBounds(MarkBounds markBounds) {
-        this.markBounds = markBounds;
     }
 }

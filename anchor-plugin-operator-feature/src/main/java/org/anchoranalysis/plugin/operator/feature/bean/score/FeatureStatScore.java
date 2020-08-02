@@ -26,12 +26,14 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -43,13 +45,13 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private Feature<T> itemMean = null;
+    @BeanField @Getter @Setter private Feature<T> itemMean;
 
-    @BeanField private Feature<T> itemStdDev = null;
+    @BeanField @Getter @Setter private Feature<T> itemStdDev;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         return deriveScore(
                 input.calc(getItem()), input.calc(itemMean), () -> input.calc(itemStdDev));
@@ -62,27 +64,13 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
      * @param mean the mean
      * @param stdDev a means to get the std-deviation (if needed)
      * @return
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     protected abstract double deriveScore(
-            double featureValue, double mean, Operation<Double, FeatureCalcException> stdDev)
-            throws FeatureCalcException;
-
-    public Feature<T> getItemMean() {
-        return itemMean;
-    }
-
-    public void setItemMean(Feature<T> itemMean) {
-        this.itemMean = itemMean;
-    }
-
-    public Feature<T> getItemStdDev() {
-        return itemStdDev;
-    }
-
-    public void setItemStdDev(Feature<T> itemStdDev) {
-        this.itemStdDev = itemStdDev;
-    }
+            double featureValue,
+            double mean,
+            CallableWithException<Double, FeatureCalculationException> stdDev)
+            throws FeatureCalculationException;
 
     @Override
     public String getParamDscr() {

@@ -41,7 +41,7 @@ public class PixelsFromFloatProcessor implements PixelsForPlane<FloatBuffer> {
     public PixelsFromFloatProcessor(FloatProcessor fp) {
         super();
         this.bp = fp;
-        this.extent = new Extent(fp.getWidth(), fp.getHeight(), 1);
+        this.extent = new Extent(fp.getWidth(), fp.getHeight());
     }
 
     @Override

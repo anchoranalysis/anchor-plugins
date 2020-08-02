@@ -30,8 +30,8 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
 public class FeatureValueIndividualEnergyGreaterThan

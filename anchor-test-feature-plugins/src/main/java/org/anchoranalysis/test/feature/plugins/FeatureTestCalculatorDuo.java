@@ -29,7 +29,7 @@ package org.anchoranalysis.test.feature.plugins;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /** Tests that consider two possibilities: positive and negative */
@@ -43,7 +43,7 @@ public class FeatureTestCalculatorDuo {
             T paramsNegative,
             double expectedResultPositive,
             double expectedResultNegative)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         FeatureTestCalculator.assertDoubleResult(
                 positiveMessage(message), feature, paramsPositive, expectedResultPositive);
         FeatureTestCalculator.assertDoubleResult(
@@ -57,7 +57,7 @@ public class FeatureTestCalculatorDuo {
             T paramsNegative,
             int expectedResultPositive,
             int expectedResultNegative)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         FeatureTestCalculator.assertIntResult(
                 positiveMessage(message), feature, paramsPositive, expectedResultPositive);
         FeatureTestCalculator.assertIntResult(

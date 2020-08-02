@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -39,9 +41,9 @@ import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean showBest = true;
+    @BeanField @Getter @Setter private boolean showBest = true;
 
-    @BeanField private boolean showAgg = true;
+    @BeanField @Getter @Setter private boolean showAgg = true;
     // END BEAN PROPERTIES
 
     private MessageLogger logger;
@@ -85,21 +87,5 @@ public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 
         MemoryUtilities.logMemoryUsage(
                 String.format("MemoryUsageReporter BEST step=%d", reporting.getIter()), logger);
-    }
-
-    public boolean isShowBest() {
-        return showBest;
-    }
-
-    public void setShowBest(boolean showBest) {
-        this.showBest = showBest;
-    }
-
-    public boolean isShowAgg() {
-        return showAgg;
-    }
-
-    public void setShowAgg(boolean showAgg) {
-        this.showAgg = showAgg;
     }
 }

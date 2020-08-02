@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.object.filter.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
@@ -47,7 +49,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 public class ThresholdedVolume extends ObjectFilterRelation {
 
     // START BEAN PROPERTIES
-    @BeanField private UnitValueVolume threshold;
+    @BeanField @Getter @Setter private UnitValueVolume threshold;
     // END BEAN PROPERTIES
 
     private int thresholdResolved;

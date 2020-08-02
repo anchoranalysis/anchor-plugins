@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.object.filter.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -43,7 +45,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 public class NotTouchingSceneBorder extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean includeZ = false;
+    @BeanField @Getter @Setter private boolean includeZ = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -70,13 +72,5 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             }
         }
         return true;
-    }
-
-    public boolean isIncludeZ() {
-        return includeZ;
-    }
-
-    public void setIncludeZ(boolean includeZ) {
-        this.includeZ = includeZ;
     }
 }

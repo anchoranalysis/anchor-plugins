@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
@@ -72,7 +72,7 @@ class EastObjectsExtractor {
         int width = (int) matrix.size().width;
         int height = (int) matrix.size().height;
 
-        return new ImageDimensions(new Extent(width, height, 1), res);
+        return new ImageDimensions(new Extent(width, height), res);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(

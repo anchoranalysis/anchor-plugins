@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.progress.OperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -37,9 +37,9 @@ import org.anchoranalysis.image.stack.TimeSequence;
  *
  * @author Owen Feehan
  */
-public abstract class StackSequenceInput extends ProvidesStackInput {
+public interface StackSequenceInput extends ProvidesStackInput {
 
-    // Creates a TimeSequence of ImgStack for a particular series number
-    public abstract OperationWithProgressReporter<TimeSequence, OperationFailedException>
+    /** Creates a TimeSequence of stacks for a particular series number */
+    CallableWithProgressReporter<TimeSequence, OperationFailedException>
             createStackSequenceForSeries(int seriesNum) throws RasterIOException;
 }

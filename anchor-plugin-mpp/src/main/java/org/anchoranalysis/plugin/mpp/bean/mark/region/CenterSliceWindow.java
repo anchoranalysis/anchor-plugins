@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.pxlmark.VoxelizedMark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;

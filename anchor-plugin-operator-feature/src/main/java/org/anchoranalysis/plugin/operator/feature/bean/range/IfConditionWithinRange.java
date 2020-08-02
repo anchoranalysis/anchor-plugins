@@ -26,10 +26,12 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.range;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -42,7 +44,7 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
 
     // START BEAN PROPERTIES
     /** Calculates value for the condition - which is checked if it lies within a certain range */
-    @BeanField private Feature<T> featureCondition;
+    @BeanField @Getter @Setter private Feature<T> featureCondition;
     // END BEAN PROPERTIES
 
     @Override
@@ -52,16 +54,8 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
 
     @Override
     protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         // If the condition lies within the range, then we calculate the derived feature as intended
         return input.calc(getItem());
-    }
-
-    public Feature<T> getFeatureCondition() {
-        return featureCondition;
-    }
-
-    public void setFeatureCondition(Feature<T> featureCondition) {
-        this.featureCondition = featureCondition;
     }
 }

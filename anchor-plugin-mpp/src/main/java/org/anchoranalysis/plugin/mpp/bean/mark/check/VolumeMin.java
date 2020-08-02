@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
@@ -40,9 +42,9 @@ import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
 public class VolumeMin extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private UnitValueVolume minVolume;
+    @BeanField @Getter @Setter private UnitValueVolume minVolume;
 
-    @BeanField private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+    @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
     // END BEAN PROPERTIES
 
     @Override
@@ -65,21 +67,5 @@ public class VolumeMin extends CheckMark {
         }
 
         return vol > volMin;
-    }
-
-    public int getRegionID() {
-        return regionID;
-    }
-
-    public void setRegionID(int regionID) {
-        this.regionID = regionID;
-    }
-
-    public UnitValueVolume getMinVolume() {
-        return minVolume;
-    }
-
-    public void setMinVolume(UnitValueVolume minVolume) {
-        this.minVolume = minVolume;
     }
 }

@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,7 +43,7 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private double quantile = 1.0;
+    @BeanField @Getter @Setter private double quantile = 1.0;
     // END BEAN PROPERTIES
 
     @Override
@@ -111,13 +113,5 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
         }
 
         return rounded;
-    }
-
-    public double getQuantile() {
-        return quantile;
-    }
-
-    public void setQuantile(double quantile) {
-        this.quantile = quantile;
     }
 }

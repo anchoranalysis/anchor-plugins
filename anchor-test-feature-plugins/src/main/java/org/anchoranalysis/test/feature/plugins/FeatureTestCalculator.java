@@ -29,9 +29,12 @@ package org.anchoranalysis.test.feature.plugins;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -39,19 +42,18 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.test.LoggingFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {
-
-    private FeatureTestCalculator() {}
 
     public static <T extends FeatureInput> void assertDoubleResult(
             String message, Feature<T> feature, T params, double expectedResult)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         assertDoubleResult(message, feature, params, Optional.empty(), expectedResult);
     }
 
     public static <T extends FeatureInput> void assertIntResult(
             String message, Feature<T> feature, T params, int expectedResult)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         assertIntResult(message, feature, params, Optional.empty(), expectedResult);
     }
 
@@ -61,7 +63,7 @@ public class FeatureTestCalculator {
             T params,
             Optional<SharedObjects> sharedObjects,
             double expectedResult)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         assertResultTolerance(
                 message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-4);
     }
@@ -72,7 +74,7 @@ public class FeatureTestCalculator {
             T params,
             Optional<SharedObjects> sharedObjects,
             int expectedResult)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         assertResultTolerance(
                 message, feature, params, createInitParams(sharedObjects), expectedResult, 1e-20);
     }
@@ -89,22 +91,26 @@ public class FeatureTestCalculator {
             FeatureInitParams initParams,
             double expectedResult,
             double delta)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         double res = FeatureTestCalculator.calcSequentialSession(feature, params, initParams);
         assertEquals(message, expectedResult, res, delta);
     }
 
     private static <T extends FeatureInput> double calcSequentialSession(
             Feature<T> feature, T params, FeatureInitParams initParams)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
-        FeatureCalculatorSingle<T> calculator =
-                FeatureSession.with(
-                        feature,
-                        initParams,
-                        new SharedFeatureMulti(),
-                        LoggingFixture.suppressedLogErrorReporter());
+        try {
+            FeatureCalculatorSingle<T> calculator =
+                    FeatureSession.with(
+                            feature,
+                            initParams,
+                            new SharedFeatureMulti(),
+                            LoggingFixture.suppressedLogErrorReporter());
 
-        return calculator.calc(params);
+            return calculator.calc(params);
+        } catch (InitException e) {
+            throw new FeatureCalculationException(e);
+        }
     }
 }

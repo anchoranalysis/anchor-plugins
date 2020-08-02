@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.StringMap;
 import org.anchoranalysis.core.error.InitException;
@@ -46,9 +48,9 @@ import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitP
 public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerStringMapInitParams<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField private ImageLabeller<T> filter;
+    @BeanField @Getter @Setter private ImageLabeller<T> filter;
 
-    @BeanField private StringMap map;
+    @BeanField @Getter @Setter private StringMap map;
     // END BEAN PROPERTIES
 
     @Override
@@ -69,21 +71,5 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
             throws OperationFailedException {
         String firstId = filter.labelFor(sharedState.getInitParams(), input, context);
         return sharedState.getMap().get(firstId);
-    }
-
-    public StringMap getMap() {
-        return map;
-    }
-
-    public void setMap(StringMap map) {
-        this.map = map;
-    }
-
-    public ImageLabeller<T> getFilter() {
-        return filter;
-    }
-
-    public void setFilter(ImageLabeller<T> filter) {
-        this.filter = filter;
     }
 }

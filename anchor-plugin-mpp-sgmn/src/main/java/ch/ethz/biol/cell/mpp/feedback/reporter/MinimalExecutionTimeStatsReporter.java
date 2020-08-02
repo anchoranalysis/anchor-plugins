@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
@@ -41,7 +43,7 @@ import org.apache.commons.lang.time.StopWatch;
 public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private String outputName = "minimalExecutionTimeStats";
+    @BeanField @Getter @Setter private String outputName = "minimalExecutionTimeStats";
     // END BEAN PROPERTIES
 
     private BoundOutputManagerRouteErrors outputManager = null;
@@ -93,13 +95,5 @@ public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<CfgN
                         () ->
                                 new XStreamGenerator<>(
                                         stats, Optional.of("minimalExecutionTimeStats")));
-    }
-
-    public String getOutputName() {
-        return outputName;
-    }
-
-    public void setOutputName(String outputName) {
-        this.outputName = outputName;
     }
 }

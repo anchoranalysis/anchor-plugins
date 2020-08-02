@@ -32,13 +32,13 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -73,7 +73,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
             return relation.create().isRelationToValueTrue(featureVal, threshold);
 
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new IncludeMarksFailureException(e);
         }
     }

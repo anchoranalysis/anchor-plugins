@@ -31,11 +31,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
@@ -51,17 +53,17 @@ import org.anchoranalysis.io.input.OperationOutFilePath;
 public class NamedChnlsAppend extends NamedChnlsBase {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<NamedChnlsInputPart> input;
+    @BeanField @Getter @Setter private InputManager<NamedChnlsInputPart> input;
 
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField @OptionalBean private List<NamedBean<FilePathGenerator>> listAppend;
+    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<FilePathGenerator>> listAppend;
 
-    @BeanField private boolean forceEagerEvaluation = false;
+    @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
 
-    @BeanField private boolean ignoreFileNotFoundAppend = false;
+    @BeanField @Getter @Setter private boolean ignoreFileNotFoundAppend = false;
 
-    @BeanField private boolean skipMissingChannels = false;
+    @BeanField @Getter @Setter private boolean skipMissingChannels = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -130,11 +132,11 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
-            CachedOperation<Path, AnchorIOException> outPath =
-                    new OperationOutFilePath(ni, ncc::pathForBinding, debugMode);
+            CacheCall<Path, AnchorIOException> outPath =
+                    CacheCall.of(new OperationOutFilePath(ni, ncc::pathForBinding, debugMode));
 
             if (forceEagerEvaluation) {
-                Path path = outPath.doOperation();
+                Path path = outPath.call();
                 if (!path.toFile().exists()) {
 
                     if (skipMissingChannels) {
@@ -150,53 +152,5 @@ public class NamedChnlsAppend extends NamedChnlsBase {
         }
 
         return out;
-    }
-
-    public InputManager<NamedChnlsInputPart> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<NamedChnlsInputPart> input) {
-        this.input = input;
-    }
-
-    public List<NamedBean<FilePathGenerator>> getListAppend() {
-        return listAppend;
-    }
-
-    public void setListAppend(List<NamedBean<FilePathGenerator>> listAppend) {
-        this.listAppend = listAppend;
-    }
-
-    public boolean isForceEagerEvaluation() {
-        return forceEagerEvaluation;
-    }
-
-    public void setForceEagerEvaluation(boolean forceEagerEvaluation) {
-        this.forceEagerEvaluation = forceEagerEvaluation;
-    }
-
-    public boolean isIgnoreFileNotFoundAppend() {
-        return ignoreFileNotFoundAppend;
-    }
-
-    public void setIgnoreFileNotFoundAppend(boolean ignoreFileNotFoundAppend) {
-        this.ignoreFileNotFoundAppend = ignoreFileNotFoundAppend;
-    }
-
-    public boolean isSkipMissingChannels() {
-        return skipMissingChannels;
-    }
-
-    public void setSkipMissingChannels(boolean skipMissingChannels) {
-        this.skipMissingChannels = skipMissingChannels;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
     }
 }

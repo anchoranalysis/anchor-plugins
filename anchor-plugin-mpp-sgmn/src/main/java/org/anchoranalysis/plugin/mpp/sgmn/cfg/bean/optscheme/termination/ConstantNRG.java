@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -39,9 +41,9 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditi
 public class ConstantNRG extends TerminationCondition {
 
     // START BEAN PARAMETERS
-    @BeanField private int toleranceLog10 = -1;
+    @BeanField @Getter @Setter private int toleranceLog10 = -1;
 
-    @BeanField @Positive private int numRep = -1;
+    @BeanField @Positive @Getter @Setter private int numRep = -1;
     // END BEAN PARAMETERS
 
     private double tolerance = -1;
@@ -74,21 +76,5 @@ public class ConstantNRG extends TerminationCondition {
     public void init() {
         super.init();
         this.tolerance = Math.pow(10.0, toleranceLog10);
-    }
-
-    public int getToleranceLog10() {
-        return toleranceLog10;
-    }
-
-    public void setToleranceLog10(int toleranceLog10) {
-        this.toleranceLog10 = toleranceLog10;
-    }
-
-    public int getNumRep() {
-        return numRep;
-    }
-
-    public void setNumRep(int numRep) {
-        this.numRep = numRep;
     }
 }

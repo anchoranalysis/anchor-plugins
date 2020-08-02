@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -40,18 +39,14 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.io.csv.name.CombinedName;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -60,10 +55,12 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 
 /**
  * Extracts features for each object in a collection.
@@ -86,13 +83,18 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * <p>TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to
  * anchor-plugin-image-task??
  *
- * @param <T> the feature input-type supported by the FlexiFeatureTable
+ * @param <T> the feature input-type supported by the {@link FeatureTableCalculator}
  */
 public class FromObjects<T extends FeatureInput>
         extends FeatureSource<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();
+
+    private static final String[] NON_GROUP_HEADERS =
+            new String[] {"image", "unique_pixel_in_object"};
+
+    private static final String ADDITONAL_GROUP_HEADER = "object_collection";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -101,7 +103,7 @@ public class FromObjects<T extends FeatureInput>
     @BeanField @Getter @Setter
     private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
 
-    @BeanField @Getter @Setter private FeatureTableObjects<T> table;
+    @BeanField @Getter @Setter private CombineObjectsForFeatures<T> combine;
 
     @BeanField @Getter @Setter private boolean suppressErrors = false;
     // END BEAN PROPERTIES
@@ -113,13 +115,13 @@ public class FromObjects<T extends FeatureInput>
 
     @Override
     public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
-            MetadataHeaders metadataHeaders,
+            LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
             BoundIOContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
-                    table.createFeatures(features, STORE_FACTORY, suppressErrors);
+                    combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return new SharedStateExportFeatures<>(
                     metadataHeaders,
                     tableCalculator.createFeatureNames(),
@@ -131,33 +133,24 @@ public class FromObjects<T extends FeatureInput>
     }
 
     @Override
-    public void calcAllResultsForInput(
-            MultiInput input,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            FeatureTableCalculator<T> featureSourceSupplier,
-            FeatureNameList featureNames,
-            Optional<String> groupGeneratorName,
-            BoundIOContext context)
+    public void processInput(
+            MultiInput input, InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         define.processInput(
                 input,
-                context,
+                context.getContext(),
                 (initParams, nrgStack) ->
                         calculateFeaturesForImage(
                                 input.descriptiveName(),
-                                featureSourceSupplier,
-                                addResultsFor,
-                                groupGeneratorName,
-                                initParams,
-                                nrgStack,
-                                context.getLogger()));
+                                new InitParamsWithNrgStack(initParams, nrgStack),
+                                context));
     }
 
     @Override
-    public GenerateHeadersForCSV headers() {
-        return new GenerateHeadersForCSV(
-                new String[] {"image", "unique_pixel_in_object"},
-                moreThanOneProvider() ? Optional.of("object_collection") : Optional.empty());
+    public GenerateLabelHeadersForCSV headers() {
+        return new GenerateLabelHeadersForCSV(
+                NON_GROUP_HEADERS,
+                moreThanOneProvider() ? Optional.of(ADDITONAL_GROUP_HEADER) : Optional.empty());
     }
 
     /**
@@ -175,38 +168,32 @@ public class FromObjects<T extends FeatureInput>
 
     private int calculateFeaturesForImage(
             String descriptiveName,
-            FeatureTableCalculator<T> calculator,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            Optional<String> groupGeneratorName,
-            ImageInitParams imageInit,
-            NRGStackWithParams nrgStack,
-            Logger logger)
+            InitParamsWithNrgStack initParams,
+            InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(
-                        table,
-                        startCalculator(calculator, imageInit, nrgStack, logger),
-                        addResultsFor,
-                        imageInit,
-                        nrgStack,
+                        combine,
+                        startCalculator(context.getRowSource(), initParams, context.getLogger()),
+                        initParams,
                         suppressErrors,
-                        logger);
-        processAllProviders(descriptiveName, groupGeneratorName, fromProviderCalculator);
+                        Optional.of(combine::createThumbailFor),
+                        context);
+        processAllProviders(
+                descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;
     }
 
     private FeatureCalculatorMulti<T> startCalculator(
-            FeatureTableCalculator<T> calculator,
-            ImageInitParams imageInit,
-            NRGStackWithParams nrgStack,
-            Logger logger)
+            FeatureTableCalculator<T> calculator, InitParamsWithNrgStack initParams, Logger logger)
             throws OperationFailedException {
 
         try {
-            calculator.start(imageInit, Optional.of(nrgStack), logger);
+            calculator.start(
+                    initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }
@@ -227,7 +214,7 @@ public class FromObjects<T extends FeatureInput>
                     input ->
                             identifierFor(
                                     descriptiveName,
-                                    table.uniqueIdentifierFor(input),
+                                    combine.uniqueIdentifierFor(input),
                                     groupGeneratorName,
                                     ni.getName()));
         }

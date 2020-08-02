@@ -26,8 +26,11 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import io.vavr.Tuple2;
 import java.nio.file.Path;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,7 +44,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
-import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
 
 /**
@@ -59,22 +61,8 @@ public class SegmentText extends ObjectCollectionProvider {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
 
-    // START BEAN PROPERTIES
-    /** An RGB stack to look for text in */
-    @BeanField private StackProvider stackProvider;
-
-    /** Proposed bounding boxes below this confidence interval are removed */
-    @BeanField private double minConfidence = 0.5;
-
-    /** Bounding boxes with IoU scores above this threshold are removed */
-    @BeanField private double suppressIntersectionOverUnionAbove = 0.3;
-
-    /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
-    @BeanField private boolean suppressNonMaxima = true;
-    // END BEAN PROPERTIES
-
     /** Only exact integral multiples of this size in each dimension can be accepted as input */
-    private static final Extent EAST_EXTENT = new Extent(32, 32, 1);
+    private static final Extent EAST_EXTENT = new Extent(32, 32);
 
     /**
      * As the EAST detector was designed to work with originally 1280x720 pixel images approximately
@@ -83,26 +71,40 @@ public class SegmentText extends ObjectCollectionProvider {
      */
     private static final int MAX_SCALE_FACTOR = (720 / EAST_EXTENT.getY());
 
+    // START BEAN PROPERTIES
+    /** An RGB stack to look for text in */
+    @BeanField @Getter @Setter private StackProvider stackProvider;
+
+    /** Proposed bounding boxes below this confidence interval are removed */
+    @BeanField @Getter @Setter private double minConfidence = 0.5;
+
+    /** Bounding boxes with IoU scores above this threshold are removed */
+    @BeanField @Getter @Setter private double suppressIntersectionOverUnionAbove = 0.3;
+
+    /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
+    @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
+    // END BEAN PROPERTIES
+
     @Override
     public ObjectCollection create() throws CreateException {
 
         Stack stack = createInput();
 
         // Scales the input to the largest acceptable-extent
-        Pair<Mat, ScaleFactor> pair =
+        Tuple2<Mat, ScaleFactor> pair =
                 CreateScaledInput.apply(
                         stack, findLargestExtent(stack.getDimensions().getExtent()));
 
         // Convert marks to object-masks
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
                 EastObjectsExtractor.apply(
-                        pair.getFirst(),
+                        pair._1(),
                         stack.getDimensions().getRes(),
                         minConfidence,
                         pathToEastModel());
 
         // Scale each object-mask and extract as an object-collection
-        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair.getSecond());
+        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair._2());
     }
 
     /**
@@ -124,11 +126,11 @@ public class SegmentText extends ObjectCollectionProvider {
 
         Stack stack = stackProvider.create();
 
-        if (stack.getNumChnl() != 3) {
+        if (stack.getNumberChannels() != 3) {
             throw new CreateException(
                     String.format(
                             "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumChnl()));
+                            stack.getNumberChannels()));
         }
 
         if (stack.getDimensions().getZ() > 1) {
@@ -152,37 +154,5 @@ public class SegmentText extends ObjectCollectionProvider {
         return getInitializationParameters()
                 .getModelDirectory()
                 .resolve("frozen_east_text_detection.pb");
-    }
-
-    public StackProvider getStackProvider() {
-        return stackProvider;
-    }
-
-    public void setStackProvider(StackProvider stackProvider) {
-        this.stackProvider = stackProvider;
-    }
-
-    public double getSuppressIntersectionOverUnionAbove() {
-        return suppressIntersectionOverUnionAbove;
-    }
-
-    public void setSuppressIntersectionOverUnionAbove(double suppressIntersectionOverUnionAbove) {
-        this.suppressIntersectionOverUnionAbove = suppressIntersectionOverUnionAbove;
-    }
-
-    public double getMinConfidence() {
-        return minConfidence;
-    }
-
-    public void setMinConfidence(double minConfidence) {
-        this.minConfidence = minConfidence;
-    }
-
-    public boolean isSuppressNonMaxima() {
-        return suppressNonMaxima;
-    }
-
-    public void setSuppressNonMaxima(boolean suppressNonMaxima) {
-        this.suppressNonMaxima = suppressNonMaxima;
     }
 }

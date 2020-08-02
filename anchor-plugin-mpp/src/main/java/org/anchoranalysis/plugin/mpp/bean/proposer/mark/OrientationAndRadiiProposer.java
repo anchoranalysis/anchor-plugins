@@ -27,15 +27,17 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -48,15 +50,10 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class OrientationAndRadiiProposer extends MarkProposer {
 
     // BEAN PARAMETERS
-    @BeanField private RadiiProposer radiiProposer = null;
+    @BeanField @Getter @Setter private RadiiProposer radiiProposer = null;
 
-    @BeanField private OrientationProposer orientationProposer = null;
+    @BeanField @Getter @Setter private OrientationProposer orientationProposer = null;
     // END BEAN PARAMETERS
-
-    public OrientationAndRadiiProposer() {
-        // Standard Bean Constructor
-    }
-
     public OrientationAndRadiiProposer(
             RadiiProposer radiiProposer, OrientationProposer orientationProposer) {
         this.radiiProposer = radiiProposer;
@@ -83,8 +80,6 @@ public class OrientationAndRadiiProposer extends MarkProposer {
 
         context = context.addErrorLevel("MarkRadiiProposer");
 
-        assert (context.getDimensions().contains(inputMark.getMark().centerPoint()));
-
         Optional<Point3d> rad =
                 radiiProposer.propose(
                         inputMark.getMark().centerPoint(),
@@ -110,21 +105,5 @@ public class OrientationAndRadiiProposer extends MarkProposer {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         return Optional.empty();
-    }
-
-    public OrientationProposer getOrientationProposer() {
-        return orientationProposer;
-    }
-
-    public void setOrientationProposer(OrientationProposer orientationProposer) {
-        this.orientationProposer = orientationProposer;
-    }
-
-    public RadiiProposer getRadiiProposer() {
-        return radiiProposer;
-    }
-
-    public void setRadiiProposer(RadiiProposer radiiProposer) {
-        this.radiiProposer = radiiProposer;
     }
 }

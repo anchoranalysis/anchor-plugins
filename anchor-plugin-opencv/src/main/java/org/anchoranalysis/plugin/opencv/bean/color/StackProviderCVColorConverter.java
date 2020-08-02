@@ -81,7 +81,7 @@ public abstract class StackProviderCVColorConverter extends StackProviderOne {
     }
 
     private void checkNumChnls(Stack stack) throws CreateException {
-        if (stack.getNumChnl() != 3) {
+        if (stack.getNumberChannels() != 3) {
             throw new CreateException(
                     "Input stack must have exactly 3 channels representing a RGB image");
         }

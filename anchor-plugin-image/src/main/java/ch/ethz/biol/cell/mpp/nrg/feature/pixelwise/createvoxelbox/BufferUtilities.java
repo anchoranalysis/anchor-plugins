@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -39,7 +39,7 @@ class BufferUtilities {
 
     public static void putScoreForOffset(
             PixelScore pixelScore, List<VoxelBuffer<?>> bbList, ByteBuffer bbOut, int offset)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         double score = pixelScore.calc(createParams(bbList, offset));
 
         int scoreInt = (int) Math.round(score * 255);

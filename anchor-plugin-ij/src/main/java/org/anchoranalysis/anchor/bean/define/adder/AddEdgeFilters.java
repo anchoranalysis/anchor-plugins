@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderWithPrefixBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 
@@ -109,14 +109,14 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
             addWithName(define, filterName + suffix, item);
         }
 
-        private ChnlProvider edgeFilter(String unresolvedSrcName) {
+        private ChannelProvider edgeFilter(String unresolvedSrcName) {
             ChnlProviderEdgeFilter provider = new ChnlProviderEdgeFilter();
             provider.setOutputShort(true);
             provider.setChnl(createDup(resolveName(unresolvedSrcName)));
             return provider;
         }
 
-        private ChnlProvider gradientSingleDimension(int axis) {
+        private ChannelProvider gradientSingleDimension(int axis) {
             ChnlProviderGradientSingleDimension provider =
                     new ChnlProviderGradientSingleDimension();
             provider.setOutputShort(true);
@@ -127,7 +127,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         }
     }
 
-    private ChnlProvider createMedian() {
+    private ChannelProvider createMedian() {
         ChnlProviderMedianFilterIJ2D provider = new ChnlProviderMedianFilterIJ2D();
         provider.setRadius((int) Math.round(medianRadiusMeters));
         provider.setRadiusInMeters(true);
@@ -135,7 +135,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         return provider;
     }
 
-    private ChnlProvider createGaussian() {
+    private ChannelProvider createGaussian() {
         ChnlProviderBlur provider = new ChnlProviderBlur();
         provider.setStrategy(createBlurStrategy());
         provider.setChnl(createDup(chnlID));
@@ -149,7 +149,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         return blurStrategy;
     }
 
-    private ChnlProvider createDup(String srcID) {
+    private ChannelProvider createDup(String srcID) {
         ChnlProviderReference provider = new ChnlProviderReference();
         provider.setId(srcID);
         provider.setDuplicate(true);

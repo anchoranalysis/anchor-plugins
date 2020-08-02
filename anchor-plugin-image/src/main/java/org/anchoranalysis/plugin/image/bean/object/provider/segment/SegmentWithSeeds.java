@@ -99,7 +99,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
             MatchedObject ows, Channel channel, SegmentChannelIntoObjects segment)
             throws CreateException {
         if (ows.numMatches() <= 1) {
-            return ObjectCollectionFactory.from(ows.getSource());
+            return ObjectCollectionFactory.of(ows.getSource());
         } else {
             try {
                 return sgmn(ows, channel, segment);

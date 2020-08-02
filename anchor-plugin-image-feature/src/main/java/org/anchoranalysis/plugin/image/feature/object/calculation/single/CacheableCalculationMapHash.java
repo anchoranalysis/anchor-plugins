@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -91,7 +91,7 @@ public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, 
      *
      * @param key
      * @return a cached-result, or NULL if it doesn't exist
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      * @throws GetOperationFailedException
      */
     protected S getOrNull(U key) {

@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,7 +44,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 
     // START BEAN
-    @BeanField private Thresholder thresholder;
+    @BeanField @Getter @Setter private Thresholder thresholder;
     // END BEAN
 
     @Override
@@ -59,13 +61,5 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-    }
-
-    public Thresholder getThresholder() {
-        return thresholder;
-    }
-
-    public void setThresholder(Thresholder thresholder) {
-        this.thresholder = thresholder;
     }
 }

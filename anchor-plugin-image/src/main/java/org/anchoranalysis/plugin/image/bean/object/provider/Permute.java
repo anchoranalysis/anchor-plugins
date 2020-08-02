@@ -39,6 +39,7 @@ import org.anchoranalysis.bean.permute.setter.PermutationSetter;
 import org.anchoranalysis.bean.permute.setter.PermutationSetterException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -68,7 +69,7 @@ public class Permute extends ObjectCollectionProvider {
             PermutationSetter ps = permuteProperty.createSetter(objects);
 
             return createPermutedObjects(ps, streamFromIterator(permuteProperty.propertyValues()));
-        } catch (PermutationSetterException e1) {
+        } catch (PermutationSetterException | OperationFailedException e1) {
             throw new CreateException("Cannot create a permutation setter", e1);
         }
     }

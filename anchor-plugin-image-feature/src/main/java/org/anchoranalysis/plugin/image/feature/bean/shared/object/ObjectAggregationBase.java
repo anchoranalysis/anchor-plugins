@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -57,7 +57,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
     // END BEAN PROPERTIES
 
     // We cache the objectCollection as it's not dependent on individual parameters
-    private ObjectCollection objectCollection;
+    private ObjectCollection createdObjects;
 
     @Override
     protected void beforeCalcWithImageInitParams(ImageInitParams params) throws InitException {
@@ -67,41 +67,39 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
     @Override
     protected double calc(
             CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
-        if (objectCollection == null) {
-            objectCollection = createObjects();
+        if (createdObjects == null) {
+            createdObjects = createObjects();
         }
 
         return deriveStatistic(
-                featureValsForObjects(featureForSingleObject, calcForChild, objectCollection));
+                featureValsForObjects(featureForSingleObject, calcForChild, createdObjects));
     }
 
     protected abstract double deriveStatistic(DoubleArrayList featureVals);
 
-    private ObjectCollection createObjects() throws FeatureCalcException {
+    private ObjectCollection createObjects() throws FeatureCalculationException {
         try {
             return objects.create();
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
     private DoubleArrayList featureValsForObjects(
             Feature<FeatureInputSingleObject> feature,
             CalcForChild<T> calcForChild,
-            ObjectCollection objectCollection)
-            throws FeatureCalcException {
+            ObjectCollection objects)
+            throws FeatureCalculationException {
         DoubleArrayList featureVals = new DoubleArrayList();
 
         // Calculate a feature on each obj mask
-        for (int i = 0; i < objectCollection.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
 
             double val =
                     calcForChild.calc(
-                            feature,
-                            new CalculateInputFromStack<>(objectCollection, i),
-                            cacheName(i));
+                            feature, new CalculateInputFromStack<>(objects, i), cacheName(i));
             featureVals.add(val);
         }
         return featureVals;
@@ -109,6 +107,6 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
 
     private ChildCacheName cacheName(int index) {
         return new ChildCacheName(
-                ObjectAggregationBase.class, index + "_" + objectCollection.hashCode());
+                ObjectAggregationBase.class, index + "_" + createdObjects.hashCode());
     }
 }

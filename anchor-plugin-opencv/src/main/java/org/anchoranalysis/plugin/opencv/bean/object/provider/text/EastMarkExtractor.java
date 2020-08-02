@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,6 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
-import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
@@ -81,14 +82,10 @@ class EastMarkExtractor {
 
     private static List<WithConfidence<Mark>> extractFromMatrices(
             Mat scores, Mat geometry, ScaleFactorInt offsetScale, double minConfidence) {
-        Pair<Mat, Extent> pair = reshapeScores(scores);
+        Tuple2<Mat, Extent> pair = reshapeScores(scores);
 
         return extractFromMatricesReshaped(
-                pair.getFirst(),
-                reshapeGeometry(geometry),
-                pair.getSecond(),
-                offsetScale,
-                minConfidence);
+                pair._1(), reshapeGeometry(geometry), pair._2(), offsetScale, minConfidence);
     }
 
     private static List<WithConfidence<Mark>> extractFromMatricesReshaped(
@@ -148,7 +145,7 @@ class EastMarkExtractor {
      * @param scores matrix to reshape
      * @return the reshaped-matrix and the numbers of rows and columns
      */
-    private static Pair<Mat, Extent> reshapeScores(Mat scores) {
+    private static Tuple2<Mat, Extent> reshapeScores(Mat scores) {
 
         Mat scoresReshaped = scores.reshape(1, 1);
 
@@ -158,7 +155,7 @@ class EastMarkExtractor {
         int numCols = (int) Math.floor(Math.sqrt(rowsByCols));
         int numRows = rowsByCols / numCols;
 
-        return new Pair<>(scoresReshaped, new Extent(numCols, numRows, 1));
+        return Tuple.of(scoresReshaped, new Extent(numCols, numRows));
     }
 
     private static float[][] splitGeometryIntoFiveArrays(Mat geometry, int rowsByCols) {

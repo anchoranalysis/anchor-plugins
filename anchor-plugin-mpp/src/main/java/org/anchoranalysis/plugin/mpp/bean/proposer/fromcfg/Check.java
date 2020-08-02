@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
@@ -40,9 +42,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 public class Check extends MarkFromCfgProposer {
 
     // START BEANS
-    @BeanField private MarkFromCfgProposer markFromCfgProposer;
+    @BeanField @Getter @Setter private MarkFromCfgProposer markFromCfgProposer;
 
-    @BeanField private CheckMark checkMark;
+    @BeanField @Getter @Setter private CheckMark checkMark;
     // END BEANS
 
     @Override
@@ -85,21 +87,5 @@ public class Check extends MarkFromCfgProposer {
     public boolean isCompatibleWith(Mark testMark) {
         return checkMark.isCompatibleWith(testMark)
                 && markFromCfgProposer.isCompatibleWith(testMark);
-    }
-
-    public CheckMark getCheckMark() {
-        return checkMark;
-    }
-
-    public void setCheckMark(CheckMark checkMark) {
-        this.checkMark = checkMark;
-    }
-
-    public MarkFromCfgProposer getMarkFromCfgProposer() {
-        return markFromCfgProposer;
-    }
-
-    public void setMarkFromCfgProposer(MarkFromCfgProposer markFromCfgProposer) {
-        this.markFromCfgProposer = markFromCfgProposer;
     }
 }

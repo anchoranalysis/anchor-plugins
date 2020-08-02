@@ -27,58 +27,56 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Optional;
 import java.util.function.Function;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
+import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 
+@AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
-    private final FeatureTableObjects<T> table;
+    private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
-    private final BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor;
-    private final ImageInitParams imageInitParams;
-    private final NRGStackWithParams nrgStack;
-    private final boolean suppressErrors;
-    private final Logger logger;
+    private final InitParamsWithNrgStack initParams;
 
-    public CalculateFeaturesFromProvider(
-            FeatureTableObjects<T> table,
-            FeatureCalculatorMulti<T> calculator,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            ImageInitParams imageInitParams,
-            NRGStackWithParams nrgStack,
-            boolean suppressErrors,
-            Logger logger) {
-        super();
-        this.table = table;
-        this.calculator = calculator;
-        this.addResultsFor = addResultsFor;
-        this.imageInitParams = imageInitParams;
-        this.nrgStack = nrgStack;
-        this.suppressErrors = suppressErrors;
-        this.logger = logger;
-    }
+    /**
+     * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
+     * the log
+     */
+    private final boolean suppressErrors;
+
+    /** Generates thumbnails (if enabled) */
+    private final Optional<FunctionWithException<T, Optional<DisplayStack>, CreateException>>
+            thumbnailForInput;
+
+    private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public void processProvider(
             ObjectCollectionProvider provider,
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         calculateFeaturesForProvider(
-                objectsFromProvider(provider, imageInitParams, logger),
-                nrgStack,
+                objectsFromProvider(provider, initParams.getImageInit(), context.getLogger()),
+                initParams.getNrgStack(),
                 identifierFromInput);
     }
 
@@ -88,9 +86,14 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         try {
-            List<T> listParams = table.createListInputs(objects, nrgStack, logger);
+            List<T> inputs =
+                    table.deriveInputs(
+                            objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
 
-            calculateManyFeaturesInto(listParams, identifierFromInput, suppressErrors, logger);
+            calculateManyFeaturesInto(inputs, identifierFromInput);
+
+            table.endBatchAndCleanup();
+
         } catch (CreateException | OperationFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -105,18 +108,10 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      * @param session for calculating features
      * @param listInputs a list of parameters. Each parameters creates a new result (e.g. a new row
      *     in a feature-table)
-     * @param resultsConsumer called with the results
-     * @param extractIdentifier extracts an identifier from each object that is calculated
-     * @param suppressErrors iff TRUE no exceptions are thrown when an error occurs, but rather a
-     *     message is written to the log
-     * @param logger the log
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            List<T> listInputs,
-            Function<T, StringLabelsForCsvRow> identifierFromObjName,
-            boolean suppressErrors,
-            Logger logger)
+            List<T> listInputs, Function<T, StringLabelsForCsvRow> labelsForInput)
             throws OperationFailedException {
 
         try {
@@ -124,17 +119,22 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
                 T input = listInputs.get(i);
 
-                logger.messageLogger()
+                context.getLogger()
+                        .messageLogger()
                         .logFormatted(
                                 "Calculating input %d of %d: %s",
                                 i + 1, listInputs.size(), input.toString());
 
-                addResultsFor.accept(
-                        identifierFromObjName.apply(input),
-                        calculator.calc(input, logger.errorReporter(), suppressErrors));
+                context.addResultsFor(
+                        labelsForInput.apply(input),
+                        new ResultsVectorWithThumbnail(
+                                calculator.calc(
+                                        input, context.getLogger().errorReporter(), suppressErrors),
+                                OptionalUtilities.flatMap(
+                                        thumbnailForInput, func -> func.apply(input))));
             }
 
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -144,12 +144,12 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             throws OperationFailedException {
 
         try {
-            ObjectCollectionProvider providerLoc = provider.duplicateBean();
+            ObjectCollectionProvider providerDuplicated = provider.duplicateBean();
 
             // Initialise
-            providerLoc.initRecursive(imageInitParams, logger);
+            providerDuplicated.initRecursive(imageInitParams, logger);
 
-            return providerLoc.create();
+            return providerDuplicated.create();
 
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);

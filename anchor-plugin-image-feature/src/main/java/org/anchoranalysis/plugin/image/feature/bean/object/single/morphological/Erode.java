@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.morphological;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
@@ -37,9 +39,9 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 public class Erode extends DerivedObject {
 
     // START BEAN PROPERTIES
-    @BeanField private int iterations;
+    @BeanField @Getter @Setter private int iterations;
 
-    @BeanField private boolean do3D = true;
+    @BeanField @Getter @Setter private boolean do3D = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -52,21 +54,5 @@ public class Erode extends DerivedObject {
     @Override
     public ChildCacheName cacheName() {
         return new ChildCacheName(Erode.class, iterations + "_" + do3D);
-    }
-
-    public int getIterations() {
-        return iterations;
-    }
-
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
-
-    public boolean isDo3D() {
-        return do3D;
-    }
-
-    public void setDo3D(boolean do3D) {
-        this.do3D = do3D;
     }
 }

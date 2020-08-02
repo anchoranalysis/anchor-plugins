@@ -27,9 +27,11 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -42,12 +44,12 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
  * Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
  * empty slices in a binary on the top and bottom
  */
-public class ChnlProviderExpandSliceToMask extends ChnlProvider {
+public class ChnlProviderExpandSliceToMask extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnlTargetDimensions;
+    @BeanField @Getter @Setter private ChannelProvider chnlTargetDimensions;
 
-    @BeanField private ChnlProvider chnlSlice;
+    @BeanField @Getter @Setter private ChannelProvider chnlSlice;
     // END BEAN PROPERTIES
 
     @Override

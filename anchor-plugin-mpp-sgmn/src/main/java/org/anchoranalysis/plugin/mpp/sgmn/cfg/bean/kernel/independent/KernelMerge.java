@@ -37,16 +37,16 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.PxlMarkMemoFactory;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -61,10 +61,10 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
     @BeanField @Getter @Setter private String simplePairCollectionID;
     // END BEAN PROPERTIES
 
-    private Pair<Mark> pair;
+    private IdentifiablePair<Mark> pair;
     private Optional<Mark> markAdded;
 
-    @Getter @Setter private PairCollection<Pair<Mark>> pairCollection;
+    @Getter @Setter private RandomCollection<IdentifiablePair<Mark>> pairCollection;
 
     @Override
     public void onInit(MPPInitParams pso) throws InitException {
@@ -151,7 +151,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.rmvTwo(srcIndex, destIndex, nrgStack.getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove indexes %d and %d", srcIndex, destIndex), e);
         }
@@ -160,7 +160,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.add(pmm, nrgStack.getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException("Cannot add pmm", e);
         }
 

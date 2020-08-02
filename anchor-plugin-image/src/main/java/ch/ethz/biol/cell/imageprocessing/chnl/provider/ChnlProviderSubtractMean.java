@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -39,7 +41,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean subtractFromMaskOnly = true;
+    @BeanField @Getter @Setter private boolean subtractFromMaskOnly = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -159,13 +161,5 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
                 }
             }
         }
-    }
-
-    public boolean isSubtractFromMaskOnly() {
-        return subtractFromMaskOnly;
-    }
-
-    public void setSubtractFromMaskOnly(boolean subtractFromMaskOnly) {
-        this.subtractFromMaskOnly = subtractFromMaskOnly;
     }
 }

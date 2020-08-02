@@ -67,9 +67,9 @@ public class SelectAll extends SelectChnlsFromStacks {
             Stack stack = source.getStackStore().getException(stackName);
 
             List<NamedChnl> out = new ArrayList<>();
-            for (int i = 0; i < stack.getNumChnl(); i++) {
+            for (int i = 0; i < stack.getNumberChannels(); i++) {
 
-                String outputName = stackName + createSuffix(i, stack.getNumChnl() > 1);
+                String outputName = stackName + createSuffix(i, stack.getNumberChannels() > 1);
 
                 out.add(new NamedChnl(outputName, source.extractChnl(stack, checkType, i)));
             }

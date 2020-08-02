@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -39,7 +41,7 @@ import org.anchoranalysis.core.error.CreateException;
 public class RetrieveSingletonMark extends MarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -55,13 +57,5 @@ public class RetrieveSingletonMark extends MarkProvider {
         }
 
         return Optional.of(cfg.get(0));
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
     }
 }

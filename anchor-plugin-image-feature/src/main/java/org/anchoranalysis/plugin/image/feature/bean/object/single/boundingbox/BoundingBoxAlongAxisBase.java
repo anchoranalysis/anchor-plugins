@@ -26,11 +26,14 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
+import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -38,11 +41,12 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
     // START BEAN PARAMETERS
-    @BeanField private String axis = "x";
+    @BeanField @Getter @Setter private String axis = "x";
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();
 
@@ -54,20 +58,16 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
     protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox);
 
-    private double calcAxisValue(ReadableTuple3i point) {
-        return point.getValueByDimension(AxisTypeConverter.createFromString(axis));
-    }
-
     @Override
     public String getParamDscr() {
         return String.format("%s", axis);
     }
 
-    public String getAxis() {
-        return axis;
-    }
-
-    public void setAxis(String axis) {
-        this.axis = axis;
+    private double calcAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
+        try {
+            return point.getValueByDimension(AxisTypeConverter.createFromString(axis));
+        } catch (AxisTypeException e) {
+            throw new FeatureCalculationException(e.friendlyMessageHierarchy());
+        }
     }
 }

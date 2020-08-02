@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -90,7 +90,7 @@ public class DimChecker {
      * @throws CreateException
      */
     public static Channel createSameSize(
-            ChnlProvider provider, String providerName, Channel chnlSameSize)
+            ChannelProvider provider, String providerName, Channel chnlSameSize)
             throws CreateException {
 
         Channel chnlNew = provider.create();
@@ -110,7 +110,7 @@ public class DimChecker {
      * @throws CreateException
      */
     public static Mask createSameSize(
-            BinaryChnlProvider provider, String providerName, Channel chnlSameSize)
+            MaskProvider provider, String providerName, Channel chnlSameSize)
             throws CreateException {
 
         Mask chnlNew = provider.create();

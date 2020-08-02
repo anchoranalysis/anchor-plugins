@@ -58,7 +58,7 @@ class MultiBuffer {
     public void populateWithSpecifiedChnl(
             Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
         // Specific Channel Number, but no specific Slice Number
-        Channel chnl = stackForFile.getChnl(0);
+        Channel chnl = stackForFile.getChannel(0);
         VoxelBox<?> vb = chnl.getVoxelBox().any();
 
         int chnlIndexResolved = size.getRangeC().index(chnlNum);
@@ -76,8 +76,8 @@ class MultiBuffer {
 
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
-        for (int c = 0; c < stackForFile.getNumChnl(); c++) {
-            Channel chnl = stackForFile.getChnl(c);
+        for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
+            Channel chnl = stackForFile.getChannel(c);
             copyFirstSliceForChnl(timeIndexResolved, c, chnl.getVoxelBox().any(), sliceNum);
         }
     }
@@ -88,8 +88,8 @@ class MultiBuffer {
 
         // No specific Channel Number, and no specific Slice Number
         // Then we have to guess the channel
-        for (int c = 0; c < stackForFile.getNumChnl(); c++) {
-            Channel chnl = stackForFile.getChnl(c);
+        for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
+            Channel chnl = stackForFile.getChannel(c);
             copyAllSlicesForChnl(timeIndexResolved, c, chnl.getVoxelBox().any());
         }
     }
@@ -104,7 +104,7 @@ class MultiBuffer {
             copyAllBuffersTo(t, c, chnl.getVoxelBox());
 
             try {
-                stack.addChnl(chnl);
+                stack.addChannel(chnl);
             } catch (IncorrectImageSizeException e) {
                 assert false;
             }
