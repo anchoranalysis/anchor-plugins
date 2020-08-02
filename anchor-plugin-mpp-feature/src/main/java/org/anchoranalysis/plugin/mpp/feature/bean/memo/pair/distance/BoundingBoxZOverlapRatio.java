@@ -53,7 +53,8 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
 

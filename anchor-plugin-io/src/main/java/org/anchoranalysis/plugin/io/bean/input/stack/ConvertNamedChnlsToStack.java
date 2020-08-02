@@ -134,7 +134,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
 
         private NamedChnlsInput in;
         private int seriesNum;
-                
+
         @Override
         public TimeSequence call(ProgressReporter progressReporter)
                 throws OperationFailedException {
@@ -142,12 +142,12 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
             try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 
                 NamedChannelsForSeries ncc =
-                        in.createChannelsForSeries(
-                                seriesNum, new ProgressReporterOneOfMany(prm));
+                        in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
                 prm.incrWorker();
 
-                Channel channel = ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
-                return new TimeSequence( new Stack(channel) );
+                Channel channel =
+                        ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+                return new TimeSequence(new Stack(channel));
 
             } catch (RasterIOException | GetOperationFailedException e) {
                 throw new OperationFailedException(e);

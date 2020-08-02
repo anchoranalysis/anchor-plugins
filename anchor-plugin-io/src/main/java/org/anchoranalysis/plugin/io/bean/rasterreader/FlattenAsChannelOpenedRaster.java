@@ -140,7 +140,8 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
      *
      * @throws IncorrectImageSizeException
      */
-    private static void addStack(Stack source, Stack destination) throws IncorrectImageSizeException {
+    private static void addStack(Stack source, Stack destination)
+            throws IncorrectImageSizeException {
         for (Channel channel : source) {
             destination.addChannel(channel);
         }

@@ -55,12 +55,12 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
     @Override
     public boolean includeMarks(
-        VoxelizedMarkMemo mark1,
-        VoxelizedMarkMemo mark2,
-        ImageDimensions dimensions,
-        Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
-        boolean do3D
-    ) throws IncludeMarksFailureException {
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
+            ImageDimensions dimensions,
+            Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
+            boolean do3D)
+            throws IncludeMarksFailureException {
 
         try {
             FeatureInputPairMemo params =

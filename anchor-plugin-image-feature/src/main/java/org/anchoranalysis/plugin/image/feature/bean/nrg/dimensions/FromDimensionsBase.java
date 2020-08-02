@@ -43,5 +43,6 @@ public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends Feat
         return calcFromDims(input.get().getDimensionsRequired());
     }
 
-    protected abstract double calcFromDims(ImageDimensions dimensions) throws FeatureCalculationException;
+    protected abstract double calcFromDims(ImageDimensions dimensions)
+            throws FeatureCalculationException;
 }

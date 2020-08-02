@@ -26,20 +26,21 @@
 
 package ch.ethz.biol.cell.mpp.anneal;
 
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.Positive;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class AnnealSchemeGeom extends AnnealScheme {
 
     // START BEAN PROPERTIES
     @BeanField @Positive @Getter @Setter private double currentTemp = -1;
-    
+
     @BeanField @Positive @Getter @Setter private double rate = -1;
     // END BEAN PROPERTIES
 

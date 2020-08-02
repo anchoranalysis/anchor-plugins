@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -38,8 +40,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
-import lombok.Getter;
-import lombok.Setter;
 
 // An input stack
 public class FromCSVInputManager extends InputManager<FromCSVInputObject> {

@@ -36,11 +36,12 @@ public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     @Override
     protected double deriveScore(
-            double featureValue, double mean, CallableWithException<Double, FeatureCalculationException> stdDev)
+            double featureValue,
+            double mean,
+            CallableWithException<Double, FeatureCalculationException> stdDev)
             throws FeatureCalculationException {
 
-        double zScore =
-                FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.call());
+        double zScore = FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.call());
         assert (!Double.isNaN(zScore));
         return zScore;
     }

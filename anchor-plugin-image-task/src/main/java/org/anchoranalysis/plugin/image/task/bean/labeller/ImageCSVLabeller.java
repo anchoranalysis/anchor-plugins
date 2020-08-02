@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 import java.nio.file.Path;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -38,8 +40,6 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
 

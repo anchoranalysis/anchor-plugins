@@ -57,8 +57,7 @@ public class Always extends ObjectMatcher {
         ObjectMask match = determineMatch();
 
         return sourceObjects.stream()
-                .mapToList(
-                        object -> new MatchedObject(object, ObjectCollectionFactory.of(match)));
+                .mapToList(object -> new MatchedObject(object, ObjectCollectionFactory.of(match)));
     }
 
     private ObjectMask determineMatch() throws OperationFailedException {

@@ -90,7 +90,8 @@ public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
         if (kvp.containsKey(keyAggregated)) {
             return kvp.getPropertyAsDouble(keyAggregated);
         } else {
-            throw new FeatureCalculationException(String.format("Param '%s' is missing", keyAggregated));
+            throw new FeatureCalculationException(
+                    String.format("Param '%s' is missing", keyAggregated));
         }
     }
 

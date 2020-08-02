@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Combines all series and frames returned by a reader by converting them into multiple channels in
@@ -51,6 +51,6 @@ public class FlattenAsChannel extends RasterReader {
 
     @Override
     public OpenedRaster openFile(Path filepath) throws RasterIOException {
-        return new FlattenAsChannelOpenedRaster( rasterReader.openFile(filepath) );
+        return new FlattenAsChannelOpenedRaster(rasterReader.openFile(filepath));
     }
 }

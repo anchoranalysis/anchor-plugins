@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -45,8 +47,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndPar
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CfgNRGSerializerChangeReporter extends FeedbackReceiverBean<CfgNRGPixelized> {
 

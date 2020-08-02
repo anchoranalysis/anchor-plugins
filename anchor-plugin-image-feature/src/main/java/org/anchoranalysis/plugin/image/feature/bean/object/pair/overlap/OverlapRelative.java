@@ -40,7 +40,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 public abstract class OverlapRelative extends FeaturePairObjects {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairObjects> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 

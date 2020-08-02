@@ -26,8 +26,11 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import io.vavr.Tuple2;
 import java.nio.file.Path;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -42,9 +45,6 @@ import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
-import io.vavr.Tuple2;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Extracts text from a RGB image by using the EAST deep neural network model
@@ -70,7 +70,7 @@ public class SegmentText extends ObjectCollectionProvider {
      * size proportionate to what EAST was trained on.
      */
     private static final int MAX_SCALE_FACTOR = (720 / EAST_EXTENT.getY());
-    
+
     // START BEAN PROPERTIES
     /** An RGB stack to look for text in */
     @BeanField @Getter @Setter private StackProvider stackProvider;

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.range;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Calculates a value if a condition lies within a certain range, otherwise returns constants

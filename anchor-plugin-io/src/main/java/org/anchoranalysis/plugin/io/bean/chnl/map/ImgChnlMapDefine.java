@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ImgChnlMapDefine extends ImgChnlMapCreator {
 

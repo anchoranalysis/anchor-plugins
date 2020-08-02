@@ -61,7 +61,8 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalculationException {
+    protected double calcWithChannel(ObjectMask object, Channel chnl)
+            throws FeatureCalculationException {
 
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
@@ -69,7 +70,8 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
         return ApplyKernel.applyForCount(kernelMatch, object.getVoxelBox());
     }
 
-    private BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Channel chnl) throws FeatureCalculationException {
+    private BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Channel chnl)
+            throws FeatureCalculationException {
         try {
             VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
             return new BinaryVoxelBoxByte(vb, BinaryValues.getDefault());

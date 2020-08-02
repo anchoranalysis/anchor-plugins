@@ -34,7 +34,8 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 public class NumMarks extends FeatureAllMemo {
 
     @Override
-    public double calc(SessionInput<FeatureInputAllMemo> params) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputAllMemo> params)
+            throws FeatureCalculationException {
         return params.get().getPxlPartMemo().size();
     }
 }

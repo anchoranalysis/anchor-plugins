@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
@@ -36,8 +38,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Check extends MarkFromCfgProposer {
 

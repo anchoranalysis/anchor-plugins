@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * An element from orientation of a principal-axis (as defined by Image Moments).

@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -35,8 +37,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitPa
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-import lombok.Getter;
-import lombok.Setter;
 
 public class MemoryUsageReporter extends ReporterAgg<CfgNRGPixelized> {
 

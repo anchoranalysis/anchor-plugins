@@ -27,12 +27,12 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
-import lombok.Getter;
-import lombok.Setter;
 
 public class PositionProposerRepeat extends PositionProposerBean {
 

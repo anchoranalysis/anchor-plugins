@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
@@ -33,8 +35,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageResolution;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RadiiRatio extends FeatureMark {
 

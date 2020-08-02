@@ -48,7 +48,8 @@ public class NumberVoxelsAtBorder extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
         return (double)
                 numBorderPixels(
                         input.get().getObject(), ignoreAtThreshold, outsideAtThreshold, do3D);

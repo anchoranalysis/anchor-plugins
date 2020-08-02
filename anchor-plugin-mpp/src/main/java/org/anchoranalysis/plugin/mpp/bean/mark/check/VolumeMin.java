@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
@@ -36,8 +38,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import lombok.Getter;
-import lombok.Setter;
 
 public class VolumeMin extends CheckMark {
 

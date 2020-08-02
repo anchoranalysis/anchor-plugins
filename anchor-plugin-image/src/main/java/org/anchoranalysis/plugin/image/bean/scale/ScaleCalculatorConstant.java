@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.image.bean.scale;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ScaleCalculatorConstant extends ScaleCalculator {
 
@@ -42,7 +42,8 @@ public class ScaleCalculatorConstant extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
+    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+            throws OperationFailedException {
         return new ScaleFactor(value);
     }
 }

@@ -52,7 +52,8 @@ class StatsHelper {
      * @throws FeatureCalculationException
      */
     public static ValueAndIndex calcMaxSliceMean(
-            Channel chnl, ObjectMask object, boolean excludeZero) throws FeatureCalculationException {
+            Channel chnl, ObjectMask object, boolean excludeZero)
+            throws FeatureCalculationException {
 
         double max = Double.NEGATIVE_INFINITY;
         int index = -1;

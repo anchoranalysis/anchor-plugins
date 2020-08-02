@@ -27,9 +27,9 @@
 package anchor.plugin.ij.task;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIJBackgroundSubtractor;
+import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -78,8 +78,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
         ProgressReporter progressReporter = ProgressReporterNull.get();
 
         try {
-            NamedChannelsForSeries ncc =
-                    inputObject.createChannelsForSeries(0, progressReporter);
+            NamedChannelsForSeries ncc = inputObject.createChannelsForSeries(0, progressReporter);
 
             Channel inputImage = ncc.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 

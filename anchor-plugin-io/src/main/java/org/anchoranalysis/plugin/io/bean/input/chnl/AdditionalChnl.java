@@ -38,7 +38,9 @@ class AdditionalChnl {
     private CallableWithException<Path, AnchorIOException> filePath;
 
     public AdditionalChnl(
-            String chnlName, int chnlIndex, CallableWithException<Path, AnchorIOException> filePath) {
+            String chnlName,
+            int chnlIndex,
+            CallableWithException<Path, AnchorIOException> filePath) {
         super();
         this.chnlName = chnlName;
         this.chnlIndex = chnlIndex;

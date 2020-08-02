@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 
 import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Set;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;

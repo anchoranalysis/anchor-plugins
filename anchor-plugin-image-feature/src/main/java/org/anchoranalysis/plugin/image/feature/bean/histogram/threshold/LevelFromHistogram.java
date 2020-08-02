@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -33,8 +35,6 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Calculates a level (a threshold-value) from a histogram.
@@ -48,7 +48,8 @@ public class LevelFromHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputHistogram> input)
+            throws FeatureCalculationException {
         try {
             return calculateLevel.calculateLevel(input.get().getHistogram());
         } catch (OperationFailedException e) {

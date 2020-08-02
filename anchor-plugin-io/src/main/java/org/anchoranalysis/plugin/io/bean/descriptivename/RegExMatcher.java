@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import java.io.File;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RegExMatcher extends DescriptiveNameFromFileIndependent {
 

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -54,8 +56,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Converts the input-image to the default output format, optionally changing the bit depth
@@ -114,10 +114,9 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChannelsForSeries createChnlCollection(
-            NamedChnlsInput inputObject, int seriesIndex) throws RasterIOException {
-        return inputObject.createChannelsForSeries(
-                seriesIndex, new ProgressReporterConsole(1));
+    public NamedChannelsForSeries createChnlCollection(NamedChnlsInput inputObject, int seriesIndex)
+            throws RasterIOException {
+        return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
 
     @Override

@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -38,8 +40,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import lombok.Getter;
-import lombok.Setter;
 
 public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
 

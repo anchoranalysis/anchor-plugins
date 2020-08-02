@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -45,8 +47,6 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
-import lombok.Getter;
-import lombok.Setter;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 
@@ -54,7 +54,8 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
     // Allows feature tables to be also outputted
-    @BeanField @Getter @Setter private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
 
     /** If non-empty, A keyValueParams is treated as part of the nrgStack */
     @BeanField @AllowEmpty @Getter @Setter private String nrgParamsName = "";

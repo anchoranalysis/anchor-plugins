@@ -30,6 +30,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -41,13 +43,12 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import lombok.Getter;
-import lombok.Setter;
 
 public class SgmnSequence extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private List<BinarySegmentation> listSgmn = new ArrayList<>();
+    @BeanField @OptionalBean @Getter @Setter
+    private List<BinarySegmentation> listSgmn = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override

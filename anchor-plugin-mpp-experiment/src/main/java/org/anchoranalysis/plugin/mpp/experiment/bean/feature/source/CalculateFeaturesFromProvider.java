@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -49,7 +50,6 @@ import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObject
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
@@ -57,13 +57,17 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
     private final InitParamsWithNrgStack initParams;
-    
-    /** iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to the log */
+
+    /**
+     * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
+     * the log
+     */
     private final boolean suppressErrors;
-    
+
     /** Generates thumbnails (if enabled) */
-    private final Optional<FunctionWithException<T,Optional<DisplayStack>,CreateException>> thumbnailForInput;
-    
+    private final Optional<FunctionWithException<T, Optional<DisplayStack>, CreateException>>
+            thumbnailForInput;
+
     private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public void processProvider(
@@ -82,12 +86,14 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         try {
-            List<T> inputs = table.deriveInputs(objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
+            List<T> inputs =
+                    table.deriveInputs(
+                            objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
 
             calculateManyFeaturesInto(inputs, identifierFromInput);
-            
+
             table.endBatchAndCleanup();
-            
+
         } catch (CreateException | OperationFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -105,8 +111,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            List<T> listInputs,
-            Function<T, StringLabelsForCsvRow> labelsForInput)
+            List<T> listInputs, Function<T, StringLabelsForCsvRow> labelsForInput)
             throws OperationFailedException {
 
         try {
@@ -114,7 +119,8 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
                 T input = listInputs.get(i);
 
-                context.getLogger().messageLogger()
+                context.getLogger()
+                        .messageLogger()
                         .logFormatted(
                                 "Calculating input %d of %d: %s",
                                 i + 1, listInputs.size(), input.toString());
@@ -122,10 +128,10 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
                 context.addResultsFor(
                         labelsForInput.apply(input),
                         new ResultsVectorWithThumbnail(
-                           calculator.calc(input, context.getLogger().errorReporter(), suppressErrors),
-                           OptionalUtilities.flatMap( thumbnailForInput, func->func.apply(input) )
-                        )
-                );
+                                calculator.calc(
+                                        input, context.getLogger().errorReporter(), suppressErrors),
+                                OptionalUtilities.flatMap(
+                                        thumbnailForInput, func -> func.apply(input))));
             }
 
         } catch (NamedFeatureCalculationException | CreateException e) {

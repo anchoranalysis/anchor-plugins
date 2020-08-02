@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
@@ -71,14 +71,15 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
 
     /**
      * Processes one input to generate features
-     * 
+     *
      * @param input one particular input that will creates one or more "rows" in a feature-table
      * @param adder
      * @param rowSource source of rows in the feature-table
      * @param context io-context
      * @throws OperationFailedException
      */
-    public abstract void processInput(T input, InputProcessContext<S> context) throws OperationFailedException;
+    public abstract void processInput(T input, InputProcessContext<S> context)
+            throws OperationFailedException;
 
     /**
      * Highest class(es) that will function as a valid input.

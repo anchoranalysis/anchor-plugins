@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.input.filter;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -34,8 +36,6 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Filters all the input objects for only those with certain types of descriptive-names.

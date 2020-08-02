@@ -27,6 +27,9 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
@@ -44,9 +47,6 @@ import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
@@ -60,7 +60,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
     public KernelInitialCfgNRG(CfgProposer cfgProposer) {
         this.cfgProposer = cfgProposer;
     }
-    
+
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return cfgProposer.isCompatibleWith(testMark);

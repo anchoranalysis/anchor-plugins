@@ -64,8 +64,7 @@ public class PairedWithMask extends FeatureSingleObject {
     protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
 
-        mask.initRecursive(
-                new ImageInitParams(paramsInit.sharedObjectsRequired()), getLogger());
+        mask.initRecursive(new ImageInitParams(paramsInit.sharedObjectsRequired()), getLogger());
 
         try {
             createdMask = mask.create();
@@ -75,7 +74,8 @@ public class PairedWithMask extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
         return input.forChild()
                 .calc(
                         item,

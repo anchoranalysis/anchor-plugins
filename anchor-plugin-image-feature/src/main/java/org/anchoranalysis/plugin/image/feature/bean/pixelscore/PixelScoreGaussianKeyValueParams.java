@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
-import lombok.Getter;
-import lombok.Setter;
 
 public class PixelScoreGaussianKeyValueParams extends PixelScoreParamsBase {
 

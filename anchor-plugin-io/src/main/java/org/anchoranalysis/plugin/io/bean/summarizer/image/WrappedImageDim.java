@@ -31,7 +31,8 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 // Wrap with a nicer toString() representation
-@AllArgsConstructor @EqualsAndHashCode
+@AllArgsConstructor
+@EqualsAndHashCode
 class WrappedImageDim implements Comparable<WrappedImageDim> {
 
     private final ImageDimensions dimensions;

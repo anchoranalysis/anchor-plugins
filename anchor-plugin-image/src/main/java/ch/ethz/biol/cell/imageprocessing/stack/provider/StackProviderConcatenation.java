@@ -50,7 +50,7 @@ public class StackProviderConcatenation extends StackProvider {
             Stack out = new Stack();
 
             for (BeanProviderAsStackBase<?, ?> provider : list) {
-                out.addChannelsFrom( provider.createAsStack() );
+                out.addChannelsFrom(provider.createAsStack());
             }
 
             return out;

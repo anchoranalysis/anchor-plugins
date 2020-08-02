@@ -26,12 +26,12 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
-import lombok.Getter;
-import lombok.Setter;
 
 public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderOne {
 
@@ -39,7 +39,7 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
     @BeanField @Getter @Setter private double maxRatioOn;
 
     /** Rejects if any slice has a greater ratio of ON-voxels than the maxRatio allows */
-    @BeanField @Getter @Setter private boolean bySlice = false; 
+    @BeanField @Getter @Setter private boolean bySlice = false;
     // END BEAN PROPERTIES
 
     @Override

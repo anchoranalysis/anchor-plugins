@@ -26,16 +26,17 @@
 
 package org.anchoranalysis.plugin.mpp.bean.mark.bound;
 
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class MarkBoundsDefine extends MarkBoundsProvider {
 
     // START BEAN FIELDS

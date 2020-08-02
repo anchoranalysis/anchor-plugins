@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -46,8 +48,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Assigns a label to each image and optionally 1. copies each image into directory corresponding to
@@ -102,19 +102,23 @@ public class ImageAssignLabelTask<T>
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
-                        createFromProviderWith(outputStackProvider, params.getInputObject(), params.context()),
+                        createFromProviderWith(
+                                outputStackProvider, params.getInputObject(), params.context()),
                         params.getInputObject().descriptiveName(),
-                        params.getSharedState()
-                        );
+                        params.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {
             throw new JobExecutionException(e);
         }
     }
-    
-    private static Stack createFromProviderWith(StackProvider provider, ProvidesStackInput stack, BoundIOContext context) throws CreateException {
+
+    private static Stack createFromProviderWith(
+            StackProvider provider, ProvidesStackInput stack, BoundIOContext context)
+            throws CreateException {
         try {
-            provider.initRecursive(StackInputInitParamsCreator.createInitParams(stack, context), context.getLogger());
+            provider.initRecursive(
+                    StackInputInitParamsCreator.createInitParams(stack, context),
+                    context.getLogger());
             return provider.create();
         } catch (InitException | OperationFailedException e) {
             throw new CreateException(e);
@@ -137,16 +141,13 @@ public class ImageAssignLabelTask<T>
             String groupIdentifier,
             Stack stack,
             String outputName,
-            SharedStateFilteredImageOutput<T> sharedState
-    )
-    {
+            SharedStateFilteredImageOutput<T> sharedState) {
 
-            BoundOutputManagerRouteErrors outputSub =
-                    sharedState.getOutputManagerFor(groupIdentifier);
+        BoundOutputManagerRouteErrors outputSub = sharedState.getOutputManagerFor(groupIdentifier);
 
-            // Copies the file into the output
-            outputSub
-                    .getWriterAlwaysAllowed()
-                    .write(outputName, () -> new StackGenerator(stack, true, "raster"));
+        // Copies the file into the output
+        outputSub
+                .getWriterAlwaysAllowed()
+                .write(outputName, () -> new StackGenerator(stack, true, "raster"));
     }
 }

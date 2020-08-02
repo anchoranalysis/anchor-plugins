@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import lombok.Getter;
-import lombok.Setter;
 
 // Removes one or more files if they match a regex
 public class FileProviderRemove extends FileProvider {

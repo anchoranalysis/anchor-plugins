@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.mark.MarkRegion;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -36,8 +38,6 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Intensity extends FeatureSingleMemo {
 
@@ -52,7 +52,8 @@ public class Intensity extends FeatureSingleMemo {
     // END BEAN
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         return input.forChild()
                 .calc(item, new CalculateHistogramInputFromMemo(region, excludeZero), cacheName());
@@ -62,7 +63,7 @@ public class Intensity extends FeatureSingleMemo {
     public String getParamDscr() {
         return region.getBeanDscr();
     }
-    
+
     private ChildCacheName cacheName() {
         return new ChildCacheName(Intensity.class, region.uniqueName());
     }

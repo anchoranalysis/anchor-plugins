@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Finds the repciprocal (multiplicate inverse), but imposes a maximum ceiling via a constant.

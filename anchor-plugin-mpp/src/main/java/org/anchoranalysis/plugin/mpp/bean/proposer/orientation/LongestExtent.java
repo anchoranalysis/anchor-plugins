@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
@@ -39,8 +41,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
-import lombok.Getter;
-import lombok.Setter;
 
 public class LongestExtent extends OrientationProposer {
 
@@ -68,7 +68,9 @@ public class LongestExtent extends OrientationProposer {
             BidirectionalBound bib;
 
             try {
-                bib = boundCalculator.calcBound(markC.getPos(), new Orientation2D(angle).createRotationMatrix());
+                bib =
+                        boundCalculator.calcBound(
+                                markC.getPos(), new Orientation2D(angle).createRotationMatrix());
             } catch (OperationFailedException e) {
                 throw new ProposalAbnormalFailureException(e);
             }

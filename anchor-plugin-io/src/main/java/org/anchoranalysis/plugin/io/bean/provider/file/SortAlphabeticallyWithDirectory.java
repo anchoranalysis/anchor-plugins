@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.params.InputContextParams;
-import lombok.Getter;
-import lombok.Setter;
 
 public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
 

@@ -56,7 +56,8 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairObjects> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 
@@ -77,7 +78,8 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
             throws FeatureCalculationException {
 
         if (!params.getResOptional().isPresent()) {
-            throw new FeatureCalculationException("This feature requires an Image-Res in the input");
+            throw new FeatureCalculationException(
+                    "This feature requires an Image-Res in the input");
         }
 
         Point3d cog1 = params.getFirst().centerOfGravity();

@@ -59,7 +59,8 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalculationException {
+    protected ObjectMask execute(FeatureInputSingleObject params)
+            throws FeatureCalculationException {
 
         try {
             ObjectMask dilated = mapDilation.getOrCalculate(params, iterations);

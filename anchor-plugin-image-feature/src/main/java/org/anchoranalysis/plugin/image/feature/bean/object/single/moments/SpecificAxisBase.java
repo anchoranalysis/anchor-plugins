@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.ImageMoments;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A feature based one one-specific principal-axis as identified by Image Moments.

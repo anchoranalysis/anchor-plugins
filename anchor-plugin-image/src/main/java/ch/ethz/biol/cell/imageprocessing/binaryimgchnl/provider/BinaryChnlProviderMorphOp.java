@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import lombok.Getter;
-import lombok.Setter;
 
 /** Base class for performing morphological operations */
 public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {

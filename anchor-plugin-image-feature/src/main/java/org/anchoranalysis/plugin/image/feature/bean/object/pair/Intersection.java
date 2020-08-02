@@ -58,7 +58,8 @@ public class Intersection extends FeatureDeriveFromPair {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairObjects> input)
+            throws FeatureCalculationException {
 
         return CalculateInputFromDelegateOption.calc(
                 input,

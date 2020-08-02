@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.List;
 import java.util.ListIterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Limits the number of input-objects to a certain hard-maximum

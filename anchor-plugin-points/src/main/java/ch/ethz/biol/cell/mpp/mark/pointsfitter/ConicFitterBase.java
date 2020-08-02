@@ -26,11 +26,11 @@
 
 package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class ConicFitterBase extends PointsFitter {
 

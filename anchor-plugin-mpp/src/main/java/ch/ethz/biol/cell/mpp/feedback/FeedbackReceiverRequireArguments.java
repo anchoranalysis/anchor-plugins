@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.mpp.feedback;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.experiment.bean.require.RequireArguments;
@@ -34,8 +36,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndPar
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FeedbackReceiverRequireArguments<T> extends FeedbackReceiverBean<T> {
 

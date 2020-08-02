@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.feedback.reporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRG;
@@ -52,8 +54,6 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderRepo
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
-import lombok.Getter;
-import lombok.Setter;
 
 public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
@@ -94,7 +94,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
 
         super.reportBegin(initParams);
     }
-    
+
     @Override
     public void reportNewBest(Reporting<CfgNRGPixelized> reporting) {
         // NOTHING TO DO

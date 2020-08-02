@@ -38,7 +38,8 @@ public class MaxRatioRadii extends FeatureMark {
     public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof MarkEllipse)) {
-            throw new FeatureCalculationException("Mark must be of type " + MarkEllipse.class.getName());
+            throw new FeatureCalculationException(
+                    "Mark must be of type " + MarkEllipse.class.getName());
         }
 
         MarkEllipse mark = (MarkEllipse) input.get().getMark();

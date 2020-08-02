@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
@@ -39,8 +41,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
-import lombok.Getter;
-import lombok.Setter;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
 
@@ -59,7 +59,9 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 
         try {
             return resolveDistance(
-                    bbox, Optional.of(dimensions.getRes()), AxisTypeConverter.createFromString(axis));
+                    bbox,
+                    Optional.of(dimensions.getRes()),
+                    AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e);
         }
@@ -69,7 +71,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     public String getParamDscr() {
         return String.format("%s", axis);
     }
-    
+
     private double resolveDistance(
             BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType)
             throws FeatureCalculationException {
@@ -88,5 +90,4 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         dirVector.setIndex(dimIndex, 1);
         return dirVector;
     }
-
 }

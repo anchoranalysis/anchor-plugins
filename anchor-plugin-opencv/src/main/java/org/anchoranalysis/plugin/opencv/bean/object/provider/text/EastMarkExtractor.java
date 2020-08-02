@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +41,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastMarkExtractor {
@@ -85,11 +85,7 @@ class EastMarkExtractor {
         Tuple2<Mat, Extent> pair = reshapeScores(scores);
 
         return extractFromMatricesReshaped(
-                pair._1(),
-                reshapeGeometry(geometry),
-                pair._2(),
-                offsetScale,
-                minConfidence);
+                pair._1(), reshapeGeometry(geometry), pair._2(), offsetScale, minConfidence);
     }
 
     private static List<WithConfidence<Mark>> extractFromMatricesReshaped(

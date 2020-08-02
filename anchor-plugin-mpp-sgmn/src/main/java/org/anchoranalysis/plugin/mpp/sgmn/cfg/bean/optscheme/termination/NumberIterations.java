@@ -26,21 +26,22 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class NumberIterations extends TerminationCondition {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int maxNumber = -1;
     // END BEAN PROPERTIES
-    
+
     @Override
     public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
         if (crntIter < maxNumber) {

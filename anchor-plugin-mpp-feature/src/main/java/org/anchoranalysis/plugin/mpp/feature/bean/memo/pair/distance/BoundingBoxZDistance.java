@@ -44,7 +44,8 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
 public class BoundingBoxZDistance extends FeaturePairMemoSingleRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
 

@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Takes the XY-resolution determined by rasterReaderInput. Partitions this into three ranges, based

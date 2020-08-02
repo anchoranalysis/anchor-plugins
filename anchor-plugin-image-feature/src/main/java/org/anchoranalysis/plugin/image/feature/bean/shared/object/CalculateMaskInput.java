@@ -55,7 +55,8 @@ class CalculateMaskInput<T extends FeatureInputNRG>
         return new FeatureInputSingleObject(new ObjectMask(bvb), input.getNrgStackOptional());
     }
 
-    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask mask) throws FeatureCalculationException {
+    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask mask)
+            throws FeatureCalculationException {
         VoxelBox<ByteBuffer> voxelBox;
         try {
             voxelBox = mask.getChannel().getVoxelBox().asByte();

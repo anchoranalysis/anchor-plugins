@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,8 +39,6 @@ import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 
 /**
  * Creates a scaled-version of a stack to use as input
@@ -61,7 +61,7 @@ class CreateScaledInput {
 
         Mat input = resizeMatToTarget(original, targetExtent);
 
-        return Tuple.of(input, calcRelativeScale(original, input) );
+        return Tuple.of(input, calcRelativeScale(original, input));
     }
 
     private static ScaleFactor calcRelativeScale(Mat original, Mat resized) {

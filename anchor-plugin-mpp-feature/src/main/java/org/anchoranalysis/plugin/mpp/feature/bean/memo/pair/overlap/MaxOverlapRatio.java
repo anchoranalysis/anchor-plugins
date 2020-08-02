@@ -58,7 +58,8 @@ public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairMemo params = input.get();
 

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
@@ -55,8 +57,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice
@@ -70,7 +70,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     private static final String OUTPUT_STACK_KEY = "stack";
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit @Getter @Setter private FeatureListProvider<FeatureInputStack> scoreProvider;
+    @BeanField @SkipInit @Getter @Setter
+    private FeatureListProvider<FeatureInputStack> scoreProvider;
 
     @BeanField @Getter @Setter private StackProvider nrgStackProvider;
 
@@ -141,13 +142,13 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
         try {
             double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
-    
+
             int optimaSliceIndex = findOptimaSlice(scores);
-    
+
             logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
-    
+
             params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
-    
+
             return optimaSliceIndex;
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
@@ -198,8 +199,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     }
 
     private double[] calcScoreForEachSlice(
-            Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger) throws FeatureCalculationException
-    {
+            Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger)
+            throws FeatureCalculationException {
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(scoreFeature, logger);

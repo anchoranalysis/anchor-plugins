@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -37,8 +39,6 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class FeatureIntersectingObjectsSingleElement extends FeatureIntersectingObjects {
 

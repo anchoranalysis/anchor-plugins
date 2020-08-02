@@ -53,7 +53,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination.NumberI
 import org.anchoranalysis.test.bean.BeanTestChecker;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptSchemeFixture {
 
     /** A simulated annealing scheme using direct-assign mode */

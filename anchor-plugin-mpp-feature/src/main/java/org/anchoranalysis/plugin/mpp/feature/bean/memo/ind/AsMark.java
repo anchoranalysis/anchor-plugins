@@ -39,7 +39,8 @@ public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo, FeatureInp
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsMark.class);
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
         return input.forChild().calc(getItem(), new CalculateDeriveMarkFromMemo(), CACHE_NAME);
     }
 

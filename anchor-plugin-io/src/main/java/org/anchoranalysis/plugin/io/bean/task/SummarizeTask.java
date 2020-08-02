@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
@@ -40,8 +42,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
 

@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.termination;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * TODO consider renaming to ConstantScore

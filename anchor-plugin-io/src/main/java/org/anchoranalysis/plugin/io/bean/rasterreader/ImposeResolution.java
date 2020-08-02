@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ImposeResolution extends RasterReader {
 
@@ -54,8 +54,7 @@ public class ImposeResolution extends RasterReader {
     @Override
     public OpenedRaster openFile(Path filepath) throws RasterIOException {
         return new OpenedRasterAlterDimensions(
-            rasterReader.openFile(filepath),
-            res -> Optional.of(new ImageResolution(resX, resY, keepZ ? res.getZ() : resZ))
-        );
+                rasterReader.openFile(filepath),
+                res -> Optional.of(new ImageResolution(resX, resY, keepZ ? res.getZ() : resZ)));
     }
 }

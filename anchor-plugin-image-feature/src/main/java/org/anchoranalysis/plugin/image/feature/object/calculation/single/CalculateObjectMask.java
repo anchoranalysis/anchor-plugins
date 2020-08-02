@@ -54,7 +54,8 @@ public abstract class CalculateObjectMask
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalculationException {
+    protected ObjectMask execute(FeatureInputSingleObject params)
+            throws FeatureCalculationException {
 
         if (iterations == 0) {
             return params.getObject();

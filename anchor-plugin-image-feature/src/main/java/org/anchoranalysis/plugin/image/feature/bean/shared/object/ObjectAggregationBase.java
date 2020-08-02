@@ -99,9 +99,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
 
             double val =
                     calcForChild.calc(
-                            feature,
-                            new CalculateInputFromStack<>(objects, i),
-                            cacheName(i));
+                            feature, new CalculateInputFromStack<>(objects, i), cacheName(i));
             featureVals.add(val);
         }
         return featureVals;

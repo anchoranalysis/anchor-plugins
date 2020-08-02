@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -35,8 +37,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
-import lombok.Getter;
-import lombok.Setter;
 
 public class IndependentChnls extends ChnlConversionStyle {
 

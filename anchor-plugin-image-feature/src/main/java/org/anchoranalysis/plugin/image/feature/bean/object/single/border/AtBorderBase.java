@@ -36,7 +36,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public abstract class AtBorderBase extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         if (isInputAtBorder(input.get())) {
             return 1.0;
@@ -45,7 +46,8 @@ public abstract class AtBorderBase extends FeatureSingleObject {
         }
     }
 
-    private boolean isInputAtBorder(FeatureInputSingleObject input) throws FeatureCalculationException {
+    private boolean isInputAtBorder(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
         return isBoundingBoxAtBorder(
                 input.getObject().getBoundingBox(), input.getDimensionsRequired());
     }

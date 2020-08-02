@@ -34,7 +34,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class ShapeRegularityMIP extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
         // Maximum-intensity projection of the mask
         return ShapeRegularityCalculator.calcShapeRegularity(
                 input.get().getObject().duplicate().flattenZ());

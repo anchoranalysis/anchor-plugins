@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import io.vavr.Tuple;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +46,6 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
-import io.vavr.Tuple;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>
         extends InputManager<AnnotationComparisonInput<T>> {

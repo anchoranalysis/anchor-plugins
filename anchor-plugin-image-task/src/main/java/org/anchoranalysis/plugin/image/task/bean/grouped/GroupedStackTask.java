@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -51,8 +53,6 @@ import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStac
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Base class for stacks that somehow are grouped-together

@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.io.bean.filepath;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.error.AnchorIOException;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 public class StaticFilePath extends FilePath {
 

@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.range;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
@@ -74,7 +74,8 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
      *     withinRangeValue function
      * @throws FeatureCalculationException
      */
-    private double calcForVal(double val, SessionInput<T> input) throws FeatureCalculationException {
+    private double calcForVal(double val, SessionInput<T> input)
+            throws FeatureCalculationException {
 
         if (val < boundaryMin(input)) {
             return belowMinValue;

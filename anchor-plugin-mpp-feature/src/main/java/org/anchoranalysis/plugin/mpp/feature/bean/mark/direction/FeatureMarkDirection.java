@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
@@ -39,8 +41,6 @@ import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
 

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -41,8 +43,6 @@ import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Creates a an aggregated-image for each group, where each voxel-value is the mean voxel-value

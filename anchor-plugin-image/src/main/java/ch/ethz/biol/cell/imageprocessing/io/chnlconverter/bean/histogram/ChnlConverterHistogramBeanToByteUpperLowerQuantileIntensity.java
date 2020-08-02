@@ -26,13 +26,13 @@
 
 package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean.histogram;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverterAttached;
 import org.anchoranalysis.image.stack.region.chnlconverter.attached.histogram.ChnlConverterHistogramUpperLowerQuantileIntensity;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ChnlConverterHistogramBeanToByteUpperLowerQuantileIntensity
         extends ConvertChannelToWithHistogram {

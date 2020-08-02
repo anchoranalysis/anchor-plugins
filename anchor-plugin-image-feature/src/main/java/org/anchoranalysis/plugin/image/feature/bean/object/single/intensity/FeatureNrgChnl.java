@@ -48,12 +48,14 @@ public abstract class FeatureNrgChnl extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         Channel chnl = input.get().getNrgStackRequired().getChannel(nrgIndex);
         return calcForChnl(input, chnl);
     }
 
     protected abstract double calcForChnl(
-            SessionInput<FeatureInputSingleObject> input, Channel chnl) throws FeatureCalculationException;
+            SessionInput<FeatureInputSingleObject> input, Channel chnl)
+            throws FeatureCalculationException;
 }

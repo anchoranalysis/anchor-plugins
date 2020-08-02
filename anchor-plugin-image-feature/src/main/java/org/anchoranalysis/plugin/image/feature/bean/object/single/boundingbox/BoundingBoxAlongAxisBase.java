@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
@@ -35,8 +37,6 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
@@ -45,7 +45,8 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();
 

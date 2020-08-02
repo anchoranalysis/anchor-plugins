@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -33,8 +35,6 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Creates the entire HOG descriptor for an image.

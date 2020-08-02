@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
@@ -47,8 +49,6 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
-import lombok.Getter;
-import lombok.Setter;
 
 public class NamedChnlsAppend extends NamedChnlsBase {
 
@@ -132,9 +132,8 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
-            CacheCall<Path, AnchorIOException> outPath = CacheCall.of(
-                    new OperationOutFilePath(ni, ncc::pathForBinding, debugMode)
-            );
+            CacheCall<Path, AnchorIOException> outPath =
+                    CacheCall.of(new OperationOutFilePath(ni, ncc::pathForBinding, debugMode));
 
             if (forceEagerEvaluation) {
                 Path path = outPath.call();

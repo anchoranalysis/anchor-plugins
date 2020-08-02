@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -56,8 +58,6 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Each input-file describes a histogram that produces one row of features.
@@ -97,11 +97,10 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     public boolean includeGroupInExperiment(boolean groupGeneratorDefined) {
         return groupGeneratorDefined;
     }
-    
+
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            FileInput inputObject,
-            InputProcessContext<FeatureList<FeatureInputHistogram>> context)
+            FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculationException {
 
         // Reads histogram from file-system
@@ -113,7 +112,10 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             }
 
             ResultsVector results =
-                    createCalculator(context.getRowSource(), context.getModelDirectory(), context.getLogger())
+                    createCalculator(
+                                    context.getRowSource(),
+                                    context.getModelDirectory(),
+                                    context.getLogger())
                             .calc(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
@@ -121,13 +123,16 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
             return new ResultsVectorWithThumbnail(results);
 
-        } catch (CSVReaderException | BeanDuplicateException | OperationFailedException | InitException e) {
+        } catch (CSVReaderException
+                | BeanDuplicateException
+                | OperationFailedException
+                | InitException e) {
             throw new NamedFeatureCalculationException(e);
         }
     }
-    
-    private Histogram filterHistogramFromProvider(Histogram inputtedHistogram, BoundIOContext context)
-            throws OperationFailedException {
+
+    private Histogram filterHistogramFromProvider(
+            Histogram inputtedHistogram, BoundIOContext context) throws OperationFailedException {
 
         HistogramProvider histogramProviderDuplicated = histogramProvider.duplicateBean();
 

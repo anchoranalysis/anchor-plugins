@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
@@ -39,8 +41,6 @@ import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisual
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Proposes both an orientation and radii for a {@link MarkConic}

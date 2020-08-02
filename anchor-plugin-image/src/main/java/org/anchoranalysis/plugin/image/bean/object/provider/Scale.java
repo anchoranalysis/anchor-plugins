@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -54,9 +54,7 @@ public class Scale extends ObjectCollectionProviderWithDimensions {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(
-                Optional.of(createDimensions())
-            );
+            scaleFactor = scaleCalculator.calc(Optional.of(createDimensions()));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

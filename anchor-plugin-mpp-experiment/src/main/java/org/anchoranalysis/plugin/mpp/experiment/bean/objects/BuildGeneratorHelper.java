@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.bbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
@@ -41,32 +41,35 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 
 /**
  * Builds a generator for all relevant stacks that combines several generators
- * <ul>
- * <li>An object-mask and bounding box generator
- * <li>A generator that extracts the bounding-box portion from a stack
- * <li>A generator that draws an object on an extracted bounding-box portion from a stack
- * </ul>
- * 
- * @author Owen Feehan
  *
+ * <ul>
+ *   <li>An object-mask and bounding box generator
+ *   <li>A generator that extracts the bounding-box portion from a stack
+ *   <li>A generator that draws an object on an extracted bounding-box portion from a stack
+ * </ul>
+ *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class BuildGeneratorHelper {
 
-    /** Added to the name of the stack to give an outline in an extracted portion of the stack (not flattened in z dimension) */
+    /**
+     * Added to the name of the stack to give an outline in an extracted portion of the stack (not
+     * flattened in z dimension)
+     */
     private static final String OUTPUT_OUTLINE_SUFFIX_NOT_FLATTENED = "_outline";
-    
-    /** Added to the name of the stack to give an outline in an extracted portion of the stack (flattened in z dimension) */
+
+    /**
+     * Added to the name of the stack to give an outline in an extracted portion of the stack
+     * (flattened in z dimension)
+     */
     private static final String OUTPUT_OUTLINE_SUFFIX_FLATTENED = "_outline_flattened";
-        
+
     /** The width of the outline of the object (e.g. 1 pixel) */
     private final int outlineWidth;
 
     public IterableGenerator<ObjectMask> forStacks(
-            ImageDimensions dimensions,
-            NamedStacks stacks,
-            NamedStacks stacksFlattened
-            )
+            ImageDimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
         IterableCombinedListGenerator<ObjectMask> out =
                 new IterableCombinedListGenerator<>(
@@ -83,27 +86,29 @@ class BuildGeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStacks stacks,
-            IterableCombinedListGenerator<ObjectMask> out,
-            boolean flatten)
+            NamedStacks stacks, IterableCombinedListGenerator<ObjectMask> out, boolean flatten)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {
 
-            // TODO does the first generator get added twice for both flattened and non-flattened stacks?
-            
+            // TODO does the first generator get added twice for both flattened and non-flattened
+            // stacks?
+
             // Bounding box-generator
-            ExtractBoundingBoxAreaFromStackGenerator generator = new ExtractBoundingBoxAreaFromStackGenerator(
-                    stacks.getException(key));
+            ExtractBoundingBoxAreaFromStackGenerator generator =
+                    new ExtractBoundingBoxAreaFromStackGenerator(stacks.getException(key));
             out.add(key, WrapBoundingBoxGeneratorAsObject.wrap(generator, flatten));
-            
+
             // Outline on raster generator, reusing the previous generator for the background
-            out.add( outlineOutputName(key,flatten), DrawObjectOnStackGenerator.createFromGenerator(generator, outlineWidth) );
+            out.add(
+                    outlineOutputName(key, flatten),
+                    DrawObjectOnStackGenerator.createFromGenerator(generator, outlineWidth));
         }
     }
-    
+
     private static String outlineOutputName(String key, boolean flatten) {
-        String suffix = flatten ? OUTPUT_OUTLINE_SUFFIX_FLATTENED : OUTPUT_OUTLINE_SUFFIX_NOT_FLATTENED;
+        String suffix =
+                flatten ? OUTPUT_OUTLINE_SUFFIX_FLATTENED : OUTPUT_OUTLINE_SUFFIX_NOT_FLATTENED;
         return key + suffix;
     }
 }

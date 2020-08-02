@@ -47,7 +47,8 @@ public class IntensityMeanCalculator {
     }
 
     public static double calcMeanIntensityObject(
-            Channel chnl, ObjectMask object, boolean excludeZero) throws FeatureCalculationException {
+            Channel chnl, ObjectMask object, boolean excludeZero)
+            throws FeatureCalculationException {
         checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
 
         VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();

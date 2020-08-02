@@ -63,7 +63,8 @@ public class Intensity extends FeatureStack {
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    protected double calc(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
         return input.forChild()
                 .calc(
                         item,
