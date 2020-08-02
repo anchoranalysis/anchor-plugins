@@ -62,7 +62,7 @@ public class FeatureListMPPTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = FeatureCalculationException.class)
+    @Test(expected = NamedFeatureCalculationException.class)
     public void testNoParams() throws InitException, NamedFeatureCalculationException, CreateException {
 
         testConstantsInList((FeatureInput) null, (FeatureInput) null);

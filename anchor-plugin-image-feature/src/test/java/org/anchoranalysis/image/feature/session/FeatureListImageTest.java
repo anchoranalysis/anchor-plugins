@@ -71,7 +71,7 @@ public class FeatureListImageTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = FeatureCalculationException.class)
+    @Test(expected = NamedFeatureCalculationException.class)
     public void testNoParams() throws InitException, FeatureCalculationException, CreateException, NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInput> session =
