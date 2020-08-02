@@ -132,11 +132,12 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
-            CachedOperation<Path, AnchorIOException> outPath =
-                    new OperationOutFilePath(ni, ncc::pathForBinding, debugMode);
+            CachedOperation<Path, AnchorIOException> outPath = CachedOperation.of(
+                    new OperationOutFilePath(ni, ncc::pathForBinding, debugMode)
+            );
 
             if (forceEagerEvaluation) {
-                Path path = outPath.doOperation();
+                Path path = outPath.call();
                 if (!path.toFile().exists()) {
 
                     if (skipMissingChannels) {

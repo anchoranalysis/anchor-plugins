@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
 import org.anchoranalysis.core.cache.CachedOperation;
-import org.anchoranalysis.core.cache.CachedOperationWrap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -82,7 +81,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         this.nrgStack =
                 nrgStackFromProviderOrElse(
                         nrgStackProvider,
-                        new CachedOperationWrap<>( () ->
+                        CachedOperation.of( () ->
                            allStacksAsOne(initParams.getStackCollection())
                         ), 
                         context.getLogger());
@@ -124,7 +123,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         if (nrgStackProvider.isPresent()) {
             return ExtractFromProvider.extractStack(nrgStackProvider.get(), initParams, logger);
         } else {
-            return new NRGStackWithParams( fallback.doOperation() );
+            return new NRGStackWithParams( fallback.call() );
         }
     }
      

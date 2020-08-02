@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
@@ -54,7 +54,7 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     @Override
     protected double deriveScore(
-            double featureValue, double mean, Operation<Double, FeatureCalculationException> stdDev)
+            double featureValue, double mean, CallableWithException<Double, FeatureCalculationException> stdDev)
             throws FeatureCalculationException {
 
         if (ignoreHigherSide && featureValue > mean) {
@@ -66,6 +66,6 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
         }
 
         return GaussianScoreCalculator.calc(
-                mean, stdDev.doOperation(), featureValue, rewardHigherSide, rewardLowerSide);
+                mean, stdDev.call(), featureValue, rewardHigherSide, rewardLowerSide);
     }
 }

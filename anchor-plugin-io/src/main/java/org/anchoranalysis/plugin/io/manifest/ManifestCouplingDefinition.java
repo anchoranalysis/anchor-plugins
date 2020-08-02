@@ -97,8 +97,9 @@ public class ManifestCouplingDefinition implements InputFromManager {
             // For each experiment folder, we look for a manifest
             for (FolderWrite folderWrite : finderExperimentFileFolders.getList()) {
 
+                File file = fileForFolder(folderWrite);
                 ManifestRecorderFile manifestRecorderFile =
-                        new ManifestRecorderFile(fileForFolder(folderWrite), manifestDeserializer);
+                        new ManifestRecorderFile(file, manifestDeserializer);
                 CoupledManifests cm;
                 try {
                     cm =
