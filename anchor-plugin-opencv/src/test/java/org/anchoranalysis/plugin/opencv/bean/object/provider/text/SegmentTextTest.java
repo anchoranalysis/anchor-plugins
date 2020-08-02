@@ -68,9 +68,9 @@ public class SegmentTextTest {
 
         assertTrue(objects.size() == 3);
 
-        assertBoxAtIndex(objects, 0, boxAt(439, 311, 75, 37));
-        assertBoxAtIndex(objects, 1, boxAt(310, 318, 108, 36));
-        assertBoxAtIndex(objects, 2, boxAt(392, 199, 29, 26));
+        assertBoxAtIndex(objects, 0, boxAt(439, 311, 76, 37));
+        assertBoxAtIndex(objects, 1, boxAt(310, 318, 109, 36));
+        assertBoxAtIndex(objects, 2, boxAt(393, 199, 29, 26));
     }
 
     private void assertBoxAtIndex(ObjectCollection objects, int index, BoundingBox box) {
