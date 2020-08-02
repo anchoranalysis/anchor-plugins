@@ -41,8 +41,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
-import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
+import io.vavr.Tuple2;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -91,20 +91,20 @@ public class SegmentText extends ObjectCollectionProvider {
         Stack stack = createInput();
 
         // Scales the input to the largest acceptable-extent
-        Pair<Mat, ScaleFactor> pair =
+        Tuple2<Mat, ScaleFactor> pair =
                 CreateScaledInput.apply(
                         stack, findLargestExtent(stack.getDimensions().getExtent()));
 
         // Convert marks to object-masks
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
                 EastObjectsExtractor.apply(
-                        pair.getFirst(),
+                        pair._1(),
                         stack.getDimensions().getRes(),
                         minConfidence,
                         pathToEastModel());
 
         // Scale each object-mask and extract as an object-collection
-        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair.getSecond());
+        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair._2());
     }
 
     /**

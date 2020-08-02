@@ -34,10 +34,11 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.MatConverter;
-import org.apache.commons.math3.util.Pair;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 
 /**
  * Creates a scaled-version of a stack to use as input
@@ -51,7 +52,7 @@ class CreateScaledInput {
      * Returns a scaled-down version of the stack, and a scale-factor that would return it to
      * original size
      */
-    public static Pair<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
+    public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
             throws CreateException {
 
         // TODO Better to scale before openCV conversion, so less bytes to process for RGB
@@ -60,9 +61,7 @@ class CreateScaledInput {
 
         Mat input = resizeMatToTarget(original, targetExtent);
 
-        ScaleFactor sf = calcRelativeScale(original, input);
-
-        return new Pair<>(input, sf);
+        return Tuple.of(input, calcRelativeScale(original, input) );
     }
 
     private static ScaleFactor calcRelativeScale(Mat original, Mat resized) {

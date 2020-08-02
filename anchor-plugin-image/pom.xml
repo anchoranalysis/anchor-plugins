@@ -104,7 +104,14 @@
 		<artifactId>guava</artifactId>
 		<version>${guava.version}-jre</version>
 	</dependency>
+	
+	<dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>${vavr.version}</version>
+    </dependency>
 
+    <!-- START: Test dependencies -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
@@ -125,6 +132,7 @@
 	  <version>0.0.4-SNAPSHOT</version>
 	  <scope>test</scope>
 	 </dependency>
+	 <!-- END: Test dependencies -->
 	
   </dependencies>   
 </project>

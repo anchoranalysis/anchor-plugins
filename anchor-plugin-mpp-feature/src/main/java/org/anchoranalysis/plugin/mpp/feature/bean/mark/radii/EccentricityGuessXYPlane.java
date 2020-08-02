@@ -32,6 +32,8 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.apache.commons.math3.util.Pair;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 
 // Calculates the eccentricity of the ellipse by considering the two planes which are furtherest way
 // from the Z unit-vector
@@ -42,11 +44,11 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
     @Override
     protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
 
-        Pair<Double, Double> pair = selectTwoRadii(radii, calcAngles(orientation));
+        Tuple2<Double, Double> pair = selectTwoRadii(radii, calcAngles(orientation));
 
         return calcEccentricity(
-                pair.getFirst(), // Major
-                pair.getSecond() // Minor
+                pair._1(), // Major
+                pair._2() // Minor
                 );
     }
 
@@ -81,7 +83,7 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
         return zeroVector;
     }
 
-    private static Pair<Double, Double> selectTwoRadii(double[] radii, Double[] angles) {
+    private static Tuple2<Double, Double> selectTwoRadii(double[] radii, Double[] angles) {
 
         double xAngle = angles[0];
         double yAngle = angles[1];
@@ -114,7 +116,7 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
 
         double major = Math.max(radiiOther1, radiiOther2);
         double minor = Math.min(radiiOther1, radiiOther2);
-        return new Pair<>(major, minor);
+        return Tuple.of(major, minor);
     }
 
     //	angle between vectors (we don't bother with the arccos), as we are just finding the minimum

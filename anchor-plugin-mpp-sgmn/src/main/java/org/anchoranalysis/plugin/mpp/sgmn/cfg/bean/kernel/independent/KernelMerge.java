@@ -39,8 +39,8 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -61,10 +61,10 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
     @BeanField @Getter @Setter private String simplePairCollectionID;
     // END BEAN PROPERTIES
 
-    private Pair<Mark> pair;
+    private IdentifiablePair<Mark> pair;
     private Optional<Mark> markAdded;
 
-    @Getter @Setter private PairCollection<Pair<Mark>> pairCollection;
+    @Getter @Setter private RandomCollection<IdentifiablePair<Mark>> pairCollection;
 
     @Override
     public void onInit(MPPInitParams pso) throws InitException {

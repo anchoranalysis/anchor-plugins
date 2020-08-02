@@ -30,8 +30,8 @@ import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.pair.Pair;
-import org.anchoranalysis.anchor.mpp.pair.PairCollection;
+import org.anchoranalysis.anchor.mpp.pair.IdentifiablePair;
+import org.anchoranalysis.anchor.mpp.pair.RandomCollection;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -65,7 +65,7 @@ class UpdateMarkSet {
 
         try {
             for (String key : psoImage.getSimplePairCollection().keys()) {
-                PairCollection<Pair<Mark>> pair =
+                RandomCollection<IdentifiablePair<Mark>> pair =
                         psoImage.getSimplePairCollection().getException(key);
                 pair.initUpdatableMarkSet(
                         new MemoList(),
