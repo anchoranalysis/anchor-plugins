@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +46,13 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
+import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
@@ -94,7 +95,7 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
  *
  * @author Owen Feehan
  */
-public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
+public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObjects> {
 
     // START BEAN PROPERTIES
     /**
@@ -143,7 +144,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
                             helper.copyFeaturesCreateCustomName(list),
                             helper.copyFeaturesCreateCustomName(featuresPair));
 
-            return new FeatureCalculatorMergedPairs(
+            return new PairsTableCalculator(
                     features,
                     new MergedPairsInclude(includeFirst, includeSecond, includeMerged),
                     suppressErrors);
@@ -154,7 +155,7 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
     }
 
     @Override
-    public List<FeatureInputPairObjects> createListInputs(
+    public List<FeatureInputPairObjects> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException {
 
@@ -167,13 +168,15 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
                 graphCreator.createGraph(
                         objects.asList(),
                         Function.identity(),
-                        (v1, v2, numberVoxels) -> numberVoxels,
+                        (vector1, vector2, numberVoxels) -> numberVoxels,
                         nrgStack.getNrgStack().getDimensions().getExtent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
-        for (EdgeTypeWithVertices<ObjectMask, Integer> e : graphNeighbors.edgeSetUnique()) {
-            out.add(new FeatureInputPairObjects(e.getNode1(), e.getNode2(), Optional.of(nrgStack)));
+        for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
+            out.add(
+                    new FeatureInputPairObjects(
+                            edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
         }
 
         return out;
@@ -182,5 +185,10 @@ public class MergedPairs extends FeatureTableObjects<FeatureInputPairObjects> {
     @Override
     public String uniqueIdentifierFor(FeatureInputPairObjects input) {
         return UniqueIdentifierUtilities.forObjectPair(input.getFirst(), input.getSecond());
+    }
+
+    @Override
+    public Optional<DisplayStack> createThumbailFor(FeatureInputPairObjects input) {
+        return Optional.empty();
     }
 }

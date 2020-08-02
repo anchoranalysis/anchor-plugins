@@ -30,7 +30,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
@@ -44,7 +47,8 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class SgmnSequence extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @OptionalBean private List<BinarySegmentation> listSgmn = new ArrayList<>();
+    @BeanField @OptionalBean @Getter @Setter
+    private List<BinarySegmentation> listSgmn = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -79,17 +83,6 @@ public class SgmnSequence extends BinarySegmentation {
             out = outNew;
             evolvingMask = Optional.of(new ObjectMask(bbox, outNew));
         }
-
-        assert (out != null);
-
         return out;
-    }
-
-    public List<BinarySegmentation> getListSgmn() {
-        return listSgmn;
-    }
-
-    public void setListSgmn(List<BinarySegmentation> listSgmn) {
-        this.listSgmn = listSgmn;
     }
 }

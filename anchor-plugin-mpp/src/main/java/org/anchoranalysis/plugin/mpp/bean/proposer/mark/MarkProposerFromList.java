@@ -29,19 +29,21 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 
 public abstract class MarkProposerFromList extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @NonEmpty private List<MarkProposer> list = new ArrayList<>();
+    @BeanField @NonEmpty @Getter @Setter private List<MarkProposer> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -76,12 +78,4 @@ public abstract class MarkProposerFromList extends MarkProposer {
 
     protected abstract Optional<CreateProposalVisualization> proposalVisualization(
             boolean detailed, List<MarkProposer> markProposerList);
-
-    public List<MarkProposer> getList() {
-        return list;
-    }
-
-    public void setList(List<MarkProposer> list) {
-        this.list = list;
-    }
 }

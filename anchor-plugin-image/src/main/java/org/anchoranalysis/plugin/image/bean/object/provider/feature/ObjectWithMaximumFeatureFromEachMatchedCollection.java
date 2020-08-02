@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -72,14 +72,14 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
             return ObjectCollectionFactory.mapFromOptional(
                     listMatches, owm -> findMax(session, owm.getMatches()));
 
-        } catch (OperationFailedException | FeatureCalcException e) {
+        } catch (OperationFailedException | FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }
 
     private Optional<ObjectMask> findMax(
             FeatureCalculatorSingle<FeatureInputSingleObject> session, ObjectCollection objects)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         Optional<ObjectMask> max = Optional.empty();
         double maxVal = 0;
 

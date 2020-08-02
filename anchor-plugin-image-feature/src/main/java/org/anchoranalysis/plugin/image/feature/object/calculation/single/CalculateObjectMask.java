@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -54,7 +54,8 @@ public abstract class CalculateObjectMask
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject params) throws FeatureCalcException {
+    protected ObjectMask execute(FeatureInputSingleObject params)
+            throws FeatureCalculationException {
 
         if (iterations == 0) {
             return params.getObject();

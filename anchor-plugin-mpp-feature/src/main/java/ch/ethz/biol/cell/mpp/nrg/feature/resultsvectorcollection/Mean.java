@@ -28,13 +28,13 @@ package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 
 public class Mean extends FeatureResultsFromIndex {
 
     @Override
     protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return Descriptive.mean(featureVals);
     }
 }

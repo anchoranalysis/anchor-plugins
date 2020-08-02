@@ -31,14 +31,15 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
 

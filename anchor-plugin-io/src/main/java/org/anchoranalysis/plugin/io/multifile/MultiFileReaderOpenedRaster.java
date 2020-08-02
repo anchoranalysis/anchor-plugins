@@ -39,7 +39,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
 
 // Ignores multiple series
 @RequiredArgsConstructor
-public class MultiFileReaderOpenedRaster extends OpenedRaster {
+public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
     // START REQUIRED ARGUMENTS
     private final RasterReader rasterReader;
@@ -50,7 +50,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
     private MultiFile multiFileMemo = null;
 
     @Override
-    public int numSeries() {
+    public int numberSeries() {
         // For now we only support a single series, this could be changed
         return 1;
     }
@@ -74,7 +74,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
     }
 
     @Override
-    public int numChnl() throws RasterIOException {
+    public int numberChannels() throws RasterIOException {
         MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
 
         if (!memo.numChnlDefined()) {
@@ -96,7 +96,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
     }
 
     @Override
-    public int numFrames() throws RasterIOException {
+    public int numberFrames() throws RasterIOException {
 
         MultiFile multiFile = getOrCreateMemo(ProgressReporterNull.get());
 
@@ -113,7 +113,7 @@ public class MultiFileReaderOpenedRaster extends OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dim(int seriesIndex) throws RasterIOException {
+    public ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
         throw new RasterIOException("MultiFileReader doesn't support this operation");
     }
 

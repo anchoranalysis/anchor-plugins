@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 
 /**
@@ -38,13 +38,13 @@ public class PrincipalAxisLength extends SpecificAxisBase {
 
     @Override
     protected double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return moment.eigenvalueNormalizedAsAxisLength();
     }
 
     @Override
-    protected double resultIfTooFewPixels() throws FeatureCalcException {
-        throw new FeatureCalcException(
+    protected double resultIfTooFewPixels() throws FeatureCalculationException {
+        throw new FeatureCalculationException(
                 "Too few voxels to determine axis-orientation and therefore axis-length");
     }
 }

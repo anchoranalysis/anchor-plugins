@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plot.GraphInstance;
 import org.anchoranalysis.anchor.plot.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -45,11 +47,11 @@ import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage
 public class StackProviderHistogram extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
 
-    @BeanField @Positive private int width;
+    @BeanField @Positive @Getter @Setter private int width;
 
-    @BeanField @Positive private int height;
+    @BeanField @Positive @Getter @Setter private int height;
     // END BEAN PROPERTIES
 
     @Override
@@ -76,29 +78,5 @@ public class StackProviderHistogram extends StackProvider {
             listHI.add(hi);
         }
         return listHI;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

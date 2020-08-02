@@ -30,15 +30,15 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.Operation;
-import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -62,7 +62,7 @@ class AppendPart extends NamedChnlsInputPart {
             NamedChnlsInputPart delegate,
             String chnlName,
             int chnlIndex,
-            Operation<Path, AnchorIOException> filePath,
+            CallableWithException<Path, AnchorIOException> filePath,
             RasterReader rasterReader) {
         super();
         this.delegate = delegate;
@@ -90,11 +90,10 @@ class AppendPart extends NamedChnlsInputPart {
     }
 
     @Override
-    public NamedChnlCollectionForSeries createChnlCollectionForSeries(
+    public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
 
-        NamedChnlCollectionForSeries exst =
-                delegate.createChnlCollectionForSeries(seriesNum, progressReporter);
+        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesNum, progressReporter);
 
         openRasterIfNecessary();
 
@@ -125,14 +124,14 @@ class AppendPart extends NamedChnlsInputPart {
     }
 
     @Override
-    public List<Path> pathForBindingForAllChannels() throws GetOperationFailedException {
+    public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
         try {
             List<Path> list = delegate.pathForBindingForAllChannels();
             list.add(additionalChnl.getFilePath());
             return list;
 
         } catch (AnchorIOException e) {
-            throw new GetOperationFailedException(e);
+            throw new OperationFailedException(e);
         }
     }
 

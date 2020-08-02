@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
@@ -39,7 +41,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 public class AndList extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private List<CheckMark> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<CheckMark> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -52,14 +54,6 @@ public class AndList extends CheckMark {
             }
         }
         return true;
-    }
-
-    public List<CheckMark> getList() {
-        return list;
-    }
-
-    public void setList(List<CheckMark> list) {
-        this.list = list;
     }
 
     @Override

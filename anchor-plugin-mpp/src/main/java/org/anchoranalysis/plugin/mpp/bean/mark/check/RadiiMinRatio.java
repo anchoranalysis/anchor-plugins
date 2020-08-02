@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -36,7 +38,7 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 public class RadiiMinRatio extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField private double min = 1;
+    @BeanField @Getter @Setter private double min = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -62,13 +64,5 @@ public class RadiiMinRatio extends CheckMark {
         ratio = Math.max(ratio, 1 / ratio);
 
         return (ratio >= min);
-    }
-
-    public double getMin() {
-        return min;
-    }
-
-    public void setMin(double min) {
-        this.min = min;
     }
 }

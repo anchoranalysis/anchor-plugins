@@ -51,7 +51,7 @@ public class IsPointConvexToTest {
         String testPath = "testData/binaryImage/000_zstack_nuclei.tif";
         Stack stack = testLoader.openStackFromTestPath(testPath);
 
-        Mask bic = new Mask(stack.getChnl(0), BinaryValues.getDefault());
+        Mask bic = new Mask(stack.getChannel(0), BinaryValues.getDefault());
 
         BinaryVoxelBox<ByteBuffer> bvb = bic.binaryVoxelBox();
 

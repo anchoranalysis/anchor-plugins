@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -36,13 +37,11 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
-class OpenedRasterAlterDimensions extends OpenedRaster {
-
-    private OpenedRaster delegate;
-    private ConsiderUpdatedImageRes processor;
+@AllArgsConstructor
+class OpenedRasterAlterDimensions implements OpenedRaster {
 
     @FunctionalInterface
-    public static interface ConsiderUpdatedImageRes {
+    public static interface ConsiderUpdatedImageResolution {
 
         /**
          * A possibly-updated image resolution
@@ -55,15 +54,12 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
                 throws RasterIOException;
     }
 
-    public OpenedRasterAlterDimensions(OpenedRaster delegate, ConsiderUpdatedImageRes processor) {
-        super();
-        this.delegate = delegate;
-        this.processor = processor;
-    }
+    private OpenedRaster delegate;
+    private ConsiderUpdatedImageResolution processor;
 
     @Override
-    public int numSeries() {
-        return delegate.numSeries();
+    public int numberSeries() {
+        return delegate.numberSeries();
     }
 
     @Override
@@ -85,14 +81,14 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
     }
 
     @Override
-    public int numChnl() throws RasterIOException {
-        return delegate.numChnl();
+    public int numberChannels() throws RasterIOException {
+        return delegate.numberChannels();
     }
 
     @Override
-    public ImageDimensions dim(int seriesIndex) throws RasterIOException {
+    public ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
 
-        ImageDimensions sd = delegate.dim(seriesIndex);
+        ImageDimensions sd = delegate.dimensionsForSeries(seriesIndex);
 
         Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.getRes());
 
@@ -104,8 +100,8 @@ class OpenedRasterAlterDimensions extends OpenedRaster {
     }
 
     @Override
-    public int numFrames() throws RasterIOException {
-        return delegate.numFrames();
+    public int numberFrames() throws RasterIOException {
+        return delegate.numberFrames();
     }
 
     @Override

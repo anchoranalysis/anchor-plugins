@@ -26,6 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
@@ -40,19 +44,13 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
  *
  * @param S state-type for optimization
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class DirectAssignMode<S> extends AssignMode<S, S, S> {
 
     // START BEAN PROPERTIES
-    @BeanField private ExtractScoreSize<S> extractScoreSize;
+    @BeanField @Getter @Setter private ExtractScoreSize<S> extractScoreSize;
     // END BEAN PROPERTIES
-
-    public DirectAssignMode() {
-        // Standard bean constructor
-    }
-
-    public DirectAssignMode(ExtractScoreSize<S> extractScoreSize) {
-        this.extractScoreSize = extractScoreSize;
-    }
 
     public AccptProbCalculator<S> probCalculator(AnnealScheme annealScheme) {
         return new AccptProbCalculator<>(annealScheme, extractScoreSize);
@@ -76,13 +74,5 @@ public class DirectAssignMode<S> extends AssignMode<S, S, S> {
     @Override
     public ExtractScoreSize<S> extractScoreSizeState() {
         return extractScoreSizeReport();
-    }
-
-    public ExtractScoreSize<S> getExtractScoreSize() {
-        return extractScoreSize;
-    }
-
-    public void setExtractScoreSize(ExtractScoreSize<S> extractScoreSize) {
-        this.extractScoreSize = extractScoreSize;
     }
 }

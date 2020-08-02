@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.mpp.nrg.cachedcalculation;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 
 @AllArgsConstructor
@@ -44,12 +44,12 @@ public class CalculateOverlapMask extends FeatureCalculation<Double, FeatureInpu
     private final byte maskOnValue;
 
     @Override
-    protected Double execute(FeatureInputPairMemo input) throws FeatureCalcException {
+    protected Double execute(FeatureInputPairMemo input) throws FeatureCalculationException {
 
         VoxelizedMarkMemo mark1 = input.getObj1();
         VoxelizedMarkMemo mark2 = input.getObj2();
 
-        Channel chnl = input.getNrgStackRequired().getNrgStack().getChnl(nrgIndex);
+        Channel chnl = input.getNrgStackRequired().getNrgStack().getChannel(nrgIndex);
 
         return OverlapUtilities.overlapWithMaskGlobal(
                 mark1, mark2, regionID, chnl.getVoxelBox().asByte(), maskOnValue);

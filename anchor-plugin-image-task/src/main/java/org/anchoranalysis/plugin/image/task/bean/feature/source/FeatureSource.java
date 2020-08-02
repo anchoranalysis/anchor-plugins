@@ -27,38 +27,33 @@
 package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.feature.GenerateHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Extracts features from inputs.
+ * Extracts features from some kind of inputs.
  *
  * @author Owen Feehan
  * @param <T> input-type from which one or more rows of features are derived
- * @param <S> featureSourceSupplier that is duplicated for each new thread (to prevent any
- *     concurrency issues)
- * @param <U> feature-input type for {code features} bean-field
+ * @param <S> row-source that is duplicated for each new thread (to prevent any concurrency issues)
+ * @param <U> feature-input type for @{code features} bean-field
  */
 public abstract class FeatureSource<T extends InputFromManager, S, U extends FeatureInput>
         extends AnchorBean<FeatureSource<T, S, U>> {
 
     public abstract SharedStateExportFeatures<S> createSharedState(
-            MetadataHeaders metadataHeaders,
+            LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<U>>> features,
             BoundIOContext context)
             throws CreateException;
@@ -72,15 +67,18 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
      */
     public abstract boolean includeGroupInExperiment(boolean groupGeneratorDefined);
 
-    public abstract GenerateHeadersForCSV headers();
+    public abstract GenerateLabelHeadersForCSV headers();
 
-    public abstract void calcAllResultsForInput(
-            T input,
-            BiConsumer<StringLabelsForCsvRow, ResultsVector> addResultsFor,
-            S featureSourceSupplier,
-            FeatureNameList featureNames,
-            Optional<String> groupGeneratorName,
-            BoundIOContext context)
+    /**
+     * Processes one input to generate features
+     *
+     * @param input one particular input that will creates one or more "rows" in a feature-table
+     * @param adder
+     * @param rowSource source of rows in the feature-table
+     * @param context io-context
+     * @throws OperationFailedException
+     */
+    public abstract void processInput(T input, InputProcessContext<S> context)
             throws OperationFailedException;
 
     /**

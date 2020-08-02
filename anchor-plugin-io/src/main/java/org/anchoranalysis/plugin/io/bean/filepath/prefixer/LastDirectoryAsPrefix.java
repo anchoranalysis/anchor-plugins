@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
@@ -48,9 +50,9 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
-    @BeanField private FilePathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private FilePathPrefixerAvoidResolve filePathPrefixer;
 
-    @BeanField private String delimiter = "_";
+    @BeanField @Getter @Setter private String delimiter = "_";
     // END BEAN PROPERTIES
 
     @Override
@@ -80,21 +82,5 @@ public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
             // Nothing to do
             return fpp;
         }
-    }
-
-    public FilePathPrefixerAvoidResolve getFilePathPrefixer() {
-        return filePathPrefixer;
-    }
-
-    public void setFilePathPrefixer(FilePathPrefixerAvoidResolve filePathPrefixer) {
-        this.filePathPrefixer = filePathPrefixer;
-    }
-
-    public String getDelimiter() {
-        return delimiter;
-    }
-
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
     }
 }

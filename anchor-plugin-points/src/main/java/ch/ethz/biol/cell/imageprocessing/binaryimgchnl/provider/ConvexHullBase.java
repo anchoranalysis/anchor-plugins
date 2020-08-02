@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
@@ -35,7 +37,7 @@ import org.anchoranalysis.image.outline.FindOutline;
 public abstract class ConvexHullBase extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private boolean erodeEdges = false;
+    @BeanField @Getter @Setter private boolean erodeEdges = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -44,12 +46,4 @@ public abstract class ConvexHullBase extends BinaryChnlProviderOne {
     }
 
     protected abstract Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException;
-
-    public boolean isErodeEdges() {
-        return erodeEdges;
-    }
-
-    public void setErodeEdges(boolean erodeEdges) {
-        this.erodeEdges = erodeEdges;
-    }
 }

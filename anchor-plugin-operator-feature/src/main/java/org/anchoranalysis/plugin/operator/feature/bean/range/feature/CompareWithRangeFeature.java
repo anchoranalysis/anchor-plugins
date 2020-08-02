@@ -26,10 +26,12 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange;
 import org.anchoranalysis.plugin.operator.feature.bean.range.RangeCompareBase;
@@ -44,13 +46,13 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
 
     // START BEAN PROPERTIES
     /** Constant to return if value lies within the range */
-    @BeanField private double withinValue = 0;
+    @BeanField @Getter @Setter private double withinValue = 0;
 
     /** Calculates minimally-allowed range boundary */
-    @BeanField private Feature<T> min;
+    @BeanField @Getter @Setter private Feature<T> min;
 
     /** Calculates maximally-allowed range boundary */
-    @BeanField private Feature<T> max;
+    @BeanField @Getter @Setter private Feature<T> max;
     // END BEAN PROPERTIES
 
     @Override
@@ -59,18 +61,18 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
     }
 
     @Override
-    protected double boundaryMin(SessionInput<T> input) throws FeatureCalcException {
+    protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
         return input.calc(min);
     }
 
     @Override
-    protected double boundaryMax(SessionInput<T> input) throws FeatureCalcException {
+    protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
         return input.calc(max);
     }
 
     @Override
     protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return withinValue;
     }
 
@@ -79,29 +81,5 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
         return String.format(
                 "min=%s,max=%s,withinValue=%f,%s",
                 min.getFriendlyName(), max.getFriendlyName(), withinValue, super.getParamDscr());
-    }
-
-    public Feature<T> getMin() {
-        return min;
-    }
-
-    public void setMin(Feature<T> min) {
-        this.min = min;
-    }
-
-    public Feature<T> getMax() {
-        return max;
-    }
-
-    public void setMax(Feature<T> max) {
-        this.max = max;
-    }
-
-    public double getWithinValue() {
-        return withinValue;
-    }
-
-    public void setWithinValue(double withinValue) {
-        this.withinValue = withinValue;
     }
 }

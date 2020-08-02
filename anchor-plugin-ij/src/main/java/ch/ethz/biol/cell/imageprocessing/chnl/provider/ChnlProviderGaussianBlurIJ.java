@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import ij.plugin.filter.GaussianBlur;
 import ij.process.ImageProcessor;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,7 +41,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Positive private double sigma = 3;
+    @BeanField @Positive @Getter @Setter private double sigma = 3;
     // END BEAN PROPERTIES
 
     @SuppressWarnings("deprecation")
@@ -61,13 +63,5 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
         return blur(chnl);
-    }
-
-    public double getSigma() {
-        return sigma;
-    }
-
-    public void setSigma(double sigma) {
-        this.sigma = sigma;
     }
 }

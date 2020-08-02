@@ -31,12 +31,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -47,11 +48,11 @@ import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProviderChnlSource {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnlMain;
+    @BeanField @Getter @Setter private MaskProvider binaryChnlMain;
 
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnlCompareTo;
+    @BeanField @Getter @Setter private MaskProvider binaryChnlCompareTo;
 
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnlElse;
+    @BeanField @Getter @Setter private MaskProvider binaryChnlElse;
 
     @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> featureProvider;
 
@@ -84,7 +85,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
                     new FeatureInitParams(),
                     getInitializationParameters().getFeature().getSharedFeatureSet(),
                     getLogger());
-        } catch (FeatureCalcException e1) {
+        } catch (InitException e1) {
             throw new CreateException(e1);
         }
     }
@@ -104,7 +105,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
             } else {
                 return binaryChnlElse.create();
             }
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }

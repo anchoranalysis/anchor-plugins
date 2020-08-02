@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.cfg.proposer;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
@@ -40,7 +42,7 @@ import org.anchoranalysis.core.error.CreateException;
 public class CfgProposerFromProvider extends CfgProposer {
 
     // START BEAN FIELDS
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
     // END BEAN FIELDS
 
     @Override
@@ -56,13 +58,5 @@ public class CfgProposerFromProvider extends CfgProposer {
         } catch (CreateException e) {
             throw new ProposalAbnormalFailureException(e);
         }
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
     }
 }

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
@@ -41,7 +43,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Count extends FeatureHistogramStatistic {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private RelationToThreshold threshold;
+    @BeanField @OptionalBean @Getter @Setter private RelationToThreshold threshold;
     // END BEAN PROPERTIES
 
     @Override
@@ -57,13 +59,5 @@ public class Count extends FeatureHistogramStatistic {
     public String getParamDscr() {
         return String.format(
                 "%f,%s,threshold=%s", threshold, super.getParamDscr(), threshold.toString());
-    }
-
-    public RelationToThreshold getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(RelationToThreshold threshold) {
-        this.threshold = threshold;
     }
 }

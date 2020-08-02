@@ -27,12 +27,17 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
+import lombok.Getter;
+import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -44,8 +49,10 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChan
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
@@ -55,13 +62,15 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
-public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
+public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
 
     private final ImageInitParams initParams;
-    private final NRGStackWithParams nrgStack;
+
+    @Getter private final NRGStackWithParams nrgStack;
+
     private final Logger logger;
 
-    public FeatureCalculatorFromProviderFactory(
+    public FeatureCalculatorFromProvider(
             ProvidesStackInput stackInput,
             Optional<StackProvider> nrgStackProvider,
             BoundIOContext context)
@@ -69,7 +78,10 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
         super();
         this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);
         this.nrgStack =
-                nrgStackFromProviderOrInput(stackInput, nrgStackProvider, context.getLogger());
+                nrgStackFromProviderOrElse(
+                        nrgStackProvider,
+                        CacheCall.of(() -> allStacksAsOne(initParams.getStackCollection())),
+                        context.getLogger());
         this.logger = context.getLogger();
     }
 
@@ -77,50 +89,81 @@ public class FeatureCalculatorFromProviderFactory<T extends FeatureInputNRG> {
      * Calculates a single-feature that comes from a provider (but can reference the other features
      * from the store)
      *
-     * @throws FeatureCalcException
+     * @throws FeatureCalculationException
      */
     public FeatureCalculatorSingle<T> calculatorSingleFromProvider(
-            FeatureListProvider<T> provider, String providerName) throws FeatureCalcException {
+            FeatureListProvider<T> provider, String providerName) throws OperationFailedException {
 
-        Feature<T> feature =
-                ExtractFromProvider.extractFeature(
-                        provider, providerName, initParams.getFeature(), logger);
+        try {
+            Feature<T> feature =
+                    ExtractFromProvider.extractFeature(
+                            provider, providerName, initParams.getFeature(), logger);
 
-        return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+            return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+        } catch (InitException | FeatureCalculationException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
-            throws FeatureCalcException {
+            throws InitException {
         return createMultiCalculator(features, initParams.getFeature().getSharedFeatureSet());
     }
 
-    /**
-     * Calculates a NRG-stack from a provider if it's available, or otherwise uses the input as the
-     * nerg
-     */
-    private NRGStackWithParams nrgStackFromProviderOrInput(
-            ProvidesStackInput stackInput, Optional<StackProvider> nrgStackProvider, Logger logger)
+    /** Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback */
+    private NRGStackWithParams nrgStackFromProviderOrElse(
+            Optional<StackProvider> nrgStackProvider,
+            CacheCall<Stack, OperationFailedException> fallback,
+            Logger logger)
             throws OperationFailedException {
         if (nrgStackProvider.isPresent()) {
             return ExtractFromProvider.extractStack(nrgStackProvider.get(), initParams, logger);
         } else {
-            return new NRGStackWithParams(stackInput.extractSingleStack());
+            return new NRGStackWithParams(fallback.call());
         }
     }
 
     private FeatureCalculatorMulti<T> createMultiCalculator(
-            FeatureList<T> features, SharedFeatureMulti sharedFeatures)
-            throws FeatureCalcException {
+            FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
-            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws FeatureCalcException {
+            Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorSingleChangeInput<>(
                 FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));
+    }
+
+    /**
+     * Combines all stacks in the store into one stack
+     *
+     * <p>There is no guarantee about the ordering of the stacks, if there are multiple stacks in
+     * the store.
+     *
+     * <p>All stacks must have the same dimensions.
+     *
+     * @param store a named-store of stacks
+     * @return a stack with channels from all stacks in the store
+     * @throws OperationFailedException if the stacks have different dimensions, or if anything else
+     *     goes wrong
+     */
+    private static Stack allStacksAsOne(NamedProviderStore<Stack> store)
+            throws OperationFailedException {
+        try {
+            Stack out = new Stack();
+
+            for (String key : store.keys()) {
+                out.addChannelsFrom(store.getOptional(key).get()); // NOSONAR
+            }
+
+            return out;
+
+        } catch (NamedProviderGetException | IncorrectImageSizeException e) {
+            throw new OperationFailedException(e);
+        }
     }
 }

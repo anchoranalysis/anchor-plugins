@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -82,7 +82,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
             }
             return vbOut;
 
-        } catch (InitException | FeatureCalcException e) {
+        } catch (InitException | FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }
@@ -107,7 +107,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
     }
 
     private void setPixelsWithoutMask(VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         Extent e = vbOut.extent();
 
@@ -129,7 +129,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
     private void setPixelsWithMask(
             VoxelBox<ByteBuffer> vbOut, ObjectMask object, PixelScore pixelScore)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         byte maskOn = object.getBinaryValuesByte().getOnByte();
         Extent e = vbOut.extent();

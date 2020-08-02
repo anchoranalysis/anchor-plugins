@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -129,7 +129,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         for (ObjectMask objectMask : objects) {
             try {
                 featureVals.add(calculator.calc(new FeatureInputSingleObject(objectMask)));
-            } catch (FeatureCalcException e) {
+            } catch (FeatureCalculationException e) {
                 throw new OperationFailedException(e);
             }
         }

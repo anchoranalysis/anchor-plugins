@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
 public class SegmentChannel extends ObjectCollectionProviderWithChannel {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
     @BeanField @Getter @Setter private SegmentChannelIntoObjects sgmn;
 

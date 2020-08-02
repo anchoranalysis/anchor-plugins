@@ -27,7 +27,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -57,7 +57,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
 
                 double scaleFactor = 128 / meanIntensity;
                 vb.scalePixelsCheckMask(object, scaleFactor);
-            } catch (FeatureCalcException e) {
+            } catch (FeatureCalculationException e) {
                 throw new CreateException(e);
             }
         }

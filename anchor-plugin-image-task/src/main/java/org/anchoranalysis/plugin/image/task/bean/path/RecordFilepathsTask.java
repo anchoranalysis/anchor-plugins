@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.path;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -45,9 +47,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
 
     // START BEAN PROPERTIES
-
-    // The name of the RootPath to associate with this fileset. If empty, it is ignored.
-    @BeanField @AllowEmpty private String rootName = "";
+    /** The name of the RootPath to associate with this fileset. If empty, it is ignored. */
+    @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -98,14 +99,6 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
         context.getOutputManager()
                 .getWriterAlwaysAllowed()
                 .write("list", () -> new StringGenerator(sharedState.toString()));
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
     }
 
     @Override

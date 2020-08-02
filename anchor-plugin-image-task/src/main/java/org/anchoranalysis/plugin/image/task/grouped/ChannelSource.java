@@ -32,7 +32,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class ChannelSource {
 
-    private final NamedImgStackCollection stackStore;
+    private final NamedStacks stackStore;
     private final ConsistentChannelChecker chnlChecker;
     private final Optional<SizeXY> resizeTo;
 
@@ -54,7 +54,7 @@ public class ChannelSource {
      * @param resizeTo optionally resizes all extracted channels in XY
      */
     public ChannelSource(
-            NamedImgStackCollection stackStore,
+            NamedStacks stackStore,
             ConsistentChannelChecker chnlChecker,
             Optional<SizeXY> resizeTo) {
         super();
@@ -70,7 +70,7 @@ public class ChannelSource {
             // We make a single histogram
             Stack stack = stackStore.getException(stackName);
 
-            if (stack.getNumChnl() > 1) {
+            if (stack.getNumberChannels() > 1) {
                 throw new OperationFailedException("Each stack may only have a single channel");
             }
 
@@ -100,7 +100,7 @@ public class ChannelSource {
     public Channel extractChnl(Stack stack, boolean checkType, int index)
             throws OperationFailedException {
         try {
-            Channel chnl = stack.getChnl(index);
+            Channel chnl = stack.getChannel(index);
 
             if (checkType) {
                 chnlChecker.checkChannelType(chnl.getVoxelDataType());
@@ -121,7 +121,7 @@ public class ChannelSource {
         }
     }
 
-    public NamedImgStackCollection getStackStore() {
+    public NamedStacks getStackStore() {
         return stackStore;
     }
 }

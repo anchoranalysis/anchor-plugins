@@ -31,12 +31,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -57,7 +57,8 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         ObjectMask objectMask = createMask(input.get());
         int surfaceSize = estimateSurfaceSize(input.get().getPxlPartMemo(), objectMask);
@@ -65,7 +66,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         return resolveArea(surfaceSize, input.get().getResOptional());
     }
 
-    private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalcException {
+    private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalculationException {
         ObjectWithProperties omWithProps =
                 input.getPxlPartMemo()
                         .getMark()
@@ -77,7 +78,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     }
 
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         VoxelBox<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
 
@@ -96,7 +97,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
             }
             return size;
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

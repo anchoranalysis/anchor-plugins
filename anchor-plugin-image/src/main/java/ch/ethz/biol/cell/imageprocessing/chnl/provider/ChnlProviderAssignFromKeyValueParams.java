@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -38,9 +40,9 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private String keyValueParamsID = "";
+    @BeanField @Getter @Setter private String keyValueParamsID = "";
 
-    @BeanField private String key;
+    @BeanField @Getter @Setter private String key;
     // END BEAN PROPERTIES
 
     @Override
@@ -77,21 +79,5 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
         }
 
         return chnl;
-    }
-
-    public String getKeyValueParamsID() {
-        return keyValueParamsID;
-    }
-
-    public void setKeyValueParamsID(String keyValueParamsID) {
-        this.keyValueParamsID = keyValueParamsID;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 }

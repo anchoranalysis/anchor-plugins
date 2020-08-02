@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -39,7 +41,7 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 
     // START BEAN PROPERTIES
     /** If true binary values are set high when created */
-    @BeanField private boolean createOn = false;
+    @BeanField @Getter @Setter private boolean createOn = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -54,13 +56,5 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
             chnl.getVoxelBox().any().setAllPixelsTo(bvOut.getOnInt());
         }
         return new Mask(chnl, bvOut);
-    }
-
-    public boolean isCreateOn() {
-        return createOn;
-    }
-
-    public void setCreateOn(boolean createOn) {
-        this.createOn = createOn;
     }
 }

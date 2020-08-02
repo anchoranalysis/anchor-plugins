@@ -26,12 +26,14 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -44,11 +46,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class StackProviderRGBChnlProvider extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private ChnlProvider red;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider red;
 
-    @BeanField @OptionalBean private ChnlProvider green;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider green;
 
-    @BeanField @OptionalBean private ChnlProvider blue;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider blue;
     // END BEAN PROPERTIES
 
     @Override
@@ -110,7 +112,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
                             chnl.getVoxelDataType(), outputChnlType));
         }
 
-        stack.addChnl(chnl);
+        stack.addChannel(chnl);
     }
 
     private static String voxelDataTypeString(Channel chnl) {
@@ -183,29 +185,5 @@ public class StackProviderRGBChnlProvider extends StackProvider {
         } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);
         }
-    }
-
-    public ChnlProvider getRed() {
-        return red;
-    }
-
-    public void setRed(ChnlProvider red) {
-        this.red = red;
-    }
-
-    public ChnlProvider getGreen() {
-        return green;
-    }
-
-    public void setGreen(ChnlProvider green) {
-        this.green = green;
-    }
-
-    public ChnlProvider getBlue() {
-        return blue;
-    }
-
-    public void setBlue(ChnlProvider blue) {
-        this.blue = blue;
     }
 }

@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -39,10 +41,9 @@ import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
 import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -55,6 +56,8 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 
 /**
  * Each input-file describes a histogram that produces one row of features.
@@ -78,7 +81,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
      * <p>In this way histogramProvider can be used as a type of function around the original
      * histogram.
      */
-    @BeanField @OptionalBean private HistogramProvider histogramProvider;
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
     // END BEAN PROPERTIES
 
     public FromHistogram() {
@@ -96,52 +99,55 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     }
 
     @Override
-    protected ResultsVector calcResultsVectorForInputObject(
-            FileInput inputObject,
-            FeatureList<FeatureInputHistogram> features,
-            FeatureNameList featureNames,
-            BoundIOContext context)
-            throws FeatureCalcException {
+    protected ResultsVectorWithThumbnail calculateResultsForInput(
+            FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
+            throws NamedFeatureCalculationException {
 
         // Reads histogram from file-system
         try {
-            Histogram hist = readHistogramFromCsv(inputObject);
+            Histogram histogram = readHistogramFromCsv(inputObject);
 
             if (histogramProvider != null) {
-                hist = filterHistogramFromProvider(hist, context);
+                histogram = filterHistogramFromProvider(histogram, context.getContext());
             }
 
-            ResultsVector rv =
-                    createCalculator(features, context.getModelDirectory(), context.getLogger())
-                            .calc(new FeatureInputHistogram(hist, Optional.empty()));
+            ResultsVector results =
+                    createCalculator(
+                                    context.getRowSource(),
+                                    context.getModelDirectory(),
+                                    context.getLogger())
+                            .calc(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
-            KeyValueParamsExporter.export(featureNames, rv, context);
+            KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());
 
-            return rv;
+            return new ResultsVectorWithThumbnail(results);
 
-        } catch (CSVReaderException | BeanDuplicateException | OperationFailedException e) {
-            throw new FeatureCalcException(e);
+        } catch (CSVReaderException
+                | BeanDuplicateException
+                | OperationFailedException
+                | InitException e) {
+            throw new NamedFeatureCalculationException(e);
         }
     }
 
-    private Histogram filterHistogramFromProvider(Histogram inputtedHist, BoundIOContext context)
-            throws OperationFailedException {
+    private Histogram filterHistogramFromProvider(
+            Histogram inputtedHistogram, BoundIOContext context) throws OperationFailedException {
 
-        HistogramProvider histProviderDup = histogramProvider.duplicateBean();
+        HistogramProvider histogramProviderDuplicated = histogramProvider.duplicateBean();
 
         try {
-            histProviderDup.initRecursive(
-                    createImageInitParmas(inputtedHist, context), context.getLogger());
+            histogramProviderDuplicated.initRecursive(
+                    createImageInitParams(inputtedHistogram, context), context.getLogger());
 
-            return histProviderDup.create();
+            return histogramProviderDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
             throw new OperationFailedException(
                     "Cannot retrieve a histogram from histogramProvider", e);
         }
     }
 
-    private ImageInitParams createImageInitParmas(Histogram inputtedHist, BoundIOContext context)
+    private ImageInitParams createImageInitParams(Histogram inputtedHist, BoundIOContext context)
             throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
@@ -151,9 +157,9 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         return paramsInit;
     }
 
-    private FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
+    private static FeatureCalculatorMulti<FeatureInputHistogram> createCalculator(
             FeatureList<FeatureInputHistogram> features, Path modelDirectory, Logger logger)
-            throws FeatureCalcException {
+            throws InitException {
         return FeatureSession.with(
                 features,
                 new FeatureInitParams(),
@@ -170,13 +176,5 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
 
         return HistogramCSVReader.readHistogramFromFile(file.toPath());
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

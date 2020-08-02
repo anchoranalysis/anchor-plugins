@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -43,9 +45,9 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
 public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
 
     // START BEAN PROPERTIES
-    @BeanField private MultiInputManager input;
+    @BeanField @Getter @Setter private MultiInputManager input;
 
-    @BeanField private FilePathGenerator appendCSV;
+    @BeanField @Getter @Setter private FilePathGenerator appendCSV;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,21 +68,5 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
         }
 
         return out;
-    }
-
-    public FilePathGenerator getAppendCSV() {
-        return appendCSV;
-    }
-
-    public void setAppendCSV(FilePathGenerator appendCSV) {
-        this.appendCSV = appendCSV;
-    }
-
-    public MultiInputManager getInput() {
-        return input;
-    }
-
-    public void setInput(MultiInputManager input) {
-        this.input = input;
     }
 }

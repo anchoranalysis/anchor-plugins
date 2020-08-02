@@ -68,9 +68,9 @@ public class SegmentTextTest {
 
         assertTrue(objects.size() == 3);
 
-        assertBoxAtIndex(objects, 0, boxAt(439, 311, 75, 37));
-        assertBoxAtIndex(objects, 1, boxAt(310, 318, 108, 36));
-        assertBoxAtIndex(objects, 2, boxAt(392, 199, 29, 26));
+        assertBoxAtIndex(objects, 0, boxAt(439, 311, 76, 37));
+        assertBoxAtIndex(objects, 1, boxAt(310, 318, 109, 36));
+        assertBoxAtIndex(objects, 2, boxAt(393, 199, 29, 26));
     }
 
     private void assertBoxAtIndex(ObjectCollection objects, int index, BoundingBox box) {
@@ -98,6 +98,6 @@ public class SegmentTextTest {
 
     /** Bounding box at particular point and coordinates */
     private static BoundingBox boxAt(int x, int y, int width, int height) {
-        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height, 1));
+        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
     }
 }

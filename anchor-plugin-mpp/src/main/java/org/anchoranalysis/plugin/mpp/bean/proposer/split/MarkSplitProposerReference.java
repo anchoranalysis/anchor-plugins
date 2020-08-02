@@ -27,23 +27,25 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 
 public class MarkSplitProposerReference extends MarkSplitProposer {
 
-    // Start BEAN
-    @BeanField private String id;
-    // End BEAN
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String id;
+    // END BEAN PROPERTIES
 
     private MarkSplitProposer delegate = null;
 
@@ -60,14 +62,6 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return delegate.isCompatibleWith(testMark);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

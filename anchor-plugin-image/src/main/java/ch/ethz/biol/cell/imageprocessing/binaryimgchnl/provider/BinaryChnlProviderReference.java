@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 @NoArgsConstructor
-public class BinaryChnlProviderReference extends BinaryChnlProvider {
+public class BinaryChnlProviderReference extends MaskProvider {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String id = "";

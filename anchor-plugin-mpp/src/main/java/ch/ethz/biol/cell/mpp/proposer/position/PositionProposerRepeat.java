@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.proposer.position;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposerBean;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,9 +37,9 @@ import org.anchoranalysis.core.geometry.Point3d;
 public class PositionProposerRepeat extends PositionProposerBean {
 
     // START BEAN PROPERTIES
-    @BeanField private PositionProposerBean positionProposer;
+    @BeanField @Getter @Setter private PositionProposerBean positionProposer;
 
-    @BeanField private int maxIter;
+    @BeanField @Getter @Setter private int maxIter;
     // END BEAN PROPERTIES
 
     @Override
@@ -53,21 +55,5 @@ public class PositionProposerRepeat extends PositionProposerBean {
         }
 
         return Optional.empty();
-    }
-
-    public PositionProposerBean getPositionProposer() {
-        return positionProposer;
-    }
-
-    public void setPositionProposer(PositionProposerBean positionProposer) {
-        this.positionProposer = positionProposer;
-    }
-
-    public int getMaxIter() {
-        return maxIter;
-    }
-
-    public void setMaxIter(int maxIter) {
-        this.maxIter = maxIter;
     }
 }

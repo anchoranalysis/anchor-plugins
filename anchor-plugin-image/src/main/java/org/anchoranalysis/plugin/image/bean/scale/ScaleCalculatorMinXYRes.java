@@ -26,42 +26,53 @@
 
 package org.anchoranalysis.plugin.image.bean.scale;
 
+import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField private double minXYRes = 10e-9;
+    @BeanField @Getter @Setter private double minXYRes = 10e-9;
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(ImageDimensions srcDim) throws OperationFailedException {
+    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+            throws OperationFailedException {
+
+        ImageResolution resolution =
+                sourceDimensions
+                        .map(ImageDimensions::getRes)
+                        .orElseThrow(
+                                () -> new OperationFailedException("No source dimensions exist"));
 
         // If there is no resolution information we cannot scale
-        if (srcDim.getRes().getX() == 0 || srcDim.getRes().getY() == 0) {
+        if (resolution.getX() == 0 || resolution.getY() == 0) {
             throw new OperationFailedException(
                     "Channel has zero x or y resolution. Cannot scale to min res.");
         }
 
-        int x = calcRatio(srcDim.getRes().getX(), minXYRes);
-        int y = calcRatio(srcDim.getRes().getY(), minXYRes);
+        int x = calcRatio(resolution.getX(), minXYRes);
+        int y = calcRatio(resolution.getY(), minXYRes);
 
         if (x < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            srcDim.getRes().getX(), minXYRes));
+                            resolution.getX(), minXYRes));
         }
 
         if (y < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            srcDim.getRes().getY(), minXYRes));
+                            resolution.getY(), minXYRes));
         }
 
         double xScaleDownRatio = twoToMinusPower(x);
@@ -92,13 +103,5 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
     private static double twoToMinusPower(int power) {
         return Math.pow(2.0, -1.0 * power);
-    }
-
-    public double getMinXYRes() {
-        return minXYRes;
-    }
-
-    public void setMinXYRes(double minXYRes) {
-        this.minXYRes = minXYRes;
     }
 }

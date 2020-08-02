@@ -28,33 +28,35 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
 import java.util.function.LongBinaryOperator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
 public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
     // START BEAN PROPERTIES
-    @BeanField private int maskValue = 255;
+    @BeanField @Getter @Setter private int maskValue = 255;
 
-    @BeanField private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int nrgIndex = 0;
     // END BEAN PROPERTIES
 
     protected double overlapWithGlobalMask(SessionInput<FeatureInputPairMemo> params)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return params.calc(
                 new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue()));
     }
 
     @Override
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return input.calc(new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue));
     }
 
@@ -82,21 +84,5 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
     private long sizeForObj(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
         VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
         return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
-    }
-
-    public int getNrgIndex() {
-        return nrgIndex;
-    }
-
-    public void setNrgIndex(int nrgIndex) {
-        this.nrgIndex = nrgIndex;
-    }
-
-    public int getMaskValue() {
-        return maskValue;
-    }
-
-    public void setMaskValue(int maskValue) {
-        this.maskValue = maskValue;
     }
 }

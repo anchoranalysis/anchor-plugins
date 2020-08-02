@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
@@ -44,7 +44,7 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
     /** The input (an intensity channel in the normal way) */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
-    @BeanField @Getter @Setter private ChnlProvider chnlOutput;
+    @BeanField @Getter @Setter private ChannelProvider chnlOutput;
 
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES

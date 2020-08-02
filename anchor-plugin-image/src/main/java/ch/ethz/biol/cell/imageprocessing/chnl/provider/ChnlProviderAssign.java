@@ -26,9 +26,11 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -45,7 +47,7 @@ import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 public class ChnlProviderAssign extends ChnlProviderOneMask {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnlAssignFrom;
+    @BeanField @Getter @Setter private ChannelProvider chnlAssignFrom;
     // END BEAN PROPERTIES
 
     @Override
@@ -74,13 +76,5 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
                         bbox,
                         object.getVoxelBox(),
                         object.getBinaryValuesByte());
-    }
-
-    public ChnlProvider getChnlAssignFrom() {
-        return chnlAssignFrom;
-    }
-
-    public void setChnlAssignFrom(ChnlProvider chnlAssignFrom) {
-        this.chnlAssignFrom = chnlAssignFrom;
     }
 }

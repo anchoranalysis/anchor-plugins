@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -106,7 +106,6 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams
                 configurePermuteProperty(
                         (PermutePropertySequenceInteger) permuteProperty.duplicateBean());
 
-        delegate.setListPermuteProperty(new ArrayList<>());
-        delegate.getListPermuteProperty().add(permutePropertyConfigured);
+        delegate.setPermutations(Arrays.asList(permutePropertyConfigured));
     }
 }

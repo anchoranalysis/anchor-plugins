@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.feature.input.FeatureInputNull;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -47,8 +47,8 @@ import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.image.feature.session.merged.FeatureCalculatorMergedPairs;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
+import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriorityFromPair;
@@ -92,7 +92,7 @@ public class MergePairs extends MergeWithFeature {
             return new AssignPriorityFromPair(
                     createCalculatorForPairs(), threshold, relation.create());
 
-        } catch (FeatureCalcException | CreateException e) {
+        } catch (FeatureCalculationException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -107,8 +107,8 @@ public class MergePairs extends MergeWithFeature {
         try {
             Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
 
-            FeatureCalculatorMergedPairs session =
-                    new FeatureCalculatorMergedPairs(
+            PairsTableCalculator session =
+                    new PairsTableCalculator(
                             new MergedPairsFeatures(
                                     FeatureListFactory.fromProvider(
                                             featureEvaluatorMerge.getFeatureProvider())));
@@ -116,7 +116,7 @@ public class MergePairs extends MergeWithFeature {
 
             return maybeWrapWithNRGStack(new FeatureCalculatorSingleFromMulti<>(session), nrgStack);
 
-        } catch (FeatureCalcException | OperationFailedException | InitException e) {
+        } catch (OperationFailedException | InitException e) {
             throw new CreateException(e);
         }
     }

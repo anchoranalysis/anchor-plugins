@@ -27,6 +27,9 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -39,15 +42,14 @@ import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 
+@NoArgsConstructor
 public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
 
     // START BEAN PROPERTIES
-    @BeanField private int numItr = -1;
+    @BeanField @Getter @Setter private int numItr = -1;
 
-    @BeanField private ExtractScoreSize<S> extractScoreSize;
+    @BeanField @Getter @Setter private ExtractScoreSize<S> extractScoreSize;
     // END BEAN PROPERTIES
-
-    public OptSchemeUnifPerm() {}
 
     public OptSchemeUnifPerm(int numItr) {
         super();
@@ -92,21 +94,5 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
 
     private double extractScore(S item) {
         return extractScoreSize.extractScore(item);
-    }
-
-    public int getNumItr() {
-        return numItr;
-    }
-
-    public void setNumItr(int numItr) {
-        this.numItr = numItr;
-    }
-
-    public ExtractScoreSize<S> getExtractScoreSize() {
-        return extractScoreSize;
-    }
-
-    public void setExtractScoreSize(ExtractScoreSize<S> extractScoreSize) {
-        this.extractScoreSize = extractScoreSize;
     }
 }

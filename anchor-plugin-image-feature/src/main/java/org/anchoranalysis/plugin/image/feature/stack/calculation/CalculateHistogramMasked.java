@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
@@ -54,7 +54,7 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
     private final int nrgIndexMask;
 
     @Override
-    protected Histogram execute(FeatureInputStack input) throws FeatureCalcException {
+    protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
 
         try {
             NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
@@ -62,16 +62,16 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
             return HistogramFactory.create(extractChnl(nrgStack), extractMask(nrgStack));
 
         } catch (CreateException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 
     private Channel extractChnl(NRGStack nrgStack) {
-        return nrgStack.getChnl(nrgIndexSignal);
+        return nrgStack.getChannel(nrgIndexSignal);
     }
 
     private Mask extractMask(NRGStack nrgStack) {
-        Channel chnl = nrgStack.getChnl(nrgIndexMask);
+        Channel chnl = nrgStack.getChannel(nrgIndexMask);
         return new Mask(chnl, BinaryValues.getDefault());
     }
 }

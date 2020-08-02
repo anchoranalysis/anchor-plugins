@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -40,9 +42,9 @@ import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 public class FileProviderRemove extends FileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private FileProvider fileProvider;
+    @BeanField @Getter @Setter private FileProvider fileProvider;
 
-    @BeanField private RegEx regEx; // Paths to remove
+    @BeanField @Getter @Setter private RegEx regEx; // Paths to remove
     // END BEAN PROPERTIES
 
     @Override
@@ -60,23 +62,6 @@ public class FileProviderRemove extends FileProvider {
                 itr.remove();
             }
         }
-
         return files;
-    }
-
-    public RegEx getRegEx() {
-        return regEx;
-    }
-
-    public void setRegEx(RegEx regEx) {
-        this.regEx = regEx;
-    }
-
-    public FileProvider getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProvider fileProvider) {
-        this.fileProvider = fileProvider;
     }
 }

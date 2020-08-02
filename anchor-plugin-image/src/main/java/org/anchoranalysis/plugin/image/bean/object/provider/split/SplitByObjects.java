@@ -107,7 +107,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
             ObjectMask intersectShifted =
                     intersect
                             .get()
-                            .mapBoundingBox(
+                            .mapBoundingBoxPreserveExtent(
                                     bbox ->
                                             bbox.shiftBackBy(
                                                     objectToSplit.getBoundingBox().cornerMin()));

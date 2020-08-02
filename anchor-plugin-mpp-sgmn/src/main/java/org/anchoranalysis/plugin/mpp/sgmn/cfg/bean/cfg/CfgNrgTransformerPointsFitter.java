@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.CreateMarkFromPoints;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
@@ -41,7 +43,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgNRGPixelizedFactory;
 public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private CreateMarkFromPoints createMark;
+    @BeanField @Getter @Setter private CreateMarkFromPoints createMark;
     // END BEAN PROPERTIES
 
     @Override
@@ -59,14 +61,6 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, Cfg
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
-    }
-
-    public CreateMarkFromPoints getCreateMark() {
-        return createMark;
-    }
-
-    public void setCreateMark(CreateMarkFromPoints createMark) {
-        this.createMark = createMark;
     }
 
     private static Cfg wrapMark(Optional<Mark> mark) {

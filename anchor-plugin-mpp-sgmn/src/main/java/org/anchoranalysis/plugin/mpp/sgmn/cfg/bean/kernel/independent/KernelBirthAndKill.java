@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -36,9 +38,9 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -51,14 +53,15 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 
     // START BEANS
-    @BeanField private double overlapRatioThreshold = 0.1;
+    @BeanField @Getter @Setter private double overlapRatioThreshold = 0.1;
 
-    @BeanField private MarkProposer markProposer = null;
+    @BeanField @Getter @Setter private MarkProposer markProposer = null;
 
     // Optional proposal for doing an additional birth
-    @BeanField @OptionalBean private MarkProposer markProposerAdditionalBirth = null;
+    @BeanField @OptionalBean @Getter @Setter
+    private MarkProposer markProposerAdditionalBirth = null;
 
-    @BeanField private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
+    @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
     // END BEANS
 
     private Mark markNew;
@@ -214,40 +217,8 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
         return new int[] {this.markNew.getId()};
     }
 
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
-    }
-
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return markProposer.isCompatibleWith(testMark);
-    }
-
-    public double getOverlapRatioThreshold() {
-        return overlapRatioThreshold;
-    }
-
-    public void setOverlapRatioThreshold(double overlapRatioThreshold) {
-        this.overlapRatioThreshold = overlapRatioThreshold;
-    }
-
-    public MarkProposer getMarkProposerAdditionalBirth() {
-        return markProposerAdditionalBirth;
-    }
-
-    public void setMarkProposerAdditionalBirth(MarkProposer markProposerAdditionalBirth) {
-        this.markProposerAdditionalBirth = markProposerAdditionalBirth;
-    }
-
-    public int getRegionID() {
-        return regionID;
-    }
-
-    public void setRegionID(int regionID) {
-        this.regionID = regionID;
     }
 }

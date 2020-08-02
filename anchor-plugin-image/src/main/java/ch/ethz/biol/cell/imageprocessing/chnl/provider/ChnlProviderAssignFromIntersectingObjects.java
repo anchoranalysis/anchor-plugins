@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.Getter;
@@ -41,7 +43,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.apache.commons.math3.util.Pair;
 
 // Matches source-objects to target objects, based upon intersection, and assigns the
 //   value in the respective source object to the target object
@@ -62,10 +63,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
         ObjectCollection target = objectsTarget.create();
 
         streamIntersectingObjects(source, target)
-                .forEach(
-                        pair ->
-                                vb.setPixelsCheckMask(
-                                        pair.getSecond(), getValForMask(chnl, pair.getFirst())));
+                .forEach(pair -> vb.setPixelsCheckMask(pair._2(), getValForMask(chnl, pair._1())));
         return chnl;
     }
 
@@ -77,7 +75,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
      * @param target
      * @return a pair with source object (left) and the matched object (right)
      */
-    private static Stream<Pair<ObjectMask, ObjectMask>> streamIntersectingObjects(
+    private static Stream<Tuple2<ObjectMask, ObjectMask>> streamIntersectingObjects(
             ObjectCollection source, ObjectCollection target) {
 
         List<MatchedObject> matchList =
@@ -86,7 +84,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
         return matchList.stream()
                 .map(
                         owm ->
-                                new Pair<>(
+                                Tuple.of(
                                         owm.getSource(),
                                         selectBestMatch(owm.getSource(), owm.getMatches())));
     }

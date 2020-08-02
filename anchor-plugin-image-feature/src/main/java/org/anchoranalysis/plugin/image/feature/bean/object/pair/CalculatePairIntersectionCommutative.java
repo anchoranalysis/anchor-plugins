@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
@@ -96,7 +96,7 @@ class CalculatePairIntersectionCommutative
 
     @Override
     protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         Optional<ObjectMask> omIntersection1 = ccFirstToSecond.getOrCalculate(input);
         Optional<ObjectMask> omIntersection2 = ccSecondToFirst.getOrCalculate(input);

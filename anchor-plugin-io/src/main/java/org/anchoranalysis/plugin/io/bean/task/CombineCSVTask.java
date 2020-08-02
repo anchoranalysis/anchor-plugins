@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -48,13 +50,13 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
     // START BEAN PROPERTIES
-    @BeanField private String seperator = ",";
+    @BeanField @Getter @Setter private String seperator = ",";
 
-    @BeanField private boolean firstLineHeaders = true;
+    @BeanField @Getter @Setter private boolean firstLineHeaders = true;
 
-    @BeanField private boolean transposed = false;
+    @BeanField @Getter @Setter private boolean transposed = false;
 
-    @BeanField private boolean addName = true;
+    @BeanField @Getter @Setter private boolean addName = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -120,41 +122,8 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
     @Override
     public void afterAllJobsAreExecuted(CSVWriter writer, BoundIOContext context)
             throws ExperimentExecutionException {
-
         if (writer != null) {
             writer.close();
         }
-    }
-
-    public String getSeperator() {
-        return seperator;
-    }
-
-    public void setSeperator(String seperator) {
-        this.seperator = seperator;
-    }
-
-    public boolean isFirstLineHeaders() {
-        return firstLineHeaders;
-    }
-
-    public void setFirstLineHeaders(boolean firstLineHeaders) {
-        this.firstLineHeaders = firstLineHeaders;
-    }
-
-    public boolean isTransposed() {
-        return transposed;
-    }
-
-    public void setTransposed(boolean transposed) {
-        this.transposed = transposed;
-    }
-
-    public boolean isAddName() {
-        return addName;
-    }
-
-    public void setAddName(boolean addName) {
-        this.addName = addName;
     }
 }

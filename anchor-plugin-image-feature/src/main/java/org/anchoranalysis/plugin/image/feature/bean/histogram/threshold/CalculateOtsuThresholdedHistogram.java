@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -48,7 +48,7 @@ class CalculateOtsuThresholdedHistogram
     private final Logger logger;
 
     @Override
-    protected Histogram execute(FeatureInputHistogram params) throws FeatureCalcException {
+    protected Histogram execute(FeatureInputHistogram params) throws FeatureCalculationException {
         try {
             if (!calculateLevel.isInitialized()) {
                 calculateLevel.init(NullInitParams.instance(), logger);
@@ -57,7 +57,7 @@ class CalculateOtsuThresholdedHistogram
                     params.getHistogram().duplicate(), // Important to duplicate
                     calculateLevel);
         } catch (OperationFailedException | InitException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 }

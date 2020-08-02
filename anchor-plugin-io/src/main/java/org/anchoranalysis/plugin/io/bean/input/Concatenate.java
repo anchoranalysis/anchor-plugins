@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -44,7 +46,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class Concatenate<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private List<InputManager<T>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<InputManager<T>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -62,13 +64,5 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
             }
             return listOut;
         }
-    }
-
-    public List<InputManager<T>> getList() {
-        return list;
-    }
-
-    public void setList(List<InputManager<T>> list) {
-        this.list = list;
     }
 }

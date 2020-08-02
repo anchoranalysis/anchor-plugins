@@ -27,15 +27,17 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
+import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds3D;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds3D;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -43,9 +45,9 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class EllipsoidOrientationRadii extends MarkProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private RotationBounds3D rotationBounds = new RotationBounds3D();
+    @BeanField @Getter @Setter private RotationBounds3D rotationBounds = new RotationBounds3D();
 
-    @BeanField private Bound radiusBound;
+    @BeanField @Getter @Setter private Bound radiusBound;
     // END BEAN PROPERTIES
 
     @Override
@@ -78,21 +80,5 @@ public class EllipsoidOrientationRadii extends MarkProposer {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         return Optional.empty();
-    }
-
-    public RotationBounds3D getRotationBounds() {
-        return rotationBounds;
-    }
-
-    public void setRotationBounds(RotationBounds3D rotationBounds) {
-        this.rotationBounds = rotationBounds;
-    }
-
-    public Bound getRadiusBound() {
-        return radiusBound;
-    }
-
-    public void setRadiusBound(Bound radiusBound) {
-        this.radiusBound = radiusBound;
     }
 }

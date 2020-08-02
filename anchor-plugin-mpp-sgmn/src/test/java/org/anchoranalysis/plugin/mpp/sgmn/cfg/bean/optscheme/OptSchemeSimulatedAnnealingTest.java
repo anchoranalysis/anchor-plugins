@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
+import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds2D;
+import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds3D;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkEllipseFactory;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkEllipsoidFactory;
 import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds2D;
-import org.anchoranalysis.anchor.mpp.mark.conic.bounds.RotationBounds3D;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;

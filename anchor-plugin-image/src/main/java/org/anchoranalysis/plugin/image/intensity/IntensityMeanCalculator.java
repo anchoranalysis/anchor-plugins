@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -42,12 +42,13 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 public class IntensityMeanCalculator {
 
     public static double calcMeanIntensityObject(Channel chnl, ObjectMask object)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return calcMeanIntensityObject(chnl, object, false);
     }
 
     public static double calcMeanIntensityObject(
-            Channel chnl, ObjectMask object, boolean excludeZero) throws FeatureCalcException {
+            Channel chnl, ObjectMask object, boolean excludeZero)
+            throws FeatureCalculationException {
         checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
 
         VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
@@ -90,16 +91,16 @@ public class IntensityMeanCalculator {
         }
 
         if (cnt == 0) {
-            throw new FeatureCalcException("There are 0 pixels in the object-mask");
+            throw new FeatureCalculationException("There are 0 pixels in the object-mask");
         }
 
         return sum / cnt;
     }
 
     private static void checkContained(BoundingBox bbox, Extent extent)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         if (!extent.contains(bbox)) {
-            throw new FeatureCalcException(
+            throw new FeatureCalculationException(
                     String.format(
                             "The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
                             bbox, extent));

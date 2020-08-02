@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.selectchnls;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReference;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,7 +46,8 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 public class SelectSpecificAndRename extends SelectChnlsFromStacks {
 
     // START BEAN PROPERTIES
-    @BeanField private List<NamedBean<ChnlProviderStackReference>> list = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<NamedBean<ChnlProviderStackReference>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -70,13 +73,5 @@ public class SelectSpecificAndRename extends SelectChnlsFromStacks {
         Channel chnl = source.extractChnl(ref.getStackProviderID(), checkType, ref.getChnlIndex());
 
         return new NamedChnl(nb.getName(), chnl);
-    }
-
-    public List<NamedBean<ChnlProviderStackReference>> getList() {
-        return list;
-    }
-
-    public void setList(List<NamedBean<ChnlProviderStackReference>> list) {
-        this.list = list;
     }
 }

@@ -50,7 +50,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -68,9 +68,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
     @BeanField @Getter @Setter
     private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
 
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider binaryChnlFilled;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnlFilled;
 
     @BeanField @Getter @Setter private ScalarProposer maxDistanceZ;
 

@@ -27,16 +27,18 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
@@ -45,7 +47,7 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField private MarkProposer markProposer = null;
+    @BeanField @Getter @Setter private MarkProposer markProposer = null;
     // END BEAN PROPERTIES
 
     private Mark markExst;
@@ -124,7 +126,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
         CfgNRGPixelized newNRG = exst.get().shallowCopy();
         try {
             newNRG.exchange(index, pmmMarkNew, propContext.getNrgStack());
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException(String.format("Cannot exchange index %d", index), e);
         }
 
@@ -134,13 +136,5 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return markProposer.isCompatibleWith(testMark);
-    }
-
-    public MarkProposer getMarkProposer() {
-        return markProposer;
-    }
-
-    public void setMarkProposer(MarkProposer markProposer) {
-        this.markProposer = markProposer;
     }
 }

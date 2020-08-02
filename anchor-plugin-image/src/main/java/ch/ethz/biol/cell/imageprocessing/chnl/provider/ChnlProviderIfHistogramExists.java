@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
@@ -36,7 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
     // END BEAN PROPERTIES
 
     @Override
@@ -49,13 +51,5 @@ public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
         } else {
             throw new CreateException("histogram is null");
         }
-    }
-
-    public HistogramProvider getHistogramProvider() {
-        return histogramProvider;
-    }
-
-    public void setHistogramProvider(HistogramProvider histogramProvider) {
-        this.histogramProvider = histogramProvider;
     }
 }

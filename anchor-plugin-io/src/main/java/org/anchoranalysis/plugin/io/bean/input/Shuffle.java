@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -43,7 +45,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class Shuffle<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
     // END BEAN PROPERITES
 
     @Override
@@ -52,13 +54,5 @@ public class Shuffle<T extends InputFromManager> extends InputManager<T> {
         List<T> list = input.inputObjects(params);
         Collections.shuffle(list);
         return list;
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
     }
 }

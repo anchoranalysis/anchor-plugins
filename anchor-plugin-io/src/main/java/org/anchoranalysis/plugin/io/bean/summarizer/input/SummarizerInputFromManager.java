@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -46,7 +48,7 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager, S>
         extends Summarizer<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private Summarizer<S> summarizer;
+    @BeanField @Getter @Setter private Summarizer<S> summarizer;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,12 +62,4 @@ public abstract class SummarizerInputFromManager<T extends InputFromManager, S>
     }
 
     protected abstract Optional<S> extractFrom(T input);
-
-    public Summarizer<S> getSummarizer() {
-        return summarizer;
-    }
-
-    public void setSummarizer(Summarizer<S> summarizer) {
-        this.summarizer = summarizer;
-    }
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -51,7 +51,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjectsSource {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider chnlLookup;
+    @BeanField @Getter @Setter private ChannelProvider chnlLookup;
     // END BEAN PROPERTIES
 
     @Override

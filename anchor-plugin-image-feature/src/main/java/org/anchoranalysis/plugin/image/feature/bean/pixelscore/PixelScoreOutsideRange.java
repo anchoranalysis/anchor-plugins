@@ -26,22 +26,24 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreOutsideRange extends PixelScore {
 
     // START BEAN PROPERTIES
-    @BeanField private int min = 0;
+    @BeanField @Getter @Setter private int min = 0;
 
-    @BeanField private int max = 256;
+    @BeanField @Getter @Setter private int max = 256;
 
-    @BeanField private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int nrgIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalcException {
+    public double calc(int[] pixelVals) throws FeatureCalculationException {
 
         double val = pixelVals[nrgIndex];
         if (val < min) {
@@ -51,21 +53,5 @@ public class PixelScoreOutsideRange extends PixelScore {
             return 255;
         }
         return val;
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getNrgIndex() {
-        return nrgIndex;
-    }
-
-    public void setNrgIndex(int nrgIndex) {
-        this.nrgIndex = nrgIndex;
     }
 }

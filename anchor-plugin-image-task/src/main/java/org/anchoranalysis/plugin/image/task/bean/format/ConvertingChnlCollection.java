@@ -29,18 +29,20 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.chnl.ChannelGetter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 
-class ConvertingChnlCollection implements ChnlGetter {
+class ConvertingChnlCollection implements ChannelGetter {
 
-    private ChnlGetter source;
+    private ChannelGetter source;
     private ChannelConverter<?> chnlConverter;
     private ConversionPolicy conversionPolicy;
 
     public ConvertingChnlCollection(
-            ChnlGetter source, ChannelConverter<?> chnlConverter, ConversionPolicy changeExisting) {
+            ChannelGetter source,
+            ChannelConverter<?> chnlConverter,
+            ConversionPolicy changeExisting) {
         super();
         this.source = source;
         this.chnlConverter = chnlConverter;
@@ -48,15 +50,15 @@ class ConvertingChnlCollection implements ChnlGetter {
     }
 
     @Override
-    public boolean hasChnl(String chnlName) {
-        return source.hasChnl(chnlName);
+    public boolean hasChannel(String chnlName) {
+        return source.hasChannel(chnlName);
     }
 
     @Override
-    public Channel getChnl(String chnlName, int t, ProgressReporter progressReporter)
+    public Channel getChannel(String chnlName, int t, ProgressReporter progressReporter)
             throws GetOperationFailedException {
 
-        Channel chnl = source.getChnl(chnlName, t, progressReporter);
+        Channel chnl = source.getChannel(chnlName, t, progressReporter);
         return chnlConverter.convert(chnl, conversionPolicy);
     }
 }

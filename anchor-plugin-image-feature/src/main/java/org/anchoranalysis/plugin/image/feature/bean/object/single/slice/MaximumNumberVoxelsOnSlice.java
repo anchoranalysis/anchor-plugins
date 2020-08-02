@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -40,7 +40,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         FeatureInputSingleObject params = input.get();
 

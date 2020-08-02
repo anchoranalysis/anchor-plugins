@@ -26,9 +26,11 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
@@ -37,10 +39,10 @@ import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
 public class ChnlProviderIfParamEquals extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private KeyValueCondition condition;
+    @BeanField @Getter @Setter private KeyValueCondition condition;
     // END BEAN PROPERTIES
 
-    @BeanField private ChnlProvider chnlElse;
+    @BeanField @Getter @Setter private ChannelProvider chnlElse;
     // END BEAN PROPERTIES
 
     @Override
@@ -50,21 +52,5 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
         } else {
             return chnlElse.create();
         }
-    }
-
-    public ChnlProvider getChnlElse() {
-        return chnlElse;
-    }
-
-    public void setChnlElse(ChnlProvider chnlElse) {
-        this.chnlElse = chnlElse;
-    }
-
-    public KeyValueCondition getCondition() {
-        return condition;
-    }
-
-    public void setCondition(KeyValueCondition condition) {
-        this.condition = condition;
     }
 }

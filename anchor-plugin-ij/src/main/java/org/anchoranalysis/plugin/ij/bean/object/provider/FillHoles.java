@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -57,7 +57,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
     /** */
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
     @Override

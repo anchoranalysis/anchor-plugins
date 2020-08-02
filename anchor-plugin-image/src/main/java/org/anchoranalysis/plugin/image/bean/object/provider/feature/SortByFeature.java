@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -81,7 +81,7 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
 
             return ObjectCollectionFactory.mapFrom(sorted, ObjectWithFeatureValue::getObject);
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }

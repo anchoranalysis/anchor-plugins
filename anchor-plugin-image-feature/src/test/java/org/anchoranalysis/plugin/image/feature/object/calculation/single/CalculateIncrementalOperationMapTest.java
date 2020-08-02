@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -59,7 +59,8 @@ public class CalculateIncrementalOperationMapTest {
     }
 
     @Test
-    public void testInsertingAndAppending() throws OperationFailedException, FeatureCalcException {
+    public void testInsertingAndAppending()
+            throws OperationFailedException, FeatureCalculationException {
 
         int NUM_FIRST = 8;
         int NUM_ADDITIONAL = 3;
@@ -76,7 +77,7 @@ public class CalculateIncrementalOperationMapTest {
     }
 
     @Test
-    public void testInvalidate() throws FeatureCalcException {
+    public void testInvalidate() throws FeatureCalculationException {
         // Grow to an initial number
         int NUM_INITIAL = 6;
         mockMap.getOrCalculate(input, NUM_INITIAL);
@@ -93,14 +94,14 @@ public class CalculateIncrementalOperationMapTest {
 
     private void callMockAndVerify(
             FeatureInputSingleObject input, int key, int executeTimes, int expectedNumItemsInCache)
-            throws FeatureCalcException, OperationFailedException {
+            throws FeatureCalculationException, OperationFailedException {
         mockMap.getOrCalculate(input, key);
         verifyMethodCalls(executeTimes, expectedNumItemsInCache);
         assertStoredCount(expectedNumItemsInCache);
     }
 
     private void verifyMethodCalls(int executeTimes, int applyOperationTimes)
-            throws FeatureCalcException, OperationFailedException {
+            throws FeatureCalculationException, OperationFailedException {
         verify(mockMap, times(executeTimes)).execute(any(), any());
         verify(mockMap, times(applyOperationTimes)).applyOperation(any(), any(), anyBoolean());
     }

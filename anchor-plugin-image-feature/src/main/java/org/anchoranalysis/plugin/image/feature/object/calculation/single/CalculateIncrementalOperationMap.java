@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap
         extends CacheableCalculationMapHash<
-                ObjectMask, FeatureInputSingleObject, Integer, FeatureCalcException> {
+                ObjectMask, FeatureInputSingleObject, Integer, FeatureCalculationException> {
     private boolean do3D;
 
     public CalculateIncrementalOperationMap(boolean do3D) {
@@ -51,11 +51,11 @@ public abstract class CalculateIncrementalOperationMap
 
     @Override
     protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         Extent extent = params.getDimensionsRequired().getExtent();
 
         if (key == 0) {
-            throw new FeatureCalcException("Key must be > 0");
+            throw new FeatureCalculationException("Key must be > 0");
         }
 
         int lowestExistingKey = findHighestExistingKey(key - 1);
@@ -79,7 +79,7 @@ public abstract class CalculateIncrementalOperationMap
             return object;
 
         } catch (OperationFailedException e) {
-            throw new FeatureCalcException(e);
+            throw new FeatureCalculationException(e);
         }
     }
 

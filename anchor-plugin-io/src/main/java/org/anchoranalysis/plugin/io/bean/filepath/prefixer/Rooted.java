@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
@@ -47,10 +49,10 @@ import org.apache.log4j.Logger;
 public class Rooted extends FilePathPrefixer {
 
     // START BEAN PROPERTIES
-    @BeanField private FilePathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private FilePathPrefixerAvoidResolve filePathPrefixer;
 
     // The name of the RootPath to associate with this fileset
-    @BeanField private String rootName;
+    @BeanField @Getter @Setter private String rootName;
     // END BEAN PROPERTIES
 
     private static Logger logger = Logger.getLogger(Rooted.class);
@@ -100,21 +102,5 @@ public class Rooted extends FilePathPrefixer {
         } catch (AnchorIOException e) {
             throw new FilePathPrefixerException(e);
         }
-    }
-
-    public FilePathPrefixerAvoidResolve getFilePathPrefixer() {
-        return filePathPrefixer;
-    }
-
-    public void setFilePathPrefixer(FilePathPrefixerAvoidResolve filePathPrefixer) {
-        this.filePathPrefixer = filePathPrefixer;
-    }
-
-    public String getRootName() {
-        return rootName;
-    }
-
-    public void setRootName(String rootName) {
-        this.rootName = rootName;
     }
 }

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -39,9 +41,9 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class RadiiProposerRepeat extends RadiiProposer {
 
     // START BEAN PROPERTIES
-    @BeanField private RadiiProposer radiiProposer;
+    @BeanField @Getter @Setter private RadiiProposer radiiProposer;
 
-    @BeanField private int maxIter = 20;
+    @BeanField @Getter @Setter private int maxIter = 20;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,21 +68,5 @@ public class RadiiProposerRepeat extends RadiiProposer {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return radiiProposer.isCompatibleWith(testMark);
-    }
-
-    public RadiiProposer getRadiiProposer() {
-        return radiiProposer;
-    }
-
-    public void setRadiiProposer(RadiiProposer radiiProposer) {
-        this.radiiProposer = radiiProposer;
-    }
-
-    public int getMaxIter() {
-        return maxIter;
-    }
-
-    public void setMaxIter(int maxIter) {
-        this.maxIter = maxIter;
     }
 }

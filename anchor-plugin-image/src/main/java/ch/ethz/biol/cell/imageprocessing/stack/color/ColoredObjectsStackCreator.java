@@ -26,7 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.color;
 
-import java.util.Optional;
+import io.vavr.control.Either;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
@@ -82,7 +82,7 @@ public class ColoredObjectsStackCreator {
                     new DrawObjectsGenerator(
                             drawObject,
                             new ObjectCollectionWithProperties(objects),
-                            Optional.of(background),
+                            Either.right(background),
                             colors);
 
             return generator.generate();

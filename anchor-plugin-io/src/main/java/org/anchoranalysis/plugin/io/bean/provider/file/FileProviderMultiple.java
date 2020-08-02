@@ -30,6 +30,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -40,7 +42,7 @@ import org.anchoranalysis.io.error.FileProviderException;
 public class FileProviderMultiple extends FileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private List<FileProvider> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<FileProvider> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -59,13 +61,5 @@ public class FileProviderMultiple extends FileProvider {
             }
             return combined;
         }
-    }
-
-    public List<FileProvider> getList() {
-        return list;
-    }
-
-    public void setList(List<FileProvider> list) {
-        this.list = list;
     }
 }

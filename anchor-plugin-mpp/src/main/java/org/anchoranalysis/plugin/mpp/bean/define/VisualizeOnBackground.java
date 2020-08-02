@@ -35,6 +35,8 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 import java.util.function.Function;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
@@ -43,8 +45,8 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
@@ -61,14 +63,14 @@ public class VisualizeOnBackground extends DefineAdderBean {
     private static final String SUFFIX = ".visualize";
 
     // START BEAN PROPERTIES
-    @BeanField private DefineAdderBean add;
+    @BeanField @Getter @Setter private DefineAdderBean add;
 
-    @BeanField private String backgroundID;
+    @BeanField @Getter @Setter private String backgroundID;
 
-    @BeanField private int outlineWidth = 1;
+    @BeanField @Getter @Setter private int outlineWidth = 1;
 
     // If TRUE, backgroundID refers to a Stack, otherwise it's a Chnl
-    @BeanField private boolean stackBackground = false;
+    @BeanField @Getter @Setter private boolean stackBackground = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -82,8 +84,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
             define.addAll(def);
 
             // Now we add visualizations for the BinaryChnlProvider and object-collection providers
-            addVisualizationFor(
-                    def, define, BinaryChnlProvider.class, this::visualizationBinaryMask);
+            addVisualizationFor(def, define, MaskProvider.class, this::visualizationBinaryMask);
             addVisualizationFor(
                     def, define, ObjectCollectionProvider.class, this::visualizationObjects);
             addVisualizationFor(def, define, CfgProvider.class, this::visualizationCfg);
@@ -168,39 +169,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
         }
     }
 
-    private ChnlProvider backgroundChnl() {
+    private ChannelProvider backgroundChnl() {
         return new ChnlProviderReference(backgroundID);
-    }
-
-    public String getBackgroundID() {
-        return backgroundID;
-    }
-
-    public void setBackgroundID(String backgroundID) {
-        this.backgroundID = backgroundID;
-    }
-
-    public DefineAdderBean getAdd() {
-        return add;
-    }
-
-    public void setAdd(DefineAdderBean add) {
-        this.add = add;
-    }
-
-    public int getOutlineWidth() {
-        return outlineWidth;
-    }
-
-    public void setOutlineWidth(int outlineWidth) {
-        this.outlineWidth = outlineWidth;
-    }
-
-    public boolean isStackBackground() {
-        return stackBackground;
-    }
-
-    public void setStackBackground(boolean stackBackground) {
-        this.stackBackground = stackBackground;
     }
 }

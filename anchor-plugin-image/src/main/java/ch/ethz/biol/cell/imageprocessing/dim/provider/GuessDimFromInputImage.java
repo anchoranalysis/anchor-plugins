@@ -32,7 +32,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -63,14 +63,14 @@ public class GuessDimFromInputImage extends ImageDimProvider {
 
         Set<String> keys = stackCollection.keys();
 
-        if (!keys.contains(ImgStackIdentifiers.INPUT_IMAGE)) {
+        if (!keys.contains(StackIdentifiers.INPUT_IMAGE)) {
             throw new CreateException(
                     String.format(
                             "No input-image (%s) exists so cannot guess Image Dimensions. Please set the dimensions explicitly.",
-                            ImgStackIdentifiers.INPUT_IMAGE));
+                            StackIdentifiers.INPUT_IMAGE));
         }
 
-        return takeDimFromSpecificStack(stackCollection, ImgStackIdentifiers.INPUT_IMAGE);
+        return takeDimFromSpecificStack(stackCollection, StackIdentifiers.INPUT_IMAGE);
     }
 
     /** Takes the ImageDim from a particular stack in the collection */
@@ -84,7 +84,7 @@ public class GuessDimFromInputImage extends ImageDimProvider {
             throw new CreateException(e);
         }
 
-        Channel chnl = stack.getChnl(0);
+        Channel chnl = stack.getChannel(0);
         if (chnl == null) {
             throw new CreateException(
                     String.format(

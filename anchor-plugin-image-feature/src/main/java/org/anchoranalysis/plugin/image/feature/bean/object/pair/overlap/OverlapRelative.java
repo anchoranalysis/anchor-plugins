@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.overlap;
 
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
@@ -40,7 +40,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 public abstract class OverlapRelative extends FeaturePairObjects {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairObjects> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 

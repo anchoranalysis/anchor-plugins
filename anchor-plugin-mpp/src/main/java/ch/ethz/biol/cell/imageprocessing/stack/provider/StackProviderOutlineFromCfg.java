@@ -26,10 +26,12 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.regionmap.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
@@ -49,17 +51,18 @@ import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 public class StackProviderOutlineFromCfg extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
 
-    @BeanField private StackProvider backgroundProvider;
+    @BeanField @Getter @Setter private StackProvider backgroundProvider;
 
-    @BeanField private int outlineWidth = 1;
+    @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    @BeanField private ColorSetGenerator colorSetGenerator = new HSBColorSetGenerator();
+    @BeanField @Getter @Setter
+    private ColorSetGenerator colorSetGenerator = new HSBColorSetGenerator();
 
-    @BeanField private int regionID = 0;
+    @BeanField @Getter @Setter private int regionID = 0;
 
-    @BeanField private boolean mip = false;
+    @BeanField @Getter @Setter private boolean mip = false;
     // END BEAN PROPERTIES
 
     @Override
@@ -90,53 +93,5 @@ public class StackProviderOutlineFromCfg extends StackProvider {
         } catch (OperationFailedException | OutputWriteFailedException e1) {
             throw new CreateException(e1);
         }
-    }
-
-    public int getOutlineWidth() {
-        return outlineWidth;
-    }
-
-    public void setOutlineWidth(int outlineWidth) {
-        this.outlineWidth = outlineWidth;
-    }
-
-    public ColorSetGenerator getColorSetGenerator() {
-        return colorSetGenerator;
-    }
-
-    public void setColorSetGenerator(ColorSetGenerator colorSetGenerator) {
-        this.colorSetGenerator = colorSetGenerator;
-    }
-
-    public CfgProvider getCfgProvider() {
-        return cfgProvider;
-    }
-
-    public void setCfgProvider(CfgProvider cfgProvider) {
-        this.cfgProvider = cfgProvider;
-    }
-
-    public StackProvider getBackgroundProvider() {
-        return backgroundProvider;
-    }
-
-    public void setBackgroundProvider(StackProvider backgroundProvider) {
-        this.backgroundProvider = backgroundProvider;
-    }
-
-    public int getRegionID() {
-        return regionID;
-    }
-
-    public void setRegionID(int regionID) {
-        this.regionID = regionID;
-    }
-
-    public boolean isMip() {
-        return mip;
-    }
-
-    public void setMip(boolean mip) {
-        this.mip = mip;
     }
 }

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
@@ -49,12 +51,12 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects> {
 
     // START BEAN PROPERTIES
-    @BeanField private FeatureListProvider<FeatureInputSingleObject> item;
+    @BeanField @Getter @Setter private FeatureListProvider<FeatureInputSingleObject> item;
 
-    @BeanField @AllowEmpty private String prependString = "";
+    @BeanField @AllowEmpty @Getter @Setter private String prependString = "";
 
     /** Either "merged" or "first" or "second" indicating which feature to delegate from */
-    @BeanField private String select;
+    @BeanField @Getter @Setter private String select;
     // END BEAN PROPERTIES
 
     @Override
@@ -85,29 +87,5 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
             throw new CreateException(
                     "An invalid input existings for 'select'. Select one of 'first', 'second' or 'merged'");
         }
-    }
-
-    public String getPrependString() {
-        return prependString;
-    }
-
-    public void setPrependString(String prependString) {
-        this.prependString = prependString;
-    }
-
-    public FeatureListProvider<FeatureInputSingleObject> getItem() {
-        return item;
-    }
-
-    public void setItem(FeatureListProvider<FeatureInputSingleObject> item) {
-        this.item = item;
-    }
-
-    public String getSelect() {
-        return select;
-    }
-
-    public void setSelect(String select) {
-        this.select = select;
     }
 }

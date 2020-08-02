@@ -31,6 +31,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
@@ -40,9 +42,9 @@ import org.anchoranalysis.io.params.InputContextParams;
 public class SampleWithDirectory extends FileProviderWithDirectory {
 
     // START BEAN PROPERTIES
-    @BeanField private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
-    @BeanField private int sampleEvery;
+    @BeanField @Getter @Setter private int sampleEvery;
     // END BEAN PROPERTIES
 
     @Override
@@ -68,21 +70,5 @@ public class SampleWithDirectory extends FileProviderWithDirectory {
         }
 
         return listSampled;
-    }
-
-    public int getSampleEvery() {
-        return sampleEvery;
-    }
-
-    public void setSampleEvery(int sampleEvery) {
-        this.sampleEvery = sampleEvery;
-    }
-
-    public FileProviderWithDirectory getFileProvider() {
-        return fileProvider;
-    }
-
-    public void setFileProvider(FileProviderWithDirectory fileProvider) {
-        this.fileProvider = fileProvider;
     }
 }

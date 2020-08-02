@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.input.filter;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -45,7 +47,7 @@ import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsCont
 public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
     // END BEAN PROPERTIES
 
     @Override
@@ -75,13 +77,5 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
                         debugModeParams.containsOrEmpty());
 
         return filter.removeNonMatching(unfiltered);
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
     }
 }

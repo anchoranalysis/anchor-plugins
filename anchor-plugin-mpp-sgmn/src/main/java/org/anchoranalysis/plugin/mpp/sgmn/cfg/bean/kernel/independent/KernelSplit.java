@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -35,12 +37,12 @@ import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
@@ -50,9 +52,9 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
     // START BEAN
-    @BeanField private MarkSplitProposer splitProposer = null;
+    @BeanField @Getter @Setter private MarkSplitProposer splitProposer = null;
 
-    @BeanField private MarkFromCfgProposer markFromCfgProposer = null;
+    @BeanField @Getter @Setter private MarkFromCfgProposer markFromCfgProposer = null;
     // END BEAN
 
     private Optional<Mark> markExst;
@@ -120,7 +122,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         CfgNRGPixelized newNRG = exst.shallowCopy();
         try {
             newNRG.rmv(markExstIndex, nrgStack);
-        } catch (FeatureCalcException e1) {
+        } catch (NamedFeatureCalculationException e1) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove index %d", markExstIndex), e1);
         }
@@ -128,7 +130,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         try {
             newNRG.add(pair.getSource(), nrgStack);
             newNRG.add(pair.getDestination(), nrgStack);
-        } catch (FeatureCalcException e) {
+        } catch (NamedFeatureCalculationException e) {
             throw new KernelCalcNRGException("Cannot add source and destination", e);
         }
 
@@ -168,7 +170,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
         MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 
-        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get());
+        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get()); // NOSONAR
 
         updatableMarkSetCollection.rmv(memoList, memoExst);
         memoList.remove(memoExst);
@@ -195,21 +197,5 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
                         pairNew.map(pmm -> pmm.getSource().getMark()),
                         pairNew.map(pmm -> pmm.getDestination().getMark()));
         return stream.filter(Optional::isPresent).mapToInt(opt -> opt.get().getId()).toArray();
-    }
-
-    public MarkSplitProposer getSplitProposer() {
-        return splitProposer;
-    }
-
-    public void setSplitProposer(MarkSplitProposer splitProposer) {
-        this.splitProposer = splitProposer;
-    }
-
-    public MarkFromCfgProposer getMarkFromCfgProposer() {
-        return markFromCfgProposer;
-    }
-
-    public void setMarkFromCfgProposer(MarkFromCfgProposer markFromCfgProposer) {
-        this.markFromCfgProposer = markFromCfgProposer;
     }
 }

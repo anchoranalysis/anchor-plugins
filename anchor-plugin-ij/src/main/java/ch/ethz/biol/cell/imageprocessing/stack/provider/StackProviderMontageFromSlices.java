@@ -72,7 +72,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
         int numColumns = calcNumColumns(numSlices);
 
         try {
-            return stack.mapChnl(
+            return stack.mapChannel(
                     chnl ->
                             montageChnl(
                                     chnl,

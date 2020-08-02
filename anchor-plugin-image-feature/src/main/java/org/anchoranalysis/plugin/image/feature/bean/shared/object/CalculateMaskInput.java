@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
@@ -42,28 +42,29 @@ import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateBinaryChnlInput<T extends FeatureInputNRG>
+class CalculateMaskInput<T extends FeatureInputNRG>
         extends FeatureCalculation<FeatureInputSingleObject, T> {
 
-    private final Mask chnl;
+    private final Mask mask;
 
     @Override
-    protected FeatureInputSingleObject execute(T input) throws FeatureCalcException {
+    protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
-        BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(chnl);
+        BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(mask);
 
         return new FeatureInputSingleObject(new ObjectMask(bvb), input.getNrgStackOptional());
     }
 
-    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask bic) throws FeatureCalcException {
-        VoxelBox<ByteBuffer> vb;
+    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask mask)
+            throws FeatureCalculationException {
+        VoxelBox<ByteBuffer> voxelBox;
         try {
-            vb = bic.getChannel().getVoxelBox().asByte();
-        } catch (IncorrectVoxelDataTypeException e1) {
-            throw new FeatureCalcException(
-                    "binaryImgChnlProvider returned incompatible data type", e1);
+            voxelBox = mask.getChannel().getVoxelBox().asByte();
+        } catch (IncorrectVoxelDataTypeException e) {
+            throw new FeatureCalculationException(
+                    "mask has incompatible data type, it must be unsigned 8-bit", e);
         }
 
-        return new BinaryVoxelBoxByte(vb, bic.getBinaryValues());
+        return new BinaryVoxelBoxByte(voxelBox, mask.getBinaryValues());
     }
 }

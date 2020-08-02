@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.cfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -47,7 +49,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -60,37 +62,30 @@ import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
 public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
 
     // START BEAN PROPERTIES
-    @BeanField private CfgSgmn sgmn = null;
+    @BeanField @Getter @Setter private CfgSgmn sgmn = null;
 
-    @BeanField private String outputNameOriginal = "original";
+    @BeanField @Getter @Setter private String outputNameOriginal = "original";
 
-    @BeanField @AllowEmpty private String keyValueParamsID = "";
+    @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
     // END BEAN PROPERTIES
-
-    public CfgSgmnTask() {
-        super();
-    }
 
     @Override
     public void doJobOnInputObject(InputBound<MultiInput, ExperimentState> params)
             throws JobExecutionException {
 
-        Logger logger = params.getLogger();
         MultiInput inputObject = params.getInputObject();
 
-        assert (logger != null);
-
         try {
-            NamedImgStackCollection stackCollection = stacksFromInput(inputObject);
+            NamedStacks stackCollection = stacksFromInput(inputObject);
 
-            NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject, logger);
+            NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject);
 
-            Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logger);
+            Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject);
 
             Cfg cfg =
                     sgmn.duplicateBean()
                             .sgmn(stackCollection, objects, keyValueParams, params.context());
-            writeVisualization(cfg, params.getOutputManager(), stackCollection, logger);
+            writeVisualization(cfg, params.getOutputManager(), stackCollection, params.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -106,17 +101,16 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         return new InputTypesExpected(MultiInput.class);
     }
 
-    private NamedImgStackCollection stacksFromInput(MultiInput inputObject)
-            throws OperationFailedException {
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
+    private NamedStacks stacksFromInput(MultiInput inputObject) throws OperationFailedException {
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
     }
 
-    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput inputObject, Logger logger)
+    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput inputObject)
             throws JobExecutionException {
         NamedProviderStore<KeyValueParams> paramsCollection =
-                new LazyEvaluationStore<>(logger, "keyValueParams");
+                new LazyEvaluationStore<>("keyValueParams");
         try {
             inputObject.keyValueParams().addToStore(paramsCollection);
         } catch (OperationFailedException e1) {
@@ -136,10 +130,10 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         }
     }
 
-    private NamedProviderStore<ObjectCollection> objectsFromInput(
-            MultiInput inputObject, Logger logger) throws OperationFailedException {
+    private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput inputObject)
+            throws OperationFailedException {
         NamedProviderStore<ObjectCollection> objectsStore =
-                new LazyEvaluationStore<>(logger, "object-colelctions");
+                new LazyEvaluationStore<>("object-colelctions");
         inputObject.objects().addToStore(objectsStore);
         return objectsStore;
     }
@@ -147,7 +141,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     private void writeVisualization(
             Cfg cfg,
             BoundOutputManagerRouteErrors outputManager,
-            NamedImgStackCollection stackCollection,
+            NamedStacks stackCollection,
             Logger logger) {
         outputManager
                 .getWriterCheckIfAllowed()
@@ -182,21 +176,5 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     public void afterAllJobsAreExecuted(ExperimentState sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
         sharedState.outputAfterAllTasksAreExecuted(context.getOutputManager());
-    }
-
-    public CfgSgmn getSgmn() {
-        return sgmn;
-    }
-
-    public void setSgmn(CfgSgmn sgmn) {
-        this.sgmn = sgmn;
-    }
-
-    public String getKeyValueParamsID() {
-        return keyValueParamsID;
-    }
-
-    public void setKeyValueParamsID(String keyValueParamsID) {
-        this.keyValueParamsID = keyValueParamsID;
     }
 }

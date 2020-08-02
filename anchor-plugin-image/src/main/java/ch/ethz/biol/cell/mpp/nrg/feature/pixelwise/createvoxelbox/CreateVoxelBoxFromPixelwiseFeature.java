@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -74,13 +74,13 @@ public class CreateVoxelBoxFromPixelwiseFeature {
             setPixels(vbOut, pixelScore, logger);
             return vbOut;
 
-        } catch (InitException | FeatureCalcException e) {
+        } catch (InitException | FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }
 
     private void setPixels(VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore, Logger logger)
-            throws FeatureCalcException, InitException {
+            throws FeatureCalculationException, InitException {
 
         pixelScore.init(createHistograms(), keyValueParams);
 

@@ -26,6 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import io.vavr.control.Either;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +91,7 @@ public class ThreeColoredObjectsOnStack extends StackProviderRGBFromObjectBase {
                 new DrawObjectsGenerator(
                         createDrawer(),
                         new ObjectCollectionWithProperties(objects),
-                        Optional.of(maybeFlattenedBackground()),
+                        Either.right(maybeFlattenedBackground()),
                         colors);
 
         try {

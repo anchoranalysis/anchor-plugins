@@ -24,9 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.table;
+package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
@@ -36,16 +37,18 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.SingleObjTableSession;
+import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.stack.DisplayStack;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
  *
  * @author Owen Feehan
  */
-public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
+public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureInputSingleObject> {
 
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
@@ -53,7 +56,7 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
             throws CreateException {
-        return new SingleObjTableSession(storeFactory.createNamedFeatureList(list));
+        return new SingleTableCalculator(storeFactory.createNamedFeatureList(list));
     }
 
     @Override
@@ -62,7 +65,7 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
     }
 
     @Override
-    public List<FeatureInputSingleObject> createListInputs(
+    public List<FeatureInputSingleObject> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException {
         return objects.stream()
@@ -83,5 +86,12 @@ public class Simple extends FeatureTableObjects<FeatureInputSingleObject> {
                             object.getBoundingBox(), extent));
         }
         return object;
+    }
+
+    @Override
+    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input)
+            throws CreateException {
+        return Optional.of(
+                getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject())));
     }
 }

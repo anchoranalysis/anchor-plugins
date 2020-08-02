@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -44,7 +44,7 @@ class CalculatePairInput
 
     @Override
     protected FeatureInputPairObjects execute(FeatureInputSingleObject input)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
 
         ObjectMask objFromBinary = new ObjectMask(chnl.binaryVoxelBox());
 

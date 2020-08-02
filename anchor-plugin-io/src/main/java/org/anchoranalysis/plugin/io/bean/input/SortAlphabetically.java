@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -45,7 +47,7 @@ import org.anchoranalysis.io.input.InputFromManager;
 public class SortAlphabetically<T extends InputFromManager> extends InputManager<T> {
 
     // START BEAN PROPERTIES
-    @BeanField private InputManager<T> input;
+    @BeanField @Getter @Setter private InputManager<T> input;
     // END BEAN PROPERITES
 
     @Override
@@ -62,13 +64,5 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
                 list, (T o1, T o2) -> o1.descriptiveName().compareTo(o2.descriptiveName()));
 
         return list;
-    }
-
-    public InputManager<T> getInput() {
-        return input;
-    }
-
-    public void setInput(InputManager<T> input) {
-        this.input = input;
     }
 }

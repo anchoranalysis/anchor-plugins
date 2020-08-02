@@ -27,29 +27,49 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.io.csv.MetadataHeaders;
+import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 
-public class GenerateHeadersForCSV {
+/**
+ * Generates a list of header-names for columns unrelated to features (identifiers and groups)
+ *
+ * @author Owen Feehan
+ */
+@RequiredArgsConstructor
+public class GenerateLabelHeadersForCSV {
 
-    private final String[] results;
+    /**
+     * The standard group header that occurs if a groups are enabled (with possibly an additional
+     * group header
+     */
+    private static final String GROUP_HEADER_STANDARD = "group";
+
+    // START REQUIRED ARGUMENTS
+    /** Headers that identify the row unrelated to groups */
+    private final String[] nonGroupHeaders;
+
+    /**
+     * Additional group-header used after the {@link GROUP_HEADER_STANDARD} if groups are enabled
+     */
     private final Optional<String> additionalGroupHeader;
+    // END REQUIRED ARGUMENTS
 
-    public GenerateHeadersForCSV(String[] results, Optional<String> additionalGroupHeader) {
-        super();
-        this.results = results;
-        this.additionalGroupHeader = additionalGroupHeader;
+    /**
+     * Creates the label-headers (the headers for columns not associated with features)
+     *
+     * @param groupsEnabled whether groups are enabled or not. Iff true, group headers are included.
+     * @return the headers
+     */
+    public LabelHeaders createHeaders(boolean groupsEnabled) {
+        return new LabelHeaders(nonGroupHeaders, headersForGroup(groupsEnabled));
     }
 
-    public MetadataHeaders createMetadataHeaders(boolean groupGeneratorDefined) {
-        return new MetadataHeaders(headersForGroup(groupGeneratorDefined), results);
-    }
-
-    private String[] headersForGroup(boolean groupGeneratorDefined) {
-        if (groupGeneratorDefined) {
+    private String[] headersForGroup(boolean groupsEnabled) {
+        if (groupsEnabled) {
             if (additionalGroupHeader.isPresent()) {
-                return new String[] {"group", additionalGroupHeader.get()};
+                return new String[] {GROUP_HEADER_STANDARD, additionalGroupHeader.get()};
             } else {
-                return new String[] {"group"};
+                return new String[] {GROUP_HEADER_STANDARD};
             }
         } else {
             if (additionalGroupHeader.isPresent()) {

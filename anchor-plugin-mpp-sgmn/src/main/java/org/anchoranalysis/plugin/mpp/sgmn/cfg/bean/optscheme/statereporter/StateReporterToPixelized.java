@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -48,7 +50,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
 public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, CfgNRGPixelized> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean private StateTransformerBean<T, CfgNRGPixelized> secondary;
+    @BeanField @OptionalBean @Getter @Setter
+    private StateTransformerBean<T, CfgNRGPixelized> secondary;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,13 +69,5 @@ public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, C
         compose.setFirst(new RetrieveSourceFromPixelized<T>());
         compose.setSecond(secondary);
         return compose;
-    }
-
-    public StateTransformerBean<T, CfgNRGPixelized> getSecondary() {
-        return secondary;
-    }
-
-    public void setSecondary(StateTransformerBean<T, CfgNRGPixelized> secondary) {
-        this.secondary = secondary;
     }
 }

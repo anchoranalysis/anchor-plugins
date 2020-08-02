@@ -33,7 +33,8 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.calc.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -70,8 +71,10 @@ public class FeatureListImageTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = FeatureCalcException.class)
-    public void testNoParams() throws InitException, FeatureCalcException, CreateException {
+    @Test(expected = NamedFeatureCalculationException.class)
+    public void testNoParams()
+            throws InitException, FeatureCalculationException, CreateException,
+                    NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
@@ -84,7 +87,9 @@ public class FeatureListImageTest {
     }
 
     @Test
-    public void testHistogram() throws InitException, FeatureCalcException, CreateException {
+    public void testHistogram()
+            throws InitException, FeatureCalculationException, CreateException,
+                    NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
                 createAndStart(histogramFeatures(loader));
@@ -109,7 +114,9 @@ public class FeatureListImageTest {
     }
 
     @Test
-    public void testImage() throws InitException, FeatureCalcException, CreateException {
+    public void testImage()
+            throws InitException, NamedFeatureCalculationException, CreateException,
+                    FeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
@@ -148,7 +155,7 @@ public class FeatureListImageTest {
     }
 
     private <T extends FeatureInput> FeatureCalculatorMulti<T> createAndStart(
-            FeatureList<T> features) throws FeatureCalcException {
+            FeatureList<T> features) throws InitException {
         return FeatureSession.with(features, LoggingFixture.suppressedLogErrorReporter());
     }
 

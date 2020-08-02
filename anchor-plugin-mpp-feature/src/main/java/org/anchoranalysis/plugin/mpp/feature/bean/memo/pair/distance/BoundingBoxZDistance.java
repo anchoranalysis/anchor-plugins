@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
@@ -44,7 +44,8 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingl
 public class BoundingBoxZDistance extends FeaturePairMemoSingleRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalcException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
 

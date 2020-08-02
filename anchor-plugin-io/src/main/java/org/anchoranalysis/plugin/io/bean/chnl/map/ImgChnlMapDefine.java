@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.chnl.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
@@ -37,12 +39,8 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 public class ImgChnlMapDefine extends ImgChnlMapCreator {
 
     // START BEAN PROPERTIES
-    @BeanField private List<ImgChnlMapEntry> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ImgChnlMapEntry> list = new ArrayList<>();
     // END BEAN PROPERTIES
-
-    public ImgChnlMapDefine() {
-        super();
-    }
 
     @Override
     public ImgChnlMap createMap(OpenedRaster openedRaster) {
@@ -51,13 +49,5 @@ public class ImgChnlMapDefine extends ImgChnlMapCreator {
             out.add(entry);
         }
         return out;
-    }
-
-    public List<ImgChnlMapEntry> getList() {
-        return list;
-    }
-
-    public void setList(List<ImgChnlMapEntry> list) {
-        this.list = list;
     }
 }

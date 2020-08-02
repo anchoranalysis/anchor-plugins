@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -87,12 +87,12 @@ public class IncreaseFeatureCondition implements AfterCondition {
             // We skip if we don't increase the feature value for both objects
             return (featureMerge > featureSrc && featureMerge > featureDest);
 
-        } catch (FeatureCalcException e) {
+        } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private double calc(ObjectMask object) throws FeatureCalcException {
+    private double calc(ObjectMask object) throws FeatureCalculationException {
         return session.calc(new FeatureInputSingleObject(object));
     }
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 
@@ -41,7 +41,7 @@ public class NumberIntersectingObjects extends FeatureIntersectingObjects {
     protected double valueFor(
             SessionInput<FeatureInputSingleObject> params,
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
-            throws FeatureCalcException {
+            throws FeatureCalculationException {
         return params.calc(intersecting).size();
     }
 }

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,7 +48,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     private Optional<T> afterDeathProp;
 
     // START BEAN PROPERTIES
-    @BeanField private int birthRepeats = 1;
+    @BeanField @Getter @Setter private int birthRepeats = 1;
     // END BEAN PROPERTIES
 
     private boolean hasBeenInit = false;
@@ -106,14 +108,6 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     @Override
     public int[] changedMarkIDArray() {
         return makeArray(kernelBirth.changedMarkIDArray(), kernelDeath.changedMarkIDArray());
-    }
-
-    public int getBirthRepeats() {
-        return birthRepeats;
-    }
-
-    public void setBirthRepeats(int birthRepeats) {
-        this.birthRepeats = birthRepeats;
     }
 
     private static <S> String changedID(Kernel<S> kernel) {

@@ -30,6 +30,8 @@ import com.google.common.collect.BoundType;
 import com.google.common.collect.TreeMultiset;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
@@ -42,7 +44,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField private int kernelHalfWidth;
+    @BeanField @Getter @Setter private int kernelHalfWidth;
     // END BEAN PROPERTIES
 
     // Uses a square kernel of size (2*kernelHalfWidth+1)x(2*kernelHalfWidth+1)
@@ -169,13 +171,5 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
             }
         }
         return dup;
-    }
-
-    public int getKernelHalfWidth() {
-        return kernelHalfWidth;
-    }
-
-    public void setKernelHalfWidth(int kernelHalfWidth) {
-        this.kernelHalfWidth = kernelHalfWidth;
     }
 }

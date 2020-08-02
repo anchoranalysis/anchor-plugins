@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
@@ -39,31 +41,15 @@ import org.anchoranalysis.image.outline.FindOutline;
  */
 public class BinaryChnlProviderOutline extends BinaryChnlProviderOne {
 
-    // START
-    @BeanField private boolean force2D = false;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private boolean force2D = false;
 
-    @BeanField private boolean erodeEdges = true;
-    // END
+    @BeanField @Getter @Setter private boolean erodeEdges = true;
+    // END BEAN PROPERTIES
 
     @Override
     public Mask createFromChnl(Mask chnl) throws CreateException {
         boolean do3D = chnl.getDimensions().getZ() > 1 && !force2D;
         return FindOutline.outline(chnl, do3D, erodeEdges);
-    }
-
-    public boolean isForce2D() {
-        return force2D;
-    }
-
-    public void setForce2D(boolean force2d) {
-        force2D = force2d;
-    }
-
-    public boolean isErodeEdges() {
-        return erodeEdges;
-    }
-
-    public void setErodeEdges(boolean erodeEdges) {
-        this.erodeEdges = erodeEdges;
     }
 }

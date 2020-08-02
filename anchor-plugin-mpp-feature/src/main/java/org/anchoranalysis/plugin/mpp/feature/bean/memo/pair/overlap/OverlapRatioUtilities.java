@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 import java.util.function.LongBinaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.pxlmark.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OverlapRatioUtilities {

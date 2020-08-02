@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.LessThanBean;
@@ -38,9 +40,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculateLevelBase {
 
     // START BEAN PROPERTIES
-    @BeanField private int minDifference = 0;
+    @BeanField @Getter @Setter private int minDifference = 0;
 
-    @BeanField private double widthFactor = 1.0;
+    @BeanField @Getter @Setter private double widthFactor = 1.0;
     // END BEAN PROPERTIES
 
     private double widthLessThan;
@@ -61,21 +63,5 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculat
     protected double calcForPixel(int pxlValue, int level) {
         return PixelScoreDifference.calcDiffFromValue(
                 pxlValue, level, widthGreaterThan, widthLessThan, minDifference);
-    }
-
-    public int getMinDifference() {
-        return minDifference;
-    }
-
-    public void setMinDifference(int minDifference) {
-        this.minDifference = minDifference;
-    }
-
-    public double getWidthFactor() {
-        return widthFactor;
-    }
-
-    public void setWidthFactor(double widthFactor) {
-        this.widthFactor = widthFactor;
     }
 }

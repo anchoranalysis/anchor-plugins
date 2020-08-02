@@ -29,24 +29,24 @@ package org.anchoranalysis.plugin.image.task.chnl.convert;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.chnl.ChnlGetter;
+import org.anchoranalysis.image.io.chnl.ChannelGetter;
 
 public class ChnlGetterForTimepoint {
 
-    private ChnlGetter getter;
+    private ChannelGetter getter;
     private int t;
 
-    public ChnlGetterForTimepoint(ChnlGetter getter, int t) {
+    public ChnlGetterForTimepoint(ChannelGetter getter, int t) {
         super();
         this.getter = getter;
         this.t = t;
     }
 
     public boolean hasChnl(String chnlName) {
-        return getter.hasChnl(chnlName);
+        return getter.hasChannel(chnlName);
     }
 
     public Channel getChnl(String chnlName) throws GetOperationFailedException {
-        return getter.getChnl(chnlName, t, ProgressReporterNull.get());
+        return getter.getChannel(chnlName, t, ProgressReporterNull.get());
     }
 }

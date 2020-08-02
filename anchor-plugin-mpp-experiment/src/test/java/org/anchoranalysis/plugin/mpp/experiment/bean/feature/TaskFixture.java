@@ -43,9 +43,9 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.FeatureTableObjects;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.MergedPairs;
-import org.anchoranalysis.plugin.image.feature.bean.object.table.Simple;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
+import org.anchoranalysis.plugin.image.feature.bean.object.combine.PairNeighbors;
 import org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
 import org.anchoranalysis.test.TestLoader;
@@ -58,7 +58,7 @@ class TaskFixture {
 
     @Getter private final ExportObjectsFeatureLoader featureLoader;
 
-    private FeatureTableObjects<?> flexiFeatureTable = new Simple();
+    private CombineObjectsForFeatures<?> flexiFeatureTable = new EachObjectIndependently();
 
     /**
      * Constructor
@@ -115,7 +115,7 @@ class TaskFixture {
     private <T extends FeatureInput> FromObjects<T> createSource() throws CreateException {
         FromObjects<T> source = new FromObjects<>();
         source.setDefine(DefineFixture.create(nrgStack, Optional.of(featureLoader.shared())));
-        source.setTable((FeatureTableObjects<T>) flexiFeatureTable);
+        source.setCombine((CombineObjectsForFeatures<T>) flexiFeatureTable);
         source.setObjects(createObjectProviders(MultiInputFixture.OBJECTS_NAME));
         return source;
     }
@@ -125,9 +125,9 @@ class TaskFixture {
         return Arrays.asList(new NamedBean<>(objectsName, new Reference(objectsName)));
     }
 
-    private MergedPairs createMergedPairs(
+    private PairNeighbors createMergedPairs(
             boolean includeFeaturesInPair, boolean includeImageFeatures) {
-        MergedPairs mergedPairs = new MergedPairs();
+        PairNeighbors mergedPairs = new PairNeighbors();
         if (includeFeaturesInPair) {
             mergedPairs.setFeaturesPair(featureLoader.pair());
         }

@@ -26,13 +26,15 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.conditional;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -47,15 +49,15 @@ import org.anchoranalysis.feature.input.FeatureInput;
 public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
 
     // START BEAN PROPERTIRES
-    @BeanField private Feature<T> featureCondition;
+    @BeanField @Getter @Setter private Feature<T> featureCondition;
 
-    @BeanField private Feature<T> featureElse;
+    @BeanField @Getter @Setter private Feature<T> featureElse;
 
-    @BeanField private RelationToThreshold threshold;
+    @BeanField @Getter @Setter private RelationToThreshold threshold;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalcException {
+    public double calc(SessionInput<T> input) throws FeatureCalculationException {
 
         double featureConditionResult = input.calc(featureCondition);
         RelationToValue relation = threshold.relation();
@@ -65,29 +67,5 @@ public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleEle
         } else {
             return input.calc(featureElse);
         }
-    }
-
-    public Feature<T> getFeatureCondition() {
-        return featureCondition;
-    }
-
-    public void setFeatureCondition(Feature<T> featureCondition) {
-        this.featureCondition = featureCondition;
-    }
-
-    public Feature<T> getFeatureElse() {
-        return featureElse;
-    }
-
-    public void setFeatureElse(Feature<T> featureElse) {
-        this.featureElse = featureElse;
-    }
-
-    public RelationToThreshold getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(RelationToThreshold threshold) {
-        this.threshold = threshold;
     }
 }

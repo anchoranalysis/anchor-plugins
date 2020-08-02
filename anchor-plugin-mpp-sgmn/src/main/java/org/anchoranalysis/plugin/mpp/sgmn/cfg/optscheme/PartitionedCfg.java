@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +33,7 @@ import java.util.Set;
 import java.util.function.ToDoubleFunction;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -115,12 +115,9 @@ public class PartitionedCfg {
             return Optional.empty();
         }
 
-        List<Pair<Mark, Double>> list = new ArrayList<>();
-        for (Mark item : available) {
-            Pair<Mark, Double> pair = new Pair<>(item, funcExtractWeight.applyAsDouble(item));
-            list.add(pair);
-        }
-
+        List<Pair<Mark, Double>> list =
+                FunctionalList.mapToList(
+                        available, item -> new Pair<>(item, funcExtractWeight.applyAsDouble(item)));
         return Optional.of(new EnumeratedDistribution<>(list));
     }
 

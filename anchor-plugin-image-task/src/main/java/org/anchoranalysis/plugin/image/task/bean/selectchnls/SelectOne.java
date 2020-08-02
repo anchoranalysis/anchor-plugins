@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.selectchnls;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
@@ -46,9 +48,9 @@ public class SelectOne extends SelectChnlsFromStacks {
      * If defined, processing only occurs the stack with this specific stack and index. Otherwise
      * processing occurs on all input stacks
      */
-    @BeanField private String stackName;
+    @BeanField @Getter @Setter private String stackName;
 
-    @BeanField private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int chnlIndex = 0;
     // END BEAN FIELDS
 
     @Override

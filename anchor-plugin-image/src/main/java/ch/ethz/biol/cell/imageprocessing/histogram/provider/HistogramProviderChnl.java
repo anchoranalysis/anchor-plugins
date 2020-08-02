@@ -26,12 +26,14 @@
 
 package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -39,9 +41,9 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 public class HistogramProviderChnl extends HistogramProvider {
 
     // START BEAN PROPERTIES
-    @BeanField private ChnlProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider chnl;
 
-    @BeanField @OptionalBean private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
     @Override
@@ -54,21 +56,5 @@ public class HistogramProviderChnl extends HistogramProvider {
         } else {
             return HistogramFactory.create(chnlIn);
         }
-    }
-
-    public ChnlProvider getChnl() {
-        return chnl;
-    }
-
-    public void setChnl(ChnlProvider chnl) {
-        this.chnl = chnl;
-    }
-
-    public BinaryChnlProvider getMask() {
-        return mask;
-    }
-
-    public void setMask(BinaryChnlProvider mask) {
-        this.mask = mask;
     }
 }

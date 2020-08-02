@@ -56,6 +56,6 @@ public class AtIndex extends ObjectCollectionProviderUnary {
                             index, objects.size()));
         }
 
-        return ObjectCollectionFactory.from(objects.get(index));
+        return ObjectCollectionFactory.of(objects.get(index));
     }
 }

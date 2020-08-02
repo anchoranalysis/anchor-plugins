@@ -26,12 +26,14 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -41,7 +43,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalcException;
+import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -49,8 +51,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedImgStackCollection;
-import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -69,12 +70,13 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     private static final String OUTPUT_STACK_KEY = "stack";
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit private FeatureListProvider<FeatureInputStack> scoreProvider;
+    @BeanField @SkipInit @Getter @Setter
+    private FeatureListProvider<FeatureInputStack> scoreProvider;
 
-    @BeanField private StackProvider nrgStackProvider;
+    @BeanField @Getter @Setter private StackProvider nrgStackProvider;
 
     /** If true, the maxima of the score is searched for. If false, rather the minima. */
-    @BeanField private boolean findMaxima = true;
+    @BeanField @Getter @Setter private boolean findMaxima = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -138,16 +140,19 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
             throws OperationFailedException {
 
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
+        try {
+            double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
 
-        double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
+            int optimaSliceIndex = findOptimaSlice(scores);
 
-        int optimaSliceIndex = findOptimaSlice(scores);
+            logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
 
-        logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
+            params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
 
-        params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
-
-        return optimaSliceIndex;
+            return optimaSliceIndex;
+        } catch (FeatureCalculationException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     private void deriveSlicesAndOutput(
@@ -157,10 +162,10 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
             BoundOutputManagerRouteErrors outputManager)
             throws OperationFailedException {
 
-        NamedImgStackCollection stackCollection = collectionFromInput(inputObject);
+        NamedStacks stackCollection = collectionFromInput(inputObject);
 
         // Extract slices
-        NamedImgStackCollection sliceCollection =
+        NamedStacks sliceCollection =
                 stackCollection.applyOperation(
                         nrgStack.getDimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
@@ -171,16 +176,15 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private static NamedImgStackCollection collectionFromInput(NamedChnlsInput inputObject)
+    private static NamedStacks collectionFromInput(NamedChnlsInput inputObject)
             throws OperationFailedException {
-        NamedImgStackCollection stackCollection = new NamedImgStackCollection();
-        inputObject.addToStore(
-                new WrapStackAsTimeSequenceStore(stackCollection), 0, ProgressReporterNull.get());
+        NamedStacks stackCollection = new NamedStacks();
+        inputObject.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 
     private void outputSlices(
-            BoundOutputManagerRouteErrors outputManager, NamedImgStackCollection stackCollection)
+            BoundOutputManagerRouteErrors outputManager, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StackCollectionOutputter.outputSubsetWithException(
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);
@@ -196,8 +200,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
     private double[] calcScoreForEachSlice(
             Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger)
-            throws OperationFailedException {
-
+            throws FeatureCalculationException {
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(scoreFeature, logger);
@@ -218,8 +221,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
             return results;
 
-        } catch (FeatureCalcException e) {
-            throw new OperationFailedException(e);
+        } catch (InitException | FeatureCalculationException | OperationFailedException e) {
+            throw new FeatureCalculationException(e);
         }
     }
 
@@ -241,29 +244,5 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
-    }
-
-    public FeatureListProvider<FeatureInputStack> getScoreProvider() {
-        return scoreProvider;
-    }
-
-    public void setScoreProvider(FeatureListProvider<FeatureInputStack> scoreProvider) {
-        this.scoreProvider = scoreProvider;
-    }
-
-    public StackProvider getNrgStackProvider() {
-        return nrgStackProvider;
-    }
-
-    public void setNrgStackProvider(StackProvider nrgStackProvider) {
-        this.nrgStackProvider = nrgStackProvider;
-    }
-
-    public boolean isFindMaxima() {
-        return findMaxima;
-    }
-
-    public void setFindMaxima(boolean findMaxima) {
-        this.findMaxima = findMaxima;
     }
 }

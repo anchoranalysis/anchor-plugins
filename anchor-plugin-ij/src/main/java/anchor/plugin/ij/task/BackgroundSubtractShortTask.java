@@ -28,6 +28,8 @@ package anchor.plugin.ij.task;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIJBackgroundSubtractor;
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -36,11 +38,11 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeries;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
@@ -51,9 +53,9 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 public class BackgroundSubtractShortTask extends RasterTask {
 
     // START BEAN PROPERTIES
-    @BeanField private int radius;
+    @BeanField @Getter @Setter private int radius;
 
-    @BeanField private int scaleDownIntensityFactor = 1;
+    @BeanField @Getter @Setter private int scaleDownIntensityFactor = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -76,10 +78,9 @@ public class BackgroundSubtractShortTask extends RasterTask {
         ProgressReporter progressReporter = ProgressReporterNull.get();
 
         try {
-            NamedChnlCollectionForSeries ncc =
-                    inputObject.createChnlCollectionForSeries(0, progressReporter);
+            NamedChannelsForSeries ncc = inputObject.createChannelsForSeries(0, progressReporter);
 
-            Channel inputImage = ncc.getChnl(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+            Channel inputImage = ncc.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(
@@ -111,21 +112,5 @@ public class BackgroundSubtractShortTask extends RasterTask {
     public void endSeries(BoundOutputManagerRouteErrors outputManager)
             throws JobExecutionException {
         // NOTHING TO DO
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public int getScaleDownIntensityFactor() {
-        return scaleDownIntensityFactor;
-    }
-
-    public void setScaleDownIntensityFactor(int scaleDownIntensityFactor) {
-        this.scaleDownIntensityFactor = scaleDownIntensityFactor;
     }
 }

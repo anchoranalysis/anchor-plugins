@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -73,25 +75,26 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  */
 public class GroupFiles extends InputManager<NamedChnlsInput> {
 
-    // START BEANS
-    @BeanField private Files fileInput;
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private Files fileInput;
 
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private FilePathParser filePathParser;
+    @BeanField @Getter @Setter private FilePathParser filePathParser;
 
-    @BeanField private boolean requireAllFilesMatch = false;
+    @BeanField @Getter @Setter private boolean requireAllFilesMatch = false;
 
-    @BeanField private ImgChnlMapCreator imgChnlMapCreator;
+    @BeanField @Getter @Setter private ImgChnlMapCreator imgChnlMapCreator;
 
-    @BeanField private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
+    @BeanField @Getter @Setter
+    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
      * included
      */
-    @BeanField @OptionalBean private CheckParsedFilePathBag checkParsedFilePathBag;
-    // END BEANS
+    @BeanField @OptionalBean @Getter @Setter private CheckParsedFilePathBag checkParsedFilePathBag;
+    // END BEAN PROPERTIES
 
     @Override
     public List<NamedChnlsInput> inputObjects(InputManagerParams params) throws AnchorIOException {
@@ -162,61 +165,5 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
             result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChnlMapCreator));
         }
         return result;
-    }
-
-    public FilePathParser getFilePathParser() {
-        return filePathParser;
-    }
-
-    public void setFilePathParser(FilePathParser filePathParser) {
-        this.filePathParser = filePathParser;
-    }
-
-    public boolean isRequireAllFilesMatch() {
-        return requireAllFilesMatch;
-    }
-
-    public void setRequireAllFilesMatch(boolean requireAllFilesMatch) {
-        this.requireAllFilesMatch = requireAllFilesMatch;
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public Files getFileInput() {
-        return fileInput;
-    }
-
-    public void setFileInput(Files fileInput) {
-        this.fileInput = fileInput;
-    }
-
-    public ImgChnlMapCreator getImgChnlMapCreator() {
-        return imgChnlMapCreator;
-    }
-
-    public void setImgChnlMapCreator(ImgChnlMapCreator imgChnlMapCreator) {
-        this.imgChnlMapCreator = imgChnlMapCreator;
-    }
-
-    public DescriptiveNameFromFile getDescriptiveNameFromFile() {
-        return descriptiveNameFromFile;
-    }
-
-    public void setDescriptiveNameFromFile(DescriptiveNameFromFile descriptiveNameFromFile) {
-        this.descriptiveNameFromFile = descriptiveNameFromFile;
-    }
-
-    public CheckParsedFilePathBag getCheckParsedFilePathBag() {
-        return checkParsedFilePathBag;
-    }
-
-    public void setCheckParsedFilePathBag(CheckParsedFilePathBag checkParsedFilePathBag) {
-        this.checkParsedFilePathBag = checkParsedFilePathBag;
     }
 }

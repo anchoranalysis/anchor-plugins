@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
@@ -48,15 +50,15 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 public class RejectIfConditionXYResolution extends RasterReader {
 
     // START BEAN PROPERTIES
-    @BeanField @DefaultInstance private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField private RelationBean relation;
+    @BeanField @Getter @Setter private RelationBean relation;
 
-    @BeanField @NonNegative private double value;
+    @BeanField @NonNegative @Getter @Setter private double value;
     // END BEAN PROPERTIES
 
     private static class MaybeRejectProcessor
-            implements OpenedRasterAlterDimensions.ConsiderUpdatedImageRes {
+            implements OpenedRasterAlterDimensions.ConsiderUpdatedImageResolution {
 
         private RelationToValue relation;
         private double value;
@@ -90,29 +92,5 @@ public class RejectIfConditionXYResolution extends RasterReader {
         OpenedRaster or = rasterReader.openFile(filepath);
         return new OpenedRasterAlterDimensions(
                 or, new MaybeRejectProcessor(relation.create(), value));
-    }
-
-    public RasterReader getRasterReader() {
-        return rasterReader;
-    }
-
-    public void setRasterReader(RasterReader rasterReader) {
-        this.rasterReader = rasterReader;
-    }
-
-    public RelationBean getRelation() {
-        return relation;
-    }
-
-    public void setRelation(RelationBean relation) {
-        this.relation = relation;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
     }
 }
