@@ -44,6 +44,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import io.vavr.control.Either;
 
 /**
  * Colors three distinct collections of objects in RED, GREEN, BLUE on top of a stack.
@@ -90,7 +91,7 @@ public class ThreeColoredObjectsOnStack extends StackProviderRGBFromObjectBase {
                 new DrawObjectsGenerator(
                         createDrawer(),
                         new ObjectCollectionWithProperties(objects),
-                        Optional.of(maybeFlattenedBackground()),
+                        Either.right(maybeFlattenedBackground()),
                         colors);
 
         try {

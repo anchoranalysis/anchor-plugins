@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.AllArgsConstructor;
-import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
@@ -95,11 +94,11 @@ class BuildGeneratorHelper {
             
             // Bounding box-generator
             ExtractBoundingBoxAreaFromStackGenerator generator = new ExtractBoundingBoxAreaFromStackGenerator(
-                    Optional.of(stacks.getException(key)));
+                    stacks.getException(key));
             out.add(key, WrapBoundingBoxGeneratorAsObject.wrap(generator, flatten));
             
             // Outline on raster generator, reusing the previous generator for the background
-            out.add( outlineOutputName(key,flatten), new DrawObjectOnStackGenerator(generator, outlineWidth) );
+            out.add( outlineOutputName(key,flatten), DrawObjectOnStackGenerator.createFromGenerator(generator, outlineWidth) );
         }
     }
     
