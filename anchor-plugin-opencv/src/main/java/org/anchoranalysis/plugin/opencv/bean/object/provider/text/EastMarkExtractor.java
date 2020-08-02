@@ -40,6 +40,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastMarkExtractor {
@@ -81,12 +83,12 @@ class EastMarkExtractor {
 
     private static List<WithConfidence<Mark>> extractFromMatrices(
             Mat scores, Mat geometry, ScaleFactorInt offsetScale, double minConfidence) {
-        Pair<Mat, Extent> pair = reshapeScores(scores);
+        Tuple2<Mat, Extent> pair = reshapeScores(scores);
 
         return extractFromMatricesReshaped(
-                pair.getFirst(),
+                pair._1(),
                 reshapeGeometry(geometry),
-                pair.getSecond(),
+                pair._2(),
                 offsetScale,
                 minConfidence);
     }
@@ -148,7 +150,7 @@ class EastMarkExtractor {
      * @param scores matrix to reshape
      * @return the reshaped-matrix and the numbers of rows and columns
      */
-    private static Pair<Mat, Extent> reshapeScores(Mat scores) {
+    private static Tuple2<Mat, Extent> reshapeScores(Mat scores) {
 
         Mat scoresReshaped = scores.reshape(1, 1);
 
@@ -158,7 +160,7 @@ class EastMarkExtractor {
         int numCols = (int) Math.floor(Math.sqrt(rowsByCols));
         int numRows = rowsByCols / numCols;
 
-        return new Pair<>(scoresReshaped, new Extent(numCols, numRows));
+        return Tuple.of(scoresReshaped, new Extent(numCols, numRows));
     }
 
     private static float[][] splitGeometryIntoFiveArrays(Mat geometry, int rowsByCols) {
