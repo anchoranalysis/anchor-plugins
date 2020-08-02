@@ -65,7 +65,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public List<FeatureInputSingleObject> deriveInputsFromObjects(
+    public List<FeatureInputSingleObject> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException {
         return objects.stream()

@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -99,15 +100,21 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public List<T> deriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, boolean thumbnailsEnabled, Logger logger)
             throws CreateException {
-        List<T> inputs = deriveInputsFromObjects(objects, nrgStack, logger);
+        List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
         if (thumbnailsEnabled) {
-            thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+            try {
+                thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+            } catch (OperationFailedException e) {
+                throw new CreateException(e);
+            }
         }
         return inputs;
     }
     
     /**
      * Derives a list of inputs from an object-collection
+     * <p>
+     * A session for a <i>batch</i> is started where it expects further calls to {@link #createThumbailFor(FeatureInput)}.
      * 
      * @param objects the object-collection
      * @param nrgStack nrg-stack used during feature calculation
@@ -115,7 +122,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the list of inputs
      * @throws CreateException
      */
-    protected abstract List<T> deriveInputsFromObjects(
+    protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException;
     
@@ -126,4 +133,10 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the thumbnail (if its supported)
      */
     public abstract Optional<DisplayStack> createThumbailFor(T input) throws CreateException;
+    
+    
+    /** Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch */
+    public void endBatchAndCleanup() {
+        thumbnail.end();
+    }
 }

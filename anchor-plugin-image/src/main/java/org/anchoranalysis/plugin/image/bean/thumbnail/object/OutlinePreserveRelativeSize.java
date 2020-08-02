@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
@@ -14,6 +15,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,6 +54,9 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     
     /** The width of the outline. By default, it's 3 as it's nice to have a strongly easily-visible emphasis on where the object is in a thumbnail. */
     @BeanField @Getter @Setter private int outlineWidth = 3;
+    
+    /** Optionally outline the other (unselected for the thumbnail) objects in this particular color. If not set, these objects aren't outlined at all.. */
+    @BeanField @OptionalBean @Getter @Setter private RGBColorBean colorUnselectedObjects;
     // END BEAN PROPERTIES
     
     private DrawObjectOnStackGenerator generator;
@@ -59,7 +64,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private Extent sceneExtentScaled;
     
     @Override
-    public void start(ObjectCollection objects, Optional<Stack> backgroundSource) {
+    public void start(ObjectCollection objects, Optional<Stack> backgroundSource) throws OperationFailedException {
         
         if (objects.isEmpty()) {
             // Nothing to do, no thumbnails will ever be generated
@@ -71,7 +76,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 ObjectScalingHelper.scaleEachObjectFitsIn(objects, size.asExtent()),
                 interpolator.create());
         
-        setupGenerator(objects, backgroundSource.flatMap(this::determineBackground) );
+        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, objects) );
     }
             
     @Override
@@ -104,32 +109,29 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * @param objectsUnscaled unscaled objects
      * @param backgroundUnscaled unscaled background if it exists
      */
-    private void setupGenerator(ObjectCollection objectsUnscaled, Optional<Stack> backgroundUnscaled) {
-        Optional<Stack> backgroundScaled = scaler.scaleStack(backgroundUnscaled);
+    private void setupGenerator(ObjectCollection objectsUnscaled, Optional<Stack> backgroundScaled) {
         sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
         
         // Create a generator that draws objects on the background
         generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth);
     }
     
-    /** Derives a background-stack from a stack that is a source of possible backgrounds */
-    private Optional<Stack> determineBackground(Stack backgroundSource) {
+    private Optional<Stack> determineBackgroundMaybeOutlined(Optional<Stack> backgroundSource, ObjectCollection objects) throws OperationFailedException {
+        Optional<Stack> backgroundScaled = BackgroundHelper.determineBackgroundAndScale(backgroundSource, backgroundChannelIndex, scaler);
         
-        if (backgroundChannelIndex>-1) {
-            return Optional.of( extractChannelAsStack(backgroundSource, backgroundChannelIndex) );
-        }
-                
-        int numberChannels = backgroundSource.getNumberChannels();
-        if (numberChannels==0) {
-            return Optional.empty();
-        } else if (numberChannels==3 || numberChannels==1) {
-            return Optional.of(backgroundSource);
+        if (colorUnselectedObjects!=null && backgroundScaled.isPresent()) {
+            // Draw the other objects (scaled) onto the background. The objects are memoized as we do again
+            // individually at a later point.
+            DrawOutlineHelper drawOutlineHelper = new DrawOutlineHelper(colorUnselectedObjects, outlineWidth, scaler); 
+            return Optional.of( drawOutlineHelper.drawObjects(backgroundScaled.get(), objects) );
         } else {
-            return Optional.of( extractChannelAsStack(backgroundSource, 0) );
+            return backgroundScaled;    
         }
     }
-
-    private static Stack extractChannelAsStack(Stack stack, int index) {
-        return new Stack( stack.getChannel(index) );
+    
+    @Override
+    public void end() {
+        // Garbage collect the scaler as it contains a cache of scaled-objects
+        scaler = null;
     }
 }
