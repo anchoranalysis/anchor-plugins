@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -38,8 +37,6 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 
 /**
  * Binary partition of a set into "available" and "accepted"

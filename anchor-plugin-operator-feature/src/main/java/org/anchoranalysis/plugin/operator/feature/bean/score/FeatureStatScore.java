@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -67,7 +67,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
      * @throws FeatureCalculationException
      */
     protected abstract double deriveScore(
-            double featureValue, double mean, Operation<Double, FeatureCalculationException> stdDev)
+            double featureValue, double mean, CallableWithException<Double, FeatureCalculationException> stdDev)
             throws FeatureCalculationException;
 
     @Override

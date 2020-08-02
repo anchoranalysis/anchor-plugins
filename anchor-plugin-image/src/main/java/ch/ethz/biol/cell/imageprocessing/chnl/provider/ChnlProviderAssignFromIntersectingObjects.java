@@ -41,7 +41,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.apache.commons.math3.util.Pair;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 

@@ -73,22 +73,19 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     public void doJobOnInputObject(InputBound<MultiInput, ExperimentState> params)
             throws JobExecutionException {
 
-        Logger logger = params.getLogger();
         MultiInput inputObject = params.getInputObject();
-
-        assert (logger != null);
 
         try {
             NamedStacks stackCollection = stacksFromInput(inputObject);
 
-            NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject, logger);
+            NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject);
 
-            Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject, logger);
+            Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject);
 
             Cfg cfg =
                     sgmn.duplicateBean()
                             .sgmn(stackCollection, objects, keyValueParams, params.context());
-            writeVisualization(cfg, params.getOutputManager(), stackCollection, logger);
+            writeVisualization(cfg, params.getOutputManager(), stackCollection, params.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -111,10 +108,10 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         return stackCollection;
     }
 
-    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput inputObject, Logger logger)
+    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput inputObject)
             throws JobExecutionException {
         NamedProviderStore<KeyValueParams> paramsCollection =
-                new LazyEvaluationStore<>(logger, "keyValueParams");
+                new LazyEvaluationStore<>("keyValueParams");
         try {
             inputObject.keyValueParams().addToStore(paramsCollection);
         } catch (OperationFailedException e1) {
@@ -135,9 +132,9 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     }
 
     private NamedProviderStore<ObjectCollection> objectsFromInput(
-            MultiInput inputObject, Logger logger) throws OperationFailedException {
+            MultiInput inputObject) throws OperationFailedException {
         NamedProviderStore<ObjectCollection> objectsStore =
-                new LazyEvaluationStore<>(logger, "object-colelctions");
+                new LazyEvaluationStore<>("object-colelctions");
         inputObject.objects().addToStore(objectsStore);
         return objectsStore;
     }

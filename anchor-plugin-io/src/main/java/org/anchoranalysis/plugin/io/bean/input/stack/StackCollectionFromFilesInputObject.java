@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.OperationWithProgressReporter;
+import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -86,7 +86,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public OperationWithProgressReporter<TimeSequence, OperationFailedException>
+    public CallableWithProgressReporter<TimeSequence, OperationFailedException>
             createStackSequenceForSeries(int seriesNum) throws RasterIOException {
 
         // We always use the last one
@@ -118,14 +118,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 () -> {
                     try {
                         return createStackSequenceForSeries(seriesNum)
-                                .doOperation(progressReporter);
+                                .call(progressReporter);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }
                 });
     }
 
-    private static OperationWithProgressReporter<TimeSequence, OperationFailedException>
+    private static CallableWithProgressReporter<TimeSequence, OperationFailedException>
             openRasterAsOperation(final OpenedRaster openedRaster, final int seriesNum) {
         return pr -> {
             try {

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.Operation;
+import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -62,7 +62,7 @@ class AppendPart extends NamedChnlsInputPart {
             NamedChnlsInputPart delegate,
             String chnlName,
             int chnlIndex,
-            Operation<Path, AnchorIOException> filePath,
+            CallableWithException<Path, AnchorIOException> filePath,
             RasterReader rasterReader) {
         super();
         this.delegate = delegate;

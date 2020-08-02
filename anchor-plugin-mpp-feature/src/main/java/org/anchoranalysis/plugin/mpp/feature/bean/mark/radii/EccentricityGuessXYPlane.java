@@ -31,7 +31,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-import org.apache.commons.math3.util.Pair;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 
