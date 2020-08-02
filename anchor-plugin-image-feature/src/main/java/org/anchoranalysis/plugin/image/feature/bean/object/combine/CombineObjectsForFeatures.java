@@ -36,6 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -68,14 +69,14 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Creates features that will be applied on the objects. Features should always be duplicated
      * from the input list.
      *
-     * @param list
-     * @param storeFactory
-     * @param suppressErrors
-     * @return
+     * @param featuresSingleObject beans defining features to be applied to single-objects
+     * @param storeFactory creates as new {@link NamedFeatureStore} as needed
+     * @param suppressErrors if true exceptions aren't thrown when feature-calculations fail, but rather a log error message is writen
+     * @return a calculator for feature tables that may apply various features derived from {@code featuresSingleObject}
      * @throws CreateException
      */
     public abstract FeatureTableCalculator<T> createFeatures(
-            List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
+            List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> featuresSingleObject,
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
             throws CreateException, InitException;
@@ -90,15 +91,18 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * 
      * @param objects the objects from which inputs are derived
      * @param nrgStack nrg-stack used during feature calculation
+     * @param thumbnailsEnabled whether thumbnail-generation is enabled
      * @param logger logger
      * @return the list of inputs
      * @throws CreateException
      */
     public List<T> deriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            ObjectCollection objects, NRGStackWithParams nrgStack, boolean thumbnailsEnabled, Logger logger)
             throws CreateException {
         List<T> inputs = deriveInputsFromObjects(objects, nrgStack, logger);
-        thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+        if (thumbnailsEnabled) {
+            thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+        }
         return inputs;
     }
     

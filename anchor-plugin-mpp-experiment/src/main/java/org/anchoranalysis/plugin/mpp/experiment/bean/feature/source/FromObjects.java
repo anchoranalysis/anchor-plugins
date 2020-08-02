@@ -178,7 +178,7 @@ public class FromObjects<T extends FeatureInput>
                         startCalculator(context.getRowSource(), initParams, context.getLogger()),
                         initParams,
                         suppressErrors,
-                        combine::createThumbailFor,
+                        Optional.of(combine::createThumbailFor),
                         context);
         processAllProviders(descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 

@@ -32,6 +32,7 @@ import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.function.FunctionWithException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
@@ -59,7 +60,10 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     
     /** iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to the log */
     private final boolean suppressErrors;
-    private final FunctionWithException<T,Optional<DisplayStack>,CreateException> thumbnailForInput;
+    
+    /** Generates thumbnails (if enabled) */
+    private final Optional<FunctionWithException<T,Optional<DisplayStack>,CreateException>> thumbnailForInput;
+    
     private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public void processProvider(
@@ -78,7 +82,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         try {
-            List<T> inputs = table.deriveInputs(objects, nrgStack, context.getLogger());
+            List<T> inputs = table.deriveInputs(objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
 
             calculateManyFeaturesInto(inputs, identifierFromInput);
         } catch (CreateException | OperationFailedException e) {
@@ -116,7 +120,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
                         labelsForInput.apply(input),
                         new ResultsVectorWithThumbnail(
                            calculator.calc(input, context.getLogger().errorReporter(), suppressErrors),
-                           thumbnailForInput.apply(input)
+                           OptionalUtilities.flatMap( thumbnailForInput, func->func.apply(input) )
                         )
                 );
             }
