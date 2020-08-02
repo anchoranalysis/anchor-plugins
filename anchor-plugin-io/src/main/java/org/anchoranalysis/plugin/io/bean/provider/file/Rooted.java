@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Collection;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -39,8 +41,6 @@ import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import lombok.Getter;
-import lombok.Setter;
 
 //
 // Represents a set of files, with a different root depending on the operating-system

@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.BeanField;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.bean.annotation.BeanField;
 
 public class AdjacentFile extends AnchorBean<AdjacentFile> {
 

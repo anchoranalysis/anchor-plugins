@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -53,7 +54,6 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import lombok.Getter;
 
 /**
  * Calculates feature or feature values, adding a nrgStack (optionally) from either provider or the
@@ -65,10 +65,9 @@ import lombok.Getter;
 public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
 
     private final ImageInitParams initParams;
-    
-    @Getter
-    private final NRGStackWithParams nrgStack;
-    
+
+    @Getter private final NRGStackWithParams nrgStack;
+
     private final Logger logger;
 
     public FeatureCalculatorFromProvider(
@@ -81,9 +80,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         this.nrgStack =
                 nrgStackFromProviderOrElse(
                         nrgStackProvider,
-                        CacheCall.of( () ->
-                           allStacksAsOne(initParams.getStackCollection())
-                        ), 
+                        CacheCall.of(() -> allStacksAsOne(initParams.getStackCollection())),
                         context.getLogger());
         this.logger = context.getLogger();
     }
@@ -101,7 +98,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
             Feature<T> feature =
                     ExtractFromProvider.extractFeature(
                             provider, providerName, initParams.getFeature(), logger);
-    
+
             return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
         } catch (InitException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
@@ -114,22 +111,21 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         return createMultiCalculator(features, initParams.getFeature().getSharedFeatureSet());
     }
 
-    /**
-     * Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback
-     */
+    /** Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback */
     private NRGStackWithParams nrgStackFromProviderOrElse(
-            Optional<StackProvider> nrgStackProvider, CacheCall<Stack,OperationFailedException> fallback, Logger logger)
+            Optional<StackProvider> nrgStackProvider,
+            CacheCall<Stack, OperationFailedException> fallback,
+            Logger logger)
             throws OperationFailedException {
         if (nrgStackProvider.isPresent()) {
             return ExtractFromProvider.extractStack(nrgStackProvider.get(), initParams, logger);
         } else {
-            return new NRGStackWithParams( fallback.call() );
+            return new NRGStackWithParams(fallback.call());
         }
     }
-     
+
     private FeatureCalculatorMulti<T> createMultiCalculator(
-            FeatureList<T> features, SharedFeatureMulti sharedFeatures)
-            throws InitException {
+            FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));
@@ -141,31 +137,33 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
                 FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
                 input -> input.setNrgStack(nrgStack));
     }
-    
-    /** 
+
+    /**
      * Combines all stacks in the store into one stack
-     * <p>
-     * There is no guarantee about the ordering of the stacks, if there are multiple stacks in the store.
-     * <p>
-     * All stacks must have the same dimensions.
-     * 
+     *
+     * <p>There is no guarantee about the ordering of the stacks, if there are multiple stacks in
+     * the store.
+     *
+     * <p>All stacks must have the same dimensions.
+     *
      * @param store a named-store of stacks
      * @return a stack with channels from all stacks in the store
-     * @throws OperationFailedException if the stacks have different dimensions, or if anything else goes wrong
+     * @throws OperationFailedException if the stacks have different dimensions, or if anything else
+     *     goes wrong
      */
-    private static Stack allStacksAsOne(NamedProviderStore<Stack> store) throws OperationFailedException {
+    private static Stack allStacksAsOne(NamedProviderStore<Stack> store)
+            throws OperationFailedException {
         try {
             Stack out = new Stack();
-            
-            for( String key : store.keys()) {
-                out.addChannelsFrom( store.getOptional(key).get() );   // NOSONAR
+
+            for (String key : store.keys()) {
+                out.addChannelsFrom(store.getOptional(key).get()); // NOSONAR
             }
-            
+
             return out;
-            
+
         } catch (NamedProviderGetException | IncorrectImageSizeException e) {
             throw new OperationFailedException(e);
         }
     }
-
 }

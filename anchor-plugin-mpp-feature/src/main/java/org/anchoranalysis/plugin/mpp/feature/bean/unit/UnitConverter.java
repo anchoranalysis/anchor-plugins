@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.unit;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,8 +37,6 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Converts units (distance, area, volume) to a another representation (e.g. physical units)
@@ -129,7 +129,8 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
      * @throws FeatureCalculationException if physical is set, but the resolution is not
      * @return true iff the target-units for conversion are non-physical
      */
-    private boolean isNonPhysical(Optional<ImageResolution> res) throws FeatureCalculationException {
+    private boolean isNonPhysical(Optional<ImageResolution> res)
+            throws FeatureCalculationException {
         if (physical) {
             checkResIsPresent(res);
             return false;
@@ -138,7 +139,8 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
         }
     }
 
-    private void checkResIsPresent(Optional<ImageResolution> res) throws FeatureCalculationException {
+    private void checkResIsPresent(Optional<ImageResolution> res)
+            throws FeatureCalculationException {
         if (!res.isPresent()) {
             throw new FeatureCalculationException(
                     "Image-resolution is required for conversions to physical units, but it is not specified");

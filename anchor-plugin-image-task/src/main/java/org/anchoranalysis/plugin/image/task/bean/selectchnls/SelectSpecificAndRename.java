@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.task.bean.selectchnls;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderStackReference;
-import lombok.Getter;
-import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,7 +46,8 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
 public class SelectSpecificAndRename extends SelectChnlsFromStacks {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<NamedBean<ChnlProviderStackReference>> list = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<NamedBean<ChnlProviderStackReference>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override

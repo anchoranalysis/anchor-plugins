@@ -27,11 +27,11 @@
 package org.anchoranalysis.anchor.plugin.quick.bean.filepath;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
 

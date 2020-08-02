@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
@@ -45,8 +47,6 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
 import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
-import lombok.Getter;
-import lombok.Setter;
 
 public class StackProviderOutlineFromCfg extends StackProvider {
 
@@ -57,7 +57,8 @@ public class StackProviderOutlineFromCfg extends StackProvider {
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    @BeanField @Getter @Setter private ColorSetGenerator colorSetGenerator = new HSBColorSetGenerator();
+    @BeanField @Getter @Setter
+    private ColorSetGenerator colorSetGenerator = new HSBColorSetGenerator();
 
     @BeanField @Getter @Setter private int regionID = 0;
 

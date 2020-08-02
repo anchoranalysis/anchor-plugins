@@ -44,6 +44,7 @@ public class DataTypeMaxIntensity<T extends FeatureInputNRG> extends FeatureNRGS
 
     @Override
     public double calc(SessionInput<T> input) throws FeatureCalculationException {
-        return (double) input.get().getNrgStackRequired().getChannel(0).getVoxelDataType().maxValue();
+        return (double)
+                input.get().getNrgStackRequired().getChannel(0).getVoxelDataType().maxValue();
     }
 }

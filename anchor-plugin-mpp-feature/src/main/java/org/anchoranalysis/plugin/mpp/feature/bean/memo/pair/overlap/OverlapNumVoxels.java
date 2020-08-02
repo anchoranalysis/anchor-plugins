@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 public class OverlapNumVoxels extends OverlapMIPBase {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
         return overlappingNumVoxels(input);
     }
 }

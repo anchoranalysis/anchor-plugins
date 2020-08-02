@@ -26,13 +26,13 @@
 
 package ch.ethz.biol.cell.imageprocessing.io.chnlconverter.bean;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal

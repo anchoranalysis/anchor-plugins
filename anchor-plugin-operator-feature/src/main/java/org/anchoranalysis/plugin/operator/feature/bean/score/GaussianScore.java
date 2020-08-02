@@ -26,35 +26,37 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
-import lombok.Getter;
-import lombok.Setter;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
 // approaches 1.0
 public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean ignoreHigherSide = false; // Always returns 1.0 for the higher side
+    @BeanField @Getter @Setter
+    private boolean ignoreHigherSide = false; // Always returns 1.0 for the higher side
 
-    @BeanField @Getter @Setter private boolean ignoreLowerSide = false; // Always returns 1.0 for the lower side
+    @BeanField @Getter @Setter
+    private boolean ignoreLowerSide = false; // Always returns 1.0 for the lower side
 
     /** Treat the higher side as if it's the the fill cdf */
-    @BeanField @Getter @Setter 
-    private boolean rewardHigherSide = false; 
+    @BeanField @Getter @Setter private boolean rewardHigherSide = false;
 
     /* Treat the lower side as if it's 1 - the fill cdf */
-    @BeanField @Getter @Setter 
-    private boolean rewardLowerSide = false;
+    @BeanField @Getter @Setter private boolean rewardLowerSide = false;
     // END BEAN PROPERTIES
 
     @Override
     protected double deriveScore(
-            double featureValue, double mean, CallableWithException<Double, FeatureCalculationException> stdDev)
+            double featureValue,
+            double mean,
+            CallableWithException<Double, FeatureCalculationException> stdDev)
             throws FeatureCalculationException {
 
         if (ignoreHigherSide && featureValue > mean) {

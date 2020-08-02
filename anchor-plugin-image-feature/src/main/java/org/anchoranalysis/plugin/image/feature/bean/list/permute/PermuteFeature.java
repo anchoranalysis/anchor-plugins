@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -48,15 +50,13 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Permutes one or more properties of a Feature, so as to create a set of Features
- * <p>
- * As a convenience, a single permutation can be defined using the {@code permutation} property,
+ *
+ * <p>As a convenience, a single permutation can be defined using the {@code permutation} property,
  * whereas multiple permutations can be defined using {@code permutations} list of properties.
- * 
+ *
  * @author Owen Feehan
  * @param S permutation type
  * @param T feature-input
@@ -65,12 +65,18 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
 
     // START BEAN PROPERTIES
     /** Makes sure a particular feature list creator is evaluated */
-    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator; 
+    @BeanField @OptionalBean @Getter @Setter private StringSet referencesFeatureListCreator;
 
-    /** A permutation to apply. Either this must be present or {@code permutations} must be non-empty, but not both. */
+    /**
+     * A permutation to apply. Either this must be present or {@code permutations} must be
+     * non-empty, but not both.
+     */
     @BeanField @OptionalBean @Getter @Setter private PermuteProperty<S> permutation;
-    
-    /** A list of permutations to apply. Either this must be non-empty or {@code permutation} must be present, but not both. */
+
+    /**
+     * A list of permutations to apply. Either this must be non-empty or {@code permutation} must be
+     * present, but not both.
+     */
     @BeanField @Getter @Setter private List<PermuteProperty<S>> permutations = new ArrayList<>();
     // END BEAN PROPERTIES
 
@@ -78,10 +84,11 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-       
-        CheckMisconfigured.oneOnly("permutation", "permutations", permutation!=null, !permutations.isEmpty());
+
+        CheckMisconfigured.oneOnly(
+                "permutation", "permutations", permutation != null, !permutations.isEmpty());
     }
-    
+
     @Override
     protected FeatureList<T> createPermutedFeaturesFor(Feature<T> feature) throws CreateException {
 
@@ -120,7 +127,7 @@ public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBas
             }
         }
     }
-    
+
     /** Multiplexes between the single-permutation property or the permutation-list property */
     private List<PermuteProperty<S>> permutationsAsList() {
         if (!permutations.isEmpty()) {

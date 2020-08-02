@@ -49,7 +49,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
  * @author Owen Feehan
  */
 public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureInputSingleObject> {
-    
+
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
@@ -89,9 +89,9 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input) throws CreateException {
+    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input)
+            throws CreateException {
         return Optional.of(
-           getThumbnail().thumbnailFor( ObjectCollectionFactory.of(input.getObject()) )
-        );
+                getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject())));
     }
 }

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
@@ -45,8 +47,6 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 

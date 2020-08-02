@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
@@ -42,15 +44,14 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
-import lombok.Getter;
-import lombok.Setter;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     // START BEAN PROPERTIES
-    @BeanField @SkipInit @Getter @Setter private FeatureListProvider<FeatureInputStack> classifierProvider;
+    @BeanField @SkipInit @Getter @Setter
+    private FeatureListProvider<FeatureInputStack> classifierProvider;
 
-    @BeanField @NonEmpty @Getter @Setter 
+    @BeanField @NonEmpty @Getter @Setter
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures =
             new ArrayList<>();
 

@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.LessThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
-import lombok.Setter;
 
 // Same as PixelScoreDifference but calculates the width as the std deviation of the histogram
 //  associated with the init params, and the level is calculated from the histogram

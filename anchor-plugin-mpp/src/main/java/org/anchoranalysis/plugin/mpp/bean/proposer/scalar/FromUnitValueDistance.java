@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -34,8 +36,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FromUnitValueDistance extends ScalarProposer {
 

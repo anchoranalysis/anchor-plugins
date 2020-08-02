@@ -72,7 +72,9 @@ public class FeatureListImageTest {
     }
 
     @Test(expected = NamedFeatureCalculationException.class)
-    public void testNoParams() throws InitException, FeatureCalculationException, CreateException, NamedFeatureCalculationException {
+    public void testNoParams()
+            throws InitException, FeatureCalculationException, CreateException,
+                    NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
@@ -85,7 +87,9 @@ public class FeatureListImageTest {
     }
 
     @Test
-    public void testHistogram() throws InitException, FeatureCalculationException, CreateException, NamedFeatureCalculationException {
+    public void testHistogram()
+            throws InitException, FeatureCalculationException, CreateException,
+                    NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
                 createAndStart(histogramFeatures(loader));
@@ -110,7 +114,9 @@ public class FeatureListImageTest {
     }
 
     @Test
-    public void testImage() throws InitException, NamedFeatureCalculationException, CreateException, FeatureCalculationException {
+    public void testImage()
+            throws InitException, NamedFeatureCalculationException, CreateException,
+                    FeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));

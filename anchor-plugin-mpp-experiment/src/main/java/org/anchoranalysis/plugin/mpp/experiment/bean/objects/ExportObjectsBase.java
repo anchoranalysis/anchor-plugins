@@ -48,9 +48,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
-    /**
-     * Padding placed on each side of the outputted image (if it's within the image)
-     */
+    /** Padding placed on each side of the outputted image (if it's within the image) */
     @BeanField @Getter @Setter private Padding padding;
     // END BEAN PROPERTIES
 

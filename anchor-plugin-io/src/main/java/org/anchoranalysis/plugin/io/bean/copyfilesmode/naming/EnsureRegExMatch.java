@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.error.AnchorIOException;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Rejects files that fail to match a particular regular-expression

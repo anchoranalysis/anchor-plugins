@@ -39,7 +39,8 @@ public class MinFeatureAsIndividual extends FeaturePairMemoOne {
             new ChildCacheName(MinFeatureAsIndividual.class, "second");
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         return Math.min(calcForInd(input, true), calcForInd(input, false));
     }

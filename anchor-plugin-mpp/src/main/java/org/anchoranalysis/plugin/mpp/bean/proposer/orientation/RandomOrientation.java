@@ -27,6 +27,10 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -35,12 +39,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class RandomOrientation extends OrientationProposer {
 
     // START BEAN PROPERTIES

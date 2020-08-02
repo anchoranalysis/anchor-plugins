@@ -28,6 +28,8 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -50,8 +52,6 @@ import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
-import lombok.Getter;
-import lombok.Setter;
 
 /** A quicker for of multi-input manager that makes various assumptions */
 public class MultiInputManagerQuick extends MultiInputManagerBase {
@@ -62,12 +62,14 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 
     @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
-    @BeanField @Getter @Setter private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
+    @BeanField @Getter @Setter
+    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
 
     @BeanField @Getter @Setter private String inputName;
 
     /*** Additional entities that are appended to the multi-input */
-    @BeanField @Getter @Setter private List<FilePathBaseAppendToManager> listAppend = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<FilePathBaseAppendToManager> listAppend = new ArrayList<>();
 
     /**
      * A regular-expression applied to the image file-path that matches three groups. The first

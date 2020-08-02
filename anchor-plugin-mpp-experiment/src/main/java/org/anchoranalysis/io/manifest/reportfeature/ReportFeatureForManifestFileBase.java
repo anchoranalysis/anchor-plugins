@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.io.manifest.reportfeature;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 
 public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForManifest {
 

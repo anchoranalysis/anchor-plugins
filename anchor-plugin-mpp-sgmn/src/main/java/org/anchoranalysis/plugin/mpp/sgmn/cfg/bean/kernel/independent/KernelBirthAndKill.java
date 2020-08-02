@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -47,8 +49,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 
@@ -58,7 +58,8 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
     @BeanField @Getter @Setter private MarkProposer markProposer = null;
 
     // Optional proposal for doing an additional birth
-    @BeanField @OptionalBean @Getter @Setter private MarkProposer markProposerAdditionalBirth = null;
+    @BeanField @OptionalBean @Getter @Setter
+    private MarkProposer markProposerAdditionalBirth = null;
 
     @BeanField @Getter @Setter private int regionID = GlobalRegionIdentifiers.SUBMARK_INSIDE;
     // END BEANS

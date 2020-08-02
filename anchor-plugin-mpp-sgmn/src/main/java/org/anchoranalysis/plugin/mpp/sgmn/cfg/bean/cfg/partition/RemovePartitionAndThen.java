@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.partition;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -33,8 +35,6 @@ import org.anchoranalysis.mpp.sgmn.transformer.Compose;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RemovePartitionAndThen<T> extends StateTransformerBean<CfgFromPartition, T> {
 

@@ -27,30 +27,36 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.feature.io.csv.LabelHeaders;
 
 /**
- * Generates a list of header-names for columns unrelated to features (identifiers and groups) 
- * @author Owen Feehan
+ * Generates a list of header-names for columns unrelated to features (identifiers and groups)
  *
+ * @author Owen Feehan
  */
 @RequiredArgsConstructor
 public class GenerateLabelHeadersForCSV {
 
-    /** The standard group header that occurs if a groups are enabled (with possibly an additional group header */
+    /**
+     * The standard group header that occurs if a groups are enabled (with possibly an additional
+     * group header
+     */
     private static final String GROUP_HEADER_STANDARD = "group";
-    
+
     // START REQUIRED ARGUMENTS
     /** Headers that identify the row unrelated to groups */
     private final String[] nonGroupHeaders;
-    
-    /** Additional group-header used after the {@link GROUP_HEADER_STANDARD} if groups are enabled */
+
+    /**
+     * Additional group-header used after the {@link GROUP_HEADER_STANDARD} if groups are enabled
+     */
     private final Optional<String> additionalGroupHeader;
     // END REQUIRED ARGUMENTS
- 
+
     /**
      * Creates the label-headers (the headers for columns not associated with features)
+     *
      * @param groupsEnabled whether groups are enabled or not. Iff true, group headers are included.
      * @return the headers
      */

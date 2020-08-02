@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.cfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -56,8 +58,6 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
 
@@ -101,8 +101,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         return new InputTypesExpected(MultiInput.class);
     }
 
-    private NamedStacks stacksFromInput(MultiInput inputObject)
-            throws OperationFailedException {
+    private NamedStacks stacksFromInput(MultiInput inputObject) throws OperationFailedException {
         NamedStacks stackCollection = new NamedStacks();
         inputObject.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
@@ -131,8 +130,8 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         }
     }
 
-    private NamedProviderStore<ObjectCollection> objectsFromInput(
-            MultiInput inputObject) throws OperationFailedException {
+    private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput inputObject)
+            throws OperationFailedException {
         NamedProviderStore<ObjectCollection> objectsStore =
                 new LazyEvaluationStore<>("object-colelctions");
         inputObject.objects().addToStore(objectsStore);

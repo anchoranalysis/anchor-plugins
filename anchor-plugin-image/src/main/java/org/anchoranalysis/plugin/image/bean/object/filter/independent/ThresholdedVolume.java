@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.object.filter.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Only keeps objects whose feature-value satisfies a condition relative to a threshold.

@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.feature.source;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
@@ -44,11 +45,10 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
-import lombok.AllArgsConstructor;
 
 /**
  * Base class for exporting features, where features are calculated per-image using a
@@ -92,18 +92,14 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     @Override
-    public void processInput(
-            T input,
-            InputProcessContext<FeatureList<S>> context)
+    public void processInput(T input, InputProcessContext<FeatureList<S>> context)
             throws OperationFailedException {
         try {
-            ResultsVectorWithThumbnail results =
-                    calculateResultsForInput(input, context);
+            ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
 
             context.addResultsFor(
                     identifierFor(input.descriptiveName(), context.getGroupGeneratorName()),
-                    results 
-            );
+                    results);
 
         } catch (BeanDuplicateException | NamedFeatureCalculationException e) {
             throw new OperationFailedException(e);
@@ -111,10 +107,9 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     protected abstract ResultsVectorWithThumbnail calculateResultsForInput(
-        T inputObject,
-        InputProcessContext<FeatureList<S>> context
-    ) throws NamedFeatureCalculationException;
-    
+            T inputObject, InputProcessContext<FeatureList<S>> context)
+            throws NamedFeatureCalculationException;
+
     private static StringLabelsForCsvRow identifierFor(
             String descriptiveName, Optional<String> groupGeneratorName)
             throws OperationFailedException {

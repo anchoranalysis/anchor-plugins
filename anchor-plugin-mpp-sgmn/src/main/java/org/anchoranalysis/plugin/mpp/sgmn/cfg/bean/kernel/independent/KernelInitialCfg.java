@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
 

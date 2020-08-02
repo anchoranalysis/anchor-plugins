@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.mpp.nrg.feature.all;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -35,8 +37,6 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 

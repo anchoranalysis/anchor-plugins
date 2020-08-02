@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -39,8 +41,6 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ChnlProviderZScore extends ChnlProviderOne {
 

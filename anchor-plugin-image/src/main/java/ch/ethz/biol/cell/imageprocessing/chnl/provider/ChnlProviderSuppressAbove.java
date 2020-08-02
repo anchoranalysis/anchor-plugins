@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
-import lombok.Getter;
-import lombok.Setter;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram
 // creation

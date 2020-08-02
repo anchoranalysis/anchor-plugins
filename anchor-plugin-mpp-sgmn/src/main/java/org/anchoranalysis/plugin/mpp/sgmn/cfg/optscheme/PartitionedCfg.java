@@ -115,10 +115,9 @@ public class PartitionedCfg {
             return Optional.empty();
         }
 
-        List<Pair<Mark, Double>> list = FunctionalList.mapToList(
-            available,
-            item -> new Pair<>(item, funcExtractWeight.applyAsDouble(item))
-        );
+        List<Pair<Mark, Double>> list =
+                FunctionalList.mapToList(
+                        available, item -> new Pair<>(item, funcExtractWeight.applyAsDouble(item)));
         return Optional.of(new EnumeratedDistribution<>(list));
     }
 

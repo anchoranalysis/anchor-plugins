@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -34,8 +36,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.image.orientation.Orientation2D;
-import lombok.Getter;
-import lombok.Setter;
 
 public class MarkProviderCreateEllipse extends MarkProvider {
 

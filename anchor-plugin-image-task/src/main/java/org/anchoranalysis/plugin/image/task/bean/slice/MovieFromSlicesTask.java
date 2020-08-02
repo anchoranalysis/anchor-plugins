@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -46,8 +48,6 @@ import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import lombok.Getter;
-import lombok.Setter;
 
 public class MovieFromSlicesTask extends RasterTask {
 

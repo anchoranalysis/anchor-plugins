@@ -34,7 +34,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class BoundingBoxNumberVoxels extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         return input.get().getObject().getBoundingBox().extent().getVolume();
     }

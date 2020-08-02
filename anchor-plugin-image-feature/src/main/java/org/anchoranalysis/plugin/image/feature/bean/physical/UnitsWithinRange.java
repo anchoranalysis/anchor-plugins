@@ -71,7 +71,8 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res) throws FeatureCalculationException {
+    protected double calcWithRes(double value, ImageResolution res)
+            throws FeatureCalculationException {
 
         try {
             Optional<ImageResolution> resOpt = Optional.of(res);

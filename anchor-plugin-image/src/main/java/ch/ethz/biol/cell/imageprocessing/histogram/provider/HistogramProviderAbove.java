@@ -26,12 +26,12 @@
 
 package ch.ethz.biol.cell.imageprocessing.histogram.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Removes all items in the histogram below a certain threshold.

@@ -41,7 +41,8 @@ public class CalculateDeriveMarkInput
         extends FeatureCalculation<FeatureInputMark, FeatureInputAllMemo> {
 
     @Override
-    protected FeatureInputMark execute(FeatureInputAllMemo params) throws FeatureCalculationException {
+    protected FeatureInputMark execute(FeatureInputAllMemo params)
+            throws FeatureCalculationException {
 
         MemoCollection list = params.getPxlPartMemo();
 

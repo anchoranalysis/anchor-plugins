@@ -65,7 +65,8 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
         return rotMatrix.calcRotatedPoint(new Point3d(normalToPlane));
     }
 
-    private QuadraticRoots solveEquation(double[] radii, Point3d beta) throws FeatureCalculationException {
+    private QuadraticRoots solveEquation(double[] radii, Point3d beta)
+            throws FeatureCalculationException {
 
         double a1 = Math.pow(radii[0], -2);
         double a2 = Math.pow(radii[1], -2);

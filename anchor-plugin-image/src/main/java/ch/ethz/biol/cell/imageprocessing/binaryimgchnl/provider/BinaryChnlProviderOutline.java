@@ -26,13 +26,13 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.outline.FindOutline;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Always creates a new BinaryChnl for the result (no need to duplicate input)

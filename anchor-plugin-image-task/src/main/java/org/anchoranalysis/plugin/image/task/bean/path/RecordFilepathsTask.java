@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.path;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -41,8 +43,6 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
 

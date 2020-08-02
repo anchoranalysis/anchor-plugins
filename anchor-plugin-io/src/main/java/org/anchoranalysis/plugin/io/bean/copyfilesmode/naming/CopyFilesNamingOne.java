@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 

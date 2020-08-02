@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -34,8 +36,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class IntensityGradientBase extends FeatureSingleObject {
 

@@ -27,14 +27,14 @@
 package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
-import lombok.Getter;
-import lombok.Setter;
 
 public class AppendKeyValueParams extends FilePathBaseAppendToManager {
 

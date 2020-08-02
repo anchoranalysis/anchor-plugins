@@ -45,7 +45,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public class GradientMagnitude extends IntensityGradientBase {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         // Calculate the mean
         double sum = 0.0;

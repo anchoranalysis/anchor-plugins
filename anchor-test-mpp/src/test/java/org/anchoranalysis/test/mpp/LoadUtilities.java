@@ -52,7 +52,8 @@ public class LoadUtilities {
 
         CreateFromConnectedComponentsFactory cc = new CreateFromConnectedComponentsFactory();
         ObjectCollection objects =
-                cc.createConnectedComponents(new Mask(stack.getChannel(0), BinaryValues.getDefault()));
+                cc.createConnectedComponents(
+                        new Mask(stack.getChannel(0), BinaryValues.getDefault()));
 
         return findLargestObj(objects);
     }

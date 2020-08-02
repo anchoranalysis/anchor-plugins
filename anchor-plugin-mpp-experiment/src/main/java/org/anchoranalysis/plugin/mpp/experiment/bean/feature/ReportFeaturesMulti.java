@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -48,13 +50,12 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<ReportFeatureForSharedObjects> listReportFeatures = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter private DefineOutputterMPP define;
     // END BEAN PROPERTIES

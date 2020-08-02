@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
@@ -36,8 +38,6 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
 import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         extends PermuteFeatureSequenceInteger<T> {

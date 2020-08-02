@@ -26,14 +26,14 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
 

@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plot.GraphInstance;
 import org.anchoranalysis.anchor.plot.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,8 +42,6 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
-import lombok.Getter;
-import lombok.Setter;
 
 /** Displays a histogram */
 public class StackProviderHistogram extends StackProvider {

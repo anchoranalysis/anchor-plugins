@@ -27,6 +27,9 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -38,9 +41,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
@@ -95,5 +95,4 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
     private double extractScore(S item) {
         return extractScoreSize.extractScore(item);
     }
-
 }

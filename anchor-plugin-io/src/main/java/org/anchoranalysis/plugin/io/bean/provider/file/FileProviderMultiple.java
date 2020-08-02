@@ -30,14 +30,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.FileProviderException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FileProviderMultiple extends FileProvider {
 

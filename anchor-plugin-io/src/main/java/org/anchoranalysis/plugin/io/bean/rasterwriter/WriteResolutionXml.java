@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -35,8 +37,6 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * When writing a Raster, an additional filename (with .xml appended, e.g. rasterFilename.tif.xml)

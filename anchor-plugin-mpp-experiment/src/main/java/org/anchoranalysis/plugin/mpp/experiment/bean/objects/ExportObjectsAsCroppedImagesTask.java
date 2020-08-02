@@ -62,39 +62,42 @@ import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
 /**
  * Exports a cropped image for each object-mask showing its context within an image
  *
- * <p>The context is defined by a bounding-box is placed around an object-mask, and optionally padded.
+ * <p>The context is defined by a bounding-box is placed around an object-mask, and optionally
+ * padded.
  *
  * @author Owen Feehan
  */
 public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput, NoSharedState> {
-    
-    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY = new GeneratorSequenceFactory("extractedObjects","object");
+
+    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
+            new GeneratorSequenceFactory("extractedObjects", "object");
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
     /** The channels we apply the masks to - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProvider =
-            new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();
 
     /** The channels we apply the masks to - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
-    private List<NamedBean<StackProvider>> listStackProviderMIP =
-            new ArrayList<>();
+    private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();
 
     @BeanField @Getter @Setter private StringSet outputRGBOutline = new StringSet();
-    
+
     @BeanField @Getter @Setter private StringSet outputRGBOutlineFlattened = new StringSet();
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    /** Extends the objects in z-dimension (uses maximum intensity for the segmentation, but in all slices) */
-    @BeanField @Getter @Setter
-    private boolean extendInZ = false; 
+    /**
+     * Extends the objects in z-dimension (uses maximum intensity for the segmentation, but in all
+     * slices)
+     */
+    @BeanField @Getter @Setter private boolean extendInZ = false;
 
     /**
-     * If true, rather than writing out a bounding-box around the object mask, the entire image is written
+     * If true, rather than writing out a bounding-box around the object mask, the entire image is
+     * written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;
     // END BEAN PROPERTIES
@@ -173,8 +176,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
             throw new OperationFailedException(e);
         }
     }
-    
-    private static NamedStacks createStacksFromProviders(List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
+
+    private static NamedStacks createStacksFromProviders(
+            List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
         NamedStacksUniformSize stacks = new NamedStacksUniformSize();
@@ -202,9 +206,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private IterableGenerator<ObjectMask> createGenerator(
-            ImageDimensions dimensions,
-            NamedStacks stacks,
-            NamedStacks stacksFlattened)
+            ImageDimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
         IterableGenerator<ObjectMask> generator =
@@ -212,21 +214,21 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                         .forStacks(
                                 dimensions,
                                 stacks.subset(outputRGBOutline),
-                                stacksFlattened.subset(outputRGBOutlineFlattened)
-                                );
+                                stacksFlattened.subset(outputRGBOutlineFlattened));
 
         // Maybe we need to change the objectMask to a padded version
-        return AddPaddingToGenerator.addPadding(generator, dimensions, getPadding(), keepEntireImage);
+        return AddPaddingToGenerator.addPadding(
+                generator, dimensions, getPadding(), keepEntireImage);
     }
-    
+
     private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ) {
         if (extendInZ) {
             return extendObjectsInZ(objects, sizeZ);
         } else {
-            return objects;    
+            return objects;
         }
     }
-    
+
     private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz) {
         return objects.stream().map(objectMask -> objectMask.flattenZ().growToZ(sz));
     }

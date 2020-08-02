@@ -93,8 +93,7 @@ class AppendPart extends NamedChnlsInputPart {
     public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
 
-        NamedChannelsForSeries exst =
-                delegate.createChannelsForSeries(seriesNum, progressReporter);
+        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesNum, progressReporter);
 
         openRasterIfNecessary();
 

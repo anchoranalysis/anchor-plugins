@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -35,7 +36,6 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class OpenedRasterAlterDimensions implements OpenedRaster {
@@ -56,7 +56,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
 
     private OpenedRaster delegate;
     private ConsiderUpdatedImageResolution processor;
-    
+
     @Override
     public int numberSeries() {
         return delegate.numberSeries();

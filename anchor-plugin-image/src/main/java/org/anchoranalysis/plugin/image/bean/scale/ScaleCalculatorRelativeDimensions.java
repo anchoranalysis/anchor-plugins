@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.scale;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
@@ -48,7 +48,8 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
+    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+            throws OperationFailedException {
 
         Optional<ImageDimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);
 
@@ -58,23 +59,22 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
         try {
             return ScaleFactorUtilities.calcRelativeScale(
-                    dimensions.get().getExtent(),
-                    dimTarget.create().getExtent()
-            );
+                    dimensions.get().getExtent(), dimTarget.create().getExtent());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-    
-    private Optional<ImageDimensions> maybeReplaceSourceDimensions(Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
+
+    private Optional<ImageDimensions> maybeReplaceSourceDimensions(
+            Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
         if (dimSource != null) {
             try {
-                return Optional.of( dimSource.create() );
+                return Optional.of(dimSource.create());
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }
         } else {
-            return sourceDimensions; 
+            return sourceDimensions;
         }
     }
 }

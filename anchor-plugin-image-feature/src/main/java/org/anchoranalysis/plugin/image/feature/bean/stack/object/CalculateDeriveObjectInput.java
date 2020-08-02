@@ -50,7 +50,8 @@ public class CalculateDeriveObjectInput
         return new FeatureInputSingleObject(extractObjectMask(input), input.getNrgStackOptional());
     }
 
-    private ObjectMask extractObjectMask(FeatureInputStack input) throws FeatureCalculationException {
+    private ObjectMask extractObjectMask(FeatureInputStack input)
+            throws FeatureCalculationException {
 
         NRGStackWithParams nrgStack = input.getNrgStackRequired();
 

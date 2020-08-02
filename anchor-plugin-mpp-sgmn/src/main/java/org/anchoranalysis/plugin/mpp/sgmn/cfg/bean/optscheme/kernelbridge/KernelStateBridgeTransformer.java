@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
-import lombok.Getter;
-import lombok.Setter;
 
 public class KernelStateBridgeTransformer<U, T> extends KernelStateBridge<U, T> {
 

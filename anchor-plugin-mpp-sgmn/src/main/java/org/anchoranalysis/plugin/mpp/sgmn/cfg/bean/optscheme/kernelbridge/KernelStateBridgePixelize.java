@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
@@ -35,8 +37,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.PixelizeWithTra
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.cfg.pixelized.RetrieveSourceFromPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.ToPixelized;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * State takes the form of ToPixelized<T> derived from the Kernel

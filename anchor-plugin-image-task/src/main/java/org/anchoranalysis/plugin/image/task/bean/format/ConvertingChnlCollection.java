@@ -40,7 +40,9 @@ class ConvertingChnlCollection implements ChannelGetter {
     private ConversionPolicy conversionPolicy;
 
     public ConvertingChnlCollection(
-            ChannelGetter source, ChannelConverter<?> chnlConverter, ConversionPolicy changeExisting) {
+            ChannelGetter source,
+            ChannelConverter<?> chnlConverter,
+            ConversionPolicy changeExisting) {
         super();
         this.source = source;
         this.chnlConverter = chnlConverter;

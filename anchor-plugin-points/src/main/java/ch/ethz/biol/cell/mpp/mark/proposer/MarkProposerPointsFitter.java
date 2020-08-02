@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.mpp.mark.proposer;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
@@ -45,8 +47,6 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
-import lombok.Getter;
-import lombok.Setter;
 
 public class MarkProposerPointsFitter extends MarkProposer {
 

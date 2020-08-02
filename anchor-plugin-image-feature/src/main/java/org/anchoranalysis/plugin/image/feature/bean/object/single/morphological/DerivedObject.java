@@ -49,7 +49,8 @@ public abstract class DerivedObject extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         ChildCacheName cacheName = cacheName();
 

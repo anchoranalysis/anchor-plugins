@@ -26,17 +26,18 @@
 
 package org.anchoranalysis.plugin.annotation.comparison;
 
+import io.vavr.Tuple2;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.input.InputFromManager;
-import io.vavr.Tuple2;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class AnnotationComparisonInput<T extends InputFromManager> implements InputFromManager {
 
     private final T inputObject;

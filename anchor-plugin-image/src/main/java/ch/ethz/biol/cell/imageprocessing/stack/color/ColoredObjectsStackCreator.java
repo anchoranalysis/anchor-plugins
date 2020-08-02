@@ -26,6 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.color;
 
+import io.vavr.control.Either;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
@@ -43,7 +44,6 @@ import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.control.Either;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ColoredObjectsStackCreator {

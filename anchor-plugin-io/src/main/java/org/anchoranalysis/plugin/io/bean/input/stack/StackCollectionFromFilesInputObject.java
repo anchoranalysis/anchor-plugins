@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
@@ -39,28 +40,27 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.input.FileInput;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     /** The root object that is used to provide the descriptiveName and pathForBinding */
     private FileInput delegate;
-    
+
     private RasterReader rasterReader;
-       
+
     /**
      * Uses the last series (from all series) only, and ignores any other series-numbers
-     * <p>
-     * This is to correct for a problem with formats such as czi where the seriesIndex doesn't
-     * indicate the total number of series but rather is incremented with each acquisition, so for our
-     * purposes we treat it as if its 0
+     *
+     * <p>This is to correct for a problem with formats such as czi where the seriesIndex doesn't
+     * indicate the total number of series but rather is incremented with each acquisition, so for
+     * our purposes we treat it as if its 0
      */
     private boolean useLastSeriesIndexOnly;
 
     // We cache a certain amount of stacks read for particular series
     private OpenedRaster openedRasterMemo = null;
-    
+
     public StackCollectionFromFilesInputObject(
             FileInput delegate, RasterReader rasterReader, boolean useLastSeriesIndexOnly) {
         this.delegate = delegate;
@@ -117,8 +117,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesNum)
-                                .call(progressReporter);
+                        return createStackSequenceForSeries(seriesNum).call(progressReporter);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }

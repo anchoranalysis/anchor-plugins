@@ -27,21 +27,22 @@
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
 import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.TransformMapOptional;
-import lombok.Getter;
-import lombok.Setter;
 
 public class StateReporterTransformer<T, S> extends StateReporter<Optional<T>, Optional<S>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private StateTransformerBean<T, S> transformerPrimary;
 
-    @BeanField @OptionalBean @Getter @Setter private StateTransformerBean<T, S> transformerSecondary;
+    @BeanField @OptionalBean @Getter @Setter
+    private StateTransformerBean<T, S> transformerSecondary;
     // END BEAN PROPERTIES
 
     @Override

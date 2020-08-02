@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
@@ -37,8 +39,6 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class MarkProposerFromList extends MarkProposer {
 

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.conditional;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.relation.RelationToValue;
@@ -34,8 +36,6 @@ import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * The result of featureCondition is compared to a threshold, and then either the underlying feature

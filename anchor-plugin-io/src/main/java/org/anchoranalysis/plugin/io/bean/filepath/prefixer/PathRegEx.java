@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import lombok.Getter;
-import lombok.Setter;
 
 ///
 

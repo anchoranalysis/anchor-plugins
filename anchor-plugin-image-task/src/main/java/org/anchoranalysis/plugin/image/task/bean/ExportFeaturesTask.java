@@ -82,7 +82,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  */
 public class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput>
         extends Task<T, SharedStateExportFeatures<S>> {
-    
+
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
 
@@ -130,19 +130,17 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                     extractGroupNameFromGenerator(
                             input.getInputObject().pathForBindingRequired(),
                             input.context().isDebugEnabled());
-            
-            InputProcessContext<S> context = new InputProcessContext<>(
-                input.getSharedState().addResultsFor(),
-                input.getSharedState().duplicateForNewThread(),
-                input.getSharedState().getFeatureNames(),
-                groupName,
-                input.context()
-            );
-            
-            source.processInput(
-                    input.getInputObject(),
-                    context);
-            
+
+            InputProcessContext<S> context =
+                    new InputProcessContext<>(
+                            input.getSharedState().addResultsFor(),
+                            input.getSharedState().duplicateForNewThread(),
+                            input.getSharedState().getFeatureNames(),
+                            groupName,
+                            input.context());
+
+            source.processInput(input.getInputObject(), context);
+
         } catch (OperationFailedException | AnchorIOException e) {
             throw new JobExecutionException(e);
         }

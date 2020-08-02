@@ -35,7 +35,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
         return ShapeRegularityCalculator.calcShapeRegularity(centerSlice(input.get().getObject()));
     }
 

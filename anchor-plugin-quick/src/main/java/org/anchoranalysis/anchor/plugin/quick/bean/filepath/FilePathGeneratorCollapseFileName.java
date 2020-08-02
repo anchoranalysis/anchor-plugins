@@ -28,12 +28,12 @@ package org.anchoranalysis.anchor.plugin.quick.bean.filepath;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.apache.commons.io.FilenameUtils;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Takes a file-path of form somedir/somename.ext and converts to somedir.ext

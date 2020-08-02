@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.CalculateDeriveSingleMemoFromPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -35,8 +37,6 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Calculates each feature individually, and combines them using the ratios between
@@ -85,7 +85,8 @@ public class FeatureAsIndividualProportionate extends FeaturePairMemoOne {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairMemo> input)
+            throws FeatureCalculationException {
 
         CalcHelper first =
                 new CalcHelper(new CalculateDeriveSingleMemoFromPair(true), CACHE_NAME_FIRST);

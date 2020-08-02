@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.mark.check;
 
 import java.util.function.Function;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -37,8 +39,6 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class CheckMarkBinaryChnl extends CheckMark {
 

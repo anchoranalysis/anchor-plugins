@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class StackAsProviderFixture implements ProvidesStackInput {

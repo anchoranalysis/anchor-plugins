@@ -26,22 +26,24 @@
 
 package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.NonNegative;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
+import org.anchoranalysis.image.histogram.Histogram;
 
 /**
  * A constant value for thresholding
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Constant extends CalculateLevel {
 
     // START BEAN PROPERTIES

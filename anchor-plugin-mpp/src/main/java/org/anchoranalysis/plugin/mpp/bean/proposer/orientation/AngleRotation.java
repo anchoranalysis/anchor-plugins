@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
@@ -35,8 +37,6 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
-import lombok.Getter;
-import lombok.Setter;
 
 public class AngleRotation extends OrientationProposer {
 

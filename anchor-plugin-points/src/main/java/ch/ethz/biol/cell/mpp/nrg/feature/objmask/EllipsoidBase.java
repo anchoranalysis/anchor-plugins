@@ -45,7 +45,8 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
 

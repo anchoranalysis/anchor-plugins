@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import java.io.File;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import lombok.Getter;
-import lombok.Setter;
 
 public class FromOutputName extends DescriptiveNameFromFileIndependent {
 

@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.fromcfg;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Repeat extends MarkFromCfgProposer {
 

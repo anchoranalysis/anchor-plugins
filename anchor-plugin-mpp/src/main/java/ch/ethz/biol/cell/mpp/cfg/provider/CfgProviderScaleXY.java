@@ -27,6 +27,8 @@
 package ch.ethz.biol.cell.mpp.cfg.provider;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,8 +37,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OptionalOperationUnsupportedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import lombok.Getter;
-import lombok.Setter;
 
 public class CfgProviderScaleXY extends CfgProvider {
 

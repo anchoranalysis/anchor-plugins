@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.dim.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -39,8 +41,6 @@ import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.stack.Stack;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Creates image-dimensions by referencing them from a ChnlProvider

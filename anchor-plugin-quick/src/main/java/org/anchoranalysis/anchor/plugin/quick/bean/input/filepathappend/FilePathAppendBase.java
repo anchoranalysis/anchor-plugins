@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plugin.quick.bean.filepath.FilePathGeneratorCollapseFileName;
 import org.anchoranalysis.anchor.plugin.quick.bean.filepath.FilePathGeneratorRemoveTrailingDir;
 import org.anchoranalysis.bean.AnchorBean;
@@ -35,8 +37,6 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorRegEx;
 import org.anchoranalysis.io.bean.filepath.generator.Rooted;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 

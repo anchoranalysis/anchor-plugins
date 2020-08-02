@@ -106,8 +106,6 @@ public abstract class PermuteFeatureSequenceInteger<T extends FeatureInputParams
                 configurePermuteProperty(
                         (PermutePropertySequenceInteger) permuteProperty.duplicateBean());
 
-        delegate.setPermutations(
-           Arrays.asList(permutePropertyConfigured)
-        );
+        delegate.setPermutations(Arrays.asList(permutePropertyConfigured));
     }
 }

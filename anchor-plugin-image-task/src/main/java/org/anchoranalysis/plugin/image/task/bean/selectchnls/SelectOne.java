@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.task.bean.selectchnls;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Selects one specific channel from a set of stacks

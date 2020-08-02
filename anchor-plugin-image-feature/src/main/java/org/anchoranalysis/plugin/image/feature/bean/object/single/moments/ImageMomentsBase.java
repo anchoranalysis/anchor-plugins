@@ -55,7 +55,8 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         if (input.get().getObject().numPixelsLessThan(MIN_NUM_VOXELS)) {
             return resultIfTooFewPixels();

@@ -70,7 +70,8 @@ class CalculateGradientFromMultipleChnls
     private int subtractConstant = 0;
 
     @Override
-    protected List<Point3d> execute(FeatureInputSingleObject input) throws FeatureCalculationException {
+    protected List<Point3d> execute(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
 
         if (nrgIndexX == -1 || nrgIndexY == -1) {
             throw new FeatureCalculationException(

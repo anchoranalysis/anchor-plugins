@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,15 +48,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.OutlinePreserveRelativeSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObjects;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.
- * <p>
- * Columns in the feature-table always represent features.
- * <p>
- * A row may represent a single object, or a pair of objects, or any other derived inputs from an
+ *
+ * <p>Columns in the feature-table always represent features.
+ *
+ * <p>A row may represent a single object, or a pair of objects, or any other derived inputs from an
  * object-collection, depending on the implementation of the sub-class.
  *
  * @author Owen Feehan
@@ -63,17 +63,22 @@ import lombok.Setter;
 public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         extends AnchorBean<CombineObjectsForFeatures<T>> {
 
-    /** Generates a thumbnail representation of one or more objects combine, as form a single input */
-    @BeanField @Getter @Setter private ThumbnailFromObjects thumbnail = new OutlinePreserveRelativeSize();
-    
+    /**
+     * Generates a thumbnail representation of one or more objects combine, as form a single input
+     */
+    @BeanField @Getter @Setter
+    private ThumbnailFromObjects thumbnail = new OutlinePreserveRelativeSize();
+
     /**
      * Creates features that will be applied on the objects. Features should always be duplicated
      * from the input list.
      *
      * @param featuresSingleObject beans defining features to be applied to single-objects
      * @param storeFactory creates as new {@link NamedFeatureStore} as needed
-     * @param suppressErrors if true exceptions aren't thrown when feature-calculations fail, but rather a log error message is writen
-     * @return a calculator for feature tables that may apply various features derived from {@code featuresSingleObject}
+     * @param suppressErrors if true exceptions aren't thrown when feature-calculations fail, but
+     *     rather a log error message is writen
+     * @return a calculator for feature tables that may apply various features derived from {@code
+     *     featuresSingleObject}
      * @throws CreateException
      */
     public abstract FeatureTableCalculator<T> createFeatures(
@@ -87,9 +92,10 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
 
     /**
      * Derives a list of inputs (i.e. rows in a feature table)
-     * <p>
-     * This should be called only ONCE, and always before {@link #createThumbailFor(FeatureInput)}
-     * 
+     *
+     * <p>This should be called only ONCE, and always before {@link
+     * #createThumbailFor(FeatureInput)}
+     *
      * @param objects the objects from which inputs are derived
      * @param nrgStack nrg-stack used during feature calculation
      * @param thumbnailsEnabled whether thumbnail-generation is enabled
@@ -98,7 +104,10 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @throws CreateException
      */
     public List<T> deriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, boolean thumbnailsEnabled, Logger logger)
+            ObjectCollection objects,
+            NRGStackWithParams nrgStack,
+            boolean thumbnailsEnabled,
+            Logger logger)
             throws CreateException {
         List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
         if (thumbnailsEnabled) {
@@ -110,12 +119,13 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         }
         return inputs;
     }
-    
+
     /**
      * Derives a list of inputs from an object-collection
-     * <p>
-     * A session for a <i>batch</i> is started where it expects further calls to {@link #createThumbailFor(FeatureInput)}.
-     * 
+     *
+     * <p>A session for a <i>batch</i> is started where it expects further calls to {@link
+     * #createThumbailFor(FeatureInput)}.
+     *
      * @param objects the object-collection
      * @param nrgStack nrg-stack used during feature calculation
      * @param logger logger
@@ -125,17 +135,18 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException;
-    
+
     /**
      * Creates a thumbnail for a particular input
-     * 
+     *
      * @param input the input
      * @return the thumbnail (if its supported)
      */
     public abstract Optional<DisplayStack> createThumbailFor(T input) throws CreateException;
-    
-    
-    /** Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch */
+
+    /**
+     * Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch
+     */
     public void endBatchAndCleanup() {
         thumbnail.end();
     }

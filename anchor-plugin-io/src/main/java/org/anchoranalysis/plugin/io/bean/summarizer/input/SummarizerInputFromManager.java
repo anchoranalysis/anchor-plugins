@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.input;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Extracts a particular item from an InputManager for summarization downstream

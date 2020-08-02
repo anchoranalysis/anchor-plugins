@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.io.bean.task;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -43,8 +45,6 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.csv.CSVWriter;
-import lombok.Getter;
-import lombok.Setter;
 
 // At the moment, we don't check if the name number of rows/columns exist
 public class CombineCSVTask extends Task<FileInput, CSVWriter> {

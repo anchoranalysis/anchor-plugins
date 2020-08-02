@@ -47,34 +47,36 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 /**
  * Shared-state for an export-features class
  *
- * @param <S> a source-of-rows that is duplicated for each new thread (to prevent any
- *     concurrency issues)
+ * @param <S> a source-of-rows that is duplicated for each new thread (to prevent any concurrency
+ *     issues)
  * @author Owen Feehan
  */
 public class SharedStateExportFeatures<S> {
 
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
-    
-    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY = new GeneratorSequenceFactory("thumbnails","thumbnail");  // NOSONAR
-        
+
+    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
+            new GeneratorSequenceFactory("thumbnails", "thumbnail"); // NOSONAR
+
     private final GroupedResultsVectorCollection groupedResults;
 
     @Getter private final FeatureNameList featureNames;
 
     private final Supplier<S> rowSource;
-    
+
     // Generates thumbnails, lazily if needed.
     private GeneratorSequenceIncrementalRerouteErrors<Stack> thumbnailGenerator;
 
     private BoundIOContext context;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param labelHeaders headers for the label columns
      * @param featureNames names of each feature in the featuer columns
      * @param rowSource source of rows in the feature-table (called independently for each thread)
-     * @param context IO-context including directory in which grouped/thumbnails sub-directorys may be created
+     * @param context IO-context including directory in which grouped/thumbnails sub-directorys may
+     *     be created
      * @throws AnchorIOException
      */
     public SharedStateExportFeatures(
@@ -92,24 +94,22 @@ public class SharedStateExportFeatures<S> {
 
     /**
      * An adder for results
-     * <p>
-     * Note that in order for the sequence numbers to match the order in the feature table, a
+     *
+     * <p>Note that in order for the sequence numbers to match the order in the feature table, a
      * thumbnail should be present for ALL results, or for NO results, but it should not be mixed.
-     * 
+     *
      * @return
      */
     public ExportFeatureResultsAdder addResultsFor() {
         return (StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results) -> {
             // Synchronization is important to preserve identical order in thumbnails and in the
             // exported feature CSV file, as multiple threads will concurrently add results
-            synchronized(this) {
+            synchronized (this) {
                 // Add results to grouped-map, and write to CSV file
                 groupedResults.addResultsFor(labels, results.getResultsVector());
-                
+
                 // Write thumbnail, or empty image
-                results.getThumbnail().ifPresent( image->
-                    addThumbnail(image, context)
-                );
+                results.getThumbnail().ifPresent(image -> addThumbnail(image, context));
             }
         };
     }
@@ -131,27 +131,24 @@ public class SharedStateExportFeatures<S> {
             BoundIOContext context)
             throws AnchorIOException {
         groupedResults.writeResultsForAllGroups(featuresAggregate, includeGroups, context);
-        
-
     }
-    
+
     public S duplicateForNewThread() {
         return rowSource.get();
     }
 
     public void closeAnyOpenIO() throws IOException {
-        if (thumbnailGenerator!=null) {
+        if (thumbnailGenerator != null) {
             thumbnailGenerator.end();
-        }      
+        }
         groupedResults.close();
     }
-    
+
     private void addThumbnail(DisplayStack thumbnail, BoundIOContext context) {
         if (thumbnailGenerator == null) {
-            thumbnailGenerator = GENERATOR_SEQUENCE_FACTORY.createIncremental(
-               new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL),
-               context
-            );
+            thumbnailGenerator =
+                    GENERATOR_SEQUENCE_FACTORY.createIncremental(
+                            new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL), context);
             thumbnailGenerator.start();
         }
         thumbnailGenerator.add(thumbnail.deriveStack(false));

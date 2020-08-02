@@ -41,7 +41,8 @@ public class CountEqual extends SpecificNRGChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithChannel(ObjectMask object, Channel chnl) throws FeatureCalculationException {
+    protected double calcWithChannel(ObjectMask object, Channel chnl)
+            throws FeatureCalculationException {
         return chnl.getVoxelBox().any().countEqualMask(value, object);
     }
 }

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Counts the number of items in a histogram (posssibly in relation to a threshold: above, below

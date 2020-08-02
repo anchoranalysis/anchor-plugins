@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,8 +39,6 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 

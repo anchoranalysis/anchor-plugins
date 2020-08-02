@@ -69,7 +69,8 @@ public class CalculateShellObjectMask
     }
 
     @Override
-    protected ObjectMask execute(FeatureInputSingleObject input) throws FeatureCalculationException {
+    protected ObjectMask execute(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
 
         ImageDimensions dimensions = input.getDimensionsRequired();
 

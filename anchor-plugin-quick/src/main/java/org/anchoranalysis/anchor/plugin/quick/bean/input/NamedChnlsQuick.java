@@ -28,6 +28,8 @@ package org.anchoranalysis.anchor.plugin.quick.bean.input;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.AppendStack;
 import org.anchoranalysis.anchor.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -52,8 +54,6 @@ import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsAppend;
 import org.anchoranalysis.plugin.io.bean.input.chnl.NamedChnlsBase;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A particular type of NamedChnls which allows easier input of data, making several assumptions.
@@ -66,7 +66,8 @@ public class NamedChnlsQuick extends NamedChnlsBase {
     /** A path to the main channel of each file */
     @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
 
-    @BeanField @Getter @Setter private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
+    @BeanField @Getter @Setter
+    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
 
     /**
      * This needs to be set if there is at least one adjacentChnl

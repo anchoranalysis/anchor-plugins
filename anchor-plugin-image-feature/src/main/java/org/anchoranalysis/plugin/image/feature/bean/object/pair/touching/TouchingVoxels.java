@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Base class for features that calculate touching with a dilated bounding box intersection
@@ -51,7 +51,8 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputPairObjects> input)
+            throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
 

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.list.pair;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,8 +42,6 @@ import org.anchoranalysis.image.feature.bean.object.pair.Second;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Calculates features on each part of a pair (first, second, merged etc.) and then reduces the

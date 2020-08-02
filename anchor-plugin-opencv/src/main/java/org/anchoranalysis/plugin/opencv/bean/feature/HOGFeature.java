@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
@@ -38,8 +40,6 @@ import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * One part of a <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">Histogram
@@ -85,7 +85,8 @@ public class HOGFeature extends FeatureStack {
     }
 
     @Override
-    protected double calc(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    protected double calc(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
         float[] arr = input.calc(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 
         if (index >= arr.length) {

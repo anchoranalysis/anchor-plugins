@@ -26,6 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
+import io.vavr.control.Either;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,6 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import io.vavr.control.Either;
 
 /**
  * Colors three distinct collections of objects in RED, GREEN, BLUE on top of a stack.

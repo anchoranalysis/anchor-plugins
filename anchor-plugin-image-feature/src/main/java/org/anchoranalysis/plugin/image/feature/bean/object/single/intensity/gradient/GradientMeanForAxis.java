@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -35,8 +37,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular
@@ -55,16 +55,18 @@ public class GradientMeanForAxis extends IntensityGradientBase {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         try {
             AxisType axisType = AxisTypeConverter.createFromString(axis);
-    
+
             List<Point3d> points = input.calc(gradientCalculation());
 
-            double sum = points.stream().mapToDouble(point->point.getValueByDimension(axisType)).sum();
+            double sum =
+                    points.stream().mapToDouble(point -> point.getValueByDimension(axisType)).sum();
             return sum / points.size();
-            
+
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }

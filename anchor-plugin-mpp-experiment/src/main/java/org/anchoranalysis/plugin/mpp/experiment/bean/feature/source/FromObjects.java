@@ -57,8 +57,8 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
 
@@ -90,11 +90,12 @@ public class FromObjects<T extends FeatureInput>
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();
-    
-    private static final String[] NON_GROUP_HEADERS = new String[] {"image", "unique_pixel_in_object"};
+
+    private static final String[] NON_GROUP_HEADERS =
+            new String[] {"image", "unique_pixel_in_object"};
 
     private static final String ADDITONAL_GROUP_HEADER = "object_collection";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
     private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
@@ -133,8 +134,7 @@ public class FromObjects<T extends FeatureInput>
 
     @Override
     public void processInput(
-            MultiInput input,
-            InputProcessContext<FeatureTableCalculator<T>> context)
+            MultiInput input, InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
         define.processInput(
                 input,
@@ -180,20 +180,20 @@ public class FromObjects<T extends FeatureInput>
                         suppressErrors,
                         Optional.of(combine::createThumbailFor),
                         context);
-        processAllProviders(descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
+        processAllProviders(
+                descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;
     }
 
     private FeatureCalculatorMulti<T> startCalculator(
-            FeatureTableCalculator<T> calculator,
-            InitParamsWithNrgStack initParams,
-            Logger logger)
+            FeatureTableCalculator<T> calculator, InitParamsWithNrgStack initParams, Logger logger)
             throws OperationFailedException {
 
         try {
-            calculator.start(initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
+            calculator.start(
+                    initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }
@@ -211,11 +211,12 @@ public class FromObjects<T extends FeatureInput>
         for (NamedBean<ObjectCollectionProvider> ni : objects) {
             calculator.processProvider(
                     ni.getValue(),
-                    input -> identifierFor(
-                        descriptiveName,
-                        combine.uniqueIdentifierFor(input),
-                        groupGeneratorName,
-                        ni.getName()));
+                    input ->
+                            identifierFor(
+                                    descriptiveName,
+                                    combine.uniqueIdentifierFor(input),
+                                    groupGeneratorName,
+                                    ni.getName()));
         }
     }
 

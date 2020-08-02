@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import ij.Prefs;
 import ij.plugin.filter.Binary;
 import ij.process.ImageProcessor;
+import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -47,8 +47,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
     /** One of: open, close, fill, erode, dilate, skel, outline */
-    @BeanField @Getter @Setter 
-    private String command = "";
+    @BeanField @Getter @Setter private String command = "";
 
     /** iterations for erode, dilate, open, close */
     @BeanField @Positive @Getter @Setter private int iterations = 1;

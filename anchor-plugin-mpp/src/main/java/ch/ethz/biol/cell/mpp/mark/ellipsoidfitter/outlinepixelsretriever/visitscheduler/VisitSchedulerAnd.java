@@ -29,6 +29,8 @@ package ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visits
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -37,8 +39,6 @@ import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
-import lombok.Getter;
-import lombok.Setter;
 
 public class VisitSchedulerAnd extends VisitScheduler {
 

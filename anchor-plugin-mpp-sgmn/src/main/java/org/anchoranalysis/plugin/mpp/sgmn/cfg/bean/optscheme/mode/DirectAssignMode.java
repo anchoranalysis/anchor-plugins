@@ -26,6 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
@@ -34,17 +38,14 @@ import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.Kernel
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.KernelStateBridgeIdentity;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.statereporter.StateReporterIdentity;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Directly assigns a CfgNRG for every optimisation step
  *
  * @param S state-type for optimization
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class DirectAssignMode<S> extends AssignMode<S, S, S> {
 
     // START BEAN PROPERTIES

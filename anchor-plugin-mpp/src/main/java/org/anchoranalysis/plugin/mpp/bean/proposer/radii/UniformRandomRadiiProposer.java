@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -38,8 +40,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
-import lombok.Getter;
-import lombok.Setter;
 
 public class UniformRandomRadiiProposer extends RadiiProposer {
 

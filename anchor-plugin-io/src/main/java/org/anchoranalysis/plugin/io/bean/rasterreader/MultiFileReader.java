@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
@@ -43,8 +45,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import lombok.Getter;
-import lombok.Setter;
 
 // Expects to be passed one file per set
 // Then finds all channels and stacks from an associated regular expression

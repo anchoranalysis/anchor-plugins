@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkFromCfgProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -46,8 +48,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
@@ -170,7 +170,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
         MemoList memoList = exst.createDuplicatePxlMarkMemoList();
 
-        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get());      // NOSONAR
+        VoxelizedMarkMemo memoExst = exst.getMemoForMark(this.markExst.get()); // NOSONAR
 
         updatableMarkSetCollection.rmv(memoList, memoExst);
         memoList.remove(memoExst);

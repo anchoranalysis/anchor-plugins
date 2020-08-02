@@ -27,9 +27,9 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -59,7 +59,8 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 
     @BeanField @Getter @Setter private RelationBean relation;
 
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @OptionalBean @Getter @Setter
+    private ImageDimProvider dim = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override

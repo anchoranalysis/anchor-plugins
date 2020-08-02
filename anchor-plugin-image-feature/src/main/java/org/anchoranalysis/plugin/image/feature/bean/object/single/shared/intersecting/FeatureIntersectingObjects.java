@@ -64,7 +64,8 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         if (getSearchObjects().isEmpty()) {
             return getValueNoObjects();

@@ -28,10 +28,10 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import com.google.common.collect.BoundType;
 import com.google.common.collect.TreeMultiset;
-import lombok.Getter;
-import lombok.Setter;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;

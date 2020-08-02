@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
@@ -36,8 +38,6 @@ import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
 import org.apache.log4j.Logger;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate

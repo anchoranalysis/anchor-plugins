@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
@@ -36,8 +38,6 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 

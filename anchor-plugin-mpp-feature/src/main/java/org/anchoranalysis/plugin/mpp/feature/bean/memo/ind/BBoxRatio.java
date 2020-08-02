@@ -38,7 +38,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class BBoxRatio extends FeatureSingleMemo {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
 

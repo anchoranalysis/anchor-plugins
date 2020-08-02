@@ -30,12 +30,12 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import lombok.Getter;
-import lombok.Setter;
 
 public class RootFilePathRegEx extends ReportFeatureForManifest {
 

@@ -60,15 +60,16 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         try {
             AxisType axisType = AxisTypeConverter.createFromString(axis);
-    
+
             Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
             return arbPoint.map(point -> (double) point.getValueByDimension(axisType))
                     .orElse(emptyValue);
-            
+
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }

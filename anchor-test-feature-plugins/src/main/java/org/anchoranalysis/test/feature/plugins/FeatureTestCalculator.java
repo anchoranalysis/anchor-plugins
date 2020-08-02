@@ -29,6 +29,8 @@ package org.anchoranalysis.test.feature.plugins;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
@@ -39,10 +41,8 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.test.LoggingFixture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureTestCalculator {
 
     public static <T extends FeatureInput> void assertDoubleResult(
@@ -107,7 +107,7 @@ public class FeatureTestCalculator {
                             initParams,
                             new SharedFeatureMulti(),
                             LoggingFixture.suppressedLogErrorReporter());
-    
+
             return calculator.calc(params);
         } catch (InitException e) {
             throw new FeatureCalculationException(e);

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,8 +42,6 @@ import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
 import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.mode.AssignMode;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Finds an optima using a simulated-annealing approach

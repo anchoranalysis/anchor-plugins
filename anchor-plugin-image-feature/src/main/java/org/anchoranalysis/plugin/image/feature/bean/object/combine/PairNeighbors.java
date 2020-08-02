@@ -46,9 +46,9 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
+import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -174,7 +174,9 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
 
         // We iterate through every edge in the graph, edges can exist in both directions
         for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
-            out.add(new FeatureInputPairObjects(edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
+            out.add(
+                    new FeatureInputPairObjects(
+                            edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
         }
 
         return out;

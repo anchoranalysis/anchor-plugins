@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.input.chnl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
@@ -39,8 +41,6 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.chnl.map.ImgChnlMapAutoname;
-import lombok.Getter;
-import lombok.Setter;
 
 // Provides access to a named set of channels for each input
 public class NamedChnls extends NamedChnlsBase {
@@ -50,7 +50,8 @@ public class NamedChnls extends NamedChnlsBase {
 
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField @Getter @Setter private ImgChnlMapCreator imgChnlMapCreator = new ImgChnlMapAutoname();
+    @BeanField @Getter @Setter
+    private ImgChnlMapCreator imgChnlMapCreator = new ImgChnlMapAutoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
     // END BEANS

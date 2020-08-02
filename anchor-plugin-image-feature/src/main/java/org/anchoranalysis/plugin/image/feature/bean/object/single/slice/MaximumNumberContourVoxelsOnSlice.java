@@ -42,7 +42,8 @@ import org.anchoranalysis.image.outline.FindOutline;
 public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
         ObjectMask object = input.get().getObject();
 
         return numVoxelsOnContour(sliceWithMaxNumVoxels(object));

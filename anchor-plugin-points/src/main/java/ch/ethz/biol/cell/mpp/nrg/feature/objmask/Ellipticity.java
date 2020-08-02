@@ -39,7 +39,8 @@ import org.anchoranalysis.plugin.points.calculate.ellipse.ObjectWithEllipse;
 public class Ellipticity extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleObject> input)
+            throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();
 

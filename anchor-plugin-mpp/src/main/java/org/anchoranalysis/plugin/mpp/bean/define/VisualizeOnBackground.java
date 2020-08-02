@@ -34,9 +34,9 @@ import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFrom
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
+import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.function.Function;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
@@ -45,8 +45,8 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
@@ -84,8 +84,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
             define.addAll(def);
 
             // Now we add visualizations for the BinaryChnlProvider and object-collection providers
-            addVisualizationFor(
-                    def, define, MaskProvider.class, this::visualizationBinaryMask);
+            addVisualizationFor(def, define, MaskProvider.class, this::visualizationBinaryMask);
             addVisualizationFor(
                     def, define, ObjectCollectionProvider.class, this::visualizationObjects);
             addVisualizationFor(def, define, CfgProvider.class, this::visualizationCfg);

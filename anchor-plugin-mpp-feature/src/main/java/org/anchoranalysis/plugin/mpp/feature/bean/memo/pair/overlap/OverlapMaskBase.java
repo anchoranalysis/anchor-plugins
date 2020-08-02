@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
+import java.util.function.LongBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.function.LongBinaryOperator;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;

@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ReadVoxelExtentXml extends RasterReader {
 

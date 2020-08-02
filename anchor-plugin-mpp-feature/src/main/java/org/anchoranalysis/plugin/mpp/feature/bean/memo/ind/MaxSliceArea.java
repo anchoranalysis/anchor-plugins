@@ -36,7 +36,8 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 public final class MaxSliceArea extends FeatureSingleMemoRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
 

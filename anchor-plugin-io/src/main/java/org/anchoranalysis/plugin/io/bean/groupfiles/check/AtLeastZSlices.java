@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.groupfiles.check;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.plugin.io.multifile.IntegerRange;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
-import lombok.Getter;
-import lombok.Setter;
 
 public class AtLeastZSlices extends CheckParsedFilePathBag {
 

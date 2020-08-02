@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
@@ -33,8 +35,6 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import lombok.Getter;
-import lombok.Setter;
 
 // Converts a chnl by applying a ChnlConverter. Does not need a histogram
 public class ChnlProviderConverter extends ChnlProviderOne {
@@ -42,9 +42,11 @@ public class ChnlProviderConverter extends ChnlProviderOne {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ConvertChannelTo chnlConverter;
 
-    /** If true, the existing channel can be changed. If false, a new channel must be created for any change */
-    @BeanField @Getter @Setter 
-    private boolean changeExisting = false; 
+    /**
+     * If true, the existing channel can be changed. If false, a new channel must be created for any
+     * change
+     */
+    @BeanField @Getter @Setter private boolean changeExisting = false;
     // END BEAN PROPERTIES
 
     @Override

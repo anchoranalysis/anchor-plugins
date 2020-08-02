@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import java.util.stream.IntStream;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 
 // Calculates the eccentricity of the ellipse by considering the two planes which are furtherest way
 // from the Z unit-vector

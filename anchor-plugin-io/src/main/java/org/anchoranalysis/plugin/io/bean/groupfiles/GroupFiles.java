@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
@@ -51,8 +53,6 @@ import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * An input-manager that can group together files to form stacks or time-series based on finding
@@ -86,7 +86,8 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 
     @BeanField @Getter @Setter private ImgChnlMapCreator imgChnlMapCreator;
 
-    @BeanField @Getter @Setter private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
+    @BeanField @Getter @Setter
+    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be

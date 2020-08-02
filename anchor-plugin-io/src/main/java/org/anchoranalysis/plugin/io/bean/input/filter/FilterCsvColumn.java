@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -37,8 +39,6 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Finds a CSV file with the descriptiveNames of an input as the first-column

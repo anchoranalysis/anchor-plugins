@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark;
 
 import java.awt.Color;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
@@ -39,8 +41,6 @@ import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisual
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Check extends MarkProposerOne {
 

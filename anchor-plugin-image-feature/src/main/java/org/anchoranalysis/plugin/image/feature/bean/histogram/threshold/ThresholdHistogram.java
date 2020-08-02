@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -34,8 +36,6 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Thresholds the histogram (using a weightedOtsu) and then applies a feature to the thresholded
@@ -53,7 +53,8 @@ public class ThresholdHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputHistogram> input)
+            throws FeatureCalculationException {
 
         return input.forChild()
                 .calc(

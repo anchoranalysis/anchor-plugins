@@ -48,7 +48,8 @@ public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureI
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
         return input.forChild()
                 .calc(
                         getItem(),

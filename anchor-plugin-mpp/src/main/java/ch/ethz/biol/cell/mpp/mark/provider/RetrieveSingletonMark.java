@@ -27,14 +27,14 @@
 package ch.ethz.biol.cell.mpp.mark.provider;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkProvider;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import lombok.Getter;
-import lombok.Setter;
 
 // Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an
 // error

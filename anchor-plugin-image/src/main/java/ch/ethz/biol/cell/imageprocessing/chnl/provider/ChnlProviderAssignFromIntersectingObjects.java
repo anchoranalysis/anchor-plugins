@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.Getter;
@@ -41,8 +43,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 
 // Matches source-objects to target objects, based upon intersection, and assigns the
 //   value in the respective source object to the target object
@@ -63,10 +63,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
         ObjectCollection target = objectsTarget.create();
 
         streamIntersectingObjects(source, target)
-                .forEach(
-                        pair ->
-                                vb.setPixelsCheckMask(
-                                        pair._2(), getValForMask(chnl, pair._1())));
+                .forEach(pair -> vb.setPixelsCheckMask(pair._2(), getValForMask(chnl, pair._1())));
         return chnl;
     }
 

@@ -28,20 +28,20 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeature;
 import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeatureWithMask;
-import lombok.Getter;
-import lombok.Setter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
@@ -65,9 +65,11 @@ public class ChnlProviderPixelScore extends ChannelProvider {
 
     @BeanField @Getter @Setter private PixelScore pixelScore;
 
-    @BeanField @Getter @Setter private List<ChannelProvider> listChnlProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<ChannelProvider> listChnlProviderExtra = new ArrayList<>();
 
-    @BeanField @Getter @Setter private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter
+    private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES

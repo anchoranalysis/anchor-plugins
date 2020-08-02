@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
@@ -40,8 +42,6 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Constructs a shell around an object-mask using a standard dilation and erosion process
@@ -67,7 +67,8 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
      */
     @BeanField @Getter @Setter private int nrgIndexMask = -1;
 
-    @BeanField @Getter @Setter private boolean inverseMask = false; // Uses the inverse of the passed mask
+    @BeanField @Getter @Setter
+    private boolean inverseMask = false; // Uses the inverse of the passed mask
 
     @BeanField @Getter @Setter private double emptyValue = 255;
 

@@ -26,11 +26,11 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import lombok.Getter;
-import lombok.Setter;
 
 // If a param is equal to a particular value, do soemthing
 public class BinaryChnlProviderIfStackExists extends BinaryChnlProviderElseBase {

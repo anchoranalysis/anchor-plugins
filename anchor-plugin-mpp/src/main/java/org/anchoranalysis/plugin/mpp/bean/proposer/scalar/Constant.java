@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageResolution;
-import lombok.Getter;
-import lombok.Setter;
 
 public class Constant extends ScalarProposer {
 

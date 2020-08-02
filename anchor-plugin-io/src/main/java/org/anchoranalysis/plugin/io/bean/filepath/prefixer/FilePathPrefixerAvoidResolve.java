@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
@@ -37,8 +39,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a

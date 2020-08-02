@@ -38,7 +38,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConstantBoundGenerator extends BoundCalculator {
 
     // START BEAN PROPERTIES

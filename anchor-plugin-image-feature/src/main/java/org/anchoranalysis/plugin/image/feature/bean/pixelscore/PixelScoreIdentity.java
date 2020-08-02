@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
-import lombok.Getter;
-import lombok.Setter;
 
 public class PixelScoreIdentity extends PixelScore {
 

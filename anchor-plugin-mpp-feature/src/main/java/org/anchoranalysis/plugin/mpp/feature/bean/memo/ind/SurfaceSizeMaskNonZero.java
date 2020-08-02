@@ -57,7 +57,8 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input) throws FeatureCalculationException {
+    public double calc(SessionInput<FeatureInputSingleMemo> input)
+            throws FeatureCalculationException {
 
         ObjectMask objectMask = createMask(input.get());
         int surfaceSize = estimateSurfaceSize(input.get().getPxlPartMemo(), objectMask);

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
@@ -33,8 +35,6 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.Getter;
-import lombok.Setter;
 
 //
 // Ratio of number of non-mode pixels to number of pixels

@@ -50,7 +50,8 @@ class CalculateDeriveHistogramInput
     }
 
     @Override
-    protected FeatureInputHistogram execute(FeatureInputStack input) throws FeatureCalculationException {
+    protected FeatureInputHistogram execute(FeatureInputStack input)
+            throws FeatureCalculationException {
         return new FeatureInputHistogram(
                 histogramCalculation.getOrCalculate(input), input.getResOptional());
     }

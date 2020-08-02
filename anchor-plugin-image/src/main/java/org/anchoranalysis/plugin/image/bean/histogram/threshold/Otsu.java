@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 
+import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
-import lombok.EqualsAndHashCode;
 
 /**
  * Performs Otsu auto-thresholding

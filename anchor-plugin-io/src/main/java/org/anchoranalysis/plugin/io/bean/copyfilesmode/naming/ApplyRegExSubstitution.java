@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.error.AnchorIOException;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * A regular expression substitution (replaceAll) is applied to the relative-path
@@ -52,5 +52,4 @@ public class ApplyRegExSubstitution extends CopyFilesNamingOneRegEx {
                 NamingUtilities.convertToString(pathDelegate).replaceAll(regex, replacement);
         return Optional.of(Paths.get(pathAfterRegEx));
     }
-
 }

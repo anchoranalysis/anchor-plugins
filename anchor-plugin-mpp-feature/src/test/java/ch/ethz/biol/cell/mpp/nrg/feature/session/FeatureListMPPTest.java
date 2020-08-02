@@ -63,13 +63,15 @@ public class FeatureListMPPTest {
     }
 
     @Test(expected = NamedFeatureCalculationException.class)
-    public void testNoParams() throws InitException, NamedFeatureCalculationException, CreateException {
+    public void testNoParams()
+            throws InitException, NamedFeatureCalculationException, CreateException {
 
         testConstantsInList((FeatureInput) null, (FeatureInput) null);
     }
 
     @Test
-    public void testArbitraryParams() throws InitException, NamedFeatureCalculationException, CreateException {
+    public void testArbitraryParams()
+            throws InitException, NamedFeatureCalculationException, CreateException {
 
         CfgFixture cfgFixture = new CfgFixture(DIM);
 
@@ -109,7 +111,9 @@ public class FeatureListMPPTest {
     }
 
     @Test
-    public void testCfg() throws InitException, CreateException, FeatureCalculationException, NamedFeatureCalculationException {
+    public void testCfg()
+            throws InitException, CreateException, FeatureCalculationException,
+                    NamedFeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputCfg> session =
                 createAndStart(FeatureListFixtureMPP.cfg());
