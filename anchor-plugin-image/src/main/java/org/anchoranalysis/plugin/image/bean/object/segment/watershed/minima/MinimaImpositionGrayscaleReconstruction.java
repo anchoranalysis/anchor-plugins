@@ -39,7 +39,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.BinaryChnlFromObjects;
+import org.anchoranalysis.image.object.ops.MaskFromObjects;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
@@ -83,7 +83,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
-                BinaryChnlFromObjects.createFromObjects(
+                MaskFromObjects.createFromObjects(
                         masks, chnl.getDimensions(), masks.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original

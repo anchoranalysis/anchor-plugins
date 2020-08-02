@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -53,7 +53,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider chnl;
 
     // The threshold we use, the distance is always calculated in the direction of the XY plane.
     @BeanField @Getter @Setter private UnitValueDistance threshold;

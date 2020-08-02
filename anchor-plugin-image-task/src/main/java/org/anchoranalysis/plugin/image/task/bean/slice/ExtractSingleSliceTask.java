@@ -49,7 +49,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -161,10 +161,10 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
             BoundOutputManagerRouteErrors outputManager)
             throws OperationFailedException {
 
-        NamedStackCollection stackCollection = collectionFromInput(inputObject);
+        NamedStacks stackCollection = collectionFromInput(inputObject);
 
         // Extract slices
-        NamedStackCollection sliceCollection =
+        NamedStacks sliceCollection =
                 stackCollection.applyOperation(
                         nrgStack.getDimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
@@ -175,15 +175,15 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private static NamedStackCollection collectionFromInput(NamedChnlsInput inputObject)
+    private static NamedStacks collectionFromInput(NamedChnlsInput inputObject)
             throws OperationFailedException {
-        NamedStackCollection stackCollection = new NamedStackCollection();
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 
     private void outputSlices(
-            BoundOutputManagerRouteErrors outputManager, NamedStackCollection stackCollection)
+            BoundOutputManagerRouteErrors outputManager, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StackCollectionOutputter.outputSubsetWithException(
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);

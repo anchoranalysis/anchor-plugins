@@ -26,46 +26,47 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
-import java.awt.Color;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.color.ColorList;
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedBoundingBoxGenerator;
-import org.anchoranalysis.image.io.generator.raster.bbox.ExtractedObjectGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.ExtractBoundingBoxAreaFromStackGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedStackCollection;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 
 /**
- * Builds a generator for all relevant stacks, outputting only if a predicate succeeds
+ * Builds a generator for all relevant stacks that combines several generators
+ * <ul>
+ * <li>An object-mask and bounding box generator
+ * <li>A generator that extracts the bounding-box portion from a stack
+ * <li>A generator that draws an object on an extracted bounding-box portion from a stack
+ * </ul>
  * 
  * @author Owen Feehan
  *
  */
 @AllArgsConstructor
-class GeneratorHelper {
+class BuildGeneratorHelper {
 
-    private static final String MANIFEST_FUNCTION = "extractedObjectOutline";
+    /** Added to the name of the stack to give an outline in an extracted portion of the stack (not flattened in z dimension) */
+    private static final String OUTPUT_OUTLINE_SUFFIX_NOT_FLATTENED = "_outline";
     
-    private static final String MANIFEST_FUNCTION_EXTRACTED_BOUNDING_BOX = "boundingBoxExtract";
-
-    private static final ColorList COLORS = new ColorList(Color.GREEN);
-    
+    /** Added to the name of the stack to give an outline in an extracted portion of the stack (flattened in z dimension) */
+    private static final String OUTPUT_OUTLINE_SUFFIX_FLATTENED = "_outline_flattened";
+        
     /** The width of the outline of the object (e.g. 1 pixel) */
     private final int outlineWidth;
 
-    public IterableCombinedListGenerator<ObjectMask> buildGeneratorsForStacks(
+    public IterableGenerator<ObjectMask> forStacks(
             ImageDimensions dimensions,
-            NamedStackCollection stacks,
-            NamedStackCollection stacksFlattened
+            NamedStacks stacks,
+            NamedStacks stacksFlattened
             )
             throws CreateException {
         IterableCombinedListGenerator<ObjectMask> out =
@@ -83,26 +84,27 @@ class GeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStackCollection stacks,
+            NamedStacks stacks,
             IterableCombinedListGenerator<ObjectMask> out,
-            boolean mip)
+            boolean flatten)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {
 
-            // Bounding box-generator
-            ExtractedBoundingBoxGenerator generator = new ExtractedBoundingBoxGenerator(stacks.getException(key), MANIFEST_FUNCTION_EXTRACTED_BOUNDING_BOX);
-            out.add(key, WrapGeneratorHelper.boundingBoxAsObject(generator, mip));
+            // TODO does the first generator get added twice for both flattened and non-flattened stacks?
             
-            // Outline on raster generator
-            String suffix = mip ? "_RGBOutlineMIP" : "_RGBOutline";
-            out.add(key + suffix, createExtractedObjectGenerator(generator) );
+            // Bounding box-generator
+            ExtractBoundingBoxAreaFromStackGenerator generator = new ExtractBoundingBoxAreaFromStackGenerator(
+                    Optional.of(stacks.getException(key)));
+            out.add(key, WrapBoundingBoxGeneratorAsObject.wrap(generator, flatten));
+            
+            // Outline on raster generator, reusing the previous generator for the background
+            out.add( outlineOutputName(key,flatten), new DrawObjectOnStackGenerator(generator, outlineWidth) );
         }
     }
     
-    private IterableGenerator<ObjectMask> createExtractedObjectGenerator(
-          IterableObjectGenerator<BoundingBox, Stack> backgroundGenerator
-    ) {
-        return new ExtractedObjectGenerator(backgroundGenerator, outlineWidth, COLORS, true, MANIFEST_FUNCTION);
+    private static String outlineOutputName(String key, boolean flatten) {
+        String suffix = flatten ? OUTPUT_OUTLINE_SUFFIX_FLATTENED : OUTPUT_OUTLINE_SUFFIX_NOT_FLATTENED;
+        return key + suffix;
     }
 }

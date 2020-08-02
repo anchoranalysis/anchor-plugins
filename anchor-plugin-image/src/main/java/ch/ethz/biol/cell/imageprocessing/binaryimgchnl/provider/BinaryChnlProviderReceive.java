@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import lombok.Getter;
@@ -37,7 +37,7 @@ import lombok.Setter;
 public abstract class BinaryChnlProviderReceive extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider receive;
+    @BeanField @Getter @Setter private MaskProvider receive;
     // END BEAN PROPERTIES
 
     @Override

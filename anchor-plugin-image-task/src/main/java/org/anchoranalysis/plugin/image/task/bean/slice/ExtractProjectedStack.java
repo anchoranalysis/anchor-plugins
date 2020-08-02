@@ -78,7 +78,7 @@ class ExtractProjectedStack {
                         && chnlIn.getDimensions().getY() == height)) {
             return chnlIn;
         } else {
-            Extent eOut = new Extent(width, height, 1);
+            Extent eOut = new Extent(width, height);
             Point3i crnrPos = createTarget(chnlIn.getDimensions(), eOut);
 
             BoundingBox bboxToProject =

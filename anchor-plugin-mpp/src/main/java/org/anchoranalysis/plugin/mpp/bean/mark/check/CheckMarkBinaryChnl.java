@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +43,7 @@ import lombok.Setter;
 public abstract class CheckMarkBinaryChnl extends CheckMark {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
 
     @BeanField @Getter @Setter private boolean acceptOutsideScene = false;
     // END BEAN PROPERTIES

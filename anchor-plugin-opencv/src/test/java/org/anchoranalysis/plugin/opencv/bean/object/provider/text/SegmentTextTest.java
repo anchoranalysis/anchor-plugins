@@ -98,6 +98,6 @@ public class SegmentTextTest {
 
     /** Bounding box at particular point and coordinates */
     private static BoundingBox boxAt(int x, int y, int width, int height) {
-        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height, 1));
+        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
     }
 }

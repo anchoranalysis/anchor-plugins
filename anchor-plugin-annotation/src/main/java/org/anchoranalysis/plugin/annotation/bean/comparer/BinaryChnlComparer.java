@@ -89,6 +89,6 @@ public class BinaryChnlComparer extends Comparer {
     }
 
     private static ObjectCollection convertToObjects(Mask chnl) {
-        return ObjectCollectionFactory.from(chnl);
+        return ObjectCollectionFactory.of(chnl);
     }
 }

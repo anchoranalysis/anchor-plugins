@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -59,7 +59,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> featureProvider;
 
     @BeanField @Getter @Setter
-    private List<ChnlProvider> listAdditionalChnlProviders = new ArrayList<>();
+    private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
 
     @BeanField @Getter @Setter private double factor = 1.0;
     // END BEAN PROPERTIES
@@ -88,7 +88,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         NRGStack nrgStack = new NRGStack(chnl);
 
         // add other channels
-        for (ChnlProvider cp : listAdditionalChnlProviders) {
+        for (ChannelProvider cp : listAdditionalChnlProviders) {
             Channel chnlAdditional = cp.create();
 
             if (!chnlAdditional.getDimensions().equals(chnl.getDimensions())) {

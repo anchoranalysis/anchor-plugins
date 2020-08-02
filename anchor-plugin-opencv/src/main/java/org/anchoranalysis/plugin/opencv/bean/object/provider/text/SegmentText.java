@@ -62,7 +62,7 @@ public class SegmentText extends ObjectCollectionProvider {
     }
 
     /** Only exact integral multiples of this size in each dimension can be accepted as input */
-    private static final Extent EAST_EXTENT = new Extent(32, 32, 1);
+    private static final Extent EAST_EXTENT = new Extent(32, 32);
 
     /**
      * As the EAST detector was designed to work with originally 1280x720 pixel images approximately

@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -54,9 +54,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     @BeanField @Getter @Setter private boolean bigNeighborhood = true;
 
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnlOutline;
+    @BeanField @Getter @Setter private MaskProvider binaryChnlOutline;
 
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnlFilled;
+    @BeanField @Getter @Setter private MaskProvider binaryChnlFilled;
 
     @BeanField @Getter @Setter private boolean useZ = true;
     // END BEAN PROPERTIES
@@ -123,7 +123,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             throws TraverseOutlineException {
         // Important, so we can use the contains function later
         return createObjectForPoint(root, chnlFilled)
-                .mapBoundingBox(bbox -> bbox.shiftTo(new Point3i(0, 0, 0)));
+                .mapBoundingBoxPreserveExtent(bbox -> bbox.shiftTo(new Point3i(0, 0, 0)));
     }
 
     private void callAfter(

@@ -48,7 +48,7 @@ public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeatur
         Optional<ObjectMask> max = findMaxObj(createSession(), objects);
 
         if (max.isPresent()) {
-            return ObjectCollectionFactory.from(max.get());
+            return ObjectCollectionFactory.of(max.get());
         } else {
             return ObjectCollectionFactory.empty();
         }

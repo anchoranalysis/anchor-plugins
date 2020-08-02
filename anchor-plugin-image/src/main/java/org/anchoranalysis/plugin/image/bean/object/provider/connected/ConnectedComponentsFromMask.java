@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -53,7 +53,7 @@ import org.apache.commons.lang.time.StopWatch;
 public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @Getter @Setter private MaskProvider binaryChnl;
 
     @BeanField @Getter @Setter
     private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);

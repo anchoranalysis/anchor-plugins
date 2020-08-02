@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -47,15 +46,12 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedStackCollection;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -152,136 +148,15 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         generatorSeq.end();
     }
 
-    private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ) {
-        if (extendInZ) {
-            return extendObjectsInZ(objects, sizeZ);
-        } else {
-            return objects;    
-        }
-    }
-
-    private NamedStackCollection createStacks(ImageInitParams so, Logger logger)
-            throws CreateException {
-        // Get named image stack collection
-        ImageDimensions dimensions = null;
-        NamedStackCollection stacks = new NamedStackCollection();
-
-        for (NamedBean<StackProvider> ni : listStackProvider) {
-
-            try {
-                ni.getValue().initRecursive(so, logger);
-            } catch (InitException e) {
-                // NB if we cannot create a particular channel provider, we simply skip.  We use
-                // this as a means to provide for channels
-                //  that might not always be present
-                logger.errorReporter().recordError(ExportObjectsAsCroppedImagesTask.class, e);
-                continue;
-            }
-
-            Stack stack = ni.getValue().create();
-
-            if (dimensions == null) {
-                dimensions = stack.getDimensions();
-            } else {
-                if (!stack.getDimensions().equals(dimensions)) {
-                    throw new CreateException(
-                            String.format(
-                                    "Channel dimensions are not uniform across the channels (%s vs %s)",
-                                    stack.getDimensions(), dimensions));
-                }
-            }
-
-            try {
-                stacks.add(ni.getName(), new IdentityOperation<>(stack));
-            } catch (OperationFailedException e) {
-                throw new CreateException(e);
-            }
-        }
-
-        return stacks;
-    }
-
-    private NamedStackCollection createStacksMaximumIntensityProjection(ImageInitParams so, Logger logger)
-            throws CreateException {
-        // Get named image stack collection
-        ImageDimensions dimensions = null;
-        NamedStackCollection stackCollection = new NamedStackCollection();
-
-        for (NamedBean<StackProvider> ni : listStackProviderMIP) {
-
-            try {
-                ni.getValue().initRecursive(so, logger);
-            } catch (InitException e) {
-                // NB if we cannot create a particular channel provider, we simply skip.  We use
-                // this as a means to provide for channels
-                //  that might not always be present
-                continue;
-            }
-
-            Stack stack = ni.getValue().create();
-
-            if (dimensions == null) {
-                dimensions = stack.getDimensions();
-            } else {
-                if (!stack.getDimensions().equals(dimensions)) {
-                    throw new CreateException("Stack dimensions do not match");
-                }
-            }
-
-            try {
-                stackCollection.add(ni.getName(), new IdentityOperation<>(stack));
-            } catch (OperationFailedException e) {
-                throw new CreateException(e);
-            }
-        }
-        return stackCollection;
-    }
-
-    private IterableGenerator<ObjectMask> createGenerator(
-            ImageDimensions dimensions,
-            NamedStackCollection stacks,
-            NamedStackCollection stacksFlattened)
-            throws CreateException {
-
-        IterableCombinedListGenerator<ObjectMask> out =
-                new GeneratorHelper(outlineWidth)
-                        .buildGeneratorsForStacks(
-                                dimensions,
-                                stacks.subset(outputRGBOutline),
-                                stacksFlattened.subset(outputRGBOutlineFlattened)
-                                );
-
-        // Maybe we need to change the objectMask to a padded version
-        return new IterableGeneratorBridge<>(
-                out,
-                object -> {
-                    if (keepEntireImage) {
-                        return extractObjectKeepEntireImage(object, dimensions);
-                    } else {
-                        return maybePadObject(object, dimensions);
-                    }
-                });
-    }
-
-    private static ObjectMask extractObjectKeepEntireImage(
-            ObjectMask object, ImageDimensions dimensions) {
-        return BoundingBoxUtilities.createObjectForBoundingBox(
-                object, new BoundingBox(dimensions.getExtent()));
-    }
-
-    private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz) {
-        return objects.stream().map(objectMask -> objectMask.flattenZ().growToZ(sz));
-    }
-
     private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
             throws OperationFailedException {
 
         try {
             Logger logger = context.getLogger();
 
-            NamedStackCollection stacks = createStacks(paramsInit, logger);
-            NamedStackCollection stacksProjected =
-                    createStacksMaximumIntensityProjection(paramsInit, logger);
+            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacks stacksProjected =
+                    createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 
             if (stacks.keys().isEmpty()) {
                 // Nothing to do
@@ -297,5 +172,62 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);
         }
+    }
+    
+    private static NamedStacks createStacksFromProviders(List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
+            throws CreateException {
+        // Get named image stack collection
+        NamedStacksUniformSize stacks = new NamedStacksUniformSize();
+
+        for (NamedBean<StackProvider> namedStackProvider : stackProviders) {
+
+            try {
+                namedStackProvider.getValue().initRecursive(so, logger);
+            } catch (InitException e) {
+                // NB if we cannot create a particular channel provider, we simply skip.  We use
+                // this as a means to provide for channels
+                //  that might not always be present
+                logger.errorReporter().recordError(ExportObjectsAsCroppedImagesTask.class, e);
+                continue;
+            }
+
+            try {
+                stacks.add(namedStackProvider.getName(), namedStackProvider.getValue().create());
+            } catch (OperationFailedException e) {
+                throw new CreateException(e);
+            }
+        }
+
+        return stacks.withoutUniformSizeConstraint();
+    }
+
+    private IterableGenerator<ObjectMask> createGenerator(
+            ImageDimensions dimensions,
+            NamedStacks stacks,
+            NamedStacks stacksFlattened)
+            throws CreateException {
+
+        IterableGenerator<ObjectMask> generator =
+                new BuildGeneratorHelper(outlineWidth)
+                        .forStacks(
+                                dimensions,
+                                stacks.subset(outputRGBOutline),
+                                stacksFlattened.subset(outputRGBOutlineFlattened)
+                                );
+
+        // Maybe we need to change the objectMask to a padded version
+        return AddPaddingToGenerator.addPadding(generator, dimensions, getPadding(), keepEntireImage);
+    }
+    
+    private ObjectCollection maybeExtendZObjects(ObjectCollection objects, int sizeZ) {
+        if (extendInZ) {
+            return extendObjectsInZ(objects, sizeZ);
+        } else {
+            return objects;    
+        }
+    }
+    
+    private static ObjectCollection extendObjectsInZ(ObjectCollection objects, int sz) {
+        return objects.stream().map(objectMask -> objectMask.flattenZ().growToZ(sz));
     }
 }

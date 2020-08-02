@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskInverter;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 
     // START BEAN FIELDS
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
     @BeanField @Getter @Setter private boolean forceChangeBytes = false;
     // END BEAN FIELDS

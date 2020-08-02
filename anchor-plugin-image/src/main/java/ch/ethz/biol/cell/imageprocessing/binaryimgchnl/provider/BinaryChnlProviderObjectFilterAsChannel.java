@@ -54,7 +54,7 @@ public class BinaryChnlProviderObjectFilterAsChannel extends BinaryChnlProviderE
         try {
             ObjectCollection objects =
                     filter.filter(
-                            ObjectCollectionFactory.from(objectMask),
+                            ObjectCollectionFactory.of(objectMask),
                             Optional.of(chnl.getDimensions()),
                             Optional.empty());
             return objects.size() == 1;

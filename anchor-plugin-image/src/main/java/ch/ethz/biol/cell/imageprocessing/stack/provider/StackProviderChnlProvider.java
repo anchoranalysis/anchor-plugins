@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
 import lombok.Getter;
@@ -43,12 +43,12 @@ import lombok.Setter;
 public class StackProviderChnlProvider extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
 
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider binaryChnl;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnl;
     // END BEAN PROPERTIES
 
-    public StackProviderChnlProvider(ChnlProvider chnlProvider) {
+    public StackProviderChnlProvider(ChannelProvider chnlProvider) {
         this.chnl = chnlProvider;
     }
 

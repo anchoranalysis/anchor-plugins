@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.experiment.identifiers.ImgStackIdentifiers;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChnlGenerator;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
@@ -81,7 +81,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
             NamedChannelsForSeries ncc =
                     inputObject.createChannelsForSeries(0, progressReporter);
 
-            Channel inputImage = ncc.getChannel(ImgStackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+            Channel inputImage = ncc.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(

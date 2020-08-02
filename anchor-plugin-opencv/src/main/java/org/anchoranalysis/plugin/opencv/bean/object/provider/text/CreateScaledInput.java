@@ -71,7 +71,7 @@ class CreateScaledInput {
     }
 
     private static Extent extentFromMat(Mat mat) {
-        return new Extent(mat.cols(), mat.rows(), 1);
+        return new Extent(mat.cols(), mat.rows());
     }
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {

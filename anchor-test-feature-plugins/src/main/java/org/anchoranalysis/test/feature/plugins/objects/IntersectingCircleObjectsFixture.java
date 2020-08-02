@@ -68,7 +68,7 @@ public class IntersectingCircleObjectsFixture {
         // Make sure we haven't generated so many we've run out of the scene
         assert (CircleObjectFixture.sceneContains(running.getCenter()));
 
-        return ObjectCollectionFactory.from(first, second);
+        return ObjectCollectionFactory.of(first, second);
     }
 
     /** Increments the center-point (and maybe the radius) as new circles are generated */

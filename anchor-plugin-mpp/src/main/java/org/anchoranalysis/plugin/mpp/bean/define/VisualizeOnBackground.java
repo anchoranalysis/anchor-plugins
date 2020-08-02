@@ -45,8 +45,8 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
@@ -85,7 +85,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 
             // Now we add visualizations for the BinaryChnlProvider and object-collection providers
             addVisualizationFor(
-                    def, define, BinaryChnlProvider.class, this::visualizationBinaryMask);
+                    def, define, MaskProvider.class, this::visualizationBinaryMask);
             addVisualizationFor(
                     def, define, ObjectCollectionProvider.class, this::visualizationObjects);
             addVisualizationFor(def, define, CfgProvider.class, this::visualizationCfg);
@@ -170,7 +170,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
         }
     }
 
-    private ChnlProvider backgroundChnl() {
+    private ChannelProvider backgroundChnl() {
         return new ChnlProviderReference(backgroundID);
     }
 }

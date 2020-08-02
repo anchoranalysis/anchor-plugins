@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 import lombok.Getter;
@@ -43,7 +43,7 @@ import lombok.Setter;
 public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
 
     // START PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider backgroundChnlProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider backgroundChnlProvider;
 
     @BeanField @Positive @Getter @Setter private int iterations = 1;
 

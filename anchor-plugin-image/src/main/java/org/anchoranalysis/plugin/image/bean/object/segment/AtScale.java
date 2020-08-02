@@ -91,7 +91,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             Optional<ObjectMask> mask, ScaleFactor scaleFactor, Interpolator interpolator)
             throws SegmentationFailedException {
 
-        return mapScale(mask, object -> object.scaleNew(scaleFactor, interpolator), "mask");
+        return mapScale(mask, object -> object.scale(scaleFactor, interpolator), "mask");
     }
 
     private Optional<SeedCollection> scaleSeeds(

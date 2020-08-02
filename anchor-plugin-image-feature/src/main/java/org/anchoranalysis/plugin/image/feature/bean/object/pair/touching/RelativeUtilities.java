@@ -61,6 +61,6 @@ class RelativeUtilities {
      */
     public static ObjectMask createRelMask(ObjectMask object, ObjectMask objectRelativeBase) {
         return object.relMaskTo(objectRelativeBase.getBoundingBox())
-                .mapBoundingBox(BoundingBox::reflectThroughOrigin);
+                .mapBoundingBoxPreserveExtent(BoundingBox::reflectThroughOrigin);
     }
 }

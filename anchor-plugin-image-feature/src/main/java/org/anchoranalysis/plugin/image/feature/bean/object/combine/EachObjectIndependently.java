@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
  * @author Owen Feehan
  */
 public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureInputSingleObject> {
-
+    
     @Override
     public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> list,
@@ -65,7 +65,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public List<FeatureInputSingleObject> createListInputs(
+    public List<FeatureInputSingleObject> deriveInputsFromObjects(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException {
         return objects.stream()
@@ -89,18 +89,9 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input){
-        try {
-            return OptionalUtilities.map(
-                 input.getNrgStackOptional().map(
-                    stack->stack.asStack().getChannel(0).resizeXY(200, 200)
-                 ),
-                 DisplayStack::create
-            );
-        } catch (CreateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input) throws CreateException {
+        return Optional.of(
+           getThumbnail().thumbnailFor( ObjectCollectionFactory.of(input.getObject()) )
+        );
     }
 }

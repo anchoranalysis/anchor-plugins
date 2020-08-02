@@ -47,7 +47,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStackCollection;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -79,7 +79,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         assert (logger != null);
 
         try {
-            NamedStackCollection stackCollection = stacksFromInput(inputObject);
+            NamedStacks stackCollection = stacksFromInput(inputObject);
 
             NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject, logger);
 
@@ -104,9 +104,9 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
         return new InputTypesExpected(MultiInput.class);
     }
 
-    private NamedStackCollection stacksFromInput(MultiInput inputObject)
+    private NamedStacks stacksFromInput(MultiInput inputObject)
             throws OperationFailedException {
-        NamedStackCollection stackCollection = new NamedStackCollection();
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
     }
@@ -145,7 +145,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     private void writeVisualization(
             Cfg cfg,
             BoundOutputManagerRouteErrors outputManager,
-            NamedStackCollection stackCollection,
+            NamedStacks stackCollection,
             Logger logger) {
         outputManager
                 .getWriterCheckIfAllowed()

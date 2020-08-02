@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -41,6 +42,10 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.plugin.image.bean.thumbnail.object.OutlinePreserveRelativeSize;
+import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObjects;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.
@@ -56,6 +61,9 @@ import org.anchoranalysis.image.stack.DisplayStack;
 public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         extends AnchorBean<CombineObjectsForFeatures<T>> {
 
+    /** Generates a thumbnail representation of one or more objects combine, as form a single input */
+    @BeanField @Getter @Setter private ThumbnailFromObjects thumbnail = new OutlinePreserveRelativeSize();
+    
     /**
      * Creates features that will be applied on the objects. Features should always be duplicated
      * from the input list.
@@ -75,10 +83,37 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     /** Generates a unique identifier for a particular input */
     public abstract String uniqueIdentifierFor(T input);
 
-    public abstract List<T> createListInputs(
+    /**
+     * Derives a list of inputs (i.e. rows in a feature table)
+     * <p>
+     * This should be called only ONCE, and always before {@link #createThumbailFor(FeatureInput)}
+     * 
+     * @param objects the objects from which inputs are derived
+     * @param nrgStack nrg-stack used during feature calculation
+     * @param logger logger
+     * @return the list of inputs
+     * @throws CreateException
+     */
+    public List<T> deriveInputs(
+            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            throws CreateException {
+        List<T> inputs = deriveInputsFromObjects(objects, nrgStack, logger);
+        thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+        return inputs;
+    }
+    
+    /**
+     * Derives a list of inputs from an object-collection
+     * 
+     * @param objects the object-collection
+     * @param nrgStack nrg-stack used during feature calculation
+     * @param logger logger
+     * @return the list of inputs
+     * @throws CreateException
+     */
+    protected abstract List<T> deriveInputsFromObjects(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException;
-    
     
     /**
      * Creates a thumbnail for a particular input
@@ -86,5 +121,5 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @param input the input
      * @return the thumbnail (if its supported)
      */
-    public abstract Optional<DisplayStack> createThumbailFor(T input);
+    public abstract Optional<DisplayStack> createThumbailFor(T input) throws CreateException;
 }

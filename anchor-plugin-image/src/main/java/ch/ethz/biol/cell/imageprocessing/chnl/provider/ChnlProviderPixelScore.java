@@ -39,8 +39,8 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.provider.BinaryChnlProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
@@ -53,19 +53,19 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.box.VoxelBoxList;
 import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 
-public class ChnlProviderPixelScore extends ChnlProvider {
+public class ChnlProviderPixelScore extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChnlProvider intensityProvider;
+    @BeanField @Getter @Setter private ChannelProvider intensityProvider;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlProvider gradientProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider gradientProvider;
 
     // We don't use {@link ChnlProiderMask} as here it's optional.
-    @BeanField @OptionalBean @Getter @Setter private BinaryChnlProvider mask;
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
     @BeanField @Getter @Setter private PixelScore pixelScore;
 
-    @BeanField @Getter @Setter private List<ChnlProvider> listChnlProviderExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelProvider> listChnlProviderExtra = new ArrayList<>();
 
     @BeanField @Getter @Setter private List<HistogramProvider> listHistogramProviderExtra = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class ChnlProviderPixelScore extends ChnlProvider {
         if (gradientProvider != null) {
             listOut.add(gradientProvider.create().getVoxelBox());
         }
-        for (ChnlProvider chnlProvider : listChnlProviderExtra) {
+        for (ChannelProvider chnlProvider : listChnlProviderExtra) {
             VoxelBoxWrapper vbExtra =
                     chnlProvider != null ? chnlProvider.create().getVoxelBox() : null;
             listOut.add(vbExtra);

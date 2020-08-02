@@ -158,7 +158,7 @@ class EastMarkExtractor {
         int numCols = (int) Math.floor(Math.sqrt(rowsByCols));
         int numRows = rowsByCols / numCols;
 
-        return new Pair<>(scoresReshaped, new Extent(numCols, numRows, 1));
+        return new Pair<>(scoresReshaped, new Extent(numCols, numRows));
     }
 
     private static float[][] splitGeometryIntoFiveArrays(Mat geometry, int rowsByCols) {

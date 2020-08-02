@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProvider;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
@@ -66,7 +66,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
      * If a pixel is zero in the input-channel, the output is formed from the corresponding pixel in
      * this channel instead
      */
-    @BeanField @Getter @Setter private ChnlProvider chnlIfPixelZero;
+    @BeanField @Getter @Setter private ChannelProvider chnlIfPixelZero;
     // END BEAN PROPERTIES
 
     @Override

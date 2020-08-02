@@ -38,14 +38,10 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.size.Padding;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class ExportObjectsBase<T extends InputFromManager, S> extends Task<T, S> {
 
@@ -63,29 +59,6 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
         objectsDuplicated.initRecursive(so, logger);
         return objectsDuplicated.create();
-    }
-
-    /**
-     * Adds padding (if set) to an object-mask
-     *
-     * @param object object-mask to be padded
-     * @param dimensions size of image
-     * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
-     * @throws OutputWriteFailedException
-     */
-    protected ObjectMask maybePadObject(ObjectMask object, ImageDimensions dimensions) {
-
-        if (padding.noPadding()) {
-            return object;
-        }
-
-        BoundingBox bboxToExtract =
-                object.getBoundingBox()
-                        .growBy(
-                                padding.asPoint(),
-                                dimensions.getExtent());
-
-        return BoundingBoxUtilities.createObjectForBoundingBox(object, bboxToExtract);
     }
 
     protected DrawCroppedObjectsGenerator createRGBMaskGenerator(
