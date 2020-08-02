@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.cache.CachedOperation;
+import org.anchoranalysis.core.cache.CacheCall;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
@@ -132,7 +132,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
-            CachedOperation<Path, AnchorIOException> outPath = CachedOperation.of(
+            CacheCall<Path, AnchorIOException> outPath = CacheCall.of(
                     new OperationOutFilePath(ni, ncc::pathForBinding, debugMode)
             );
 
