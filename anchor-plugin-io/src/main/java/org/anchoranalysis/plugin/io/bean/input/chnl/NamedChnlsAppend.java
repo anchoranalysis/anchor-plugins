@@ -38,7 +38,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.functional.FunctionalProgress;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -49,6 +48,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
+import org.anchoranalysis.io.input.PathSupplier;
 
 public class NamedChnlsAppend extends NamedChnlsBase {
 
@@ -132,7 +132,7 @@ public class NamedChnlsAppend extends NamedChnlsBase {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
-            CheckedSupplier<Path, AnchorIOException> outPath =
+            PathSupplier outPath =
                     OperationOutFilePath.cachedOutPathFor(ni.getValue(), ncc::pathForBinding, debugMode);
 
             if (forceEagerEvaluation) {
