@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -86,7 +86,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public CallableWithProgressReporter<TimeSequence, OperationFailedException>
+    public CheckedProgressingSupplier<TimeSequence, OperationFailedException>
             createStackSequenceForSeries(int seriesNum) throws RasterIOException {
 
         // We always use the last one
@@ -117,14 +117,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesNum).call(progressReporter);
+                        return createStackSequenceForSeries(seriesNum).get(progressReporter);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }
                 });
     }
 
-    private static CallableWithProgressReporter<TimeSequence, OperationFailedException>
+    private static CheckedProgressingSupplier<TimeSequence, OperationFailedException>
             openRasterAsOperation(final OpenedRaster openedRaster, final int seriesNum) {
         return pr -> {
             try {

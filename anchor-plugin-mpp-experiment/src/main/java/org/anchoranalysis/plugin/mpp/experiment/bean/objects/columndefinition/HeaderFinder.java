@@ -82,7 +82,7 @@ class HeaderFinder {
      */
     private static int[] findHeaderIndices(String[] headers, Collection<String> columnNames)
             throws InitException {
-        return CheckedStream.mapToIntWithException(
+        return CheckedStream.mapToInt(
                         columnNames.stream(),
                         InitException.class,
                         columnName -> findHeaderIndex(headers, columnName))

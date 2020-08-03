@@ -67,7 +67,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
         try {
             return objectCollection.stream()
-                    .flatMapWithException(
+                    .flatMap(
                             OperationFailedException.class,
                             object ->
                                     splitObject(

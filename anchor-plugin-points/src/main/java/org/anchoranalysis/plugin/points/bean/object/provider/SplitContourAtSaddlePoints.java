@@ -66,7 +66,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
         return objects.stream()
-                .flatMapWithException(CreateException.class, this::splitContoursFromObject);
+                .flatMap(CreateException.class, this::splitContoursFromObject);
     }
 
     private ObjectCollection splitContoursFromObject(ObjectMask object) throws CreateException {

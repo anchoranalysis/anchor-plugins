@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -69,7 +69,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
     protected abstract double deriveScore(
             double featureValue,
             double mean,
-            CallableWithException<Double, FeatureCalculationException> stdDev)
+            CheckedSupplier<Double, FeatureCalculationException> stdDev)
             throws FeatureCalculationException;
 
     @Override

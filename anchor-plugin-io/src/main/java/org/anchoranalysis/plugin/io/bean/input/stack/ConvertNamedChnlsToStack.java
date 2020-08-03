@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
+import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -93,9 +93,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public CallableWithProgressReporter<TimeSequence, OperationFailedException>
+        public CheckedProgressingSupplier<TimeSequence, OperationFailedException>
                 createStackSequenceForSeries(int seriesNum) throws RasterIOException {
-            return new OperationConvert(in, seriesNum);
+            return progressReporter -> convert(progressReporter, in, seriesNum);
         }
 
         @Override
@@ -122,38 +122,25 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
             return in.numberFrames();
         }
     }
+    
+    private TimeSequence convert(ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
+            throws OperationFailedException {
 
-    /**
-     * The operation of doing the conversion
-     *
-     * @author Owen Feehan
-     */
-    @AllArgsConstructor
-    private class OperationConvert
-            implements CallableWithProgressReporter<TimeSequence, OperationFailedException> {
+        try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 
-        private NamedChnlsInput in;
-        private int seriesNum;
+            NamedChannelsForSeries ncc =
+                    in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
+            prm.incrWorker();
 
-        @Override
-        public TimeSequence call(ProgressReporter progressReporter)
-                throws OperationFailedException {
+            Channel channel =
+                    ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+            return new TimeSequence(new Stack(channel));
 
-            try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
-
-                NamedChannelsForSeries ncc =
-                        in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
-                prm.incrWorker();
-
-                Channel channel =
-                        ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
-                return new TimeSequence(new Stack(channel));
-
-            } catch (RasterIOException | GetOperationFailedException e) {
-                throw new OperationFailedException(e);
-            }
+        } catch (RasterIOException | GetOperationFailedException e) {
+            throw new OperationFailedException(e);
         }
     }
+    
 
     @Override
     public List<StackSequenceInput> inputObjects(InputManagerParams params)

@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.MultiNameFactory;
@@ -67,7 +67,7 @@ public abstract class GroupMapByName<S, T> {
     public GroupMapByName(
             String nounT,
             String manifestFunction,
-            CallableWithException<T, AnchorNeverOccursException> createEmpty) {
+            CheckedSupplier<T, AnchorNeverOccursException> createEmpty) {
         super();
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;

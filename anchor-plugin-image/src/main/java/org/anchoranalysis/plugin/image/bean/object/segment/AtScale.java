@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
@@ -125,7 +125,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
      */
     private static <T> Optional<T> mapScale(
             Optional<T> optional,
-            UnaryOperatorWithException<T, OperationFailedException> scaleFunc,
+            CheckedUnaryOperator<T, OperationFailedException> scaleFunc,
             String textualDscrInError)
             throws SegmentationFailedException {
         try {
