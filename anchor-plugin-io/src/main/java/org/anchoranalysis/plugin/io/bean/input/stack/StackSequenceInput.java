@@ -26,11 +26,8 @@
 
 package org.anchoranalysis.plugin.io.bean.input.stack;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
  * Provides a single stack (or a time series of such stacks) as an input
@@ -40,6 +37,5 @@ import org.anchoranalysis.image.stack.TimeSequence;
 public interface StackSequenceInput extends ProvidesStackInput {
 
     /** Creates a TimeSequence of stacks for a particular series number */
-    CheckedProgressingSupplier<TimeSequence, OperationFailedException>
-            createStackSequenceForSeries(int seriesNum) throws RasterIOException;
+    TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException;
 }

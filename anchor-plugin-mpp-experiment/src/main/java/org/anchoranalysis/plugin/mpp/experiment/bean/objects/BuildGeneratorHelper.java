@@ -35,7 +35,7 @@ import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenera
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 
@@ -69,7 +69,7 @@ class BuildGeneratorHelper {
     private final int outlineWidth;
 
     public IterableGenerator<ObjectMask> forStacks(
-            ImageDimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
+            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
         IterableCombinedListGenerator<ObjectMask> out =
                 new IterableCombinedListGenerator<>(
@@ -86,7 +86,7 @@ class BuildGeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStacks stacks, IterableCombinedListGenerator<ObjectMask> out, boolean flatten)
+            NamedStacksSet stacks, IterableCombinedListGenerator<ObjectMask> out, boolean flatten)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {

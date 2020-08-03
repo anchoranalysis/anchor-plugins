@@ -38,7 +38,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CheckedProgressingSupplier;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -93,8 +92,7 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public CheckedProgressingSupplier<TimeSequence, OperationFailedException>
-                createStackSequenceForSeries(int seriesNum) throws RasterIOException {
+        public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException {
             return progressReporter -> convert(progressReporter, in, seriesNum);
         }
 
