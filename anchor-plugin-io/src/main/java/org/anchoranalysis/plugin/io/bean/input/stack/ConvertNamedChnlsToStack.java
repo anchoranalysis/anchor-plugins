@@ -119,26 +119,25 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         public int numberFrames() throws OperationFailedException {
             return in.numberFrames();
         }
-    }
-    
-    private TimeSequence convert(ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
-            throws OperationFailedException {
+        
+        private TimeSequence convert(ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
+                throws OperationFailedException {
 
-        try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
+            try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {
 
-            NamedChannelsForSeries ncc =
-                    in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
-            prm.incrWorker();
+                NamedChannelsForSeries ncc =
+                        in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
+                prm.incrWorker();
 
-            Channel channel =
-                    ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
-            return new TimeSequence(new Stack(channel));
+                Channel channel =
+                        ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+                return new TimeSequence(new Stack(channel));
 
-        } catch (RasterIOException | GetOperationFailedException e) {
-            throw new OperationFailedException(e);
+            } catch (RasterIOException | GetOperationFailedException e) {
+                throw new OperationFailedException(e);
+            }
         }
     }
-    
 
     @Override
     public List<StackSequenceInput> inputObjects(InputManagerParams params)
