@@ -34,6 +34,8 @@ import org.anchoranalysis.core.functional.function.CheckedRunnable;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Creates a mock-feature which used a mock {@link org.anchoranalysis.feature.cache.calculation.FeatureCalculation} under the hood
@@ -46,6 +48,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class MockFeatureWithCalculationFixture {
 
     public static final ToDoubleFunction<FeatureInputSingleObject> DEFAULT_FUNC_NUM_PIXELS =
