@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -165,7 +165,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             throws JobExecutionException {
 
         try {
-            NamedStacks stackCollection = new NamedStacks();
+            NamedStacksSet stackCollection = new NamedStacksSet();
             inputObject.getInputObject().addToStoreInferNames(stackCollection);
             return DisplayStack.create(stackCollection.getException(backgroundChnlName));
 

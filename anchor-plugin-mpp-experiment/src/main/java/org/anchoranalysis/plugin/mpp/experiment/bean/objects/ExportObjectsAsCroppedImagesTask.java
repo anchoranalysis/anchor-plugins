@@ -49,7 +49,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
@@ -157,8 +157,8 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
-            NamedStacks stacksProjected =
+            NamedStacksSet stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacksSet stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 
             if (stacks.keys().isEmpty()) {
@@ -177,7 +177,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         }
     }
 
-    private static NamedStacks createStacksFromProviders(
+    private static NamedStacksSet createStacksFromProviders(
             List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
@@ -206,7 +206,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private IterableGenerator<ObjectMask> createGenerator(
-            ImageDimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
+            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
 
         IterableGenerator<ObjectMask> generator =

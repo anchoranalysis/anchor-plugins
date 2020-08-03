@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
@@ -68,7 +68,7 @@ public class GroupedMeanChnlTask extends GroupedStackTask<Channel, AggregateChnl
 
     @Override
     protected void processKeys(
-            NamedStacks store,
+            NamedStacksSet store,
             Optional<String> groupName,
             GroupedSharedState<Channel, AggregateChnl> sharedState,
             BoundIOContext context)
