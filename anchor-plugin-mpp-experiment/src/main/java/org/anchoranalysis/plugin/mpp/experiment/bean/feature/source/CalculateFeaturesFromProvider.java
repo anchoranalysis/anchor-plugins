@@ -87,7 +87,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             throws OperationFailedException {
         try {
             List<T> inputs =
-                    table.deriveInputs(
+                    table.deriveInputsStartBatch(
                             objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
 
             calculateManyFeaturesInto(inputs, identifierFromInput);

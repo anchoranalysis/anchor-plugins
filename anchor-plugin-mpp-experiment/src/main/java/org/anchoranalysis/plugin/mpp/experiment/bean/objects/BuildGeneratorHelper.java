@@ -27,14 +27,16 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.AllArgsConstructor;
+import java.awt.Color;
+import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.bbox.ExtractBoundingBoxAreaFromStackGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
@@ -53,6 +55,9 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 @AllArgsConstructor
 class BuildGeneratorHelper {
 
+    /** The color GREEN is used for the outline of objects */
+    private static final ColorList OUTLINE_COLOR = new ColorList(Color.GREEN);
+    
     /**
      * Added to the name of the stack to give an outline in an extracted portion of the stack (not
      * flattened in z dimension)
@@ -68,13 +73,17 @@ class BuildGeneratorHelper {
     /** The width of the outline of the object (e.g. 1 pixel) */
     private final int outlineWidth;
 
-    public IterableGenerator<ObjectMask> forStacks(
+    public IterableGenerator<ObjectsWithBoundingBox> forStacks(
             ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
-        IterableCombinedListGenerator<ObjectMask> out =
+        
+        // First generator generates object-masks and bounding-boxes for each object
+        IterableGenerator<ObjectsWithBoundingBox> wrappedObjectWithBoundingBoxGenerator = WrapGenerators.wrapObjectMask( new ObjectWithBoundingBoxGenerator(dimensions.getRes()) ); 
+        
+        IterableCombinedListGenerator<ObjectsWithBoundingBox> out =
                 new IterableCombinedListGenerator<>(
                         new SimpleNameValue<>(
-                                "mask", new ObjectWithBoundingBoxGenerator(dimensions.getRes())));
+                                "mask", wrappedObjectWithBoundingBoxGenerator));
 
         try {
             addGeneratorForEachStack(stacks, out, false);
@@ -86,7 +95,7 @@ class BuildGeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStacksSet stacks, IterableCombinedListGenerator<ObjectMask> out, boolean flatten)
+            NamedStacksSet stacks, IterableCombinedListGenerator<ObjectsWithBoundingBox> out, boolean flatten)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {
@@ -97,12 +106,12 @@ class BuildGeneratorHelper {
             // Bounding box-generator
             ExtractBoundingBoxAreaFromStackGenerator generator =
                     new ExtractBoundingBoxAreaFromStackGenerator(stacks.getException(key));
-            out.add(key, WrapBoundingBoxGeneratorAsObject.wrap(generator, flatten));
+            out.add(key, WrapGenerators.wrapBoundingBox(generator, flatten));
 
             // Outline on raster generator, reusing the previous generator for the background
             out.add(
                     outlineOutputName(key, flatten),
-                    DrawObjectOnStackGenerator.createFromGenerator(generator, outlineWidth));
+                    DrawObjectOnStackGenerator.createFromGenerator(generator, outlineWidth, OUTLINE_COLOR));
         }
     }
 
