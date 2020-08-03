@@ -82,7 +82,7 @@ public class TiffTimeSeriesReporter extends PeriodicSubfolderReporter<CfgNRG> {
         //   cleaning up woould be nice
         IterableCombinedListGenerator<CfgNRG> iterableCombined =
                 new IterableCombinedListGenerator<>(
-                        new IterableGeneratorBridge<>(
+                        IterableGeneratorBridge.createOneToOne(
                                 iterableRaster,
                                 sourceObject -> addColor(sourceObject.getCfg(), initParams)));
 

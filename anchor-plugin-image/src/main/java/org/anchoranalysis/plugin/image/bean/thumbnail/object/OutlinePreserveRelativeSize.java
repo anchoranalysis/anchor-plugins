@@ -1,10 +1,14 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
+import java.awt.Color;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
@@ -13,8 +17,8 @@ import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.io.generator.raster.bbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -48,6 +52,9 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  */
 public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
+    /** The color GREEN is used for the outline of objects */
+    private static final ColorList OUTLINE_COLORS = new ColorList(Color.GREEN, Color.RED);
+    
     // START BEAN PROPERTIES
     /** Size of all created thumbnails */
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(200, 200);
@@ -71,7 +78,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * Optionally outline the other (unselected for the thumbnail) objects in this particular color.
      * If not set, these objects aren't outlined at all..
      */
-    @BeanField @OptionalBean @Getter @Setter private RGBColorBean colorUnselectedObjects;
+    @BeanField @OptionalBean @Getter @Setter private RGBColorBean colorUnselectedObjects = new RGBColorBean(0,0,255);
     // END BEAN PROPERTIES
 
     private DrawObjectOnStackGenerator generator;
@@ -79,7 +86,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private Extent sceneExtentScaled;
 
     @Override
-    public void start(ObjectCollection objects, Optional<Stack> backgroundSource)
+    public void start(ObjectCollection objects, Supplier<Stream<BoundingBox>> boundingBoxes, Optional<Stack> backgroundSource)
             throws OperationFailedException {
 
         if (objects.isEmpty()) {
@@ -90,7 +97,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         // Determine what to scale the objects and any background by
         scaler =
                 new FlattenAndScaler(
-                        ObjectScalingHelper.scaleEachObjectFitsIn(objects, size.asExtent()),
+                        ScaleFactorCalculator.scaleEachObjectFitsIn(boundingBoxes, size.asExtent()),
                         interpolator.create());
 
         setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, objects));
@@ -98,22 +105,20 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
 
     @Override
     public DisplayStack thumbnailFor(ObjectCollection objects) throws CreateException {
-        assert (objects.size() == 1);
+        
         // For now only work with the first object in the collection
         try {
-            ObjectMask objectScaled = scaler.scaleObject(objects.get(0));
+            ObjectsWithBoundingBox objectsScaled = new ObjectsWithBoundingBox(scaler.scaleObjects(objects));
 
             // Find a bounding-box of target size in which objectScaled is centered
             BoundingBox centeredBox =
                     CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
-                            objectScaled.getBoundingBox(), size.asExtent(), sceneExtentScaled);
+                            objectsScaled.getBoundingBox(), size.asExtent(), sceneExtentScaled);
 
             assert (centeredBox.extent().equals(size.asExtent()));
             assert (sceneExtentScaled.contains(centeredBox));
 
-            ObjectMask objectCentered = objectScaled.mapBoundingBoxChangeExtent(centeredBox);
-
-            generator.setIterableElement(objectCentered);
+            generator.setIterableElement(objectsScaled.mapBoundingBoxToBigger(centeredBox));
 
             return DisplayStack.create(generator.generate());
 
@@ -133,7 +138,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
 
         // Create a generator that draws objects on the background
-        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth);
+        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth, OUTLINE_COLORS);
     }
 
     private Optional<Stack> determineBackgroundMaybeOutlined(

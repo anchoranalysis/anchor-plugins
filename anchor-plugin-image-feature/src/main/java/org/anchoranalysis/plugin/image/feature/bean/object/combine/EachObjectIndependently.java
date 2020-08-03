@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -89,9 +89,13 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input)
+    public DisplayStack createThumbailFor(FeatureInputSingleObject input)
             throws CreateException {
-        return Optional.of(
-                getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject())));
+        return getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject()));
+    }
+
+    @Override
+    protected BoundingBox boundingBoxThatSpansInput(FeatureInputSingleObject input) {
+        return input.getObject().getBoundingBox();
     }
 }

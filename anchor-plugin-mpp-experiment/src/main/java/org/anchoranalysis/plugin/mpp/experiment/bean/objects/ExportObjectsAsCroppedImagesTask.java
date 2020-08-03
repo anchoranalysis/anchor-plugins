@@ -47,8 +47,8 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.io.generator.raster.bbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -140,14 +140,16 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private void outputGeneratorSeq(
-            IterableGenerator<ObjectMask> generator,
+            IterableGenerator<ObjectsWithBoundingBox> generator,
             ObjectCollection objects,
             BoundIOContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq =
+        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> generatorSeq =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
         generatorSeq.start();
-        objects.streamStandardJava().forEach(generatorSeq::add);
+        objects.streamStandardJava().forEach( object->
+            generatorSeq.add( new ObjectsWithBoundingBox(object) )
+        );
         generatorSeq.end();
     }
 
@@ -205,11 +207,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks.withoutUniformSizeConstraint();
     }
 
-    private IterableGenerator<ObjectMask> createGenerator(
+    private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
             ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
 
-        IterableGenerator<ObjectMask> generator =
+        IterableGenerator<ObjectsWithBoundingBox> generator =
                 new BuildGeneratorHelper(outlineWidth)
                         .forStacks(
                                 dimensions,

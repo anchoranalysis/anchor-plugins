@@ -98,7 +98,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
         try {
             return new ResultsVectorWithThumbnail(
-                    results, extractThumbnail(factory.getNrgStack(), context.isThumbnails()));
+                    results, extractThumbnail(factory.getNrgStack(), context.isThumbnailsEnabled()));
         } catch (CreateException e) {
             throw new NamedFeatureCalculationException(e);
         }
