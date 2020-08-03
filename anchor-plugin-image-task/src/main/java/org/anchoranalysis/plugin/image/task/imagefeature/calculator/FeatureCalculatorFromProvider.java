@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.cache.CacheCall;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
@@ -80,7 +80,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         this.nrgStack =
                 nrgStackFromProviderOrElse(
                         nrgStackProvider,
-                        CacheCall.of(() -> allStacksAsOne(initParams.getStackCollection())),
+                        CachedSupplier.cache(() -> allStacksAsOne(initParams.getStackCollection())),
                         context.getLogger());
         this.logger = context.getLogger();
     }
@@ -114,13 +114,13 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
     /** Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback */
     private NRGStackWithParams nrgStackFromProviderOrElse(
             Optional<StackProvider> nrgStackProvider,
-            CacheCall<Stack, OperationFailedException> fallback,
+            CachedSupplier<Stack, OperationFailedException> fallback,
             Logger logger)
             throws OperationFailedException {
         if (nrgStackProvider.isPresent()) {
             return ExtractFromProvider.extractStack(nrgStackProvider.get(), initParams, logger);
         } else {
-            return new NRGStackWithParams(fallback.call());
+            return new NRGStackWithParams(fallback.get());
         }
     }
 

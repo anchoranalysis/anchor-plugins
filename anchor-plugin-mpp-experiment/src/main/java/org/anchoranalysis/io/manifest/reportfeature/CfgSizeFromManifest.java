@@ -46,7 +46,7 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
                 new FinderSerializedObject<>(
                         "cfg", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 
-        ManifestRecorder manifest = obj.call();
+        ManifestRecorder manifest = obj.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException("Cannot find cfg in manifest");

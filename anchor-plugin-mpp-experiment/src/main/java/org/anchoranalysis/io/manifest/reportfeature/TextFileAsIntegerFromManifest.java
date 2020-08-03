@@ -40,7 +40,7 @@ public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileB
 
         FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
 
-        ManifestRecorder manifest = obj.call();
+        ManifestRecorder manifest = obj.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException(

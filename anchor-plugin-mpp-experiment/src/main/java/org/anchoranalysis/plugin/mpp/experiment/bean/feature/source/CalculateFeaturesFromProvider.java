@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.functional.function.FunctionWithException;
+import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -65,7 +65,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final boolean suppressErrors;
 
     /** Generates thumbnails (if enabled) */
-    private final Optional<FunctionWithException<T, Optional<DisplayStack>, CreateException>>
+    private final Optional<CheckedFunction<T, Optional<DisplayStack>, CreateException>>
             thumbnailForInput;
 
     private final InputProcessContext<FeatureTableCalculator<T>> context;

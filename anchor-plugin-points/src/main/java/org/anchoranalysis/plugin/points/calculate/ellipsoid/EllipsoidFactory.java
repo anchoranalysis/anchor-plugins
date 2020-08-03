@@ -33,8 +33,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
@@ -71,7 +71,7 @@ public class EllipsoidFactory {
     }
 
     public static MarkEllipsoid createMarkEllipsoidLeastSquares(
-            CallableWithException<List<Point3i>, CreateException> opPoints,
+            CheckedSupplier<List<Point3i>, CreateException> opPoints,
             ImageDimensions dimensions,
             boolean suppressZCovariance,
             double shellRad)
@@ -85,7 +85,7 @@ public class EllipsoidFactory {
         MarkEllipsoid mark = new MarkEllipsoid();
 
         List<Point3f> pointsFloat =
-                FunctionalList.mapToList(opPoints.call(), PointConverter::floatFromInt);
+                FunctionalList.mapToList(opPoints.get(), PointConverter::floatFromInt);
 
         try {
             pointsFitter.fit(pointsFloat, mark, dimensions);

@@ -68,7 +68,13 @@ public class CalculateEllipsoidLeastSquares
         try {
             // Shell Rad is arbitrary here for now
             return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-                    new CachedCalculationOperation<>(ccPoints, input),
+                    () -> {
+                        try {
+                            return ccPoints.getOrCalculate(input);
+                        } catch (FeatureCalculationException e) {
+                            throw new CreateException(e);
+                        }
+                    },
                     input.getDimensionsRequired(),
                     suppressZCovariance,
                     0.2);

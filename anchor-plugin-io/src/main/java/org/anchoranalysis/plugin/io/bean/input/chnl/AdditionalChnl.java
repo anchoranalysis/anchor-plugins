@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.functional.CallableWithException;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -35,12 +35,12 @@ import org.anchoranalysis.io.error.AnchorIOException;
 class AdditionalChnl {
     private String chnlName;
     private int chnlIndex;
-    private CallableWithException<Path, AnchorIOException> filePath;
+    private CheckedSupplier<Path, AnchorIOException> filePath;
 
     public AdditionalChnl(
             String chnlName,
             int chnlIndex,
-            CallableWithException<Path, AnchorIOException> filePath) {
+            CheckedSupplier<Path, AnchorIOException> filePath) {
         super();
         this.chnlName = chnlName;
         this.chnlIndex = chnlIndex;
@@ -48,7 +48,7 @@ class AdditionalChnl {
     }
 
     public Path getFilePath() throws AnchorIOException {
-        return filePath.call();
+        return filePath.get();
     }
 
     public ImgChnlMap createChnlMap() {
