@@ -27,25 +27,18 @@
 package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.PathSupplier;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class AdditionalChnl {
+    
     private String chnlName;
     private int chnlIndex;
-    private CheckedSupplier<Path, AnchorIOException> filePath;
-
-    public AdditionalChnl(
-            String chnlName,
-            int chnlIndex,
-            CheckedSupplier<Path, AnchorIOException> filePath) {
-        super();
-        this.chnlName = chnlName;
-        this.chnlIndex = chnlIndex;
-        this.filePath = filePath;
-    }
+    private PathSupplier filePath;
 
     public Path getFilePath() throws AnchorIOException {
         return filePath.get();
