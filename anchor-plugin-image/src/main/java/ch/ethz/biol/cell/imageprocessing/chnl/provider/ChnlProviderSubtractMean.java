@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
@@ -62,8 +62,8 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private double calculateMean(Channel chnl, Mask mask) {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
-        VoxelBox<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
+        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
 
         Extent e = vbMask.extent();
 
@@ -101,8 +101,8 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private void subtractMeanMask(Channel chnl, Mask mask, int mean) {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
-        VoxelBox<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
+        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
 
         Extent e = vbMask.extent();
 
@@ -136,7 +136,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private void subtractMeanAll(Channel chnl, int mean) {
 
-        VoxelBox<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
 
         Extent e = vbIntensity.extent();
 

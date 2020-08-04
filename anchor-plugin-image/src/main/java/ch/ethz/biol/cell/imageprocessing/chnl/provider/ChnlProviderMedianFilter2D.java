@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // 3x3 Sobel Filter
 public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
@@ -131,12 +131,12 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
 
         RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 
         Channel dup = chnl.duplicate();
-        VoxelBox<ByteBuffer> vbDup = dup.voxels().asByte();
+        Voxels<ByteBuffer> vbDup = dup.voxels().asByte();
         Extent e = dup.getDimensions().getExtent();
 
         for (int z = 0; z < e.getZ(); z++) {

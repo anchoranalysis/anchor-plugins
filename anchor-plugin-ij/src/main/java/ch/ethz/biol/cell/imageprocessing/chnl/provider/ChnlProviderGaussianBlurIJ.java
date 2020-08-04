@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
@@ -49,7 +49,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
         GaussianBlur gb = new GaussianBlur();
 
-        VoxelBoxWrapper vb = chnl.voxels();
+        VoxelsWrapper vb = chnl.voxels();
 
         // Are we missing a Z slice?
         for (int z = 0; z < chnl.getDimensions().getZ(); z++) {

@@ -39,8 +39,8 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Chops objects up into squares (or mostly squares, sometimes rectangles at the very end)
 // Only chops in X and Y, Z is unaffected
@@ -106,8 +106,8 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
         Extent extentNew = new Extent(extentX, extentY, objToSplit.getVoxels().extent().getZ());
         BoundingBox srcBox = new BoundingBox(new Point3i(startX, startY, 0), extentNew);
 
-        // A voxel-box for the new square
-        VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(extentNew);
+        // Voxels for the new square
+        Voxels<ByteBuffer> vbNew = VoxelsFactory.getByte().createInitialized(extentNew);
 
         // Copy in mask-values from the source
         objToSplit.getVoxels().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
@@ -124,7 +124,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
                         objToSplit.getBinaryValuesByte()));
     }
 
-    private boolean acceptSquare(VoxelBox<ByteBuffer> vbNew, int maskOnValue) {
+    private boolean acceptSquare(Voxels<ByteBuffer> vbNew, int maskOnValue) {
         // We only add the square if there's at least one voxel in it
         if (minNumVoxels == 1) {
             return vbNew.hasEqualTo(maskOnValue);

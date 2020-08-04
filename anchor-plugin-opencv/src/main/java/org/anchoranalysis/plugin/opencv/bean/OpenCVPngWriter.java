@@ -43,7 +43,7 @@ public class OpenCVPngWriter extends RasterWriter {
     }
 
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "png";
     }
 

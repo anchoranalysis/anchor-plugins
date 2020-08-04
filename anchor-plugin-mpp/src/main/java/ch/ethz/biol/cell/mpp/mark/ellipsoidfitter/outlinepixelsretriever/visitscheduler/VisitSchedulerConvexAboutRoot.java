@@ -35,10 +35,10 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
@@ -72,12 +72,12 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i point, BinaryVoxelBox<ByteBuffer> bvb) {
+            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> bvb) {
         return isPointConvexTo(root, point, bvb, false);
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i destPoint, BinaryVoxelBox<ByteBuffer> bvb, boolean debug) {
+            Point3i root, Point3i destPoint, BinaryVoxels<ByteBuffer> bvb, boolean debug) {
 
         Point3d distance = relVector(root, destPoint);
         double mag =
@@ -122,7 +122,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
         return point1.distanceSquared(point2) < 1.0;
     }
 
-    private static boolean isPointOnObject(Point3d point, VoxelBox<ByteBuffer> vb, BinaryValues bv) {
+    private static boolean isPointOnObject(Point3d point, Voxels<ByteBuffer> vb, BinaryValues bv) {
 
         Point3i pointInt = PointConverter.intFromDouble(point);
 

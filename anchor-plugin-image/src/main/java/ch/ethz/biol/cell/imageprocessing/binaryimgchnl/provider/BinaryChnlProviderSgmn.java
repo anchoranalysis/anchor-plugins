@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -63,13 +63,13 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
                 );
     }
 
-    private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
+    private BinaryVoxels<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
         Optional<ObjectMask> omMask = objectFromMask(chnl.getDimensions());
 
         BinarySegmentationParameters params = createParams(chnl.getDimensions());
 
         try {
-            return sgmn.sgmn(chnl.voxels(), params, omMask);
+            return sgmn.segment(chnl.voxels(), params, omMask);
 
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);

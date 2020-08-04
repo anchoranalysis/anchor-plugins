@@ -37,7 +37,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
-import org.anchoranalysis.image.points.PointsFromBinaryChnl;
+import org.anchoranalysis.image.points.PointsFromMask;
 
 @AllArgsConstructor
 class GeneratePointsHelper {
@@ -75,7 +75,7 @@ class GeneratePointsHelper {
             return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox)
                     .convexOnly(chnl, pointRoot, skipZDistance);
         } else {
-            return PointsFromBinaryChnl.pointsFromChnlInsideBox(
+            return PointsFromMask.listFromSlicesInsideBox3i(
                     chnl,
                     bbox.duplicateChangeZ(zLow, zHigh - zLow),
                     (int) Math.floor(pointRoot.getZ()),

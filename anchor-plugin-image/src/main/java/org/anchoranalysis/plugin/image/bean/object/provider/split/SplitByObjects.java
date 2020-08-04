@@ -36,16 +36,16 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxInt;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.box.BoundedVoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.BoundedVoxels;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
 
 public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
@@ -89,9 +89,9 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
         // Then we find connected components
 
         // Should be set to 0 by default
-        BoundedVoxelBox<IntBuffer> boundedVbId =
-                new BoundedVoxelBox<>(
-                        VoxelBoxFactory.getInt().create(objectToSplit.getBoundingBox().extent()));
+        BoundedVoxels<IntBuffer> boundedVbId =
+                new BoundedVoxels<>(
+                        VoxelsFactory.getInt().createInitialized(objectToSplit.getBoundingBox().extent()));
 
         // Populate boundedVbId with id values
         int cnt = 1;
@@ -136,10 +136,10 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
     /** Creates objects from all connected-components in a buffer with particular voxel values */
     private static ObjectCollection createObjectForIndex(
-            int voxelEqualTo, VoxelBox<IntBuffer> voxels, ReadableTuple3i shiftBy)
+            int voxelEqualTo, Voxels<IntBuffer> voxels, ReadableTuple3i shiftBy)
             throws CreateException {
-        BinaryVoxelBox<IntBuffer> binaryVoxels =
-                new BinaryVoxelBoxInt(voxels, new BinaryValues(0, voxelEqualTo));
+        BinaryVoxels<IntBuffer> binaryVoxels =
+                BinaryVoxelsFactory.reuseInt(voxels, new BinaryValues(0, voxelEqualTo));
 
         // for every object we add the objToSplit Bounding Box crnr, to restore it to global
         // coordinates

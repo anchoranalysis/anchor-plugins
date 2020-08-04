@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -78,13 +78,13 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
         }
     }
 
-    private Channel createExpandedChnl(ImageDimensions sdTarget, VoxelBox<ByteBuffer> vbSlice) {
+    private Channel createExpandedChnl(ImageDimensions sdTarget, Voxels<ByteBuffer> vbSlice) {
 
         Channel chnl =
                 ChannelFactory.instance()
                         .createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbOut = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vbOut = chnl.voxels().asByte();
 
         for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
             ByteBuffer bb = vbSlice.duplicate().getPixelsForPlane(0).buffer();

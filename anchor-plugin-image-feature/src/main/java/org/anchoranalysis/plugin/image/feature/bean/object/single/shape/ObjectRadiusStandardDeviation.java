@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,8 +39,7 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.FindOutline;
-import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
@@ -59,7 +57,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         ObjectMask object = input.get().getObject();
 
         // Get the outline
-        List<Point3i> pointsOutline = createObjectOutlineAsPoints(object, 1);
+        List<Point3i> pointsOutline = PointsFromObject.listFromOutline3i(object);
 
         // Distances from the center to each point on the outline
         DoubleArrayList distances = distancesToPoints(object.centerOfGravity(), pointsOutline);
@@ -94,16 +92,5 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         } else {
             return stdDev;
         }
-    }
-
-    private static List<Point3i> createObjectOutlineAsPoints(ObjectMask object, int numberErosions) {
-
-        List<Point3i> pointsOutline = new ArrayList<>();
-
-        ObjectMask outline = FindOutline.outline(object, numberErosions, false, true);
-        PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), pointsOutline);
-
-        return pointsOutline;
     }
 }

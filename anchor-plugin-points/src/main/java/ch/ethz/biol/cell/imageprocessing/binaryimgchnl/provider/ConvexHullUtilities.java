@@ -26,18 +26,17 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.FindOutline;
-import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -156,19 +155,11 @@ public class ConvexHullUtilities {
     }
 
     public static List<Point2i> pointsOnAllOutlines(ObjectCollection objects) {
-        List<Point2i> points = new ArrayList<>();
-
-        for (ObjectMask object : objects) {
-            addPointsFromObjOutline(object, points);
-        }
-
-        return points;
+        return PointsFromObject.listFromAllOutlines2i(objects);
     }
 
-    public static List<Point2i> pointsOnOutline(ObjectMask obj) {
-        List<Point2i> points = new ArrayList<>();
-        addPointsFromObjOutline(obj, points);
-        return points;
+    public static List<Point2i> pointsOnOutline(ObjectMask object) throws CreateException {
+        return PointsFromObject.listFromOutline2i(object);
     }
 
     private static int calculateStartingIndex(List<Point2i> pointsIn) {
@@ -194,11 +185,5 @@ public class ConvexHullUtilities {
             }
         }
         return p1;
-    }
-
-    private static void addPointsFromObjOutline(ObjectMask object, List<Point2i> points) {
-        ObjectMask outline = FindOutline.outline(object, 1, true, false);
-        PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
-                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), points);
     }
 }

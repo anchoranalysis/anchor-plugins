@@ -32,7 +32,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
@@ -47,7 +47,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
                         .createEmptyInitialised(
                                 chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
-        processVoxelBox(
+        processVoxels(
                 chnlOut.voxels().asByte(),
                 chnl1.voxels().asByte(),
                 chnl2.voxels().asByte(),
@@ -56,11 +56,11 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
         return chnlOut;
     }
 
-    private void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut,
-            VoxelBox<ByteBuffer> vbIn1,
-            VoxelBox<ByteBuffer> vbIn2,
-            VoxelBox<ByteBuffer> vbIn3) {
+    private void processVoxels(
+            Voxels<ByteBuffer> vbOut,
+            Voxels<ByteBuffer> vbIn1,
+            Voxels<ByteBuffer> vbIn2,
+            Voxels<ByteBuffer> vbIn3) {
 
         for (int z = 0; z < vbOut.extent().getZ(); z++) {
 

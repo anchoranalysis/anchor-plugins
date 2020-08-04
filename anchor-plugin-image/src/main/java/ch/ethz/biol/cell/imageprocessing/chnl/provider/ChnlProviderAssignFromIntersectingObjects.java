@@ -41,7 +41,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
 // Matches source-objects to target objects, based upon intersection, and assigns the
@@ -57,7 +57,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        VoxelBox<?> vb = chnl.voxels().any();
+        Voxels<?> vb = chnl.voxels().any();
 
         ObjectCollection source = objectsSource.create();
         ObjectCollection target = objectsTarget.create();
@@ -111,7 +111,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
     private static int getValForMask(Channel chnl, ObjectMask object) {
 
-        VoxelBox<?> vb = chnl.voxels().any();
+        Voxels<?> vb = chnl.voxels().any();
 
         return vb.getVoxel(
                 object.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new));

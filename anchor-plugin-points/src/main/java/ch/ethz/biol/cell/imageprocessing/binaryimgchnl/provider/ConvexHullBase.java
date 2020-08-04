@@ -37,12 +37,12 @@ import org.anchoranalysis.image.outline.FindOutline;
 public abstract class ConvexHullBase extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean erodeEdges = false;
+    @BeanField @Getter @Setter private boolean erodeAtBoundary = false;
     // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return createFromMask(mask, FindOutline.outline(mask, true, erodeEdges));
+        return createFromMask(mask, FindOutline.outline(mask, true, erodeAtBoundary));
     }
 
     protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;

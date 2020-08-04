@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -49,7 +49,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
                 ChannelFactory.instance()
                         .createEmptyInitialised(chnl1.getDimensions(), combinedType);
 
-        setMaxInOutputVoxelBox(
+        setMaxInOutputVoxels(
                 chnlOut.voxels().asByte(),
                 chnl1.voxels().asByte(),
                 chnl2.voxels().asByte());
@@ -58,13 +58,13 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
     }
 
     @Override
-    protected void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
-        setMaxInOutputVoxelBox(vbOut, vbIn1, vbIn2);
+    protected void processVoxels(
+            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
+        setMaxInOutputVoxels(vbOut, vbIn1, vbIn2);
     }
 
-    private static void setMaxInOutputVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+    private static void setMaxInOutputVoxels(
+            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
         int volumeXY = vbIn1.extent().getVolumeXY();
         for (int z = 0; z < vbOut.extent().getZ(); z++) {
 

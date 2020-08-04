@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public abstract class SliceThresholder {
@@ -41,7 +41,7 @@ public abstract class SliceThresholder {
     }
 
     public abstract void sgmnAll(
-            VoxelBox<?> voxelBoxIn, VoxelBox<?> vbThrshld, VoxelBox<ByteBuffer> voxelBoxOut);
+            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut);
 
     protected final void writeOffByte(int offset, ByteBuffer bbOut) {
         bbOut.put(offset, bvb.getOffByte());

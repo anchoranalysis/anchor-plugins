@@ -40,7 +40,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 
@@ -59,7 +59,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     @BeanField @Getter @Setter private UnitValueDistance threshold;
     // END BEAN PROPERTIES
 
-    private VoxelBox<?> vb;
+    private Voxels<?> vb;
 
     @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)

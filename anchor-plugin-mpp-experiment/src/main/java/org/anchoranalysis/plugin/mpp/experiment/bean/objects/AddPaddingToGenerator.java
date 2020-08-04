@@ -15,7 +15,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Adds optional padding to objects before being passed into another generator
  * <p>
- * TODO This is quite inefficient as it changes the object-mask's voxel-boxes to use the ENTIRE
+ * TODO This is quite inefficient as it changes the object-mask's voxel-buffers to use the ENTIRE
  * image each time. There's a better way to do this.
  *
  * @author Owen Feehan

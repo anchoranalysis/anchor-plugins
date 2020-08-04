@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
 
@@ -39,7 +39,7 @@ public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
         Channel dup = chnl.duplicate();
-        VoxelBoxWrapper vbDup = dup.voxels();
+        VoxelsWrapper vbDup = dup.voxels();
 
         for (int z = 0; z < dup.getDimensions().getZ(); z++) {
 

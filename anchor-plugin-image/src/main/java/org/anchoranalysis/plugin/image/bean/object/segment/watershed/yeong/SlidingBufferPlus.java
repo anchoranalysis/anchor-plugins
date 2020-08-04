@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.SteepestCalc;
 
 /** A sliding-buffer enhanced with other elements of internal state used to "visit" a pixel */
@@ -44,12 +44,12 @@ final class SlidingBufferPlus {
     private final SlidingBuffer<?> slidingBufferSteepestCalc;
 
     private final FindEqualVoxels findEqualVoxels;
-    private final EncodedVoxelBox matS;
+    private final EncodedVoxels matS;
     private final Optional<MinimaStore> minimaStore;
 
     public SlidingBufferPlus(
-            VoxelBox<?> vbImg,
-            EncodedVoxelBox matS,
+            Voxels<?> vbImg,
+            EncodedVoxels matS,
             Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
@@ -61,7 +61,7 @@ final class SlidingBufferPlus {
         boolean do3D = vbImg.extent().getZ() > 1;
         this.findEqualVoxels = new FindEqualVoxels(vbImg, matS, do3D, objectMask);
         this.steepestCalc =
-                new SteepestCalc(slidingBufferSteepestCalc, EncodedVoxelBox.ENCODING, do3D, true, objectMask);
+                new SteepestCalc(slidingBufferSteepestCalc, EncodedVoxels.ENCODING, do3D, true, objectMask);
     }
 
     public SlidingBuffer<?> getSlidingBuffer() { // NOSONAR

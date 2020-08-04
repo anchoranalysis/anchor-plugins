@@ -42,10 +42,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 /**
  * A 'rainfall' watershed algorithm
@@ -83,7 +83,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
-        EncodedVoxelBox matS = createS(channel.getDimensions().getExtent());
+        EncodedVoxels matS = createS(channel.getDimensions().getExtent());
 
         Optional<MinimaStore> minimaStore =
                 OptionalFactory.create(exitWithMinima, MinimaStore::new);
@@ -114,14 +114,13 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     }
 
     /** Create 'S' matrix */
-    private EncodedVoxelBox createS(Extent extent) {
-        VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.getInt().create(extent);
-        return new EncodedVoxelBox(matSVoxelBox);
+    private EncodedVoxels createS(Extent extent) {
+        return new EncodedVoxels( VoxelsFactory.getInt().createInitialized(extent) );
     }
 
     private static void pointPixelsOrMarkAsMinima(
-            VoxelBox<?> vbImg,
-            EncodedVoxelBox matS,
+            Voxels<?> vbImg,
+            EncodedVoxels matS,
             Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
@@ -131,13 +130,13 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     }
 
     private static void convertAllToConnectedComponents(
-            EncodedVoxelBox matS, Optional<ObjectMask> objectMask) {
+            EncodedVoxels matS, Optional<ObjectMask> objectMask) {
         IterateVoxels.callEachPoint(
                 objectMask, matS.getVoxels(), new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(
-            VoxelBox<IntBuffer> matS, Optional<ObjectMask> objectMask) throws CreateException {
+            Voxels<IntBuffer> matS, Optional<ObjectMask> objectMask) throws CreateException {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 

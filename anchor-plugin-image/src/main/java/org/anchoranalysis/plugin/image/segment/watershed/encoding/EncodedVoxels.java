@@ -35,14 +35,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 @AllArgsConstructor
-public final class EncodedVoxelBox {
+public final class EncodedVoxels {
 
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
     
-    @Getter private final VoxelBox<IntBuffer> voxels;
+    @Getter private final Voxels<IntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
         int offset = voxels.extent().offset(point.getX(), point.getY());

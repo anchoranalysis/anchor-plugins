@@ -41,6 +41,6 @@ public class CalculatePointsFromOutline
     @Override
     protected List<Point3i> execute(FeatureInputSingleObject params)
             throws FeatureCalculationException {
-        return PointsFromObject.pointsFromMaskOutline(params.getObject());
+        return PointsFromObject.listFromOutline3i(params.getObject());
     }
 }

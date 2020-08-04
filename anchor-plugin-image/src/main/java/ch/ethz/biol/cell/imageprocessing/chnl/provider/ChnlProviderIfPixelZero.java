@@ -34,7 +34,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -113,7 +113,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
                         .createEmptyInitialised(channel.getDimensions(), combinedType);
 
         // We know these are all the same types from the logic above, so we can safetly cast
-        processVoxelBox(
+        processVoxels(
                 channelOut.voxels(),
                 channel.voxels(),
                 channelIfPixelZero.voxels(),
@@ -122,10 +122,10 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
         return channelOut;
     }
 
-    private static void processVoxelBox(
-            VoxelBoxWrapper vbOut,
-            VoxelBoxWrapper vbIn,
-            VoxelBoxWrapper vbIfZero,
+    private static void processVoxels(
+            VoxelsWrapper vbOut,
+            VoxelsWrapper vbIn,
+            VoxelsWrapper vbIfZero,
             double multFactorIfNonZero) {
 
         int volumeXY = vbIn.any().extent().getVolumeXY();

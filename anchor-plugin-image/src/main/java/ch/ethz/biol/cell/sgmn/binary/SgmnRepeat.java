@@ -36,9 +36,9 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class SgmnRepeat extends BinarySegmentationOne {
 
@@ -47,18 +47,18 @@ public class SgmnRepeat extends BinarySegmentationOne {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxelBox<ByteBuffer> outOld = null;
+        BinaryVoxels<ByteBuffer> outOld = null;
 
         int cnt = 0;
         while (cnt++ < maxIter) {
-            BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objectMask);
+            BinaryVoxels<ByteBuffer> outNew = sgmn.segment(voxels, params, objectMask);
 
             if (outNew == null) {
                 return outOld;

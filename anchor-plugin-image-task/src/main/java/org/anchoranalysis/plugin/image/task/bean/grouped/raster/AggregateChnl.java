@@ -54,7 +54,7 @@ class AggregateChnl {
                             chnl.getDimensions(), raster.getDimensions()));
         }
 
-        VoxelBoxArithmetic.add(
+        VoxelsArithmetic.add(
                 raster.voxels().asInt(), chnl.voxels(), chnl.getVoxelDataType());
 
         cnt++;
@@ -63,7 +63,7 @@ class AggregateChnl {
     /**
      * Create a channel with the mean-value of all the aggregated channels
      *
-     * @return the channel with newly created voxel-box
+     * @return the channel with newly created voxels
      * @throws OperationFailedException
      */
     public Channel createMeanChnl(VoxelDataType outputType) throws OperationFailedException {
@@ -77,7 +77,7 @@ class AggregateChnl {
                 ChannelFactory.instance()
                         .createEmptyInitialised(raster.getDimensions(), outputType);
 
-        VoxelBoxArithmetic.divide(
+        VoxelsArithmetic.divide(
                 raster.voxels().asInt(), cnt, chnlOut.voxels(), outputType);
 
         return chnlOut;

@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane;
 import ij.process.ShortProcessor;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
 
 public class PixelsFromShortProcessor implements PixelsForPlane<ShortBuffer> {
 

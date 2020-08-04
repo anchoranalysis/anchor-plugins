@@ -38,7 +38,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -57,7 +57,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
         Histogram hist = histogram.create();
 
-        VoxelBox<ByteBuffer> out = chnl.voxels().asByteOrCreateEmpty(alwaysDuplicate);
+        Voxels<ByteBuffer> out = chnl.voxels().asByteOrCreateEmpty(alwaysDuplicate);
 
         try {
             transformBufferToZScore(hist.mean(), hist.stdDev(), chnl, out);
@@ -70,7 +70,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
     }
 
     private void transformBufferToZScore(
-            double histMean, double histStdDev, Channel chnl, VoxelBox<ByteBuffer> out) {
+            double histMean, double histStdDev, Channel chnl, Voxels<ByteBuffer> out) {
 
         // We loop through each item
         Extent e = chnl.getDimensions().getExtent();

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram
 // creation
@@ -66,7 +66,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     }
 
     /** Replaces any pixels with value > threshold, with the threshold value */
-    private static void replacePixelsAbove(int threshold, VoxelBox<ByteBuffer> vb) {
+    private static void replacePixelsAbove(int threshold, Voxels<ByteBuffer> vb) {
         byte meanIntensityByte = (byte) threshold;
 
         Extent e = vb.extent();

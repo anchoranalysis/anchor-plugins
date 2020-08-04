@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodIgnoreOutsideScene;
@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.getExtent(),
                             object.getBoundingBox().cornerMin());
 
-            VoxelBox<ByteBuffer> mipVb = object.getVoxels().maxIntensityProjection();
+            Voxels<ByteBuffer> mipVb = object.getVoxels().maxIntensityProjection();
             return ApplyKernel.applyForCount(kernel, mipVb);
 
         } else {

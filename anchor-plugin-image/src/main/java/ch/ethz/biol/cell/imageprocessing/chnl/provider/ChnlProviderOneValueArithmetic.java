@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
@@ -50,8 +50,8 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 
         Channel chnlOut = FACTORY.createEmptyInitialised(chnl.getDimensions());
 
-        VoxelBox<?> vbIn = chnl.voxels().any();
-        VoxelBox<?> vbOut = chnlOut.voxels().any();
+        Voxels<?> vbIn = chnl.voxels().any();
+        Voxels<?> vbOut = chnlOut.voxels().any();
 
         int volumeXY = chnl.getDimensions().getVolumeXY();
 

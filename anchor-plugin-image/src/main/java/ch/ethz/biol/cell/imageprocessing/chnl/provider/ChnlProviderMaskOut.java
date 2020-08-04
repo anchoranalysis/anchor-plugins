@@ -32,7 +32,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Set pixels NOT IN the mask to 0, but keep pixels IN the mask identical.
@@ -46,7 +46,7 @@ public class ChnlProviderMaskOut extends ChnlProviderOneMask {
     @Override
     protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
+        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
 
         Channel chnlOut =
                 ChannelFactory.instance()

@@ -37,13 +37,13 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
@@ -97,8 +97,8 @@ class CalculateGradientFromMultipleChnls
     private void putGradientValue(
             ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl) {
 
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxels();
-        VoxelBox<?> vb = chnl.voxels().any();
+        BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
+        Voxels<?> vb = chnl.voxels().any();
         BoundingBox bbox = object.getBoundingBox();
 
         Extent e = vb.extent();

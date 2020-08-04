@@ -38,8 +38,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -108,16 +108,16 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                 0,
                 chnl.getDimensions().getZ(),
                 CreateException.class,
-                z -> createForSlice(creator, createBinaryVoxelBox(chnl, z), z));
+                z -> createForSlice(creator, createVoxels(chnl, z), z));
     }
 
-    private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(Mask chnl, int z) {
-        return new BinaryVoxelBoxByte(chnl.getVoxels().extractSlice(z), chnl.getBinaryValues());
+    private static BinaryVoxels<ByteBuffer> createVoxels(Mask chnl, int z) {
+        return BinaryVoxelsFactory.reuseByte(chnl.getVoxels().extractSlice(z), chnl.getBinaryValues());
     }
 
     private ObjectCollection createForSlice(
             CreateFromConnectedComponentsFactory objectCreator,
-            BinaryVoxelBox<ByteBuffer> bvb,
+            BinaryVoxels<ByteBuffer> bvb,
             int z)
             throws CreateException {
         // respecify the z

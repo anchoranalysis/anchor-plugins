@@ -40,7 +40,7 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
 
     // A default extension
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "tif";
     }
 

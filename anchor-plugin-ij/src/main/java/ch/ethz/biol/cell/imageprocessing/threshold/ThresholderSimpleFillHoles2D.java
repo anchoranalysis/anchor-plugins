@@ -39,12 +39,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.thresholder.VoxelBoxThresholder;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.thresholder.VoxelsThresholder;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -60,8 +60,8 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> threshold(
-            VoxelBoxWrapper inputBuffer,
+    public BinaryVoxels<ByteBuffer> threshold(
+            VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
             Optional<ObjectMask> objectMask)
@@ -71,8 +71,8 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 
-        BinaryVoxelBox<ByteBuffer> thresholded =
-                VoxelBoxThresholder.thresholdForLevel(
+        BinaryVoxels<ByteBuffer> thresholded =
+                VoxelsThresholder.thresholdForLevel(
                         inputBuffer, minIntensity, bvOut, objectMask, false);
 
         Binary binaryPlugin = new Binary();
@@ -81,7 +81,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 
         for (int z = 0; z < thresholded.extent().getZ(); z++) {
             ImageProcessor ip =
-                    IJWrap.imageProcessor(new VoxelBoxWrapper(thresholded.getVoxels()), z);
+                    IJWrap.imageProcessor(new VoxelsWrapper(thresholded.getVoxels()), z);
             binaryPlugin.run(ip);
         }
 

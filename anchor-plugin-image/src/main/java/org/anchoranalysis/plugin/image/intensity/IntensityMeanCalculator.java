@@ -35,7 +35,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -51,7 +51,7 @@ public class IntensityMeanCalculator {
             throws FeatureCalculationException {
         checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
 
-        VoxelBoxWrapper vbIntensity = chnl.voxels();
+        VoxelsWrapper vbIntensity = chnl.voxels();
 
         BoundingBox bbox = object.getBoundingBox();
 

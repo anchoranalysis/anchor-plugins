@@ -31,17 +31,17 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<IntBuffer> {
 
-    private final EncodedVoxelBox matS;
+    private final EncodedVoxels matS;
     private final Extent extent;
 
     /** A 3D offset for the 0th pixel in the current slice. */
     private int offsetZ = 0;
 
-    public ConvertAllToConnectedComponents(EncodedVoxelBox matS) {
+    public ConvertAllToConnectedComponents(EncodedVoxels matS) {
         super();
         this.matS = matS;
         this.extent = matS.extent();
@@ -55,7 +55,7 @@ final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<I
     @Override
     public void process(Point3i point, IntBuffer buffer, int offsetSlice) {
         assert (buffer != null);
-        new EncodedIntBuffer(buffer, EncodedVoxelBox.ENCODING)
+        new EncodedIntBuffer(buffer, EncodedVoxels.ENCODING)
                 .convertCode(offsetSlice, offsetZ + offsetSlice, matS, point);
     }
 }

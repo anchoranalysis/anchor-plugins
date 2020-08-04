@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * A method for applying blurring to an image
@@ -52,7 +52,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
     // END BEAN PROPERTIES
 
     public abstract void blur(
-            VoxelBoxWrapper voxelBox, ImageDimensions dimensions, MessageLogger logger)
+            VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException;
 
     protected double calcSigma(ImageDimensions dimensions, MessageLogger logger)

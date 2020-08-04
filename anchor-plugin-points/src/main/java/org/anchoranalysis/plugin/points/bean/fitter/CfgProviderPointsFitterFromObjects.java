@@ -87,11 +87,15 @@ public class CfgProviderPointsFitterFromObjects extends CfgProvider {
     }
 
     private List<Point2i> maybeApplyConvexHull(ObjectMask object) throws OperationFailedException {
-        List<Point2i> points = ConvexHullUtilities.pointsOnOutline(object);
-        if (convexHull) {
-            return ConvexHullUtilities.convexHull2D(points, pointsFitter.getMinNumPoints());
-        } else {
-            return points;
+        try {
+            List<Point2i> points = ConvexHullUtilities.pointsOnOutline(object);
+            if (convexHull) {
+                return ConvexHullUtilities.convexHull2D(points, pointsFitter.getMinNumPoints());
+            } else {
+                return points;
+            }
+        } catch (CreateException e) {
+            throw new OperationFailedException(e);
         }
     }
 

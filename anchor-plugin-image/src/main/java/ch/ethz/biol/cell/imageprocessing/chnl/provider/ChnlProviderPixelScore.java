@@ -26,8 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeature;
-import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelBoxFromPixelwiseFeatureWithMask;
+import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelsFromPixelwiseFeature;
+import ch.ethz.biol.cell.mpp.nrg.feature.pixelwise.createvoxelbox.CreateVoxelsFromPixelwiseFeatureWithMask;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +49,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxList;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 
 public class ChnlProviderPixelScore extends ChannelProvider {
 
@@ -74,9 +74,9 @@ public class ChnlProviderPixelScore extends ChannelProvider {
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
     // END BEAN PROPERTIES
 
-    private VoxelBoxList createVoxelBoxList(Channel chnlIntensity) throws CreateException {
+    private VoxelsWrapperList createVoxelsList(Channel chnlIntensity) throws CreateException {
 
-        VoxelBoxList listOut = new VoxelBoxList();
+        VoxelsWrapperList listOut = new VoxelsWrapperList();
 
         listOut.add(chnlIntensity.voxels());
 
@@ -84,7 +84,7 @@ public class ChnlProviderPixelScore extends ChannelProvider {
             listOut.add(gradientProvider.create().voxels());
         }
         for (ChannelProvider chnlProvider : listChnlProviderExtra) {
-            VoxelBoxWrapper vbExtra =
+            VoxelsWrapper vbExtra =
                     chnlProvider != null ? chnlProvider.create().voxels() : null;
             listOut.add(vbExtra);
         }
@@ -111,7 +111,7 @@ public class ChnlProviderPixelScore extends ChannelProvider {
 
         Channel chnlIntensity = intensityProvider.create();
 
-        VoxelBoxList listVb = createVoxelBoxList(chnlIntensity);
+        VoxelsWrapperList listVb = createVoxelsList(chnlIntensity);
         List<Histogram> listHistExtra =
                 ProviderBeanUtilities.listFromBeans(listHistogramProviderExtra);
 
@@ -124,18 +124,18 @@ public class ChnlProviderPixelScore extends ChannelProvider {
 
         Optional<ObjectMask> object = createMaskOrNull();
 
-        VoxelBox<ByteBuffer> vbPixelScore;
+        Voxels<ByteBuffer> vbPixelScore;
         if (object.isPresent()) {
-            CreateVoxelBoxFromPixelwiseFeatureWithMask creator =
-                    new CreateVoxelBoxFromPixelwiseFeatureWithMask(listVb, kpv, listHistExtra);
+            CreateVoxelsFromPixelwiseFeatureWithMask creator =
+                    new CreateVoxelsFromPixelwiseFeatureWithMask(listVb, kpv, listHistExtra);
 
-            vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, object);
+            vbPixelScore = creator.createVoxelsFromPixelScore(pixelScore, object);
 
         } else {
-            CreateVoxelBoxFromPixelwiseFeature creator =
-                    new CreateVoxelBoxFromPixelwiseFeature(listVb, kpv, listHistExtra);
+            CreateVoxelsFromPixelwiseFeature creator =
+                    new CreateVoxelsFromPixelwiseFeature(listVb, kpv, listHistExtra);
 
-            vbPixelScore = creator.createVoxelBoxFromPixelScore(pixelScore, getLogger());
+            vbPixelScore = creator.createVoxelsFromPixelScore(pixelScore, getLogger());
         }
 
         return new ChannelFactoryByte()

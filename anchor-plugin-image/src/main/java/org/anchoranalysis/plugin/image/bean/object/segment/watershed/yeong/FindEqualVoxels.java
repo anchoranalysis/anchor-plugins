@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFacto
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -51,7 +51,7 @@ final class FindEqualVoxels {
 
         private Deque<Point3i> stack;
 
-        private EncodedVoxelBox matS;
+        private EncodedVoxels matS;
 
         // Arguments for each point
         private int lowestNeighborVal;
@@ -60,7 +60,7 @@ final class FindEqualVoxels {
         private EncodedIntBuffer bufS;
         private int z1;
 
-        public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
+        public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxels matS) {
             super(rbb);
             this.stack = stack;
             this.matS = matS;
@@ -105,13 +105,13 @@ final class FindEqualVoxels {
                     // We take anything
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                     return false;
                 } else {
                     if (valPoint < lowestNeighborVal) {
                         lowestNeighborVal = valPoint;
                         lowestNeighborIndex =
-                                EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
+                                EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                     }
                     return false;
                 }
@@ -127,15 +127,15 @@ final class FindEqualVoxels {
                 if (valPoint < sourceVal && valPoint < lowestNeighborVal) {
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                 }
                 return false;
             }
         }
     }
 
-    private final VoxelBox<?> bufferValuesToFindEqual;
-    private final EncodedVoxelBox matS;
+    private final Voxels<?> bufferValuesToFindEqual;
+    private final EncodedVoxels matS;
     private final boolean do3D;
     private final Optional<ObjectMask> objectMask;
 

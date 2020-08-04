@@ -29,9 +29,9 @@ package ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane;
 import ij.process.ByteProcessor;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
+import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
 
 public class PixelsFromByteProcessor implements PixelsForPlane<ByteBuffer> {
 
