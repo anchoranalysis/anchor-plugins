@@ -111,10 +111,10 @@ class CalcOutlineRGB {
             Mask outline, Channel chnl, VoxelDataType outputType) {
 
         double multFact =
-                (double) outputType.maxValue() / outline.getChannel().getVoxelDataType().maxValue();
+                (double) outputType.maxValue() / outline.channel().getVoxelDataType().maxValue();
 
         return ChnlProviderIfPixelZero.mergeViaZeroCheck(
-                outline.getChannel(), chnl, outputType, multFact);
+                outline.channel(), chnl, outputType, multFact);
     }
 
     private static void zeroPixels(Mask outline, Channel[] chnlArr) {

@@ -70,7 +70,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         for (Point3i point : pointsTo) {
 
             Point3d shifted =
-                    new Point3d(point.getX() + 0.5, point.getY() + 0.5, point.getZ() + 0.5);
+                    new Point3d(point.x() + 0.5, point.y() + 0.5, point.z() + 0.5);
 
             distances.add(pointFrom.distance(shifted));
         }

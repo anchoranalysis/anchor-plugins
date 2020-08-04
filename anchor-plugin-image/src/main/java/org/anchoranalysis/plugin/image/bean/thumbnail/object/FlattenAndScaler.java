@@ -66,7 +66,7 @@ class FlattenAndScaler {
     public Extent extentFromStackOrObjects(
             Optional<Stack> stackScaled, ObjectCollection objectsUnscaled) {
         return stackScaled
-                .map(stack -> stack.getDimensions().getExtent())
+                .map(stack -> stack.dimensions().extent())
                 .orElseGet(() -> deriveScaledExtentFromObjects(objectsUnscaled));
     }
 
@@ -117,6 +117,6 @@ class FlattenAndScaler {
     private Extent deriveScaledExtentFromObjects(ObjectCollection objects) {
         return ExtentToFitBoundingBoxes.derive(
                 objects.streamStandardJava()
-                        .map(object -> object.getBoundingBox().scale(scaleFactor).flattenZ()));
+                        .map(object -> object.boundingBox().scale(scaleFactor).flattenZ()));
     }
 }

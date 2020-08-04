@@ -54,19 +54,19 @@ class PointsFromInsideHelper {
     private final ReadableTuple3i cornerMax;
 
     public PointsFromInsideHelper(
-            PointListForConvex pointsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
+            PointListForConvex pointsConvexRoot, Mask maskFilled, BoundingBox bbox) {
         this.pointsConvexRoot = pointsConvexRoot;
         this.boundingBox = bbox;
-        this.voxelsFilled = chnlFilled.binaryVoxels();
+        this.voxelsFilled = maskFilled.binaryVoxels();
         this.cornerMin = bbox.cornerMin();
         this.cornerMax = bbox.calcCornerMax();
     }
 
     public List<Point3i> convexOnly(
-            Mask chnl, Point3d pointRoot, int skipAfterSuccessiveEmptySlices) {
-        Preconditions.checkArgument(chnl.getDimensions().contains(boundingBox));
+            Mask mask, Point3d pointRoot, int skipAfterSuccessiveEmptySlices) {
+        Preconditions.checkArgument(mask.dimensions().contains(boundingBox));
 
-        int startZ = (int) Math.floor(pointRoot.getZ());
+        int startZ = (int) Math.floor(pointRoot.z());
 
         List<Point3i> listOut = new ArrayList<>();
 
@@ -75,8 +75,8 @@ class PointsFromInsideHelper {
 
         successiveEmptySlices =
                 iterateOverSlices(
-                        IntStream.rangeClosed(startZ, cornerMax.getZ()),
-                        chnl,
+                        IntStream.rangeClosed(startZ, cornerMax.z()),
+                        mask,
                         successiveEmptySlices,
                         skipAfterSuccessiveEmptySlices,
                         listOut::add);
@@ -86,8 +86,8 @@ class PointsFromInsideHelper {
             return listOut;
         }
         iterateOverSlices(
-                IntStreamEx.rangeClosed(startZ - 1, cornerMin.getZ(), -1),
-                chnl,
+                IntStreamEx.rangeClosed(startZ - 1, cornerMin.z(), -1),
+                mask,
                 successiveEmptySlices,
                 skipAfterSuccessiveEmptySlices,
                 listOut::add);
@@ -97,20 +97,20 @@ class PointsFromInsideHelper {
 
     private int iterateOverSlices(
             IntStream zRange,
-            Mask chnl,
+            Mask mask,
             int successiveEmptySlices,
             int skipAfterSuccessiveEmptySlices,
             Consumer<Point3i> processPoint) {
-        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Voxels<ByteBuffer> vb = chnl.getChannel().voxels().asByte();
-        Extent extent = vb.extent();
+        Voxels<ByteBuffer> voxels = mask.channel().voxels().asByte();
+        Extent extent = voxels.extent();
 
         Iterator<Integer> itr = zRange.iterator();
         while (itr.hasNext()) {
             int z = itr.next();
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;
@@ -133,8 +133,8 @@ class PointsFromInsideHelper {
             int z,
             Consumer<Point3i> processPoint) {
         boolean addedToSlice = false;
-        for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-            for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+        for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+            for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
                 if (bb.get(offset) == bvb.getOnByte()) {
 

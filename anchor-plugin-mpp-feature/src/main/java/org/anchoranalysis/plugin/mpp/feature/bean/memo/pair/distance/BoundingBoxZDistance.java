@@ -61,11 +61,11 @@ public class BoundingBoxZDistance extends FeaturePairMemoSingleRegion {
     }
 
     private double calcZDistance(BoundingBox bbox1, BoundingBox bbox2) {
-        int z1Min = bbox1.cornerMin().getZ();
-        int z1Max = bbox1.calcCornerMax().getZ();
+        int z1Min = bbox1.cornerMin().z();
+        int z1Max = bbox1.calcCornerMax().z();
 
-        int z2Min = bbox2.cornerMin().getZ();
-        int z2Max = bbox2.calcCornerMax().getZ();
+        int z2Min = bbox2.cornerMin().z();
+        int z2Max = bbox2.calcCornerMax().z();
 
         int diff1 = Math.abs(z1Min - z2Min);
         int diff2 = Math.abs(z1Min - z2Max);

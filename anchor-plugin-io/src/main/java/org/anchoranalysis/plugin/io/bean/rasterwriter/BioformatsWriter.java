@@ -67,14 +67,14 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
         Channel chnlGreen = stack.getChannel(1);
         Channel chnlBlue = stack.getChannel(2);
 
-        int cap = chnlRed.voxels().any().extent().getVolumeXY();
+        int cap = chnlRed.voxels().any().extent().volumeXY();
         int cap3 = cap * 3;
 
-        for (int z = 0; z < stack.getDimensions().getZ(); z++) {
+        for (int z = 0; z < stack.dimensions().z(); z++) {
 
-            ByteBuffer red = chnlRed.voxels().asByte().getPixelsForPlane(z).buffer();
-            ByteBuffer green = chnlGreen.voxels().asByte().getPixelsForPlane(z).buffer();
-            ByteBuffer blue = chnlBlue.voxels().asByte().getPixelsForPlane(z).buffer();
+            ByteBuffer red = chnlRed.voxels().asByte().slice(z).buffer();
+            ByteBuffer green = chnlGreen.voxels().asByte().slice(z).buffer();
+            ByteBuffer blue = chnlBlue.voxels().asByte().slice(z).buffer();
 
             ByteBuffer merged = ByteBuffer.allocate(cap3);
             merged.put(red);

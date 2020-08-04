@@ -29,21 +29,25 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
+import lombok.AllArgsConstructor;
 
-// We don't really use this as a bean, convenient way of inserting channels into providers in bean
-// parameters
-// This is hack
+/**
+ * A convenient way of inserting channels into providers in bean
+ * <p>
+ * Note, this is not a valid java-bean, as there's no parameterless constructor.
+ * <p>
+ * Please use carefully, as this breaks the inheritance hierarchy, which assumes all sub-classes will be valid beans.
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
 public class BinaryChnlProviderHolder extends MaskProvider {
 
-    private Mask chnl;
-
-    public BinaryChnlProviderHolder(Mask chnl) {
-        super();
-        this.chnl = chnl;
-    }
+    private Mask mask;
 
     @Override
     public Mask create() throws CreateException {
-        return chnl;
+        return mask;
     }
 }

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromMask(Mask chnlIn, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask maskIn, Mask outline) throws CreateException {
         MessageLogger logger = getLogger().messageLogger();
         List<Point3d> extPoints = pointsFromChnl(outline);
 
@@ -68,36 +68,36 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
         }
 
         // we write the vertices to the outline
-        Channel out = outline.getChannel();
-        Voxels<ByteBuffer> vbOut = out.voxels().asByte();
+        Channel out = outline.channel();
+        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
-        vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
+        voxelsOut.setAllPixelsTo(outline.binaryValues().getOffInt());
         for (int i = 0; i < vertices.length; i++) {
             Point3d point = vertices[i];
-            vbOut.setVoxel(
+            voxelsOut.setVoxel(
                     (int) point.x,
                     (int) point.y,
                     (int) point.z,
-                    outline.getBinaryValues().getOnInt());
+                    outline.binaryValues().getOnInt());
         }
 
         return outline;
     }
 
     // We use it here as it uses the quickHull3D Point3d primitive
-    private static List<Point3d> pointsFromChnl(Mask chnl) {
+    private static List<Point3d> pointsFromChnl(Mask mask) {
 
         List<Point3d> listOut = new ArrayList<>();
 
-        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Extent e = chnl.getVoxels().extent();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = mask.voxels().extent();
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = chnl.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = mask.voxels().slice(z).buffer();
 
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bb.get() == bvb.getOnByte()) {
                         listOut.add(new Point3d(x, y, z));

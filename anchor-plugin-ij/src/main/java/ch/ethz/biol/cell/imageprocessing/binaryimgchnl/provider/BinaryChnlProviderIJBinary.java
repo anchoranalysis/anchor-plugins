@@ -59,7 +59,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
             BinaryVoxels<ByteBuffer> bvb, String command, int iterations)
             throws OperationFailedException {
 
-        if (bvb.getBinaryValues().getOnInt() != 255 || bvb.getBinaryValues().getOffInt() != 0) {
+        if (bvb.binaryValues().getOnInt() != 255 || bvb.binaryValues().getOffInt() != 0) {
             throw new OperationFailedException("On byte must be 255, and off byte must be 0");
         }
 
@@ -68,15 +68,15 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
         // Fills Holes
         Binary binaryPlugin = new Binary();
         binaryPlugin.setup(command, null);
-        binaryPlugin.setNPasses(bvb.extent().getZ());
+        binaryPlugin.setNPasses(bvb.extent().z());
 
         for (int i = 0; i < iterations; i++) {
 
             // Are we missing a Z slice?
-            for (int z = 0; z < bvb.extent().getZ(); z++) {
+            for (int z = 0; z < bvb.extent().z(); z++) {
 
                 ImageProcessor ip =
-                        IJWrap.imageProcessorByte(bvb.getVoxels().getPlaneAccess(), z);
+                        IJWrap.imageProcessorByte(bvb.voxels().getPlaneAccess(), z);
                 binaryPlugin.run(ip);
             }
         }
@@ -90,10 +90,10 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
         BinaryVoxels<ByteBuffer> bvb = mask.binaryVoxels();
 
         try {
-            BinaryVoxels<ByteBuffer> bvbOut = doCommand(bvb, command, iterations);
+            BinaryVoxels<ByteBuffer> bvoxelsOut = doCommand(bvb, command, iterations);
             return new Mask(
-                    bvbOut,
-                    mask.getDimensions().getResolution()
+                    bvoxelsOut,
+                    mask.dimensions().resolution()
                     );
         } catch (OperationFailedException e) {
             throw new CreateException(e);

@@ -40,27 +40,27 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
 
     @Override
     public void sgmnAll(
-            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut) {
-        for (int z = 0; z < voxelsIn.extent().getZ(); z++) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
             sgmnSlice(
                     voxelsIn.extent(),
-                    voxelsIn.getPixelsForPlane(z),
-                    vbThrshld.getPixelsForPlane(z),
-                    voxelsOut.getPixelsForPlane(z));
+                    voxelsIn.slice(z),
+                    voxelsThrshld.slice(z),
+                    voxelsOut.slice(z));
         }
     }
 
     private void sgmnSlice(
             Extent extent,
-            VoxelBuffer<?> vbIn,
-            VoxelBuffer<?> vbThrshld,
+            VoxelBuffer<?> voxelsIn,
+            VoxelBuffer<?> voxelsThrshld,
             VoxelBuffer<ByteBuffer> bbOut) {
         ByteBuffer out = bbOut.buffer();
 
         int offset = 0;
-        for (int y = 0; y < extent.getY(); y++) {
-            for (int x = 0; x < extent.getX(); x++) {
-                writeThresholdedByte(offset, out, vbIn, vbThrshld);
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
+                writeThresholdedByte(offset, out, voxelsIn, voxelsThrshld);
                 offset++;
             }
         }

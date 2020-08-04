@@ -34,13 +34,13 @@ public class ChnlProviderSubtract extends ChnlProviderTwoVoxelMapping {
 
     @Override
     protected void processVoxels(
-            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
+            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
 
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
-            ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();
-            ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer in1 = voxelsIn1.slice(z).buffer();
+            ByteBuffer in2 = voxelsIn2.slice(z).buffer();
+            ByteBuffer out = voxelsOut.slice(z).buffer();
 
             while (in1.hasRemaining()) {
 

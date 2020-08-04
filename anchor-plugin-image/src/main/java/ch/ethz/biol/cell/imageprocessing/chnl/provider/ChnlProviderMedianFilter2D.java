@@ -68,7 +68,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
             int xMax = xCenter + kernelHalfWidth;
 
             xMin = Math.max(xMin, 0);
-            xMax = Math.min(xMax, e.getX() - 1);
+            xMax = Math.min(xMax, e.x() - 1);
 
             for (int y = yMin; y <= yMax; y++) {
                 for (int x = xMin; x <= xMax; x++) {
@@ -84,7 +84,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
             if (x < 0) {
                 return;
             }
-            if (x >= e.getX()) {
+            if (x >= e.x()) {
                 return;
             }
 
@@ -100,7 +100,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
             if (x < 0) {
                 return;
             }
-            if (x >= e.getX()) {
+            if (x >= e.x()) {
                 return;
             }
 
@@ -131,29 +131,29 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
         RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 
         Channel dup = chnl.duplicate();
-        Voxels<ByteBuffer> vbDup = dup.voxels().asByte();
-        Extent e = dup.getDimensions().getExtent();
+        Voxels<ByteBuffer> voxelsDup = dup.voxels().asByte();
+        Extent e = dup.dimensions().extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
-            ByteBuffer bbOut = vbDup.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bbOut = voxelsDup.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
+            for (int y = 0; y < e.y(); y++) {
 
                 int yMin = y - kernelHalfWidth;
                 int yMax = y + kernelHalfWidth;
 
                 yMin = Math.max(yMin, 0);
-                yMax = Math.min(yMax, e.getY() - 1);
+                yMax = Math.min(yMax, e.y() - 1);
 
-                for (int x = 0; x < e.getX(); x++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (x == 0) {
                         set.clear();

@@ -44,10 +44,10 @@ public class SliceAt extends ObjectCollectionProviderUnary {
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
         return objects.stream()
                 .filterAndMap(
-                        objectMask -> objectMask.getBoundingBox().contains().z(index),
+                        objectMask -> objectMask.boundingBox().contains().z(index),
                         objectMask ->
                                 objectMask.extractSlice(
-                                        index - objectMask.getBoundingBox().cornerMin().getZ(),
+                                        index - objectMask.boundingBox().cornerMin().z(),
                                         false));
     }
 }

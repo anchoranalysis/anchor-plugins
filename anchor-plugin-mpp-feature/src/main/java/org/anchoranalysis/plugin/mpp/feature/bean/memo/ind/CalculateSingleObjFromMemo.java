@@ -56,7 +56,7 @@ class CalculateSingleObjFromMemo
                 params.getPxlPartMemo()
                         .getMark()
                         .deriveObject(
-                                params.getDimensionsRequired(),
+                                params.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(index),
                                 BinaryValuesByte.getDefault());
         return om.withoutProperties();

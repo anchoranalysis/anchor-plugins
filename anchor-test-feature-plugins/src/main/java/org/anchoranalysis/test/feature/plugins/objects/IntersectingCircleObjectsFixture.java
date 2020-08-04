@@ -87,8 +87,8 @@ public class IntersectingCircleObjectsFixture {
 
         public void shift(double factor) {
             int shift = (int) (factor * radius);
-            center.incrX(shift);
-            center.incrY(shift);
+            center.incrementX(shift);
+            center.incrementY(shift);
         }
 
         public ObjectCollection generateMultipleCircles(int numCircles, double factor) {

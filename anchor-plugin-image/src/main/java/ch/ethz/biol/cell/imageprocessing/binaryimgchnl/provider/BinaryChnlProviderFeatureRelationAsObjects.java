@@ -93,7 +93,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
     private Mask calcRelation(
             ObjectMask objectMain,
             ObjectMask objectCompareTo,
-            Mask chnlMain,
+            Mask maskMain,
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator)
             throws CreateException {
         try {
@@ -101,7 +101,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
             double valCompareTo = calculator.calc(new FeatureInputSingleObject(objectCompareTo));
 
             if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
-                return chnlMain;
+                return maskMain;
             } else {
                 return binaryChnlElse.create();
             }

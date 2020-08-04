@@ -121,8 +121,8 @@ public class MovieFromSlicesTask extends RasterTask {
             Channel green = ncc.getChannel("green", 0, progressReporter);
 
             //
-            if (!red.getDimensions().equals(blue.getDimensions())
-                    || !blue.getDimensions().equals(green.getDimensions())) {
+            if (!red.dimensions().equals(blue.dimensions())
+                    || !blue.dimensions().equals(green.dimensions())) {
                 throw new JobExecutionException("Scene dimensions do not match");
             }
 
@@ -130,7 +130,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
             ExtractProjectedStack extract = new ExtractProjectedStack(width, height);
 
-            for (int z = 0; z < red.getDimensions().getZ(); z++) {
+            for (int z = 0; z < red.dimensions().z(); z++) {
 
                 sliceOut = extract.extractAndProjectStack(red, green, blue, z);
 

@@ -82,9 +82,9 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
         Point3d distance = relVector(root, destPoint);
         double mag =
                 Math.pow(
-                        Math.pow(distance.getX(), 2)
-                                + Math.pow(distance.getY(), 2)
-                                + Math.pow(distance.getZ(), 2),
+                        Math.pow(distance.x(), 2)
+                                + Math.pow(distance.y(), 2)
+                                + Math.pow(distance.z(), 2),
                         0.5);
 
         if (mag > 0.0) {
@@ -99,7 +99,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
                 System.out.printf("%s ", point.toString()); // NOSONAR
             }
 
-            if (!isPointOnObject(point, bvb.getVoxels(), bvb.getBinaryValues())) {
+            if (!isPointOnObject(point, bvb.voxels(), bvb.binaryValues())) {
 
                 if (debug) {
                     System.out.printf("failed%n%n"); // NOSONAR
@@ -122,14 +122,14 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
         return point1.distanceSquared(point2) < 1.0;
     }
 
-    private static boolean isPointOnObject(Point3d point, Voxels<ByteBuffer> vb, BinaryValues bv) {
+    private static boolean isPointOnObject(Point3d point, Voxels<ByteBuffer> voxels, BinaryValues bv) {
 
         Point3i pointInt = PointConverter.intFromDouble(point);
 
-        if (!vb.extent().contains(pointInt)) {
+        if (!voxels.extent().contains(pointInt)) {
             return false;
         }
 
-        return vb.getVoxel(pointInt) == bv.getOnInt();
+        return voxels.getVoxel(pointInt) == bv.getOnInt();
     }
 }

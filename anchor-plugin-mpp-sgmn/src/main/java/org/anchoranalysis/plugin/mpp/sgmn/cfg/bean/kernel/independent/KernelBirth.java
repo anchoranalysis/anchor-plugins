@@ -82,7 +82,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
             ImageDimensions dimensions,
             double densityRatio) {
 
-        double num = getProbNeg() * dimensions.getVolume() * poissonIntensity;
+        double num = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
         double dem = getProbPos() * propSize;
 
         assert (num > 0);

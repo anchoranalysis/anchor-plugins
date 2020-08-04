@@ -61,13 +61,13 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
     }
 
     private void changeMaskToShowPointsOnly(Mask mask, List<Point2i> points) {
-        Voxels<?> voxels = mask.getChannel().voxels().any();
+        Voxels<?> voxels = mask.channel().voxels().any();
 
-        int on = mask.getBinaryValues().getOnInt();
-        int off = mask.getBinaryValues().getOffInt();
+        int on = mask.binaryValues().getOnInt();
+        int off = mask.binaryValues().getOffInt();
 
         voxels.setAllPixelsTo(off);
 
-        points.forEach(point -> voxels.setVoxel(point.getX(), point.getY(), 0, on));
+        points.forEach(point -> voxels.setVoxel(point.x(), point.y(), 0, on));
     }
 }

@@ -74,7 +74,7 @@ public class SegmentTextTest {
     }
 
     private void assertBoxAtIndex(ObjectCollection objects, int index, BoundingBox box) {
-        assertEquals("box at index " + index, box, objects.get(index).getBoundingBox());
+        assertEquals("box at index " + index, box, objects.get(index).boundingBox());
     }
 
     private SegmentText createAndInitProvider(String imageFilename) throws InitException {

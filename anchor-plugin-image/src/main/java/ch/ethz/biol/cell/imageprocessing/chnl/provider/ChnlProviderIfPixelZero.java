@@ -110,7 +110,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
         Channel channelOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(channel.getDimensions(), combinedType);
+                        .createEmptyInitialised(channel.dimensions(), combinedType);
 
         // We know these are all the same types from the logic above, so we can safetly cast
         processVoxels(
@@ -123,18 +123,18 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
     }
 
     private static void processVoxels(
-            VoxelsWrapper vbOut,
-            VoxelsWrapper vbIn,
-            VoxelsWrapper vbIfZero,
+            VoxelsWrapper voxelsOut,
+            VoxelsWrapper voxelsIn,
+            VoxelsWrapper voxelsIfZero,
             double multFactorIfNonZero) {
 
-        int volumeXY = vbIn.any().extent().getVolumeXY();
+        int volumeXY = voxelsIn.any().extent().volumeXY();
 
-        for (int z = 0; z < vbOut.any().extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.any().extent().z(); z++) {
 
-            VoxelBuffer<?> in1 = vbIn.any().getPixelsForPlane(z);
-            VoxelBuffer<?> in2 = vbIfZero.any().getPixelsForPlane(z);
-            VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
+            VoxelBuffer<?> in1 = voxelsIn.any().slice(z);
+            VoxelBuffer<?> in2 = voxelsIfZero.any().slice(z);
+            VoxelBuffer<?> out = voxelsOut.any().slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

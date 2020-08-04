@@ -149,7 +149,7 @@ class MakePlateauLowerComplete {
 
             ProcessVoxelNeighbor<List<Point3i>> process =
                     ProcessVoxelNeighborFactory.withinMask(
-                            object, new PointTester(matS, object.getBinaryValuesByte()));
+                            object, new PointTester(matS, object.binaryValuesByte()));
 
             while (!searchPoints.isEmpty()) {
                 searchPoints = findPointsFor(searchPoints, neighborhood, process);

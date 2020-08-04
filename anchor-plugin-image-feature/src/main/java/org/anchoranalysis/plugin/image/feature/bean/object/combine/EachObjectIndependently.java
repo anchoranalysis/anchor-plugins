@@ -73,17 +73,17 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                         object ->
                                 new FeatureInputSingleObject(
                                         checkObjectInsideScene(
-                                                object, nrgStack.getDimensions().getExtent()),
+                                                object, nrgStack.dimensions().extent()),
                                         nrgStack));
     }
 
     private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)
             throws CreateException {
-        if (!extent.contains(object.getBoundingBox())) {
+        if (!extent.contains(object.boundingBox())) {
             throw new CreateException(
                     String.format(
                             "Object is not (perhaps fully) contained inside the scene: %s is not in %s",
-                            object.getBoundingBox(), extent));
+                            object.boundingBox(), extent));
         }
         return object;
     }
@@ -96,6 +96,6 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
 
     @Override
     protected BoundingBox boundingBoxThatSpansInput(FeatureInputSingleObject input) {
-        return input.getObject().getBoundingBox();
+        return input.getObject().boundingBox();
     }
 }

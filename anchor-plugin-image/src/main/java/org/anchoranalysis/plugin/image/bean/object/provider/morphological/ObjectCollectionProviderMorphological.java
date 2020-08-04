@@ -56,6 +56,6 @@ public abstract class ObjectCollectionProviderMorphological
             ObjectMask object, Optional<Extent> extent) throws CreateException;
 
     protected Optional<Extent> calcExtent() throws CreateException {
-        return createDims().map(ImageDimensions::getExtent);
+        return createDims().map(ImageDimensions::extent);
     }
 }

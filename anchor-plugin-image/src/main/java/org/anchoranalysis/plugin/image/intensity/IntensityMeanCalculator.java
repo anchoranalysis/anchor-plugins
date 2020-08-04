@@ -49,11 +49,11 @@ public class IntensityMeanCalculator {
     public static double calcMeanIntensityObject(
             Channel chnl, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
-        checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
+        checkContained(object.boundingBox(), chnl.dimensions().extent());
 
-        VoxelsWrapper vbIntensity = chnl.voxels();
+        VoxelsWrapper voxelsIntensity = chnl.voxels();
 
-        BoundingBox bbox = object.getBoundingBox();
+        BoundingBox bbox = object.boundingBox();
 
         ReadableTuple3i cornerMin = bbox.cornerMin();
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
@@ -61,18 +61,18 @@ public class IntensityMeanCalculator {
         double sum = 0.0;
         int cnt = 0;
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bbIntens = vbIntensity.any().getPixelsForPlane(z);
+            VoxelBuffer<?> bbIntens = voxelsIntensity.any().slice(z);
             ByteBuffer bbMask =
-                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.voxels().slice(z - cornerMin.z()).buffer();
 
             int offsetMask = 0;
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
-                    if (bbMask.get(offsetMask) == object.getBinaryValuesByte().getOnByte()) {
-                        int offsetIntens = vbIntensity.any().extent().offset(x, y);
+                    if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
+                        int offsetIntens = voxelsIntensity.any().extent().offset(x, y);
 
                         int val = bbIntens.getInt(offsetIntens);
 

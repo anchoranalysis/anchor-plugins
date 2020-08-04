@@ -45,43 +45,43 @@ final class SliceThresholderMask extends SliceThresholder {
         super(bvb);
         this.clearOutsideMask = clearOutsideMask;
         this.object = object;
-        this.cornerMin = object.getBoundingBox().cornerMin();
-        this.cornerMax = object.getBoundingBox().calcCornerMax();
+        this.cornerMin = object.boundingBox().cornerMin();
+        this.cornerMax = object.boundingBox().calcCornerMax();
     }
 
     @Override
     public void sgmnAll(
-            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut) {
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            int relZ = z - cornerMin.getZ();
+            int relZ = z - cornerMin.z();
 
             sgmnSlice(
                     voxelsIn.extent(),
-                    voxelsIn.getPixelsForPlane(relZ),
-                    vbThrshld.getPixelsForPlane(relZ),
-                    voxelsOut.getPixelsForPlane(relZ),
-                    object.getVoxels().getPixelsForPlane(z),
-                    object.getBinaryValuesByte());
+                    voxelsIn.slice(relZ),
+                    voxelsThrshld.slice(relZ),
+                    voxelsOut.slice(relZ),
+                    object.voxels().slice(z),
+                    object.binaryValuesByte());
         }
     }
 
     private void sgmnSlice(
             Extent extent,
-            VoxelBuffer<?> vbIn,
-            VoxelBuffer<?> vbThrshld,
-            VoxelBuffer<ByteBuffer> vbOut,
-            VoxelBuffer<ByteBuffer> vbMask,
+            VoxelBuffer<?> voxelsIn,
+            VoxelBuffer<?> voxelsThrshld,
+            VoxelBuffer<ByteBuffer> voxelsOut,
+            VoxelBuffer<ByteBuffer> voxelsMask,
             BinaryValuesByte bvbMask) {
         int offsetMask = 0;
-        ByteBuffer out = vbOut.buffer();
+        ByteBuffer out = voxelsOut.buffer();
 
-        for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-            for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+        for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+            for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                 int offset = extent.offset(x, y);
 
-                if (vbMask.buffer().get(offsetMask++) == bvbMask.getOffByte()) {
+                if (voxelsMask.buffer().get(offsetMask++) == bvbMask.getOffByte()) {
 
                     if (clearOutsideMask) {
                         writeOffByte(offset, out);
@@ -90,7 +90,7 @@ final class SliceThresholderMask extends SliceThresholder {
                     continue;
                 }
 
-                writeThresholdedByte(offset, out, vbIn, vbThrshld);
+                writeThresholdedByte(offset, out, voxelsIn, voxelsThrshld);
             }
         }
     }

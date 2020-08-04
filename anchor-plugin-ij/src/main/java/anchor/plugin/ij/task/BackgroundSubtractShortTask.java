@@ -85,15 +85,15 @@ public class BackgroundSubtractShortTask extends RasterTask {
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(
                             inputImage, radius, false);
-            Voxels<?> vbSubOut = bgSubOut.voxels().any();
+            Voxels<?> voxelsSubOut = bgSubOut.voxels().any();
 
-            double maxPixel = vbSubOut.ceilOfMaxPixel();
+            double maxPixel = voxelsSubOut.ceilOfMaxPixel();
 
             double scaleRatio = 255.0 / maxPixel;
 
             // We go from 2048 to 256
             if (scaleDownIntensityFactor != 1) {
-                vbSubOut.multiplyBy(scaleRatio);
+                voxelsSubOut.multiplyBy(scaleRatio);
             }
 
             ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();

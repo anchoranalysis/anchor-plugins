@@ -44,22 +44,22 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
 
-        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
+        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(chnl.getDimensions(), chnl.getVoxelDataType());
+                        .createEmptyInitialised(chnl.dimensions(), chnl.getVoxelDataType());
 
-        BoundingBox bbox = new BoundingBox(chnlOut.getDimensions().getExtent());
+        BoundingBox bbox = new BoundingBox(chnlOut.dimensions().extent());
         chnl.voxels()
                 .copyPixelsToCheckMask(
                         bbox,
                         chnlOut.voxels(),
                         bbox,
-                        vbMask,
-                        mask.getBinaryValues().createByte());
+                        voxelsMask,
+                        mask.binaryValues().createByte());
 
         return chnlOut;
     }

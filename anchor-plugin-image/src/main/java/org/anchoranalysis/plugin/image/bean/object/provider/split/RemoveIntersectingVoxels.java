@@ -84,42 +84,42 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
 
         BoundingBox bboxRelWrite =
                 new BoundingBox(
-                        intersection.relPosTo(objectWrite.getBoundingBox()), intersection.extent());
+                        intersection.relPosTo(objectWrite.boundingBox()), intersection.extent());
 
         BoundingBox bboxRelRead =
                 new BoundingBox(
-                        intersection.relPosTo(objectRead.getBoundingBox()), intersection.extent());
+                        intersection.relPosTo(objectRead.boundingBox()), intersection.extent());
 
         // TODO we can make this more efficient, as we only need to duplicate the intersection area
         ObjectMask objectReadDuplicated = objectRead.duplicate();
         ObjectMask objectWriteDuplicated = objectWrite.duplicate();
 
         objectWrite
-                .getVoxels()
+                .voxels()
                 .setPixelsCheckMask(
                         bboxRelWrite,
-                        objectReadDuplicated.getVoxels(),
+                        objectReadDuplicated.voxels(),
                         bboxRelRead,
-                        objectWrite.getBinaryValues().getOffInt(),
-                        objectReadDuplicated.getBinaryValuesByte().getOnByte());
+                        objectWrite.binaryValues().getOffInt(),
+                        objectReadDuplicated.binaryValuesByte().getOnByte());
 
         objectRead
-                .getVoxels()
+                .voxels()
                 .setPixelsCheckMask(
                         bboxRelRead,
-                        objectWriteDuplicated.getVoxels(),
+                        objectWriteDuplicated.voxels(),
                         bboxRelWrite,
-                        objectRead.getBinaryValues().getOffInt(),
-                        objectWriteDuplicated.getBinaryValuesByte().getOnByte());
+                        objectRead.binaryValues().getOffInt(),
+                        objectWriteDuplicated.binaryValuesByte().getOnByte());
     }
 
     private void removeIntersectingVoxelsIfIntersects(
             ObjectMask objectWrite, ObjectMask objectRead, ImageDimensions dimensions) {
         Optional<BoundingBox> intersection =
                 objectWrite
-                        .getBoundingBox()
+                        .boundingBox()
                         .intersection()
-                        .withInside(objectRead.getBoundingBox(), dimensions.getExtent());
+                        .withInside(objectRead.boundingBox(), dimensions.extent());
 
         // We check if their bounding boxes intersect
         if (intersection.isPresent()) {

@@ -75,7 +75,7 @@ class CreateScaledInput {
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {
         Mat dst = new Mat();
-        Size sz = new Size(targetExtent.getX(), targetExtent.getY());
+        Size sz = new Size(targetExtent.x(), targetExtent.y());
         Imgproc.resize(src, dst, sz);
         return dst;
     }

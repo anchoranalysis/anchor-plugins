@@ -69,19 +69,19 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
 
-        Mask chnlOutline = createOutline();
-        Mask chnlFilled = createFilled();
+        Mask maskOutline = createOutline();
+        Mask maskFilled = createFilled();
 
-        checkDimensions(chnlOutline.getDimensions(), chnlFilled.getDimensions());
+        checkDimensions(maskOutline.dimensions(), maskFilled.dimensions());
 
-        useZ = useZ && (chnlOutline.getDimensions().getZ() > 1);
+        useZ = useZ && (maskOutline.dimensions().z() > 1);
 
-        callBefore(chnlOutline.getDimensions().getResolution(), randomNumberGenerator);
+        callBefore(maskOutline.dimensions().resolution(), randomNumberGenerator);
 
-        objectOutline = createObjectForPoint(root, chnlOutline);
+        objectOutline = createObjectForPoint(root, maskOutline);
 
-        objectFilled = objectForFilled(root, chnlFilled);
-        callAfter(root, chnlOutline.getDimensions().getResolution(), randomNumberGenerator);
+        objectFilled = objectForFilled(root, maskFilled);
+        callAfter(root, maskOutline.dimensions().resolution(), randomNumberGenerator);
         traverseOutline(root, listOut);
     }
 
@@ -119,10 +119,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private ObjectMask objectForFilled(Point3i root, Mask chnlFilled)
+    private ObjectMask objectForFilled(Point3i root, Mask mask)
             throws TraverseOutlineException {
         // Important, so we can use the contains function later
-        return createObjectForPoint(root, chnlFilled)
+        return createObjectForPoint(root, mask)
                 .mapBoundingBoxPreserveExtent(bbox -> bbox.shiftTo(new Point3i(0, 0, 0)));
     }
 
@@ -130,7 +130,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
-                BoundingBox.relPosTo(root, objectOutline.getBoundingBox().cornerMin());
+                BoundingBox.relPosTo(root, objectOutline.boundingBox().cornerMin());
         try {
             visitScheduler.afterCreateObject(rootRelToMask, res, randomNumberGenerator);
         } catch (InitException e) {
@@ -154,13 +154,13 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private ObjectMask createObjectForPoint(Point3i root, Mask chnl)
+    private ObjectMask createObjectForPoint(Point3i root, Mask mask)
             throws TraverseOutlineException {
 
         try {
             Tuple3i maxDistance =
                     visitScheduler
-                            .maxDistanceFromRootPoint(chnl.getDimensions().getResolution())
+                            .maxDistanceFromRootPoint(mask.dimensions().resolution())
                             .orElseThrow(
                                     () ->
                                             new CreateException(
@@ -168,13 +168,13 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
             // We make sure the box is within our scene boundaries
             BoundingBox box =
-                    createBoxAroundPoint(root, maxDistance, chnl.getDimensions().getExtent());
+                    createBoxAroundPoint(root, maxDistance, mask.dimensions().extent());
 
             // This is our final intersection box, that we use for traversing and memorizing pixels
             //  that we have already visited
             assert (!box.extent().isEmpty());
 
-            return chnl.region(box, false);
+            return mask.region(box, false);
 
         } catch (OperationFailedException | CreateException e) {
             throw new TraverseOutlineException(

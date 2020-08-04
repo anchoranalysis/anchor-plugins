@@ -66,7 +66,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
             return sgmn.segment(
                     chnlSource,
                     maskAsObject,
-                    createSeeds(chnlSource.getDimensions(), maskAsObject));
+                    createSeeds(chnlSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }

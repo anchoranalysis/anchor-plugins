@@ -51,10 +51,10 @@ public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
             return true;
         }
 
-        BoundingBox bbox = mark.bboxAllRegions(nrgStack.getDimensions());
+        BoundingBox bbox = mark.bboxAllRegions(nrgStack.dimensions());
         ReadableTuple3i cornerMax = bbox.calcCornerMax();
-        for (int z = bbox.cornerMin().getZ(); z <= cornerMax.getZ(); z++) {
-            Point3d cpSlice = new Point3d(cp.getX(), cp.getY(), z);
+        for (int z = bbox.cornerMin().z(); z <= cornerMax.z(); z++) {
+            Point3d cpSlice = new Point3d(cp.x(), cp.y(), z);
             if (isPointOnBinaryChnl(cpSlice, nrgStack, AnySliceCenterOnMask::derivePoint)) {
                 return true;
             }
@@ -64,6 +64,6 @@ public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
     }
 
     private static Point3i derivePoint(Point3d cp) {
-        return new Point3i((int) cp.getX(), (int) cp.getY(), (int) cp.getZ());
+        return new Point3i((int) cp.x(), (int) cp.y(), (int) cp.z());
     }
 }

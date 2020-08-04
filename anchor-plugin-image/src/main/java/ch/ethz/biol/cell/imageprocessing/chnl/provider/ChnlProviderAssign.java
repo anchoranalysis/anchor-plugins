@@ -51,13 +51,13 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnlSrc, Mask binaryImgChnl)
+    protected Channel createFromMaskedChannel(Channel chnlSrc, Mask mask)
             throws CreateException {
 
         assign(
                 chnlSrc,
                 DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", chnlSrc),
-                binaryImgChnl);
+                mask);
 
         return chnlSrc;
     }
@@ -65,7 +65,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
     private void assign(Channel chnlSrc, Channel chnlAssignFrom, Mask mask) {
 
         ObjectMask object = CreateFromEntireChnlFactory.createObject(mask);
-        BoundingBox bbox = new BoundingBox(chnlSrc.getDimensions().getExtent());
+        BoundingBox bbox = new BoundingBox(chnlSrc.dimensions().extent());
 
         chnlAssignFrom
                 .voxels()
@@ -74,7 +74,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
                         bbox,
                         chnlSrc.voxels().asByte(),
                         bbox,
-                        object.getVoxels(),
-                        object.getBinaryValuesByte());
+                        object.voxels(),
+                        object.binaryValuesByte());
     }
 }

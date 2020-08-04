@@ -59,7 +59,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     @BeanField @Getter @Setter private UnitValueDistance threshold;
     // END BEAN PROPERTIES
 
-    private Voxels<?> vb;
+    private Voxels<?> voxels;
 
     @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
@@ -72,7 +72,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
             throw new OperationFailedException(e);
         }
         assert (chnlSingleRegion != null);
-        vb = chnlSingleRegion.voxels().any();
+        voxels = chnlSingleRegion.voxels().any();
     }
 
     @Override
@@ -81,25 +81,25 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         int thresholdResolved = threshold(dim);
 
-        for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
+        for (int z = 0; z < object.boundingBox().extent().z(); z++) {
 
-            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.voxels().slice(z).buffer();
 
-            int z1 = z + object.getBoundingBox().cornerMin().getZ();
-            VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
+            int z1 = z + object.boundingBox().cornerMin().z();
+            VoxelBuffer<?> bbChnl = voxels.slice(z1);
 
-            for (int y = 0; y < object.getBoundingBox().extent().getY(); y++) {
-                for (int x = 0; x < object.getBoundingBox().extent().getX(); x++) {
+            for (int y = 0; y < object.boundingBox().extent().y(); y++) {
+                for (int x = 0; x < object.boundingBox().extent().x(); x++) {
 
-                    int offset = object.getBoundingBox().extent().offset(x, y);
-                    if (bb.get(offset) == object.getBinaryValuesByte().getOnByte()) {
+                    int offset = object.boundingBox().extent().offset(x, y);
+                    if (bb.get(offset) == object.binaryValuesByte().getOnByte()) {
 
-                        int y1 = y + object.getBoundingBox().cornerMin().getY();
-                        int x1 = x + object.getBoundingBox().cornerMin().getX();
+                        int y1 = y + object.boundingBox().cornerMin().y();
+                        int x1 = x + object.boundingBox().cornerMin().x();
 
-                        int offsetGlobal = vb.extent().offset(x1, y1);
+                        int offsetGlobal = voxels.extent().offset(x1, y1);
 
-                        // Now we get a value from the vb
+                        // Now we get a value from the voxels
                         int val = bbChnl.getInt(offsetGlobal);
                         if (val >= thresholdResolved) {
                             return true;
@@ -114,11 +114,11 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::getResolution), AxisType.X));
+                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::resolution), AxisType.X));
     }
 
     @Override
     protected void end() throws OperationFailedException {
-        vb = null;
+        voxels = null;
     }
 }

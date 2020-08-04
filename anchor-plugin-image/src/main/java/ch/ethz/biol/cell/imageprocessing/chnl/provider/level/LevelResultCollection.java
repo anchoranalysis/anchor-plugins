@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
 
 public class LevelResultCollection implements Iterable<LevelResult> {
 
@@ -39,7 +39,7 @@ public class LevelResultCollection implements Iterable<LevelResult> {
         return list.add(arg0);
     }
 
-    public LevelResult findClosestResult(Point3d point) {
+    public LevelResult findClosestResult(Point3i point) {
 
         double minDistance = Double.MAX_VALUE;
         LevelResult min = null;

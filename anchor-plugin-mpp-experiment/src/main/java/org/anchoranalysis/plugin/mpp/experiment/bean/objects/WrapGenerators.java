@@ -42,14 +42,14 @@ class WrapGenerators {
     public static IterableGenerator<ObjectsWithBoundingBox> wrapObjectMask(
             IterableGenerator<ObjectMask> generator) {
         return IterableGeneratorBridge.createOneToMany(
-                generator, objects -> objects.getObjects().streamStandardJava() );
+                generator, objects -> objects.objects().streamStandardJava() );
     }
     
     private static BoundingBox boundingBoxFromObject(ObjectsWithBoundingBox objects, boolean flatten) {
         if (flatten) {
-            return objects.getBoundingBox().flattenZ();
+            return objects.boundingBox().flattenZ();
         } else {
-            return objects.getBoundingBox();
+            return objects.boundingBox();
         }
     }
 }

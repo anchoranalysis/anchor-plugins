@@ -91,7 +91,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
 
         // If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
         if (requireBBoxNeighbors
-                && !bboxSrcGrown.intersection().existsWith(destination.getBoundingBox())) {
+                && !bboxSrcGrown.intersection().existsWith(destination.boundingBox())) {
             return false;
         }
 
@@ -99,6 +99,6 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
     }
 
     private static BoundingBox boundingBoxGrown(ObjectMask object) {
-        return GrowUtilities.grow(object.getBoundingBox());
+        return GrowUtilities.grow(object.boundingBox());
     }
 }

@@ -64,14 +64,14 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
             Extent e = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            Voxels<ByteBuffer> vbOut = VoxelsFactory.getByte().createInitialized(e);
+            Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(e);
 
             if (object.isPresent()) {
-                setPixelsWithMask(vbOut, object.get(), pixelScore);
+                setPixelsWithMask(voxelsOut, object.get(), pixelScore);
             } else {
-                setPixelsWithoutMask(vbOut, pixelScore);
+                setPixelsWithoutMask(voxelsOut, pixelScore);
             }
-            return vbOut;
+            return voxelsOut;
 
         } catch (InitException | FeatureCalculationException e) {
             throw new CreateException(e);
@@ -97,19 +97,19 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
         return out;
     }
 
-    private void setPixelsWithoutMask(Voxels<ByteBuffer> vbOut, PixelScore pixelScore)
+    private void setPixelsWithoutMask(Voxels<ByteBuffer> voxelsOut, PixelScore pixelScore)
             throws FeatureCalculationException {
 
-        Extent e = vbOut.extent();
+        Extent e = voxelsOut.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
-            for (int y = 0; y <= e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y <= e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int offset = e.offset(x, y);
                     BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
@@ -119,31 +119,31 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
     }
 
     private void setPixelsWithMask(
-            Voxels<ByteBuffer> vbOut, ObjectMask object, PixelScore pixelScore)
+            Voxels<ByteBuffer> voxelsOut, ObjectMask object, PixelScore pixelScore)
             throws FeatureCalculationException {
 
-        byte maskOn = object.getBinaryValuesByte().getOnByte();
-        Extent e = vbOut.extent();
+        byte maskOn = object.binaryValuesByte().getOnByte();
+        Extent e = voxelsOut.extent();
         Extent eMask = object.binaryVoxels().extent();
 
-        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            int zRel = z - cornerMin.getZ();
+            int zRel = z - cornerMin.z();
 
-            ByteBuffer bbMask = object.getVoxels().getPixelsForPlane(zRel).buffer();
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask = object.voxels().slice(zRel).buffer();
+            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                     int offset = e.offset(x, y);
 
-                    int offsetMask = eMask.offset(x - cornerMin.getX(), y - cornerMin.getY());
+                    int offsetMask = eMask.offset(x - cornerMin.x(), y - cornerMin.y());
 
                     if (bbMask.get(offsetMask) == maskOn) {
                         BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);

@@ -50,7 +50,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
 
         Histogram hist = HistogramFactory.create(chnl, mask);
 
@@ -66,18 +66,18 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     }
 
     /** Replaces any pixels with value > threshold, with the threshold value */
-    private static void replacePixelsAbove(int threshold, Voxels<ByteBuffer> vb) {
+    private static void replacePixelsAbove(int threshold, Voxels<ByteBuffer> voxels) {
         byte meanIntensityByte = (byte) threshold;
 
-        Extent e = vb.extent();
+        Extent e = voxels.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int val = ByteConverter.unsignedByteToInt(bb.get(offset));
                     if (val > threshold) {

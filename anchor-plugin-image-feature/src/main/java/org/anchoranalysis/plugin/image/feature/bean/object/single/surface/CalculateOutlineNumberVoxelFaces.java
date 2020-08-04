@@ -58,30 +58,30 @@ class CalculateOutlineNumberVoxelFaces
             ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D)
             throws OperationFailedException {
 
-        boolean do3D = (dimensions.getZ() > 1) && !suppress3D;
+        boolean do3D = (dimensions.z() > 1) && !suppress3D;
 
         if (do3D && mip) {
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
             CountKernel kernel =
                     new CountKernelNeighborhoodIgnoreOutsideScene(
                             false,
-                            object.getBinaryValuesByte(),
+                            object.binaryValuesByte(),
                             true,
-                            dimensions.getExtent(),
-                            object.getBoundingBox().cornerMin());
+                            dimensions.extent(),
+                            object.boundingBox().cornerMin());
 
-            Voxels<ByteBuffer> mipVb = object.getVoxels().maxIntensityProjection();
+            Voxels<ByteBuffer> mipVb = object.voxels().maxIntensityProjection();
             return ApplyKernel.applyForCount(kernel, mipVb);
 
         } else {
             CountKernel kernel =
                     new CountKernelNeighborhoodIgnoreOutsideScene(
                             do3D,
-                            object.getBinaryValuesByte(),
+                            object.binaryValuesByte(),
                             true,
-                            dimensions.getExtent(),
-                            object.getBoundingBox().cornerMin());
-            return ApplyKernel.applyForCount(kernel, object.getVoxels());
+                            dimensions.extent(),
+                            object.boundingBox().cornerMin());
+            return ApplyKernel.applyForCount(kernel, object.voxels());
         }
     }
 
@@ -89,7 +89,7 @@ class CalculateOutlineNumberVoxelFaces
     protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
         try {
             return calcSurfaceSize(
-                    params.getObject(), params.getDimensionsRequired(), mip, suppress3D);
+                    params.getObject(), params.dimensionsRequired(), mip, suppress3D);
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

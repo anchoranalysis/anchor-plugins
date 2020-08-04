@@ -55,7 +55,7 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
             FeatureInputPairMemo input,
             Function<FeatureInputPairMemo, VoxelizedMarkMemo> funcExtract)
             throws FeatureCalculationException {
-        ImageDimensions sd = input.getDimensionsRequired();
+        ImageDimensions sd = input.dimensionsRequired();
         return funcExtract.apply(input).getMark().bbox(sd, getRegionID());
     }
 }

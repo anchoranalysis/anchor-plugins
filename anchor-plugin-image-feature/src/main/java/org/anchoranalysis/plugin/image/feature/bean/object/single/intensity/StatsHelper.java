@@ -58,14 +58,14 @@ class StatsHelper {
         double max = Double.NEGATIVE_INFINITY;
         int index = -1;
 
-        for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
+        for (int z = 0; z < object.boundingBox().extent().z(); z++) {
 
             ObjectMask slice = object.extractSlice(z, true);
 
             // We adjust the z coordiante to point to the channel
             int zTarget =
-                    slice.getBoundingBox().cornerMin().getZ()
-                            + object.getBoundingBox().cornerMin().getZ();
+                    slice.boundingBox().cornerMin().z()
+                            + object.boundingBox().cornerMin().z();
             slice = slice.mapBoundingBoxPreserveExtent(bbox -> bbox.shiftToZ(zTarget));
 
             if (slice.hasPixelsGreaterThan(0)) {

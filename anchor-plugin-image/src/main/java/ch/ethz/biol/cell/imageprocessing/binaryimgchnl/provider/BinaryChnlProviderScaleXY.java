@@ -47,30 +47,30 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
     @BeanField @Getter @Setter private boolean interpolate = true;
     // END BEAN PROPERTIES
 
-    public static Mask scale(Mask chnl, ScaleCalculator scaleCalculator, Interpolator interpolator)
+    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator, Interpolator interpolator)
             throws CreateException {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(Optional.of(chnl.getDimensions()));
+            scaleFactor = scaleCalculator.calc(Optional.of(mask.dimensions()));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
 
         if (scaleFactor.isNoScale()) {
             // Nothing to do
-            return chnl;
+            return mask;
         }
 
-        return chnl.scaleXY(scaleFactor, interpolator);
+        return mask.scaleXY(scaleFactor, interpolator);
     }
 
     @Override
-    public Mask createFromMask(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
         Interpolator interpolator =
                 interpolate
                         ? InterpolatorFactory.getInstance().binaryResizing()
                         : InterpolatorFactory.getInstance().noInterpolation();
-        return scale(chnl, scaleCalculator, interpolator);
+        return scale(mask, scaleCalculator, interpolator);
     }
 }

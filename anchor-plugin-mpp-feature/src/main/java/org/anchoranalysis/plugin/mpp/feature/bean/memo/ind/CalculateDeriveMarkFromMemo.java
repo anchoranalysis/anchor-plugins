@@ -40,6 +40,6 @@ class CalculateDeriveMarkFromMemo
     @Override
     protected FeatureInputMark execute(FeatureInputSingleMemo input) {
         return new FeatureInputMark(
-                input.getPxlPartMemo().getMark(), input.getDimensionsOptional());
+                input.getPxlPartMemo().getMark(), input.dimensionsOptional());
     }
 }

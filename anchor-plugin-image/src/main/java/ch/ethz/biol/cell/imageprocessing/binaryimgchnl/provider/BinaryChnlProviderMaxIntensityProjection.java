@@ -35,7 +35,7 @@ public class BinaryChnlProviderMaxIntensityProjection extends BinaryChnlProvider
 
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
-    public Mask createFromMask(Mask chnl) throws CreateException {
-        return chnl.maxIntensityProj();
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return mask.flattenZ();
     }
 }

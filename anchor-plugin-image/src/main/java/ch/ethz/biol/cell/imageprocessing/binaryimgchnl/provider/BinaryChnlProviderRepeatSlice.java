@@ -49,34 +49,34 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
-        Channel chnlIn = chnl.getChannel();
-        Voxels<ByteBuffer> vbIn = chnlIn.voxels().asByte();
+        Channel chnlIn = mask.channel();
+        Voxels<ByteBuffer> voxelsIn = chnlIn.voxels().asByte();
 
         ImageDimensions dimSource = dim.create();
 
-        if (chnl.getDimensions().getX() != dimSource.getX()
-                && chnl.getDimensions().getY() != dimSource.getY()) {
+        if (mask.dimensions().x() != dimSource.x()
+                && mask.dimensions().y() != dimSource.y()) {
             throw new CreateException("dims do not match");
         }
 
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
-        Voxels<ByteBuffer> vbOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
-        int volumeXY = vbIn.extent().getVolumeXY();
-        for (int z = 0; z < chnlOut.getDimensions().getExtent().getZ(); z++) {
+        int volumeXY = voxelsIn.extent().volumeXY();
+        for (int z = 0; z < chnlOut.dimensions().extent().z(); z++) {
 
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
-            ByteBuffer bbIn = vbIn.getPixelsForPlane(0).buffer();
+            ByteBuffer bbIn = voxelsIn.slice(0).buffer();
             for (int i = 0; i < volumeXY; i++) {
                 bbOut.put(i, bbIn.get(i));
             }
         }
 
-        return new Mask(chnlOut, chnl.getBinaryValues());
+        return new Mask(chnlOut, mask.binaryValues());
     }
 }

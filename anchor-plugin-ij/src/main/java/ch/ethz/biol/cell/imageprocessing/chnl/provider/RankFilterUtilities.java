@@ -42,12 +42,12 @@ class RankFilterUtilities {
 
         RankFilters rankFilters = new RankFilters();
 
-        VoxelsWrapper vb = chnl.voxels();
+        VoxelsWrapper voxels = chnl.voxels();
 
         // Are we missing a Z slice?
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
 
-            ImageProcessor processor = IJWrap.imageProcessor(vb, z);
+            ImageProcessor processor = IJWrap.imageProcessor(voxels, z);
             rankFilters.rank(processor, radius, filterType);
         }
 

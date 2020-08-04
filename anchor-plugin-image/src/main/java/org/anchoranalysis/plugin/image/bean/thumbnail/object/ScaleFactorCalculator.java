@@ -33,8 +33,8 @@ class ScaleFactorCalculator {
     public static ScaleFactor scaleEachObjectFitsIn(Supplier<Stream<BoundingBox>> boundingBoxes, Extent targetSize) {
         Extent maxInEachDimension =
                 new Extent(
-                        extractMaxDimension(boundingBoxes.get(), Extent::getX),
-                        extractMaxDimension(boundingBoxes.get(), Extent::getY));
+                        extractMaxDimension(boundingBoxes.get(), Extent::x),
+                        extractMaxDimension(boundingBoxes.get(), Extent::y));
         return ScaleFactorUtilities.calcRelativeScale(maxInEachDimension, targetSize);
     }
 

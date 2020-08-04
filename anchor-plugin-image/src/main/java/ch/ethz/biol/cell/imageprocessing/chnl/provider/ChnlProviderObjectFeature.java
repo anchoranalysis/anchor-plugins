@@ -74,7 +74,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             NRGStack nrgStack = createNrgStack(chnl);
 
             return createOutputChnl(
-                    chnl.getDimensions(),
+                    chnl.dimensions(),
                     objectsSource,
                     createSession(feature),
                     new NRGStackWithParams(nrgStack));
@@ -91,7 +91,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         for (ChannelProvider cp : listAdditionalChnlProviders) {
             Channel chnlAdditional = cp.create();
 
-            if (!chnlAdditional.getDimensions().equals(chnl.getDimensions())) {
+            if (!chnlAdditional.dimensions().equals(chnl.dimensions())) {
                 throw new CreateException(
                         "Dimensions of additional channel are not equal to main channel");
             }

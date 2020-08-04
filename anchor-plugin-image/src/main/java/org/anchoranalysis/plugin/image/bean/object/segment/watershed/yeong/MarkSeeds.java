@@ -49,7 +49,7 @@ class MarkSeeds {
             throws SegmentationFailedException {
 
         if (containingMask.isPresent()
-                && !matS.extent().equals(containingMask.get().getBoundingBox().extent())) {
+                && !matS.extent().equals(containingMask.get().boundingBox().extent())) {
             throw new SegmentationFailedException("Extent of matS does not match containingMask");
         }
 

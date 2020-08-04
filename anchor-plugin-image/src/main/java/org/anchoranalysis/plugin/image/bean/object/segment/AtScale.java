@@ -70,7 +70,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         Interpolator interpolator = createInterpolator();
 
-        ScaleFactor scaleFactor = determineScaleFactor(chnl.getDimensions());
+        ScaleFactor scaleFactor = determineScaleFactor(chnl.dimensions());
 
         // Perform segmentation on scaled versions of the channel, mask and seeds
         ObjectCollection scaledSegmentationResult =
@@ -142,13 +142,13 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     private static SeedCollection scaleSeeds(SeedCollection seedsUnscaled, ScaleFactor sf)
             throws OperationFailedException {
 
-        if (sf.getX() != sf.getY()) {
+        if (sf.x() != sf.y()) {
             throw new OperationFailedException(
                     "scaleFactor in X and Y must be equal to scale seeds");
         }
 
         SeedCollection seedsScaled = seedsUnscaled.duplicate();
-        seedsScaled.scaleXY(sf.getX());
+        seedsScaled.scaleXY(sf.x());
         return seedsScaled;
     }
 

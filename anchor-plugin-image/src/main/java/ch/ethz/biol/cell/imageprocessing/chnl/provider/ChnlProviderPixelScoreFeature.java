@@ -63,7 +63,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        List<Channel> listAdditional = additionalChnls(chnl.getDimensions());
+        List<Channel> listAdditional = additionalChnls(chnl.dimensions());
 
         try {
             pixelScore.init(histograms(), Optional.empty());
@@ -85,24 +85,24 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     }
 
     private static void calcScoresIntoVoxels(
-            VoxelsWrapper vb, List<Channel> listAdditional, PixelScore pixelScore)
+            VoxelsWrapper voxels, List<Channel> listAdditional, PixelScore pixelScore)
             throws FeatureCalculationException {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];
 
-        Extent e = vb.any().extent();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = voxels.any().extent();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> bb = vb.any().getPixelsForPlane(z);
+            VoxelBuffer<?> bb = voxels.any().slice(z);
 
             for (int i = 0; i < listAdditional.size(); i++) {
                 Channel additional = listAdditional.get(i);
-                arrByteBuffer[i] = additional.voxels().asByte().getPixelsForPlane(z).buffer();
+                arrByteBuffer[i] = additional.voxels().asByte().slice(z).buffer();
             }
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     double result = pixelScore.calc(createParams(bb, arrByteBuffer, offset));
 
@@ -137,7 +137,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
         for (ChannelProvider cp : listAdditionalChnlProviders) {
             Channel chnlAdditional = cp.create();
 
-            if (!chnlAdditional.getDimensions().equals(dimensions)) {
+            if (!chnlAdditional.dimensions().equals(dimensions)) {
                 throw new CreateException(
                         "Dimensions of additional channel are not equal to main channel");
             }

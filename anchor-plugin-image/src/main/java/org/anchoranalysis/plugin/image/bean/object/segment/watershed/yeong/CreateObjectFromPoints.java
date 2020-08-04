@@ -49,7 +49,7 @@ class CreateObjectFromPoints {
                 object.binaryVoxels()
                         .setOn(
                                 Point3i.immutableSubtract(
-                                        points.get(i), object.getBoundingBox().cornerMin()));
+                                        points.get(i), object.boundingBox().cornerMin()));
             }
 
             return object;

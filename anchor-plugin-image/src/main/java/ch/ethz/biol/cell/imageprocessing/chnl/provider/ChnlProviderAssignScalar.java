@@ -41,7 +41,7 @@ public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) {
+    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) {
         assignScalar(chnl, mask, (int) value);
         return chnl;
     }

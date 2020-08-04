@@ -113,7 +113,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             // Find a bounding-box of target size in which objectScaled is centered
             BoundingBox centeredBox =
                     CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
-                            objectsScaled.getBoundingBox(), size.asExtent(), sceneExtentScaled);
+                            objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
 
             assert (centeredBox.extent().equals(size.asExtent()));
             assert (sceneExtentScaled.contains(centeredBox));

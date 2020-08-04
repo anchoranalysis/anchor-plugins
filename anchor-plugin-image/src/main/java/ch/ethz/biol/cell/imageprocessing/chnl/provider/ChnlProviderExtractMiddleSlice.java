@@ -34,7 +34,7 @@ public class ChnlProviderExtractMiddleSlice extends ChnlProviderOne {
 
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
-        int z = (chnl.getDimensions().getZ() - 1) / 2;
+        int z = (chnl.dimensions().z() - 1) / 2;
         return chnl.extractSlice(z);
     }
 }

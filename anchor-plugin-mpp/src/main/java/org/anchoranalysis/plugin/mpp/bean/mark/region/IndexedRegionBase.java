@@ -73,7 +73,7 @@ public abstract class IndexedRegionBase extends MarkRegion {
     }
 
     protected BoundingBox boundingBoxForRegion(VoxelizedMark pm) {
-        return pm.getBoundingBox();
+        return pm.boundingBox();
     }
 
     @Override

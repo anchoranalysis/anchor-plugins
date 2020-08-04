@@ -65,7 +65,7 @@ class AddPaddingToGenerator {
         }
 
         BoundingBox bboxToExtract =
-                object.getBoundingBox().growBy(padding.asPoint(), dimensions.getExtent());
+                object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
 
         return object.mapBoundingBoxChangeExtent(bboxToExtract);
     }

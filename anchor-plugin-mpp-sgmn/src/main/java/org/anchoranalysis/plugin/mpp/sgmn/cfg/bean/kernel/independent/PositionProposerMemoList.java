@@ -71,7 +71,7 @@ class PositionProposerMemoList implements PositionProposer {
             // And randomly taking positions until we find a position that matches
             VoxelizedMark pm = randomMemo(context).voxelized();
 
-            BoundingBox bbox = pm.getBoundingBox();
+            BoundingBox bbox = pm.boundingBox();
 
             Point3d point = randomPosition(bbox, context.getRandomNumberGenerator());
 
@@ -92,7 +92,7 @@ class PositionProposerMemoList implements PositionProposer {
                 Point3i.immutableSubtract(PointConverter.intFromDouble(point), bbox.cornerMin());
 
         byte membershipExst =
-                pm.getVoxels().getPixelsForPlane(rel.getZ()).get(bbox.extent().offsetSlice(rel));
+                pm.voxels().getPixelsForPlane(rel.z()).get(bbox.extent().offsetSlice(rel));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {
@@ -112,9 +112,9 @@ class PositionProposerMemoList implements PositionProposer {
     private static Point3d randomPosition(
             BoundingBox bbox, RandomNumberGenerator randomNumberGenerator) {
         return new Point3d(
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getX),
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getY),
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getZ));
+                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::x),
+                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::y),
+                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::z));
     }
 
     private static int randomFromExtent(

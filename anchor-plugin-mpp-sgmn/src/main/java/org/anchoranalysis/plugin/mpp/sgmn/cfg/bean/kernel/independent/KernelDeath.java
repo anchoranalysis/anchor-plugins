@@ -71,7 +71,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
         double num = getProbNeg() * exstSize;
 
         // Death prob
-        double dem = getProbPos() * dimensions.getVolume() * poissonIntens;
+        double dem = getProbPos() * dimensions.calculateVolume() * poissonIntens;
 
         return Math.min(1.0, densityRatio * num / dem);
     }

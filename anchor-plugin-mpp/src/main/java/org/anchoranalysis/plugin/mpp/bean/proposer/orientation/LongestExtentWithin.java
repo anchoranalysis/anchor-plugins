@@ -66,7 +66,7 @@ public class LongestExtentWithin extends OrientationProposer {
             ResolvedBound minMaxBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .calcMinMax(dimensions.getResolution(), dimensions.getZ() > 1);
+                            .calcMinMax(dimensions.resolution(), dimensions.z() > 1);
             return findAllOrientations(mark, minMaxBound, dimensions).sample(randomNumberGenerator);
 
         } catch (NamedProviderGetException e) {
@@ -122,7 +122,7 @@ public class LongestExtentWithin extends OrientationProposer {
             Mark mark, ResolvedBound minMaxBound, ImageDimensions dim)
             throws ProposalAbnormalFailureException {
 
-        if (dim.getZ() > 1 && !rotateOnlyIn2DPlane) {
+        if (dim.z() > 1 && !rotateOnlyIn2DPlane) {
             return findAllOrientations3D(mark, minMaxBound);
         } else {
             return findAllOrientations2D(mark, minMaxBound);

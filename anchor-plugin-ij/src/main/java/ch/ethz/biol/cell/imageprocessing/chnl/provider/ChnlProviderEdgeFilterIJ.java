@@ -38,14 +38,14 @@ public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        Channel dup = chnl.duplicate();
-        VoxelsWrapper vbDup = dup.voxels();
+        Channel out = chnl.duplicate();
+        VoxelsWrapper voxelsDuplicated = chnl.duplicate().voxels();
 
-        for (int z = 0; z < dup.getDimensions().getZ(); z++) {
+        for (int z = 0; z < out.dimensions().z(); z++) {
 
-            ImageProcessor ip = IJWrap.imageProcessor(vbDup, z);
+            ImageProcessor ip = IJWrap.imageProcessor(voxelsDuplicated, z);
             ip.filter(ImageProcessor.FIND_EDGES);
         }
-        return dup;
+        return out;
     }
 }

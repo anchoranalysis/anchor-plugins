@@ -98,16 +98,16 @@ public class ConvexHullUtilities {
 
         int count = 0;
         do {
-            int x1 = points.get(p1).getX();
-            int y1 = points.get(p1).getY();
+            int x1 = points.get(p1).x();
+            int y1 = points.get(p1).y();
             p2 = p1 + 1;
 
             if (p2 == points.size()) {
                 p2 = 0;
             }
 
-            int x2 = points.get(p2).getX();
-            int y2 = points.get(p2).getY();
+            int x2 = points.get(p2).x();
+            int y2 = points.get(p2).y();
             p3 = p2 + 1;
 
             if (p3 == points.size()) {
@@ -116,8 +116,8 @@ public class ConvexHullUtilities {
 
             int determinate;
             do {
-                int x3 = points.get(p3).getX();
-                int y3 = points.get(p3).getY();
+                int x3 = points.get(p3).x();
+                int y3 = points.get(p3).y();
                 determinate = x1 * (y2 - y3) - y1 * (x2 - x3) + (y3 * x2 - y2 * x3);
                 if (determinate > 0) {
                     x2 = x3;
@@ -168,7 +168,7 @@ public class ConvexHullUtilities {
         int x;
         int y;
         for (int i = 0; i < pointsIn.size(); i++) {
-            y = pointsIn.get(i).getY();
+            y = pointsIn.get(i).y();
             if (y < smallestY) {
                 smallestY = y;
             }
@@ -177,8 +177,8 @@ public class ConvexHullUtilities {
         int smallestX = Integer.MAX_VALUE;
         int p1 = 0;
         for (int i = 0; i < pointsIn.size(); i++) {
-            x = pointsIn.get(i).getX();
-            y = pointsIn.get(i).getY();
+            x = pointsIn.get(i).x();
+            y = pointsIn.get(i).y();
             if (y == smallestY && x < smallestX) {
                 smallestX = x;
                 p1 = i;

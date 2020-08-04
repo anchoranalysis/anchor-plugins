@@ -70,12 +70,12 @@ class CreateFromLabels {
             list.add(new PointRange());
         }
 
-        for (int z = 0; z < voxels.getPlaneAccess().extent().getZ(); z++) {
+        for (int z = 0; z < voxels.getPlaneAccess().extent().z(); z++) {
 
             ByteBuffer pixel = voxels.getPlaneAccess().getPixelsForPlane(z).buffer();
 
-            for (int y = 0; y < voxels.getPlaneAccess().extent().getY(); y++) {
-                for (int x = 0; x < voxels.getPlaneAccess().extent().getX(); x++) {
+            for (int y = 0; y < voxels.getPlaneAccess().extent().y(); y++) {
+                for (int x = 0; x < voxels.getPlaneAccess().extent().x(); x++) {
 
                     int col = ByteConverter.unsignedByteToInt(pixel.get());
 
@@ -102,7 +102,7 @@ class CreateFromLabels {
             int smallVolumeThreshold) {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 bboxList,
-                bbox -> bbox.extent().getVolumeXY() >= smallVolumeThreshold,
+                bbox -> bbox.extent().volumeXY() >= smallVolumeThreshold,
                 voxels::equalMask // Using index as the color value
                 );
     }

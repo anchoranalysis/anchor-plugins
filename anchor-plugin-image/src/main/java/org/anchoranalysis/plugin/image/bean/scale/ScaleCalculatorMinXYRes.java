@@ -48,31 +48,31 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
         ImageResolution resolution =
                 sourceDimensions
-                        .map(ImageDimensions::getResolution)
+                        .map(ImageDimensions::resolution)
                         .orElseThrow(
                                 () -> new OperationFailedException("No source dimensions exist"));
 
         // If there is no resolution information we cannot scale
-        if (resolution.getX() == 0 || resolution.getY() == 0) {
+        if (resolution.x() == 0 || resolution.y() == 0) {
             throw new OperationFailedException(
                     "Channel has zero x or y resolution. Cannot scale to min res.");
         }
 
-        int x = calcRatio(resolution.getX(), minXYRes);
-        int y = calcRatio(resolution.getY(), minXYRes);
+        int x = calcRatio(resolution.x(), minXYRes);
+        int y = calcRatio(resolution.y(), minXYRes);
 
         if (x < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            resolution.getX(), minXYRes));
+                            resolution.x(), minXYRes));
         }
 
         if (y < 0) {
             throw new OperationFailedException(
                     String.format(
                             "Insufficient resolution (%E). %E is required",
-                            resolution.getY(), minXYRes));
+                            resolution.y(), minXYRes));
         }
 
         double xScaleDownRatio = twoToMinusPower(x);

@@ -72,10 +72,10 @@ public class StackProviderRGBChnlProvider extends StackProvider {
         }
 
         if (existing == null) {
-            return toCombine.getDimensions();
+            return toCombine.dimensions();
         }
 
-        if (!existing.equals(toCombine.getDimensions())) {
+        if (!existing.equals(toCombine.dimensions())) {
             throw new IncorrectImageSizeException("dims are not equal");
         }
 

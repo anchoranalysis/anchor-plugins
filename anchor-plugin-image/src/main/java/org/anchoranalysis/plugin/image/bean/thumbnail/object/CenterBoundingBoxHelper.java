@@ -97,9 +97,9 @@ class CenterBoundingBoxHelper {
     /** Creates a new point where negative-values are retained, and non-negative values are zero */
     private static Point3i keepOnlyNegative(Point3i point) {
         return new Point3i(
-                negativeOrZero(point.getX()),
-                negativeOrZero(point.getY()),
-                negativeOrZero(point.getZ()));
+                negativeOrZero(point.x()),
+                negativeOrZero(point.y()),
+                negativeOrZero(point.z()));
     }
 
     /**
@@ -108,9 +108,9 @@ class CenterBoundingBoxHelper {
      */
     private static Point3i keepOnlyExcess(Point3i point, Extent sceneExtent) {
         return new Point3i(
-                keepOnlyExcess(point.getX(), sceneExtent.getX()),
-                keepOnlyExcess(point.getY(), sceneExtent.getY()),
-                keepOnlyExcess(point.getZ(), sceneExtent.getZ()));
+                keepOnlyExcess(point.x(), sceneExtent.x()),
+                keepOnlyExcess(point.y(), sceneExtent.y()),
+                keepOnlyExcess(point.z(), sceneExtent.z()));
     }
 
     private static int negativeOrZero(int val) {

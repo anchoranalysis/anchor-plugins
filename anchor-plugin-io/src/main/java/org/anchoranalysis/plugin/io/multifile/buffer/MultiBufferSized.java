@@ -41,7 +41,7 @@ public class MultiBufferSized {
 
     public MultiBufferSized(Stack stack, SizeExtents size) {
         buffers = new MultiBuffer(stack, size);
-        dimensions = new ImageDimensions(size.toExtent(), stack.getDimensions().getResolution());
+        dimensions = new ImageDimensions(size.toExtent(), stack.dimensions().resolution());
         sizeT = size.getRangeT().getSize();
     }
 

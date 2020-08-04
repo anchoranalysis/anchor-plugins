@@ -84,9 +84,9 @@ public class ChnlProviderPixelScore extends ChannelProvider {
             listOut.add(gradientProvider.create().voxels());
         }
         for (ChannelProvider chnlProvider : listChnlProviderExtra) {
-            VoxelsWrapper vbExtra =
+            VoxelsWrapper voxelsExtra =
                     chnlProvider != null ? chnlProvider.create().voxels() : null;
-            listOut.add(vbExtra);
+            listOut.add(voxelsExtra);
         }
         return listOut;
     }
@@ -96,14 +96,14 @@ public class ChnlProviderPixelScore extends ChannelProvider {
             return Optional.empty();
         }
 
-        Mask binaryChnlMask = mask.create();
-        Channel chnlMask = binaryChnlMask.getChannel();
+        Mask createdMask = mask.create();
+        Channel chnlMask = createdMask.channel();
 
         return Optional.of(
                 new ObjectMask(
-                        new BoundingBox(chnlMask.getDimensions().getExtent()),
+                        new BoundingBox(chnlMask.dimensions().extent()),
                         chnlMask.voxels().asByte(),
-                        binaryChnlMask.getBinaryValues()));
+                        createdMask.binaryValues()));
     }
 
     @Override
@@ -124,21 +124,21 @@ public class ChnlProviderPixelScore extends ChannelProvider {
 
         Optional<ObjectMask> object = createMaskOrNull();
 
-        Voxels<ByteBuffer> vbPixelScore;
+        Voxels<ByteBuffer> voxelsPixelScore;
         if (object.isPresent()) {
             CreateVoxelsFromPixelwiseFeatureWithMask creator =
                     new CreateVoxelsFromPixelwiseFeatureWithMask(listVb, kpv, listHistExtra);
 
-            vbPixelScore = creator.createVoxelsFromPixelScore(pixelScore, object);
+            voxelsPixelScore = creator.createVoxelsFromPixelScore(pixelScore, object);
 
         } else {
             CreateVoxelsFromPixelwiseFeature creator =
                     new CreateVoxelsFromPixelwiseFeature(listVb, kpv, listHistExtra);
 
-            vbPixelScore = creator.createVoxelsFromPixelScore(pixelScore, getLogger());
+            voxelsPixelScore = creator.createVoxelsFromPixelScore(pixelScore, getLogger());
         }
 
         return new ChannelFactoryByte()
-                .create(vbPixelScore, chnlIntensity.getDimensions().getResolution());
+                .create(voxelsPixelScore, chnlIntensity.dimensions().resolution());
     }
 }

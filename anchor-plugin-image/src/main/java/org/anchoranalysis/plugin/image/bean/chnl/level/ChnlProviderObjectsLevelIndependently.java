@@ -57,9 +57,9 @@ public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
                             numDilations,
                             getLogger().messageLogger());
 
-            Voxels<?> vbOutput = chnlOutput.voxels().any();
+            Voxels<?> voxelsOutput = chnlOutput.voxels().any();
             for (LevelResult lr : lrc) {
-                vbOutput.setPixelsCheckMask(lr.getObject(), lr.getLevel());
+                voxelsOutput.setPixelsCheckMask(lr.getObject(), lr.getLevel());
             }
 
             return chnlOutput;

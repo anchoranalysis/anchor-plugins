@@ -93,16 +93,16 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     private boolean isAny3d(ObjectCollection objects) {
         return objects.stream()
-                .anyMatch(objectMask -> objectMask.getVoxels().extent().getZ() > 1);
+                .anyMatch(objectMask -> objectMask.voxels().extent().z() > 1);
     }
 
     private BinaryVoxels<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(chnl.getDimensions().getResolution());
+                new BinarySegmentationParameters(chnl.dimensions().resolution());
 
-        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
-        Voxels<ByteBuffer> stackBinary = vb.duplicate();
+        Voxels<ByteBuffer> stackBinary = voxels.duplicate();
         return segmentStack.segment(new VoxelsWrapper(stackBinary), params, Optional.empty());
     }
 

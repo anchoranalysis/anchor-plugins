@@ -147,13 +147,13 @@ public class ScaleTask extends RasterTask {
     }
 
     private void populateOutputCollectionsFromSharedObjects(
-            ImageInitParams so,
+            ImageInitParams params,
             NamedStacksSet stackCollection,
             NamedStacksSet stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Set<String> chnlNames = so.getStackCollection().keys();
+        Set<String> chnlNames = params.getStackCollection().keys();
         for (String chnlName : chnlNames) {
 
             // If this output is not allowed we simply skip
@@ -164,17 +164,17 @@ public class ScaleTask extends RasterTask {
             }
 
             try {
-                Channel chnlIn = so.getStackCollection().getException(chnlName).getChannel(0);
+                Channel chnlIn = params.getStackCollection().getException(chnlName).getChannel(0);
 
                 Channel chnlOut;
                 if (forceBinary) {
-                    Mask binaryImg = new Mask(chnlIn);
+                    Mask mask = new Mask(chnlIn);
                     chnlOut =
                             BinaryChnlProviderScaleXY.scale(
-                                            binaryImg,
+                                            mask,
                                             scaleCalculator,
                                             InterpolatorFactory.getInstance().binaryResizing())
-                                    .getChannel();
+                                    .channel();
                 } else {
                     chnlOut =
                             ChnlProviderScale.scale(

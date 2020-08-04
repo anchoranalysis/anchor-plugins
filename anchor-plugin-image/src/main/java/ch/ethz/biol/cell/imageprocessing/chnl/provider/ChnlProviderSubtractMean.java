@@ -45,7 +45,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
 
         double mean = calculateMean(chnl, mask);
 
@@ -62,24 +62,24 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private double calculateMean(Channel chnl, Mask mask) {
 
-        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
-        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbMask.extent();
+        Extent e = voxelsMask.extent();
 
-        BinaryValuesByte bvb = mask.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
         double sum = 0.0;
         double cnt = 0;
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbMask = vbMask.getPixelsForPlane(z).buffer();
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask = voxelsMask.slice(z).buffer();
+            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bbMask.get(offset) == bvb.getOnByte()) {
                         int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
@@ -101,21 +101,21 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private void subtractMeanMask(Channel chnl, Mask mask, int mean) {
 
-        Voxels<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
-        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbMask.extent();
+        Extent e = voxelsMask.extent();
 
-        BinaryValuesByte bvb = mask.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbMask = vbMask.getPixelsForPlane(z).buffer();
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask = voxelsMask.slice(z).buffer();
+            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bbMask.get(offset) == bvb.getOnByte()) {
                         int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
@@ -136,17 +136,17 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private void subtractMeanAll(Channel chnl, int mean) {
 
-        Voxels<ByteBuffer> vbIntensity = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbIntensity.extent();
+        Extent e = voxelsIntensity.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
                     int intensSub = (intens - mean);

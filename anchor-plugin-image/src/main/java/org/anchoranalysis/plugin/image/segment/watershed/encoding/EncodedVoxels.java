@@ -33,11 +33,12 @@ import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
-@AllArgsConstructor
+@AllArgsConstructor @Accessors(fluent=true)
 public final class EncodedVoxels {
 
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
@@ -45,8 +46,8 @@ public final class EncodedVoxels {
     @Getter private final Voxels<IntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
-        int offset = voxels.extent().offset(point.getX(), point.getY());
-        IntBuffer bbS = voxels.getPixelsForPlane(point.getZ()).buffer();
+        int offset = voxels.extent().offset(point.x(), point.y());
+        IntBuffer bbS = voxels.slice(point.z()).buffer();
         bbS.put(offset, code);
     }
 
@@ -76,13 +77,13 @@ public final class EncodedVoxels {
     }
 
     public EncodedIntBuffer getPixelsForPlane(int z) {
-        return new EncodedIntBuffer(voxels.getPixelsForPlane(z).buffer(), ENCODING);
+        return new EncodedIntBuffer(voxels.slice(z).buffer(), ENCODING);
     }
 
     public boolean hasTemporary() {
-        int volumeXY = extent().getVolumeXY();
+        int volumeXY = extent().volumeXY();
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             EncodedIntBuffer bb = getPixelsForPlane(z);
 
             for (int i = 0; i < volumeXY; i++) {
@@ -98,12 +99,12 @@ public final class EncodedVoxels {
 
         ArrayList<Point3i> listOut = new ArrayList<>();
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             EncodedIntBuffer bb = getPixelsForPlane(z);
 
             int offset = 0;
-            for (int y = 0; y < extent().getY(); y++) {
-                for (int x = 0; x < extent().getX(); x++) {
+            for (int y = 0; y < extent().y(); y++) {
+                for (int x = 0; x < extent().x(); x++) {
 
                     if (bb.isTemporary(offset++)) {
                         listOut.add(new Point3i(x, y, z));
@@ -119,12 +120,12 @@ public final class EncodedVoxels {
 
         Set<Integer> setOut = new HashSet<>();
 
-        for (int z = 0; z < extent().getZ(); z++) {
+        for (int z = 0; z < extent().z(); z++) {
             EncodedIntBuffer bb = getPixelsForPlane(z);
 
             int offset = 0;
-            for (int y = 0; y < extent().getY(); y++) {
-                for (int x = 0; x < extent().getX(); x++) {
+            for (int y = 0; y < extent().y(); y++) {
+                for (int x = 0; x < extent().x(); x++) {
 
                     if (bb.isConnectedComponentID(offset)) {
                         setOut.add(bb.getCode(offset));
@@ -151,7 +152,7 @@ public final class EncodedVoxels {
 
             // Replace with intelligence slices buffer?
             int nextVal =
-                    voxels.getPixelsForPlane(point.getZ()).buffer().get(e.offsetSlice(point));
+                    voxels.slice(point.z()).buffer().get(e.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);

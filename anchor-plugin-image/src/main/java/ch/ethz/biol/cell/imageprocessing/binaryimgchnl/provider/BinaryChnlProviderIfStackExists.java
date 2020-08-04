@@ -40,7 +40,7 @@ public class BinaryChnlProviderIfStackExists extends BinaryChnlProviderElseBase 
     // END BEAN PROPERTIES
 
     @Override
-    protected boolean condition(Mask chnl) throws CreateException {
+    protected boolean condition(Mask mask) throws CreateException {
         return getInitializationParameters().getChnlCollection().keys().contains(stackID);
     }
 }

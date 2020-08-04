@@ -60,7 +60,7 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
         return filterObjects(
-                upstreamSegmentation.segment(channel, object, seeds), channel.getDimensions());
+                upstreamSegmentation.segment(channel, object, seeds), channel.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, ImageDimensions dim)

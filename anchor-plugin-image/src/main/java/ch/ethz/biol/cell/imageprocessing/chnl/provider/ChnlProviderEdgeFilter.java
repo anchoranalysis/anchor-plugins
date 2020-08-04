@@ -72,10 +72,10 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
         Channel chnlIntermediate =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                chnlIn.getDimensions(), VoxelDataTypeFloat.INSTANCE);
-        Voxels<FloatBuffer> vb = chnlIntermediate.voxels().asFloat();
+                                chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
+        Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
 
-        NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
+        NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);
 
         if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
             NativeImg<UnsignedByteType, ByteArray> natIn =

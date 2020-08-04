@@ -86,7 +86,7 @@ public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
 
         TransformationContext transformationContext =
                 new TransformationContext(
-                        initContext.getDualStack().getNrgStack().getDimensions(),
+                        initContext.getDualStack().getNrgStack().dimensions(),
                         initContext.calcContext(cfgGenContext),
                         initContext.getLogger());
 

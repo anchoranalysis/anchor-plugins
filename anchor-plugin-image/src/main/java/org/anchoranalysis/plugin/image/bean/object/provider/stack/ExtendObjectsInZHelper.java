@@ -48,10 +48,10 @@ class ExtendObjectsInZHelper {
 
         ObjectMask objectNew = container.region(bbox, false);
 
-        ByteBuffer bbFlat = flat.getVoxels().getPixelsForPlane(0).buffer();
+        ByteBuffer bbFlat = flat.voxels().slice(0).buffer();
 
-        int zLow = bbox.cornerMin().getZ();
-        int zHigh = bbox.calcCornerMax().getZ();
+        int zLow = bbox.cornerMin().z();
+        int zHigh = bbox.calcCornerMax().z();
 
         if (zCenter > zHigh) {
             zCenter = zHigh;
@@ -76,7 +76,7 @@ class ExtendObjectsInZHelper {
         boolean andMode = true;
         boolean writtenOneSlice = false;
 
-        int volumeXY = extent.getVolumeXY();
+        int volumeXY = extent.volumeXY();
 
         // Start in the mid point, and go upwards
         Iterator<Integer> itr = zRange.iterator();
@@ -86,7 +86,7 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            ByteBuffer bbExst = objectNew.getVoxels().getPixelsForPlane(zRel).buffer();
+            ByteBuffer bbExst = objectNew.voxels().slice(zRel).buffer();
 
             if (andMode) { // NOSONAR
 
@@ -94,8 +94,8 @@ class ExtendObjectsInZHelper {
                         volumeXY,
                         bbExst,
                         bbFlat,
-                        objectNew.getBinaryValuesByte(),
-                        flat.getBinaryValuesByte())) {
+                        objectNew.binaryValuesByte(),
+                        flat.binaryValuesByte())) {
                     writtenOneSlice = true;
                 } else {
                     // As soon as we have no pixel high, we switch to simply clearing instead, so
@@ -106,7 +106,7 @@ class ExtendObjectsInZHelper {
                 }
 
             } else {
-                setBufferLow(extent.getVolumeXY(), bbExst, objectNew.getBinaryValuesByte());
+                setBufferLow(extent.volumeXY(), bbExst, objectNew.binaryValuesByte());
             }
         }
 

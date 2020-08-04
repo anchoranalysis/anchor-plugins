@@ -71,7 +71,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
 
     private ObjectCollection splitContoursFromObject(ObjectMask object) throws CreateException {
 
-        if (object.getBoundingBox().extent().getZ() > 1) {
+        if (object.boundingBox().extent().z() > 1) {
             throw new CreateException("Only objects with z-slices > 1 are allowed");
         }
 

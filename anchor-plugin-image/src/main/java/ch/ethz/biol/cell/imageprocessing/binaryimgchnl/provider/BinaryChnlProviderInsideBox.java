@@ -88,6 +88,6 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
                 new BoundingBox(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
 
         // Make sure box is inside channel
-        return bbox.clipTo(sd.getExtent());
+        return bbox.clipTo(sd.extent());
     }
 }

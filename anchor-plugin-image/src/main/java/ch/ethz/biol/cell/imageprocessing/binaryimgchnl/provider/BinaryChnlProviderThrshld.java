@@ -54,7 +54,7 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
                             chnlSource.voxels(), bvOut, Optional.empty(), Optional.empty());
             return new Mask(
                     bvb,
-                    chnlSource.getDimensions().getResolution()
+                    chnlSource.dimensions().resolution()
                     );
         } catch (OperationFailedException e) {
             throw new CreateException(e);

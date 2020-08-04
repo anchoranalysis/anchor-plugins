@@ -168,11 +168,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 return;
             }
 
-            ImageDimensions dimensions = stacks.getArbitraryElement().getDimensions();
+            ImageDimensions dimensions = stacks.getArbitraryElement().dimensions();
 
             outputGeneratorSeq(
                     createGenerator(dimensions, stacks, stacksProjected),
-                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.getZ()),
+                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.z()),
                     context);
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);

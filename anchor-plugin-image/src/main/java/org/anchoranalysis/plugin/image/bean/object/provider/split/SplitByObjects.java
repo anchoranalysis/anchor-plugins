@@ -91,7 +91,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
         // Should be set to 0 by default
         BoundedVoxels<IntBuffer> boundedVbId =
                 new BoundedVoxels<>(
-                        VoxelsFactory.getInt().createInitialized(objectToSplit.getBoundingBox().extent()));
+                        VoxelsFactory.getInt().createInitialized(objectToSplit.boundingBox().extent()));
 
         // Populate boundedVbId with id values
         int cnt = 1;
@@ -110,10 +110,10 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
                             .mapBoundingBoxPreserveExtent(
                                     bbox ->
                                             bbox.shiftBackBy(
-                                                    objectToSplit.getBoundingBox().cornerMin()));
+                                                    objectToSplit.boundingBox().cornerMin()));
 
             // We make the intersection relative to objToSplit
-            boundedVbId.getVoxels().setPixelsCheckMask(intersectShifted, cnt++);
+            boundedVbId.voxels().setPixelsCheckMask(intersectShifted, cnt++);
         }
 
         try {
@@ -126,8 +126,8 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
                     i ->
                             createObjectForIndex(
                                     i,
-                                    boundedVbId.getVoxels(),
-                                    objectToSplit.getBoundingBox().cornerMin()));
+                                    boundedVbId.voxels(),
+                                    objectToSplit.boundingBox().cornerMin()));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

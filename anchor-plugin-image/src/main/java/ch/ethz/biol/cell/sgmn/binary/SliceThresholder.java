@@ -41,7 +41,7 @@ public abstract class SliceThresholder {
     }
 
     public abstract void sgmnAll(
-            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut);
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut);
 
     protected final void writeOffByte(int offset, ByteBuffer bbOut) {
         bbOut.put(offset, bvb.getOffByte());

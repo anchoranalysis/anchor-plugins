@@ -165,8 +165,8 @@ class NaiveGreedyMerge {
             Point3i pointNew =
                     PointConverter.intFromDouble(
                             Point3d.midPointBetween(
-                                    source.getBoundingBox().midpoint(),
-                                    destination.getBoundingBox().midpoint()));
+                                    source.boundingBox().midpoint(),
+                                    destination.boundingBox().midpoint()));
             return createSinglePixelObject(pointNew);
         } else {
             return ObjectMaskMerger.merge(source, destination);

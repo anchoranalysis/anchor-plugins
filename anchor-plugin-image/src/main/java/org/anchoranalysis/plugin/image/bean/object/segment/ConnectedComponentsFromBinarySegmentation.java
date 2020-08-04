@@ -65,26 +65,26 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
             throws SegmentationFailedException {
 
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.getDimensions().getResolution());
+                new BinarySegmentationParameters(channel.dimensions().resolution());
 
         BinaryVoxels<ByteBuffer> bvb = segment.segment(channel.voxels(), params, objectMask);
-        return createFromBinaryVoxels(
+        return createFromVoxels(
                 bvb,
-                channel.getDimensions().getResolution(),
-                objectMask.map(object -> object.getBoundingBox().cornerMin()));
+                channel.dimensions().resolution(),
+                objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 
-    private ObjectCollection createFromBinaryVoxels(
+    private ObjectCollection createFromVoxels(
             BinaryVoxels<ByteBuffer> bvb,
             ImageResolution resolution,
             Optional<ReadableTuple3i> maskShiftBy)
             throws SegmentationFailedException {
-        Mask bic = new Mask(bvb, resolution);
+        Mask mask = new Mask(bvb, resolution);
 
         CreateFromConnectedComponentsFactory creator =
                 new CreateFromConnectedComponentsFactory(minNumberVoxels);
         try {
-            return maybeShiftObjects(creator.createConnectedComponents(bic), maskShiftBy);
+            return maybeShiftObjects(creator.createConnectedComponents(mask), maskShiftBy);
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }

@@ -57,7 +57,7 @@ public class MarkPolygon extends MarkAbstractPointList {
     public byte evalPointInside(Point3d pt) {
 
         // FOR NOW WE IGNORE THE SHELL RADIUS
-        if (containsPixel(pt.getX(), pt.getY()) || getPoints().contains(pt)) {
+        if (containsPixel(pt.x(), pt.y()) || getPoints().contains(pt)) {
             return FLAG_SUBMARK_INSIDE;
         }
 
@@ -129,8 +129,8 @@ public class MarkPolygon extends MarkAbstractPointList {
 
         int i = 0;
         for (Point3d point : points) {
-            xArr[i] = (float) point.getX();
-            yArr[i] = (float) point.getY();
+            xArr[i] = (float) point.x();
+            yArr[i] = (float) point.y();
             i++;
         }
 
@@ -150,7 +150,7 @@ public class MarkPolygon extends MarkAbstractPointList {
             // We cycle around at the end
             Point3d pointNext = i == (numPoints - 1) ? points.get(0) : points.get(i + 1);
 
-            sum += (point.getX() * pointNext.getY()) - (pointNext.getX() * point.getY());
+            sum += (point.x() * pointNext.y()) - (pointNext.x() * point.y());
         }
         return sum / 2;
     }
@@ -169,12 +169,12 @@ public class MarkPolygon extends MarkAbstractPointList {
             // We cycle around at the end
             Point3d pointNext = i == (numPoints - 1) ? points.get(0) : points.get(i + 1);
 
-            double leftX = point.getX() + pointNext.getX();
-            double leftY = point.getY() + pointNext.getY();
-            double right = (point.getX() * pointNext.getY()) - (pointNext.getX() * point.getY());
+            double leftX = point.x() + pointNext.x();
+            double leftY = point.y() + pointNext.y();
+            double right = (point.x() * pointNext.y()) - (pointNext.x() * point.y());
 
-            centroid.setX(centroid.getX() + leftX * right);
-            centroid.setY(centroid.getY() + leftY * right);
+            centroid.setX(centroid.x() + leftX * right);
+            centroid.setY(centroid.y() + leftY * right);
         }
 
         centroid.scale(1 / (6 * area));

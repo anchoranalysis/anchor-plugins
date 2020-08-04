@@ -121,7 +121,7 @@ public class FeatureListImageTest {
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
 
-        ObjectMaskFixture objectFixture = new ObjectMaskFixture(NRG_STACK.getDimensions());
+        ObjectMaskFixture objectFixture = new ObjectMaskFixture(NRG_STACK.dimensions());
 
         assertCalc(
                 session.calc(createInput(objectFixture.create1())),
@@ -181,7 +181,7 @@ public class FeatureListImageTest {
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(
-                histogram, Optional.of(NRG_STACK.getDimensions().getResolution()));
+                histogram, Optional.of(NRG_STACK.dimensions().resolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

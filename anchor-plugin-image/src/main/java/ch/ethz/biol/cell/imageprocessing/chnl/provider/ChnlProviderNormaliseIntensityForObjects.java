@@ -41,7 +41,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
     protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         for (ObjectMask object : objectsSource) {
 
@@ -51,12 +51,12 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
 
                 if (meanIntensity == 0.0) {
                     // Special case. The mean can only be 0.0, if all pixels are 0
-                    vb.setPixelsCheckMask(object, 128);
+                    voxels.setPixelsCheckMask(object, 128);
                     continue;
                 }
 
                 double scaleFactor = 128 / meanIntensity;
-                vb.scalePixelsCheckMask(object, scaleFactor);
+                voxels.scalePixelsCheckMask(object, scaleFactor);
             } catch (FeatureCalculationException e) {
                 throw new CreateException(e);
             }

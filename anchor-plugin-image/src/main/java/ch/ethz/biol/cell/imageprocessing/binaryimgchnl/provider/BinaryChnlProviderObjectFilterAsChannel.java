@@ -47,15 +47,15 @@ public class BinaryChnlProviderObjectFilterAsChannel extends BinaryChnlProviderE
     // END BEAN PROPERTIES
 
     @Override
-    protected boolean condition(Mask chnl) throws CreateException {
+    protected boolean condition(Mask mask) throws CreateException {
 
-        ObjectMask objectMask = CreateFromEntireChnlFactory.createObject(chnl);
+        ObjectMask objectMask = CreateFromEntireChnlFactory.createObject(mask);
 
         try {
             ObjectCollection objects =
                     filter.filter(
                             ObjectCollectionFactory.of(objectMask),
-                            Optional.of(chnl.getDimensions()),
+                            Optional.of(mask.dimensions()),
                             Optional.empty());
             return objects.size() == 1;
         } catch (OperationFailedException e) {

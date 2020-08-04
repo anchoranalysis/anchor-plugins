@@ -61,11 +61,11 @@ public class CenterSliceWindow extends CenterSliceBase {
             zCenter = 0;
         }
 
-        if (zCenter >= bbox.extent().getZ()) {
-            zCenter = bbox.extent().getZ() - 1;
+        if (zCenter >= bbox.extent().z()) {
+            zCenter = bbox.extent().z() - 1;
         }
         assert (zCenter >= 0);
-        assert (zCenter < bbox.extent().getZ());
+        assert (zCenter < bbox.extent().z());
 
         // Early exit if the windowSize is 0
         if (windowSize == 0) {
@@ -73,7 +73,7 @@ public class CenterSliceWindow extends CenterSliceBase {
         }
 
         int zLow = Math.max(zCenter - windowSize, 0);
-        int zHigh = Math.min(zCenter + windowSize, bbox.extent().getZ() - 1);
+        int zHigh = Math.min(zCenter + windowSize, bbox.extent().z() - 1);
 
         VoxelStatisticsCombined out = new VoxelStatisticsCombined();
         for (int z = zLow; z <= zHigh; z++) {

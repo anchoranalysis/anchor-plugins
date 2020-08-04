@@ -107,7 +107,7 @@ class CalculatePairIntersection
     protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
             throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.getDimensionsRequired();
+        ImageDimensions dimensions = input.dimensionsRequired();
 
         ObjectMask object1Dilated = first.getOrCalculate(input);
         ObjectMask object2Dilated = second.getOrCalculate(input);
@@ -140,7 +140,7 @@ class CalculatePairIntersection
         ObjectMask eroded =
                 MorphologicalErosion.createErodedObject(
                         input.getMerged(),
-                        Optional.of(dimensions.getExtent()),
+                        Optional.of(dimensions.extent()),
                         do3D,
                         iterationsErosion,
                         true,

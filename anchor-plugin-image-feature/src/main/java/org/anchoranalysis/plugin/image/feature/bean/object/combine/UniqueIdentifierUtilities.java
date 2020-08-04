@@ -69,6 +69,6 @@ class UniqueIdentifierUtilities {
     }
 
     private static String forPoint(Point3i point) {
-        return String.format("%d_%d_%d", point.getX(), point.getY(), point.getZ());
+        return String.format("%d_%d_%d", point.x(), point.y(), point.z());
     }
 }

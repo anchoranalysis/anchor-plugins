@@ -173,7 +173,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                         objects.asList(),
                         Function.identity(),
                         (vector1, vector2, numberVoxels) -> numberVoxels,
-                        nrgStack.getNrgStack().getDimensions().getExtent(),
+                        nrgStack.getNrgStack().dimensions().extent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions

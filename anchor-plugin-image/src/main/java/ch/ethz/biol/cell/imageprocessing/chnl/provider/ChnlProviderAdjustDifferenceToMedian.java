@@ -78,26 +78,26 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
     private void adjustObject(
             ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
 
-        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
 
-        Voxels<ByteBuffer> vb = chnl.voxels().asByte();
-        Voxels<ByteBuffer> vbLookup = chnlLookup.voxels().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsLookup = chnlLookup.voxels().asByte();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
-            ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
+            ByteBuffer bbChnl = voxels.slice(z).buffer();
+            ByteBuffer bbChnlLookup = voxelsLookup.slice(z).buffer();
             ByteBuffer bbMask =
-                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.voxels().slice(z - cornerMin.z()).buffer();
 
             int objectMaskOffset = 0;
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
-                    if (bbMask.get(objectMaskOffset++) == object.getBinaryValuesByte().getOnByte()) {
+                    if (bbMask.get(objectMaskOffset++) == object.binaryValuesByte().getOnByte()) {
 
-                        int offset = vb.extent().offset(x, y);
+                        int offset = voxels.extent().offset(x, y);
 
                         int lookupVal = ByteConverter.unsignedByteToInt(bbChnlLookup.get(offset));
                         int adj = (medianFromObject - lookupVal);
