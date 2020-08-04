@@ -85,12 +85,12 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
         Point3i point = new Point3i(0, 0, 0);
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer buf = voxels.getPixelsForPlane(point.z()).buffer();
+            ByteBuffer buf = voxels.slice(point.z()).buffer();
 
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    int offset = extent.offset(point.x(), point.y());
+                    int offset = extent.offset(point);
                     if (buf.get(offset) == bvb.getOnByte()) {
                         pointRange.add(point);
                     }
