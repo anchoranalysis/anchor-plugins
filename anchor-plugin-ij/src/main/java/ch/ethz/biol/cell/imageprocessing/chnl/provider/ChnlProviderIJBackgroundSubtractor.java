@@ -54,6 +54,6 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadius
                     true);
         }
 
-        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getResolution());
     }
 }

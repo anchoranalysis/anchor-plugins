@@ -67,9 +67,9 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
-        checkUnsupportedMask(mask);
+        checkUnsupportedObjectMask(objectMask);
         checkUnsupportedSeeds(seeds);
         checkUnsupported3D(channel);
 
@@ -93,7 +93,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     private int floodFillChnl(Channel chnl) throws OperationFailedException {
         BinaryValuesByte bv = BinaryValuesByte.getDefault();
         ImageProcessor imageProcessor =
-                IJWrap.imageProcessorByte(chnl.getVoxelBox().asByte().getPlaneAccess(), 0);
+                IJWrap.imageProcessorByte(chnl.voxels().asByte().getPlaneAccess(), 0);
         return new FloodFillHelper(minimumBoundingBoxVolume, bv.getOnByte(), imageProcessor)
                 .floodFill2D(startingIntensity);
     }
@@ -108,6 +108,6 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
      */
     private ObjectCollection objectsFromLabels(Channel chnl, int numLabels) {
         return CreateFromLabels.create(
-                chnl.getVoxelBox().asByte(), 1, numLabels, minimumBoundingBoxVolume);
+                chnl.voxels().asByte(), 1, numLabels, minimumBoundingBoxVolume);
     }
 }

@@ -97,8 +97,8 @@ class CalculateGradientFromMultipleChnls
     private void putGradientValue(
             ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl) {
 
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxels();
+        VoxelBox<?> vb = chnl.voxels().any();
         BoundingBox bbox = object.getBoundingBox();
 
         Extent e = vb.extent();

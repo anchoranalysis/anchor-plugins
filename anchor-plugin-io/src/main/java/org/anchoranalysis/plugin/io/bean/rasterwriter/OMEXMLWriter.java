@@ -58,9 +58,9 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
         Channel chnlGreen = stack.getChannel(1);
         Channel chnlBlue = stack.getChannel(2);
 
-        VoxelBox<ByteBuffer> vbRed = chnlRed.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbGreen = chnlGreen.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbBlue = chnlBlue.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbRed = chnlRed.voxels().asByte();
+        VoxelBox<ByteBuffer> vbGreen = chnlGreen.voxels().asByte();
+        VoxelBox<ByteBuffer> vbBlue = chnlBlue.voxels().asByte();
 
         for (int z = 0; z < stack.getDimensions().getZ(); z++) {
 

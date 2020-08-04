@@ -37,10 +37,11 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.test.LoggingFixture;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class NRGSchemeFixture {
-
-    private NRGSchemeFixture() {}
 
     /**
      * An NRG scheme that is rewarded by larger marks but with a penalty for overlap.

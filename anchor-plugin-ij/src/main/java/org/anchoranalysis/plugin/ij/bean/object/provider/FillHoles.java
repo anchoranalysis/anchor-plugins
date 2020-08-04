@@ -67,7 +67,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
         for (ObjectMask objectMask : objects) {
 
-            BinaryVoxelBox<ByteBuffer> bvb = objectMask.binaryVoxelBox();
+            BinaryVoxelBox<ByteBuffer> bvb = objectMask.binaryVoxels();
             BinaryVoxelBox<ByteBuffer> bvbDup = bvb.duplicate();
 
             try {
@@ -85,9 +85,9 @@ public class FillHoles extends ObjectCollectionProviderUnary {
                 // We do an and operation with the mask
                 bvbDup.copyPixelsToCheckMask(
                         bboxAll,
-                        bvb.getVoxelBox(),
+                        bvb.getVoxels(),
                         bboxAll,
-                        objectRegion.getVoxelBox(),
+                        objectRegion.getVoxels(),
                         objectRegion.getBinaryValuesByte());
             }
         }

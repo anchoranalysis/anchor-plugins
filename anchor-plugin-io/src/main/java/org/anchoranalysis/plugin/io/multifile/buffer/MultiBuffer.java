@@ -59,7 +59,7 @@ class MultiBuffer {
             Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
         // Specific Channel Number, but no specific Slice Number
         Channel chnl = stackForFile.getChannel(0);
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        VoxelBox<?> vb = chnl.voxels().any();
 
         int chnlIndexResolved = size.getRangeC().index(chnlNum);
         int timeIndexResolved = size.getRangeT().index(timeIndex);
@@ -78,7 +78,7 @@ class MultiBuffer {
 
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
             Channel chnl = stackForFile.getChannel(c);
-            copyFirstSliceForChnl(timeIndexResolved, c, chnl.getVoxelBox().any(), sliceNum);
+            copyFirstSliceForChnl(timeIndexResolved, c, chnl.voxels().any(), sliceNum);
         }
     }
 
@@ -90,7 +90,7 @@ class MultiBuffer {
         // Then we have to guess the channel
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
             Channel chnl = stackForFile.getChannel(c);
-            copyAllSlicesForChnl(timeIndexResolved, c, chnl.getVoxelBox().any());
+            copyAllSlicesForChnl(timeIndexResolved, c, chnl.voxels().any());
         }
     }
 
@@ -101,7 +101,7 @@ class MultiBuffer {
         for (int c = 0; c < size.getRangeC().getSize(); c++) {
 
             Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dimensions, dataType);
-            copyAllBuffersTo(t, c, chnl.getVoxelBox());
+            copyAllBuffersTo(t, c, chnl.voxels());
 
             try {
                 stack.addChannel(chnl);

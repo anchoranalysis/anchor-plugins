@@ -34,6 +34,8 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Checks to see if a bean has been misconfigured, when created manually in tests (thereby skipping
@@ -45,9 +47,8 @@ import org.anchoranalysis.core.log.Logger;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class BeanTestChecker {
-
-    private BeanTestChecker() {}
 
     /**
      * Checks if a bean has all necessary items, throwing a run-time exception if it does not

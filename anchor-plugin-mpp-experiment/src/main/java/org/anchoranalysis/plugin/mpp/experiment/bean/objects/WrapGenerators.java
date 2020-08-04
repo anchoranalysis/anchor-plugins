@@ -32,7 +32,7 @@ class WrapGenerators {
     }
 
     /**
-     * Gives an existing generator that accepts single-object masks an interface that accepts
+     * Gives an existing generator that accepts single-object-masks an interface that accepts
      * {@link ObjectsWithBoundingBox}
      *
      * @param generator existing generator to wrap

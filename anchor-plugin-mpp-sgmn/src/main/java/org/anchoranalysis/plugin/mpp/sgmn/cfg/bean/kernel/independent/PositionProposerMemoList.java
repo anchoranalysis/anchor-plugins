@@ -92,7 +92,7 @@ class PositionProposerMemoList implements PositionProposer {
                 Point3i.immutableSubtract(PointConverter.intFromDouble(point), bbox.cornerMin());
 
         byte membershipExst =
-                pm.getVoxelBox().getPixelsForPlane(rel.getZ()).get(bbox.extent().offsetSlice(rel));
+                pm.getVoxels().getPixelsForPlane(rel.getZ()).get(bbox.extent().offsetSlice(rel));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {

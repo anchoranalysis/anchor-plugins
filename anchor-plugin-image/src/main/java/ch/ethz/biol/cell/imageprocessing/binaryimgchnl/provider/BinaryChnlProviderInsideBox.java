@@ -79,7 +79,7 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
 
     private static Mask createBinaryChnl(BoundingBox bbox, Channel chnl) {
         BinaryValues bv = BinaryValues.getDefault();
-        chnl.getVoxelBox().any().setPixelsTo(bbox, bv.getOnInt());
+        chnl.voxels().any().setPixelsTo(bbox, bv.getOnInt());
         return new Mask(chnl, bv);
     }
 

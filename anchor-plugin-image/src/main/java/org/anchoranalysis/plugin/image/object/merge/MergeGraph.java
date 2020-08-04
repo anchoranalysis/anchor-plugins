@@ -111,7 +111,7 @@ public class MergeGraph {
         graph.removeVertex(bestImprovement.getNode1());
         graph.removeVertex(bestImprovement.getNode2());
 
-        ObjectVertex omMerged = bestImprovement.getEdge().getOmWithFeature();
+        ObjectVertex omMerged = bestImprovement.getEdge().getVertex();
         graph.addVertex(omMerged, setPossibleNeighbors, prioritizer, logger);
 
         logger.describeMerge(omMerged, bestImprovement);
@@ -138,19 +138,19 @@ public class MergeGraph {
                 max = entry;
             } else if (DoubleUtilities.areEqual(edge.getPriority(), max.getEdge().getPriority())) {
 
-                // We can safely assume a point exists on the mask and call .get(), as none of the
-                // masks are empty
+                // We can safely assume a point exists on the object-mask and call .get(), as none of the
+                // object-masks are empty
 
                 // If we have equal values, we impose an arbitrary ordering
                 // so as to keep the output of the algorithm as deterministic as possible
                 int cmp =
                         comparator.compare(
                                 max.getEdge() // NOSONAR
-                                        .getOmWithFeature()
+                                        .getVertex()
                                         .getObject()
                                         .findArbitraryOnVoxel()
                                         .get(),
-                                edge.getOmWithFeature() // NOSONAR
+                                edge.getVertex() // NOSONAR
                                         .getObject()
                                         .findArbitraryOnVoxel()
                                         .get());

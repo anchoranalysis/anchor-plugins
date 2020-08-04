@@ -148,8 +148,8 @@ public class XYOrientationExtendToZ extends PointsProposer {
                     new GeneratePointsHelper(
                                     point,
                                     chnlFilled(),
-                                    maxZDistance(randomNumberGenerator, dimensions.getRes()),
-                                    skipZDistance(dimensions.getRes()),
+                                    maxZDistance(randomNumberGenerator, dimensions.getResolution()),
+                                    skipZDistance(dimensions.getResolution()),
                                     binaryChnl.create(),
                                     dimensions)
                             .generatePoints(pointsXY);

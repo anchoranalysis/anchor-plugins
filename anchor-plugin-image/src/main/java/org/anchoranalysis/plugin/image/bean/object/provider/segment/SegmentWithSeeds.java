@@ -131,7 +131,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
         BoundingBox bboxSource = matchedObject.getSource().getBoundingBox();
 
         // We create a new object-mask for the new channel
-        ObjectMask objectLocal = new ObjectMask(matchedObject.getSource().binaryVoxelBox());
+        ObjectMask objectLocal = new ObjectMask(matchedObject.getSource().binaryVoxels());
 
         SeedCollection seedsObj =
                 SeedsFactory.createSeedsWithMask(
@@ -154,7 +154,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
         // We make a channel just for the object
         return ChannelFactory.instance()
                 .create(
-                        channel.getVoxelBox().any().region(boundingBox, false),
-                        channel.getDimensions().getRes());
+                        channel.voxels().any().region(boundingBox, false),
+                        channel.getDimensions().getResolution());
     }
 }

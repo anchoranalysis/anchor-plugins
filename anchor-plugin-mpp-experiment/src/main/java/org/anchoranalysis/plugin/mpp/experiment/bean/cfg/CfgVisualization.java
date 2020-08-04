@@ -70,10 +70,10 @@ class CfgVisualization {
     private static void writeCfgGenerator(
             WriterRouterErrors writeIfAllowed,
             String outputName,
-            DrawObject maskWriter,
+            DrawObject drawObject,
             ColoredCfgWithDisplayStack cfgWithStack) {
         writeIfAllowed.write(
                 outputName,
-                () -> new CfgGenerator(maskWriter, cfgWithStack, new IDGetterIter<Overlay>()));
+                () -> new CfgGenerator(drawObject, cfgWithStack, new IDGetterIter<Overlay>()));
     }
 }

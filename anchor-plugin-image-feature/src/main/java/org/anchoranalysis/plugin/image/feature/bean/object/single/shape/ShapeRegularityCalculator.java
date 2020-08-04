@@ -28,10 +28,11 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
-
-    private ShapeRegularityCalculator() {}
 
     public static double calcShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();

@@ -59,7 +59,7 @@ class CalculateMaskInput<T extends FeatureInputNRG>
             throws FeatureCalculationException {
         VoxelBox<ByteBuffer> voxelBox;
         try {
-            voxelBox = mask.getChannel().getVoxelBox().asByte();
+            voxelBox = mask.getChannel().voxels().asByte();
         } catch (IncorrectVoxelDataTypeException e) {
             throw new FeatureCalculationException(
                     "mask has incompatible data type, it must be unsigned 8-bit", e);

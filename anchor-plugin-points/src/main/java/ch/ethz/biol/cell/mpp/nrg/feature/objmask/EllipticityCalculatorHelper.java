@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 class EllipticityCalculatorHelper {
 
     public static double calc(ObjectMask object, Mark mark, ImageDimensions dimensions) {
-        return calc(object, maskCompare(mark, dimensions));
+        return calc(object, objectMaskCompare(mark, dimensions));
     }
 
     private static double calc(ObjectMask object, ObjectMask objectCompare) {
@@ -58,10 +58,10 @@ class EllipticityCalculatorHelper {
         return intDiv(numPixelsCompare, numUnion - numIntersection + numPixelsCompare);
     }
 
-    private static ObjectMask maskCompare(Mark mark, ImageDimensions dim) {
+    private static ObjectMask objectMaskCompare(Mark mark, ImageDimensions dim) {
         RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex(0);
         assert (rm.getRegionID() == 0);
-        return mark.calcMask(dim, rm, BinaryValuesByte.getDefault()).getMask();
+        return mark.deriveObject(dim, rm, BinaryValuesByte.getDefault()).withoutProperties();
     }
 
     private static double intDiv(int num, int dem) {

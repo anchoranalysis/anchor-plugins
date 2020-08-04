@@ -55,7 +55,7 @@ class AggregateChnl {
         }
 
         VoxelBoxArithmetic.add(
-                raster.getVoxelBox().asInt(), chnl.getVoxelBox(), chnl.getVoxelDataType());
+                raster.voxels().asInt(), chnl.voxels(), chnl.getVoxelDataType());
 
         cnt++;
     }
@@ -78,7 +78,7 @@ class AggregateChnl {
                         .createEmptyInitialised(raster.getDimensions(), outputType);
 
         VoxelBoxArithmetic.divide(
-                raster.getVoxelBox().asInt(), cnt, chnlOut.getVoxelBox(), outputType);
+                raster.voxels().asInt(), cnt, chnlOut.voxels(), outputType);
 
         return chnlOut;
     }

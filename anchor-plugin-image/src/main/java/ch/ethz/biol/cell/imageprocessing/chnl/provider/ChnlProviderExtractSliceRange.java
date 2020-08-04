@@ -54,14 +54,14 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 
         ChannelFactoryByte factory = new ChannelFactoryByte();
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
 
         Extent e = chnl.getDimensions().getExtent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel chnlOut =
                 factory.createEmptyInitialised(
-                        new ImageDimensions(e, chnl.getDimensions().getRes()));
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+                        new ImageDimensions(e, chnl.getDimensions().getResolution()));
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         int volumeXY = vb.extent().getVolumeXY();
         for (int z = sliceStart; z <= sliceEnd; z++) {

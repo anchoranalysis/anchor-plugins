@@ -50,7 +50,7 @@ public class SgmnRepeat extends BinarySegmentationOne {
     public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
@@ -58,7 +58,7 @@ public class SgmnRepeat extends BinarySegmentationOne {
 
         int cnt = 0;
         while (cnt++ < maxIter) {
-            BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, mask);
+            BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, objectMask);
 
             if (outNew == null) {
                 return outOld;
@@ -67,10 +67,10 @@ public class SgmnRepeat extends BinarySegmentationOne {
             outOld = outNew;
 
             // Increasingly tightens the obj-mask used for the segmentation
-            mask =
+            objectMask =
                     Optional.of(
-                            mask.isPresent()
-                                    ? new ObjectMask(mask.get().getBoundingBox(), outNew)
+                            objectMask.isPresent()
+                                    ? new ObjectMask(objectMask.get().getBoundingBox(), outNew)
                                     : new ObjectMask(outNew));
         }
 

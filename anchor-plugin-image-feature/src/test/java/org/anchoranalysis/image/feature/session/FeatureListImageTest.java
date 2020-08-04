@@ -181,7 +181,7 @@ public class FeatureListImageTest {
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(
-                histogram, Optional.of(NRG_STACK.getDimensions().getRes()));
+                histogram, Optional.of(NRG_STACK.getDimensions().getResolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

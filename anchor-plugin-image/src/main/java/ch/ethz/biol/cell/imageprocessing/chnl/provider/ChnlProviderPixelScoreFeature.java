@@ -67,7 +67,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
         try {
             pixelScore.init(histograms(), Optional.empty());
-            calcScoresIntoVoxelBox(chnl.getVoxelBox(), listAdditional, pixelScore);
+            calcScoresIntoVoxelBox(chnl.voxels(), listAdditional, pixelScore);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
@@ -97,7 +97,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
             for (int i = 0; i < listAdditional.size(); i++) {
                 Channel additional = listAdditional.get(i);
-                arrByteBuffer[i] = additional.getVoxelBox().asByte().getPixelsForPlane(z).buffer();
+                arrByteBuffer[i] = additional.voxels().asByte().getPixelsForPlane(z).buffer();
             }
 
             int offset = 0;

@@ -47,10 +47,11 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ProviderFixture {
-
-    private ProviderFixture() {}
 
     public static ObjectCollectionProvider providerFor(ObjectMask obj) {
         return providerFor(ObjectCollectionFactory.of(obj));

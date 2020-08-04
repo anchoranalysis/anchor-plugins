@@ -66,7 +66,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
     }
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
         Interpolator interpolator =
                 interpolate
                         ? InterpolatorFactory.getInstance().binaryResizing()

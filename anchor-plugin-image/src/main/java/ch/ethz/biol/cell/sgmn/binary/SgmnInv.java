@@ -44,11 +44,11 @@ public class SgmnInv extends BinarySegmentationOne {
     public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, mask);
+        BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objectMask);
 
         try {
             invertVoxelBox(vb);

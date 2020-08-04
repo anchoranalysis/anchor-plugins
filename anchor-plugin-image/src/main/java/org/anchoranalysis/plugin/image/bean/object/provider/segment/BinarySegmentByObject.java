@@ -69,13 +69,13 @@ public class BinarySegmentByObject extends ObjectCollectionProviderUnaryWithChan
 
     private ObjectMask sgmnObject(ObjectMask object, Channel channelSource)
             throws SegmentationFailedException {
-        VoxelBox<?> vb = channelSource.getVoxelBox().any().region(object.getBoundingBox(), true);
+        VoxelBox<?> vb = channelSource.voxels().any().region(object.getBoundingBox(), true);
 
         BinaryVoxelBox<ByteBuffer> bvb =
                 binarySgmn.sgmn(
                         new VoxelBoxWrapper(vb),
                         new BinarySegmentationParameters(),
-                        Optional.of(new ObjectMask(object.getVoxelBox())));
+                        Optional.of(new ObjectMask(object.getVoxels())));
 
         return new ObjectMask(object.getBoundingBox(), bvb);
     }

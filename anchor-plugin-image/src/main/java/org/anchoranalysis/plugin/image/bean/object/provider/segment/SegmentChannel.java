@@ -60,7 +60,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
     @Override
     protected ObjectCollection createFromChnl(Channel chnlSource) throws CreateException {
 
-        Optional<ObjectMask> maskAsObject = createMask();
+        Optional<ObjectMask> maskAsObject = createObjectMask();
 
         try {
             return sgmn.segment(
@@ -72,7 +72,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
         }
     }
 
-    private Optional<ObjectMask> createMask() throws CreateException {
+    private Optional<ObjectMask> createObjectMask() throws CreateException {
         return OptionalFactory.create(mask).map(CreateFromEntireChnlFactory::createObject);
     }
 
@@ -88,9 +88,9 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
             throws CreateException {
         return OptionalUtilities.map(
                         maskAsObject,
-                        mask ->
+                        object ->
                                 SeedsFactory.createSeedsWithMask(
-                                        seeds, mask, new Point3i(0, 0, 0), dim))
+                                        seeds, object, new Point3i(0, 0, 0), dim))
                 .orElseGet(() -> SeedsFactory.createSeedsWithoutMask(seeds));
     }
 }

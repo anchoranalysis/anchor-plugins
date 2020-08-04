@@ -80,12 +80,12 @@ class EastObjectsExtractor {
 
         ObjectWithProperties om =
                 mark.getObject()
-                        .calcMask(
+                        .deriveObject(
                                 dimensions,
                                 RegionMapSingleton.instance()
                                         .membershipWithFlagsForIndex(
                                                 GlobalRegionIdentifiers.SUBMARK_INSIDE),
                                 BinaryValuesByte.getDefault());
-        return new WithConfidence<>(om.getMask(), mark.getConfidence());
+        return new WithConfidence<>(om.withoutProperties(), mark.getConfidence());
     }
 }

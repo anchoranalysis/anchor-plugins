@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
- * Creates object masks from a {@link Cfg} where (a particular region of) each mark creates an
+ * Creates object-masks from a {@link Cfg} where (a particular region of) each mark creates an
  * object.
  *
  * @author Owen Feehan
@@ -66,7 +66,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
         ImageDimensions dims = dim.create();
 
-        return cfg.calcMask(
+        return cfg.deriveObjects(
                         dims,
                         regionMap.membershipWithFlagsForIndex(regionID),
                         BinaryValuesByte.getDefault())

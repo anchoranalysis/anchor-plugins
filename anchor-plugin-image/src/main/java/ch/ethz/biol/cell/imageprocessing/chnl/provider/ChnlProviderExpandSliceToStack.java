@@ -64,8 +64,8 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
                 ChannelFactory.instance()
                         .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbSlice = chnl.voxels().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
             VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);

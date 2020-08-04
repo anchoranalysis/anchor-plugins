@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
-/** Creates a BinaryImgChannel from a collection of object masks */
+/** Creates a BinaryImgChannel from a collection of object-masks */
 public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
 
     // START BEAN

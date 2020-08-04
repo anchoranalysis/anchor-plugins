@@ -46,7 +46,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromChnl(Mask mask, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask mask, Mask outline) throws CreateException {
         try {
             List<Point2i> pointsOnConvexHull =
                     ConvexHullUtilities.convexHull2D(
@@ -61,7 +61,7 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
     }
 
     private void changeMaskToShowPointsOnly(Mask mask, List<Point2i> points) {
-        VoxelBox<?> voxels = mask.getChannel().getVoxelBox().any();
+        VoxelBox<?> voxels = mask.getChannel().voxels().any();
 
         int on = mask.getBinaryValues().getOnInt();
         int off = mask.getBinaryValues().getOffInt();

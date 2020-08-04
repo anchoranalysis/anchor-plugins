@@ -124,11 +124,11 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        chnlOut.getVoxelBox().any().setAllPixelsTo(valueNoObject);
+        chnlOut.voxels().any().setAllPixelsTo(valueNoObject);
         for (ObjectMask object : objectsSource) {
 
             double featVal = session.calc(new FeatureInputSingleObject(object, nrgStackParams));
-            chnlOut.getVoxelBox().any().setPixelsCheckMask(object, (int) (factor * featVal));
+            chnlOut.voxels().any().setPixelsCheckMask(object, (int) (factor * featVal));
         }
 
         return chnlOut;

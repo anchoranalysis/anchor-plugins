@@ -61,7 +61,7 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
     public BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
         setUpDelegate(
@@ -72,7 +72,7 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
                                         new SegmentationFailedException(
                                                 "Image-resolution is required but missing")));
 
-        return delegate.sgmn(voxelBox, params, mask);
+        return delegate.sgmn(voxelBox, params, objectMask);
     }
 
     private void setUpDelegate(Extent e, ImageResolution res) {

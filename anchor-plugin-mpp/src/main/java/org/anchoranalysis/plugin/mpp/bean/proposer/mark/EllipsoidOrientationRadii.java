@@ -58,13 +58,13 @@ public class EllipsoidOrientationRadii extends MarkProposer {
 
         Orientation orientation =
                 rotationBounds.randomOrientation(
-                        context.getRandomNumberGenerator(), context.getDimensions().getRes());
+                        context.getRandomNumberGenerator(), context.getDimensions().getResolution());
 
         Point3d radii =
                 RadiiRandomizer.randomizeRadii(
                         radiusBound,
                         context.getRandomNumberGenerator(),
-                        context.getDimensions().getRes(),
+                        context.getDimensions().getResolution(),
                         true);
 
         mark.setMarksExplicit(mark.getPos(), orientation, radii);

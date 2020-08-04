@@ -56,18 +56,18 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask bic) throws CreateException {
+    public Mask createFromMask(Mask bic) throws CreateException {
 
         if (slicesSeperately) {
             Extent e = bic.getDimensions().getExtent();
             for (int z = 0; z < e.getZ(); z++) {
 
-                BoundingBox bbox = calcNarrowestBoxAroundMask(bic.extractSlice(z).binaryVoxelBox());
-                bic.binaryVoxelBox().setPixelsToOn(bbox.shiftToZ(z));
+                BoundingBox bbox = calcNarrowestBoxAroundMask(bic.extractSlice(z).binaryVoxels());
+                bic.binaryVoxels().setPixelsToOn(bbox.shiftToZ(z));
             }
         } else {
-            BoundingBox bbox = calcNarrowestBoxAroundMask(bic.binaryVoxelBox());
-            bic.binaryVoxelBox().setPixelsToOn(bbox);
+            BoundingBox bbox = calcNarrowestBoxAroundMask(bic.binaryVoxels());
+            bic.binaryVoxels().setPixelsToOn(bbox);
         }
 
         return bic;

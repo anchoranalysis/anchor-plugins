@@ -53,7 +53,7 @@ public class ChnlProviderBlur extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
         try {
-            strategy.blur(chnl.getVoxelBox(), chnl.getDimensions(), getLogger().messageLogger());
+            strategy.blur(chnl.voxels(), chnl.getDimensions(), getLogger().messageLogger());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

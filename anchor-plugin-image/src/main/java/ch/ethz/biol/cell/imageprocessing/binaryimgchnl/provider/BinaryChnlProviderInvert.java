@@ -51,7 +51,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
     // END BEAN FIELDS
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
 
         Optional<Mask> maskChnl = OptionalFactory.create(mask);
 
@@ -61,7 +61,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
         }
 
         if (forceChangeBytes) {
-            MaskInverter.invertChnl(chnl);
+            MaskInverter.invert(chnl);
         } else {
             return new Mask(chnl.getChannel(), chnl.getBinaryValues().createInverted());
         }
@@ -75,7 +75,7 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
         final byte byteOff = bvb.getOffByte();
 
         IterateVoxels.callEachPoint(
-                chnl.binaryVoxelBox().getVoxelBox(),
+                chnl.binaryVoxels().getVoxels(),
                 mask,
                 (Point3i point, ByteBuffer buffer, int offset) -> {
                     byte val = buffer.get(offset);

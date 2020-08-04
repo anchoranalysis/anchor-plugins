@@ -50,7 +50,7 @@ class ObjectCollectionFixture {
      * Creates an object-collection containing between a random number of objects (uniformly sampled
      * from a range)
      *
-     * <p>Each mask has a position and extent that is randomly-sampled, and contains voxels that are
+     * <p>Each object has a position and extent that is randomly-sampled, and contains voxels that are
      * each randomly on or off.
      *
      * @param minNumberObjects minimum number of objects (inclusive)
@@ -75,7 +75,7 @@ class ObjectCollectionFixture {
         int volumeXY = e.getVolumeXY();
         for (int z = 0; z < e.getZ(); z++) {
 
-            VoxelBuffer<ByteBuffer> vb = object.getVoxelBox().getPixelsForPlane(z);
+            VoxelBuffer<ByteBuffer> vb = object.getVoxels().getPixelsForPlane(z);
             ByteBuffer bb = vb.buffer();
 
             int prevVal = 0;

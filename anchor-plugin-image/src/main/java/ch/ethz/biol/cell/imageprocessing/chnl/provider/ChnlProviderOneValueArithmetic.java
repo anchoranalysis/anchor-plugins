@@ -50,8 +50,8 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 
         Channel chnlOut = FACTORY.createEmptyInitialised(chnl.getDimensions());
 
-        VoxelBox<?> vbIn = chnl.getVoxelBox().any();
-        VoxelBox<?> vbOut = chnlOut.getVoxelBox().any();
+        VoxelBox<?> vbIn = chnl.voxels().any();
+        VoxelBox<?> vbOut = chnlOut.voxels().any();
 
         int volumeXY = chnl.getDimensions().getVolumeXY();
 

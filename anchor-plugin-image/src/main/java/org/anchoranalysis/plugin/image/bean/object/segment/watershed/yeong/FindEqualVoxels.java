@@ -41,7 +41,9 @@ import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 final class FindEqualVoxels {
 
     private static class PointTester
@@ -103,13 +105,13 @@ final class FindEqualVoxels {
                     // We take anything
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
                     return false;
                 } else {
                     if (valPoint < lowestNeighborVal) {
                         lowestNeighborVal = valPoint;
                         lowestNeighborIndex =
-                                matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                                EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
                     }
                     return false;
                 }
@@ -125,7 +127,7 @@ final class FindEqualVoxels {
                 if (valPoint < sourceVal && valPoint < lowestNeighborVal) {
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxelBox.ENCODING.encodeDirection(xChange, yChange, zChange);
                 }
                 return false;
             }
@@ -135,18 +137,7 @@ final class FindEqualVoxels {
     private final VoxelBox<?> bufferValuesToFindEqual;
     private final EncodedVoxelBox matS;
     private final boolean do3D;
-    private final Optional<ObjectMask> mask;
-
-    public FindEqualVoxels(
-            VoxelBox<?> bufferValuesToFindEqual,
-            EncodedVoxelBox temporaryMarkVisitedBuffer,
-            boolean do3D,
-            Optional<ObjectMask> mask) {
-        this.bufferValuesToFindEqual = bufferValuesToFindEqual;
-        this.matS = temporaryMarkVisitedBuffer;
-        this.do3D = do3D;
-        this.mask = mask;
-    }
+    private final Optional<ObjectMask> objectMask;
 
     public EqualVoxelsPlateau createPlateau(Point3i point) {
 
@@ -178,7 +169,7 @@ final class FindEqualVoxels {
 
         ProcessVoxelNeighbor<Optional<Integer>> process =
                 ProcessVoxelNeighborFactory.within(
-                        mask, slidingBuffer.extent(), new PointTester(stack, slidingBuffer, matS));
+                        objectMask, slidingBuffer.extent(), new PointTester(stack, slidingBuffer, matS));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(true);
 

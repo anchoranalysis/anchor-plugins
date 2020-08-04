@@ -66,7 +66,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
         byte valueByte = (byte) Double.parseDouble(params.getProperty(key));
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
 
         int volumeXY = vb.extent().getVolumeXY();
         for (int z = 0; z < vb.extent().getZ(); z++) {

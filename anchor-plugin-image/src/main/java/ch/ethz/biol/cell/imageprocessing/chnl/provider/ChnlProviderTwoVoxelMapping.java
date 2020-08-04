@@ -53,9 +53,9 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
                                 chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte());
+                chnlOut.voxels().asByte(),
+                chnl1.voxels().asByte(),
+                chnl2.voxels().asByte());
 
         return chnlOut;
     }

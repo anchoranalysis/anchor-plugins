@@ -66,12 +66,12 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
     @Override
     public ObjectCollection segment(
             Channel chnl,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
-        if (mask.isPresent()) {
+        if (objectMask.isPresent()) {
             throw new SegmentationFailedException(
                     "An object-mask is not supported for this operation");
         }
@@ -93,14 +93,14 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     private boolean isAny3d(ObjectCollection objects) {
         return objects.stream()
-                .anyMatch(objectMask -> objectMask.getVoxelBox().extent().getZ() > 1);
+                .anyMatch(objectMask -> objectMask.getVoxels().extent().getZ() > 1);
     }
 
     private BinaryVoxelBox<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(chnl.getDimensions().getRes());
+                new BinarySegmentationParameters(chnl.getDimensions().getResolution());
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
 
         VoxelBox<ByteBuffer> stackBinary = vb.duplicate();
         return segmentStack.sgmn(new VoxelBoxWrapper(stackBinary), params, Optional.empty());

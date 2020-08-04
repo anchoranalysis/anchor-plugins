@@ -61,7 +61,7 @@ final class SliceThresholderMask extends SliceThresholder {
                     voxelBoxIn.getPixelsForPlane(relZ),
                     vbThrshld.getPixelsForPlane(relZ),
                     voxelBoxOut.getPixelsForPlane(relZ),
-                    object.getVoxelBox().getPixelsForPlane(z),
+                    object.getVoxels().getPixelsForPlane(z),
                     object.getBinaryValuesByte());
         }
     }

@@ -57,7 +57,7 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
         if (radiusInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.getRes()));
+            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.getResolution()));
         } else {
             return (int) radius;
         }

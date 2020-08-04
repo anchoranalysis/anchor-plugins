@@ -64,16 +64,16 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
             VoxelBoxWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws OperationFailedException {
 
-        if (mask.isPresent()) {
+        if (objectMask.isPresent()) {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 
         BinaryVoxelBox<ByteBuffer> thresholded =
                 VoxelBoxThresholder.thresholdForLevel(
-                        inputBuffer, minIntensity, bvOut, mask, false);
+                        inputBuffer, minIntensity, bvOut, objectMask, false);
 
         Binary binaryPlugin = new Binary();
         binaryPlugin.setup("fill", null);
@@ -81,7 +81,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
 
         for (int z = 0; z < thresholded.extent().getZ(); z++) {
             ImageProcessor ip =
-                    IJWrap.imageProcessor(new VoxelBoxWrapper(thresholded.getVoxelBox()), z);
+                    IJWrap.imageProcessor(new VoxelBoxWrapper(thresholded.getVoxels()), z);
             binaryPlugin.run(ip);
         }
 

@@ -57,7 +57,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
         try {
             double intensityThrshldDbl = hist.quantile(quantile);
 
-            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), chnl.getVoxelBox().asByte());
+            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), chnl.voxels().asByte());
         } catch (OperationFailedException e) {
             throw new CreateException("An error occurred computing a quantile", e);
         }

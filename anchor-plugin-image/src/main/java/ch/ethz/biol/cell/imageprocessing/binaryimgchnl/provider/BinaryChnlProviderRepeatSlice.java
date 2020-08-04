@@ -49,10 +49,10 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
 
         Channel chnlIn = chnl.getChannel();
-        VoxelBox<ByteBuffer> vbIn = chnlIn.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbIn = chnlIn.voxels().asByte();
 
         ImageDimensions dimSource = dim.create();
 
@@ -64,7 +64,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         int volumeXY = vbIn.extent().getVolumeXY();
         for (int z = 0; z < chnlOut.getDimensions().getExtent().getZ(); z++) {

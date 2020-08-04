@@ -70,11 +70,11 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         ObjectWithProperties omWithProps =
                 input.getPxlPartMemo()
                         .getMark()
-                        .calcMask(
+                        .deriveObject(
                                 input.getDimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(getRegionID()),
                                 BinaryValuesByte.getDefault());
-        return omWithProps.getMask();
+        return omWithProps.withoutProperties();
     }
 
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
@@ -103,6 +103,6 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
 
     private static VoxelBox<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
         OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, useZ);
-        return ApplyKernel.apply(kernel, object.getVoxelBox(), object.getBinaryValuesByte());
+        return ApplyKernel.apply(kernel, object.getVoxels(), object.getBinaryValuesByte());
     }
 }

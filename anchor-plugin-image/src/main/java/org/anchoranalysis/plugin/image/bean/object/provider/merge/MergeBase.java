@@ -59,7 +59,7 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 
     protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
         try {
-            return OptionalFactory.create(dim).map(ImageDimensions::getRes);
+            return OptionalFactory.create(dim).map(ImageDimensions::getResolution);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

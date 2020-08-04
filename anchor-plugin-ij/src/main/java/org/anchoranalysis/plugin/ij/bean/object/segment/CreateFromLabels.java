@@ -36,10 +36,11 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class CreateFromLabels {
-
-    private CreateFromLabels() {}
 
     /**
      * Creates an object-mask collection from a voxel-box that is labelled with unique integers

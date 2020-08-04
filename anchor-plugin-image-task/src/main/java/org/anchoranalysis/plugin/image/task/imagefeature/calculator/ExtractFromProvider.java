@@ -39,10 +39,11 @@ import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class ExtractFromProvider {
-
-    private ExtractFromProvider() {}
 
     public static NRGStackWithParams extractStack(
             StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger)

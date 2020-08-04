@@ -63,6 +63,6 @@ public class NumberVoxelsAtBorder extends FeatureSingleObject {
         OutlineKernel3 kernel =
                 new OutlineKernel3(
                         object.getBinaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
-        return ApplyKernel.applyForCount(kernel, object.getVoxelBox());
+        return ApplyKernel.applyForCount(kernel, object.getVoxels());
     }
 }

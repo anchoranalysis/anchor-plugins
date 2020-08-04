@@ -51,8 +51,8 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
         // All the on voxels in the receive, are put onto crnt
         for (int z = 0; z < e.getZ(); z++) {
 
-            ByteBuffer bufSrc = chnlCrnt.getVoxelBox().getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = chnlReceiver.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = chnlCrnt.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bufReceive = chnlReceiver.getVoxels().getPixelsForPlane(z).buffer();
 
             int offset = 0;
             for (int y = 0; y < e.getY(); y++) {

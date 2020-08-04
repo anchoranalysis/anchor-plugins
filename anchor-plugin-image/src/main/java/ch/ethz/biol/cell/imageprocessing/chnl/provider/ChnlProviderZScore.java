@@ -57,7 +57,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
         Histogram hist = histogram.create();
 
-        VoxelBox<ByteBuffer> out = chnl.getVoxelBox().asByteOrCreateEmpty(alwaysDuplicate);
+        VoxelBox<ByteBuffer> out = chnl.voxels().asByteOrCreateEmpty(alwaysDuplicate);
 
         try {
             transformBufferToZScore(hist.mean(), hist.stdDev(), chnl, out);
@@ -66,7 +66,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
                     "An occurred calculating the mean or std-dev of a channel's histogram");
         }
 
-        return ChannelFactory.instance().create(out, chnl.getDimensions().getRes());
+        return ChannelFactory.instance().create(out, chnl.getDimensions().getResolution());
     }
 
     private void transformBufferToZScore(
@@ -79,7 +79,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
         for (int z = 0; z < e.getZ(); z++) {
 
-            VoxelBuffer<?> vbIn = chnl.getVoxelBox().any().getPixelsForPlane(z);
+            VoxelBuffer<?> vbIn = chnl.voxels().any().getPixelsForPlane(z);
             VoxelBuffer<?> vbOut = out.getPixelsForPlane(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {

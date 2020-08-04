@@ -49,7 +49,7 @@ public class MatConverter {
                     "Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
-        return singleChnlMatFromVoxelBox(object.binaryVoxelBox().getVoxelBox());
+        return singleChnlMatFromVoxelBox(object.binaryVoxels().getVoxels());
     }
 
     public static Mat fromStack(Stack stack) throws CreateException {
@@ -87,7 +87,7 @@ public class MatConverter {
 
     private static Mat makeGrayscale(Channel chnl) throws CreateException {
         if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return singleChnlMatFromVoxelBox(chnl.getVoxelBox().asByte());
+            return singleChnlMatFromVoxelBox(chnl.voxels().asByte());
         } else {
             throw new CreateException("Only 8-bit channels are supported");
         }
@@ -157,7 +157,7 @@ public class MatConverter {
     }
 
     private static ByteBuffer bufferFromChnl(Channel chnl) {
-        return chnl.getVoxelBox().asByte().getPixelsForPlane(0).buffer();
+        return chnl.voxels().asByte().getPixelsForPlane(0).buffer();
     }
 
     public static Mat createEmptyMat(Extent e, int type) {

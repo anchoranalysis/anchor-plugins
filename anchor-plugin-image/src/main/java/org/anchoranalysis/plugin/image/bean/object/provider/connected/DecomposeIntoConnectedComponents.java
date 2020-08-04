@@ -64,7 +64,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
             throws CreateException {
 
         ObjectCollection objects =
-                createObjectMasks.createConnectedComponents(unconnected.binaryVoxelBox());
+                createObjectMasks.createConnectedComponents(unconnected.binaryVoxels());
 
         // Adjust the crnr of each object, by adding on the original starting point of our
         // object-mask

@@ -62,7 +62,7 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
         checkDimensions(slice.getDimensions(), sdTarget);
 
         try {
-            return createExpandedChnl(sdTarget, slice.getVoxelBox().asByte());
+            return createExpandedChnl(sdTarget, slice.voxels().asByte());
         } catch (IncorrectVoxelDataTypeException e) {
             throw new CreateException("chnlSlice must have unsigned 8 bit data");
         }
@@ -84,7 +84,7 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
                 ChannelFactory.instance()
                         .createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbOut = chnl.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = chnl.voxels().asByte();
 
         for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
             ByteBuffer bb = vbSlice.duplicate().getPixelsForPlane(0).buffer();

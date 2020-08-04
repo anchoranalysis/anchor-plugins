@@ -114,9 +114,9 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
         // We know these are all the same types from the logic above, so we can safetly cast
         processVoxelBox(
-                channelOut.getVoxelBox(),
-                channel.getVoxelBox(),
-                channelIfPixelZero.getVoxelBox(),
+                channelOut.voxels(),
+                channel.voxels(),
+                channelIfPixelZero.voxels(),
                 multFactorIfNonZero);
 
         return channelOut;

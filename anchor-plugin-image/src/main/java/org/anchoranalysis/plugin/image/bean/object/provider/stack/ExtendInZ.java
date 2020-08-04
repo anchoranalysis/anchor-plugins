@@ -66,7 +66,7 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
 
         VoxelBox<ByteBuffer> voxelBox =
                 createVoxelBoxOfDuplicatedPlanes(
-                        object.getVoxelBox().getPixelsForPlane(0), bbox.extent());
+                        object.getVoxels().getPixelsForPlane(0), bbox.extent());
 
         return new ObjectMask(bbox, voxelBox, object.getBinaryValues());
     }

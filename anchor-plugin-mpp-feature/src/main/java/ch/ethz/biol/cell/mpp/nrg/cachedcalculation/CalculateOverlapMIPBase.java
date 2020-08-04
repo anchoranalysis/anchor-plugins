@@ -60,8 +60,8 @@ public abstract class CalculateOverlapMIPBase
 
         MaxIntensityProjectionPair pair =
                 new MaxIntensityProjectionPair(
-                        pm1.getVoxelBoxMIP(),
-                        pm2.getVoxelBoxMIP(),
+                        pm1.getVoxelsMaximumIntensityProjection(),
+                        pm2.getVoxelsMaximumIntensityProjection(),
                         regionMembershipForMark(mark1),
                         regionMembershipForMark(mark2));
 

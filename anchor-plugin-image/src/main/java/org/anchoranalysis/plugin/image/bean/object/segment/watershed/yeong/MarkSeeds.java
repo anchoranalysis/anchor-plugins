@@ -35,10 +35,11 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class MarkSeeds {
-
-    private MarkSeeds() {}
 
     public static void apply(
             SeedCollection seeds,
@@ -52,13 +53,13 @@ class MarkSeeds {
             throw new SegmentationFailedException("Extent of matS does not match containingMask");
         }
 
-        for (Seed s : seeds) {
+        for (Seed seed : seeds) {
 
-            ObjectMask mask = s.createMask();
+            ObjectMask object = seed.deriveObject();
 
-            throwExceptionIfNotConnected(mask);
+            throwExceptionIfNotConnected(object);
 
-            IterateVoxels.overMasks(mask, containingMask, createPointProcessor(matS, minimaStore));
+            IterateVoxels.overMasks(object, containingMask, createPointProcessor(matS, minimaStore));
         }
     }
 

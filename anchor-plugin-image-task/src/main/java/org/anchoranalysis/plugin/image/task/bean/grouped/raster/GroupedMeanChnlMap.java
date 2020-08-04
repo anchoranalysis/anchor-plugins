@@ -70,7 +70,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Channel, AggregateChnl> {
                             "Writing chnl %s with %d items and numPixels>100=%d and outputType=%s",
                             outputName,
                             agg.getCnt(),
-                            mean.getVoxelBox().any().countGreaterThan(100),
+                            mean.voxels().any().countGreaterThan(100),
                             outputType);
 
         } catch (OperationFailedException e) {

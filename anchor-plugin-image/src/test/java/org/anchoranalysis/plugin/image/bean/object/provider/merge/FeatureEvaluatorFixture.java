@@ -35,10 +35,11 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class FeatureEvaluatorFixture {
-
-    private FeatureEvaluatorFixture() {}
 
     public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg(
             Feature<T> feature, Logger logger, Path modelDirectory) throws CreateException {

@@ -48,7 +48,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
     // END BEAN FIELDS
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
         return createMaskedImage(chnl);
     }
 
@@ -66,7 +66,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
                     (int)
                             Math.floor(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(bi.getDimensions().getRes())));
+                                            Optional.of(bi.getDimensions().getResolution())));
         } catch (UnitValueException e) {
             throw new CreateException(e);
         }

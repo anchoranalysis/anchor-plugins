@@ -39,9 +39,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 
@@ -78,7 +76,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
             for (int z = 0; z < bvb.extent().getZ(); z++) {
 
                 ImageProcessor ip =
-                        IJWrap.imageProcessorByte(bvb.getVoxelBox().getPlaneAccess(), z);
+                        IJWrap.imageProcessorByte(bvb.getVoxels().getPlaneAccess(), z);
                 binaryPlugin.run(ip);
             }
         }
@@ -87,16 +85,16 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
     }
 
     @Override
-    public Mask createFromChnl(Mask binaryChnl) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
-        BinaryVoxelBox<ByteBuffer> bvb = binaryChnl.binaryVoxelBox();
+        BinaryVoxelBox<ByteBuffer> bvb = mask.binaryVoxels();
 
         try {
             BinaryVoxelBox<ByteBuffer> bvbOut = doCommand(bvb, command, iterations);
             return new Mask(
                     bvbOut,
-                    binaryChnl.getDimensions().getRes(),
-                    ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE));
+                    mask.getDimensions().getResolution()
+                    );
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

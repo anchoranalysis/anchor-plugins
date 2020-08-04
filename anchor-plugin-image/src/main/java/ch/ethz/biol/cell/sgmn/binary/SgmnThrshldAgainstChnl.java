@@ -97,7 +97,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
             throw new SegmentationFailedException(e);
         }
 
-        VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
+        VoxelBox<?> vbThrshld = threshold.voxels().any();
 
         if (!vbThrshld.extent().equals(voxelBoxExtent)) {
             throw new SegmentationFailedException(

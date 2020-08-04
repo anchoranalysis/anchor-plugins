@@ -79,20 +79,20 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
         seeds.verifySeedsAreInside(chnl.getDimensions().getExtent());
 
-        ObjectCollection masks = seeds.createMasks();
+        ObjectCollection objects = seeds.deriveObjects();
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
                 MaskFromObjects.createFromObjects(
-                        masks, chnl.getDimensions(), masks.getFirstBinaryValues());
+                        objects, chnl.getDimensions(), objects.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original
         chnl = chnl.duplicate();
 
-        VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
+        VoxelBoxWrapper vbIntensity = chnl.voxels();
 
         // We set the EDM to 0 at the points of the minima
-        for (ObjectMask object : masks) {
+        for (ObjectMask object : objects) {
             vbIntensity.any().setPixelsCheckMask(object, 0);
         }
 
@@ -104,12 +104,12 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                     .setPixelsCheckMask(
                             containingMask.get(),
                             (int) vbIntensity.getVoxelDataType().maxValue(),
-                            masks.getFirstBinaryValuesByte().getOffByte());
+                            objects.getFirstBinaryValuesByte().getOffByte());
         }
 
         VoxelBoxWrapper markerForReconstruction =
                 createMarkerImageFromGradient(
-                        markerMask.getChannel().getVoxelBox().asByte(),
+                        markerMask.getChannel().voxels().asByte(),
                         markerMask.getBinaryValues().createByte(),
                         vbIntensity);
 
@@ -117,6 +117,6 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                 grayscaleReconstruction.reconstruction(
                         vbIntensity, markerForReconstruction, containingMask);
 
-        return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes());
+        return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getResolution());
     }
 }

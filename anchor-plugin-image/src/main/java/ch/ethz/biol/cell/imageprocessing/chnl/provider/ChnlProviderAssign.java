@@ -68,13 +68,13 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
         BoundingBox bbox = new BoundingBox(chnlSrc.getDimensions().getExtent());
 
         chnlAssignFrom
-                .getVoxelBox()
+                .voxels()
                 .asByte()
                 .copyPixelsToCheckMask(
                         bbox,
-                        chnlSrc.getVoxelBox().asByte(),
+                        chnlSrc.voxels().asByte(),
                         bbox,
-                        object.getVoxelBox(),
+                        object.getVoxels(),
                         object.getBinaryValuesByte());
     }
 }

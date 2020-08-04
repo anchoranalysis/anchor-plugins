@@ -82,9 +82,9 @@ public class CfgComparer extends Comparer {
             throw new CreateException(e);
         }
 
-        ObjectCollection mask =
-                cfg.calcMask(dimensions, REGION_MEMBERSHIP, BinaryValuesByte.getDefault())
+        ObjectCollection objects =
+                cfg.deriveObjects(dimensions, REGION_MEMBERSHIP, BinaryValuesByte.getDefault())
                         .withoutProperties();
-        return new Found<>(mask);
+        return new Found<>(objects);
     }
 }

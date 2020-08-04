@@ -64,18 +64,18 @@ public class SgmnSequence extends BinarySegmentation {
     public BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBox,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
         BinaryVoxelBox<ByteBuffer> out = null;
 
         // A bounding-box capturing what part of the scene is being segmented
         BoundingBox bbox =
-                mask.map(ObjectMask::getBoundingBox)
+                objectMask.map(ObjectMask::getBoundingBox)
                         .orElseGet(() -> new BoundingBox(voxelBox.any().extent()));
 
         // A mask that evolves as we move through each segmentation to be increasingly smaller.
-        Optional<ObjectMask> evolvingMask = mask;
+        Optional<ObjectMask> evolvingMask = objectMask;
         for (BinarySegmentation sgmn : listSgmn) {
 
             BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
