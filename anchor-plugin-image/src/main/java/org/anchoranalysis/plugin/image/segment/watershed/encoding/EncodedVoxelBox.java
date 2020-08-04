@@ -31,35 +31,31 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.box.VoxelBox;
 
+@AllArgsConstructor
 public final class EncodedVoxelBox {
 
-    @Getter private final VoxelBox<IntBuffer> voxelBox;
-
-    @Getter private final WatershedEncoding encoding;
-
-    public EncodedVoxelBox(VoxelBox<IntBuffer> voxelBox) {
-        super();
-        this.encoding = new WatershedEncoding();
-        this.voxelBox = voxelBox;
-    }
+    public static final WatershedEncoding ENCODING = new WatershedEncoding();
+    
+    @Getter private final VoxelBox<IntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
-        int offset = voxelBox.extent().offset(point.getX(), point.getY());
-        IntBuffer bbS = voxelBox.getPixelsForPlane(point.getZ()).buffer();
+        int offset = voxels.extent().offset(point.getX(), point.getY());
+        IntBuffer bbS = voxels.getPixelsForPlane(point.getZ()).buffer();
         bbS.put(offset, code);
     }
 
     public void setPointConnectedComponentID(Point3i point, int connectedComponentID) {
-        setPoint(point, encoding.encodeConnectedComponentID(connectedComponentID));
+        setPoint(point, ENCODING.encodeConnectedComponentID(connectedComponentID));
     }
 
     public void setPointDirection(Point3i point, int xChange, int yChange, int zChange) {
-        setPoint(point, encoding.encodeDirection(xChange, yChange, zChange));
+        setPoint(point, ENCODING.encodeDirection(xChange, yChange, zChange));
     }
 
     /**
@@ -71,7 +67,7 @@ public final class EncodedVoxelBox {
 
         Point3i rootPoint = points.get(0);
         int rootPointOffsetEncoded =
-                encoding.encodeConnectedComponentID(voxelBox.extent().offset(rootPoint));
+                ENCODING.encodeConnectedComponentID(voxels.extent().offset(rootPoint));
         setPoint(rootPoint, rootPointOffsetEncoded);
 
         for (int i = 1; i < points.size(); i++) {
@@ -80,7 +76,7 @@ public final class EncodedVoxelBox {
     }
 
     public EncodedIntBuffer getPixelsForPlane(int z) {
-        return new EncodedIntBuffer(voxelBox.getPixelsForPlane(z).buffer(), encoding);
+        return new EncodedIntBuffer(voxels.getPixelsForPlane(z).buffer(), ENCODING);
     }
 
     public boolean hasTemporary() {
@@ -143,7 +139,7 @@ public final class EncodedVoxelBox {
     // Returns the CODED final index (global)
     public int calculateConnectedComponentID(Point3i point, int firstChainCode) {
 
-        Extent e = voxelBox.extent();
+        Extent e = voxels.extent();
 
         int crntChainCode = firstChainCode;
 
@@ -155,17 +151,17 @@ public final class EncodedVoxelBox {
 
             // Replace with intelligence slices buffer?
             int nextVal =
-                    voxelBox.getPixelsForPlane(point.getZ()).buffer().get(e.offsetSlice(point));
+                    voxels.getPixelsForPlane(point.getZ()).buffer().get(e.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);
 
-            if (encoding.isConnectedComponentIDCode(nextVal)) {
+            if (ENCODING.isConnectedComponentIDCode(nextVal)) {
                 return nextVal;
             }
 
             if (nextVal == WatershedEncoding.CODE_MINIMA) {
-                return encoding.encodeConnectedComponentID(e.offset(point));
+                return ENCODING.encodeConnectedComponentID(e.offset(point));
             }
 
             crntChainCode = nextVal;
@@ -181,7 +177,7 @@ public final class EncodedVoxelBox {
      * @return a new point which is the sum of point and the decoded-direction
      */
     private Point3i addDirectionFromChainCode(Point3i point, int chainCode) {
-        Point3i out = encoding.chainCodes(chainCode);
+        Point3i out = ENCODING.chainCodes(chainCode);
         out.add(point);
         return out;
     }
@@ -203,14 +199,14 @@ public final class EncodedVoxelBox {
     }
 
     public boolean isDirectionChainCode(int code) {
-        return encoding.isDirectionChainCode(code);
+        return ENCODING.isDirectionChainCode(code);
     }
 
     public boolean isConnectedComponentIDCode(int code) {
-        return encoding.isConnectedComponentIDCode(code);
+        return ENCODING.isConnectedComponentIDCode(code);
     }
 
     public Extent extent() {
-        return voxelBox.extent();
+        return voxels.extent();
     }
 }

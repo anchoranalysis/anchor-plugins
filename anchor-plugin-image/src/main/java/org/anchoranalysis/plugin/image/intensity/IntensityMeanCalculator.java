@@ -51,7 +51,7 @@ public class IntensityMeanCalculator {
             throws FeatureCalculationException {
         checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
 
-        VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
+        VoxelBoxWrapper vbIntensity = chnl.voxels();
 
         BoundingBox bbox = object.getBoundingBox();
 
@@ -65,7 +65,7 @@ public class IntensityMeanCalculator {
 
             VoxelBuffer<?> bbIntens = vbIntensity.any().getPixelsForPlane(z);
             ByteBuffer bbMask =
-                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
 
             int offsetMask = 0;
             for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {

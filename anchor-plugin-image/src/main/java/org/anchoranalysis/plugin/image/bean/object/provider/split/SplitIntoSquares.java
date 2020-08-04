@@ -103,14 +103,14 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     private Optional<ObjectMask> createSquare(
             ObjectMask objToSplit, int startX, int startY, int extentX, int extentY) {
 
-        Extent extentNew = new Extent(extentX, extentY, objToSplit.getVoxelBox().extent().getZ());
+        Extent extentNew = new Extent(extentX, extentY, objToSplit.getVoxels().extent().getZ());
         BoundingBox srcBox = new BoundingBox(new Point3i(startX, startY, 0), extentNew);
 
         // A voxel-box for the new square
         VoxelBox<ByteBuffer> vbNew = VoxelBoxFactory.getByte().create(extentNew);
 
         // Copy in mask-values from the source
-        objToSplit.getVoxelBox().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
+        objToSplit.getVoxels().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
 
         // We only add the square if there's at least one voxel in it
         if (!acceptSquare(vbNew, objToSplit.getBinaryValues().getOnInt())) {

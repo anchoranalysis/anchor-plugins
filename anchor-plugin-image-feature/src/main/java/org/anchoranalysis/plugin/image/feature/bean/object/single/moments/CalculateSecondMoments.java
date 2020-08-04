@@ -71,10 +71,10 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
 
         List<Point3i> listPts = new ArrayList<>();
 
-        Extent e = object.getVoxelBox().extent();
+        Extent e = object.getVoxels().extent();
 
         for (int z = 0; z < e.getZ(); z++) {
-            ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
 
             int offset = 0;
             for (int y = 0; y < e.getY(); y++) {

@@ -129,11 +129,11 @@ class ExtractProjectedStack {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(eOut, chnl.getDimensions().getRes()),
+                                new ImageDimensions(eOut, chnl.getDimensions().getResolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
-        chnl.getVoxelBox()
+        chnl.voxels()
                 .asByte()
-                .copyPixelsTo(bboxSrc, chnlOut.getVoxelBox().asByte(), bboxToProject);
+                .copyPixelsTo(bboxSrc, chnlOut.voxels().asByte(), bboxToProject);
         return chnlOut;
     }
 }

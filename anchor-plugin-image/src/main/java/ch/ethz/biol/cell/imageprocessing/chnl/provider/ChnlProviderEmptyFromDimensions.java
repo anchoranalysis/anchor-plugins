@@ -55,7 +55,7 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 
         Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
         if (value != 0) {
-            chnlNew.getVoxelBox().any().setAllPixelsTo(value);
+            chnlNew.voxels().any().setAllPixelsTo(value);
         }
         return chnlNew;
     }

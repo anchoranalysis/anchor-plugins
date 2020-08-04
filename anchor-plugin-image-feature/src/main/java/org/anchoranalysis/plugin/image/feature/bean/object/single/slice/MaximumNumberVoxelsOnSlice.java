@@ -48,7 +48,7 @@ public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
         int max = 0;
 
         for (int z = 0; z < params.getObject().getBoundingBox().extent().getZ(); z++) {
-            ByteBuffer bb = params.getObject().getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = params.getObject().getVoxels().getPixelsForPlane(z).buffer();
             int cnt = cntForByteBuffer(bb, params.getObject().getBinaryValuesByte().getOnByte());
 
             if (cnt > max) {

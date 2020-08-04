@@ -30,6 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -49,6 +50,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 
     // START BEAN PROPERTIES
@@ -63,8 +65,6 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 
     // Caches the calculation
     private Path resolvedRoot = null;
-
-    public FilePathPrefixerAvoidResolve() {}
 
     public FilePathPrefixerAvoidResolve(String outPathPrefix) {
         this.outPathPrefix = outPathPrefix;

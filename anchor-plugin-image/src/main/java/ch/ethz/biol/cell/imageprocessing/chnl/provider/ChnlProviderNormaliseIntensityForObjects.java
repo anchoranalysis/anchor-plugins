@@ -41,7 +41,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
     protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        VoxelBox<?> vb = chnl.voxels().any();
 
         for (ObjectMask object : objectsSource) {
 

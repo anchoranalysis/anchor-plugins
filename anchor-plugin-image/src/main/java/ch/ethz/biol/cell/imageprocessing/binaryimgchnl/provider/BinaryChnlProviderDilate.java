@@ -65,7 +65,7 @@ public class BinaryChnlProviderDilate extends BinaryChnlProviderMorphOp {
 
         BinaryVoxelBox<ByteBuffer> out =
                 MorphologicalDilation.dilate(
-                        imgChnl.binaryVoxelBox(),
+                        imgChnl.binaryVoxels(),
                         do3D,
                         getIterations(),
                         backgroundVb(),

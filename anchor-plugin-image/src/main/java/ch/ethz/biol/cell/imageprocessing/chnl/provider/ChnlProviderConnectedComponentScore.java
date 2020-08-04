@@ -96,8 +96,8 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
     private void populateChnl(Channel regionIn, Channel regionOut, LevelResultCollection lrc) {
 
-        VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbIn = regionIn.voxels().asByte();
+        VoxelBox<ByteBuffer> vbOut = regionOut.voxels().asByte();
 
         assert (vbIn.extent().equals(vbOut.extent()));
 

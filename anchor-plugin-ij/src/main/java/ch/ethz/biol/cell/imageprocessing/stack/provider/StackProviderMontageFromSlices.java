@@ -102,7 +102,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
                         1,
                         borderWidth,
                         label);
-        return IJWrap.chnlFromImagePlus(res, in.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(res, in.getDimensions().getResolution());
     }
 
     private int calcNumColumns(int totalNumSlices) {

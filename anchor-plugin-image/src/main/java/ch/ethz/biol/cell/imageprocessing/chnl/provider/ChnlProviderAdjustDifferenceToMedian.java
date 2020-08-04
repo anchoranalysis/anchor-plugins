@@ -64,7 +64,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
             for (ObjectMask object : objectsSource) {
 
                 Histogram histogram =
-                        HistogramFactory.create(lookup.getVoxelBox(), Optional.of(object));
+                        HistogramFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, chnl, lookup, (int) Math.round(histogram.mean()));
             }
 
@@ -81,21 +81,21 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
         ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
+        VoxelBox<ByteBuffer> vbLookup = chnlLookup.voxels().asByte();
 
         for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
 
             ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
             ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
             ByteBuffer bbMask =
-                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+                    object.getVoxels().getPixelsForPlane(z - cornerMin.getZ()).buffer();
 
-            int maskOffset = 0;
+            int objectMaskOffset = 0;
             for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
                 for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
 
-                    if (bbMask.get(maskOffset++) == object.getBinaryValuesByte().getOnByte()) {
+                    if (bbMask.get(objectMaskOffset++) == object.getBinaryValuesByte().getOnByte()) {
 
                         int offset = vb.extent().offset(x, y);
 

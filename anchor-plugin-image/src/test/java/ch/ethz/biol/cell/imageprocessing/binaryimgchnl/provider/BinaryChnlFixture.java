@@ -34,25 +34,26 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.image.ChnlFixture;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Creates {@link Mask} instantiations for tests.
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 class BinaryChnlFixture {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 7;
     public static final int DEPTH = 3;
 
-    private BinaryChnlFixture() {}
-
     public static Mask createWithRectangle(Point3i crnr, boolean do3D) throws CreateException {
 
         Mask chnl = new Mask(BinaryVoxelBoxFactory.instance().create(extent(do3D)));
 
-        chnl.binaryVoxelBox().setPixelsCheckMaskOn(createRectange(crnr, do3D));
+        chnl.binaryVoxels().setPixelsCheckMaskOn(createRectange(crnr, do3D));
 
         return chnl;
     }
@@ -69,7 +70,7 @@ class BinaryChnlFixture {
     private static ObjectMask createRectange(Point3i crnr, boolean do3D) {
         ObjectMask object =
                 new ObjectMask(new BoundingBox(crnr, new Extent(WIDTH, HEIGHT, depth(do3D))));
-        object.binaryVoxelBox().setAllPixelsToOn();
+        object.binaryVoxels().setAllPixelsToOn();
         return object;
     }
 }

@@ -40,7 +40,6 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -62,28 +61,26 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.getDimensions().getRes());
+                new BinarySegmentationParameters(channel.getDimensions().getResolution());
 
-        BinaryVoxelBox<ByteBuffer> bvb = segment.sgmn(channel.getVoxelBox(), params, mask);
+        BinaryVoxelBox<ByteBuffer> bvb = segment.sgmn(channel.voxels(), params, objectMask);
         return createFromBinaryVoxelBox(
                 bvb,
-                channel.getDimensions().getRes(),
-                mask.map(objectMask -> objectMask.getBoundingBox().cornerMin()));
+                channel.getDimensions().getResolution(),
+                objectMask.map(object -> object.getBoundingBox().cornerMin()));
     }
 
     private ObjectCollection createFromBinaryVoxelBox(
             BinaryVoxelBox<ByteBuffer> bvb,
-            ImageResolution res,
+            ImageResolution resolution,
             Optional<ReadableTuple3i> maskShiftBy)
             throws SegmentationFailedException {
-        Mask bic =
-                new Mask(
-                        ChannelFactory.instance().create(bvb.getVoxelBox(), res),
-                        bvb.getBinaryValues());
+        Mask bic = new Mask(bvb, resolution);
+
         CreateFromConnectedComponentsFactory creator =
                 new CreateFromConnectedComponentsFactory(minNumberVoxels);
         try {

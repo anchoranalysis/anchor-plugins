@@ -50,7 +50,7 @@ final class SlidingBufferPlus {
     public SlidingBufferPlus(
             VoxelBox<?> vbImg,
             EncodedVoxelBox matS,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
         this.matS = matS;
@@ -59,9 +59,9 @@ final class SlidingBufferPlus {
         this.slidingBufferSteepestCalc = new SlidingBuffer<>(vbImg);
 
         boolean do3D = vbImg.extent().getZ() > 1;
-        this.findEqualVoxels = new FindEqualVoxels(vbImg, matS, do3D, mask);
+        this.findEqualVoxels = new FindEqualVoxels(vbImg, matS, do3D, objectMask);
         this.steepestCalc =
-                new SteepestCalc(slidingBufferSteepestCalc, matS.getEncoding(), do3D, true, mask);
+                new SteepestCalc(slidingBufferSteepestCalc, EncodedVoxelBox.ENCODING, do3D, true, objectMask);
     }
 
     public SlidingBuffer<?> getSlidingBuffer() { // NOSONAR

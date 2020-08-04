@@ -35,7 +35,6 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 
 public class BinaryChnlProviderStackReference extends MaskProvider {
@@ -46,13 +45,13 @@ public class BinaryChnlProviderStackReference extends MaskProvider {
     @BeanField @Getter @Setter private String stackProviderID;
     // END BEAN PROPERTIES
 
-    private Channel chnl;
+    private Channel channel;
 
     @Override
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            chnl = so.getStackCollection().getException(stackProviderID).getChannel(chnlIndex);
+            channel = so.getStackCollection().getException(stackProviderID).getChannel(chnlIndex);
         } catch (NamedProviderGetException e) {
             throw InitException.createOrReuse(e.summarize());
         }
@@ -60,6 +59,6 @@ public class BinaryChnlProviderStackReference extends MaskProvider {
 
     @Override
     public Mask create() throws CreateException {
-        return new Mask(chnl, BinaryValues.getDefault());
+        return new Mask(channel);
     }
 }

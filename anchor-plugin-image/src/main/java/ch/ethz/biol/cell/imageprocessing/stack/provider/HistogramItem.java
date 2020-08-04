@@ -26,9 +26,9 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
-import org.anchoranalysis.core.index.IIndexGetter;
+import org.anchoranalysis.core.index.IndexGetter;
 
-class HistogramItem implements IIndexGetter {
+class HistogramItem implements IndexGetter {
 
     private int intensity;
     private int count;

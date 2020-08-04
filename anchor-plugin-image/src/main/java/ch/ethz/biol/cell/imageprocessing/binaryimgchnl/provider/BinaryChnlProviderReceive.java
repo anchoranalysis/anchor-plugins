@@ -41,7 +41,7 @@ public abstract class BinaryChnlProviderReceive extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
         return createFromChnlReceive(chnl, receive.create());
     }
 

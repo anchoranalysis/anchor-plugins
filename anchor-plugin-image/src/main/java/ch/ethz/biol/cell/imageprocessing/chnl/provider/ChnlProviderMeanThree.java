@@ -48,10 +48,10 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
                                 chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte(),
-                chnl3.getVoxelBox().asByte());
+                chnlOut.voxels().asByte(),
+                chnl1.voxels().asByte(),
+                chnl2.voxels().asByte(),
+                chnl3.voxels().asByte());
 
         return chnlOut;
     }

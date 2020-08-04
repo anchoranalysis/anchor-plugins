@@ -78,14 +78,14 @@ public class ChnlProviderPixelScore extends ChannelProvider {
 
         VoxelBoxList listOut = new VoxelBoxList();
 
-        listOut.add(chnlIntensity.getVoxelBox());
+        listOut.add(chnlIntensity.voxels());
 
         if (gradientProvider != null) {
-            listOut.add(gradientProvider.create().getVoxelBox());
+            listOut.add(gradientProvider.create().voxels());
         }
         for (ChannelProvider chnlProvider : listChnlProviderExtra) {
             VoxelBoxWrapper vbExtra =
-                    chnlProvider != null ? chnlProvider.create().getVoxelBox() : null;
+                    chnlProvider != null ? chnlProvider.create().voxels() : null;
             listOut.add(vbExtra);
         }
         return listOut;
@@ -102,7 +102,7 @@ public class ChnlProviderPixelScore extends ChannelProvider {
         return Optional.of(
                 new ObjectMask(
                         new BoundingBox(chnlMask.getDimensions().getExtent()),
-                        chnlMask.getVoxelBox().asByte(),
+                        chnlMask.voxels().asByte(),
                         binaryChnlMask.getBinaryValues()));
     }
 
@@ -139,6 +139,6 @@ public class ChnlProviderPixelScore extends ChannelProvider {
         }
 
         return new ChannelFactoryByte()
-                .create(vbPixelScore, chnlIntensity.getDimensions().getRes());
+                .create(vbPixelScore, chnlIntensity.getDimensions().getResolution());
     }
 }

@@ -73,17 +73,17 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
                 ChannelFactory.instance()
                         .createEmptyInitialised(
                                 chnlIn.getDimensions(), VoxelDataTypeFloat.INSTANCE);
-        VoxelBox<FloatBuffer> vb = chnlIntermediate.getVoxelBox().asFloat();
+        VoxelBox<FloatBuffer> vb = chnlIntermediate.voxels().asFloat();
 
         NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
 
         if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
             NativeImg<UnsignedByteType, ByteArray> natIn =
-                    ImgLib2Wrap.wrapByte(chnlIn.getVoxelBox().asByte());
+                    ImgLib2Wrap.wrapByte(chnlIn.voxels().asByte());
             process(natIn, natOut, (float) scaleFactor);
         } else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
             NativeImg<UnsignedShortType, ShortArray> natIn =
-                    ImgLib2Wrap.wrapShort(chnlIn.getVoxelBox().asShort());
+                    ImgLib2Wrap.wrapShort(chnlIn.voxels().asShort());
             process(natIn, natOut, (float) scaleFactor);
         } else {
             throw new CreateException("Input type must be unsigned byte or short");

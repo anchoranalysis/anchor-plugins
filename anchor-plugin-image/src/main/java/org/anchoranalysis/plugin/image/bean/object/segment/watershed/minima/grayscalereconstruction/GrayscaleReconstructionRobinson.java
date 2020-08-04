@@ -184,7 +184,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
             VoxelBuffer<ByteBuffer> bbFinalized = vbFinalized.getPixelsForPlane(z);
             VoxelBuffer<ByteBuffer> bbMask =
-                    containingMask.getVoxelBox().getPixelsForPlane(z - crnrpointMin.getZ());
+                    containingMask.getVoxels().getPixelsForPlane(z - crnrpointMin.getZ());
 
             int offset = 0;
             for (int y = crnrpointMin.getY(); y <= crnrpointMax.getY(); y++) {

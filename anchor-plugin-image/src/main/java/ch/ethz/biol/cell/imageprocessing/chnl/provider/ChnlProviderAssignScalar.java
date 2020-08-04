@@ -47,7 +47,7 @@ public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
     }
 
     private void assignScalar(Channel chnlSrc, Mask mask, int value) {
-        chnlSrc.getVoxelBox()
+        chnlSrc.voxels()
                 .any()
                 .setPixelsCheckMask(CreateFromEntireChnlFactory.createObject(mask), value);
     }

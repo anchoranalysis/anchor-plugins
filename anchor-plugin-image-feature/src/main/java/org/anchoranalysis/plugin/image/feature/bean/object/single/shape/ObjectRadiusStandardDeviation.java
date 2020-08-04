@@ -59,7 +59,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         ObjectMask object = input.get().getObject();
 
         // Get the outline
-        List<Point3i> pointsOutline = createMaskOutlineAsPoints(object, 1);
+        List<Point3i> pointsOutline = createObjectOutlineAsPoints(object, 1);
 
         // Distances from the center to each point on the outline
         DoubleArrayList distances = distancesToPoints(object.centerOfGravity(), pointsOutline);
@@ -96,13 +96,13 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         }
     }
 
-    private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions) {
+    private static List<Point3i> createObjectOutlineAsPoints(ObjectMask object, int numberErosions) {
 
         List<Point3i> pointsOutline = new ArrayList<>();
 
-        ObjectMask outline = FindOutline.outline(mask, numberErosions, false, true);
+        ObjectMask outline = FindOutline.outline(object, numberErosions, false, true);
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), pointsOutline);
+                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), pointsOutline);
 
         return pointsOutline;
     }

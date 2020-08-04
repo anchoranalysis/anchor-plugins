@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates deterministicly a point that is definitely inside the object mask. A selected axis is
+ * Calculates deterministicly a point that is definitely inside the object-mask. A selected axis is
  * outputted.
  *
  * @author Owen Feehan

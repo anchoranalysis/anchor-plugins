@@ -76,12 +76,12 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
         useZ = useZ && (chnlOutline.getDimensions().getZ() > 1);
 
-        callBefore(chnlOutline.getDimensions().getRes(), randomNumberGenerator);
+        callBefore(chnlOutline.getDimensions().getResolution(), randomNumberGenerator);
 
         objectOutline = createObjectForPoint(root, chnlOutline);
 
         objectFilled = objectForFilled(root, chnlFilled);
-        callAfter(root, chnlOutline.getDimensions().getRes(), randomNumberGenerator);
+        callAfter(root, chnlOutline.getDimensions().getResolution(), randomNumberGenerator);
         traverseOutline(root, listOut);
     }
 
@@ -160,7 +160,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         try {
             Tuple3i maxDistance =
                     visitScheduler
-                            .maxDistanceFromRootPoint(chnl.getDimensions().getRes())
+                            .maxDistanceFromRootPoint(chnl.getDimensions().getResolution())
                             .orElseThrow(
                                     () ->
                                             new CreateException(

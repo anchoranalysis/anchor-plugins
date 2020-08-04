@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.box.VoxelBox;
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask chnlIn, Mask outline) throws CreateException {
         MessageLogger logger = getLogger().messageLogger();
         List<Point3d> extPoints = pointsFromChnl(outline);
 
@@ -69,7 +69,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
         // we write the vertices to the outline
         Channel out = outline.getChannel();
-        VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbOut = out.voxels().asByte();
 
         vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
         for (int i = 0; i < vertices.length; i++) {
@@ -91,10 +91,10 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
         BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 
-        Extent e = chnl.getVoxelBox().extent();
+        Extent e = chnl.getVoxels().extent();
         for (int z = 0; z < e.getZ(); z++) {
 
-            ByteBuffer bb = chnl.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = chnl.getVoxels().getPixelsForPlane(z).buffer();
 
             for (int y = 0; y < e.getY(); y++) {
                 for (int x = 0; x < e.getX(); x++) {

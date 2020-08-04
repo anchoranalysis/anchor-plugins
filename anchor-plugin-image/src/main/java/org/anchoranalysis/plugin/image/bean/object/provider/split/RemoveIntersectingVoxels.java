@@ -95,19 +95,19 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
         ObjectMask objectWriteDuplicated = objectWrite.duplicate();
 
         objectWrite
-                .getVoxelBox()
+                .getVoxels()
                 .setPixelsCheckMask(
                         bboxRelWrite,
-                        objectReadDuplicated.getVoxelBox(),
+                        objectReadDuplicated.getVoxels(),
                         bboxRelRead,
                         objectWrite.getBinaryValues().getOffInt(),
                         objectReadDuplicated.getBinaryValuesByte().getOnByte());
 
         objectRead
-                .getVoxelBox()
+                .getVoxels()
                 .setPixelsCheckMask(
                         bboxRelRead,
-                        objectWriteDuplicated.getVoxelBox(),
+                        objectWriteDuplicated.getVoxels(),
                         bboxRelWrite,
                         objectRead.getBinaryValues().getOffInt(),
                         objectWriteDuplicated.getBinaryValuesByte().getOnByte());

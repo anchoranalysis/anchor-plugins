@@ -32,7 +32,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including
- * the original object mask) and measures the mean intensity of this shell
+ * the original object-mask) and measures the mean intensity of this shell
  */
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 

@@ -38,7 +38,6 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -179,7 +178,7 @@ class NaiveGreedyMerge {
     private static ObjectMask createSinglePixelObject(Point3i point) {
         Extent e = new Extent(1, 1, 1);
         VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(e);
-        BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault());
+        BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb);
         bvb.setAllPixelsToOn();
         return new ObjectMask(new BoundingBox(point, e), bvb);
     }

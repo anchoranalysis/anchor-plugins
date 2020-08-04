@@ -85,7 +85,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(
                             inputImage, radius, false);
-            VoxelBox<?> vbSubOut = bgSubOut.getVoxelBox().any();
+            VoxelBox<?> vbSubOut = bgSubOut.voxels().any();
 
             double maxPixel = vbSubOut.ceilOfMaxPixel();
 

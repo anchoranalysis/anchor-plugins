@@ -80,7 +80,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
         EncodedVoxelBox matS = createS(channel.getDimensions().getExtent());
@@ -89,10 +89,10 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
                 OptionalFactory.create(exitWithMinima, MinimaStore::new);
 
         if (seeds.isPresent()) {
-            MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
+            MarkSeeds.apply(seeds.get(), matS, minimaStore, objectMask);
         }
 
-        pointPixelsOrMarkAsMinima(channel.getVoxelBox().any(), matS, mask, minimaStore);
+        pointPixelsOrMarkAsMinima(channel.voxels().any(), matS, objectMask, minimaStore);
 
         // Special behavior where we just want to find the minima and nothing more
         if (minimaStore.isPresent()) {
@@ -104,10 +104,10 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
         }
 
         // TODO let's only work on the areas with regions
-        convertAllToConnectedComponents(matS, mask);
+        convertAllToConnectedComponents(matS, objectMask);
 
         try {
-            return createObjectsFromLabels(matS.getVoxelBox(), mask);
+            return createObjectsFromLabels(matS.getVoxels(), objectMask);
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }
@@ -122,27 +122,27 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     private static void pointPixelsOrMarkAsMinima(
             VoxelBox<?> vbImg,
             EncodedVoxelBox matS,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
-        SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
+        SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, objectMask, minimaStore);
         IterateVoxels.callEachPoint(
-                mask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
+                objectMask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
     }
 
     private static void convertAllToConnectedComponents(
-            EncodedVoxelBox matS, Optional<ObjectMask> mask) {
+            EncodedVoxelBox matS, Optional<ObjectMask> objectMask) {
         IterateVoxels.callEachPoint(
-                mask, matS.getVoxelBox(), new ConvertAllToConnectedComponents(matS));
+                objectMask, matS.getVoxels(), new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(
-            VoxelBox<IntBuffer> matS, Optional<ObjectMask> mask) throws CreateException {
+            VoxelBox<IntBuffer> matS, Optional<ObjectMask> objectMask) throws CreateException {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 
         IterateVoxels.callEachPoint(
-                mask,
+                objectMask,
                 matS,
                 (Point3i point, IntBuffer buffer, int offset) -> {
                     int crntVal = buffer.get(offset);

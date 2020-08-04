@@ -42,7 +42,7 @@ class RankFilterUtilities {
 
         RankFilters rankFilters = new RankFilters();
 
-        VoxelBoxWrapper vb = chnl.getVoxelBox();
+        VoxelBoxWrapper vb = chnl.voxels();
 
         // Are we missing a Z slice?
         for (int z = 0; z < chnl.getDimensions().getZ(); z++) {

@@ -67,7 +67,7 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
             throws ProposalAbnormalFailureException {
         return Optional.of(
                 RadiiRandomizer.randomizeRadii(
-                        radiusBound, randomNumberGenerator, dimensions.getRes(), do3D));
+                        radiusBound, randomNumberGenerator, dimensions.getResolution(), do3D));
     }
 
     @Override

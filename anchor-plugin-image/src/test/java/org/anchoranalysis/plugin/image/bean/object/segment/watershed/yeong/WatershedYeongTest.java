@@ -30,8 +30,7 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -69,19 +68,18 @@ public class WatershedYeongTest {
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         WatershedYeong sgmn = new WatershedYeong();
 
-        Optional<ObjectMask> mask = pathMask.map(path -> mask(path));
+        Optional<ObjectMask> objectMask = pathMask.map(path -> maskAsObject(path));
 
         ObjectCollection objectsResult =
-                sgmn.segment(chnl(PATH_CHNL_BLURRED), mask, Optional.empty());
+                sgmn.segment(chnl(PATH_CHNL_BLURRED), objectMask, Optional.empty());
 
         ObjectCollection objectsExpected = loader.openObjectsFromTestPath(pathObjectsExpected);
 
         assertTrue(objectsExpected.equalsDeep(objectsResult));
     }
 
-    private ObjectMask mask(String path) {
-        Mask chnl = new Mask(chnl(PATH_MASK), BinaryValues.getDefault());
-        return new ObjectMask(chnl.binaryVoxelBox());
+    private ObjectMask maskAsObject(String path) {
+        return new ObjectMask(new BinaryVoxelBoxByte( chnl(PATH_MASK).voxels().asByte() ));
     }
 
     private Channel chnl(String path) {

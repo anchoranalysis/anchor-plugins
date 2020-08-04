@@ -151,7 +151,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                             chnlIntensity.getDimensions().getExtent(),
                             true);
 
-            VoxelBox<?> vbOutput = chnlOutput.getVoxelBox().any();
+            VoxelBox<?> vbOutput = chnlOutput.voxels().any();
 
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectMaskWithHistogram, Integer> mapLevel = new HashMap<>();

@@ -56,7 +56,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     @BeanField @Getter @Setter private int iterationsDilation = 0;
 
     /**
-     * Iff TRUE, calculates instead on the inverse of the mask (what's left when the shell is
+     * Iff TRUE, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed)
      */
     @BeanField @Getter @Setter private boolean inverse = false;
@@ -130,7 +130,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     private ObjectMask createNrgMask(NRGStack nrgStack) {
         return new ObjectMask(
                 new BoundingBox(nrgStack.getDimensions().getExtent()),
-                nrgStack.getChannel(nrgIndexMask).getVoxelBox().asByte(),
+                nrgStack.getChannel(nrgIndexMask).voxels().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()
                         : BinaryValues.getDefault());

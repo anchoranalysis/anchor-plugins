@@ -28,7 +28,6 @@ package org.anchoranalysis.test.mpp;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -53,7 +52,7 @@ public class LoadUtilities {
         CreateFromConnectedComponentsFactory cc = new CreateFromConnectedComponentsFactory();
         ObjectCollection objects =
                 cc.createConnectedComponents(
-                        new Mask(stack.getChannel(0), BinaryValues.getDefault()));
+                        new Mask(stack.getChannel(0)));
 
         return findLargestObj(objects);
     }

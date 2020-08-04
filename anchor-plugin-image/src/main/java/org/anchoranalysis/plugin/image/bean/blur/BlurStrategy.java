@@ -63,7 +63,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
         if (sigmaInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            sigmaToUse = ImageUnitConverter.convertFromMeters(sigma, dimensions.getRes());
+            sigmaToUse = ImageUnitConverter.convertFromMeters(sigma, dimensions.getResolution());
 
             logger.logFormatted("Converted sigmaInMeters=%f into sigma=%f", sigma, sigmaToUse);
         }

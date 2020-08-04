@@ -113,7 +113,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
                                                     objectToSplit.getBoundingBox().cornerMin()));
 
             // We make the intersection relative to objToSplit
-            boundedVbId.getVoxelBox().setPixelsCheckMask(intersectShifted, cnt++);
+            boundedVbId.getVoxels().setPixelsCheckMask(intersectShifted, cnt++);
         }
 
         try {
@@ -126,7 +126,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
                     i ->
                             createObjectForIndex(
                                     i,
-                                    boundedVbId.getVoxelBox(),
+                                    boundedVbId.getVoxels(),
                                     objectToSplit.getBoundingBox().cornerMin()));
 
         } catch (CreateException e) {

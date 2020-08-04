@@ -67,7 +67,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calcMinMax(
-                                    outlineChnl.getDimensions().getRes(),
+                                    outlineChnl.getDimensions().getResolution(),
                                     rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
@@ -114,7 +114,7 @@ public class LineBoundCalculator extends BoundCalculator {
     private double maxReachablePoint(
             Channel voxels, Point3d point, Point3d marg, int maxPossiblePoint) {
 
-        VoxelBox<ByteBuffer> vb = voxels.getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = voxels.voxels().asByte();
 
         // This only exists in 2d for now so we can use a slice byteArray
         ByteBuffer arr = null;
@@ -148,7 +148,7 @@ public class LineBoundCalculator extends BoundCalculator {
                 return extra
                         + normZMag(
                                 runningDbl,
-                                voxels.getDimensions().getRes().getZRelativeResolution());
+                                voxels.getDimensions().getResolution().getZRelativeResolution());
             }
         }
         return -1;

@@ -144,7 +144,7 @@ public class DescribeGraph {
                     describeEdge(
                             edge.getNode1(),
                             edge.getNode2(),
-                            edge.getEdge().getOmWithFeature(),
+                            edge.getEdge().getVertex(),
                             edge.getEdge().getPriority(),
                             edge.getEdge().isConsiderForMerge()));
             sb.append("\n");

@@ -46,17 +46,17 @@ public class ChnlProviderMaskOut extends ChnlProviderOneMask {
     @Override
     protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vbMask = mask.getChannel().voxels().asByte();
 
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(chnl.getDimensions(), chnl.getVoxelDataType());
 
         BoundingBox bbox = new BoundingBox(chnlOut.getDimensions().getExtent());
-        chnl.getVoxelBox()
+        chnl.voxels()
                 .copyPixelsToCheckMask(
                         bbox,
-                        chnlOut.getVoxelBox(),
+                        chnlOut.voxels(),
                         bbox,
                         vbMask,
                         mask.getBinaryValues().createByte());

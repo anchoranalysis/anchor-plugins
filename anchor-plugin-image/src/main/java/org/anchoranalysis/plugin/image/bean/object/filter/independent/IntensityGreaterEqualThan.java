@@ -72,7 +72,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
             throw new OperationFailedException(e);
         }
         assert (chnlSingleRegion != null);
-        vb = chnlSingleRegion.getVoxelBox().any();
+        vb = chnlSingleRegion.voxels().any();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
 
-            ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
 
             int z1 = z + object.getBoundingBox().cornerMin().getZ();
             VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
@@ -114,7 +114,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::getRes), AxisType.X));
+                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::getResolution), AxisType.X));
     }
 
     @Override

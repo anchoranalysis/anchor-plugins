@@ -36,7 +36,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -67,10 +66,10 @@ public class SgmnObject extends BinarySegmentation {
     public BinaryVoxelBox<ByteBuffer> sgmn(
             VoxelBoxWrapper voxelBoxIn,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
-        if (mask.isPresent()) {
+        if (objectMask.isPresent()) {
             throw new SegmentationFailedException("Masks are not supported on this operation");
         }
 
@@ -82,11 +81,11 @@ public class SgmnObject extends BinarySegmentation {
         VoxelBox<ByteBuffer> out = voxelBoxIn.asByte();
 
         sgmnByObj(
-                new BinaryVoxelBoxByte(out, BinaryValues.getDefault()),
+                new BinaryVoxelBoxByte(out),
                 new VoxelBoxWrapper(orig),
                 params);
 
-        return new BinaryVoxelBoxByte(out, BinaryValues.getDefault());
+        return new BinaryVoxelBoxByte(out);
     }
 
     private void sgmnByObj(
@@ -107,9 +106,9 @@ public class SgmnObject extends BinarySegmentation {
 
                 out.copyPixelsToCheckMask(
                         new BoundingBox(obj.getBoundingBox().extent()),
-                        voxelBox.getVoxelBox(),
+                        voxelBox.getVoxels(),
                         obj.getBoundingBox(),
-                        obj.getVoxelBox(),
+                        obj.getVoxels(),
                         obj.getBinaryValuesByte());
 
             } else {

@@ -61,15 +61,15 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
     @Override
     public Stack create() throws CreateException {
 
-        Mask maskChnl = mask.create();
+        Mask maskChannel = mask.create();
 
         try {
-            boolean do3D = !mip || maskChnl.getDimensions().getZ() == 1;
+            boolean do3D = !mip || maskChannel.getDimensions().getZ() == 1;
 
             return CalcOutlineRGB.apply(
-                    calcOutline(maskChnl),
+                    calcOutline(maskChannel),
                     backgroundStack(do3D),
-                    createBlue(do3D, maskChnl.getDimensions()),
+                    createBlue(do3D, maskChannel.getDimensions()),
                     createShort);
 
         } catch (OperationFailedException e) {

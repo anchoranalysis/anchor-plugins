@@ -47,13 +47,13 @@ public class CircleObjectFixture {
         MarkCircle mark = new MarkCircle();
         mark.setPos(PointConverter.doubleFromInt(center));
         mark.setRadius(radius);
-        return mark.calcMask(
+        return mark.deriveObject(
                         DIMS,
                         RegionMapSingleton.instance()
                                 .membershipWithFlagsForIndex(
                                         GlobalRegionIdentifiers.SUBMARK_INSIDE),
                         BinaryValuesByte.getDefault())
-                .getMask();
+                .withoutProperties();
     }
 
     public static NRGStackWithParams nrgStack() {

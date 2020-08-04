@@ -55,7 +55,7 @@ public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
     protected abstract void applyMorphOp(Mask imgChnl, boolean do3D) throws CreateException;
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask chnl) throws CreateException {
 
         // Gets outline
         applyMorphOp(chnl, (chnl.getDimensions().getZ() > 1) && !suppress3D);
@@ -66,7 +66,7 @@ public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
     protected Optional<VoxelBox<ByteBuffer>> backgroundVb() throws CreateException {
 
         if (minIntensityValue > 0) {
-            return Optional.of(backgroundChnlProvider.create().getVoxelBox().asByte());
+            return Optional.of(backgroundChnlProvider.create().voxels().asByte());
         } else {
             return Optional.empty();
         }

@@ -144,7 +144,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = chnl.getVoxelBox().asByte().getPixelsForPlane(point.getZ()).buffer();
+        ByteBuffer buffer = chnl.voxels().asByte().getPixelsForPlane(point.getZ()).buffer();
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 
@@ -174,11 +174,11 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             double distance =
                     binaryImage
                             .getDimensions()
-                            .getRes()
+                            .getResolution()
                             .distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(binaryImage.getDimensions().getRes()),
+                            Optional.of(binaryImage.getDimensions().getResolution()),
                             centerPoint,
                             pointDouble);
             return distance > maxDistanceResolved;

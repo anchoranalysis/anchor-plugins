@@ -46,7 +46,7 @@ class CalculatePairInput
     protected FeatureInputPairObjects execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        ObjectMask objFromBinary = new ObjectMask(chnl.binaryVoxelBox());
+        ObjectMask objFromBinary = new ObjectMask(chnl.binaryVoxels());
 
         return new FeatureInputPairObjects(
                 input.getObject(), objFromBinary, input.getNrgStackOptional());

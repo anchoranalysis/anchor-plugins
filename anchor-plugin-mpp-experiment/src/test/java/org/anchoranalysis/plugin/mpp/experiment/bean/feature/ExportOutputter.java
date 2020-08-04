@@ -26,10 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-/** Helpful routines and constants related to outputting for {@link ExportFeaturesTaskTest} */
-class ExportOutputter {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private ExportOutputter() {}
+/** Helpful routines and constants related to outputting for {@link ExportFeaturesTaskTest} */
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class ExportOutputter {
 
     // Saved output locations for particular tests
     public static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";

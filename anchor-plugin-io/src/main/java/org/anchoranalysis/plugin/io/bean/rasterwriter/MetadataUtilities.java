@@ -81,9 +81,9 @@ class MetadataUtilities {
             meta.setPixelsSizeZ(new PositiveInteger(sd.getZ()), seriesNum);
         }
 
-        meta.setPixelsPhysicalSizeX(createLength(sd.getRes().getX() * sd.getX()), 0);
-        meta.setPixelsPhysicalSizeY(createLength(sd.getRes().getY() * sd.getY()), 0);
-        meta.setPixelsPhysicalSizeZ(createLength(sd.getRes().getZ() * sd.getZ()), 0);
+        meta.setPixelsPhysicalSizeX(createLength(sd.getResolution().getX() * sd.getX()), 0);
+        meta.setPixelsPhysicalSizeY(createLength(sd.getResolution().getY() * sd.getY()), 0);
+        meta.setPixelsPhysicalSizeZ(createLength(sd.getResolution().getZ() * sd.getZ()), 0);
 
         addNumChnls(meta, calcNumChnls(makeRGB), calcSamplesPerPixel(makeRGB), seriesNum);
 

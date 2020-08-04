@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.getExtent(),
                             object.getBoundingBox().cornerMin());
 
-            VoxelBox<ByteBuffer> mipVb = object.getVoxelBox().maxIntensityProj();
+            VoxelBox<ByteBuffer> mipVb = object.getVoxels().maxIntensityProjection();
             return ApplyKernel.applyForCount(kernel, mipVb);
 
         } else {
@@ -81,7 +81,7 @@ class CalculateOutlineNumberVoxelFaces
                             true,
                             dimensions.getExtent(),
                             object.getBoundingBox().cornerMin());
-            return ApplyKernel.applyForCount(kernel, object.getVoxelBox());
+            return ApplyKernel.applyForCount(kernel, object.getVoxels());
         }
     }
 

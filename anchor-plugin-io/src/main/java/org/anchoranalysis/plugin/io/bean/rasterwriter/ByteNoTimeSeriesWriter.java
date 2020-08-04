@@ -109,7 +109,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
         int cnt = 0;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             Channel chnl = stack.getChannel(c);
-            VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+            VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
 
             for (int z = 0; z < stack.getDimensions().getZ(); z++) {
                 writer.saveBytes(cnt++, vb.getPixelsForPlane(z).buffer().array());

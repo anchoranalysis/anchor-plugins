@@ -43,6 +43,6 @@ public class ChnlProviderMedianFilterIJ3D extends ChnlProviderOne {
 
         ImagePlus impOut = plugin.Hybrid3dMedianizer(imp);
 
-        return IJWrap.chnlFromImagePlus(impOut, chnl.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(impOut, chnl.getDimensions().getResolution());
     }
 }

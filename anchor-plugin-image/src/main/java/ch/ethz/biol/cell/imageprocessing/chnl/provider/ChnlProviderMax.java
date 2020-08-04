@@ -50,9 +50,9 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
                         .createEmptyInitialised(chnl1.getDimensions(), combinedType);
 
         setMaxInOutputVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte());
+                chnlOut.voxels().asByte(),
+                chnl1.voxels().asByte(),
+                chnl2.voxels().asByte());
 
         return chnlOut;
     }

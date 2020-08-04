@@ -37,7 +37,7 @@ public class ChnlProviderInvert extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        VoxelBoxWrapper vb = chnl.getVoxelBox();
+        VoxelBoxWrapper vb = chnl.voxels();
 
         int maxVal = (int) vb.getVoxelDataType().maxValue();
 

@@ -59,7 +59,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
     private static void histogramStretch(Channel chnl, double quantile)
             throws OperationFailedException {
 
-        VoxelBoxWrapper vb = chnl.getVoxelBox();
+        VoxelBoxWrapper vb = chnl.voxels();
 
         Histogram hist = HistogramFactory.create(vb);
 

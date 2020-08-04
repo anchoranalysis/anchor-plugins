@@ -48,7 +48,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
         ImageResolution resolution =
                 sourceDimensions
-                        .map(ImageDimensions::getRes)
+                        .map(ImageDimensions::getResolution)
                         .orElseThrow(
                                 () -> new OperationFailedException("No source dimensions exist"));
 

@@ -48,7 +48,7 @@ class ExtendObjectsInZHelper {
 
         ObjectMask objectNew = container.region(bbox, false);
 
-        ByteBuffer bbFlat = flat.getVoxelBox().getPixelsForPlane(0).buffer();
+        ByteBuffer bbFlat = flat.getVoxels().getPixelsForPlane(0).buffer();
 
         int zLow = bbox.cornerMin().getZ();
         int zHigh = bbox.calcCornerMax().getZ();
@@ -86,7 +86,7 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            ByteBuffer bbExst = objectNew.getVoxelBox().getPixelsForPlane(zRel).buffer();
+            ByteBuffer bbExst = objectNew.getVoxels().getPixelsForPlane(zRel).buffer();
 
             if (andMode) { // NOSONAR
 

@@ -62,6 +62,6 @@ class CalculateIntersectionOfDilatedBoundingBox
     }
 
     private BoundingBox dilatedBoundingBoxFor(ObjectMask object, Extent extent) {
-        return object.getVoxelBoxBounded().dilate(do3D, Optional.of(extent));
+        return object.getBoundedVoxels().dilate(do3D, Optional.of(extent));
     }
 }

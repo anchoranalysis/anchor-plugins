@@ -199,6 +199,6 @@ public class ConvexHullUtilities {
     private static void addPointsFromObjOutline(ObjectMask object, List<Point2i> points) {
         ObjectMask outline = FindOutline.outline(object, 1, true, false);
         PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), points);
+                outline.binaryVoxels(), outline.getBoundingBox().cornerMin(), points);
     }
 }

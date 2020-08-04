@@ -50,7 +50,7 @@ public class BinaryChnlProviderErode extends BinaryChnlProviderMorphOp {
 
         BinaryVoxelBox<ByteBuffer> out =
                 MorphologicalErosion.erode(
-                        imgChnl.binaryVoxelBox(),
+                        imgChnl.binaryVoxels(),
                         do3D,
                         getIterations(),
                         backgroundVb(),

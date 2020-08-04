@@ -79,6 +79,6 @@ public class NumTouchingVoxels extends TouchingVoxels {
                         source.getBinaryValuesByte(),
                         RelativeUtilities.createRelMask(destination, source),
                         false);
-        return ApplyKernel.applyForCount(kernelMatch, source.getVoxelBox(), bboxIntersectRelative);
+        return ApplyKernel.applyForCount(kernelMatch, source.getVoxels(), bboxIntersectRelative);
     }
 }

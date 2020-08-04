@@ -75,11 +75,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
-    /** The channels we apply the masks to - all assumed to be of same dimension */
+    /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();
 
-    /** The channels we apply the masks to - all assumed to be of same dimension */
+    /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     @BeanField @Getter @Setter private boolean extendInZ = false;
 
     /**
-     * If true, rather than writing out a bounding-box around the object mask, the entire image is
+     * If true, rather than writing out a bounding-box around the object-mask, the entire image is
      * written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;

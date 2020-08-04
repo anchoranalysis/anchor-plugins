@@ -47,9 +47,9 @@ public class BlurGaussian3D extends BlurStrategy {
 
         GaussianBlurUtilities.applyBlur(
                 ImgLib2Wrap.wrap(voxelBox),
-                dimensions.getRes(),
+                dimensions.getResolution(),
                 new double[] {
-                    sigma, sigma, sigma / dimensions.getRes().getZRelativeResolution()
+                    sigma, sigma, sigma / dimensions.getResolution().getZRelativeResolution()
                 } // Sigma-array
                 );
     }

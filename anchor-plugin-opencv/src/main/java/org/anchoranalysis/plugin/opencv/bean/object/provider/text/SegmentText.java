@@ -99,7 +99,7 @@ public class SegmentText extends ObjectCollectionProvider {
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
                 EastObjectsExtractor.apply(
                         pair._1(),
-                        stack.getDimensions().getRes(),
+                        stack.getDimensions().getResolution(),
                         minConfidence,
                         pathToEastModel());
 

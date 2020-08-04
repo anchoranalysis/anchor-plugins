@@ -57,7 +57,7 @@ class PointsFromInsideHelper {
             PointListForConvex pointsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
         this.pointsConvexRoot = pointsConvexRoot;
         this.boundingBox = bbox;
-        this.voxelBoxFilled = chnlFilled.binaryVoxelBox();
+        this.voxelBoxFilled = chnlFilled.binaryVoxels();
         this.cornerMin = bbox.cornerMin();
         this.cornerMax = bbox.calcCornerMax();
     }
@@ -103,7 +103,7 @@ class PointsFromInsideHelper {
             Consumer<Point3i> processPoint) {
         BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vb = chnl.getChannel().getVoxelBox().asByte();
+        VoxelBox<ByteBuffer> vb = chnl.getChannel().voxels().asByte();
         Extent extent = vb.extent();
 
         Iterator<Integer> itr = zRange.iterator();

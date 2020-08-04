@@ -37,10 +37,11 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class LevelResultCollectionFactory {
-
-    private LevelResultCollectionFactory() {}
 
     public static LevelResultCollection createCollection(
             Channel chnl,

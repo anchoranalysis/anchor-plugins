@@ -133,7 +133,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
         byte maskOn = object.getBinaryValuesByte().getOnByte();
         Extent e = vbOut.extent();
-        Extent eMask = object.binaryVoxelBox().extent();
+        Extent eMask = object.binaryVoxels().extent();
 
         ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
         ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
@@ -144,7 +144,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
             int zRel = z - cornerMin.getZ();
 
-            ByteBuffer bbMask = object.getVoxelBox().getPixelsForPlane(zRel).buffer();
+            ByteBuffer bbMask = object.getVoxels().getPixelsForPlane(zRel).buffer();
             ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 
             for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {

@@ -41,9 +41,9 @@ public abstract class ConvexHullBase extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask chnlIn) throws CreateException {
-        return createFromChnl(chnlIn, FindOutline.outline(chnlIn, true, erodeEdges));
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return createFromMask(mask, FindOutline.outline(mask, true, erodeEdges));
     }
 
-    protected abstract Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException;
+    protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;
 }

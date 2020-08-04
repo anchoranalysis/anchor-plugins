@@ -84,7 +84,7 @@ public class CalculateShellObjectMask
             omShellIntersected.ifPresent(
                     shellIntersected ->
                             duplicated
-                                    .binaryVoxelBox()
+                                    .binaryVoxels()
                                     .setPixelsCheckMaskOff(
                                             shellIntersected.relMaskTo(
                                                     duplicated.getBoundingBox())));
@@ -131,7 +131,7 @@ public class CalculateShellObjectMask
 
         ObjectMask relMask = objectEroded.relMaskTo(objectDilated.getBoundingBox());
 
-        objectDilated.binaryVoxelBox().setPixelsCheckMaskOff(relMask);
+        objectDilated.binaryVoxels().setPixelsCheckMaskOff(relMask);
 
         return objectDilated;
     }

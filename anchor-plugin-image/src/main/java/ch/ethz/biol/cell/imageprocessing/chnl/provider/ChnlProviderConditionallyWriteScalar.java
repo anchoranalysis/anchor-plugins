@@ -36,7 +36,7 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
 
     @Override
     public Channel createFromChnlValue(Channel chnl, double value) throws CreateException {
-        processVoxelBox(chnl.getVoxelBox().any(), value);
+        processVoxelBox(chnl.voxels().any(), value);
         return chnl;
     }
 

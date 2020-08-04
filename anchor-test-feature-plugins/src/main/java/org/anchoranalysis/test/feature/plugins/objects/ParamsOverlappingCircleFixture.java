@@ -29,7 +29,10 @@ package org.anchoranalysis.test.feature.plugins.objects;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
 public class ParamsOverlappingCircleFixture {
 
     private static final int DEFAULT_CIRCLE_RADIUS = 30;
@@ -37,13 +40,11 @@ public class ParamsOverlappingCircleFixture {
     private static final int DEFAULT_POS_X = 50;
     private static final int DEFAULT_POS_Y = 50;
 
-    private ParamsOverlappingCircleFixture() {}
-
     /**
      * Two object-masks of circles in different locations WITH some overlap
      *
      * @param sameSize iff TRUE the object-masks are the same size, otherwise not
-     * @return the params populated with the two masks
+     * @return the params populated with the two object-masks
      */
     public static FeatureInputPairObjects twoOverlappingCircles(boolean sameSize) {
         return twoCircles(10, 0, sameSize, 3);
@@ -53,7 +54,7 @@ public class ParamsOverlappingCircleFixture {
      * Two object-masks of circles in different locations WITHOUT any overlap
      *
      * @param sameSize iff TRUE the object-masks are the same size, otherwise not
-     * @return the params populated with the two masks
+     * @return the params populated with the two object-masks
      */
     public static FeatureInputPairObjects twoNonOverlappingCircles(boolean sameSize) {
         return twoCircles(0, (DEFAULT_CIRCLE_RADIUS * 3), sameSize, -3);

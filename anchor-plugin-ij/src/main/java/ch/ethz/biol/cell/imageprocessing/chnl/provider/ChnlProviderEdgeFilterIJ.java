@@ -39,7 +39,7 @@ public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
         Channel dup = chnl.duplicate();
-        VoxelBoxWrapper vbDup = dup.getVoxelBox();
+        VoxelBoxWrapper vbDup = dup.voxels();
 
         for (int z = 0; z < dup.getDimensions().getZ(); z++) {
 

@@ -41,7 +41,7 @@ public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromChnl(Mask chnl) throws CreateException {
+    protected Mask createFromMask(Mask chnl) throws CreateException {
         if (condition(chnl)) {
             return chnl;
         } else {

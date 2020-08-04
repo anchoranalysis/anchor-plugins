@@ -54,7 +54,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
     }
 
     private static int numVoxelsOnContour(ObjectMask obj) {
-        return FindOutline.outline(obj, 1, true, false).binaryVoxelBox().countOn();
+        return FindOutline.outline(obj, 1, true, false).binaryVoxels().countOn();
     }
 
     private static int cntForByteBuffer(ByteBuffer bb, byte equalVal) {
@@ -73,7 +73,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
         int ind = 0;
 
         for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
-            ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
             int cnt = cntForByteBuffer(bb, object.getBinaryValuesByte().getOnByte());
 
             if (cnt > max) {

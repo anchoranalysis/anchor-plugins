@@ -56,7 +56,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask bic) throws CreateException {
+    public Mask createFromMask(Mask bic) throws CreateException {
 
         Mask bicDup = fillChnl(bic);
 
@@ -73,7 +73,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
         Mask bicDup = bic.duplicate();
 
         try {
-            BinaryChnlProviderIJBinary.fill(bicDup.binaryVoxelBox());
+            BinaryChnlProviderIJBinary.fill(bicDup.binaryVoxels());
         } catch (OperationFailedException e1) {
             throw new CreateException(e1);
         }
@@ -103,7 +103,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     private double determineMaxVolume(ImageDimensions dim) throws CreateException {
         if (maxVolume != null) {
             try {
-                return maxVolume.resolveToVoxels(Optional.of(dim.getRes()));
+                return maxVolume.resolveToVoxels(Optional.of(dim.getResolution()));
             } catch (UnitValueException e) {
                 throw new CreateException(e);
             }

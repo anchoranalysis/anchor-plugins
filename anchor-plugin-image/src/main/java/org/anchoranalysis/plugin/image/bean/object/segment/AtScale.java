@@ -63,7 +63,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     @Override
     public ObjectCollection segment(
             Channel chnl,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
@@ -76,7 +76,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         ObjectCollection scaledSegmentationResult =
                 upstreamSegmentation.segment(
                         scaleChannel(chnl, scaleFactor, interpolator),
-                        scaleMask(mask, scaleFactor, interpolator),
+                        scaleMask(objectMask, scaleFactor, interpolator),
                         scaleSeeds(seeds, scaleFactor));
 
         // Segment and scale results back up to original-scale
@@ -88,10 +88,10 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private Optional<ObjectMask> scaleMask(
-            Optional<ObjectMask> mask, ScaleFactor scaleFactor, Interpolator interpolator)
+            Optional<ObjectMask> objectMask, ScaleFactor scaleFactor, Interpolator interpolator)
             throws SegmentationFailedException {
 
-        return mapScale(mask, object -> object.scale(scaleFactor, interpolator), "mask");
+        return mapScale(objectMask, object -> object.scale(scaleFactor, interpolator), "mask");
     }
 
     private Optional<SeedCollection> scaleSeeds(

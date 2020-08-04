@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
  * A scheme for counting the touching voxels by intersection of object-masks
  *
  * <p>Specifically, one of the object-masks is dilated, and count the number of intersecting pixels
- * with another mask.
+ * with another object.
  *
  * <p>However, intersection(a*,b)!=intersection(a,b*) where * is the dilation operator. Different
  * counts occur as a single-voxel can have multiple edges with the neighbor.
@@ -61,7 +61,7 @@ public class NumTouchingVoxelFaces extends TouchingVoxels {
         try {
             return ApplyKernel.applyForCount(
                     createCountKernelMask(object1, object2Relative),
-                    object1.getVoxelBox(),
+                    object1.getVoxels(),
                     RelativeUtilities.createRelBBox(bboxIntersect, object1));
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);

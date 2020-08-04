@@ -58,7 +58,7 @@ public abstract class AssignPriority {
         logger.describeEdge(
                 src,
                 dest,
-                withPriority.getOmWithFeature(),
+                withPriority.getVertex(),
                 withPriority.getPriority(),
                 withPriority.isConsiderForMerge());
 

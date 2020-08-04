@@ -50,7 +50,7 @@ public class BBoxRatio extends FeatureSingleMemo {
         int[] extent = bb.extent().createOrderedArray();
 
         // Let's change the z-dimension to include the relative-resolution
-        extent[2] = (int) (bb.extent().getZ() * dimensions.getRes().getZRelativeResolution());
+        extent[2] = (int) (bb.extent().getZ() * dimensions.getResolution().getZRelativeResolution());
 
         int len = extent.length;
         assert (len >= 2);

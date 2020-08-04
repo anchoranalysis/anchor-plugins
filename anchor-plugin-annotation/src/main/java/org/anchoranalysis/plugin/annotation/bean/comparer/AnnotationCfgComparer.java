@@ -83,7 +83,7 @@ public class AnnotationCfgComparer extends Comparer {
                 annotation
                         .get()
                         .getCfg()
-                        .calcMask(
+                        .deriveObjects(
                                 dimensions,
                                 annotation
                                         .get()

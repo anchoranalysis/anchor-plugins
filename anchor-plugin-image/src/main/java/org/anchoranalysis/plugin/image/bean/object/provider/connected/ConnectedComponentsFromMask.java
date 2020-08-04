@@ -77,7 +77,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(bi.getDimensions().getRes())));
+                                            Optional.of(bi.getDimensions().getResolution())));
 
             if (bySlices) {
                 return createObjectsBySlice(bi, minNumberVoxels);
@@ -112,7 +112,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(Mask chnl, int z) {
-        return new BinaryVoxelBoxByte(chnl.getVoxelBox().extractSlice(z), chnl.getBinaryValues());
+        return new BinaryVoxelBoxByte(chnl.getVoxels().extractSlice(z), chnl.getBinaryValues());
     }
 
     private ObjectCollection createForSlice(
