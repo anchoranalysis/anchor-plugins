@@ -68,16 +68,16 @@ public class ThreeWayBranchXYResolution extends RasterReader {
 
         OpenedRaster orInput = rasterReaderInput.openFile(filepath);
 
-        ImageDimensions sd = orInput.dimensionsForSeries(0);
+        ImageDimensions dimensions = orInput.dimensionsForSeries(0);
 
-        if (Math.abs(sd.resolution().x() - sd.resolution().y()) > 1e-12) {
+        if (Math.abs(dimensions.resolution().x() - dimensions.resolution().y()) > 1e-12) {
             throw new RasterIOException(
                     String.format(
                             "X-Res (%f) must be equal to Y-Res (%f).",
-                            sd.resolution().x(), sd.resolution().y()));
+                            dimensions.resolution().x(), dimensions.resolution().y()));
         }
 
-        double xyRes = sd.resolution().x();
+        double xyRes = dimensions.resolution().x();
 
         if (xyRes < thresholdLow) {
             return rasterReaderLow.openFile(filepath);

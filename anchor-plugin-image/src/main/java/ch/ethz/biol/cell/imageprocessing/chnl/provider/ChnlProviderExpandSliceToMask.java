@@ -55,14 +55,14 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
     @Override
     public Channel create() throws CreateException {
 
-        ImageDimensions sdTarget = chnlTargetDimensions.create().dimensions();
+        ImageDimensions dimensionsTarget = chnlTargetDimensions.create().dimensions();
 
         Channel slice = chnlSlice.create();
 
-        checkDimensions(slice.dimensions(), sdTarget);
+        checkDimensions(slice.dimensions(), dimensionsTarget);
 
         try {
-            return createExpandedChnl(sdTarget, slice.voxels().asByte());
+            return createExpandedChnl(dimensionsTarget, slice.voxels().asByte());
         } catch (IncorrectVoxelDataTypeException e) {
             throw new CreateException("chnlSlice must have unsigned 8 bit data");
         }
@@ -78,11 +78,11 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
         }
     }
 
-    private Channel createExpandedChnl(ImageDimensions sdTarget, Voxels<ByteBuffer> voxelsSlice) {
+    private Channel createExpandedChnl(ImageDimensions dimensionsTarget, Voxels<ByteBuffer> voxelsSlice) {
 
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyUninitialised(dimensionsTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 

@@ -56,7 +56,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
@@ -64,7 +64,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
         Cfg cfg = cfgProvider.create();
 
-        ImageDimensions dims = dim.create();
+        ImageDimensions dims = dimensions.create();
 
         return cfg.deriveObjects(
                         dims,

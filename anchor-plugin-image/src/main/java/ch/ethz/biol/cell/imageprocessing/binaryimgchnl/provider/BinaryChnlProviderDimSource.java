@@ -39,13 +39,13 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class BinaryChnlProviderDimSource extends MaskProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
     public Mask create() throws CreateException {
-        return createFromSource(dim.create());
+        return createFromDimensions(dimensions.create());
     }
 
-    protected abstract Mask createFromSource(ImageDimensions dimSource) throws CreateException;
+    protected abstract Mask createFromDimensions(ImageDimensions dimensions) throws CreateException;
 }

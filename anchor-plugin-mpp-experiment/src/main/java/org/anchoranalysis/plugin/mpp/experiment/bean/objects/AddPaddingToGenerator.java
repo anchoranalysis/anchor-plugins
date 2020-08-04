@@ -6,7 +6,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.bbox.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
@@ -64,9 +64,9 @@ class AddPaddingToGenerator {
             return object;
         }
 
-        BoundingBox bboxToExtract =
+        BoundingBox boxToExtract =
                 object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
 
-        return object.mapBoundingBoxChangeExtent(bboxToExtract);
+        return object.mapBoundingBoxChangeExtent(boxToExtract);
     }
 }

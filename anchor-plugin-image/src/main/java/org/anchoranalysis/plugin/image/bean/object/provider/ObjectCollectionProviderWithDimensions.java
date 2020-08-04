@@ -46,10 +46,10 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class ObjectCollectionProviderWithDimensions extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     protected ImageDimensions createDimensions() throws CreateException {
-        return dim.create();
+        return dimensions.create();
     }
 }

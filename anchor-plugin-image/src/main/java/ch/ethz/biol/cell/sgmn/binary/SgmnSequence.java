@@ -70,7 +70,7 @@ public class SgmnSequence extends BinarySegmentation {
         BinaryVoxels<ByteBuffer> out = null;
 
         // A bounding-box capturing what part of the scene is being segmented
-        BoundingBox bbox =
+        BoundingBox box =
                 objectMask.map(ObjectMask::boundingBox)
                         .orElseGet(() -> new BoundingBox(voxels.any().extent()));
 
@@ -81,7 +81,7 @@ public class SgmnSequence extends BinarySegmentation {
             BinaryVoxels<ByteBuffer> outNew = sgmn.segment(voxels, params, evolvingMask);
 
             out = outNew;
-            evolvingMask = Optional.of(new ObjectMask(bbox, outNew));
+            evolvingMask = Optional.of(new ObjectMask(box, outNew));
         }
         return out;
     }

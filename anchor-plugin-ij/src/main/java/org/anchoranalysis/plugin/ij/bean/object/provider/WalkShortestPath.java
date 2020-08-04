@@ -82,9 +82,9 @@ class WalkShortestPath {
 
         checkCoplanar(points);
 
-        BoundingBox bbox = BoundingBoxFromPoints.forList(points);
+        BoundingBox box = BoundingBoxFromPoints.forList(points);
 
-        ObjectMask object = new ObjectMask(bbox);
+        ObjectMask object = new ObjectMask(box);
 
         for (int i = 0; i < (points.size() - 1); i++) {
 
@@ -95,12 +95,12 @@ class WalkShortestPath {
             drawLineOnVoxelBuffer(
                     object.binaryVoxels()
                             .voxels()
-                            .slice(point1.z() - bbox.cornerMin().z()),
+                            .slice(point1.z() - box.cornerMin().z()),
                     object.binaryVoxels().voxels().extent(),
                     object.binaryVoxels().binaryValues().createByte(),
                     point1,
                     point2,
-                    bbox.cornerMin());
+                    box.cornerMin());
         }
 
         return object;

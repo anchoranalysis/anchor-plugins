@@ -45,10 +45,10 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
+    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         BinaryValues bvOut = BinaryValues.getDefault();
 

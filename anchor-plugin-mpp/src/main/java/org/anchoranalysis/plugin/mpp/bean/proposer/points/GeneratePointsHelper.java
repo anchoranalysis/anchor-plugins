@@ -66,18 +66,18 @@ class GeneratePointsHelper {
             List<Point3i> pointsAlongContour, PointListForConvex pointList)
             throws OperationFailedException {
 
-        BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
+        BoundingBox box = BoundingBoxFromPoints.forList(pointsAlongContour);
 
-        int zLow = Math.max(0, bbox.cornerMin().z() - maxZDistance);
-        int zHigh = Math.min(dimensions.z(), bbox.cornerMin().z() + maxZDistance);
+        int zLow = Math.max(0, box.cornerMin().z() - maxZDistance);
+        int zHigh = Math.min(dimensions.z(), box.cornerMin().z() + maxZDistance);
 
         if (maskFilled.isPresent()) {
-            return new PointsFromInsideHelper(pointList, maskFilled.get(), bbox)
+            return new PointsFromInsideHelper(pointList, maskFilled.get(), box)
                     .convexOnly(mask, pointRoot, skipZDistance);
         } else {
             return PointsFromMask.listFromSlicesInsideBox3i(
                     mask,
-                    bbox.duplicateChangeZ(zLow, zHigh - zLow),
+                    box.duplicateChangeZ(zLow, zHigh - zLow),
                     (int) Math.floor(pointRoot.z()),
                     skipZDistance);
         }

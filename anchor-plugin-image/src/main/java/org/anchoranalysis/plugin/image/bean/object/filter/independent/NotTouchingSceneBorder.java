@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 
@@ -48,6 +49,11 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
     @BeanField @Getter @Setter private boolean includeZ = false;
     // END BEAN PROPERTIES
 
+    @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+    
     @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {
@@ -72,5 +78,10 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void end() throws OperationFailedException {
+        // NOTHING TO DO
     }
 }

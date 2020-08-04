@@ -54,12 +54,12 @@ class PointsFromInsideHelper {
     private final ReadableTuple3i cornerMax;
 
     public PointsFromInsideHelper(
-            PointListForConvex pointsConvexRoot, Mask maskFilled, BoundingBox bbox) {
+            PointListForConvex pointsConvexRoot, Mask maskFilled, BoundingBox box) {
         this.pointsConvexRoot = pointsConvexRoot;
-        this.boundingBox = bbox;
+        this.boundingBox = box;
         this.voxelsFilled = maskFilled.binaryVoxels();
-        this.cornerMin = bbox.cornerMin();
-        this.cornerMax = bbox.calcCornerMax();
+        this.cornerMin = box.cornerMin();
+        this.cornerMax = box.calcCornerMax();
     }
 
     public List<Point3i> convexOnly(

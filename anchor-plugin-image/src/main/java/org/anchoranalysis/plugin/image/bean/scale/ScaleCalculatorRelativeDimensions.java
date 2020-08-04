@@ -42,9 +42,9 @@ import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimSource;
+    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimensionsSource;
 
-    @BeanField @Getter @Setter private ImageDimProvider dimTarget;
+    @BeanField @Getter @Setter private ImageDimProvider dimensionsTarget;
     // END BEAN PROPERTIES
 
     @Override
@@ -59,7 +59,7 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
         try {
             return ScaleFactorUtilities.calcRelativeScale(
-                    dimensions.get().extent(), dimTarget.create().extent());
+                    dimensions.get().extent(), dimensionsTarget.create().extent());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -67,9 +67,9 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
     private Optional<ImageDimensions> maybeReplaceSourceDimensions(
             Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
-        if (dimSource != null) {
+        if (dimensionsSource != null) {
             try {
-                return Optional.of(dimSource.create());
+                return Optional.of(dimensionsSource.create());
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }

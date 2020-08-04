@@ -53,7 +53,7 @@ public class NumTouchingVoxelFaces extends TouchingVoxels {
 
     @Override
     protected double calcWithIntersection(
-            ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect)
+            ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException {
 
         ObjectMask object2Relative = RelativeUtilities.createRelMask(object2, object1);
@@ -62,7 +62,7 @@ public class NumTouchingVoxelFaces extends TouchingVoxels {
             return ApplyKernel.applyForCount(
                     createCountKernelMask(object1, object2Relative),
                     object1.voxels(),
-                    RelativeUtilities.createRelBBox(bboxIntersect, object1));
+                    RelativeUtilities.createRelBBox(boxIntersect, object1));
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

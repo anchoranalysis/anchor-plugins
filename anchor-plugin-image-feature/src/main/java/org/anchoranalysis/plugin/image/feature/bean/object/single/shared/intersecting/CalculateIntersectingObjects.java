@@ -56,7 +56,7 @@ class CalculateIntersectingObjects
     @Override
     protected ObjectCollection execute(FeatureInputSingleObject params) {
 
-        ObjectCollectionRTree bboxRTree = new ObjectCollectionRTree(searchObjects);
-        return bboxRTree.intersectsWith(params.getObject());
+        ObjectCollectionRTree boxRTree = new ObjectCollectionRTree(searchObjects);
+        return boxRTree.intersectsWith(params.getObject());
     }
 }

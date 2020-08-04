@@ -121,6 +121,6 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
             throws CreateException {
         // respecify the z
         return objectCreator.createConnectedComponents(bvb).stream()
-                .mapBoundingBoxPreserveExtent(bbox -> bbox.shiftToZ(z));
+                .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));
     }
 }

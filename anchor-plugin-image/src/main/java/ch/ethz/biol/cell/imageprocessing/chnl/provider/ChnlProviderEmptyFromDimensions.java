@@ -46,14 +46,14 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromDim(ImageDimensions dim) {
+    protected Channel createFromDim(ImageDimensions dimensions) {
 
         VoxelDataType typeOut =
                 createShort
                         ? VoxelDataTypeUnsignedShort.INSTANCE
                         : VoxelDataTypeUnsignedByte.INSTANCE;
 
-        Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dim, typeOut);
+        Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dimensions, typeOut);
         if (value != 0) {
             chnlNew.voxels().any().setAllPixelsTo(value);
         }

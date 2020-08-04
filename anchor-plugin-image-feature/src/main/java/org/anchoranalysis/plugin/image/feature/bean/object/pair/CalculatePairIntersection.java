@@ -40,6 +40,7 @@ import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPai
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 
 /**
  * Procedure to calculate an area of intersection between two objects (termed first and second)
@@ -71,18 +72,17 @@ class CalculatePairIntersection
             SessionInput<FeatureInputPairObjects> cache,
             ChildCacheName cacheLeft,
             ChildCacheName cacheRight,
-            int iterationsFirst,
-            int iterationsSecond,
-            boolean do3D,
-            int iterationsErosion) {
+            MorphologicalIterations iterations,
+            int iterationsSecond
+    ) {
         // We use two additional caches, for the calculations involving the single objects, as these
         // can be expensive, and we want
         //  them also cached
         return cache.resolver()
                 .search(
                         new CalculatePairIntersection(
-                                do3D,
-                                iterationsErosion,
+                                iterations.isDo3D(),
+                                iterations.getIterationsErosion(),
                                 cache.resolver()
                                         .search(
                                                 CalculateDilatedFromPair.of(
@@ -90,8 +90,8 @@ class CalculatePairIntersection
                                                         cache.forChild(),
                                                         Extract.FIRST,
                                                         cacheLeft,
-                                                        iterationsFirst,
-                                                        do3D)),
+                                                        iterations.getIterationsDilation(),
+                                                        iterations.isDo3D())),
                                 cache.resolver()
                                         .search(
                                                 CalculateDilatedFromPair.of(
@@ -100,7 +100,7 @@ class CalculatePairIntersection
                                                         Extract.SECOND,
                                                         cacheRight,
                                                         iterationsSecond,
-                                                        do3D))));
+                                                        iterations.isDo3D()))));
     }
 
     @Override

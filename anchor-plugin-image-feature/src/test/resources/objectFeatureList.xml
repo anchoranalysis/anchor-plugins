@@ -5,7 +5,9 @@
 		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox.BoundingBoxMaximumAlongAxis" axis="x"/>
 		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox.BoundingBoxMinimumAlongAxis" axis="z"/>
 		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.Intensity" nrgIndex="0"/>
-		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.IntensityMeanShell" nrgIndex="1" iterationsDilation="2"/>
+		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.IntensityMeanShell" nrgIndex="1">
+			<iterations iterationsDilation="2" config-class="org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations"/>
+		</item>
 		<item config-class="org.anchoranalysis.image.feature.bean.object.single.NumberVoxels"/>
 		<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder"/>
 	</list>

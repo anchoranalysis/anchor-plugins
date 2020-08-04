@@ -82,11 +82,11 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
     private void removeIntersectingVoxels(
             ObjectMask objectWrite, ObjectMask objectRead, BoundingBox intersection) {
 
-        BoundingBox bboxRelWrite =
+        BoundingBox boxRelWrite =
                 new BoundingBox(
                         intersection.relPosTo(objectWrite.boundingBox()), intersection.extent());
 
-        BoundingBox bboxRelRead =
+        BoundingBox boxRelRead =
                 new BoundingBox(
                         intersection.relPosTo(objectRead.boundingBox()), intersection.extent());
 
@@ -97,18 +97,18 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
         objectWrite
                 .voxels()
                 .setPixelsCheckMask(
-                        bboxRelWrite,
+                        boxRelWrite,
                         objectReadDuplicated.voxels(),
-                        bboxRelRead,
+                        boxRelRead,
                         objectWrite.binaryValues().getOffInt(),
                         objectReadDuplicated.binaryValuesByte().getOnByte());
 
         objectRead
                 .voxels()
                 .setPixelsCheckMask(
-                        bboxRelRead,
+                        boxRelRead,
                         objectWriteDuplicated.voxels(),
-                        bboxRelWrite,
+                        boxRelWrite,
                         objectRead.binaryValues().getOffInt(),
                         objectWriteDuplicated.binaryValuesByte().getOnByte());
     }

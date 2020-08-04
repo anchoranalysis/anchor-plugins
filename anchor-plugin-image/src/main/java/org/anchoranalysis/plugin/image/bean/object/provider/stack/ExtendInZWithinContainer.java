@@ -78,14 +78,14 @@ public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContai
 
         ObjectMask flattened = object.flattenZ();
 
-        BoundingBox bbox = potentialZExpansion(flattened, container);
+        BoundingBox box = potentialZExpansion(flattened, container);
 
         // We update these values after our intersection with the container, in case they have
         // changed
-        assert (container.boundingBox().contains().box(bbox));
+        assert (container.boundingBox().contains().box(box));
 
         return ExtendObjectsInZHelper.createExtendedObject(
-                flattened, container, bbox, (int) object.centerOfGravity().z());
+                flattened, container, box, (int) object.centerOfGravity().z());
     }
 
     private static BoundingBox potentialZExpansion(ObjectMask objectFlattened, ObjectMask container)

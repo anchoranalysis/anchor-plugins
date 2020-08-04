@@ -31,7 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -41,6 +40,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
 /**
@@ -51,10 +51,11 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     // START BEAN PROPERTIES
-    @BeanField @NonNegative @Getter @Setter private int iterationsErosion = 0;
-
-    @BeanField @Getter @Setter private int iterationsDilation = 0;
-
+    /** 
+     * The number of dilations and erosions to apply and whether to do in the Z dimension
+     **/
+    @BeanField @Getter @Setter private MorphologicalIterations iterations = new MorphologicalIterations();
+    
     /**
      * Iff TRUE, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed)
@@ -71,16 +72,13 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     private boolean inverseMask = false; // Uses the inverse of the passed mask
 
     @BeanField @Getter @Setter private double emptyValue = 255;
-
-    @BeanField @Getter @Setter private boolean do3D = true;
-
     // END BEAN PROPERTIES
 
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (iterationsDilation == 0 && iterationsErosion == 0) {
+        if (!iterations.isAtLeastOnePositive()) {
             throw new BeanMisconfiguredException(
                     "At least one of iterationsDilation and iterationsErosion must be positive");
         }
@@ -113,10 +111,8 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
         return input.calc(
                 CalculateShellObjectMask.of(
                         input.resolver(),
-                        iterationsDilation,
-                        getIterationsErosion(),
+                        iterations,
                         0,
-                        isDo3D(),
                         inverse));
     }
 
@@ -139,11 +135,10 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     @Override
     public String getParamDscr() {
         return String.format(
-                "%s,iterationsDilation=%d,iterationsErosion=%d,inverse=%s,do3D=%s",
+                "%s,%s,inverse=%s",
                 super.getParamDscr(),
-                iterationsDilation,
-                iterationsErosion,
-                inverse ? "true" : "false",
-                do3D ? "true" : "false");
+                iterations.describePropertiesFriendly(),
+                inverse ? "true" : "false"
+                );
     }
 }

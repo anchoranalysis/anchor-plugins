@@ -99,10 +99,10 @@ class CalculateGradientFromMultipleChnls
 
         BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
         Voxels<?> voxels = chnl.voxels().any();
-        BoundingBox bbox = object.boundingBox();
+        BoundingBox box = object.boundingBox();
 
         Extent e = voxels.extent();
-        Extent eMask = bbox.extent();
+        Extent eMask = box.extent();
 
         BinaryValuesByte bvbMask = bvb.binaryValues().createByte();
 
@@ -111,7 +111,7 @@ class CalculateGradientFromMultipleChnls
 
         for (int z = 0; z < eMask.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.slice(z + bbox.cornerMin().z());
+            VoxelBuffer<?> bb = voxels.slice(z + box.cornerMin().z());
             VoxelBuffer<ByteBuffer> bbMask = bvb.slice(z);
 
             for (int y = 0; y < eMask.y(); y++) {
@@ -122,7 +122,7 @@ class CalculateGradientFromMultipleChnls
                     if (bbMask.buffer().get(offsetMask) == bvbMask.getOnByte()) {
 
                         int offset =
-                                e.offset(x + bbox.cornerMin().x(), y + bbox.cornerMin().y());
+                                e.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
 
                         int gradVal = bb.getInt(offset) - subtractConstant;
 

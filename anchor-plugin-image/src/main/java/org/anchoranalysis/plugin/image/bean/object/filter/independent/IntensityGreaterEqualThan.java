@@ -62,6 +62,11 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     private Voxels<?> voxels;
 
     @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+    
+    @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
 
@@ -74,7 +79,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
         assert (chnlSingleRegion != null);
         voxels = chnlSingleRegion.voxels().any();
     }
-
+    
     @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {

@@ -53,10 +53,10 @@ public class IntensityMeanCalculator {
 
         VoxelsWrapper voxelsIntensity = chnl.voxels();
 
-        BoundingBox bbox = object.boundingBox();
+        BoundingBox box = object.boundingBox();
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calcCornerMax();
 
         double sum = 0.0;
         int cnt = 0;
@@ -97,13 +97,13 @@ public class IntensityMeanCalculator {
         return sum / cnt;
     }
 
-    private static void checkContained(BoundingBox bbox, Extent extent)
+    private static void checkContained(BoundingBox box, Extent extent)
             throws FeatureCalculationException {
-        if (!extent.contains(bbox)) {
+        if (!extent.contains(box)) {
             throw new FeatureCalculationException(
                     String.format(
                             "The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
-                            bbox, extent));
+                            box, extent));
         }
     }
 }

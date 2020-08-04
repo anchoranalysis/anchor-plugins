@@ -115,7 +115,6 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 
     @Override
     protected void end() throws OperationFailedException {
-        super.end();
         featureVals = null;
         if (getLogger() != null) {
             getLogger().messageLogger().log("END DiscardOutliers");

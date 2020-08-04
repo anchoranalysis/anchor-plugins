@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 public class BoundingBoxMinimumAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override
-    protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox) {
-        return bbox.cornerMin();
+    protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox box) {
+        return box.cornerMin();
     }
 }

@@ -46,9 +46,9 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
     private boolean requireTouching;
 
     // START TEMPORARY objects, updated after every call to updateSrcObj
-    // The bounding box of omSrcWithFeature grown by 1 in all directions (used for testing bbox
+    // The bounding box of omSrcWithFeature grown by 1 in all directions (used for testing box
     // intersection)
-    private BoundingBox bboxSrcGrown;
+    private BoundingBox boxSrcGrown;
 
     // The object-mask of omSrcWithFeature dilated by 1 in all directions (used for testing if
     // objects touch)
@@ -71,7 +71,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
     public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res)
             throws OperationFailedException {
 
-        bboxSrcGrown = requireBBoxNeighbors ? boundingBoxGrown(source) : null;
+        boxSrcGrown = requireBBoxNeighbors ? boundingBoxGrown(source) : null;
 
         try {
             if (requireTouching) {
@@ -91,7 +91,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
 
         // If this is set, we ignore any combinations whose bounding boxes don't touch or intersect
         if (requireBBoxNeighbors
-                && !bboxSrcGrown.intersection().existsWith(destination.boundingBox())) {
+                && !boxSrcGrown.intersection().existsWith(destination.boundingBox())) {
             return false;
         }
 

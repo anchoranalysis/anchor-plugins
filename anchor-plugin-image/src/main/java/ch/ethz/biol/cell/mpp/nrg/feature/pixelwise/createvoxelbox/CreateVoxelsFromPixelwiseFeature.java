@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Extent;
@@ -59,7 +58,7 @@ public class CreateVoxelsFromPixelwiseFeature {
     private Optional<KeyValueParams> keyValueParams;
     private List<Histogram> listAdditionalHistograms;
 
-    public Voxels<ByteBuffer> createVoxelsFromPixelScore(PixelScore pixelScore, Logger logger)
+    public Voxels<ByteBuffer> createVoxelsFromPixelScore(PixelScore pixelScore)
             throws CreateException {
 
         // Sets up the Feature
@@ -68,7 +67,7 @@ public class CreateVoxelsFromPixelwiseFeature {
 
             // We make our index buffer
             Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(e);
-            setPixels(voxelsOut, pixelScore, logger);
+            setPixels(voxelsOut, pixelScore);
             return voxelsOut;
 
         } catch (InitException | FeatureCalculationException e) {
@@ -76,23 +75,23 @@ public class CreateVoxelsFromPixelwiseFeature {
         }
     }
 
-    private void setPixels(Voxels<ByteBuffer> voxelsOut, PixelScore pixelScore, Logger logger)
+    private void setPixels(Voxels<ByteBuffer> voxelsOut, PixelScore pixelScore)
             throws FeatureCalculationException, InitException {
 
         pixelScore.init(createHistograms(), keyValueParams);
 
-        Extent e = voxelsOut.extent();
+        Extent extent = voxelsOut.extent();
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
             ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
-                    int offset = e.offset(x, y);
+                    int offset = extent.offset(x, y);
 
                     BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
                 }

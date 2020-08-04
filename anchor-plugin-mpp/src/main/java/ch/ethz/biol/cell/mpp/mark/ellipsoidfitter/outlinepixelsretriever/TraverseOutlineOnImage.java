@@ -123,7 +123,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             throws TraverseOutlineException {
         // Important, so we can use the contains function later
         return createObjectForPoint(root, mask)
-                .mapBoundingBoxPreserveExtent(bbox -> bbox.shiftTo(new Point3i(0, 0, 0)));
+                .mapBoundingBoxPreserveExtent(box -> box.shiftTo(new Point3i(0, 0, 0)));
     }
 
     private void callAfter(

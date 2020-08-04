@@ -48,22 +48,22 @@ public class HasTouchingVoxels extends TouchingVoxels {
 
     @Override
     protected double calcWithIntersection(
-            ObjectMask first, ObjectMask second, BoundingBox bboxIntersect)
+            ObjectMask first, ObjectMask second, BoundingBox boxIntersect)
             throws FeatureCalculationException {
         return convertToInt(
                 calculateHasTouchingRelative(
                         first,
                         RelativeUtilities.createRelMask(second, first),
-                        RelativeUtilities.createRelBBox(bboxIntersect, first)));
+                        RelativeUtilities.createRelBBox(boxIntersect, first)));
     }
 
     private boolean calculateHasTouchingRelative(
-            ObjectMask first, ObjectMask secondRelative, BoundingBox bboxIntersectRel)
+            ObjectMask first, ObjectMask secondRelative, BoundingBox boxIntersectRel)
             throws FeatureCalculationException {
         CountKernel kernelMatch = createCountKernelMask(first, secondRelative);
         try {
             return ApplyKernel.applyUntilPositive(
-                    kernelMatch, first.voxels(), bboxIntersectRel);
+                    kernelMatch, first.voxels(), boxIntersectRel);
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

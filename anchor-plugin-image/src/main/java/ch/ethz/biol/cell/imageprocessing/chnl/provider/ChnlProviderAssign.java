@@ -65,15 +65,15 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
     private void assign(Channel chnlSrc, Channel chnlAssignFrom, Mask mask) {
 
         ObjectMask object = CreateFromEntireChnlFactory.createObject(mask);
-        BoundingBox bbox = new BoundingBox(chnlSrc.dimensions().extent());
+        BoundingBox box = new BoundingBox(chnlSrc.dimensions().extent());
 
         chnlAssignFrom
                 .voxels()
                 .asByte()
                 .copyPixelsToCheckMask(
-                        bbox,
+                        box,
                         chnlSrc.voxels().asByte(),
-                        bbox,
+                        box,
                         object.voxels(),
                         object.binaryValuesByte());
     }

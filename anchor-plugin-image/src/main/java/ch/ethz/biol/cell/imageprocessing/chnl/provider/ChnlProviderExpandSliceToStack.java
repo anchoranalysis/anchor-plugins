@@ -47,22 +47,22 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromDim(ImageDimensions dim) throws CreateException {
+    protected Channel createFromDim(ImageDimensions dimensions) throws CreateException {
 
         Channel chnl = slice.create();
 
-        ImageDimensions sdSrc = chnl.dimensions();
+        ImageDimensions dimensionsSource = chnl.dimensions();
 
-        if (sdSrc.x() != dim.x()) {
+        if (dimensionsSource.x() != dimensions.x()) {
             throw new CreateException("x dimension is not equal");
         }
-        if (sdSrc.y() != dim.y()) {
+        if (dimensionsSource.y() != dimensions.y()) {
             throw new CreateException("y dimension is not equal");
         }
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyUninitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsSlice = chnl.voxels().asByte();
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();

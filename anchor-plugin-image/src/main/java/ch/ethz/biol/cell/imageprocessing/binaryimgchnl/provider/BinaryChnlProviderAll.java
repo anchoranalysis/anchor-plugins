@@ -36,11 +36,11 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
 
     @Override
-    protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
+    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
         Channel channel =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Mask mask = new Mask(channel);
         mask.binaryVoxels().setAllPixelsToOn();
