@@ -54,11 +54,11 @@ class CalculateIntersectionOfDilatedBoundingBox
             ObjectMask first, ObjectMask second, Extent extent) {
 
         // Grow each bounding box
-        BoundingBox bboxFirst = dilatedBoundingBoxFor(first, extent);
-        BoundingBox bboxSecond = dilatedBoundingBoxFor(second, extent);
+        BoundingBox boxFirst = dilatedBoundingBoxFor(first, extent);
+        BoundingBox boxSecond = dilatedBoundingBoxFor(second, extent);
 
         // Find the intersection
-        return bboxFirst.intersection().withInside(bboxSecond, extent);
+        return boxFirst.intersection().withInside(boxSecond, extent);
     }
 
     private BoundingBox dilatedBoundingBoxFor(ObjectMask object, Extent extent) {

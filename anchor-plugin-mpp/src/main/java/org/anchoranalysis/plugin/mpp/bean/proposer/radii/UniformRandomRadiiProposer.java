@@ -27,7 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.radii;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
@@ -41,6 +43,7 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 
+@NoArgsConstructor @AllArgsConstructor
 public class UniformRandomRadiiProposer extends RadiiProposer {
 
     // START BEAN PROPERTIES
@@ -48,15 +51,6 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
 
     @BeanField @Getter @Setter private boolean do3D = false;
     // END BEAN PROPERTIES
-
-    public UniformRandomRadiiProposer() {
-        // Standard Bean Constructor
-    }
-
-    public UniformRandomRadiiProposer(Bound radiusBound, boolean do3D) {
-        this.radiusBound = radiusBound;
-        this.do3D = do3D;
-    }
 
     @Override
     public Optional<Point3d> propose(

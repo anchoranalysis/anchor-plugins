@@ -188,7 +188,7 @@ public class MarkPolygon extends MarkAbstractPointList {
     }
 
     @Override
-    public BoundingBox bboxAllRegions(ImageDimensions bndScene) {
-        return bbox(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
+        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

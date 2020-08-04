@@ -56,7 +56,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
         return calcAxisValue(point);
     }
 
-    protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox);
+    protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox box);
 
     @Override
     public String getParamDscr() {

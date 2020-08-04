@@ -97,12 +97,12 @@ class CreateFromLabels {
     }
 
     private static ObjectCollection createFromLabels(
-            List<BoundingBox> bboxList,
+            List<BoundingBox> boxList,
             Voxels<ByteBuffer> voxels,
             int smallVolumeThreshold) {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
-                bboxList,
-                bbox -> bbox.extent().volumeXY() >= smallVolumeThreshold,
+                boxList,
+                box -> box.extent().volumeXY() >= smallVolumeThreshold,
                 voxels::equalMask // Using index as the color value
                 );
     }

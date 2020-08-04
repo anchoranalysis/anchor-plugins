@@ -47,9 +47,9 @@ class RelativeUtilities {
      * @return a new bounding box with relative coordinates
      */
     public static BoundingBox createRelBBox(BoundingBox box, ObjectMask objectRelativeBase) {
-        BoundingBox bboxIntersectRel =
+        BoundingBox boxIntersectRel =
                 new BoundingBox(box.relPosTo(objectRelativeBase.boundingBox()), box.extent());
-        return bboxIntersectRel.clipTo(objectRelativeBase.boundingBox().extent());
+        return boxIntersectRel.clipTo(objectRelativeBase.boundingBox().extent());
     }
 
     /**

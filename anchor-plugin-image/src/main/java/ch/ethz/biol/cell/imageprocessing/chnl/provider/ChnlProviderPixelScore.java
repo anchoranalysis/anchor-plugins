@@ -135,7 +135,7 @@ public class ChnlProviderPixelScore extends ChannelProvider {
             CreateVoxelsFromPixelwiseFeature creator =
                     new CreateVoxelsFromPixelwiseFeature(listVb, kpv, listHistExtra);
 
-            voxelsPixelScore = creator.createVoxelsFromPixelScore(pixelScore, getLogger());
+            voxelsPixelScore = creator.createVoxelsFromPixelScore(pixelScore);
         }
 
         return new ChannelFactoryByte()

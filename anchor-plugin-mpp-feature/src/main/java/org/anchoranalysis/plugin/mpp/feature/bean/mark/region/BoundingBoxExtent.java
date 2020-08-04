@@ -55,11 +55,11 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 
         ImageDimensions dimensions = input.get().getDimensionsRequired();
 
-        BoundingBox bbox = input.get().getMark().bbox(dimensions, getRegionID());
+        BoundingBox box = input.get().getMark().box(dimensions, getRegionID());
 
         try {
             return resolveDistance(
-                    bbox,
+                    box,
                     Optional.of(dimensions.resolution()),
                     AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
@@ -73,11 +73,11 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     }
 
     private double resolveDistance(
-            BoundingBox bbox, Optional<ImageResolution> res, AxisType axisType)
+            BoundingBox box, Optional<ImageResolution> res, AxisType axisType)
             throws FeatureCalculationException {
         try {
             return unit.resolveDistance(
-                    bbox.extent().valueByDimension(axisType),
+                    box.extent().valueByDimension(axisType),
                     res,
                     unitVector(AxisTypeConverter.dimensionIndexFor(axisType)));
         } catch (AxisTypeException e) {

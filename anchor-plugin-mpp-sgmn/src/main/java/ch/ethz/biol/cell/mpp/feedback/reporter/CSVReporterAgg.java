@@ -31,7 +31,6 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
@@ -72,13 +71,9 @@ public class CSVReporterAgg extends ReporterAgg<CfgNRGPixelized>
 
         super.reportBegin(initParams);
 
-        try {
-            this.csvOutput =
-                    CSVReporterUtilities.createFileOutputFor(
-                            "csvStatsAgg", initParams, "interval_aggregate_stats");
-        } catch (OutputWriteFailedException e) {
-            throw new ReporterException(e);
-        }
+        this.csvOutput =
+                CSVReporterUtilities.createFileOutputFor(
+                        "csvStatsAgg", initParams, "interval_aggregate_stats");
 
         timer = new StopWatch();
         timer.start();

@@ -81,59 +81,59 @@ class ExtractProjectedStack {
             Extent eOut = new Extent(width, height);
             Point3i crnrPos = createTarget(chnlIn.dimensions(), eOut);
 
-            BoundingBox bboxToProject =
+            BoundingBox boxToProject =
                     boxToProject(crnrPos, chnlIn.dimensions().extent(), eOut);
 
-            BoundingBox bboxSrc = bboxSrc(bboxToProject, chnlIn.dimensions());
+            BoundingBox boxSrc = boxSrc(boxToProject, chnlIn.dimensions());
 
-            return copyPixels(bboxSrc, bboxToProject, chnlIn, eOut);
+            return copyPixels(boxSrc, boxToProject, chnlIn, eOut);
         }
     }
 
-    private static Point3i createTarget(ImageDimensions sd, Extent e) {
+    private static Point3i createTarget(ImageDimensions dimensions, Extent e) {
         Point3i crnrPos = new Point3i();
-        crnrPos.setX((e.x() - sd.x()) / 2);
-        crnrPos.setY((e.y() - sd.y()) / 2);
+        crnrPos.setX((e.x() - dimensions.x()) / 2);
+        crnrPos.setY((e.y() - dimensions.y()) / 2);
         crnrPos.setZ(0);
         return crnrPos;
     }
 
-    private static BoundingBox boxToProject(Point3i crnrPos, Extent eChnl, Extent eTrgt) {
-        return new BoundingBox(crnrPos, eChnl)
+    private static BoundingBox boxToProject(Point3i crnrPos, Extent extentChannel, Extent extentTarget) {
+        return new BoundingBox(crnrPos, extentChannel)
                 .intersection()
-                .with(new BoundingBox(eTrgt))
+                .with(new BoundingBox(extentTarget))
                 .orElseThrow(AnchorImpossibleSituationException::new);
     }
 
-    private static BoundingBox bboxSrc(BoundingBox bboxToProject, ImageDimensions sd) {
-        Point3i srcCrnrPos = createSrcCrnrPos(bboxToProject, sd);
-        return new BoundingBox(srcCrnrPos, bboxToProject.extent());
+    private static BoundingBox boxSrc(BoundingBox boxToProject, ImageDimensions dimensions) {
+        Point3i srcCrnrPos = createSrcCrnrPos(boxToProject, dimensions);
+        return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
-    private static Point3i createSrcCrnrPos(BoundingBox bboxToProject, ImageDimensions sd) {
-        Point3i srcCrnrPos = new Point3i(0, 0, 0);
+    private static Point3i createSrcCrnrPos(BoundingBox boxToProject, ImageDimensions dimensions) {
+        Point3i sourceCorner = new Point3i(0, 0, 0);
 
-        if (bboxToProject.extent().x() < sd.x()) {
-            srcCrnrPos.setX((sd.x() - bboxToProject.extent().x()) / 2);
+        if (boxToProject.extent().x() < dimensions.x()) {
+            sourceCorner.setX((dimensions.x() - boxToProject.extent().x()) / 2);
         }
 
-        if (bboxToProject.extent().y() < sd.y()) {
-            srcCrnrPos.setY((sd.y() - bboxToProject.extent().y()) / 2);
+        if (boxToProject.extent().y() < dimensions.y()) {
+            sourceCorner.setY((dimensions.y() - boxToProject.extent().y()) / 2);
         }
-        return srcCrnrPos;
+        return sourceCorner;
     }
 
     private Channel copyPixels(
-            BoundingBox bboxSrc, BoundingBox bboxToProject, Channel chnl, Extent eOut) {
+            BoundingBox boxSrc, BoundingBox boxToProject, Channel chnl, Extent extentOut) {
 
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(eOut, chnl.dimensions().resolution()),
+                                new ImageDimensions(extentOut, chnl.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
         chnl.voxels()
                 .asByte()
-                .copyPixelsTo(bboxSrc, chnlOut.voxels().asByte(), bboxToProject);
+                .copyPixelsTo(boxSrc, chnlOut.voxels().asByte(), boxToProject);
         return chnlOut;
     }
 }

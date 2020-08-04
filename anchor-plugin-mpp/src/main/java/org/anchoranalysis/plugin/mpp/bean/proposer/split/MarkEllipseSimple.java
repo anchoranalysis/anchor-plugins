@@ -173,7 +173,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             Orientation2D orientation,
             MarkEllipse markExst,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions sd,
+            ImageDimensions dimensions,
             double minRadScaleStart,
             double minRadScaleEnd,
             boolean wigglePos) {
@@ -203,7 +203,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             point1.add(randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE));
             point2.add(randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE));
         }
-        return ifBothPointsInside(sd, point1, point2);
+        return ifBothPointsInside(dimensions, point1, point2);
     }
 
     private static Point3d randomPointXY(

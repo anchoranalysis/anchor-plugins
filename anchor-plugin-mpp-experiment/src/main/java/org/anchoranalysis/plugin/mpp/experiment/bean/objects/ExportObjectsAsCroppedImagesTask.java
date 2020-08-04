@@ -47,7 +47,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.bbox.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;

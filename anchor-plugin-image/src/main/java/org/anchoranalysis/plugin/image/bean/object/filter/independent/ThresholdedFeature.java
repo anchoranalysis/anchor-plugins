@@ -111,7 +111,6 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 
     @Override
     protected void end() throws OperationFailedException {
-        super.end();
         if (debug) {
             getLogger().messageLogger().log("END Feature Threshold");
         }

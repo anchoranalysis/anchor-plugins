@@ -41,17 +41,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 class ExtendObjectsInZHelper {
 
     public static ObjectMask createExtendedObject(
-            ObjectMask flat, ObjectMask container, BoundingBox bbox, int zCenter)
+            ObjectMask flat, ObjectMask container, BoundingBox box, int zCenter)
             throws CreateException {
 
-        Extent extent = bbox.extent();
+        Extent extent = box.extent();
 
-        ObjectMask objectNew = container.region(bbox, false);
+        ObjectMask objectNew = container.region(box, false);
 
         ByteBuffer bbFlat = flat.voxels().slice(0).buffer();
 
-        int zLow = bbox.cornerMin().z();
-        int zHigh = bbox.calcCornerMax().z();
+        int zLow = box.cornerMin().z();
+        int zHigh = box.calcCornerMax().z();
 
         if (zCenter > zHigh) {
             zCenter = zHigh;

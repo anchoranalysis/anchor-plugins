@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
@@ -54,7 +54,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
         Channel chnlIn = mask.channel();
         Voxels<ByteBuffer> voxelsIn = chnlIn.voxels().asByte();
 
-        ImageDimensions dimSource = dim.create();
+        ImageDimensions dimSource = dimensions.create();
 
         if (mask.dimensions().x() != dimSource.x()
                 && mask.dimensions().y() != dimSource.y()) {

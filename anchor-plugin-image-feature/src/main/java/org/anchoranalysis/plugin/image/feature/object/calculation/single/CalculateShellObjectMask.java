@@ -38,6 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
 
@@ -54,18 +55,16 @@ public class CalculateShellObjectMask
 
     public static FeatureCalculation<ObjectMask, FeatureInputSingleObject> of(
             CalculationResolver<FeatureInputSingleObject> params,
-            int iterationsDilation,
-            int iterationsErosion,
+            MorphologicalIterations iterations,
             int iterationsErosionSecond,
-            boolean do3D,
             boolean inverse) {
         ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDilation =
-                CalculateDilation.of(params, iterationsDilation, do3D);
+                CalculateDilation.of(params, iterations.getIterationsDilation(), iterations.isDo3D());
         ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion =
-                CalculateErosion.ofResolved(params, iterationsErosion, do3D);
+                CalculateErosion.ofResolved(params, iterations.getIterationsErosion(), iterations.isDo3D());
 
         return new CalculateShellObjectMask(
-                ccDilation, ccErosion, iterationsErosionSecond, do3D, inverse);
+                ccDilation, ccErosion, iterationsErosionSecond, iterations.isDo3D(), inverse);
     }
 
     @Override

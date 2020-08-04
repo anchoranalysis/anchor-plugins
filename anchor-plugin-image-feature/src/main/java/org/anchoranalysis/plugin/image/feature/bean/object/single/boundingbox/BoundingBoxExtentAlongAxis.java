@@ -32,7 +32,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 public class BoundingBoxExtentAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override
-    protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox bbox) {
-        return bbox.extent().asTuple();
+    protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox box) {
+        return box.extent().asTuple();
     }
 }

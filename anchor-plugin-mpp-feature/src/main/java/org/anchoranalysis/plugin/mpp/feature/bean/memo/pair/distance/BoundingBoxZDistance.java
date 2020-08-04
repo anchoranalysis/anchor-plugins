@@ -49,23 +49,23 @@ public class BoundingBoxZDistance extends FeaturePairMemoSingleRegion {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
-        BoundingBox bbox1 = bbox(inputSessionless, FeatureInputPairMemo::getObj1);
-        BoundingBox bbox2 = bbox(inputSessionless, FeatureInputPairMemo::getObj2);
+        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObj1);
+        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObj2);
 
         // Check the bounding boxes intersect in general (including XY)
-        if (bbox1.intersection().existsWith(bbox2)) {
+        if (box1.intersection().existsWith(box2)) {
             return 0.0;
         }
 
-        return calcZDistance(bbox1, bbox2);
+        return calcZDistance(box1, box2);
     }
 
-    private double calcZDistance(BoundingBox bbox1, BoundingBox bbox2) {
-        int z1Min = bbox1.cornerMin().z();
-        int z1Max = bbox1.calcCornerMax().z();
+    private double calcZDistance(BoundingBox box1, BoundingBox box2) {
+        int z1Min = box1.cornerMin().z();
+        int z1Max = box1.calcCornerMax().z();
 
-        int z2Min = bbox2.cornerMin().z();
-        int z2Max = bbox2.calcCornerMax().z();
+        int z2Min = box2.cornerMin().z();
+        int z2Max = box2.calcCornerMax().z();
 
         int diff1 = Math.abs(z1Min - z2Min);
         int diff2 = Math.abs(z1Min - z2Max);

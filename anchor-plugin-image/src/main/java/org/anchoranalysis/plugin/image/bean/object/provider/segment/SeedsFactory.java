@@ -80,7 +80,7 @@ class SeedsFactory {
 
         ObjectMask seed =
                 object.mapBoundingBoxPreserveExtent(
-                        bbox -> bbox.shiftBackBy(subtractFromCornerMin));
+                        box -> box.shiftBackBy(subtractFromCornerMin));
 
         // If a seed object is partially located outside an object, the above line might fail, so we
         // should test
@@ -91,8 +91,8 @@ class SeedsFactory {
             ObjectMask seed, BoundingBox containingBBox, ImageDimensions dimensions)
             throws CreateException {
         if (!containingBBox.contains().box(seed.boundingBox())) {
-            // We only take the part of the seed object that intersects with our bbox
-            BoundingBox bboxIntersect =
+            // We only take the part of the seed object that intersects with our box
+            BoundingBox boxIntersect =
                     containingBBox
                             .intersection()
                             .withInside(seed.boundingBox(), dimensions.extent())
@@ -100,7 +100,7 @@ class SeedsFactory {
                                     () ->
                                             new CreateException(
                                                     "No bounding box intersection exists between seed and containing bounding-box"));
-            return seed.region(bboxIntersect, false);
+            return seed.region(boxIntersect, false);
         } else {
             return seed;
         }

@@ -67,27 +67,27 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
+    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        BoundingBox bbox = createBox(dimSource);
+        BoundingBox box = createBox(dimensions);
 
-        return createBinaryChnl(bbox, chnl);
+        return createBinaryChnl(box, chnl);
     }
 
-    private static Mask createBinaryChnl(BoundingBox bbox, Channel chnl) {
+    private static Mask createBinaryChnl(BoundingBox box, Channel chnl) {
         BinaryValues bv = BinaryValues.getDefault();
-        chnl.voxels().any().setPixelsTo(bbox, bv.getOnInt());
+        chnl.voxels().any().setPixelsTo(box, bv.getOnInt());
         return new Mask(chnl, bv);
     }
 
-    private BoundingBox createBox(ImageDimensions sd) {
-        BoundingBox bbox =
+    private BoundingBox createBox(ImageDimensions dimensions) {
+        BoundingBox box =
                 new BoundingBox(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
 
         // Make sure box is inside channel
-        return bbox.clipTo(sd.extent());
+        return box.clipTo(dimensions.extent());
     }
 }
