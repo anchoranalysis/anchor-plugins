@@ -48,30 +48,29 @@ public class BinaryChnlProviderReference extends MaskProvider {
     @BeanField @Getter @Setter private boolean duplicate = false;
     // END BEAN PROPERTIES
 
-    private Mask bi;
+    private Mask mask;
 
     public BinaryChnlProviderReference(String id) {
-        super();
         this.id = id;
     }
 
     @Override
     public Mask create() throws CreateException {
         assert (this.isInitialized());
-        if (bi == null) {
-            bi = createChnl();
+        if (mask == null) {
+            mask = createMask();
         }
-        return bi;
+        return mask;
     }
 
-    private Mask createChnl() throws CreateException {
+    private Mask createMask() throws CreateException {
         try {
-            Mask chnl = getInitializationParameters().getBinaryImageCollection().getException(id);
+            Mask mask = getInitializationParameters().getBinaryImageCollection().getException(id);
 
             if (duplicate) {
-                return chnl.duplicate();
+                return mask.duplicate();
             } else {
-                return chnl;
+                return mask;
             }
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);

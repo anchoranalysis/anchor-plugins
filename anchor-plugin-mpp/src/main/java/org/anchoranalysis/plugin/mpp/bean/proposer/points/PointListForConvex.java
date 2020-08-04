@@ -42,11 +42,11 @@ class PointListForConvex {
     }
 
     public boolean convexWithAtLeastOnePoint(
-            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> vb) {
-        return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, vb);
+            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> voxels) {
+        return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, voxels);
     }
 
-    public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxels<ByteBuffer> vb) {
-        return list.stream().anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, vb));
+    public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxels<ByteBuffer> voxels) {
+        return list.stream().anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, voxels));
     }
 }

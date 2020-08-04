@@ -62,16 +62,16 @@ public class ChnlProviderScale extends ChnlProviderOne {
             MessageLogger logger)
             throws CreateException {
         try {
-            logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getResolution());
+            logger.logFormatted("incoming Image Resolution: %s\n", chnl.dimensions().resolution());
 
-            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.getDimensions()));
+            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.dimensions()));
 
             logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
 
             Channel chnlOut = chnl.scaleXY(scaleFactor, interpolator);
 
             logger.logFormatted(
-                    "outgoing Image Resolution: %s\n", chnlOut.getDimensions().getResolution());
+                    "outgoing Image Resolution: %s\n", chnlOut.dimensions().resolution());
 
             return chnlOut;
 

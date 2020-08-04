@@ -48,7 +48,7 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
         Channel chnlIn = chnl.create();
 
-        ImageDimensions sd = chnlIn.getDimensions();
+        ImageDimensions sd = chnlIn.dimensions();
 
         try {
             Stack out = new Stack();

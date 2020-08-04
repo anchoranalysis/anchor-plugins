@@ -65,7 +65,7 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
                         outsideAtThreshold, do3D, object, binaryVoxels(chnl), ignoreAtThreshold);
-        return ApplyKernel.applyForCount(kernelMatch, object.getVoxels());
+        return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 
     private BinaryVoxels<ByteBuffer> binaryVoxels(Channel chnl)

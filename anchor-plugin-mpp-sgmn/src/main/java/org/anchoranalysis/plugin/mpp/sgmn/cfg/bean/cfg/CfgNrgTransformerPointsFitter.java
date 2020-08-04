@@ -50,7 +50,7 @@ public class CfgNrgTransformerPointsFitter extends StateTransformerBean<Cfg, Cfg
     public CfgNRGPixelized transform(Cfg in, TransformationContext context)
             throws OperationFailedException {
 
-        Optional<Mark> mark = createMark.fitMarkToPointsFromCfg(in, context.getDimensions());
+        Optional<Mark> mark = createMark.fitMarkToPointsFromCfg(in, context.dimensions());
 
         // If we cannot create a mark, there is no proposal
         Cfg cfg = wrapMark(mark);

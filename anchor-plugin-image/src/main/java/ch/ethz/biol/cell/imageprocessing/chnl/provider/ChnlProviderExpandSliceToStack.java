@@ -51,12 +51,12 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
         Channel chnl = slice.create();
 
-        ImageDimensions sdSrc = chnl.getDimensions();
+        ImageDimensions sdSrc = chnl.dimensions();
 
-        if (sdSrc.getX() != dim.getX()) {
+        if (sdSrc.x() != dim.x()) {
             throw new CreateException("x dimension is not equal");
         }
-        if (sdSrc.getY() != dim.getY()) {
+        if (sdSrc.y() != dim.y()) {
             throw new CreateException("y dimension is not equal");
         }
 
@@ -64,12 +64,12 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
                 ChannelFactory.instance()
                         .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        Voxels<ByteBuffer> vbSlice = chnl.voxels().asByte();
-        Voxels<ByteBuffer> vbOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> voxelsSlice = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
-        for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
-            VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);
-            vbOut.setPixelsForPlane(z, bb);
+        for (int z = 0; z < chnlOut.dimensions().z(); z++) {
+            VoxelBuffer<ByteBuffer> bb = voxelsSlice.duplicate().slice(0);
+            voxelsOut.updateSlice(z, bb);
         }
 
         return chnlOut;

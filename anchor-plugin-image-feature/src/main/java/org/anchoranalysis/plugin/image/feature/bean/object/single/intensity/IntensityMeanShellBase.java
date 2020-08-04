@@ -121,7 +121,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     private Optional<ObjectMask> intersectWithNRGMask(ObjectMask object, NRGStack nrgStack) {
-        return object.intersect(createNrgMask(nrgStack), nrgStack.getDimensions());
+        return object.intersect(createNrgMask(nrgStack), nrgStack.dimensions());
     }
 
     protected abstract double calcForShell(ObjectMask shell, Channel chnl)
@@ -129,7 +129,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     private ObjectMask createNrgMask(NRGStack nrgStack) {
         return new ObjectMask(
-                new BoundingBox(nrgStack.getDimensions().getExtent()),
+                new BoundingBox(nrgStack.dimensions().extent()),
                 nrgStack.getChannel(nrgIndexMask).voxels().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()

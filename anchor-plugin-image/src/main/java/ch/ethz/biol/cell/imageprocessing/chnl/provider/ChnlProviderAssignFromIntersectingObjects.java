@@ -57,13 +57,13 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         ObjectCollection source = objectsSource.create();
         ObjectCollection target = objectsTarget.create();
 
         streamIntersectingObjects(source, target)
-                .forEach(pair -> vb.setPixelsCheckMask(pair._2(), getValForMask(chnl, pair._1())));
+                .forEach(pair -> voxels.setPixelsCheckMask(pair._2(), getValForMask(chnl, pair._1())));
         return chnl;
     }
 
@@ -111,9 +111,9 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
     private static int getValForMask(Channel chnl, ObjectMask object) {
 
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
-        return vb.getVoxel(
+        return voxels.getVoxel(
                 object.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new));
     }
 }

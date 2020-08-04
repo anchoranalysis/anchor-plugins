@@ -72,9 +72,9 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
         int max = 0;
         int ind = 0;
 
-        for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
-            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
-            int cnt = cntForByteBuffer(bb, object.getBinaryValuesByte().getOnByte());
+        for (int z = 0; z < object.boundingBox().extent().z(); z++) {
+            ByteBuffer bb = object.voxels().slice(z).buffer();
+            int cnt = cntForByteBuffer(bb, object.binaryValuesByte().getOnByte());
 
             if (cnt > max) {
                 max = cnt;

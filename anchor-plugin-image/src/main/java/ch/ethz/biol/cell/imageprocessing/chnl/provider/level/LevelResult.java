@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -41,7 +41,7 @@ public class LevelResult {
 
     @Getter private final Histogram histogram;
 
-    public double distanceSquaredTo(Point3d srcPoint) {
-        return srcPoint.distanceSquared(object.getBoundingBox().midpoint());
+    public double distanceSquaredTo(Point3i srcPoint) {
+        return object.boundingBox().midpoint().distanceSquared(srcPoint);
     }
 }

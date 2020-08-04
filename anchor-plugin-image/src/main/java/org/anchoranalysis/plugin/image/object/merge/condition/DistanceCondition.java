@@ -61,13 +61,13 @@ public class DistanceCondition implements BeforeCondition {
 
         double distance =
                 BoundingBoxDistance.distance(
-                        source.getBoundingBox(), destination.getBoundingBox(), !suppressZ);
+                        source.boundingBox(), destination.boundingBox(), !suppressZ);
 
         double maxDistanceResolved =
                 resolveDistance(
                         res,
-                        source.getBoundingBox().midpoint(),
-                        destination.getBoundingBox().midpoint());
+                        source.boundingBox().midpoint(),
+                        destination.boundingBox().midpoint());
 
         if (distance >= maxDistanceResolved) {
             return false;
@@ -75,8 +75,8 @@ public class DistanceCondition implements BeforeCondition {
 
             logger.logFormatted(
                     "Maybe merging %s and %s with distance %f (<%f)",
-                    source.getBoundingBox().midpoint(),
-                    destination.getBoundingBox().midpoint(),
+                    source.boundingBox().midpoint(),
+                    destination.boundingBox().midpoint(),
                     distance,
                     maxDistanceResolved);
 

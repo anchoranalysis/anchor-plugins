@@ -63,12 +63,12 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
         if (sigmaInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            sigmaToUse = ImageUnitConverter.convertFromMeters(sigma, dimensions.getResolution());
+            sigmaToUse = ImageUnitConverter.convertFromMeters(sigma, dimensions.resolution());
 
             logger.logFormatted("Converted sigmaInMeters=%f into sigma=%f", sigma, sigmaToUse);
         }
 
-        if (sigmaToUse > dimensions.getX() || sigmaToUse > dimensions.getY()) {
+        if (sigmaToUse > dimensions.x() || sigmaToUse > dimensions.y()) {
             throw new OperationFailedException(
                     "The calculated sigma is FAR TOO LARGE. It is larger than the entire channel it is applied to");
         }

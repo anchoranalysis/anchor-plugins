@@ -58,15 +58,15 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
         Channel chnlGreen = stack.getChannel(1);
         Channel chnlBlue = stack.getChannel(2);
 
-        Voxels<ByteBuffer> vbRed = chnlRed.voxels().asByte();
-        Voxels<ByteBuffer> vbGreen = chnlGreen.voxels().asByte();
-        Voxels<ByteBuffer> vbBlue = chnlBlue.voxels().asByte();
+        Voxels<ByteBuffer> voxelsRed = chnlRed.voxels().asByte();
+        Voxels<ByteBuffer> voxelsGreen = chnlGreen.voxels().asByte();
+        Voxels<ByteBuffer> voxelsBlue = chnlBlue.voxels().asByte();
 
-        for (int z = 0; z < stack.getDimensions().getZ(); z++) {
+        for (int z = 0; z < stack.dimensions().z(); z++) {
 
-            ByteBuffer red = vbRed.getPixelsForPlane(z).buffer();
-            ByteBuffer green = vbGreen.getPixelsForPlane(z).buffer();
-            ByteBuffer blue = vbBlue.getPixelsForPlane(z).buffer();
+            ByteBuffer red = voxelsRed.slice(z).buffer();
+            ByteBuffer green = voxelsGreen.slice(z).buffer();
+            ByteBuffer blue = voxelsBlue.slice(z).buffer();
 
             ByteBuffer merged =
                     ByteBuffer.allocate(red.capacity() + green.capacity() + blue.capacity());

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.points.PointRange;
 
 /**
- * Takes an existing binaryChnl and fits a box around the *On* pixels.
+ * Takes an existing mask and fits a box around the ON pixels.
  *
  * <p>The tightest box that fits is always used
  *
@@ -56,41 +56,41 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask bic) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
         if (slicesSeperately) {
-            Extent e = bic.getDimensions().getExtent();
-            for (int z = 0; z < e.getZ(); z++) {
+            Extent e = mask.dimensions().extent();
+            for (int z = 0; z < e.z(); z++) {
 
-                BoundingBox bbox = calcNarrowestBoxAroundMask(bic.extractSlice(z).binaryVoxels());
-                bic.binaryVoxels().setPixelsToOn(bbox.shiftToZ(z));
+                BoundingBox bbox = calcNarrowestBoxAroundMask(mask.extractSlice(z).binaryVoxels());
+                mask.binaryVoxels().setPixelsToOn(bbox.shiftToZ(z));
             }
         } else {
-            BoundingBox bbox = calcNarrowestBoxAroundMask(bic.binaryVoxels());
-            bic.binaryVoxels().setPixelsToOn(bbox);
+            BoundingBox bbox = calcNarrowestBoxAroundMask(mask.binaryVoxels());
+            mask.binaryVoxels().setPixelsToOn(bbox);
         }
 
-        return bic;
+        return mask;
     }
 
-    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxels<ByteBuffer> vb)
+    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxels<ByteBuffer> voxels)
             throws CreateException {
 
         PointRange pointRange = new PointRange();
 
-        Extent extent = vb.extent();
+        Extent extent = voxels.extent();
 
-        BinaryValuesByte bvb = vb.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
         Point3i point = new Point3i(0, 0, 0);
-        for (point.setZ(0); point.getZ() < extent.getZ(); point.incrementZ()) {
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer buf = vb.getPixelsForPlane(point.getZ()).buffer();
+            ByteBuffer buf = voxels.getPixelsForPlane(point.z()).buffer();
 
-            for (point.setY(0); point.getY() < extent.getY(); point.incrementY()) {
-                for (point.setX(0); point.getX() < extent.getX(); point.incrementX()) {
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    int offset = extent.offset(point.getX(), point.getY());
+                    int offset = extent.offset(point.x(), point.y());
                     if (buf.get(offset) == bvb.getOnByte()) {
                         pointRange.add(point);
                     }

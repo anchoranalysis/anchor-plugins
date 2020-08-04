@@ -47,7 +47,7 @@ class CalculateIntersectionOfDilatedBoundingBox
     protected Optional<BoundingBox> execute(FeatureInputPairObjects input)
             throws FeatureCalculationException {
         return findIntersectionOfDilatedBoundingBox(
-                input.getFirst(), input.getSecond(), input.getDimensionsRequired().getExtent());
+                input.getFirst(), input.getSecond(), input.dimensionsRequired().extent());
     }
 
     private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox(
@@ -62,6 +62,6 @@ class CalculateIntersectionOfDilatedBoundingBox
     }
 
     private BoundingBox dilatedBoundingBoxFor(ObjectMask object, Extent extent) {
-        return object.getBoundedVoxels().dilate(do3D, Optional.of(extent));
+        return object.boundedVoxels().dilate(do3D, Optional.of(extent));
     }
 }

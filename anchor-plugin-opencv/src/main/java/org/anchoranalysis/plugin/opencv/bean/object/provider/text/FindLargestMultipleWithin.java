@@ -58,12 +58,12 @@ class FindLargestMultipleWithin {
     public static Extent apply(Extent small, Extent stayWithin, int maxScaleFactor)
             throws OperationFailedException {
 
-        if (small.getX() > stayWithin.getX()) {
+        if (small.x() > stayWithin.x()) {
             throw new OperationFailedException(
                     "The extent of small in the X direction is already larger than stayWithin. This is not allowed");
         }
 
-        if (small.getY() > stayWithin.getY()) {
+        if (small.y() > stayWithin.y()) {
             throw new OperationFailedException(
                     "The extent of small in the Y direction is already larger than stayWithin. This is not allowed");
         }
@@ -88,6 +88,6 @@ class FindLargestMultipleWithin {
     }
 
     private static int minScaleFactor(ScaleFactor sf) {
-        return (int) Math.floor(Math.min(sf.getX(), sf.getY()));
+        return (int) Math.floor(Math.min(sf.x(), sf.y()));
     }
 }

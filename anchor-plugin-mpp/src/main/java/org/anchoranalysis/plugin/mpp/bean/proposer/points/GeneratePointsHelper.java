@@ -43,10 +43,10 @@ import org.anchoranalysis.image.points.PointsFromMask;
 class GeneratePointsHelper {
 
     private Point3d pointRoot;
-    private final Optional<Mask> chnlFilled;
+    private final Optional<Mask> maskFilled;
     private int maxZDistance;
     private int skipZDistance;
-    private Mask chnl;
+    private Mask mask;
     private ImageDimensions dimensions;
 
     public List<Point3i> generatePoints(List<List<Point3i>> pointsXY)
@@ -68,17 +68,17 @@ class GeneratePointsHelper {
 
         BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
 
-        int zLow = Math.max(0, bbox.cornerMin().getZ() - maxZDistance);
-        int zHigh = Math.min(dimensions.getZ(), bbox.cornerMin().getZ() + maxZDistance);
+        int zLow = Math.max(0, bbox.cornerMin().z() - maxZDistance);
+        int zHigh = Math.min(dimensions.z(), bbox.cornerMin().z() + maxZDistance);
 
-        if (chnlFilled.isPresent()) {
-            return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox)
-                    .convexOnly(chnl, pointRoot, skipZDistance);
+        if (maskFilled.isPresent()) {
+            return new PointsFromInsideHelper(pointList, maskFilled.get(), bbox)
+                    .convexOnly(mask, pointRoot, skipZDistance);
         } else {
             return PointsFromMask.listFromSlicesInsideBox3i(
-                    chnl,
+                    mask,
                     bbox.duplicateChangeZ(zLow, zHigh - zLow),
-                    (int) Math.floor(pointRoot.getZ()),
+                    (int) Math.floor(pointRoot.z()),
                     skipZDistance);
         }
     }

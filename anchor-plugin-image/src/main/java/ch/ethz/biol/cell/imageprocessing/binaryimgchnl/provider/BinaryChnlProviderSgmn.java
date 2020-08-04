@@ -59,14 +59,14 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
     protected Mask createFromSource(Channel chnlSource) throws CreateException {
         return new Mask(
                 sgmnResult(chnlSource),
-                chnlSource.getDimensions().getResolution()
+                chnlSource.dimensions().resolution()
                 );
     }
 
     private BinaryVoxels<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
-        Optional<ObjectMask> omMask = objectFromMask(chnl.getDimensions());
+        Optional<ObjectMask> omMask = objectFromMask(chnl.dimensions());
 
-        BinarySegmentationParameters params = createParams(chnl.getDimensions());
+        BinarySegmentationParameters params = createParams(chnl.dimensions());
 
         try {
             return sgmn.segment(chnl.voxels(), params, omMask);
@@ -78,7 +78,7 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
     private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
         return new BinarySegmentationParameters(
-                dim.getResolution(), OptionalFactory.create(histogramProvider));
+                dim.resolution(), OptionalFactory.create(histogramProvider));
     }
 
     private Optional<ObjectMask> objectFromMask(ImageDimensions dim) throws CreateException {

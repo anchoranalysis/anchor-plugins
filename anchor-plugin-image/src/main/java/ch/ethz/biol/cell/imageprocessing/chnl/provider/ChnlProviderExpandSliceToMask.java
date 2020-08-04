@@ -55,11 +55,11 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
     @Override
     public Channel create() throws CreateException {
 
-        ImageDimensions sdTarget = chnlTargetDimensions.create().getDimensions();
+        ImageDimensions sdTarget = chnlTargetDimensions.create().dimensions();
 
         Channel slice = chnlSlice.create();
 
-        checkDimensions(slice.getDimensions(), sdTarget);
+        checkDimensions(slice.dimensions(), sdTarget);
 
         try {
             return createExpandedChnl(sdTarget, slice.voxels().asByte());
@@ -70,25 +70,25 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
 
     private static void checkDimensions(ImageDimensions dimSrc, ImageDimensions dimTarget)
             throws CreateException {
-        if (dimSrc.getX() != dimTarget.getX()) {
+        if (dimSrc.x() != dimTarget.x()) {
             throw new CreateException("x dimension is not equal");
         }
-        if (dimSrc.getY() != dimTarget.getY()) {
+        if (dimSrc.y() != dimTarget.y()) {
             throw new CreateException("y dimension is not equal");
         }
     }
 
-    private Channel createExpandedChnl(ImageDimensions sdTarget, Voxels<ByteBuffer> vbSlice) {
+    private Channel createExpandedChnl(ImageDimensions sdTarget, Voxels<ByteBuffer> voxelsSlice) {
 
         Channel chnl =
                 ChannelFactory.instance()
                         .createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        Voxels<ByteBuffer> vbOut = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-            ByteBuffer bb = vbSlice.duplicate().getPixelsForPlane(0).buffer();
-            vbOut.setPixelsForPlane(z, VoxelBufferByte.wrap(bb));
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
+            ByteBuffer bb = voxelsSlice.duplicate().slice(0).buffer();
+            voxelsOut.updateSlice(z, VoxelBufferByte.wrap(bb));
         }
 
         return chnl;

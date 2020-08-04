@@ -28,32 +28,20 @@ package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class ScaleFactorInt {
 
     private int x;
     private int y;
 
-    public ScaleFactorInt(int x, int y) {
-        super();
-        this.x = x;
-        this.y = y;
-    }
-
     public Point2i scale(Point2i point) {
-        return new Point2i(scaledX(point.getX()), scaledY(point.getY()));
+        return new Point2i(scaledX(point.x()), scaledY(point.y()));
     }
 
     public Extent scale(Extent extent) {
-        return new Extent(scaledX(extent.getX()), scaledY(extent.getY()), extent.getZ());
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+        return new Extent(scaledX(extent.x()), scaledY(extent.y()), extent.z());
     }
 
     private int scaledX(int val) {

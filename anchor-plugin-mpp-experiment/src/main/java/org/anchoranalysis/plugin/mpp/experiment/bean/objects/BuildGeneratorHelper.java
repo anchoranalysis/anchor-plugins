@@ -78,7 +78,7 @@ class BuildGeneratorHelper {
             throws CreateException {
         
         // First generator generates object-masks and bounding-boxes for each object
-        IterableGenerator<ObjectsWithBoundingBox> wrappedObjectWithBoundingBoxGenerator = WrapGenerators.wrapObjectMask( new ObjectWithBoundingBoxGenerator(dimensions.getResolution()) ); 
+        IterableGenerator<ObjectsWithBoundingBox> wrappedObjectWithBoundingBoxGenerator = WrapGenerators.wrapObjectMask( new ObjectWithBoundingBoxGenerator(dimensions.resolution()) ); 
         
         IterableCombinedListGenerator<ObjectsWithBoundingBox> out =
                 new IterableCombinedListGenerator<>(

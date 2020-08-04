@@ -59,15 +59,15 @@ public class SizeExtents {
 
     public void populateMissingFromArbitrarySlice(Stack stackArbitrarySlice) {
 
-        sizeX = stackArbitrarySlice.getDimensions().getX();
-        sizeY = stackArbitrarySlice.getDimensions().getY();
+        sizeX = stackArbitrarySlice.dimensions().x();
+        sizeY = stackArbitrarySlice.dimensions().y();
 
         if (!rangeC.isPresent()) {
             rangeC = Optional.of(new IntegerRange(stackArbitrarySlice.getNumberChannels()));
         }
 
         if (!rangeZ.isPresent()) {
-            rangeZ = Optional.of(new IntegerRange(stackArbitrarySlice.getDimensions().getZ()));
+            rangeZ = Optional.of(new IntegerRange(stackArbitrarySlice.dimensions().z()));
         }
 
         if (!rangeT.isPresent()) {

@@ -69,7 +69,7 @@ public class OrientationAndRadiiProposer extends MarkProposer {
         Optional<Orientation> orientationNew =
                 orientationProposer.propose(
                         inputMark.getMark(),
-                        context.getDimensions(),
+                        context.dimensions(),
                         context.getRandomNumberGenerator());
 
         if (!orientationNew.isPresent()) {
@@ -84,7 +84,7 @@ public class OrientationAndRadiiProposer extends MarkProposer {
                 radiiProposer.propose(
                         inputMark.getMark().centerPoint(),
                         context.getRandomNumberGenerator(),
-                        context.getDimensions(),
+                        context.dimensions(),
                         orientationNew.get());
 
         if (!rad.isPresent()) {

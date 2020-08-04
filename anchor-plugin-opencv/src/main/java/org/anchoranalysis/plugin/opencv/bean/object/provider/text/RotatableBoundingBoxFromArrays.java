@@ -89,8 +89,8 @@ class RotatableBoundingBoxFromArrays {
 
         Point3d endRotated = rotatedPointWithoffset(endUnrotated, orientation, offset);
 
-        float width = startUnrotated.getX() + endUnrotated.getX();
-        float height = startUnrotated.getY() + endUnrotated.getY();
+        float width = startUnrotated.x() + endUnrotated.x();
+        float height = startUnrotated.y() + endUnrotated.y();
 
         Point3d midpoint = midPointFor(width, height, angle, endRotated);
 
@@ -134,10 +134,10 @@ class RotatableBoundingBoxFromArrays {
 
     private static Point3d meanPoint(Point3d point1, Point3d point2) {
         return new Point3d(
-                (point1.getX() + point2.getX()) / 2, (point1.getY() + point2.getY()) / 2, 0);
+                (point1.x() + point2.x()) / 2, (point1.y() + point2.y()) / 2, 0);
     }
 
     public static Point3d convert3d(Point2f p) {
-        return new Point3d(p.getX(), p.getY(), 0);
+        return new Point3d(p.x(), p.y(), 0);
     }
 }

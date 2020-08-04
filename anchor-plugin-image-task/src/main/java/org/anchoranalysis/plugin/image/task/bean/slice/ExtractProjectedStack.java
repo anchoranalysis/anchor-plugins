@@ -74,17 +74,17 @@ class ExtractProjectedStack {
         // Then the mode is off
         if (width == -1
                 || height == -1
-                || (chnlIn.getDimensions().getX() == width
-                        && chnlIn.getDimensions().getY() == height)) {
+                || (chnlIn.dimensions().x() == width
+                        && chnlIn.dimensions().y() == height)) {
             return chnlIn;
         } else {
             Extent eOut = new Extent(width, height);
-            Point3i crnrPos = createTarget(chnlIn.getDimensions(), eOut);
+            Point3i crnrPos = createTarget(chnlIn.dimensions(), eOut);
 
             BoundingBox bboxToProject =
-                    boxToProject(crnrPos, chnlIn.getDimensions().getExtent(), eOut);
+                    boxToProject(crnrPos, chnlIn.dimensions().extent(), eOut);
 
-            BoundingBox bboxSrc = bboxSrc(bboxToProject, chnlIn.getDimensions());
+            BoundingBox bboxSrc = bboxSrc(bboxToProject, chnlIn.dimensions());
 
             return copyPixels(bboxSrc, bboxToProject, chnlIn, eOut);
         }
@@ -92,8 +92,8 @@ class ExtractProjectedStack {
 
     private static Point3i createTarget(ImageDimensions sd, Extent e) {
         Point3i crnrPos = new Point3i();
-        crnrPos.setX((e.getX() - sd.getX()) / 2);
-        crnrPos.setY((e.getY() - sd.getY()) / 2);
+        crnrPos.setX((e.x() - sd.x()) / 2);
+        crnrPos.setY((e.y() - sd.y()) / 2);
         crnrPos.setZ(0);
         return crnrPos;
     }
@@ -113,12 +113,12 @@ class ExtractProjectedStack {
     private static Point3i createSrcCrnrPos(BoundingBox bboxToProject, ImageDimensions sd) {
         Point3i srcCrnrPos = new Point3i(0, 0, 0);
 
-        if (bboxToProject.extent().getX() < sd.getX()) {
-            srcCrnrPos.setX((sd.getX() - bboxToProject.extent().getX()) / 2);
+        if (bboxToProject.extent().x() < sd.x()) {
+            srcCrnrPos.setX((sd.x() - bboxToProject.extent().x()) / 2);
         }
 
-        if (bboxToProject.extent().getY() < sd.getY()) {
-            srcCrnrPos.setY((sd.getY() - bboxToProject.extent().getY()) / 2);
+        if (bboxToProject.extent().y() < sd.y()) {
+            srcCrnrPos.setY((sd.y() - bboxToProject.extent().y()) / 2);
         }
         return srcCrnrPos;
     }
@@ -129,7 +129,7 @@ class ExtractProjectedStack {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(eOut, chnl.getDimensions().getResolution()),
+                                new ImageDimensions(eOut, chnl.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
         chnl.voxels()
                 .asByte()

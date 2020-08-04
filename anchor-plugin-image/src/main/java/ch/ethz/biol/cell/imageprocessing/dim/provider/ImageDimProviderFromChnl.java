@@ -70,7 +70,7 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 
     @Override
     public ImageDimensions create() throws CreateException {
-        return selectChnl().getDimensions();
+        return selectChnl().dimensions();
     }
 
     private Channel selectChnl() throws CreateException {

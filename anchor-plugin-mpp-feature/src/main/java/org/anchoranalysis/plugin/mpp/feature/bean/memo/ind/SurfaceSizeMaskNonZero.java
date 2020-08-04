@@ -63,7 +63,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         ObjectMask objectMask = createMask(input.get());
         int surfaceSize = estimateSurfaceSize(input.get().getPxlPartMemo(), objectMask);
 
-        return resolveArea(surfaceSize, input.get().getResOptional());
+        return resolveArea(surfaceSize, input.get().getResolutionOptional());
     }
 
     private ObjectMask createMask(FeatureInputSingleMemo input) throws FeatureCalculationException {
@@ -71,7 +71,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
                 input.getPxlPartMemo()
                         .getMark()
                         .deriveObject(
-                                input.getDimensionsRequired(),
+                                input.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(getRegionID()),
                                 BinaryValuesByte.getDefault());
         return omWithProps.withoutProperties();
@@ -80,19 +80,19 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
             throws FeatureCalculationException {
 
-        Voxels<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
+        Voxels<ByteBuffer> voxelsOutline = calcOutline(object, !suppressZ);
 
-        Extent extent = object.getBoundingBox().extent();
+        Extent extent = object.boundingBox().extent();
 
         try {
             int size = 0;
-            for (int z = 0; z < extent.getZ(); z++) {
+            for (int z = 0; z < extent.z(); z++) {
                 VoxelStatistics stats = pxlMarkMemo.voxelized().statisticsFor(maskIndex, 0, z);
                 if (stats.histogram().hasAboveZero()) {
                     size +=
-                            vbOutline
+                            voxelsOutline
                                     .extractSlice(z)
-                                    .countEqual(object.getBinaryValues().getOnInt());
+                                    .countEqual(object.binaryValues().getOnInt());
                 }
             }
             return size;
@@ -102,7 +102,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     }
 
     private static Voxels<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
-        OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, useZ);
-        return ApplyKernel.apply(kernel, object.getVoxels(), object.getBinaryValuesByte());
+        OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, useZ);
+        return ApplyKernel.apply(kernel, object.voxels(), object.binaryValuesByte());
     }
 }

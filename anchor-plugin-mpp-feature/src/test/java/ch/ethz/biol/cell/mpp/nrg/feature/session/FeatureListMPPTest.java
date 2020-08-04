@@ -55,7 +55,7 @@ import org.junit.Test;
 public class FeatureListMPPTest {
 
     private static final NRGStackWithParams nrgStack = NRGStackFixture.create(false, true);
-    private static final ImageDimensions DIM = nrgStack.getDimensions();
+    private static final ImageDimensions DIM = nrgStack.dimensions();
 
     @Before
     public void setUp() {

@@ -62,7 +62,7 @@ public abstract class StackProviderCVColorConverter extends StackProviderOne {
         Mat matBGR = MatConverter.makeRGBStack(stackRGB);
 
         Mat matHSV =
-                convertColorSpace(stackRGB.getDimensions().getExtent(), matBGR, colorSpaceCode());
+                convertColorSpace(stackRGB.dimensions().extent(), matBGR, colorSpaceCode());
 
         return createOutputStack(stackRGB, matHSV);
     }

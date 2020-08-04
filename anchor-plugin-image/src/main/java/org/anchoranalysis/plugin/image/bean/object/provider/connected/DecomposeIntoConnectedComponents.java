@@ -68,6 +68,6 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
 
         // Adjust the crnr of each object, by adding on the original starting point of our
         // object-mask
-        return objects.shiftBy(unconnected.getBoundingBox().cornerMin());
+        return objects.shiftBy(unconnected.boundingBox().cornerMin());
     }
 }

@@ -76,9 +76,9 @@ public class NumTouchingVoxels extends TouchingVoxels {
         CountKernelNeighborhoodMask kernelMatch =
                 new CountKernelNeighborhoodMask(
                         isDo3D(),
-                        source.getBinaryValuesByte(),
+                        source.binaryValuesByte(),
                         RelativeUtilities.createRelMask(destination, source),
                         false);
-        return ApplyKernel.applyForCount(kernelMatch, source.getVoxels(), bboxIntersectRelative);
+        return ApplyKernel.applyForCount(kernelMatch, source.voxels(), bboxIntersectRelative);
     }
 }

@@ -90,14 +90,14 @@ class WalkShortestPath {
 
             Point3i point1 = points.get(i);
             Point3i point2 = points.get(i + 1);
-            assert (point1.getZ() == point2.getZ());
+            assert (point1.z() == point2.z());
 
             drawLineOnVoxelBuffer(
                     object.binaryVoxels()
-                            .getVoxels()
-                            .getPixelsForPlane(point1.getZ() - bbox.cornerMin().getZ()),
-                    object.binaryVoxels().getVoxels().extent(),
-                    object.binaryVoxels().getBinaryValues().createByte(),
+                            .voxels()
+                            .slice(point1.z() - bbox.cornerMin().z()),
+                    object.binaryVoxels().voxels().extent(),
+                    object.binaryVoxels().binaryValues().createByte(),
                     point1,
                     point2,
                     bbox.cornerMin());
@@ -117,11 +117,11 @@ class WalkShortestPath {
             }
 
             // Only accept points in 2D
-            if (firstPoint.getZ() != point.getZ()) {
+            if (firstPoint.z() != point.z()) {
                 throw new OperationFailedException(
                         String.format(
                                 "the first point in the list (%d) and another point (%d) have different z values. This algorithm only supports co-planar points (parallel to XY-axis)",
-                                firstPoint.getZ(), point.getZ()));
+                                firstPoint.z(), point.z()));
             }
         }
     }
@@ -137,10 +137,10 @@ class WalkShortestPath {
                 plane,
                 extent,
                 bvb,
-                point1.getX() - cornerMin.getX(),
-                point1.getY() - cornerMin.getY(),
-                point2.getX() - cornerMin.getX(),
-                point2.getY() - cornerMin.getY());
+                point1.x() - cornerMin.x(),
+                point1.y() - cornerMin.y(),
+                point2.x() - cornerMin.x(),
+                point2.y() - cornerMin.y());
     }
 
     /*

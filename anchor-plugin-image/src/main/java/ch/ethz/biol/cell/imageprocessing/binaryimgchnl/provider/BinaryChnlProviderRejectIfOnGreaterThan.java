@@ -43,20 +43,20 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromMask(Mask binaryImgChnl) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
         if (bySlice) {
-            for (int z = 0; z < binaryImgChnl.getDimensions().getZ(); z++) {
-                testChnl(binaryImgChnl.extractSlice(z));
+            for (int z = 0; z < mask.dimensions().z(); z++) {
+                testChnl(mask.extractSlice(z));
             }
         } else {
-            testChnl(binaryImgChnl);
+            testChnl(mask);
         }
-        return binaryImgChnl;
+        return mask;
     }
 
-    private void testChnl(Mask binaryImgChnl) throws CreateException {
-        int cnt = binaryImgChnl.countHighValues();
-        long volume = binaryImgChnl.getDimensions().getVolume();
+    private void testChnl(Mask mask) throws CreateException {
+        int cnt = mask.countOn();
+        long volume = mask.dimensions().calculateVolume();
 
         double ratio = ((double) cnt) / volume;
 

@@ -72,7 +72,7 @@ public class CalculateShellObjectMask
     protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.getDimensionsRequired();
+        ImageDimensions dimensions = input.dimensionsRequired();
 
         ObjectMask shell =
                 createShellObject(input, ccDilation, ccErosion, iterationsErosionSecond, do3D);
@@ -87,7 +87,7 @@ public class CalculateShellObjectMask
                                     .binaryVoxels()
                                     .setPixelsCheckMaskOff(
                                             shellIntersected.relMaskTo(
-                                                    duplicated.getBoundingBox())));
+                                                    duplicated.boundingBox())));
             return duplicated;
 
         } else {
@@ -129,7 +129,7 @@ public class CalculateShellObjectMask
             throw new FeatureCalculationException(e);
         }
 
-        ObjectMask relMask = objectEroded.relMaskTo(objectDilated.getBoundingBox());
+        ObjectMask relMask = objectEroded.relMaskTo(objectDilated.boundingBox());
 
         objectDilated.binaryVoxels().setPixelsCheckMaskOff(relMask);
 

@@ -56,18 +56,18 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             throw new OperationFailedException("Image-dimensions are required for this operation");
         }
 
-        if (object.getBoundingBox().atBorderXY(dim.get())) {
+        if (object.boundingBox().atBorderXY(dim.get())) {
             return false;
         }
 
         if (includeZ) {
-            ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-            if (cornerMin.getZ() == 0) {
+            ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+            if (cornerMin.z() == 0) {
                 return false;
             }
 
-            ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
-            if (cornerMax.getZ() == (dim.get().getZ() - 1)) {
+            ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
+            if (cornerMax.z() == (dim.get().z() - 1)) {
                 return false;
             }
         }

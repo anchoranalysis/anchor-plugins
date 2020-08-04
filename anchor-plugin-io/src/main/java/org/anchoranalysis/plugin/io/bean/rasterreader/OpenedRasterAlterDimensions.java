@@ -69,7 +69,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
 
         for (Stack stack : ts) {
             Optional<ImageResolution> res =
-                    processor.maybeUpdatedResolution(stack.getDimensions().getResolution());
+                    processor.maybeUpdatedResolution(stack.dimensions().resolution());
             res.ifPresent(stack::updateResolution);
         }
         return ts;
@@ -90,7 +90,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
 
         ImageDimensions sd = delegate.dimensionsForSeries(seriesIndex);
 
-        Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.getResolution());
+        Optional<ImageResolution> res = processor.maybeUpdatedResolution(sd.resolution());
 
         if (res.isPresent()) {
             return sd.duplicateChangeRes(res.get());

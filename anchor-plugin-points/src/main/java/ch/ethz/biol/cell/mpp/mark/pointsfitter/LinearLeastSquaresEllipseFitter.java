@@ -68,7 +68,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 
         List<Point2D_F64> pointsConvert =
                 FunctionalList.mapToList(
-                        points, point -> new Point2D_F64(point.getX(), point.getY()));
+                        points, point -> new Point2D_F64(point.x(), point.y()));
 
         FitEllipseAlgebraic fitter = new FitEllipseAlgebraic();
         fitter.process(pointsConvert);

@@ -67,30 +67,30 @@ public class CreateVoxelsFromPixelwiseFeature {
             Extent e = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            Voxels<ByteBuffer> vbOut = VoxelsFactory.getByte().createInitialized(e);
-            setPixels(vbOut, pixelScore, logger);
-            return vbOut;
+            Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(e);
+            setPixels(voxelsOut, pixelScore, logger);
+            return voxelsOut;
 
         } catch (InitException | FeatureCalculationException e) {
             throw new CreateException(e);
         }
     }
 
-    private void setPixels(Voxels<ByteBuffer> vbOut, PixelScore pixelScore, Logger logger)
+    private void setPixels(Voxels<ByteBuffer> voxelsOut, PixelScore pixelScore, Logger logger)
             throws FeatureCalculationException, InitException {
 
         pixelScore.init(createHistograms(), keyValueParams);
 
-        Extent e = vbOut.extent();
+        Extent e = voxelsOut.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
 
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int offset = e.offset(x, y);
 

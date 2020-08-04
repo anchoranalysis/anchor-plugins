@@ -43,15 +43,15 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
     /** Whether to overwrite the current voxel-value with the constant? */
     protected abstract boolean shouldOverwriteVoxelWithConstant(int voxel, int constant);
 
-    private void processVoxels(Voxels<?> vb, double value) {
+    private void processVoxels(Voxels<?> voxels, double value) {
 
         int constant = (int) Math.floor(value);
 
-        Extent e = vb.extent();
-        int volumeXY = e.getVolumeXY();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = voxels.extent();
+        int volumeXY = e.volumeXY();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> buf = vb.getPixelsForPlane(z);
+            VoxelBuffer<?> buf = voxels.slice(z);
 
             for (int i = 0; i < volumeXY; i++) {
 

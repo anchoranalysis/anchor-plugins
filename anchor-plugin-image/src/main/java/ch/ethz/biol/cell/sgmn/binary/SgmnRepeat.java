@@ -70,7 +70,7 @@ public class SgmnRepeat extends BinarySegmentationOne {
             objectMask =
                     Optional.of(
                             objectMask.isPresent()
-                                    ? new ObjectMask(objectMask.get().getBoundingBox(), outNew)
+                                    ? new ObjectMask(objectMask.get().boundingBox(), outNew)
                                     : new ObjectMask(outNew));
         }
 

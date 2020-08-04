@@ -45,7 +45,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                                chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxels(
                 chnlOut.voxels().asByte(),
@@ -57,17 +57,17 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
     }
 
     private void processVoxels(
-            Voxels<ByteBuffer> vbOut,
-            Voxels<ByteBuffer> vbIn1,
-            Voxels<ByteBuffer> vbIn2,
-            Voxels<ByteBuffer> vbIn3) {
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2,
+            Voxels<ByteBuffer> voxelsIn3) {
 
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
-            ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();
-            ByteBuffer in3 = vbIn3.getPixelsForPlane(z).buffer();
-            ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer in1 = voxelsIn1.slice(z).buffer();
+            ByteBuffer in2 = voxelsIn2.slice(z).buffer();
+            ByteBuffer in3 = voxelsIn3.slice(z).buffer();
+            ByteBuffer out = voxelsOut.slice(z).buffer();
 
             while (in1.hasRemaining()) {
 
@@ -92,11 +92,11 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
     private void checkDims(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
 
-        if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
+        if (!chnl1.dimensions().equals(chnl2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 
-        if (!chnl2.getDimensions().equals(chnl3.getDimensions())) {
+        if (!chnl2.dimensions().equals(chnl3.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
     }

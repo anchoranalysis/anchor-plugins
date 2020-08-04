@@ -96,7 +96,7 @@ class EastMarkExtractor {
             double minConfidence) {
         List<WithConfidence<Mark>> list = new ArrayList<>();
 
-        int rowsByCols = extent.getVolumeXY();
+        int rowsByCols = extent.volumeXY();
 
         float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
@@ -104,8 +104,8 @@ class EastMarkExtractor {
         int index = 0;
 
         Point2i point = new Point2i(0, 0);
-        for (point.setY(0); point.getY() < extent.getY(); point.incrY()) {
-            for (point.setX(0); point.getX() < extent.getX(); point.incrX()) {
+        for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+            for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                 float confidence = scoresData[index];
                 if (confidence >= minConfidence) {

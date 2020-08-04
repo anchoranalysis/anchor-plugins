@@ -51,7 +51,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
         FeatureInputSingleObject inputSessionless = input.get();
 
         ReadableTuple3i point =
-                extractTupleForBoundingBox(inputSessionless.getObject().getBoundingBox());
+                extractTupleForBoundingBox(inputSessionless.getObject().boundingBox());
 
         return calcAxisValue(point);
     }
@@ -65,7 +65,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
 
     private double calcAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
         try {
-            return point.getValueByDimension(AxisTypeConverter.createFromString(axis));
+            return point.byDimension(AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());
         }

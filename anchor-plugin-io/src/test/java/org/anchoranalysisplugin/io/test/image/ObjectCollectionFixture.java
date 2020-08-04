@@ -72,11 +72,11 @@ class ObjectCollectionFixture {
 
         ObjectMask object = new ObjectMask(new BoundingBox(crnr, e));
 
-        int volumeXY = e.getVolumeXY();
-        for (int z = 0; z < e.getZ(); z++) {
+        int volumeXY = e.volumeXY();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<ByteBuffer> vb = object.getVoxels().getPixelsForPlane(z);
-            ByteBuffer bb = vb.buffer();
+            VoxelBuffer<ByteBuffer> voxels = object.voxels().slice(z);
+            ByteBuffer bb = voxels.buffer();
 
             int prevVal = 0;
 
@@ -101,17 +101,17 @@ class ObjectCollectionFixture {
 
     /** Randomly returns an extent within a scene */
     private static Extent randomExtent() {
-        int x = randomTotal(SCENE_EXTENT.getX() - 1) + 1;
-        int y = randomTotal(SCENE_EXTENT.getY() - 1) + 1;
-        int z = randomTotal(SCENE_EXTENT.getZ() - 1) + 1;
+        int x = randomTotal(SCENE_EXTENT.x() - 1) + 1;
+        int y = randomTotal(SCENE_EXTENT.y() - 1) + 1;
+        int z = randomTotal(SCENE_EXTENT.z() - 1) + 1;
         return new Extent(x, y, z);
     }
 
     /** A random starting corner, making sure there's enough room for the extent */
     private static Point3i randomCorner(Extent extent) {
-        int x = randomSubtract(SCENE_EXTENT.getX(), extent.getX());
-        int y = randomSubtract(SCENE_EXTENT.getY(), extent.getY());
-        int z = randomSubtract(SCENE_EXTENT.getZ(), extent.getZ());
+        int x = randomSubtract(SCENE_EXTENT.x(), extent.x());
+        int y = randomSubtract(SCENE_EXTENT.y(), extent.y());
+        int z = randomSubtract(SCENE_EXTENT.z(), extent.z());
         return new Point3i(x, y, z);
     }
 

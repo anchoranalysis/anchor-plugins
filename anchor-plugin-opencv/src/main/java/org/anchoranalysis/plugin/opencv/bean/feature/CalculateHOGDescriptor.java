@@ -63,7 +63,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             Stack stack = extractStack(input);
-            Extent extent = stack.getDimensions().getExtent();
+            Extent extent = stack.dimensions().extent();
 
             checkSize(extent);
 
@@ -99,7 +99,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     }
 
     private void checkSize(Extent extent) throws FeatureCalculationException {
-        if (extent.getZ() > 1) {
+        if (extent.z() > 1) {
             throw new FeatureCalculationException(
                     "The image is 3D, but the feture only supports 2D images");
         }

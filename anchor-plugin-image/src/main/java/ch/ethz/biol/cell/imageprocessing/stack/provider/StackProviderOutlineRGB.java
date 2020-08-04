@@ -26,14 +26,11 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderHolder;
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderOutline;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -41,6 +38,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -61,15 +59,15 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
     @Override
     public Stack create() throws CreateException {
 
-        Mask maskChannel = mask.create();
+        Mask maskToBeOutlined = mask.create();
 
         try {
-            boolean do3D = !mip || maskChannel.getDimensions().getZ() == 1;
+            boolean do3D = !mip || maskToBeOutlined.dimensions().z() == 1;
 
             return CalcOutlineRGB.apply(
-                    calcOutline(maskChannel),
+                    deriveOutline(maskToBeOutlined),
                     backgroundStack(do3D),
-                    createBlue(do3D, maskChannel.getDimensions()),
+                    createBlue(do3D, maskToBeOutlined.dimensions()),
                     createShort);
 
         } catch (OperationFailedException e) {
@@ -77,8 +75,8 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
         }
     }
 
-    private Channel createBlue(boolean do3D, ImageDimensions dim) throws CreateException {
-        Channel blue = createBlueMaybeProvider(dim);
+    private Channel createBlue(boolean do3D, ImageDimensions dimensions) throws CreateException {
+        Channel blue = createBlueMaybeProvider(dimensions);
         if (do3D) {
             return blue;
         } else {
@@ -86,32 +84,19 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
         }
     }
 
-    private Channel createBlueMaybeProvider(ImageDimensions dim) throws CreateException {
+    private Channel createBlueMaybeProvider(ImageDimensions dimensions) throws CreateException {
         if (chnlBlue != null) {
             return chnlBlue.create();
         } else {
             return ChannelFactory.instance()
-                    .createEmptyInitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
+                    .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         }
     }
 
-    private Mask calcOutline(Mask mask) throws OperationFailedException {
-        Mask maskIn = mip ? mask.maxIntensityProj() : mask.duplicate();
+    private Mask deriveOutline(Mask maskToBeOutlined) throws OperationFailedException {
+        Mask maybeFlattened = mip ? maskToBeOutlined.flattenZ() : maskToBeOutlined.duplicate();
 
         // We calculate outline of mask
-        return createOutline(maskIn);
-    }
-
-    private Mask createOutline(Mask maskIn) throws OperationFailedException {
-        // We calculate outline of mask
-        BinaryChnlProviderOutline cpOutline = new BinaryChnlProviderOutline();
-        cpOutline.setForce2D(force2D);
-        cpOutline.setBinaryChnl(new BinaryChnlProviderHolder(maskIn));
-        try {
-            cpOutline.initRecursive(getInitializationParameters(), getLogger());
-            return cpOutline.create();
-        } catch (InitException | CreateException e) {
-            throw new OperationFailedException(e);
-        }
+        return FindOutline.outlineGuess3D(maybeFlattened, force2D, true);
     }
 }

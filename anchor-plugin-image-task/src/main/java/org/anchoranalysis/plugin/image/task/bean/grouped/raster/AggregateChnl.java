@@ -45,13 +45,13 @@ class AggregateChnl {
 
     public synchronized void addChnl(Channel chnl) throws OperationFailedException {
 
-        createRasterIfNecessary(chnl.getDimensions());
+        createRasterIfNecessary(chnl.dimensions());
 
-        if (!chnl.getDimensions().equals(raster.getDimensions())) {
+        if (!chnl.dimensions().equals(raster.dimensions())) {
             throw new OperationFailedException(
                     String.format(
                             "Dimensions of added-chnl (%s) and aggregated-chnl must be equal (%s)",
-                            chnl.getDimensions(), raster.getDimensions()));
+                            chnl.dimensions(), raster.dimensions()));
         }
 
         VoxelsArithmetic.add(
@@ -75,7 +75,7 @@ class AggregateChnl {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(raster.getDimensions(), outputType);
+                        .createEmptyInitialised(raster.dimensions(), outputType);
 
         VoxelsArithmetic.divide(
                 raster.voxels().asInt(), cnt, chnlOut.voxels(), outputType);

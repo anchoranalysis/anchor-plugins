@@ -49,11 +49,11 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
         GaussianBlur gb = new GaussianBlur();
 
-        VoxelsWrapper vb = chnl.voxels();
+        VoxelsWrapper voxels = chnl.voxels();
 
         // Are we missing a Z slice?
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-            ImageProcessor processor = IJWrap.imageProcessor(vb, z);
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
+            ImageProcessor processor = IJWrap.imageProcessor(voxels, z);
             gb.blur(processor, sigma); // NOSONAR
         }
 

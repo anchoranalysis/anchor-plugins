@@ -51,14 +51,14 @@ public class EllipsoidBoundsCheck extends CheckMark {
             double minBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .getMinResolved(nrgStack.getDimensions().getResolution(), true);
+                            .getMinResolved(nrgStack.dimensions().resolution(), true);
             double maxBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .getMaxResolved(nrgStack.getDimensions().getResolution(), true);
+                            .getMaxResolved(nrgStack.dimensions().resolution(), true);
 
             double[] normalisedRadii =
-                    EllipsoidUtilities.normalisedRadii(me, nrgStack.getDimensions().getResolution());
+                    EllipsoidUtilities.normalisedRadii(me, nrgStack.dimensions().resolution());
 
             for (int i = 0; i < 3; i++) {
                 if (normalisedRadii[i] < minBound) {

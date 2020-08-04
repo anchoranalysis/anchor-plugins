@@ -55,7 +55,7 @@ public class CalculateIncrementalOperationMapTest {
     public void setup() throws OperationFailedException {
         // An arbitrary object
         when(mockMap.applyOperation(any(), any(), anyBoolean()))
-                .thenReturn(new ObjectMaskFixture(nrgStack.getDimensions()).create1());
+                .thenReturn(new ObjectMaskFixture(nrgStack.dimensions()).create1());
     }
 
     @Test

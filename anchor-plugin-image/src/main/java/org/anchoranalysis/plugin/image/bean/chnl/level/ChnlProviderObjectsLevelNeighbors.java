@@ -148,10 +148,10 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                             objectsWithHistograms(objects, chnlIntensity),
                             ObjectMaskWithHistogram::getObject,
                             (v1, v2, numberVoxels) -> numberVoxels,
-                            chnlIntensity.getDimensions().getExtent(),
+                            chnlIntensity.dimensions().extent(),
                             true);
 
-            Voxels<?> vbOutput = chnlOutput.voxels().any();
+            Voxels<?> voxelsOutput = chnlOutput.voxels().any();
 
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectMaskWithHistogram, Integer> mapLevel = new HashMap<>();
@@ -179,7 +179,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                 // Level calculated from combined histograms
                 int level = calcLevelCombinedHist(om, vertexNeighbors);
 
-                vbOutput.setPixelsCheckMask(om.getObject(), level);
+                voxelsOutput.setPixelsCheckMask(om.getObject(), level);
 
                 getLogger()
                         .messageLogger()

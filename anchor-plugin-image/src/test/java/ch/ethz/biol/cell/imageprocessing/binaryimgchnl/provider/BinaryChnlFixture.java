@@ -51,11 +51,11 @@ class BinaryChnlFixture {
 
     public static Mask createWithRectangle(Point3i crnr, boolean do3D) throws CreateException {
 
-        Mask chnl = new Mask(BinaryVoxelsFactory.createEmptyOff(extent(do3D)));
+        Mask mask = new Mask(BinaryVoxelsFactory.createEmptyOff(extent(do3D)));
 
-        chnl.binaryVoxels().setPixelsCheckMaskOn(createRectange(crnr, do3D));
+        mask.binaryVoxels().setPixelsCheckMaskOn(createRectange(crnr, do3D));
 
-        return chnl;
+        return mask;
     }
 
     public static Extent extent(boolean do3D) {

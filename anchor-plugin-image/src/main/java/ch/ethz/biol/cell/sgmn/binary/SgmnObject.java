@@ -104,11 +104,11 @@ public class SgmnObject extends BinarySegmentation {
                 }
 
                 out.copyPixelsToCheckMask(
-                        new BoundingBox(objects.getBoundingBox().extent()),
-                        voxels.getVoxels(),
-                        objects.getBoundingBox(),
-                        objects.getVoxels(),
-                        objects.getBinaryValuesByte());
+                        new BoundingBox(objects.boundingBox().extent()),
+                        voxels.voxels(),
+                        objects.boundingBox(),
+                        objects.voxels(),
+                        objects.binaryValuesByte());
 
             } else {
                 voxels.setPixelsCheckMaskOff(objects);

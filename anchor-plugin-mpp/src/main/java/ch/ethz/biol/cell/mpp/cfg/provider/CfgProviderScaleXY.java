@@ -49,25 +49,25 @@ public class CfgProviderScaleXY extends CfgProvider {
     @Override
     public Cfg create() throws CreateException {
 
-        ScaleFactor sf;
+        ScaleFactor scaleFactor;
         try {
-            sf = scaleCalculator.calc(Optional.empty());
+            scaleFactor = scaleCalculator.calc(Optional.empty());
         } catch (OperationFailedException e1) {
             throw new CreateException(e1);
         }
 
-        if (Math.abs(sf.getX() - sf.getY()) >= 1e-1) {
+        if (Math.abs(scaleFactor.x() - scaleFactor.y()) >= 1e-1) {
             throw new CreateException(
                     String.format(
                             "ScaleFactor x=%f and y=%f should be within 1e-1 of each other",
-                            sf.getX(), sf.getY()));
+                            scaleFactor.x(), scaleFactor.y()));
         }
 
         Cfg cfg = cfgProvider.create();
 
         Cfg cfgCopy = cfg.deepCopy();
         try {
-            cfgCopy.scaleXY(sf.getX());
+            cfgCopy.scaleXY(scaleFactor.x());
         } catch (OptionalOperationUnsupportedException e) {
             throw new CreateException(e);
         }

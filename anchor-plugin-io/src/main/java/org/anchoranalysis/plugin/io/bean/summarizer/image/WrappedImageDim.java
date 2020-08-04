@@ -40,17 +40,17 @@ class WrappedImageDim implements Comparable<WrappedImageDim> {
     @Override
     public String toString() {
         // Whether we display in 3d form or 2d is dependent on if there's more than 1 z-slice
-        if (dimensions.getZ() > 1) {
+        if (dimensions.z() > 1) {
             return String.format(
-                    "%dx%dx%d", dimensions.getX(), dimensions.getY(), dimensions.getZ());
+                    "%dx%dx%d", dimensions.x(), dimensions.y(), dimensions.z());
         } else {
-            return String.format("%dx%d", dimensions.getX(), dimensions.getY());
+            return String.format("%dx%d", dimensions.x(), dimensions.y());
         }
     }
 
     @Override
     public int compareTo(WrappedImageDim other) {
         // Order by volume, smaller first
-        return Long.compare(dimensions.getVolume(), other.dimensions.getVolume());
+        return Long.compare(dimensions.calculateVolume(), other.dimensions.calculateVolume());
     }
 }

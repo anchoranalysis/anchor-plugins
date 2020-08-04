@@ -145,7 +145,7 @@ final class FindEqualVoxels {
 
         int valToFind =
                 bufferValuesToFindEqual
-                        .getPixelsForPlane(point.getZ())
+                        .slice(point.z())
                         .getInt(bufferValuesToFindEqual.extent().offsetSlice(point));
 
         SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
@@ -177,13 +177,13 @@ final class FindEqualVoxels {
             Point3i point = stack.pop();
 
             // If we've already visited this point, we skip it
-            EncodedIntBuffer bbVisited = matS.getPixelsForPlane(point.getZ());
+            EncodedIntBuffer bbVisited = matS.getPixelsForPlane(point.z());
             int offset = slidingBuffer.extent().offsetSlice(point);
             if (bbVisited.isTemporary(offset)) {
                 continue;
             }
 
-            slidingBuffer.seek(point.getZ());
+            slidingBuffer.seek(point.z());
 
             Optional<Integer> lowestNeighborIndex =
                     IterateVoxels.callEachPointInNeighborhood(

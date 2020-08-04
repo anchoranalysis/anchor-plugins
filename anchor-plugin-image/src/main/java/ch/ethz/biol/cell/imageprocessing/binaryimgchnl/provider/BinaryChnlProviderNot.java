@@ -37,26 +37,26 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
 
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
-    protected Mask createFromChnlReceive(Mask chnlCrnt, Mask chnlReceiver) throws CreateException {
+    protected Mask createFromChnlReceive(Mask maskCurrent, Mask maskReceiver) throws CreateException {
 
-        BinaryValuesByte bvbCrnt = chnlCrnt.getBinaryValues().createByte();
-        BinaryValuesByte bvbReceiver = chnlReceiver.getBinaryValues().createByte();
+        BinaryValuesByte bvbCrnt = maskCurrent.binaryValues().createByte();
+        BinaryValuesByte bvbReceiver = maskReceiver.binaryValues().createByte();
 
-        Extent e = chnlCrnt.getDimensions().getExtent();
+        Extent e = maskCurrent.dimensions().extent();
 
         byte crntOn = bvbCrnt.getOnByte();
         byte crntOff = bvbCrnt.getOffByte();
         byte receiveOff = bvbReceiver.getOffByte();
 
         // All the on voxels in the receive, are put onto crnt
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = chnlCrnt.getVoxels().getPixelsForPlane(z).buffer();
-            ByteBuffer bufReceive = chnlReceiver.getVoxels().getPixelsForPlane(z).buffer();
+            ByteBuffer bufSrc = maskCurrent.voxels().slice(z).buffer();
+            ByteBuffer bufReceive = maskReceiver.voxels().slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     byte byteSrc = bufSrc.get(offset);
                     if (byteSrc == crntOn) {
@@ -74,6 +74,6 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
             }
         }
 
-        return chnlCrnt;
+        return maskCurrent;
     }
 }

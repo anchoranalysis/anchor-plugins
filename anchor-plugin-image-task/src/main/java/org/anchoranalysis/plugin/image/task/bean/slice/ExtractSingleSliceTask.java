@@ -167,7 +167,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         // Extract slices
         NamedStacksSet sliceCollection =
                 stackCollection.applyOperation(
-                        nrgStack.getDimensions(), stack -> stack.extractSlice(optimaSliceIndex));
+                        nrgStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
             outputSlices(outputManager, sliceCollection);
@@ -205,10 +205,10 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(scoreFeature, logger);
 
-            double[] results = new double[nrgStack.getDimensions().getZ()];
+            double[] results = new double[nrgStack.dimensions().z()];
 
             // Extract each slice, and calculate feature
-            for (int z = 0; z < nrgStack.getDimensions().getZ(); z++) {
+            for (int z = 0; z < nrgStack.dimensions().z(); z++) {
                 NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 
                 // Calculate feature for this slice

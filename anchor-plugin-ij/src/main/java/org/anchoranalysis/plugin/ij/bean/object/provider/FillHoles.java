@@ -78,17 +78,17 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
             if (maskChnl.isPresent()) {
                 // Let's make an object for our mask
-                ObjectMask objectRegion = maskChnl.get().region(objectMask.getBoundingBox(), true);
+                ObjectMask objectRegion = maskChnl.get().region(objectMask.boundingBox(), true);
 
                 BoundingBox bboxAll = new BoundingBox(bvb.extent());
 
                 // We do an and operation with the mask
                 bvbDup.copyPixelsToCheckMask(
                         bboxAll,
-                        bvb.getVoxels(),
+                        bvb.voxels(),
                         bboxAll,
-                        objectRegion.getVoxels(),
-                        objectRegion.getBinaryValuesByte());
+                        objectRegion.voxels(),
+                        objectRegion.binaryValuesByte());
             }
         }
         return objects;

@@ -42,8 +42,8 @@ public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        Mask bic = new Mask(channel);
-        bic.binaryVoxels().setAllPixelsToOn();
-        return bic;
+        Mask mask = new Mask(channel);
+        mask.binaryVoxels().setAllPixelsToOn();
+        return mask;
     }
 }

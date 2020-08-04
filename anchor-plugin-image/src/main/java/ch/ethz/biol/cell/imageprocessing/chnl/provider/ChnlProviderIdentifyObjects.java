@@ -41,7 +41,7 @@ public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
     protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         if (objectsSource.size() > 255) {
             throw new CreateException(
@@ -50,11 +50,11 @@ public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
                             objectsSource.size()));
         }
 
-        vb.setAllPixelsTo(0);
+        voxels.setAllPixelsTo(0);
 
         int index = 1;
         for (ObjectMask objects : objectsSource) {
-            vb.setPixelsCheckMask(objects, index++);
+            voxels.setPixelsCheckMask(objects, index++);
         }
 
         return chnl;

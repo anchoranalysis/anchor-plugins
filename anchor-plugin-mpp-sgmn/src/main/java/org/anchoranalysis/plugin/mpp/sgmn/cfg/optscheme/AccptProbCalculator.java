@@ -48,7 +48,7 @@ public class AccptProbCalculator<T> {
                 sizeOrZero(crnt),
                 sizeOrZero(Optional.of(proposal)),
                 context.cfgGen().getCfgGen().getReferencePoissonIntensity(),
-                context.proposer().getDimensions(),
+                context.proposer().dimensions(),
                 calcDensityRatio(crnt, Optional.of(proposal), iter));
     }
 

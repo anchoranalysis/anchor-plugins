@@ -35,9 +35,9 @@ class ExtentToFitBoundingBoxes {
                 boundingBoxes.map(BoundingBox::calcCornerMax).collect(Collectors.toList());
 
         return new Extent(
-                maxDimensionValue(cornersMax, ReadableTuple3i::getX) + 1,
-                maxDimensionValue(cornersMax, ReadableTuple3i::getY) + 1,
-                maxDimensionValue(cornersMax, ReadableTuple3i::getZ) + 1);
+                maxDimensionValue(cornersMax, ReadableTuple3i::x) + 1,
+                maxDimensionValue(cornersMax, ReadableTuple3i::y) + 1,
+                maxDimensionValue(cornersMax, ReadableTuple3i::z) + 1);
     }
 
     private static int maxDimensionValue(

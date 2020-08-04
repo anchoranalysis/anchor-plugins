@@ -62,7 +62,7 @@ class SeedsFactory {
         for (ObjectMask object : seeds) {
             out.add(
                     createSeedWithinMask(
-                            object, containingMask.getBoundingBox(), subtractFromCornerMin, dim));
+                            object, containingMask.boundingBox(), subtractFromCornerMin, dim));
         }
         return out;
     }
@@ -90,12 +90,12 @@ class SeedsFactory {
     private static ObjectMask ensureInsideContainer(
             ObjectMask seed, BoundingBox containingBBox, ImageDimensions dimensions)
             throws CreateException {
-        if (!containingBBox.contains().box(seed.getBoundingBox())) {
+        if (!containingBBox.contains().box(seed.boundingBox())) {
             // We only take the part of the seed object that intersects with our bbox
             BoundingBox bboxIntersect =
                     containingBBox
                             .intersection()
-                            .withInside(seed.getBoundingBox(), dimensions.getExtent())
+                            .withInside(seed.boundingBox(), dimensions.extent())
                             .orElseThrow(
                                     () ->
                                             new CreateException(

@@ -39,7 +39,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 
     public static Channel createMax(Channel chnl1, Channel chnl2) throws CreateException {
 
-        if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
+        if (!chnl1.dimensions().equals(chnl2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 
@@ -47,7 +47,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
                 CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(chnl1.getDimensions(), combinedType);
+                        .createEmptyInitialised(chnl1.dimensions(), combinedType);
 
         setMaxInOutputVoxels(
                 chnlOut.voxels().asByte(),
@@ -59,18 +59,18 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 
     @Override
     protected void processVoxels(
-            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
-        setMaxInOutputVoxels(vbOut, vbIn1, vbIn2);
+            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
+        setMaxInOutputVoxels(voxelsOut, voxelsIn1, voxelsIn2);
     }
 
     private static void setMaxInOutputVoxels(
-            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
-        int volumeXY = vbIn1.extent().getVolumeXY();
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
+        int volumeXY = voxelsIn1.extent().volumeXY();
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            VoxelBuffer<?> in1 = vbIn1.getPixelsForPlane(z);
-            VoxelBuffer<?> in2 = vbIn2.getPixelsForPlane(z);
-            VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
+            VoxelBuffer<?> in1 = voxelsIn1.slice(z);
+            VoxelBuffer<?> in2 = voxelsIn2.slice(z);
+            VoxelBuffer<?> out = voxelsOut.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

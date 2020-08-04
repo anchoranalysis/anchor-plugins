@@ -61,12 +61,11 @@ public abstract class CheckMarkBinaryChnl extends CheckMark {
             Point3d cp, NRGStackWithParams nrgStack, Function<Point3d, Point3i> deriveFunc)
             throws CheckException {
 
-        if (!nrgStack.getDimensions().contains(cp)) {
+        if (!nrgStack.dimensions().contains(cp)) {
             return acceptOutsideScene;
         }
 
-        Mask bi = createChnl();
-        return bi.isPointOn(deriveFunc.apply(cp));
+        return createChnl().isPointOn(deriveFunc.apply(cp));
     }
 
     @Override

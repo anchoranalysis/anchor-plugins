@@ -98,7 +98,7 @@ class SgmnMPPOutputter {
                 "finalCfgRaster",
                 () ->
                         new CfgMaskCollectionDifferentValuesGenerator(
-                                coloredCfgDisplayStack.getStack().getDimensions(),
+                                coloredCfgDisplayStack.getStack().dimensions(),
                                 rm,
                                 coloredCfgDisplayStack.getCfg().getCfg()));
     }

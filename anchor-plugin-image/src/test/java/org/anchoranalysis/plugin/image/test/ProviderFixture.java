@@ -79,10 +79,10 @@ public class ProviderFixture {
         return provider;
     }
 
-    public static MaskProvider providerFor(Mask chnl) {
+    public static MaskProvider providerFor(Mask mask) {
         MaskProvider provider = mock(MaskProvider.class);
         try {
-            when(provider.create()).thenReturn(chnl);
+            when(provider.create()).thenReturn(mask);
         } catch (CreateException e) {
         }
         when(provider.duplicateBean()).thenReturn(provider);

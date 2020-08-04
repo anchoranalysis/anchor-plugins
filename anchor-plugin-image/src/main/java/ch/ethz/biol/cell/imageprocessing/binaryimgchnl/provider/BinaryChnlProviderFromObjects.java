@@ -57,7 +57,7 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
         BinaryValues bv = BinaryValues.getDefault();
 
         Mask maskedImage = createChannelFromObjectsMultiplex(objects, dimensions, bv, invert);
-        return new Mask(maskedImage.getChannel(), bv);
+        return new Mask(maskedImage.channel(), bv);
     }
 
     private static Mask createChannelFromObjectsMultiplex(

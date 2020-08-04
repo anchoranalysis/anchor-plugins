@@ -82,26 +82,26 @@ public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContai
 
         // We update these values after our intersection with the container, in case they have
         // changed
-        assert (container.getBoundingBox().contains().box(bbox));
+        assert (container.boundingBox().contains().box(bbox));
 
         return ExtendObjectsInZHelper.createExtendedObject(
-                flattened, container, bbox, (int) object.centerOfGravity().getZ());
+                flattened, container, bbox, (int) object.centerOfGravity().z());
     }
 
     private static BoundingBox potentialZExpansion(ObjectMask objectFlattened, ObjectMask container)
             throws CreateException {
 
-        int zLow = container.getBoundingBox().cornerMin().getZ();
-        int zHigh = container.getBoundingBox().calcCornerMax().getZ();
+        int zLow = container.boundingBox().cornerMin().z();
+        int zHigh = container.boundingBox().calcCornerMax().z();
 
         Extent extent =
-                objectFlattened.getBoundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);
+                objectFlattened.boundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);
         ReadableTuple3i cornerMin =
-                objectFlattened.getBoundingBox().cornerMin().duplicateChangeZ(zLow);
+                objectFlattened.boundingBox().cornerMin().duplicateChangeZ(zLow);
 
         return new BoundingBox(cornerMin, extent)
                 .intersection()
-                .with(container.getBoundingBox())
+                .with(container.boundingBox())
                 .orElseThrow(() -> new CreateException("Bounding boxes don't intersect"));
     }
 }

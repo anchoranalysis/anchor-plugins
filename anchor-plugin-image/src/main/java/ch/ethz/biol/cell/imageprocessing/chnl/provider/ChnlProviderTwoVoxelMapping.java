@@ -50,7 +50,7 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                                chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxels(
                 chnlOut.voxels().asByte(),
@@ -61,5 +61,5 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
     }
 
     protected abstract void processVoxels(
-            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2);
+            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2);
 }

@@ -65,20 +65,20 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
 
         ObjectCollection out = new ObjectCollection();
 
-        Extent e = object.getBoundingBox().extent();
+        Extent e = object.boundingBox().extent();
 
-        int numX = numSquaresAlongDimension(e.getX());
-        int numY = numSquaresAlongDimension(e.getY());
+        int numX = numSquaresAlongDimension(e.x());
+        int numY = numSquaresAlongDimension(e.y());
 
         for (int y = 0; y < numY; y++) {
 
             int startY = y * squareSize;
 
-            int endY = Math.min(startY + squareSize, e.getY());
+            int endY = Math.min(startY + squareSize, e.y());
 
             // Special treatment for last square
             if (y == (numY - 1)) {
-                endY = Math.min(endY + squareSize, e.getY());
+                endY = Math.min(endY + squareSize, e.y());
             }
 
             int extentY = endY - startY;
@@ -86,11 +86,11 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
             for (int x = 0; x < numX; x++) {
 
                 int startX = x * squareSize;
-                int endX = Math.min(startX + squareSize, e.getX());
+                int endX = Math.min(startX + squareSize, e.x());
 
                 // Special treatment for last square
                 if (x == (numX - 1)) {
-                    endX = Math.min(endX + squareSize, e.getX());
+                    endX = Math.min(endX + squareSize, e.x());
                 }
 
                 createSquare(object, startX, startY, endX - startX, extentY).ifPresent(out::add);
@@ -103,33 +103,33 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     private Optional<ObjectMask> createSquare(
             ObjectMask objToSplit, int startX, int startY, int extentX, int extentY) {
 
-        Extent extentNew = new Extent(extentX, extentY, objToSplit.getVoxels().extent().getZ());
+        Extent extentNew = new Extent(extentX, extentY, objToSplit.voxels().extent().z());
         BoundingBox srcBox = new BoundingBox(new Point3i(startX, startY, 0), extentNew);
 
         // Voxels for the new square
-        Voxels<ByteBuffer> vbNew = VoxelsFactory.getByte().createInitialized(extentNew);
+        Voxels<ByteBuffer> voxelsNew = VoxelsFactory.getByte().createInitialized(extentNew);
 
         // Copy in mask-values from the source
-        objToSplit.getVoxels().copyPixelsTo(srcBox, vbNew, new BoundingBox(extentNew));
+        objToSplit.voxels().copyPixelsTo(srcBox, voxelsNew, new BoundingBox(extentNew));
 
         // We only add the square if there's at least one voxel in it
-        if (!acceptSquare(vbNew, objToSplit.getBinaryValues().getOnInt())) {
+        if (!acceptSquare(voxelsNew, objToSplit.binaryValues().getOnInt())) {
             return Optional.empty();
         }
 
         return Optional.of(
                 new ObjectMask(
-                        srcBox.shiftBy(objToSplit.getBoundingBox().cornerMin()),
-                        vbNew,
-                        objToSplit.getBinaryValuesByte()));
+                        srcBox.shiftBy(objToSplit.boundingBox().cornerMin()),
+                        voxelsNew,
+                        objToSplit.binaryValuesByte()));
     }
 
-    private boolean acceptSquare(Voxels<ByteBuffer> vbNew, int maskOnValue) {
+    private boolean acceptSquare(Voxels<ByteBuffer> voxelsNew, int maskOnValue) {
         // We only add the square if there's at least one voxel in it
         if (minNumVoxels == 1) {
-            return vbNew.hasEqualTo(maskOnValue);
+            return voxelsNew.hasEqualTo(maskOnValue);
         } else {
-            int cntOn = vbNew.countEqual(maskOnValue);
+            int cntOn = voxelsNew.countEqual(maskOnValue);
             return (cntOn >= minNumVoxels);
         }
     }

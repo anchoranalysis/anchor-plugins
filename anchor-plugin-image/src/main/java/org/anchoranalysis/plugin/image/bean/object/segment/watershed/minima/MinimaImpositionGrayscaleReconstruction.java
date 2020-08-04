@@ -77,46 +77,46 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
             throw new OperationFailedException("There must be at least one seed");
         }
 
-        seeds.verifySeedsAreInside(chnl.getDimensions().getExtent());
+        seeds.verifySeedsAreInside(chnl.dimensions().extent());
 
         ObjectCollection objects = seeds.deriveObjects();
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
                 MaskFromObjects.createFromObjects(
-                        objects, chnl.getDimensions(), objects.getFirstBinaryValues());
+                        objects, chnl.dimensions(), objects.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original
         chnl = chnl.duplicate();
 
-        VoxelsWrapper vbIntensity = chnl.voxels();
+        VoxelsWrapper voxelsIntensity = chnl.voxels();
 
         // We set the EDM to 0 at the points of the minima
         for (ObjectMask object : objects) {
-            vbIntensity.any().setPixelsCheckMask(object, 0);
+            voxelsIntensity.any().setPixelsCheckMask(object, 0);
         }
 
         // We set the EDM to 255 outside the channel, otherwise the reconstruction will be messed up
         // Better alternative is to apply the reconstruction only on the ask
         if (containingMask.isPresent()) {
-            vbIntensity
+            voxelsIntensity
                     .any()
                     .setPixelsCheckMask(
                             containingMask.get(),
-                            (int) vbIntensity.getVoxelDataType().maxValue(),
+                            (int) voxelsIntensity.getVoxelDataType().maxValue(),
                             objects.getFirstBinaryValuesByte().getOffByte());
         }
 
         VoxelsWrapper markerForReconstruction =
                 createMarkerImageFromGradient(
-                        markerMask.getChannel().voxels().asByte(),
-                        markerMask.getBinaryValues().createByte(),
-                        vbIntensity);
+                        markerMask.channel().voxels().asByte(),
+                        markerMask.binaryValues().createByte(),
+                        voxelsIntensity);
 
         VoxelsWrapper reconBuffer =
                 grayscaleReconstruction.reconstruction(
-                        vbIntensity, markerForReconstruction, containingMask);
+                        voxelsIntensity, markerForReconstruction, containingMask);
 
-        return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getResolution());
+        return ChannelFactory.instance().create(reconBuffer.any(), chnl.dimensions().resolution());
     }
 }

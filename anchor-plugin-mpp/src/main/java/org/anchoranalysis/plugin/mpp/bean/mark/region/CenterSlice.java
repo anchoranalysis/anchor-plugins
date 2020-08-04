@@ -40,7 +40,7 @@ public class CenterSlice extends CenterSliceBase {
     protected VoxelStatistics createStatisticsForBBox(
             VoxelizedMark pm, ImageDimensions dimensions, BoundingBox bbox, int zCenter) {
 
-        if (zCenter < 0 || zCenter >= bbox.extent().getZ()) {
+        if (zCenter < 0 || zCenter >= bbox.extent().z()) {
             return new VoxelStatisticsCombined();
         }
 

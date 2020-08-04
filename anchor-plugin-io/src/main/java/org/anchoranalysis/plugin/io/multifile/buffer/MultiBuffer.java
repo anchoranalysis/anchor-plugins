@@ -59,16 +59,16 @@ class MultiBuffer {
             Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
         // Specific Channel Number, but no specific Slice Number
         Channel chnl = stackForFile.getChannel(0);
-        Voxels<?> vb = chnl.voxels().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         int chnlIndexResolved = size.getRangeC().index(chnlNum);
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
         if (sliceNum.isPresent()) {
-            copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, vb, sliceNum.get());
+            copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, voxels, sliceNum.get());
 
         } else {
-            copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, vb);
+            copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, voxels);
         }
     }
 
@@ -113,19 +113,19 @@ class MultiBuffer {
     }
 
     @SuppressWarnings("unchecked")
-    private void copyAllBuffersTo(int t, int c, VoxelsWrapper vb) {
+    private void copyAllBuffersTo(int t, int c, VoxelsWrapper voxels) {
         for (int z = 0; z < size.getRangeZ().getSize(); z++) {
-            vb.any().setPixelsForPlane(z, buffers[t][c][z]);
+            voxels.any().updateSlice(z, buffers[t][c][z]);
         }
     }
 
-    private void copyFirstSliceForChnl(int t, int c, Voxels<?> vb, int sliceNum) {
-        buffers[t][c][size.getRangeZ().index(sliceNum)] = vb.getPixelsForPlane(0);
+    private void copyFirstSliceForChnl(int t, int c, Voxels<?> voxels, int sliceNum) {
+        buffers[t][c][size.getRangeZ().index(sliceNum)] = voxels.slice(0);
     }
 
-    private void copyAllSlicesForChnl(int t, int c, Voxels<?> vb) {
-        for (int z = 0; z < vb.extent().getZ(); z++) {
-            buffers[t][c][z] = vb.getPixelsForPlane(z);
+    private void copyAllSlicesForChnl(int t, int c, Voxels<?> voxels) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
+            buffers[t][c][z] = voxels.slice(z);
         }
     }
 }

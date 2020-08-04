@@ -63,7 +63,7 @@ public class CVFindContours {
             Imgproc.findContours(
                     mat, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
-            return convertMatOfPoint(contours, object.getBoundingBox().cornerMin());
+            return convertMatOfPoint(contours, object.boundingBox().cornerMin());
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -88,9 +88,9 @@ public class CVFindContours {
 
     private static Point3f convert(Point point, ReadableTuple3i cornerMin) {
         return new Point3f(
-                convertAdd(point.x, cornerMin.getX()),
-                convertAdd(point.y, cornerMin.getY()),
-                cornerMin.getZ());
+                convertAdd(point.x, cornerMin.x()),
+                convertAdd(point.y, cornerMin.y()),
+                cornerMin.z());
     }
 
     private static float convertAdd(double in, double add) {

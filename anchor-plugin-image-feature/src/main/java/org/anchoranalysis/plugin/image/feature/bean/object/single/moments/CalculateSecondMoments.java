@@ -71,16 +71,16 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
 
         List<Point3i> listPts = new ArrayList<>();
 
-        Extent e = object.getVoxels().extent();
+        Extent e = object.voxels().extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
-            ByteBuffer bb = object.getVoxels().getPixelsForPlane(z).buffer();
+        for (int z = 0; z < e.z(); z++) {
+            ByteBuffer bb = object.voxels().slice(z).buffer();
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
-                    if (bb.get(offset++) == object.getBinaryValuesByte().getOnByte()) {
+                    if (bb.get(offset++) == object.binaryValuesByte().getOnByte()) {
                         listPts.add(new Point3i(x, y, z));
                     }
                 }
@@ -94,9 +94,9 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
         DoubleMatrix2D mat = DoubleFactory2D.dense.make(points.size(), 3);
         for (int i = 0; i < points.size(); i++) {
             Point3i point = points.get(i);
-            mat.set(i, 0, point.getX());
-            mat.set(i, 1, point.getY());
-            mat.set(i, 2, point.getZ());
+            mat.set(i, 0, point.x());
+            mat.set(i, 1, point.y());
+            mat.set(i, 2, point.z());
         }
         return mat;
     }

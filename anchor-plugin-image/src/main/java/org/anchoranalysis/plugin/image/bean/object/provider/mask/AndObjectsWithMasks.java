@@ -65,12 +65,12 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
     private static void applyMask(ObjectMask object, Mask mask) {
 
         // Just the portion of the mask that matches the bounding box of our object
-        ObjectMask objectPortion = mask.region(object.getBoundingBox(), true);
+        ObjectMask objectPortion = mask.region(object.boundingBox(), true);
 
         BinaryChnlAnd.apply(
-                object.binaryVoxels().getVoxels(),
-                objectPortion.binaryVoxels().getVoxels(),
-                object.binaryVoxels().getBinaryValues().createByte(),
-                objectPortion.binaryVoxels().getBinaryValues().createByte());
+                object.binaryVoxels().voxels(),
+                objectPortion.binaryVoxels().voxels(),
+                object.binaryVoxels().binaryValues().createByte(),
+                objectPortion.binaryVoxels().binaryValues().createByte());
     }
 }

@@ -68,22 +68,22 @@ class MetadataUtilities {
         meta.setPixelsType(pixelType, seriesNum);
         meta.setPixelsSizeC(new PositiveInteger(numChnl), seriesNum);
 
-        meta.setPixelsSizeX(new PositiveInteger(sd.getX()), seriesNum);
-        meta.setPixelsSizeY(new PositiveInteger(sd.getY()), seriesNum);
+        meta.setPixelsSizeX(new PositiveInteger(sd.x()), seriesNum);
+        meta.setPixelsSizeY(new PositiveInteger(sd.y()), seriesNum);
 
         // We pretend Z-stacks are Time frames as it makes it easier to
         //   view in other software if they are a series
         if (pretendSeries) {
-            meta.setPixelsSizeT(new PositiveInteger(sd.getZ()), seriesNum);
+            meta.setPixelsSizeT(new PositiveInteger(sd.z()), seriesNum);
             meta.setPixelsSizeZ(new PositiveInteger(1), seriesNum);
         } else {
             meta.setPixelsSizeT(new PositiveInteger(1), seriesNum);
-            meta.setPixelsSizeZ(new PositiveInteger(sd.getZ()), seriesNum);
+            meta.setPixelsSizeZ(new PositiveInteger(sd.z()), seriesNum);
         }
 
-        meta.setPixelsPhysicalSizeX(createLength(sd.getResolution().getX() * sd.getX()), 0);
-        meta.setPixelsPhysicalSizeY(createLength(sd.getResolution().getY() * sd.getY()), 0);
-        meta.setPixelsPhysicalSizeZ(createLength(sd.getResolution().getZ() * sd.getZ()), 0);
+        meta.setPixelsPhysicalSizeX(createLength(sd.resolution().x() * sd.x()), 0);
+        meta.setPixelsPhysicalSizeY(createLength(sd.resolution().y() * sd.y()), 0);
+        meta.setPixelsPhysicalSizeZ(createLength(sd.resolution().z() * sd.z()), 0);
 
         addNumChnls(meta, calcNumChnls(makeRGB), calcSamplesPerPixel(makeRGB), seriesNum);
 

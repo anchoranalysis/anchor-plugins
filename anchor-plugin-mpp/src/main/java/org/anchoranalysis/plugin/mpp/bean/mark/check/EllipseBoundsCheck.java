@@ -49,25 +49,25 @@ public class EllipseBoundsCheck extends CheckMark {
             double minBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .getMinResolved(nrgStack.getDimensions().getResolution(), false);
+                            .getMinResolved(nrgStack.dimensions().resolution(), false);
             double maxBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .getMaxResolved(nrgStack.getDimensions().getResolution(), false);
+                            .getMaxResolved(nrgStack.dimensions().resolution(), false);
 
-            if (me.getRadii().getX() < minBound) {
+            if (me.getRadii().x() < minBound) {
                 return false;
             }
 
-            if (me.getRadii().getY() < minBound) {
+            if (me.getRadii().y() < minBound) {
                 return false;
             }
 
-            if (me.getRadii().getX() > maxBound) {
+            if (me.getRadii().x() > maxBound) {
                 return false;
             }
 
-            return me.getRadii().getY() <= maxBound;
+            return me.getRadii().y() <= maxBound;
         } catch (NamedProviderGetException e) {
             throw new CheckException("Cannot establish bounds", e.summarize());
         }

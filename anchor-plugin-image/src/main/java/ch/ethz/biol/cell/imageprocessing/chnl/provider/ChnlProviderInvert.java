@@ -37,15 +37,15 @@ public class ChnlProviderInvert extends ChnlProviderOne {
     @Override
     public Channel createFromChnl(Channel chnl) throws CreateException {
 
-        VoxelsWrapper vb = chnl.voxels();
+        VoxelsWrapper voxels = chnl.voxels();
 
-        int maxVal = (int) vb.getVoxelDataType().maxValue();
+        int maxVal = (int) voxels.getVoxelDataType().maxValue();
 
-        int volumeXY = vb.any().extent().getVolumeXY();
+        int volumeXY = voxels.any().extent().volumeXY();
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
 
-            VoxelBuffer<?> bb = vb.any().getPixelsForPlane(z);
+            VoxelBuffer<?> bb = voxels.any().slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

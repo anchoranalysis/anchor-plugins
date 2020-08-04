@@ -38,12 +38,12 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DimChecker {
 
-    public static void check(Channel chnl, Mask mask) throws CreateException {
-        if (!chnl.getDimensions().equals(mask.getDimensions())) {
+    public static void check(Channel channel, Mask mask) throws CreateException {
+        if (!channel.dimensions().equals(mask.dimensions())) {
             throw new CreateException(
                     String.format(
                             "chnl (%s) and mask (%s) must have the same dimensions",
-                            chnl.getDimensions().toString(), mask.getDimensions().toString()));
+                            channel.dimensions().toString(), mask.dimensions().toString()));
         }
     }
 
@@ -60,22 +60,22 @@ public class DimChecker {
     public static void check(
             Channel chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl)
             throws CreateException {
-        check(chnlToCheck.getDimensions(), chnlToCheckName, dimFromChnl);
+        check(chnlToCheck.dimensions(), chnlToCheckName, dimFromChnl);
     }
 
     /**
      * Checks a channel to make sure it's the same size as an an existing channel
      *
-     * @param chnlToCheck the channel whose size will be compared
-     * @param chnlToCheckName a user-meaningful string to identify the chnlToCheck in error messages
-     * @param dimFromChnl the dimensions it must equal from chnl (identified as chnl in error
+     * @param maskToCheck the channel whose size will be compared
+     * @param channelToCheckName a user-meaningful string to identify the chnlToCheck in error messages
+     * @param dimensionsFromChannel the dimensions it must equal from chnl (identified as chnl in error
      *     messages)
      * @return the newly created channel
      * @throws CreateException
      */
-    public static void check(Mask chnlToCheck, String chnlToCheckName, ImageDimensions dimFromChnl)
+    public static void check(Mask maskToCheck, String channelToCheckName, ImageDimensions dimensionsFromChannel)
             throws CreateException {
-        check(chnlToCheck.getDimensions(), chnlToCheckName, dimFromChnl);
+        check(maskToCheck.dimensions(), channelToCheckName, dimensionsFromChannel);
     }
 
     /**
@@ -84,18 +84,18 @@ public class DimChecker {
      *
      * @param provider the provider to to create the channel
      * @param providerName a user-meaningful string to identify the provider in error messages
-     * @param chnlSameSize the channel which it must be the same size as (referred to in error
+     * @param channelSameSize the channel which it must be the same size as (referred to in error
      *     messages as "chnl")
      * @return the newly created channel
      * @throws CreateException
      */
     public static Channel createSameSize(
-            ChannelProvider provider, String providerName, Channel chnlSameSize)
+            ChannelProvider provider, String providerName, Channel channelSameSize)
             throws CreateException {
 
-        Channel chnlNew = provider.create();
-        check(chnlNew, providerName, chnlSameSize.getDimensions());
-        return chnlNew;
+        Channel channelNew = provider.create();
+        check(channelNew, providerName, channelSameSize.dimensions());
+        return channelNew;
     }
 
     /**
@@ -113,19 +113,19 @@ public class DimChecker {
             MaskProvider provider, String providerName, Channel chnlSameSize)
             throws CreateException {
 
-        Mask chnlNew = provider.create();
-        check(chnlNew, providerName, chnlSameSize.getDimensions());
-        return chnlNew;
+        Mask mask = provider.create();
+        check(mask, providerName, chnlSameSize.dimensions());
+        return mask;
     }
 
     private static void check(
-            ImageDimensions dimToCheck, String chnlToCheckName, ImageDimensions dimFromChnl)
+            ImageDimensions dimensionsToCheck, String channelToCheckName, ImageDimensions dimensionsFromChannel)
             throws CreateException {
-        if (!dimFromChnl.equals(dimToCheck)) {
+        if (!dimensionsFromChannel.equals(dimensionsToCheck)) {
             throw new CreateException(
                     String.format(
                             "chnl (%s) and %s (%s) must have the same dimensions",
-                            dimFromChnl.toString(), chnlToCheckName, dimToCheck.toString()));
+                            dimensionsFromChannel.toString(), channelToCheckName, dimensionsToCheck.toString()));
         }
     }
 }

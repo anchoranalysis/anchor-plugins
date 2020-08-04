@@ -83,7 +83,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
-        EncodedVoxels matS = createS(channel.getDimensions().getExtent());
+        EncodedVoxels matS = createS(channel.dimensions().extent());
 
         Optional<MinimaStore> minimaStore =
                 OptionalFactory.create(exitWithMinima, MinimaStore::new);
@@ -107,7 +107,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
         convertAllToConnectedComponents(matS, objectMask);
 
         try {
-            return createObjectsFromLabels(matS.getVoxels(), objectMask);
+            return createObjectsFromLabels(matS.voxels(), objectMask);
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }
@@ -119,12 +119,12 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     }
 
     private static void pointPixelsOrMarkAsMinima(
-            Voxels<?> vbImg,
+            Voxels<?> voxelsImg,
             EncodedVoxels matS,
             Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
-        SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, objectMask, minimaStore);
+        SlidingBufferPlus buffer = new SlidingBufferPlus(voxelsImg, matS, objectMask, minimaStore);
         IterateVoxels.callEachPoint(
                 objectMask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
     }
@@ -132,7 +132,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     private static void convertAllToConnectedComponents(
             EncodedVoxels matS, Optional<ObjectMask> objectMask) {
         IterateVoxels.callEachPoint(
-                objectMask, matS.getVoxels(), new ConvertAllToConnectedComponents(matS));
+                objectMask, matS.voxels(), new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(

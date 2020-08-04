@@ -65,8 +65,8 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel =
                         MorphologicalDilation.createDilatedObject(
                                 objectMask,
-                                Optional.of(chnl.getDimensions().getExtent()),
-                                chnl.getDimensions().getZ() > 1,
+                                Optional.of(chnl.dimensions().extent()),
+                                chnl.dimensions().z() > 1,
                                 numDilations,
                                 false);
             } else {

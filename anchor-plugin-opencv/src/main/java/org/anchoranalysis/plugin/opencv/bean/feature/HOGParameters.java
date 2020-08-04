@@ -120,11 +120,11 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
         DivideUtilities.checkDivisibleBy(blockStride, cellSize, BLOCK_STRIDE, CELL_SIZE);
 
         if (windowSize != null) {
-            if (extent.getX() < windowSize.getWidth()) {
+            if (extent.x() < windowSize.getWidth()) {
                 throw new FeatureCalculationException(
                         "Image width is smaller than HOG window width. This is not permitted.");
             }
-            if (extent.getY() < windowSize.getHeight()) {
+            if (extent.y() < windowSize.getHeight()) {
                 throw new FeatureCalculationException(
                         "Image height is smaller than HOG window height. This is not permitted.");
             }
@@ -150,11 +150,11 @@ public class HOGParameters extends AnchorBean<HOGParameters> {
     /** Convert to OpenCV Size class */
     private static Size convertOr(Optional<SizeXY> in, Extent imageSize) {
         return in.map(HOGParameters::sizeFor)
-                .orElseGet(() -> new Size(imageSize.getX(), imageSize.getY()));
+                .orElseGet(() -> new Size(imageSize.x(), imageSize.y()));
     }
 
     private static Size sizeFor(Extent extent) {
-        return new Size(extent.getX(), extent.getY());
+        return new Size(extent.x(), extent.y());
     }
 
     private static Size sizeFor(SizeXY size) {

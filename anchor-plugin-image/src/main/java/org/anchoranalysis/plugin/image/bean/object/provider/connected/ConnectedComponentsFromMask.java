@@ -67,7 +67,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Mask bi = binaryChnl.create();
+        Mask mask = binaryChnl.create();
 
         StopWatch sw = new StopWatch();
         sw.start();
@@ -77,12 +77,12 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(bi.getDimensions().getResolution())));
+                                            Optional.of(mask.dimensions().resolution())));
 
             if (bySlices) {
-                return createObjectsBySlice(bi, minNumberVoxels);
+                return createObjectsBySlice(mask, minNumberVoxels);
             } else {
-                return createObjects3D(bi, minNumberVoxels);
+                return createObjects3D(mask, minNumberVoxels);
             }
 
         } catch (UnitValueException e) {
@@ -94,25 +94,24 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
-    private ObjectCollection createObjects3D(Mask bi, int minNumberVoxels) throws CreateException {
-        CreateFromConnectedComponentsFactory objectCreator = createFactory(minNumberVoxels);
-        return objectCreator.createConnectedComponents(bi);
+    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) throws CreateException {
+        return createFactory(minNumberVoxels).createConnectedComponents(mask);
     }
 
-    private ObjectCollection createObjectsBySlice(Mask chnl, int minNumberVoxels)
+    private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
             throws CreateException {
 
         CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
-                chnl.getDimensions().getZ(),
+                mask.dimensions().z(),
                 CreateException.class,
-                z -> createForSlice(creator, createVoxels(chnl, z), z));
+                z -> createForSlice(creator, createVoxels(mask, z), z));
     }
 
-    private static BinaryVoxels<ByteBuffer> createVoxels(Mask chnl, int z) {
-        return BinaryVoxelsFactory.reuseByte(chnl.getVoxels().extractSlice(z), chnl.getBinaryValues());
+    private static BinaryVoxels<ByteBuffer> createVoxels(Mask mask, int z) {
+        return BinaryVoxelsFactory.reuseByte(mask.voxels().extractSlice(z), mask.binaryValues());
     }
 
     private ObjectCollection createForSlice(

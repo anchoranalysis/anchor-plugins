@@ -59,9 +59,9 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
     private static void histogramStretch(Channel chnl, double quantile)
             throws OperationFailedException {
 
-        VoxelsWrapper vb = chnl.voxels();
+        VoxelsWrapper voxels = chnl.voxels();
 
-        Histogram hist = HistogramFactory.create(vb);
+        Histogram hist = HistogramFactory.create(voxels);
 
         double rangeMin = hist.calcMin();
         double rangeMax = hist.quantile(quantile);
@@ -71,22 +71,22 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
             rangeMax = rangeMin + 1;
         }
 
-        changeVoxels(vb.any(), rangeMin, rangeMax);
+        changeVoxels(voxels.any(), rangeMin, rangeMax);
     }
 
-    private static void changeVoxels(Voxels<?> vb, double rangeMin, double rangeMax) {
+    private static void changeVoxels(Voxels<?> voxels, double rangeMin, double rangeMax) {
 
         double rangeExtent = rangeMax - rangeMin;
         double rangeMult = 255 / rangeExtent;
 
-        Extent e = vb.extent();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = voxels.extent();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
+            VoxelBuffer<?> bb = voxels.slice(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     double val = (double) bb.getInt(offset);
 

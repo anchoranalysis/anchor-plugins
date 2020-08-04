@@ -141,7 +141,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
         Optional<ObjectsToCompare> objectsToCompare =
                 ObjectsToCompareFactory.create(
-                        input, addAnnotation, background.getDimensions(), context);
+                        input, addAnnotation, background.dimensions(), context);
         return OptionalUtilities.map(
                 objectsToCompare,
                 objects ->
@@ -191,7 +191,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         try {
             T assignment =
                     assigner.createAssignment(
-                            objectsToCompare, background.getDimensions(), useMIP, context);
+                            objectsToCompare, background.dimensions(), useMIP, context);
 
             addAnnotation.addAcceptedAnnotation(assignment);
 

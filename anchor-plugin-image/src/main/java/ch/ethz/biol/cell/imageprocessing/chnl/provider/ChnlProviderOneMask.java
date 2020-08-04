@@ -45,8 +45,8 @@ public abstract class ChnlProviderOneMask extends ChnlProviderOne {
     public Channel createFromChnl(Channel chnl) throws CreateException {
         Mask maskChnl = mask.create();
         DimChecker.check(chnl, maskChnl);
-        return createFromMaskedChnl(chnl, maskChnl);
+        return createFromMaskedChannel(chnl, maskChnl);
     }
 
-    protected abstract Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException;
+    protected abstract Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException;
 }

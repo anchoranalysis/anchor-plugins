@@ -75,7 +75,7 @@ public class CalculateEllipsoidLeastSquares
                             throw new CreateException(e);
                         }
                     },
-                    input.getDimensionsRequired(),
+                    input.dimensionsRequired(),
                     suppressZCovariance,
                     0.2);
         } catch (CreateException e) {
