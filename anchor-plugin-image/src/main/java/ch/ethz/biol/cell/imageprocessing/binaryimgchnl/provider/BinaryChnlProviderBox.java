@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.points.PointRange;
@@ -73,7 +73,7 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
         return bic;
     }
 
-    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxelBox<ByteBuffer> vb)
+    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxels<ByteBuffer> vb)
             throws CreateException {
 
         PointRange pointRange = new PointRange();

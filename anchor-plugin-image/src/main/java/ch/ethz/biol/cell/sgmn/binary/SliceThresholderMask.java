@@ -31,7 +31,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 final class SliceThresholderMask extends SliceThresholder {
@@ -51,16 +51,16 @@ final class SliceThresholderMask extends SliceThresholder {
 
     @Override
     public void sgmnAll(
-            VoxelBox<?> voxelBoxIn, VoxelBox<?> vbThrshld, VoxelBox<ByteBuffer> voxelBoxOut) {
+            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut) {
         for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
 
             int relZ = z - cornerMin.getZ();
 
             sgmnSlice(
-                    voxelBoxIn.extent(),
-                    voxelBoxIn.getPixelsForPlane(relZ),
+                    voxelsIn.extent(),
+                    voxelsIn.getPixelsForPlane(relZ),
                     vbThrshld.getPixelsForPlane(relZ),
-                    voxelBoxOut.getPixelsForPlane(relZ),
+                    voxelsOut.getPixelsForPlane(relZ),
                     object.getVoxels().getPixelsForPlane(z),
                     object.getBinaryValuesByte());
         }

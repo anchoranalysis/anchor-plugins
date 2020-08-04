@@ -38,16 +38,14 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
 
@@ -176,10 +174,8 @@ class NaiveGreedyMerge {
     }
 
     private static ObjectMask createSinglePixelObject(Point3i point) {
-        Extent e = new Extent(1, 1, 1);
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(e);
-        BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb);
-        bvb.setAllPixelsToOn();
-        return new ObjectMask(new BoundingBox(point, e), bvb);
+        Extent extent = new Extent(1, 1, 1);
+        BinaryVoxels<ByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
+        return new ObjectMask(new BoundingBox(point, extent), voxels);
     }
 }

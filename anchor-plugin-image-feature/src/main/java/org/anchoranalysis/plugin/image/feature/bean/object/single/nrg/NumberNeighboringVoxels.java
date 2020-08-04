@@ -31,11 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NeighborMatchValue;
@@ -65,15 +64,14 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
 
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
-                        outsideAtThreshold, do3D, object, binaryVoxelBox(chnl), ignoreAtThreshold);
+                        outsideAtThreshold, do3D, object, binaryVoxels(chnl), ignoreAtThreshold);
         return ApplyKernel.applyForCount(kernelMatch, object.getVoxels());
     }
 
-    private BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Channel chnl)
+    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel chnl)
             throws FeatureCalculationException {
         try {
-            VoxelBox<ByteBuffer> vb = chnl.voxels().asByte();
-            return new BinaryVoxelBoxByte(vb);
+            return BinaryVoxelsFactory.reuseByte(chnl.voxels().asByte());
 
         } catch (IncorrectVoxelDataTypeException e) {
             throw new FeatureCalculationException(

@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,7 +51,7 @@ class BinaryChnlFixture {
 
     public static Mask createWithRectangle(Point3i crnr, boolean do3D) throws CreateException {
 
-        Mask chnl = new Mask(BinaryVoxelBoxFactory.instance().create(extent(do3D)));
+        Mask chnl = new Mask(BinaryVoxelsFactory.createEmptyOff(extent(do3D)));
 
         chnl.binaryVoxels().setPixelsCheckMaskOn(createRectange(crnr, do3D));
 

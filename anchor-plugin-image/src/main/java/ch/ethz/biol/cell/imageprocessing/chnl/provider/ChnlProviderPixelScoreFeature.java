@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
@@ -67,7 +67,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
         try {
             pixelScore.init(histograms(), Optional.empty());
-            calcScoresIntoVoxelBox(chnl.voxels(), listAdditional, pixelScore);
+            calcScoresIntoVoxels(chnl.voxels(), listAdditional, pixelScore);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
@@ -84,8 +84,8 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
         }
     }
 
-    private static void calcScoresIntoVoxelBox(
-            VoxelBoxWrapper vb, List<Channel> listAdditional, PixelScore pixelScore)
+    private static void calcScoresIntoVoxels(
+            VoxelsWrapper vb, List<Channel> listAdditional, PixelScore pixelScore)
             throws FeatureCalculationException {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];

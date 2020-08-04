@@ -34,7 +34,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -49,7 +49,7 @@ public class MatConverter {
                     "Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
-        return singleChnlMatFromVoxelBox(object.binaryVoxels().getVoxels());
+        return singleChannelMatFromVoxels(object.binaryVoxels().getVoxels());
     }
 
     public static Mat fromStack(Stack stack) throws CreateException {
@@ -87,13 +87,13 @@ public class MatConverter {
 
     private static Mat makeGrayscale(Channel chnl) throws CreateException {
         if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return singleChnlMatFromVoxelBox(chnl.voxels().asByte());
+            return singleChannelMatFromVoxels(chnl.voxels().asByte());
         } else {
             throw new CreateException("Only 8-bit channels are supported");
         }
     }
 
-    private static Mat singleChnlMatFromVoxelBox(VoxelBox<ByteBuffer> vb) {
+    private static Mat singleChannelMatFromVoxels(Voxels<ByteBuffer> vb) {
 
         assert (vb.extent().getZ()) == 1;
 

@@ -40,40 +40,31 @@ import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxList;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import lombok.AllArgsConstructor;
 
-public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
+@AllArgsConstructor
+public class CreateVoxelsFromPixelwiseFeatureWithMask {
 
-    private VoxelBoxList listVoxelBox;
+    private VoxelsWrapperList listVoxels;
     private Optional<KeyValueParams> keyValueParams;
     private List<Histogram> listAdditionalHistograms;
 
-    // Constructor
-    public CreateVoxelBoxFromPixelwiseFeatureWithMask(
-            VoxelBoxList listVoxelBox,
-            Optional<KeyValueParams> keyValueParams,
-            List<Histogram> listAdditionalHistograms) {
-        super();
-        this.listVoxelBox = listVoxelBox;
-        this.keyValueParams = keyValueParams;
-        this.listAdditionalHistograms = listAdditionalHistograms;
-    }
-
-    public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore(
+    public Voxels<ByteBuffer> createVoxelsFromPixelScore(
             PixelScore pixelScore, Optional<ObjectMask> object) throws CreateException {
 
         // Sets up the Feature
         try {
             init(pixelScore, object);
 
-            Extent e = listVoxelBox.getFirstExtent();
+            Extent e = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
+            Voxels<ByteBuffer> vbOut = VoxelsFactory.getByte().createInitialized(e);
 
             if (object.isPresent()) {
                 setPixelsWithMask(vbOut, object.get(), pixelScore);
@@ -95,8 +86,8 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
     private List<Histogram> createHistograms(Optional<ObjectMask> object) {
         List<Histogram> out = new ArrayList<>();
 
-        for (VoxelBoxWrapper voxelBox : listVoxelBox) {
-            out.add(HistogramFactory.create(voxelBox, object));
+        for (VoxelsWrapper voxels : listVoxels) {
+            out.add(HistogramFactory.create(voxels, object));
         }
 
         for (Histogram hist : listAdditionalHistograms) {
@@ -106,14 +97,14 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
         return out;
     }
 
-    private void setPixelsWithoutMask(VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore)
+    private void setPixelsWithoutMask(Voxels<ByteBuffer> vbOut, PixelScore pixelScore)
             throws FeatureCalculationException {
 
         Extent e = vbOut.extent();
 
         for (int z = 0; z < e.getZ(); z++) {
 
-            List<VoxelBuffer<?>> bbList = listVoxelBox.bufferListForSlice(z);
+            List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
             ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 
@@ -128,7 +119,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
     }
 
     private void setPixelsWithMask(
-            VoxelBox<ByteBuffer> vbOut, ObjectMask object, PixelScore pixelScore)
+            Voxels<ByteBuffer> vbOut, ObjectMask object, PixelScore pixelScore)
             throws FeatureCalculationException {
 
         byte maskOn = object.getBinaryValuesByte().getOnByte();
@@ -140,7 +131,7 @@ public class CreateVoxelBoxFromPixelwiseFeatureWithMask {
 
         for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
 
-            List<VoxelBuffer<?>> bbList = listVoxelBox.bufferListForSlice(z);
+            List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
             int zRel = z - cornerMin.getZ();
 

@@ -64,7 +64,7 @@ public class EllipsoidFactory {
             double shellRad)
             throws CreateException {
         return createMarkEllipsoidLeastSquares(
-                () -> PointsFromObject.pointsFromMaskOutline(object),
+                () -> PointsFromObject.listFromOutline3i(object),
                 dimensions,
                 suppressZCovariance,
                 shellRad);

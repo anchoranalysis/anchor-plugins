@@ -33,9 +33,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
 
 /**
@@ -64,19 +64,19 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
 
         BoundingBox bbox = object.getBoundingBox().duplicateChangeExtentZ(dim.getZ());
 
-        VoxelBox<ByteBuffer> voxelBox =
-                createVoxelBoxOfDuplicatedPlanes(
+        Voxels<ByteBuffer> voxels =
+                createVoxelsOfDuplicatedPlanes(
                         object.getVoxels().getPixelsForPlane(0), bbox.extent());
 
-        return new ObjectMask(bbox, voxelBox, object.getBinaryValues());
+        return new ObjectMask(bbox, voxels, object.getBinaryValues());
     }
 
-    private static VoxelBox<ByteBuffer> createVoxelBoxOfDuplicatedPlanes(
+    private static Voxels<ByteBuffer> createVoxelsOfDuplicatedPlanes(
             VoxelBuffer<ByteBuffer> planeIn, Extent extent) {
-        VoxelBox<ByteBuffer> voxelBox = VoxelBoxFactory.getByte().create(extent);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         for (int z = 0; z < extent.getZ(); z++) {
-            voxelBox.setPixelsForPlane(z, planeIn);
+            voxels.setPixelsForPlane(z, planeIn);
         }
-        return voxelBox;
+        return voxels;
     }
 }

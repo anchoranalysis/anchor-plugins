@@ -51,8 +51,8 @@ public class WriteResolutionXml extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String dfltExt() {
-        return writer.dfltExt();
+    public String defaultExtension() {
+        return writer.defaultExtension();
     }
 
     @Override

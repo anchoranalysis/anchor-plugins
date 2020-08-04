@@ -28,13 +28,13 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderMin extends ChnlProviderTwoVoxelMapping {
 
     @Override
-    protected void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+    protected void processVoxels(
+            Voxels<ByteBuffer> vbOut, Voxels<ByteBuffer> vbIn1, Voxels<ByteBuffer> vbIn2) {
 
         for (int z = 0; z < vbOut.extent().getZ(); z++) {
 

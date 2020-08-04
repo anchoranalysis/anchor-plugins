@@ -39,17 +39,17 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 class PointsFromInsideHelper {
 
     private final PointListForConvex pointsConvexRoot;
 
     private final BoundingBox boundingBox;
-    private final BinaryVoxelBox<ByteBuffer> voxelBoxFilled;
+    private final BinaryVoxels<ByteBuffer> voxelsFilled;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
@@ -57,7 +57,7 @@ class PointsFromInsideHelper {
             PointListForConvex pointsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
         this.pointsConvexRoot = pointsConvexRoot;
         this.boundingBox = bbox;
-        this.voxelBoxFilled = chnlFilled.binaryVoxels();
+        this.voxelsFilled = chnlFilled.binaryVoxels();
         this.cornerMin = bbox.cornerMin();
         this.cornerMax = bbox.calcCornerMax();
     }
@@ -103,7 +103,7 @@ class PointsFromInsideHelper {
             Consumer<Point3i> processPoint) {
         BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vb = chnl.getChannel().voxels().asByte();
+        Voxels<ByteBuffer> vb = chnl.getChannel().voxels().asByte();
         Extent extent = vb.extent();
 
         Iterator<Integer> itr = zRange.iterator();
@@ -139,7 +139,7 @@ class PointsFromInsideHelper {
                 if (bb.get(offset) == bvb.getOnByte()) {
 
                     Point3i point = new Point3i(x, y, z);
-                    if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelBoxFilled)) {
+                    if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {
                         addedToSlice = true;
                         processPoint.accept(point);
                     }

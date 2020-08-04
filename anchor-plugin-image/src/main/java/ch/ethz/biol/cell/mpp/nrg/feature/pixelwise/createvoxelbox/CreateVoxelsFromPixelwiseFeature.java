@@ -39,38 +39,35 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxList;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import lombok.AllArgsConstructor;
 
-public class CreateVoxelBoxFromPixelwiseFeature {
+/**
+ * TODO integrate into a factory or common class with {@link CreateVoxelsFromPixelwiseFeatureWithMask}
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
+public class CreateVoxelsFromPixelwiseFeature {
 
-    private VoxelBoxList listVoxelBox;
+    private VoxelsWrapperList listVoxels;
     private Optional<KeyValueParams> keyValueParams;
     private List<Histogram> listAdditionalHistograms;
 
-    // Constructor
-    public CreateVoxelBoxFromPixelwiseFeature(
-            VoxelBoxList listVoxelBox,
-            Optional<KeyValueParams> keyValueParams,
-            List<Histogram> listAdditionalHistograms) {
-        super();
-        this.listVoxelBox = listVoxelBox;
-        this.keyValueParams = keyValueParams;
-        this.listAdditionalHistograms = listAdditionalHistograms;
-    }
-
-    public VoxelBox<ByteBuffer> createVoxelBoxFromPixelScore(PixelScore pixelScore, Logger logger)
+    public Voxels<ByteBuffer> createVoxelsFromPixelScore(PixelScore pixelScore, Logger logger)
             throws CreateException {
 
         // Sets up the Feature
         try {
-            Extent e = listVoxelBox.getFirstExtent();
+            Extent e = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            VoxelBox<ByteBuffer> vbOut = VoxelBoxFactory.getByte().create(e);
+            Voxels<ByteBuffer> vbOut = VoxelsFactory.getByte().createInitialized(e);
             setPixels(vbOut, pixelScore, logger);
             return vbOut;
 
@@ -79,7 +76,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
         }
     }
 
-    private void setPixels(VoxelBox<ByteBuffer> vbOut, PixelScore pixelScore, Logger logger)
+    private void setPixels(Voxels<ByteBuffer> vbOut, PixelScore pixelScore, Logger logger)
             throws FeatureCalculationException, InitException {
 
         pixelScore.init(createHistograms(), keyValueParams);
@@ -88,7 +85,7 @@ public class CreateVoxelBoxFromPixelwiseFeature {
 
         for (int z = 0; z < e.getZ(); z++) {
 
-            List<VoxelBuffer<?>> bbList = listVoxelBox.bufferListForSlice(z);
+            List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
             ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
 
@@ -106,8 +103,8 @@ public class CreateVoxelBoxFromPixelwiseFeature {
     private List<Histogram> createHistograms() {
         List<Histogram> out = new ArrayList<>();
 
-        for (VoxelBoxWrapper voxelBox : listVoxelBox) {
-            out.add(HistogramFactory.create(voxelBox, Optional.empty()));
+        for (VoxelsWrapper voxels : listVoxels) {
+            out.add(HistogramFactory.create(voxels, Optional.empty()));
         }
 
         for (Histogram hist : listAdditionalHistograms) {

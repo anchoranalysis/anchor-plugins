@@ -41,9 +41,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
@@ -52,13 +52,13 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
     @BeanField @Getter @Setter private GrayscaleReconstructionByErosion grayscaleReconstruction;
     // END BEAN PROPERTIES
 
-    private VoxelBoxWrapper createMarkerImageFromGradient(
-            VoxelBox<ByteBuffer> markerMaskVb,
+    private VoxelsWrapper createMarkerImageFromGradient(
+            Voxels<ByteBuffer> markerMaskVb,
             BinaryValuesByte maskBV,
-            VoxelBoxWrapper gradientImage) {
+            VoxelsWrapper gradientImage) {
 
-        VoxelBoxWrapper out =
-                VoxelBoxFactory.instance()
+        VoxelsWrapper out =
+                VoxelsFactory.instance()
                         .create(gradientImage.any().extent(), gradientImage.getVoxelDataType());
         out.any().setAllPixelsTo((int) gradientImage.getVoxelDataType().maxValue());
 
@@ -89,7 +89,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         // We duplicate the channel so we are not manipulating the original
         chnl = chnl.duplicate();
 
-        VoxelBoxWrapper vbIntensity = chnl.voxels();
+        VoxelsWrapper vbIntensity = chnl.voxels();
 
         // We set the EDM to 0 at the points of the minima
         for (ObjectMask object : objects) {
@@ -107,13 +107,13 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                             objects.getFirstBinaryValuesByte().getOffByte());
         }
 
-        VoxelBoxWrapper markerForReconstruction =
+        VoxelsWrapper markerForReconstruction =
                 createMarkerImageFromGradient(
                         markerMask.getChannel().voxels().asByte(),
                         markerMask.getBinaryValues().createByte(),
                         vbIntensity);
 
-        VoxelBoxWrapper reconBuffer =
+        VoxelsWrapper reconBuffer =
                 grayscaleReconstruction.reconstruction(
                         vbIntensity, markerForReconstruction, containingMask);
 

@@ -36,8 +36,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
@@ -59,7 +59,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
     private static void histogramStretch(Channel chnl, double quantile)
             throws OperationFailedException {
 
-        VoxelBoxWrapper vb = chnl.voxels();
+        VoxelsWrapper vb = chnl.voxels();
 
         Histogram hist = HistogramFactory.create(vb);
 
@@ -74,7 +74,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
         changeVoxels(vb.any(), rangeMin, rangeMax);
     }
 
-    private static void changeVoxels(VoxelBox<?> vb, double rangeMin, double rangeMax) {
+    private static void changeVoxels(Voxels<?> vb, double rangeMin, double rangeMax) {
 
         double rangeExtent = rangeMax - rangeMin;
         double rangeMult = 255 / rangeExtent;

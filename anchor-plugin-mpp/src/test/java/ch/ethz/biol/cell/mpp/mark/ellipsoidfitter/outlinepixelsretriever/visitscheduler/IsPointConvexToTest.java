@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
@@ -52,7 +52,7 @@ public class IsPointConvexToTest {
 
         Mask bic = new Mask(stack.getChannel(0));
 
-        BinaryVoxelBox<ByteBuffer> bvb = bic.binaryVoxels();
+        BinaryVoxels<ByteBuffer> bvb = bic.binaryVoxels();
 
         Point3i pointRoot = new Point3i(62, 84, 15);
 

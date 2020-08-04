@@ -35,12 +35,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderUnaryWithChannel;
 
 /**
@@ -69,11 +69,11 @@ public class BinarySegmentByObject extends ObjectCollectionProviderUnaryWithChan
 
     private ObjectMask sgmnObject(ObjectMask object, Channel channelSource)
             throws SegmentationFailedException {
-        VoxelBox<?> vb = channelSource.voxels().any().region(object.getBoundingBox(), true);
+        Voxels<?> vb = channelSource.voxels().any().region(object.getBoundingBox(), true);
 
-        BinaryVoxelBox<ByteBuffer> bvb =
-                binarySgmn.sgmn(
-                        new VoxelBoxWrapper(vb),
+        BinaryVoxels<ByteBuffer> bvb =
+                binarySgmn.segment(
+                        new VoxelsWrapper(vb),
                         new BinarySegmentationParameters(),
                         Optional.of(new ObjectMask(object.getVoxels())));
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.seed.Seed;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -43,7 +43,7 @@ class MarkSeeds {
 
     public static void apply(
             SeedCollection seeds,
-            EncodedVoxelBox matS,
+            EncodedVoxels matS,
             Optional<MinimaStore> minimaStore,
             Optional<ObjectMask> containingMask)
             throws SegmentationFailedException {
@@ -64,7 +64,7 @@ class MarkSeeds {
     }
 
     private static ProcessVoxel createPointProcessor(
-            EncodedVoxelBox matS, Optional<MinimaStore> minimaStore) {
+            EncodedVoxels matS, Optional<MinimaStore> minimaStore) {
         ConnectedComponentWriter ccWriter = new ConnectedComponentWriter(matS, minimaStore);
         return ccWriter::writePoint;
     }

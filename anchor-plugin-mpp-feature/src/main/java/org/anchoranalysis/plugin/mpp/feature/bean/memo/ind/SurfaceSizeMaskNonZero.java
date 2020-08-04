@@ -41,7 +41,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
@@ -80,7 +80,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
             throws FeatureCalculationException {
 
-        VoxelBox<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
+        Voxels<ByteBuffer> vbOutline = calcOutline(object, !suppressZ);
 
         Extent extent = object.getBoundingBox().extent();
 
@@ -101,7 +101,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         }
     }
 
-    private static VoxelBox<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
+    private static Voxels<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
         OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, useZ);
         return ApplyKernel.apply(kernel, object.getVoxels(), object.getBinaryValuesByte());
     }

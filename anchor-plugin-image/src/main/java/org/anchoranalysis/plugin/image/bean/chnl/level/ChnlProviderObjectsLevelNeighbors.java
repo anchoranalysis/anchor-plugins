@@ -44,7 +44,7 @@ import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
@@ -151,7 +151,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                             chnlIntensity.getDimensions().getExtent(),
                             true);
 
-            VoxelBox<?> vbOutput = chnlOutput.voxels().any();
+            Voxels<?> vbOutput = chnlOutput.voxels().any();
 
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectMaskWithHistogram, Integer> mapLevel = new HashMap<>();

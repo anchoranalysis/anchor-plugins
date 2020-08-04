@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Ors the receiveProvider onto the binaryImgChnlProvider
@@ -52,7 +52,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
     public Mask createFromMask(Mask chnl) throws CreateException {
 
         Channel chnlIn = chnl.getChannel();
-        VoxelBox<ByteBuffer> vbIn = chnlIn.voxels().asByte();
+        Voxels<ByteBuffer> vbIn = chnlIn.voxels().asByte();
 
         ImageDimensions dimSource = dim.create();
 
@@ -64,7 +64,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
-        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         int volumeXY = vbIn.extent().getVolumeXY();
         for (int z = 0; z < chnlOut.getDimensions().getExtent().getZ(); z++) {

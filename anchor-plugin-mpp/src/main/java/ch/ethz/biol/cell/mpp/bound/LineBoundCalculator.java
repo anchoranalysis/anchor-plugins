@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class LineBoundCalculator extends BoundCalculator {
@@ -114,7 +114,7 @@ public class LineBoundCalculator extends BoundCalculator {
     private double maxReachablePoint(
             Channel voxels, Point3d point, Point3d marg, int maxPossiblePoint) {
 
-        VoxelBox<ByteBuffer> vb = voxels.voxels().asByte();
+        Voxels<ByteBuffer> vb = voxels.voxels().asByte();
 
         // This only exists in 2d for now so we can use a slice byteArray
         ByteBuffer arr = null;

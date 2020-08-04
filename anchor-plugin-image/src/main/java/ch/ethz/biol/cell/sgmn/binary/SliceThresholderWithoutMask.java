@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class SliceThresholderWithoutMask extends SliceThresholder {
@@ -40,13 +40,13 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
 
     @Override
     public void sgmnAll(
-            VoxelBox<?> voxelBoxIn, VoxelBox<?> vbThrshld, VoxelBox<ByteBuffer> voxelBoxOut) {
-        for (int z = 0; z < voxelBoxIn.extent().getZ(); z++) {
+            Voxels<?> voxelsIn, Voxels<?> vbThrshld, Voxels<ByteBuffer> voxelsOut) {
+        for (int z = 0; z < voxelsIn.extent().getZ(); z++) {
             sgmnSlice(
-                    voxelBoxIn.extent(),
-                    voxelBoxIn.getPixelsForPlane(z),
+                    voxelsIn.extent(),
+                    voxelsIn.getPixelsForPlane(z),
                     vbThrshld.getPixelsForPlane(z),
-                    voxelBoxOut.getPixelsForPlane(z));
+                    voxelsOut.getPixelsForPlane(z));
         }
     }
 

@@ -41,7 +41,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
@@ -96,8 +96,8 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
     private void populateChnl(Channel regionIn, Channel regionOut, LevelResultCollection lrc) {
 
-        VoxelBox<ByteBuffer> vbIn = regionIn.voxels().asByte();
-        VoxelBox<ByteBuffer> vbOut = regionOut.voxels().asByte();
+        Voxels<ByteBuffer> vbIn = regionIn.voxels().asByte();
+        Voxels<ByteBuffer> vbOut = regionOut.voxels().asByte();
 
         assert (vbIn.extent().equals(vbOut.extent()));
 

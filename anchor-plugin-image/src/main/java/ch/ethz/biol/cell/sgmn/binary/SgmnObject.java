@@ -36,14 +36,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 // Thresholds an image, then creates an object out of each
 //   connected set of pixels, and then performs another threshold
@@ -63,8 +63,8 @@ public class SgmnObject extends BinarySegmentation {
     // END BEANS
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBoxIn,
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxelsIn,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
@@ -74,55 +74,54 @@ public class SgmnObject extends BinarySegmentation {
         }
 
         // Keep a copy of the original unchanged
-        VoxelBox<?> orig = voxelBoxIn.any().duplicate();
+        Voxels<?> orig = voxelsIn.any().duplicate();
 
-        imageSgmn.sgmn(voxelBoxIn, params, Optional.empty());
+        imageSgmn.segment(voxelsIn, params, Optional.empty());
 
-        VoxelBox<ByteBuffer> out = voxelBoxIn.asByte();
-
-        sgmnByObj(
-                new BinaryVoxelBoxByte(out),
-                new VoxelBoxWrapper(orig),
+        BinaryVoxels<ByteBuffer> out = BinaryVoxelsFactory.reuseByte(voxelsIn.asByte());
+        segmentByObject(
+                out,
+                new VoxelsWrapper(orig),
                 params);
 
-        return new BinaryVoxelBoxByte(out);
+        return out;
     }
 
-    private void sgmnByObj(
-            BinaryVoxelBox<ByteBuffer> voxelBox,
-            VoxelBoxWrapper orig,
+    private void segmentByObject(
+            BinaryVoxels<ByteBuffer> voxels,
+            VoxelsWrapper orig,
             BinarySegmentationParameters params)
             throws SegmentationFailedException {
 
-        for (ObjectMask obj : objectsFromVoxelBox(voxelBox)) {
+        for (ObjectMask objects : objectsFromVoxels(voxels)) {
 
-            if (!obj.numPixelsLessThan(minNumPixelsImageSgmn)) {
+            if (!objects.numPixelsLessThan(minNumPixelsImageSgmn)) {
 
-                BinaryVoxelBox<ByteBuffer> out = objectSgmn.sgmn(orig, params, Optional.of(obj));
+                BinaryVoxels<ByteBuffer> out = objectSgmn.segment(orig, params, Optional.of(objects));
 
                 if (out == null) {
                     continue;
                 }
 
                 out.copyPixelsToCheckMask(
-                        new BoundingBox(obj.getBoundingBox().extent()),
-                        voxelBox.getVoxels(),
-                        obj.getBoundingBox(),
-                        obj.getVoxels(),
-                        obj.getBinaryValuesByte());
+                        new BoundingBox(objects.getBoundingBox().extent()),
+                        voxels.getVoxels(),
+                        objects.getBoundingBox(),
+                        objects.getVoxels(),
+                        objects.getBinaryValuesByte());
 
             } else {
-                voxelBox.setPixelsCheckMaskOff(obj);
+                voxels.setPixelsCheckMaskOff(objects);
             }
         }
     }
 
-    private static ObjectCollection objectsFromVoxelBox(BinaryVoxelBox<ByteBuffer> buffer)
+    private static ObjectCollection objectsFromVoxels(BinaryVoxels<ByteBuffer> voxels)
             throws SegmentationFailedException {
         try {
             CreateFromConnectedComponentsFactory omcCreator =
                     new CreateFromConnectedComponentsFactory();
-            return omcCreator.createConnectedComponents(buffer.duplicate());
+            return omcCreator.createConnectedComponents(voxels.duplicate());
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }

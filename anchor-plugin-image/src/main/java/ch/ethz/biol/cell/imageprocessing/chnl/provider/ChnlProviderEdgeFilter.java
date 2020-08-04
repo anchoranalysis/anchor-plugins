@@ -51,7 +51,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
@@ -73,7 +73,7 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
                 ChannelFactory.instance()
                         .createEmptyInitialised(
                                 chnlIn.getDimensions(), VoxelDataTypeFloat.INSTANCE);
-        VoxelBox<FloatBuffer> vb = chnlIntermediate.voxels().asFloat();
+        Voxels<FloatBuffer> vb = chnlIntermediate.voxels().asFloat();
 
         NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
 

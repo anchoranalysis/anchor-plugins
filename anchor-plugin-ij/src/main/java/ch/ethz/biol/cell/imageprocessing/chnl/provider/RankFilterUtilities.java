@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class RankFilterUtilities {
@@ -42,7 +42,7 @@ class RankFilterUtilities {
 
         RankFilters rankFilters = new RankFilters();
 
-        VoxelBoxWrapper vb = chnl.voxels();
+        VoxelsWrapper vb = chnl.voxels();
 
         // Are we missing a Z slice?
         for (int z = 0; z < chnl.getDimensions().getZ(); z++) {

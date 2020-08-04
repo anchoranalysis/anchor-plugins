@@ -28,48 +28,40 @@ package ch.ethz.biol.cell.sgmn.binary;
 
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class SgmnInv extends BinarySegmentationOne {
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxelBox<ByteBuffer> vb = sgmn.sgmn(voxelBox, params, objectMask);
-
-        try {
-            invertVoxelBox(vb);
-        } catch (OperationFailedException e) {
-            throw new SegmentationFailedException(e);
-        }
-
-        return vb;
+        BinaryVoxels<ByteBuffer> voxelsSegmented = sgmn.segment(voxels, params, objectMask);
+        invertVoxels(voxelsSegmented);
+        return voxelsSegmented;
     }
 
-    private void invertVoxelBox(BinaryVoxelBox<ByteBuffer> voxelBox)
-            throws OperationFailedException {
+    private void invertVoxels(BinaryVoxels<ByteBuffer> voxels) {
 
-        BinaryValuesByte bv = voxelBox.getBinaryValues().createByte();
+        BinaryValuesByte bv = voxels.getBinaryValues().createByte();
 
-        int volumeXY = voxelBox.extent().getVolumeXY();
+        int volumeXY = voxels.extent().getVolumeXY();
 
-        // We invert each item in the VoxelBox
-        for (int z = 0; z < voxelBox.extent().getZ(); z++) {
+        // We invert each item in the voxels
+        for (int z = 0; z < voxels.extent().getZ(); z++) {
 
-            ByteBuffer bb = voxelBox.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.getPixelsForPlane(z).buffer();
             for (int index = 0; index < volumeXY; index++) {
 
                 byte val = bb.get(index);

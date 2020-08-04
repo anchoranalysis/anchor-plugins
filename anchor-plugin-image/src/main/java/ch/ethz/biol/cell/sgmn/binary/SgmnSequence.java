@@ -39,10 +39,10 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class SgmnSequence extends BinarySegmentation {
 
@@ -61,24 +61,24 @@ public class SgmnSequence extends BinarySegmentation {
     }
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
-        BinaryVoxelBox<ByteBuffer> out = null;
+        BinaryVoxels<ByteBuffer> out = null;
 
         // A bounding-box capturing what part of the scene is being segmented
         BoundingBox bbox =
                 objectMask.map(ObjectMask::getBoundingBox)
-                        .orElseGet(() -> new BoundingBox(voxelBox.any().extent()));
+                        .orElseGet(() -> new BoundingBox(voxels.any().extent()));
 
         // A mask that evolves as we move through each segmentation to be increasingly smaller.
         Optional<ObjectMask> evolvingMask = objectMask;
         for (BinarySegmentation sgmn : listSgmn) {
 
-            BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, evolvingMask);
+            BinaryVoxels<ByteBuffer> outNew = sgmn.segment(voxels, params, evolvingMask);
 
             out = outNew;
             evolvingMask = Optional.of(new ObjectMask(bbox, outNew));

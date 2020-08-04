@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 class CreateFromLabels {
 
     /**
-     * Creates an object-mask collection from a voxel-box that is labelled with unique integers
+     * Creates an object-collection from voxels that are labelled with unique integers
      * (sequentially increasing)
      *
      * @param voxels voxels each labelled with an integer (sequentially increasing from 1) to
@@ -54,7 +54,7 @@ class CreateFromLabels {
      * @return
      */
     public static ObjectCollection create(
-            VoxelBox<ByteBuffer> voxels, int minLabel, int maxLabel, int minBBoxVolume) {
+            Voxels<ByteBuffer> voxels, int minLabel, int maxLabel, int minBBoxVolume) {
         int[] numPixel = new int[maxLabel - minLabel + 1];
 
         return createFromLabels(
@@ -62,7 +62,7 @@ class CreateFromLabels {
     }
 
     private static List<BoundingBox> calcBoundingBoxes(
-            VoxelBox<ByteBuffer> bufferAccess, int minC, int maxC, int[] numPixel) {
+            Voxels<ByteBuffer> voxels, int minC, int maxC, int[] numPixel) {
 
         List<PointRange> list = new ArrayList<>(maxC - minC + 1);
 
@@ -70,12 +70,12 @@ class CreateFromLabels {
             list.add(new PointRange());
         }
 
-        for (int z = 0; z < bufferAccess.getPlaneAccess().extent().getZ(); z++) {
+        for (int z = 0; z < voxels.getPlaneAccess().extent().getZ(); z++) {
 
-            ByteBuffer pixel = bufferAccess.getPlaneAccess().getPixelsForPlane(z).buffer();
+            ByteBuffer pixel = voxels.getPlaneAccess().getPixelsForPlane(z).buffer();
 
-            for (int y = 0; y < bufferAccess.getPlaneAccess().extent().getY(); y++) {
-                for (int x = 0; x < bufferAccess.getPlaneAccess().extent().getX(); x++) {
+            for (int y = 0; y < voxels.getPlaneAccess().extent().getY(); y++) {
+                for (int x = 0; x < voxels.getPlaneAccess().extent().getX(); x++) {
 
                     int col = ByteConverter.unsignedByteToInt(pixel.get());
 
@@ -98,12 +98,12 @@ class CreateFromLabels {
 
     private static ObjectCollection createFromLabels(
             List<BoundingBox> bboxList,
-            VoxelBox<ByteBuffer> bufferAccess,
+            Voxels<ByteBuffer> voxels,
             int smallVolumeThreshold) {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 bboxList,
                 bbox -> bbox.extent().getVolumeXY() >= smallVolumeThreshold,
-                bufferAccess::equalMask // Using index as the color value
+                voxels::equalMask // Using index as the color value
                 );
     }
 }

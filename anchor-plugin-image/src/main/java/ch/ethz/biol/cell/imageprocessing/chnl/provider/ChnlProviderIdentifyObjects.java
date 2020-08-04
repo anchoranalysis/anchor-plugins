@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Assigns a unique id number to each objects
 // Note behaviour is undefined when objects overlap with each other. An ID of either object
@@ -41,7 +41,7 @@ public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
     protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        VoxelBox<?> vb = chnl.voxels().any();
+        Voxels<?> vb = chnl.voxels().any();
 
         if (objectsSource.size() > 255) {
             throw new CreateException(

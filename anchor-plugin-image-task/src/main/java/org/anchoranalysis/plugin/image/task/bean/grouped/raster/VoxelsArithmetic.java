@@ -34,17 +34,17 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class VoxelBoxArithmetic {
+class VoxelsArithmetic {
 
     public static void divide(
-            VoxelBox<IntBuffer> vb, int cnt, VoxelBoxWrapper out, VoxelDataType outputType)
+            Voxels<IntBuffer> vb, int cnt, VoxelsWrapper out, VoxelDataType outputType)
             throws OperationFailedException {
 
         if (outputType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
@@ -58,7 +58,7 @@ class VoxelBoxArithmetic {
         }
     }
 
-    public static void add(VoxelBox<IntBuffer> vb, VoxelBoxWrapper toAdd, VoxelDataType toAddType)
+    public static void add(Voxels<IntBuffer> vb, VoxelsWrapper toAdd, VoxelDataType toAddType)
             throws OperationFailedException {
 
         if (toAddType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
@@ -78,7 +78,7 @@ class VoxelBoxArithmetic {
      * @param vbOut
      */
     private static void divideValueShort(
-            VoxelBox<IntBuffer> vbIn, int div, VoxelBox<ShortBuffer> vbOut) {
+            Voxels<IntBuffer> vbIn, int div, Voxels<ShortBuffer> vbOut) {
 
         for (int z = 0; z < vbIn.extent().getZ(); z++) {
 
@@ -104,7 +104,7 @@ class VoxelBoxArithmetic {
      * @param vbOut
      */
     private static void divideValueByte(
-            VoxelBox<IntBuffer> vbIn, int div, VoxelBox<ByteBuffer> vbOut) {
+            Voxels<IntBuffer> vbIn, int div, Voxels<ByteBuffer> vbOut) {
 
         for (int z = 0; z < vbIn.extent().getZ(); z++) {
 
@@ -128,7 +128,7 @@ class VoxelBoxArithmetic {
                 String.format("Unsupported data type: %s", voxelDataType));
     }
 
-    private static void addShort(VoxelBox<IntBuffer> vb, VoxelBox<ShortBuffer> toAdd) {
+    private static void addShort(Voxels<IntBuffer> vb, Voxels<ShortBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().getZ(); z++) {
 
@@ -150,7 +150,7 @@ class VoxelBoxArithmetic {
         }
     }
 
-    private static void addByte(VoxelBox<IntBuffer> vb, VoxelBox<ByteBuffer> toAdd) {
+    private static void addByte(Voxels<IntBuffer> vb, Voxels<ByteBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().getZ(); z++) {
 

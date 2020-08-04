@@ -44,12 +44,12 @@ public class BinaryChnlProviderOutline extends BinaryChnlProviderOne {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean force2D = false;
 
-    @BeanField @Getter @Setter private boolean erodeEdges = true;
+    @BeanField @Getter @Setter private boolean erodeAtBoundary = true;
     // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask chnl) throws CreateException {
         boolean do3D = chnl.getDimensions().getZ() > 1 && !force2D;
-        return FindOutline.outline(chnl, do3D, erodeEdges);
+        return FindOutline.outline(chnl, do3D, erodeAtBoundary);
     }
 }

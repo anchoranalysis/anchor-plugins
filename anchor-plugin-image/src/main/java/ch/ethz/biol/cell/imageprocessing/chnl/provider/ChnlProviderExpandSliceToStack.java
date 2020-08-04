@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -64,8 +64,8 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
                 ChannelFactory.instance()
                         .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbSlice = chnl.voxels().asByte();
-        VoxelBox<ByteBuffer> vbOut = chnlOut.voxels().asByte();
+        Voxels<ByteBuffer> vbSlice = chnl.voxels().asByte();
+        Voxels<ByteBuffer> vbOut = chnlOut.voxels().asByte();
 
         for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
             VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);

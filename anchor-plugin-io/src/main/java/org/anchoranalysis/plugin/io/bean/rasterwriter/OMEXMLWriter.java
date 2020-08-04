@@ -34,14 +34,14 @@ import loci.formats.ImageWriter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Writes a stack to the file system in some manner
 public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
 
     // A default extension
     @Override
-    public String dfltExt() {
+    public String defaultExtension() {
         return "ome";
     }
 
@@ -58,9 +58,9 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
         Channel chnlGreen = stack.getChannel(1);
         Channel chnlBlue = stack.getChannel(2);
 
-        VoxelBox<ByteBuffer> vbRed = chnlRed.voxels().asByte();
-        VoxelBox<ByteBuffer> vbGreen = chnlGreen.voxels().asByte();
-        VoxelBox<ByteBuffer> vbBlue = chnlBlue.voxels().asByte();
+        Voxels<ByteBuffer> vbRed = chnlRed.voxels().asByte();
+        Voxels<ByteBuffer> vbGreen = chnlGreen.voxels().asByte();
+        Voxels<ByteBuffer> vbBlue = chnlBlue.voxels().asByte();
 
         for (int z = 0; z < stack.getDimensions().getZ(); z++) {
 
