@@ -68,10 +68,6 @@ public class MovieFromSlicesTask extends RasterTask {
     private int index = 0;
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
 
-    public MovieFromSlicesTask() {
-        super();
-    }
-
     @Override
     public void startSeries(
             BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
