@@ -31,14 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.anchor.plot.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
@@ -49,9 +49,8 @@ public class StackProviderHistogram extends StackProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private HistogramProvider histogramProvider;
 
-    @BeanField @Positive @Getter @Setter private int width;
-
-    @BeanField @Positive @Getter @Setter private int height;
+    /** Size of the image produced showing a plot of the histogram */
+    @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024,768);
     // END BEAN PROPERTIES
 
     @Override
@@ -60,9 +59,9 @@ public class StackProviderHistogram extends StackProvider {
         try {
             List<HistogramItem> listHI = histogramList(histogramProvider.create());
 
-            GraphInstance gi = HistogramPlot.create(listHI.iterator(), null, null);
+            PlotInstance gi = HistogramPlot.create(listHI.iterator(), null, null);
 
-            BufferedImage bi = GraphOutputter.createBufferedImage(gi, width, height);
+            BufferedImage bi = GraphOutputter.createBufferedImage(gi, size.getWidth(), size.getHeight());
 
             return CreateStackFromBufferedImage.create(bi);
 
