@@ -34,6 +34,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -56,10 +57,9 @@ public class MovieFromSlicesTask extends RasterTask {
 
     @BeanField @Getter @Setter private String filePrefix = "movie";
 
-    @BeanField @Getter @Setter private int width = -1;
-
-    @BeanField @Getter @Setter private int height = -1;
-
+    /** TODO what does -1 do exactly? Disables mode? */
+    @BeanField @Getter @Setter private SizeXY size = new SizeXY(-1,-1);
+    
     @BeanField @Getter @Setter private int startIndex = 0; // this does nothing atm
 
     @BeanField @Getter @Setter private int repeat = 1;
@@ -128,7 +128,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
             Stack sliceOut = null;
 
-            ExtractProjectedStack extract = new ExtractProjectedStack(width, height);
+            ExtractProjectedStack extract = new ExtractProjectedStack(size);
 
             for (int z = 0; z < red.dimensions().z(); z++) {
 

@@ -113,7 +113,7 @@ class NaiveGreedyMerge {
             for (int j = range.getEnd(); j < objects.size(); j++) {
 
                 if (i != j && tryMergeOnIndices(objects, i, j, consumer)) {
-                    // After a succesful merge, we don't try to merge again
+                    // After a successful merge, we don't try to merge again
                     break;
                 }
 
