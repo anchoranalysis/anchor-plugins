@@ -28,7 +28,9 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
@@ -57,8 +59,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
     @BeanField @Getter @Setter private String filePrefix = "movie";
 
-    /** TODO what does -1 do exactly? Disables mode? */
-    @BeanField @Getter @Setter private SizeXY size = new SizeXY(-1,-1);
+    @BeanField @OptionalBean @Getter @Setter private SizeXY size;
     
     @BeanField @Getter @Setter private int startIndex = 0; // this does nothing atm
 
@@ -124,7 +125,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
             Stack sliceOut = null;
 
-            ExtractProjectedStack extract = new ExtractProjectedStack(size);
+            ExtractProjectedStack extract = new ExtractProjectedStack( Optional.ofNullable(size).map(SizeXY::asExtent) );
 
             for (int z = 0; z < red.dimensions().z(); z++) {
 

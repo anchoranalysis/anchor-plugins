@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.Optional;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -48,7 +48,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class ExtractProjectedStack {
 
-    private SizeXY size;
+    private Optional<Extent> extent;
 
     public Stack extractAndProjectStack(Channel red, Channel green, Channel blue, int z)
             throws IncorrectImageSizeException {
@@ -68,28 +68,25 @@ class ExtractProjectedStack {
     private Channel createProjectedChnl(Channel chnlIn) {
 
         // Then the mode is off
-        if (size.getWidth() == -1
-                || size.getHeight() == -1
-                || (chnlIn.dimensions().x() == size.getWidth()
-                        && chnlIn.dimensions().y() == size.getHeight())) {
+        if (!extent.isPresent()
+                || chnlIn.dimensions().extent().equals(extent.get())) {
             return chnlIn;
         } else {
-            Extent eOut = size.asExtent();
-            Point3i crnrPos = createTarget(chnlIn.dimensions(), eOut);
+            Point3i crnrPos = createTarget(chnlIn.dimensions(), extent.get());
 
             BoundingBox boxToProject =
-                    boxToProject(crnrPos, chnlIn.dimensions().extent(), eOut);
+                    boxToProject(crnrPos, chnlIn.dimensions().extent(), extent.get());
 
             BoundingBox boxSrc = boxSrc(boxToProject, chnlIn.dimensions());
 
-            return copyPixels(boxSrc, boxToProject, chnlIn, eOut);
+            return copyPixels(boxSrc, boxToProject, chnlIn, extent.get());
         }
     }
 
-    private static Point3i createTarget(ImageDimensions dimensions, Extent e) {
+    private static Point3i createTarget(ImageDimensions dimensions, Extent extent) {
         Point3i crnrPos = new Point3i();
-        crnrPos.setX((e.x() - dimensions.x()) / 2);
-        crnrPos.setY((e.y() - dimensions.y()) / 2);
+        crnrPos.setX((extent.x() - dimensions.x()) / 2);
+        crnrPos.setY((extent.y() - dimensions.y()) / 2);
         crnrPos.setZ(0);
         return crnrPos;
     }
