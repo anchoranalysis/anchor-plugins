@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.slice;
 
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -36,6 +37,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import lombok.AllArgsConstructor;
 
 /**
  * Takes three RGB channels and projects them into a canvas of width/height in the form of a new RGB
@@ -43,16 +45,10 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 class ExtractProjectedStack {
 
-    private int width;
-    private int height;
-
-    public ExtractProjectedStack(int width, int height) {
-        super();
-        this.width = width;
-        this.height = height;
-    }
+    private SizeXY size;
 
     public Stack extractAndProjectStack(Channel red, Channel green, Channel blue, int z)
             throws IncorrectImageSizeException {
@@ -72,13 +68,13 @@ class ExtractProjectedStack {
     private Channel createProjectedChnl(Channel chnlIn) {
 
         // Then the mode is off
-        if (width == -1
-                || height == -1
-                || (chnlIn.dimensions().x() == width
-                        && chnlIn.dimensions().y() == height)) {
+        if (size.getWidth() == -1
+                || size.getHeight() == -1
+                || (chnlIn.dimensions().x() == size.getWidth()
+                        && chnlIn.dimensions().y() == size.getHeight())) {
             return chnlIn;
         } else {
-            Extent eOut = new Extent(width, height);
+            Extent eOut = size.asExtent();
             Point3i crnrPos = createTarget(chnlIn.dimensions(), eOut);
 
             BoundingBox boxToProject =
