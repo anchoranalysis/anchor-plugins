@@ -77,7 +77,7 @@ class GeneratePointsHelper {
         } else {
             return PointsFromMask.listFromSlicesInsideBox3i(
                     mask,
-                    box.duplicateChangeZ(zLow, zHigh - zLow),
+                    box.changeZ(zLow, zHigh - zLow),
                     (int) Math.floor(pointRoot.z()),
                     skipZDistance);
         }

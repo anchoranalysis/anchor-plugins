@@ -25,11 +25,11 @@
  */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
-import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -55,16 +55,18 @@ class ScaleFactorCalculator {
      * @return a scale-factor that can be applied to the bounding-boxes so that they will always fit inside
      *     {@code targetSize}
      */
-    public static ScaleFactor scaleEachObjectFitsIn(Supplier<Stream<BoundingBox>> boundingBoxes, Extent targetSize) {
+    public static ScaleFactor factorSoEachBoundingBoxFitsIn(StreamableCollection<BoundingBox> boundingBoxes, Extent targetSize) {
         Extent maxInEachDimension =
                 new Extent(
-                        extractMaxDimension(boundingBoxes.get(), Extent::x),
-                        extractMaxDimension(boundingBoxes.get(), Extent::y));
+                        extractMaxDimension(boundingBoxes.stream(), Extent::x),
+                        extractMaxDimension(boundingBoxes.stream(), Extent::y));
         return ScaleFactorUtilities.calcRelativeScale(maxInEachDimension, targetSize);
     }
 
     private static int extractMaxDimension(
             Stream<BoundingBox> boundingBoxes, ToIntFunction<Extent> functionDimension) {
-        return boundingBoxes.map( BoundingBox::extent).mapToInt(functionDimension).max().getAsInt();
+        // We add a 1 to make the object be a little bit smaller after scaling and prevent
+        //  round up errors after accidentally pushing a bounding-box outside the target-window
+        return boundingBoxes.map( BoundingBox::extent).mapToInt(functionDimension).max().getAsInt() + 1;
     }
 }

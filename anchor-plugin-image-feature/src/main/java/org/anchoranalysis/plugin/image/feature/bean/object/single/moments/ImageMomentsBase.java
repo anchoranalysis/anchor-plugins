@@ -50,8 +50,15 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     private static final int MIN_NUM_VOXELS = 12;
 
     // START BEAN PROPERTIES
+    /** If true co-voariance is suprpessed in z-dimension */
     @BeanField @Getter @Setter
-    private boolean suppressZ = false; // Suppresses covariance in the z-direction.
+    private boolean suppressZ = false;
+    
+    /** A value to return if there are too few voxels (less than {@code MIN_NUM_VOXELS} to calculate moments
+     *  <p>A warning message is also written to the log. 
+     * */
+    @BeanField @Getter @Setter
+    private double valueIfTooFewVoxels = Double.NaN;
     // END BEAN PROPERTIES
 
     @Override
@@ -59,7 +66,11 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
             throws FeatureCalculationException {
 
         if (input.get().getObject().numPixelsLessThan(MIN_NUM_VOXELS)) {
-            return resultIfTooFewPixels();
+            String errorMessage = errorMessageIfTooFewPixels();
+            
+            getLogger().errorReporter().recordError(ImageMomentsBase.class, errorMessage);
+            
+            return valueIfTooFewVoxels;
         }
 
         return calcFeatureResultFromMoments(calcMoments(input));
@@ -68,7 +79,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     protected abstract double calcFeatureResultFromMoments(ImageMoments moments)
             throws FeatureCalculationException;
 
-    protected abstract double resultIfTooFewPixels() throws FeatureCalculationException;
+    protected abstract String errorMessageIfTooFewPixels() throws FeatureCalculationException;
 
     private ImageMoments calcMoments(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {

@@ -62,7 +62,7 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
 
     private static ObjectMask expandZ(ObjectMask object, ImageDimensions dim) {
 
-        BoundingBox box = object.boundingBox().duplicateChangeExtentZ(dim.z());
+        BoundingBox box = object.boundingBox().changeExtentZ(dim.z());
 
         Voxels<ByteBuffer> voxels =
                 createVoxelsOfDuplicatedPlanes(

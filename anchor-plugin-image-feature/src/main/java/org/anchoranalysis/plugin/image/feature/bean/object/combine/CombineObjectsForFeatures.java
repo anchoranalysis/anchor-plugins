@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -110,10 +111,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             boolean thumbnailsEnabled,
             Logger logger)
             throws CreateException {
+        
         List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
         if (thumbnailsEnabled) {
             try {
-                thumbnail.start(objects, () -> inputs.stream().map(this::boundingBoxThatSpansInput), Optional.of(nrgStack.asStack()));
+                thumbnail.start(objects, scaledBoundingBoxes(inputs), Optional.of(nrgStack.asStack()));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -161,4 +163,10 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return a bounding-box that fully fits around all objects used in input
      */
     protected abstract BoundingBox boundingBoxThatSpansInput(T input);
+    
+    private StreamableCollection<BoundingBox> scaledBoundingBoxes(List<T> inputs) {
+       return new StreamableCollection<>(
+            () -> inputs.stream().map(this::boundingBoxThatSpansInput)
+       );
+    }
 }

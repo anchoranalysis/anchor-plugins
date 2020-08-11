@@ -212,7 +212,7 @@ public class FromObjects<T extends FeatureInput>
             Optional<String> groupGeneratorName,
             CalculateFeaturesFromProvider<T> calculator)
             throws OperationFailedException {
-
+        
         // For every object-collection-provider
         for (NamedBean<ObjectCollectionProvider> ni : objects) {
             calculator.processProvider(
