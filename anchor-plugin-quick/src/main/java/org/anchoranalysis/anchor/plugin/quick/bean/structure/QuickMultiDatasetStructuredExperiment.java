@@ -40,6 +40,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.io.IReplaceInputManager;
 import org.anchoranalysis.experiment.io.IReplaceOutputManager;
+import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
@@ -224,5 +225,13 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
 
     public void setSuppressExceptions(boolean suppressExceptions) {
         delegate.setSuppressExceptions(suppressExceptions);
+    }
+
+    public Task<T, S> getTask() {
+        return delegate.getTask();
+    }
+
+    public void setTask(Task<T, S> task) {
+        delegate.setTask(task);
     }
 }
