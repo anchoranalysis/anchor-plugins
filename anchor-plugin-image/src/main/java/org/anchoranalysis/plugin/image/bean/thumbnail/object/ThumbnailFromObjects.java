@@ -26,11 +26,10 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -53,7 +52,7 @@ public abstract class ThumbnailFromObjects extends AnchorBean<ThumbnailFromObjec
      * @param background a stack that will be used to form the background (or some part of may be
      *     used)
      */
-    public abstract void start(ObjectCollection objects, Supplier<Stream<BoundingBox>> boundingBoxes, Optional<Stack> background)
+    public abstract void start(ObjectCollection objects, StreamableCollection<BoundingBox> boundingBoxes, Optional<Stack> background)
             throws OperationFailedException;
 
     /** Creates a thumbnail for one or more objects */

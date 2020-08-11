@@ -111,6 +111,13 @@
         <version>${vavr.version}</version>
     </dependency>
 
+	<!-- For Advanced manipulation of streams -->
+	<dependency>
+	    <groupId>one.util</groupId>
+	    <artifactId>streamex</artifactId>
+	    <version>${streamex.version}</version>
+	</dependency>
+	
     <!-- START: Test dependencies -->
     <dependency>
       <groupId>org.mockito</groupId>

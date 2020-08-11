@@ -41,8 +41,6 @@ public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
             FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
-        double zScore = FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.get());
-        assert (!Double.isNaN(zScore));
-        return zScore;
+        return FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.get());
     }
 }

@@ -36,6 +36,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.io.generator.raster.obj.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -102,10 +103,11 @@ class BuildGeneratorHelper {
 
             // TODO does the first generator get added twice for both flattened and non-flattened
             // stacks?
-
+            ScaleableBackground background = ScaleableBackground.noScaling(stacks.getException(key));
+            
             // Bounding box-generator
             ExtractBoundingBoxAreaFromStackGenerator generator =
-                    new ExtractBoundingBoxAreaFromStackGenerator(stacks.getException(key));
+                    new ExtractBoundingBoxAreaFromStackGenerator(background);
             out.add(key, WrapGenerators.wrapBoundingBox(generator, flatten));
 
             // Outline on raster generator, reusing the previous generator for the background

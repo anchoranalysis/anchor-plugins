@@ -26,25 +26,37 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
+import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class BackgroundHelper {
+/**
+ * Selects a background from an optional stack with an unknown number of channels, and assigns a scale-factor
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
+class BackgroundSelector {
 
-    public static Optional<Stack> determineBackgroundAndScale(
-            Optional<Stack> backgroundSource, int backgroundChannelIndex, FlattenAndScaler scaler) {
-        return backgroundSource.flatMap(
-                source ->
-                        scaler.scaleStack(
-                                BackgroundHelper.determineBackground(
-                                        source, backgroundChannelIndex)));
+    private int backgroundChannelIndex;
+    private ScaleFactor scaleFactor;
+    private Interpolator interpolator;
+    
+    public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource) {
+        return backgroundSource.flatMap(this::determineScaledBackground);
     }
-
+    
+    private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource) {
+        return determineBackground(backgroundSource).map( stack->
+            ScaleableBackground.scaleBy(stack,scaleFactor,interpolator)
+        );
+    }
+    
     /** Derives a background-stack from a stack that is a source of possible backgrounds */
-    private static Optional<Stack> determineBackground(
-            Stack backgroundSource, int backgroundChannelIndex) {
+    private Optional<Stack> determineBackground(Stack backgroundSource) {
 
         if (backgroundChannelIndex > -1) {
             return Optional.of(extractChannelAsStack(backgroundSource, backgroundChannelIndex));

@@ -51,20 +51,20 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objectCollection)
+    public ObjectCollection createFromObjects(ObjectCollection objects)
             throws CreateException {
 
-        ObjectCollection objectsDuplicated = objectCollection.duplicate();
+        ObjectCollection objectsDuplicated = objects.duplicate();
 
         ImageDimensions dims = createDimensions();
 
-        for (int i = 0; i < objectCollection.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
 
             ObjectMask objectWrite = objectsDuplicated.get(i);
 
             maybeErrorDisconnectedObjects(objectWrite, "before");
 
-            for (int j = 0; j < objectCollection.size(); j++) {
+            for (int j = 0; j < objects.size(); j++) {
 
                 ObjectMask objectRead = objectsDuplicated.get(j);
 

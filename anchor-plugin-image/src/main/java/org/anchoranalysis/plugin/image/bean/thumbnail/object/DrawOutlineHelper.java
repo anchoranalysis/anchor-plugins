@@ -46,7 +46,6 @@ class DrawOutlineHelper {
 
     private final RGBColorBean color;
     private final int outlineWidth;
-    private final FlattenAndScaler scaler;
 
     /**
      * Draws the outline of all objects on the background in the color of {@code
@@ -57,17 +56,15 @@ class DrawOutlineHelper {
      * @return the background-stack with the outline of all objects drawn on it
      * @throws OperationFailedException
      */
-    public Stack drawObjects(Stack backgroundScaled, ObjectCollection objectsUnscaled)
+    public Stack drawObjects(Stack backgroundScaled, ObjectCollection objects)
             throws OperationFailedException {
         try {
             DisplayStack displayStack = DisplayStack.create(backgroundScaled);
-            ObjectCollectionWithProperties objectsScaled =
-                    new ObjectCollectionWithProperties(scaler.scaleObjects(objectsUnscaled));
 
             DrawObjectsGenerator drawOthers =
                     new DrawObjectsGenerator(
                             new Outline(outlineWidth),
-                            objectsScaled,
+                            new ObjectCollectionWithProperties(objects),
                             Either.right(displayStack),
                             colorsForUnselected());
             return drawOthers.generate();

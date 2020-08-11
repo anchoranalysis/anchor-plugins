@@ -59,7 +59,7 @@ public class PrincipalAxisOrientation extends SpecificAxisBase {
     }
 
     @Override
-    protected double resultIfTooFewPixels() throws FeatureCalculationException {
-        throw new FeatureCalculationException("Too few voxels to determine axis-orientation");
+    protected String errorMessageIfTooFewPixels() throws FeatureCalculationException {
+        return "Too few voxels to determine axis-orientation";
     }
 }

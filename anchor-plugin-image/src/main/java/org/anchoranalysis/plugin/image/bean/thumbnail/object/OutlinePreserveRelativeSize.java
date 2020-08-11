@@ -25,24 +25,24 @@
  */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
-import java.awt.Color;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.color.ColorList;
+import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -76,20 +76,22 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * @author Owen Feehan
  */
 public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
-
-    /** The color GREEN is used for the outline of objects */
-    private static final ColorList OUTLINE_COLORS = new ColorList(Color.GREEN, Color.RED);
     
     // START BEAN PROPERTIES
-    /** Size of all created thumbnails */
+    /** 
+     * Size of all created thumbnails
+     **/
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(200, 200);
 
     /**
-     * Uses only this channel (identified by an index in the stack) as the background, -1 disables.
+     * Uses only this channel (identified by an index in the stack) as the background,
+     * -1 disables.
      */
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
-    /** Interpolator used when scaling */
+    /** 
+     * Interpolator used when scaling
+     **/
     @BeanField @Getter @Setter
     private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
 
@@ -111,21 +113,24 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private Extent sceneExtentScaled;
 
     @Override
-    public void start(ObjectCollection objects, Supplier<Stream<BoundingBox>> boundingBoxes, Optional<Stack> backgroundSource)
+    public void start(ObjectCollection objects, StreamableCollection<BoundingBox> boundingBoxes, Optional<Stack> backgroundSource)
             throws OperationFailedException {
 
         if (objects.isEmpty()) {
             // Nothing to do, no thumbnails will ever be generated
             return;
         }
-
+        
+        Interpolator interpolatorCreated = interpolator.create();
+        
         // Determine what to scale the objects and any background by
         scaler =
                 new FlattenAndScaler(
-                        ScaleFactorCalculator.scaleEachObjectFitsIn(boundingBoxes, size.asExtent()),
-                        interpolator.create());
+                        boundingBoxes,
+                        objects,
+                        interpolatorCreated, size.asExtent());
 
-        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, objects));
+        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, interpolatorCreated));
     }
 
     @Override
@@ -134,16 +139,18 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         // For now only work with the first object in the collection
         try {
             ObjectsWithBoundingBox objectsScaled = new ObjectsWithBoundingBox(scaler.scaleObjects(objects));
-
+            
+            assert(!objectsScaled.boundingBox().extent().anyDimensionIsLargerThan(size.asExtent()));
+            
             // Find a bounding-box of target size in which objectScaled is centered
             BoundingBox centeredBox =
                     CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
                             objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
 
-            assert (centeredBox.extent().equals(size.asExtent()));
-            assert (sceneExtentScaled.contains(centeredBox));
+            assert centeredBox.extent().equals(size.asExtent());
+            assert sceneExtentScaled.contains(centeredBox);
 
-            generator.setIterableElement(objectsScaled.mapBoundingBoxToBigger(centeredBox));
+            generator.setIterableElement( determineObjectsForGenerator(objectsScaled, centeredBox) );
 
             return DisplayStack.create(generator.generate());
 
@@ -151,6 +158,27 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             throw new CreateException(e);
         }
     }
+    
+    @Override
+    public void end() {
+        // Garbage collect the scaler as it contains a cache of scaled-objects
+        scaler = null;
+    }
+    
+    private ObjectsWithBoundingBox determineObjectsForGenerator(ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox) throws OperationFailedException {
+        ObjectsWithBoundingBox objectsMapped = objectsScaled.mapBoundingBoxToBigger(centeredBox);
+        
+        // Add any other objects which intersect with the scaled-bounding box, excluding
+        //  the object themselves
+        if (colorUnselectedObjects!=null) {
+            return objectsMapped.addObjectsNoBoundingBoxChange(
+                    scaler.objectsThatIntersectWith(objectsMapped.boundingBox(), objectsScaled.objects())
+            );
+        } else {
+            return objectsMapped;
+        }
+    }
+    
 
     /**
      * Sets up the generator and the related {@code sceneExtentScaled} variable
@@ -159,35 +187,27 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * @param backgroundUnscaled unscaled background if it exists
      */
     private void setupGenerator(
-            ObjectCollection objectsUnscaled, Optional<Stack> backgroundScaled) {
+            ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {
+        
         sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
-
+                
         // Create a generator that draws objects on the background
-        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth, OUTLINE_COLORS);
+        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth, createColorIndex(false) );
     }
 
-    private Optional<Stack> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, ObjectCollection objects)
-            throws OperationFailedException {
-        Optional<Stack> backgroundScaled =
-                BackgroundHelper.determineBackgroundAndScale(
-                        backgroundSource, backgroundChannelIndex, scaler);
-
-        if (colorUnselectedObjects != null && backgroundScaled.isPresent()) {
-            // Draw the other objects (scaled) onto the background. The objects are memoized as we
-            // do again
-            // individually at a later point.
-            DrawOutlineHelper drawOutlineHelper =
-                    new DrawOutlineHelper(colorUnselectedObjects, outlineWidth, scaler);
-            return Optional.of(drawOutlineHelper.drawObjects(backgroundScaled.get(), objects));
-        } else {
-            return backgroundScaled;
-        }
+    private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
+        Optional<Stack> backgroundSource, Interpolator interpolator) {
+        BackgroundSelector backgroundHelper = new BackgroundSelector(backgroundChannelIndex, scaler.getScaleFactor(), interpolator); 
+        return backgroundHelper.determineBackground(backgroundSource);
     }
-
-    @Override
-    public void end() {
-        // Garbage collect the scaler as it contains a cache of scaled-objects
-        scaler = null;
+    
+    /**
+     * Creates a suitable color index for distinguishing between the different types of objects that appear
+     * 
+     * @param pairs whether pairs are being used or not
+     * @return the color index
+     */
+    private ColorIndex createColorIndex( boolean pairs ) {
+        return new ThumbnailColorIndex(pairs, colorUnselectedObjects.toAWTColor() );
     }
 }
