@@ -107,7 +107,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
             ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation)
             throws OperationFailedException {
         try {
-            double val = evaluatorForSource.calc(new FeatureInputSingleObject(object));
+            double val = evaluatorForSource.calculate(new FeatureInputSingleObject(object));
             return doesMatchAllAssociatedObjects(val, matches.get(object), relation);
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
@@ -128,7 +128,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
         for (ObjectMask match : matches) {
 
-            double valMatch = evaluatorForMatch.calc(new FeatureInputSingleObject(match));
+            double valMatch = evaluatorForMatch.calculate(new FeatureInputSingleObject(match));
 
             if (!relation.isRelationToValueTrue(val, valMatch)) {
                 return false;

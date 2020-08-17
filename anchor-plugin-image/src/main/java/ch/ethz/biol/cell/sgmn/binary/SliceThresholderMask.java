@@ -46,7 +46,7 @@ final class SliceThresholderMask extends SliceThresholder {
         this.clearOutsideMask = clearOutsideMask;
         this.object = object;
         this.cornerMin = object.boundingBox().cornerMin();
-        this.cornerMax = object.boundingBox().calcCornerMax();
+        this.cornerMax = object.boundingBox().calculateCornerMax();
     }
 
     @Override

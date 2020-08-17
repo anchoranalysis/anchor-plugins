@@ -174,7 +174,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             ObjectMask containingMask) {
 
         ReadableTuple3i crnrpointMin = containingMask.boundingBox().cornerMin();
-        ReadableTuple3i crnrpointMax = containingMask.boundingBox().calcCornerMax();
+        ReadableTuple3i crnrpointMax = containingMask.boundingBox().calculateCornerMax();
 
         byte maskOn = containingMask.binaryValuesByte().getOnByte();
 

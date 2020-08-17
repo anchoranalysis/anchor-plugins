@@ -53,7 +53,7 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
                         ? VoxelDataTypeUnsignedShort.INSTANCE
                         : VoxelDataTypeUnsignedByte.INSTANCE;
 
-        Channel chnlNew = ChannelFactory.instance().createEmptyInitialised(dimensions, typeOut);
+        Channel chnlNew = ChannelFactory.instance().create(dimensions, typeOut);
         if (value != 0) {
             chnlNew.assignValue(value).toAll();
         }

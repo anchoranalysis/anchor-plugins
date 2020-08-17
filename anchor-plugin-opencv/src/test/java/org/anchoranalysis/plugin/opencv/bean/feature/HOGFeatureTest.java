@@ -28,11 +28,9 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import static org.junit.Assert.*;
 
-import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.test.LoggingFixture;
@@ -49,7 +47,7 @@ public class HOGFeatureTest {
 
     @Test
     public void testWithinBounds() throws FeatureCalculationException {
-        assertEquals(0.006448161, featureValForIndex(0), 10e-6);
+        assertEquals(0.01632116, featureValForIndex(0), 10e-6);
     }
 
     @Test(expected = FeatureCalculationException.class)
@@ -58,17 +56,7 @@ public class HOGFeatureTest {
     }
 
     private double featureValForIndex(int index) throws FeatureCalculationException {
-
-        HOGFeature feature = new HOGFeature();
-        feature.setResizeTo(new SizeXY(64, 64));
-        feature.setIndex(index);
-
-        try {
-            FeatureCalculatorSingle<FeatureInputStack> session =
-                    FeatureSession.with(feature, LoggingFixture.suppressedLogErrorReporter());
-            return session.calc(new FeatureInputStack(stack));
-        } catch (InitException e) {
-            throw new FeatureCalculationException(e);
-        }
+        HOGFeature feature = new HOGFeature( new SizeXY(64, 64), index );
+        return FeatureSession.calculateWith(feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogErrorReporter());
     }
 }

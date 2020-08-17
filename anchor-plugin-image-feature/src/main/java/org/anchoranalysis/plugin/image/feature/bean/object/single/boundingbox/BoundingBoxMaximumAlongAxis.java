@@ -33,6 +33,6 @@ public class BoundingBoxMaximumAlongAxis extends BoundingBoxAlongAxisBase {
 
     @Override
     protected ReadableTuple3i extractTupleForBoundingBox(BoundingBox box) {
-        return box.calcCornerMax();
+        return box.calculateCornerMax();
     }
 }

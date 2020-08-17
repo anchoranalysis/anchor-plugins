@@ -38,15 +38,15 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ReportFeatureUtilities {
 
-    public static <T> List<String> genHeaderNames(
+    public static <T> List<String> headerNames(
             List<? extends ReportFeature<T>> list, Logger logger) {
 
         // Create a list of headers
         List<String> headerNames = new ArrayList<>();
-        for (ReportFeature<T> feat : list) {
+        for (ReportFeature<T> feateature : list) {
             String name;
             try {
-                name = feat.genTitleStr();
+                name = feateature.title();
             } catch (OperationFailedException e) {
                 name = "error";
                 logger.errorReporter().recordError(ReportFeatureUtilities.class, e);
@@ -56,7 +56,7 @@ class ReportFeatureUtilities {
         return headerNames;
     }
 
-    public static <T> List<TypedValue> genElementList(
+    public static <T> List<TypedValue> elementList(
             List<? extends ReportFeature<T>> list, T obj, Logger logger) {
 
         List<TypedValue> rowElements = new ArrayList<>();
@@ -64,7 +64,7 @@ class ReportFeatureUtilities {
         for (ReportFeature<T> feat : list) {
             String value;
             try {
-                value = feat.genFeatureStringFor(obj, logger);
+                value = feat.featureDescription(obj, logger);
             } catch (OperationFailedException e) {
                 value = "error";
                 logger.errorReporter().recordError(ReportFeatureUtilities.class, e);

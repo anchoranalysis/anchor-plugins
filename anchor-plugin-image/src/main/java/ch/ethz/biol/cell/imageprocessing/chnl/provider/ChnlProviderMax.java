@@ -47,7 +47,7 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
                 CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(chnl1.dimensions(), combinedType);
+                        .create(chnl1.dimensions(), combinedType);
 
         setMaxInOutputVoxels(
                 chnlOut.voxels().asByte(),

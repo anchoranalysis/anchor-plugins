@@ -31,7 +31,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
@@ -77,17 +76,12 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
     private ObjectCollection createFromVoxels(
             BinaryVoxels<ByteBuffer> bvb,
             ImageResolution resolution,
-            Optional<ReadableTuple3i> maskShiftBy)
-            throws SegmentationFailedException {
+            Optional<ReadableTuple3i> maskShiftBy) {
         Mask mask = new Mask(bvb, resolution);
 
         CreateFromConnectedComponentsFactory creator =
                 new CreateFromConnectedComponentsFactory(minNumberVoxels);
-        try {
-            return maybeShiftObjects(creator.createConnectedComponents(mask), maskShiftBy);
-        } catch (CreateException e) {
-            throw new SegmentationFailedException(e);
-        }
+        return maybeShiftObjects(creator.createConnectedComponents(mask), maskShiftBy);
     }
 
     private static ObjectCollection maybeShiftObjects(

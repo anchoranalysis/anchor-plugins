@@ -70,7 +70,7 @@ public class BinaryChnlProviderInsideBox extends BinaryChnlProviderDimSource {
     protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         BoundingBox box = createBox(dimensions);
 

@@ -51,7 +51,7 @@ class ExtendObjectsInZHelper {
         ByteBuffer bbFlat = flat.sliceBufferLocal(0);
 
         int zLow = box.cornerMin().z();
-        int zHigh = box.calcCornerMax().z();
+        int zHigh = box.calculateCornerMax().z();
 
         if (zCenter > zHigh) {
             zCenter = zHigh;

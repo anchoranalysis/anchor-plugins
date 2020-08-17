@@ -71,7 +71,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
             double classificationVal =
                     featureCalculator
                             .calculatorSingleFromProvider(classifierProvider, "classifierProvider")
-                            .calc(new FeatureInputStack());
+                            .calculate(new FeatureInputStack());
 
             context.getLogReporter().logFormatted("Classification value = %f", classificationVal);
 

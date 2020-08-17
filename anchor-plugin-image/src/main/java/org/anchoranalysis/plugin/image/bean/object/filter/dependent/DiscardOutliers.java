@@ -127,7 +127,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         DoubleArrayList featureVals = new DoubleArrayList();
         for (ObjectMask objectMask : objects) {
             try {
-                featureVals.add(calculator.calc(new FeatureInputSingleObject(objectMask)));
+                featureVals.add(calculator.calculate(new FeatureInputSingleObject(objectMask)));
             } catch (FeatureCalculationException e) {
                 throw new OperationFailedException(e);
             }

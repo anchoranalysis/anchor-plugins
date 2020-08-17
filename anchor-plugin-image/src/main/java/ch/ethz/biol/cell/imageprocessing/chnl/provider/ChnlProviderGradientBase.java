@@ -57,7 +57,7 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
         // The gradient is calculated on a float
         Channel chnlIntermediate =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
+                        .create(
                                 chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
 
         GradientCalculator calculator =

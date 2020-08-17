@@ -56,7 +56,7 @@ public class IntensityMeanCalculator {
         BoundingBox box = object.boundingBox();
 
         ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
         double sum = 0.0;
         int cnt = 0;

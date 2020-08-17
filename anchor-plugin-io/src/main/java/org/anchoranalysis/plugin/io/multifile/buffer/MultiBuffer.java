@@ -100,7 +100,7 @@ class MultiBuffer {
 
         for (int c = 0; c < size.getRangeC().getSize(); c++) {
 
-            Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dimensions, dataType);
+            Channel chnl = ChannelFactory.instance().createUninitialised(dimensions, dataType);
             copyAllBuffersTo(t, c, chnl.voxels());
 
             try {

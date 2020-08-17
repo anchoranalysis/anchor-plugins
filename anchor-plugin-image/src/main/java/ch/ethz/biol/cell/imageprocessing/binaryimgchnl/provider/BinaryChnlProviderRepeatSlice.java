@@ -63,7 +63,7 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
         int volumeXY = voxelsIn.extent().volumeXY();

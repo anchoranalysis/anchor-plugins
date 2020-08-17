@@ -71,7 +71,7 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
 
         Channel chnlIntermediate =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
+                        .create(
                                 chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
         Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
 

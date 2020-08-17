@@ -82,7 +82,7 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
 
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(dimensionsTarget, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensionsTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 

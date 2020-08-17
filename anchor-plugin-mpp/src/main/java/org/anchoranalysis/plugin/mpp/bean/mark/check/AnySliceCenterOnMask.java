@@ -52,7 +52,7 @@ public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
         }
 
         BoundingBox box = mark.boxAllRegions(nrgStack.dimensions());
-        ReadableTuple3i cornerMax = box.calcCornerMax();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
             Point3d cpSlice = new Point3d(cp.x(), cp.y(), z);
             if (isPointOnBinaryChnl(cpSlice, nrgStack, AnySliceCenterOnMask::derivePoint)) {

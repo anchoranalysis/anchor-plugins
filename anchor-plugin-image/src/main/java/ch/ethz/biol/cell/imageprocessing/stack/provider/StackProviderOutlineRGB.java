@@ -89,7 +89,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
             return chnlBlue.create();
         } else {
             return ChannelFactory.instance()
-                    .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                    .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         }
     }
 
