@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -62,16 +62,16 @@ public class FeatureListMPPTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = NamedFeatureCalculationException.class)
+    @Test(expected = NamedFeatureCalculateException.class)
     public void testNoParams()
-            throws InitException, NamedFeatureCalculationException, CreateException {
+            throws InitException, NamedFeatureCalculateException, CreateException {
 
         testConstantsInList((FeatureInput) null, (FeatureInput) null);
     }
 
     @Test
     public void testArbitraryParams()
-            throws InitException, NamedFeatureCalculationException, CreateException {
+            throws InitException, NamedFeatureCalculateException, CreateException {
 
         CfgFixture cfgFixture = new CfgFixture(DIM);
 
@@ -81,7 +81,7 @@ public class FeatureListMPPTest {
     }
 
     @Test
-    public void testMark() throws InitException, CreateException, NamedFeatureCalculationException {
+    public void testMark() throws InitException, CreateException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMark> session =
                 createAndStart(FeatureListFixtureMPP.mark());
@@ -113,7 +113,7 @@ public class FeatureListMPPTest {
     @Test
     public void testCfg()
             throws InitException, CreateException, FeatureCalculationException,
-                    NamedFeatureCalculationException {
+                    NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputCfg> session =
                 createAndStart(FeatureListFixtureMPP.cfg());
@@ -129,7 +129,7 @@ public class FeatureListMPPTest {
 
     private static void assertCfg(
             FeatureCalculatorMulti<FeatureInputCfg> session, Cfg cfg, double expected)
-            throws CreateException, FeatureCalculationException, NamedFeatureCalculationException {
+            throws CreateException, FeatureCalculationException, NamedFeatureCalculateException {
         assertCalc(session.calculate(new FeatureInputCfg(cfg, Optional.of(DIM))), expected);
     }
 
@@ -139,7 +139,7 @@ public class FeatureListMPPTest {
             double expected1,
             double expected2,
             double expected3)
-            throws CreateException, NamedFeatureCalculationException {
+            throws CreateException, NamedFeatureCalculateException {
         ResultsVector rv = session.calculate(new FeatureInputMark(mark, Optional.of(DIM)));
         ResultsVectorTestUtilities.assertCalc(rv, expected1, expected2, expected3);
     }
@@ -150,7 +150,7 @@ public class FeatureListMPPTest {
     }
 
     private void testConstantsInList(FeatureInput params1, FeatureInput params2)
-            throws CreateException, InitException, NamedFeatureCalculationException {
+            throws CreateException, InitException, NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());

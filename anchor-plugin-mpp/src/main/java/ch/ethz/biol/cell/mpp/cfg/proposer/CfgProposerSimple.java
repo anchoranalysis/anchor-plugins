@@ -99,7 +99,7 @@ public class CfgProposerSimple extends CfgProposer {
     }
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return getBeanName();
     }
 }

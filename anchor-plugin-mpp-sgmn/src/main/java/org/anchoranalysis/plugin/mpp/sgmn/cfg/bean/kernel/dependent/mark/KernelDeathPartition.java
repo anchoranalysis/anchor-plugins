@@ -55,7 +55,7 @@ public class KernelDeathPartition extends KernelDeath<CfgFromPartition> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgFromPartition nrgExst,
             CfgFromPartition nrgNew)

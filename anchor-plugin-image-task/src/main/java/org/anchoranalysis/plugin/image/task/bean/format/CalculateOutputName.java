@@ -28,8 +28,10 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 
-class CalcOutputName {
+@AllArgsConstructor
+class CalculateOutputName {
 
     private int seriesIndex;
     private int numSeries;
@@ -39,17 +41,7 @@ class CalcOutputName {
 
     private boolean suppressSeries;
 
-    public CalcOutputName(
-            int seriesIndex, int numSeries, int t, int sizeT, boolean suppressSeries) {
-        super();
-        this.seriesIndex = seriesIndex;
-        this.numSeries = numSeries;
-        this.t = t;
-        this.sizeT = sizeT;
-        this.suppressSeries = suppressSeries;
-    }
-
-    public String calcOutputName(String existingName) {
+    public String outputName(String existingName) {
         String outputName = maybePrependTimeSeries(existingName);
 
         // Catch the case where a string is empty (a single stack, with numSeries=1 and sizeT=1) and

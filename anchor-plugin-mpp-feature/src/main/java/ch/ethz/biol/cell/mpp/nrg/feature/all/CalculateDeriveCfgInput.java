@@ -29,8 +29,8 @@ package ch.ethz.biol.cell.mpp.nrg.feature.all;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveCfgInput

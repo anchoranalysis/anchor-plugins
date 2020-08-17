@@ -69,7 +69,7 @@ class FindLargestMultipleWithin {
         }
 
         // Non-integral scale factors
-        ScaleFactor sf = ScaleFactorUtilities.calcRelativeScale(small, stayWithin);
+        ScaleFactor sf = ScaleFactorUtilities.relativeScale(small, stayWithin);
 
         int minFactor = minScaleFactorUnder(sf, maxScaleFactor);
 

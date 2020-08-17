@@ -35,29 +35,28 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
-import org.anchoranalysis.image.orientation.DirectionVector;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public abstract class FeatureMarkDirection extends FeatureMark {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private VectorInDirection directionVector;
+    @BeanField @Getter @Setter private VectorInDirection direction;
     // END BEAN PROPERTIES
 
-    private DirectionVector dv;
+    private Vector3d vectorInDirection;
 
     @Override
     protected void beforeCalc(FeatureInitParams paramsInit) throws InitException {
         super.beforeCalc(paramsInit);
-        dv = directionVector.createVector();
+        this.vectorInDirection = direction.createVector().createVector3d();
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof MarkEllipsoid)) {
             throw new FeatureCalculationException("Only supports MarkEllipsoids");
@@ -66,11 +65,10 @@ public abstract class FeatureMarkDirection extends FeatureMark {
         MarkEllipsoid mark = (MarkEllipsoid) input.get().getMark();
 
         Orientation orientation = mark.getOrientation();
-        RotationMatrix rotMatrix = orientation.createRotationMatrix();
-        return calcForEllipsoid(mark, orientation, rotMatrix, dv.createVector3d());
+        return calculateForEllipsoid(mark, orientation, orientation.createRotationMatrix(), vectorInDirection);
     }
 
-    protected abstract double calcForEllipsoid(
+    protected abstract double calculateForEllipsoid(
             MarkEllipsoid mark,
             Orientation orientation,
             RotationMatrix rotMatrix,

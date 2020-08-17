@@ -34,10 +34,10 @@ import org.anchoranalysis.image.orientation.Orientation;
 public class EccentricityAxisAligned extends FeatureMarkEccentricity {
 
     @Override
-    protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
-        double e0 = calcEccentricity(radii[1], radii[0]);
-        double e1 = calcEccentricity(radii[2], radii[1]);
-        double e2 = calcEccentricity(radii[2], radii[0]);
+    protected double eccentricityForEllipsoid(double[] radii, Orientation orientation) {
+        double e0 = eccentricity(radii[1], radii[0]);
+        double e1 = eccentricity(radii[2], radii[1]);
+        double e2 = eccentricity(radii[2], radii[0]);
         return (e0 + e1 + e2) / 3;
     }
 }

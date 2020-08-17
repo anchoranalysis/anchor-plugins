@@ -32,8 +32,8 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.anchor.mpp.feature.mark.MemoCollection;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

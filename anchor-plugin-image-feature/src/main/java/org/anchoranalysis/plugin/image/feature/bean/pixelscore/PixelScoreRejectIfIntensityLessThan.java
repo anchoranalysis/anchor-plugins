@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
@@ -43,7 +43,7 @@ public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
         int intensity = pixelVals[nrgChnlIndex];
 
@@ -51,6 +51,6 @@ public class PixelScoreRejectIfIntensityLessThan extends PixelScore {
             return 0;
         }
 
-        return item.calc(pixelVals);
+        return item.calculate(pixelVals);
     }
 }

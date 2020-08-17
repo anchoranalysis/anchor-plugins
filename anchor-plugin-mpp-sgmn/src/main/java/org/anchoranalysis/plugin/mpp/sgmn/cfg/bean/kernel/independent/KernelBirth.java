@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 /**
@@ -55,46 +55,46 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context)
+    public Optional<T> makeProposal(Optional<T> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
-        setMarksNew = proposeNewMarks(exst.get(), repeats, context);
+        setMarksNew = proposeNewMarks(existing.get(), repeats, context);
         return OptionalUtilities.flatMap(
-                setMarksNew, set -> calcForNewMark(exst.get(), set, context));
+                setMarksNew, set -> calculateForNewMark(existing.get(), set, context));
     }
 
     protected abstract Optional<Set<Mark>> proposeNewMarks(
-            T exst, int number, KernelCalcContext context);
+            T exst, int number, KernelCalculationContext context);
 
-    protected abstract Optional<T> calcForNewMark(
-            T exst, Set<Mark> listMarksNew, KernelCalcContext context)
+    protected abstract Optional<T> calculateForNewMark(
+            T exst, Set<Mark> listMarksNew, KernelCalculationContext context)
             throws KernelCalcNRGException;
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
 
-        double num = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
-        double dem = getProbPos() * propSize;
+        double numerator = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
+        double denominator = getProbPos() * proposalSize;
 
-        assert (num > 0);
-        if (dem == 0) {
+        assert (numerator > 0);
+        if (denominator == 0) {
             return 1.0;
         }
 
-        return Math.min((densityRatio * num) / dem, 1.0);
+        return Math.min((densityRatio * numerator) / denominator, 1.0);
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         return String.format("birth_%d(%s)", repeats, idStr(setMarksNew.get())); // NOSONAR
     }
 
@@ -103,7 +103,7 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
         return setMarksNew.map(KernelBirth::idArr).orElse(new int[] {});
     }
 
-    protected Optional<Set<Mark>> getMarkNew() {
+    protected Optional<Set<Mark>> marksNew() {
         return setMarksNew;
     }
 

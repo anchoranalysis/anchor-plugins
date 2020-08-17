@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

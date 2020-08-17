@@ -39,7 +39,7 @@ class OverlapRatioUtilities {
         return useMax ? Math::max : Math::min;
     }
 
-    public static double calcOverlapRatio(
+    public static double overlapRatio(
             VoxelizedMarkMemo obj1,
             VoxelizedMarkMemo obj2,
             double overlap,
@@ -54,12 +54,12 @@ class OverlapRatioUtilities {
         if (mip) {
             return overlap;
         } else {
-            double volume = calcVolumeAgg(obj1, obj2, regionID, funcAgg);
+            double volume = volumeAgg(obj1, obj2, regionID, funcAgg);
             return overlap / volume;
         }
     }
 
-    private static double calcVolumeAgg(
+    private static double volumeAgg(
             VoxelizedMarkMemo obj1,
             VoxelizedMarkMemo obj2,
             int regionID,

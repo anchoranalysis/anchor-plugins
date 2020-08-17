@@ -36,7 +36,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 public class OverlapRelativeToMaxVolume extends OverlapRelative {
 
     @Override
-    protected int calcDenominator(FeatureInputPairObjects params) {
+    protected int calculateDenominator(FeatureInputPairObjects params) {
         return OverlapRatioUtilities.denominatorMaxVolume(params);
     }
 }

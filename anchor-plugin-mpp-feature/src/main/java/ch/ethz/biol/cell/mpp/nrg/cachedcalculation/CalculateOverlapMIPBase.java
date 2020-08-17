@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.overlap.MaxIntensityProjectionPair;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -48,20 +48,17 @@ public abstract class CalculateOverlapMIPBase
         VoxelizedMarkMemo mark1 = params.getObj1();
         VoxelizedMarkMemo mark2 = params.getObj2();
 
-        assert (mark1 != null);
-        assert (mark2 != null);
+        VoxelizedMark voxelized1 = mark1.voxelized();
+        VoxelizedMark voxelized2 = mark2.voxelized();
 
-        VoxelizedMark pm1 = mark1.voxelized();
-        VoxelizedMark pm2 = mark2.voxelized();
-
-        if (!pm1.boundingBoxFlattened().intersection().existsWith(pm2.boundingBoxFlattened())) {
+        if (!voxelized1.boundingBoxFlattened().intersection().existsWith(voxelized2.boundingBoxFlattened())) {
             return 0.0;
         }
 
         MaxIntensityProjectionPair pair =
                 new MaxIntensityProjectionPair(
-                        pm1.voxelsMaximumIntensityProjection(),
-                        pm2.voxelsMaximumIntensityProjection(),
+                        voxelized1.voxelsMaximumIntensityProjection(),
+                        voxelized2.voxelsMaximumIntensityProjection(),
                         regionMembershipForMark(mark1),
                         regionMembershipForMark(mark2));
 

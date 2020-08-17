@@ -36,7 +36,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -62,22 +62,22 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     }
 
     @Override
-    public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context)
+    public Optional<T> makeProposal(Optional<T> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (exst.isPresent()) {
+        if (existing.isPresent()) {
             return Optional.empty();
         }
 
-        afterDeathProp = kernelDeath.makeProposal(exst, context);
+        afterDeathProp = kernelDeath.makeProposal(existing, context);
         return OptionalUtilities.flatMap(
                 afterDeathProp, prop -> kernelBirth.makeProposal(Optional.of(prop), context));
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntens,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -85,7 +85,7 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         assert (hasBeenInit);
         assert (kernelDeath != null);
         return String.format(
@@ -93,15 +93,15 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection, T nrgExst, T nrgNew)
             throws UpdateMarkSetException {
 
         OptionalUtilities.ifPresent(
                 afterDeathProp,
                 prop -> {
-                    kernelDeath.updateAfterAccpt(updatableMarkSetCollection, nrgExst, prop);
-                    kernelBirth.updateAfterAccpt(updatableMarkSetCollection, prop, nrgNew);
+                    kernelDeath.updateAfterAcceptance(updatableMarkSetCollection, nrgExst, prop);
+                    kernelBirth.updateAfterAcceptance(updatableMarkSetCollection, prop, nrgNew);
                 });
     }
 

@@ -82,13 +82,13 @@ public class PriorityQueueIndexRangeDownhill<T> {
         T ret = nextList.remove(0);
 
         if (nextList.isEmpty()) {
-            calcNewMaxCurrentValue();
+            calculateNewMaxCurrentValue();
         }
 
         return ret;
     }
 
-    public void calcNewMaxCurrentValue() {
+    public void calculateNewMaxCurrentValue() {
 
         for (int i = (nextIndexValue - 1); i >= 0; i--) {
 

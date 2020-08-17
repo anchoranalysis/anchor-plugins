@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.ImageMoments;
 
 /**
@@ -47,7 +47,7 @@ import org.anchoranalysis.math.moment.ImageMoments;
 public class RatioPrincipalAxisLength extends ImageMomentsBase {
 
     @Override
-    protected double calcFeatureResultFromMoments(ImageMoments moments)
+    protected double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException {
 
         moments.removeClosestToUnitZ();

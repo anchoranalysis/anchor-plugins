@@ -177,7 +177,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                 }
 
                 // Level calculated from combined histograms
-                int level = calcLevelCombinedHist(om, vertexNeighbors);
+                int level = calculateLevelCombinedHist(om, vertexNeighbors);
 
                 voxelsOutput.assignValue(level).toObject(om.getObject());
 
@@ -201,7 +201,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                 .mapToList(objectMask -> new ObjectMaskWithHistogram(objectMask, chnlIntensity));
     }
 
-    private int calcLevelCombinedHist(
+    private int calculateLevelCombinedHist(
             ObjectMaskWithHistogram objectMask, Collection<ObjectMaskWithHistogram> vertices)
             throws OperationFailedException {
 

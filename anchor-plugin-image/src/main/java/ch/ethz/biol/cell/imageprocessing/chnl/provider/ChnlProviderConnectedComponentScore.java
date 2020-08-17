@@ -63,11 +63,11 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
         Channel chnlOut =
                 ChannelFactory.instance()
                         .create(chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
-        populateChnl(chnl, chnlOut, lrc);
+        populateChannel(chnl, chnlOut, lrc);
         return chnlOut;
     }
 
-    private int calcOutValue(int pixelVal, int level) {
+    private int outValue(int pixelVal, int level) {
 
         if (pixelVal >= level) {
 
@@ -93,7 +93,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
         return (int) (div * mult);
     }
 
-    private void populateChnl(Channel regionIn, Channel regionOut, LevelResultCollection lrc) {
+    private void populateChannel(Channel regionIn, Channel regionOut, LevelResultCollection levels) {
 
         Voxels<ByteBuffer> voxelsIn = regionIn.voxels().asByte();
         Voxels<ByteBuffer> voxelsOut = regionOut.voxels().asByte();
@@ -116,9 +116,9 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
                     int val = ByteConverter.unsignedByteToInt(bbIn.get(index));
 
                     // Find closest point
-                    LevelResult lr = lrc.findClosestResult(point);
+                    LevelResult levelResult = levels.findClosestResult(point);
 
-                    int out = calcOutValue(val, lr.getLevel());
+                    int out = outValue(val, levelResult.getLevel());
 
                     bbOut.put((byte) out);
 

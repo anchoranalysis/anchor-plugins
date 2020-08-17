@@ -44,7 +44,7 @@ public class BlurGaussianEachSlice2D extends BlurStrategy {
     public void blur(VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
-        double sigma = calcSigma(dimensions, logger);
+        double sigma = calculateSigma(dimensions, logger);
 
         Extent e = voxels.any().extent();
         double[] sigmaArr = new double[] {sigma, sigma};

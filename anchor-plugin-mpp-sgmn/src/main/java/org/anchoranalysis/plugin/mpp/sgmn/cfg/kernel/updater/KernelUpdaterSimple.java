@@ -81,7 +81,7 @@ public class KernelUpdaterSimple<S, T> implements KernelUpdater<S, T> {
     private void updateAfterAccept(Kernel<S> kernel, Optional<S> crnt, S proposed)
             throws UpdateMarkSetException {
         OptionalUtilities.ifPresent(
-                crnt, c -> kernel.updateAfterAccpt(updatableMarkSetCollection, c, proposed));
+                crnt, c -> kernel.updateAfterAcceptance(updatableMarkSetCollection, c, proposed));
     }
 
     private void informAllKernelsAfterAccept(S cfgNRG) {

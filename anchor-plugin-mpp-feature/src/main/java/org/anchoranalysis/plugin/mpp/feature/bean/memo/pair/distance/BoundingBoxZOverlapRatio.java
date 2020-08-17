@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
@@ -53,7 +53,7 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
@@ -66,10 +66,10 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
             return 0.0;
         }
 
-        return calcOverlap(box1, box2, inputSessionless.dimensionsRequired());
+        return overlap(box1, box2, inputSessionless.dimensionsRequired());
     }
 
-    private double calcOverlap(BoundingBox box1, BoundingBox box2, ImageDimensions dim) {
+    private double overlap(BoundingBox box1, BoundingBox box2, ImageDimensions dim) {
 
         Optional<BoundingBox> boxOverlap = box1.intersection().withInside(box2, dim.extent());
         if (!boxOverlap.isPresent()) {

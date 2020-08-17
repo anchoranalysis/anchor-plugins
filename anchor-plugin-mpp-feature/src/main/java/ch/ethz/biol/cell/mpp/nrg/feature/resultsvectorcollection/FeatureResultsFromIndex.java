@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVectorCollection;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.results.ResultsVectorCollection;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
 public abstract class FeatureResultsFromIndex extends FeatureResults {
@@ -55,14 +55,14 @@ public abstract class FeatureResultsFromIndex extends FeatureResults {
                         "No feature-values exist, so this operation is undefined");
             }
 
-            return calcStatisticFromFeatureVal(arrayListFrom(rvc, index));
+            return statisticFromFeatureValue(arrayListFrom(rvc, index));
 
         } catch (GetOperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    protected abstract double calcStatisticFromFeatureVal(DoubleArrayList featureVals)
+    protected abstract double statisticFromFeatureValue(DoubleArrayList featureVals)
             throws FeatureCalculationException;
 
     private static DoubleArrayList arrayListFrom(ResultsVectorCollection rvc, int index) {

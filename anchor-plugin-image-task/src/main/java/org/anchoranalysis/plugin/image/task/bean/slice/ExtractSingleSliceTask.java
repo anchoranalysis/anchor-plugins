@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -141,7 +141,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
         try {
-            double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
+            double[] scores = calculateScoreForEachSlice(scoreFeature, nrgStack, logger);
 
             int optimaSliceIndex = findOptimaSlice(scores);
 
@@ -198,7 +198,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private double[] calcScoreForEachSlice(
+    private double[] calculateScoreForEachSlice(
             Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger)
             throws FeatureCalculationException {
         try {

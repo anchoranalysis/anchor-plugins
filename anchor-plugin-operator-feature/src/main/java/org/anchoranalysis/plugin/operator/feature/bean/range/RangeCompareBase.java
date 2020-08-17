@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
@@ -46,8 +46,8 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
-        return calcForVal(input.calc(featureToCalcInputVal()), input);
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
+        return calculateForValue(input.calc(featureToCalcInputVal()), input);
     }
 
     /** Boundary to define the minimum accepted value in the range */
@@ -57,7 +57,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     protected abstract double boundaryMax(SessionInput<T> input) throws FeatureCalculationException;
 
     /**
-     * Which feature to calculate the input-value? The result is then passed to {@link #calcForVal}
+     * Which feature to calculate the input-value? The result is then passed to {@link #calculateForValue}
      */
     protected abstract Feature<T> featureToCalcInputVal();
 
@@ -74,7 +74,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
      *     withinRangeValue function
      * @throws FeatureCalculationException
      */
-    private double calcForVal(double val, SessionInput<T> input)
+    private double calculateForValue(double val, SessionInput<T> input)
             throws FeatureCalculationException {
 
         if (val < boundaryMin(input)) {
@@ -89,7 +89,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("belowMinValue=%f,aboveMaxValue=%f", belowMinValue, aboveMaxValue);
     }
 }

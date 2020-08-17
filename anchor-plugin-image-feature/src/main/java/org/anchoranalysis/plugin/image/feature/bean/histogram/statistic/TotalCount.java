@@ -32,7 +32,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class TotalCount extends FeatureHistogramStatistic {
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) {
+    protected double calculateStatisticFrom(Histogram histogram) {
         return histogram.getTotalCount();
     }
 }

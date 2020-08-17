@@ -60,8 +60,8 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculat
     }
 
     @Override
-    protected double calcForPixel(int pxlValue, int level) {
-        return PixelScoreDifference.calcDiffFromValue(
+    protected double calculateForPixel(int pxlValue, int level) {
+        return PixelScoreDifference.differenceFromValue(
                 pxlValue, level, widthGreaterThan, widthLessThan, minDifference);
     }
 }

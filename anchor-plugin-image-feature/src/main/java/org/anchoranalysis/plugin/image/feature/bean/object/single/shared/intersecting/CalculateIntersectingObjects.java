@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;

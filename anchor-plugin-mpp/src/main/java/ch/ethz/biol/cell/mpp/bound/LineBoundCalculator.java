@@ -56,7 +56,7 @@ public class LineBoundCalculator extends BoundCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix)
+    public BidirectionalBound calculateBound(Point3d point, RotationMatrix rotMatrix)
             throws OperationFailedException {
 
         try {
@@ -66,7 +66,7 @@ public class LineBoundCalculator extends BoundCalculator {
             ResolvedBound minMax =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .calcMinMax(
+                            .calculateMinMax(
                                     outlineChnl.dimensions().resolution(),
                                     rotMatrix.getNumDim() >= 3);
 

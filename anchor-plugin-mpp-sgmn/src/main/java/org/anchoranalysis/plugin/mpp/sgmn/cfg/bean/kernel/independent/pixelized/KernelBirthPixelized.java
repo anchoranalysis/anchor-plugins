@@ -43,8 +43,8 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelBirth;
 
@@ -63,7 +63,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
 
     @Override
     protected Optional<Set<Mark>> proposeNewMarks(
-            CfgNRGPixelized exst, int number, KernelCalcContext context) {
+            CfgNRGPixelized exst, int number, KernelCalculationContext context) {
 
         Set<Mark> out = new HashSet<>();
         for (int i = 0; i < number; i++) {
@@ -73,8 +73,8 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
     }
 
     @Override
-    protected Optional<CfgNRGPixelized> calcForNewMark(
-            CfgNRGPixelized exst, Set<Mark> listMarksNew, KernelCalcContext context)
+    protected Optional<CfgNRGPixelized> calculateForNewMark(
+            CfgNRGPixelized exst, Set<Mark> listMarksNew, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
         ProposerContext propContext = context.proposer();
@@ -90,14 +90,14 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized exst,
-            CfgNRGPixelized accptd)
+            CfgNRGPixelized accepted)
             throws UpdateMarkSetException {
 
-        for (Mark m : getMarkNew().get()) {
-            VoxelizedMarkMemo memo = accptd.getMemoForMark(m);
+        for (Mark mark : marksNew().get()) {
+            VoxelizedMarkMemo memo = accepted.getMemoForMark(mark);
             exst.addToUpdatablePairList(updatableMarkSetCollection, memo);
         }
     }
@@ -117,7 +117,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
             return Optional.empty();
         }
 
-        return Optional.of(calcUpdatedNRG(exst, pmmMarkNew, propContext));
+        return Optional.of(calculateUpdatedNRG(exst, pmmMarkNew, propContext));
     }
 
     private boolean applyMarkProposer(VoxelizedMarkMemo pmmMarkNew, ProposerContext context)
@@ -130,7 +130,7 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
         }
     }
 
-    private static CfgNRGPixelized calcUpdatedNRG(
+    private static CfgNRGPixelized calculateUpdatedNRG(
             CfgNRGPixelized exst, VoxelizedMarkMemo pmmMark, ProposerContext propContext)
             throws KernelCalcNRGException {
 
@@ -140,14 +140,14 @@ public class KernelBirthPixelized extends KernelBirth<CfgNRGPixelized> {
             assert (pmmMark != null);
             newNRG.add(pmmMark, propContext.getNrgStack().getNrgStack());
 
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException("Cannot add pmmMarkNew", e);
         }
 
         return newNRG;
     }
 
-    private Mark proposeNewMark(KernelCalcContext context) {
+    private Mark proposeNewMark(KernelCalculationContext context) {
         return context.cfgGen().getCfgGen().newTemplateMark();
     }
 }

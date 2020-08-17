@@ -40,9 +40,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
@@ -100,7 +100,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
             FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
 
         // Reads histogram from file-system
         try {
@@ -126,7 +126,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                 | BeanDuplicateException
                 | OperationFailedException
                 | InitException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 

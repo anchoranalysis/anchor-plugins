@@ -27,7 +27,7 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -47,7 +47,7 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
 
             try {
                 double meanIntensity =
-                        IntensityMeanCalculator.calcMeanIntensityObject(chnl, object);
+                        IntensityMeanCalculator.calculateMeanIntensityObject(chnl, object);
 
                 if (meanIntensity == 0.0) {
                     // Special case. The mean can only be 0.0, if all pixels are 0

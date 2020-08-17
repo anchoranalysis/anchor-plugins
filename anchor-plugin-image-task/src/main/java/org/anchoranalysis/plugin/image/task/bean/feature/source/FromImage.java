@@ -36,8 +36,8 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -86,7 +86,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     protected ResultsVectorWithThumbnail calculateResultsForInput(
             ProvidesStackInput inputObject,
             InputProcessContext<FeatureList<FeatureInputStack>> context)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
 
         FeatureCalculatorFromProvider<FeatureInputStack> factory =
                 createCalculator(inputObject, context.getContext());
@@ -101,18 +101,18 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
                     results,
                     extractThumbnail(factory.getNrgStack(), context.isThumbnailsEnabled()));
         } catch (CreateException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
             FeatureList<FeatureInputStack> features)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         try {
             return factory.calculatorForAll(features).calculate(new FeatureInputStack());
         } catch (InitException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
@@ -127,12 +127,12 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
             ProvidesStackInput inputObject, BoundIOContext context)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         try {
             return new FeatureCalculatorFromProvider<>(
                     inputObject, Optional.ofNullable(getNrgStackProvider()), context);
         } catch (OperationFailedException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 }

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -56,10 +56,10 @@ public class AsObjectMask extends FeatureStack {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
 
         return input.forChild()
-                .calc(
+                .calculate(
                         item,
                         new CalculateDeriveObjectInput(nrgIndex),
                         new ChildCacheName(AsObjectMask.class, nrgIndex));

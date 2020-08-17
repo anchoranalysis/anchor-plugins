@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -46,7 +46,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
             int startV = ignoreZero ? 1 : 0;
 

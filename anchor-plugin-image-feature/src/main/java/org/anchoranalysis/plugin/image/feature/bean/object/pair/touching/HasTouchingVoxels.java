@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernel;
 public class HasTouchingVoxels extends TouchingVoxels {
 
     @Override
-    protected double calcWithIntersection(
+    protected double calculateWithIntersection(
             ObjectMask first, ObjectMask second, BoundingBox boxIntersect)
             throws FeatureCalculationException {
         return convertToInt(

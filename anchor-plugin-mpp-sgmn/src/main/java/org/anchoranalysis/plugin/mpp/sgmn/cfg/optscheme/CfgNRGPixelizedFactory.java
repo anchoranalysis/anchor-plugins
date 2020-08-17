@@ -34,13 +34,13 @@ import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgWithNRGTotal;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CfgNRGPixelizedFactory {
 
-    public static CfgNRGPixelized createFromCfg(Cfg cfg, KernelCalcContext context, Logger logger)
+    public static CfgNRGPixelized createFromCfg(Cfg cfg, KernelCalculationContext context, Logger logger)
             throws CreateException {
         try {
             return new CfgNRGPixelized(
@@ -48,7 +48,7 @@ public class CfgNRGPixelizedFactory {
                     context.proposer().getNrgStack(),
                     context.getNrgScheme().getSharedFeatures(),
                     logger);
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new CreateException(e);
         }
     }

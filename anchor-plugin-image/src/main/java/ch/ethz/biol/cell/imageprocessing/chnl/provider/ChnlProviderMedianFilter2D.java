@@ -110,7 +110,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
             }
         }
 
-        public int calcMedian() {
+        public int median() {
             int size = size();
             int medianIndex = size / 2;
 
@@ -163,7 +163,7 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
                         set.addColumn(x + kernelHalfWidth, yMin, yMax, bb, e);
                     }
 
-                    int median = set.calcMedian();
+                    int median = set.median();
 
                     bbOut.put(offset, (byte) median);
                     offset++;

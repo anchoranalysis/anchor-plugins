@@ -33,15 +33,15 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.SteepestCalc;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.Steepest;
 
 /** A sliding-buffer enhanced with other elements of internal state used to "visit" a pixel */
 final class SlidingBufferPlus {
 
-    private final SteepestCalc steepestCalc;
+    private final Steepest steepest;
 
-    /* The sliding buffer used for calculating the steepest-calc */
-    private final SlidingBuffer<?> slidingBufferSteepestCalc;
+    /* The sliding buffer used for calculating the steepest */
+    private final SlidingBuffer<?> slidingBufferSteepest;
 
     private final FindEqualVoxels findEqualVoxels;
     private final EncodedVoxels matS;
@@ -56,25 +56,25 @@ final class SlidingBufferPlus {
         this.matS = matS;
         this.minimaStore = minimaStore;
 
-        this.slidingBufferSteepestCalc = new SlidingBuffer<>(voxelsImg);
+        this.slidingBufferSteepest = new SlidingBuffer<>(voxelsImg);
 
         boolean do3D = voxelsImg.extent().z() > 1;
         this.findEqualVoxels = new FindEqualVoxels(voxelsImg, matS, do3D, objectMask);
-        this.steepestCalc =
-                new SteepestCalc(
-                        slidingBufferSteepestCalc, EncodedVoxels.ENCODING, do3D, true, objectMask);
+        this.steepest =
+                new Steepest(
+                        slidingBufferSteepest, EncodedVoxels.ENCODING, do3D, true, objectMask);
     }
 
     public SlidingBuffer<?> getSlidingBuffer() { // NOSONAR
-        return slidingBufferSteepestCalc;
+        return slidingBufferSteepest;
     }
 
     public int offsetSlice(Point3i point) {
-        return slidingBufferSteepestCalc.extent().offsetSlice(point);
+        return slidingBufferSteepest.extent().offsetSlice(point);
     }
 
     public int getG(int indxBuffer) {
-        return slidingBufferSteepestCalc.getCenter().getInt(indxBuffer);
+        return slidingBufferSteepest.getCenter().getInt(indxBuffer);
     }
 
     public EncodedIntBuffer getSPlane(int z) {
@@ -92,8 +92,8 @@ final class SlidingBufferPlus {
                 .makeBufferLowerCompleteForPlateau(matS, minimaStore);
     }
 
-    public int calcSteepestDescent(Point3i point, int val, int indxBuffer) {
-        return steepestCalc.calcSteepestDescent(point, val, indxBuffer);
+    public int steepestDescent(Point3i point, int val, int indxBuffer) {
+        return steepest.steepestDescent(point, val, indxBuffer);
     }
 
     public boolean isPlateau(int code) {

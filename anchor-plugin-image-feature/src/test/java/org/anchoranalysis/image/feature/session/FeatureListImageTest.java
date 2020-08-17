@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -71,10 +71,10 @@ public class FeatureListImageTest {
         RegisterBeanFactories.registerAllPackageBeanFactories();
     }
 
-    @Test(expected = NamedFeatureCalculationException.class)
+    @Test(expected = NamedFeatureCalculateException.class)
     public void testNoParams()
             throws InitException, FeatureCalculationException, CreateException,
-                    NamedFeatureCalculationException {
+                    NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
@@ -89,7 +89,7 @@ public class FeatureListImageTest {
     @Test
     public void testHistogram()
             throws InitException, FeatureCalculationException, CreateException,
-                    NamedFeatureCalculationException {
+                    NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputHistogram> session =
                 createAndStart(histogramFeatures(loader));
@@ -115,7 +115,7 @@ public class FeatureListImageTest {
 
     @Test
     public void testImage()
-            throws InitException, NamedFeatureCalculationException, CreateException,
+            throws InitException, NamedFeatureCalculateException, CreateException,
                     FeatureCalculationException {
 
         FeatureCalculatorMulti<FeatureInputSingleObject> session =

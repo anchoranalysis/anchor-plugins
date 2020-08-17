@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,7 +51,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
@@ -62,7 +62,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         // Distances from the center to each point on the outline
         DoubleArrayList distances = distancesToPoints(object.centerOfGravity(), pointsOutline);
 
-        return calcStatistic(distances);
+        return calculateStatistic(distances);
     }
 
     private static DoubleArrayList distancesToPoints(Point3d pointFrom, List<Point3i> pointsTo) {
@@ -76,7 +76,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         return distances;
     }
 
-    private double calcStatistic(DoubleArrayList distances) {
+    private double calculateStatistic(DoubleArrayList distances) {
         // Calculate Std Deviation
         int size = distances.size();
         double sum = Descriptive.sum(distances);

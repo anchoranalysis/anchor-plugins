@@ -30,7 +30,7 @@ import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver.QuadraticRoots;
@@ -46,7 +46,7 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class EllipsoidAxisRatio extends FeatureMarkDirection {
 
     @Override
-    protected double calcForEllipsoid(
+    protected double calculateForEllipsoid(
             MarkEllipsoid mark,
             Orientation orientation,
             RotationMatrix rotMatrix,
@@ -55,14 +55,14 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
 
         // Now we get
         QuadraticRoots roots =
-                solveEquation(mark.createRadiiArray(), calcBeta(rotMatrix, normalToPlane));
+                solveEquation(mark.createRadiiArray(), calculateBeta(rotMatrix, normalToPlane));
 
-        return calcRatio(roots);
+        return ratio(roots);
     }
 
-    private static Point3d calcBeta(RotationMatrix rotMatrix, Vector3d normalToPlane) {
+    private static Point3d calculateBeta(RotationMatrix rotMatrix, Vector3d normalToPlane) {
         normalToPlane.normalize();
-        return rotMatrix.calcRotatedPoint(new Point3d(normalToPlane));
+        return rotMatrix.rotatedPoint(new Point3d(normalToPlane));
     }
 
     private QuadraticRoots solveEquation(double[] radii, Point3d beta)
@@ -96,7 +96,7 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
         }
     }
 
-    private static double calcRatio(QuadraticRoots roots) {
+    private static double ratio(QuadraticRoots roots) {
         double r1 = Math.sqrt(roots.getRoot1());
         double r2 = Math.sqrt(roots.getRoot2());
 

@@ -71,8 +71,8 @@ public class OtsuWeighted extends CalculateLevel {
                         weightForeground, weightBackground);
 
         // Search for max between-class variance
-        int minIntensity = hist.calcMinimum() + 1;
-        int maxIntensity = hist.calcMaximum() - 1;
+        int minIntensity = hist.calculateMinimum() + 1;
+        int maxIntensity = hist.calculateMaximum() - 1;
 
         // If there's only zeroes
         if (maxIntensity == -1) {
@@ -117,7 +117,7 @@ public class OtsuWeighted extends CalculateLevel {
     }
 
     private static VarianceCalculator varianceCalculatorTotal(Histogram hist) {
-        return new VarianceCalculator(hist.calcSum(), hist.calcSumSquares(), hist.getTotalCount());
+        return new VarianceCalculator(hist.calculateSum(), hist.calculateSumSquares(), hist.getTotalCount());
     }
 
     private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {

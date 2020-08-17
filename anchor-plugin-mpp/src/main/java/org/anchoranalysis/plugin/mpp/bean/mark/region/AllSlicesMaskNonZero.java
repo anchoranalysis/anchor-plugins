@@ -36,7 +36,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 public class AllSlicesMaskNonZero extends SelectSlicesWithIndexBase {
 
     @Override
-    protected VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException {
-        return statisticsForAllSlices(pm, false);
+    protected VoxelStatistics extractFromVoxelized(VoxelizedMark mark) throws CreateException {
+        return statisticsForAllSlices(mark, false);
     }
 }

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.feature;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;

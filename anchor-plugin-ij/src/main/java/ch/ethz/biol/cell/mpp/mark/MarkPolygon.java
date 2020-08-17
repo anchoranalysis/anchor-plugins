@@ -54,10 +54,10 @@ public class MarkPolygon extends MarkAbstractPointList {
     private Point3d centroid;
 
     @Override
-    public byte evalPointInside(Point3d pt) {
+    public byte isPointInside(Point3d point) {
 
         // FOR NOW WE IGNORE THE SHELL RADIUS
-        if (containsPixel(pt.x(), pt.y()) || getPoints().contains(pt)) {
+        if (containsPixel(point.x(), point.y()) || getPoints().contains(point)) {
             return FLAG_SUBMARK_INSIDE;
         }
 
@@ -116,8 +116,8 @@ public class MarkPolygon extends MarkAbstractPointList {
         super.updateAfterPointsChange();
         Preconditions.checkArgument(!getPoints().isEmpty());
 
-        this.area = calcArea(getPoints());
-        this.centroid = calcCentroid(getPoints(), area);
+        this.area = area(getPoints());
+        this.centroid = centroid(getPoints(), area);
 
         polygon = createRoi(getPoints());
     }
@@ -137,7 +137,7 @@ public class MarkPolygon extends MarkAbstractPointList {
         return new PolygonRoi(xArr, yArr, points.size(), Roi.POLYGON);
     }
 
-    private static double calcArea(List<Point3d> points) {
+    private static double area(List<Point3d> points) {
         // http://en.wikipedia.org/wiki/Polygon
 
         int numPoints = points.size();
@@ -155,7 +155,7 @@ public class MarkPolygon extends MarkAbstractPointList {
         return sum / 2;
     }
 
-    private static Point3d calcCentroid(List<Point3d> points, double area) {
+    private static Point3d centroid(List<Point3d> points, double area) {
         // http://en.wikipedia.org/wiki/Polygon
         // Shoelace formula
 
@@ -183,12 +183,12 @@ public class MarkPolygon extends MarkAbstractPointList {
     }
 
     @Override
-    public int numRegions() {
+    public int numberRegions() {
         return 1;
     }
 
     @Override
-    public BoundingBox boxAllRegions(ImageDimensions bndScene) {
-        return box(bndScene, GlobalRegionIdentifiers.SUBMARK_INSIDE);
+    public BoundingBox boxAllRegions(ImageDimensions dimensions) {
+        return box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
     }
 }

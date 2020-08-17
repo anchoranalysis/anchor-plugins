@@ -62,7 +62,7 @@ class ScaleFactorCalculator {
                 new Extent(
                         extractMaxDimension(boundingBoxes.stream(), Extent::x),
                         extractMaxDimension(boundingBoxes.stream(), Extent::y));
-        return ScaleFactorUtilities.calcRelativeScale(maxInEachDimension, targetSize);
+        return ScaleFactorUtilities.relativeScale(maxInEachDimension, targetSize);
     }
 
     private static int extractMaxDimension(

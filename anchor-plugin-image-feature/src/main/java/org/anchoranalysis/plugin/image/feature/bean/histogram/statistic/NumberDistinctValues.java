@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -36,7 +36,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class NumberDistinctValues extends FeatureHistogramStatistic {
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         int numUniqueValues = 0;
 
         for (int v = 0; v < 255; v++) {

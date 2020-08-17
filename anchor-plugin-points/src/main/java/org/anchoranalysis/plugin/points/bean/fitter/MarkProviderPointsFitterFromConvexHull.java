@@ -96,7 +96,7 @@ public class MarkProviderPointsFitterFromConvexHull extends MarkProvider {
         int count = 0;
         for (Point3f point : points) {
             Point3d pointD = new Point3d(point);
-            byte membership = m.evalPointInside(pointD);
+            byte membership = m.isPointInside(pointD);
 
             if (rm.isMemberFlag(membership, flags)) {
                 count++;

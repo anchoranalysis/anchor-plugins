@@ -46,10 +46,10 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 
     @Override
-    protected VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException {
+    protected VoxelStatistics extractFromVoxelized(VoxelizedMark mark) throws CreateException {
 
-        Histogram histIndex = histogramForAllSlices(pm, false);
-        Histogram histNonZero = histogramForAllSlices(pm, true);
+        Histogram histIndex = histogramForAllSlices(mark, false);
+        Histogram histNonZero = histogramForAllSlices(mark, true);
 
         long numNonZero =
                 histNonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
@@ -57,10 +57,10 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(histIndex, numNonZero));
     }
 
-    private Histogram histogramForAllSlices(VoxelizedMark pm, boolean useNonZeroIndex)
+    private Histogram histogramForAllSlices(VoxelizedMark mark, boolean useNonZeroIndex)
             throws CreateException {
         try {
-            return statisticsForAllSlices(pm, useNonZeroIndex).histogram();
+            return statisticsForAllSlices(mark, useNonZeroIndex).histogram();
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
@@ -68,7 +68,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
 
     private static Histogram histogramExtractedFromRight(Histogram histIndex, long numNonZero) {
         Histogram hOut = histIndex.duplicate();
-        hOut = hOut.extractPixelsFromRight(numNonZero);
+        hOut = hOut.extractValuesFromRight(numNonZero);
         return hOut;
     }
 }

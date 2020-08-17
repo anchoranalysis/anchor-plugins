@@ -43,7 +43,7 @@ public class BlurGaussian3D extends BlurStrategy {
     public void blur(VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
-        double sigma = calcSigma(dimensions, logger);
+        double sigma = calculateSigma(dimensions, logger);
 
         GaussianBlurUtilities.applyBlur(
                 ImgLib2Wrap.wrap(voxels),

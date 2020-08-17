@@ -82,9 +82,9 @@ class GradientCalculator {
      * @param gradientOut where to output the gradient to
      * @throws CreateException
      */
-    public void calculateGradient(VoxelsWrapper signalIn, Voxels<FloatBuffer> gradientOut) {
+    public void gradient(VoxelsWrapper signalIn, Voxels<FloatBuffer> gradientOut) {
 
-        calcGradientImgLib2(
+        gradientImgLib2(
                 ImgLib2Wrap.wrap(signalIn), // Input channel
                 ImgLib2Wrap.wrapFloat(gradientOut) // Output channel
                 );
@@ -115,7 +115,7 @@ class GradientCalculator {
      * @param input input-image
      * @param output output-image
      */
-    private void calcGradientImgLib2(Img<? extends RealType<?>> input, Img<FloatType> output) {
+    private void gradientImgLib2(Img<? extends RealType<?>> input, Img<FloatType> output) {
 
         Cursor<? extends RealType<?>> in = Views.iterable(input).localizingCursor();
         RandomAccess<FloatType> oc = output.randomAccess();

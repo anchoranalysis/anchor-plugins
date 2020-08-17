@@ -35,7 +35,7 @@ import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
@@ -55,7 +55,7 @@ public class GradientMeanForAxis extends IntensityGradientBase {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         try {

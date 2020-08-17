@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -57,7 +57,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
         ObjectMask objectMask = createMask(input.get());
@@ -80,7 +80,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
             throws FeatureCalculationException {
 
-        Voxels<ByteBuffer> voxelsOutline = calcOutline(object, !suppressZ);
+        Voxels<ByteBuffer> voxelsOutline = outline(object, !suppressZ);
 
         Extent extent = object.boundingBox().extent();
 
@@ -104,7 +104,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         }
     }
 
-    private static Voxels<ByteBuffer> calcOutline(ObjectMask object, boolean useZ) {
+    private static Voxels<ByteBuffer> outline(ObjectMask object, boolean useZ) {
         OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, useZ);
         return ApplyKernel.apply(kernel, object.voxels(), object.binaryValuesByte());
     }

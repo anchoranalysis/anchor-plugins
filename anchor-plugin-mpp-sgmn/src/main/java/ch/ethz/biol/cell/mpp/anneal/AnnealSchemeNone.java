@@ -32,12 +32,12 @@ public class AnnealSchemeNone extends AnnealScheme {
 
     // Returns identity
     @Override
-    public final double calcTemp(int iter) {
+    public final double calculateTemperature(int iter) {
         return 1.0;
     }
 
     @Override
-    public final double crntTemp() {
+    public final double currentTemperature() {
         return 1.0;
     }
 }

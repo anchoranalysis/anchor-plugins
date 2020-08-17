@@ -46,7 +46,7 @@ public class PixelScoreCalculateLevel extends PixelScoreCalculateLevelBase {
     }
 
     @Override
-    protected double calcForPixel(int pxlValue, int level) {
+    protected double calculateForPixel(int pxlValue, int level) {
 
         if (pxlValue < level) {
 

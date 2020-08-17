@@ -32,13 +32,13 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
 
 public abstract class FeatureMarkEccentricity extends FeatureMark {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         Mark mark = input.get().getMark();
 
@@ -49,14 +49,14 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
         double[] radii = ((MarkConic) mark).radiiOrdered();
 
         if (radii.length == 2) {
-            return calcEccentricityForEllipse(radii);
+            return eccentricityForEllipse(radii);
         } else {
 
             if (!(mark instanceof MarkEllipsoid)) {
                 throw new FeatureCalculationException("mark must be of type MarkEllipsoid");
             }
 
-            return calcEccentricityForEllipsoid(radii, ((MarkEllipsoid) mark).getOrientation());
+            return eccentricityForEllipsoid(radii, ((MarkEllipsoid) mark).getOrientation());
         }
     }
 
@@ -66,7 +66,7 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
      * @param radii an array of length 3, ordered from largest radius to smallest
      * @return the eccentricity
      */
-    protected abstract double calcEccentricityForEllipsoid(double[] radii, Orientation orientation);
+    protected abstract double eccentricityForEllipsoid(double[] radii, Orientation orientation);
 
     /**
      * Calculates eccentricity in 2D-case
@@ -74,8 +74,8 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
      * @param radii an array of length 2, ordered from largest radius to smallest
      * @return the eccentricity
      */
-    private double calcEccentricityForEllipse(double[] radii) {
-        return calcEccentricity(radii[1], radii[0]);
+    private double eccentricityForEllipse(double[] radii) {
+        return eccentricity(radii[1], radii[0]);
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
      * @param semiMinorAxis length of semi-minor axis
      * @return the eccentricity
      */
-    protected static double calcEccentricity(double semiMajorAxis, double semiMinorAxis) {
+    protected static double eccentricity(double semiMajorAxis, double semiMinorAxis) {
         double ratio = semiMinorAxis / semiMajorAxis;
         return Math.sqrt(1.0 - Math.pow(ratio, 2.0));
     }

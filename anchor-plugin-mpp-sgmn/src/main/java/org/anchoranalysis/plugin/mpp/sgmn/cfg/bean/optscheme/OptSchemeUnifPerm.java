@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
@@ -67,7 +67,7 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
 
         S best = null;
 
-        KernelCalcContext context = initContext.calcContext(initContext.cfgGenContext());
+        KernelCalculationContext context = initContext.calculateContext(initContext.cfgGenContext());
 
         try {
             kernelProposer.initBeforeCalc(context);

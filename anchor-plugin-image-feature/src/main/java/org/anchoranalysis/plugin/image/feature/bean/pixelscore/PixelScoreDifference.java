@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreDifference extends PixelScore {
@@ -44,7 +44,7 @@ public class PixelScoreDifference extends PixelScore {
     @BeanField @Getter @Setter private int minDifference = 0;
     // END BEAN PROPERTIES
 
-    public static double calcDiffFromValue(
+    public static double differenceFromValue(
             int valFirst,
             int valSecond,
             double widthGreaterThan,
@@ -67,24 +67,24 @@ public class PixelScoreDifference extends PixelScore {
         }
     }
 
-    public static double calcDiffFromValue(
+    public static double differenceFromValue(
             int valFirst, int valSecond, double width, int minDifference) {
-        return calcDiffFromValue(valFirst, valSecond, width, width, minDifference);
+        return differenceFromValue(valFirst, valSecond, width, width, minDifference);
     }
 
-    public static double calcDiffFromParams(
+    public static double differenceFromParams(
             int[] pixelVals,
             int nrgChnlIndexFirst,
             int nrgChnlIndexSecond,
             double width,
             int minDifference) {
-        return calcDiffFromValue(
+        return differenceFromValue(
                 pixelVals[nrgChnlIndexFirst], pixelVals[nrgChnlIndexSecond], width, minDifference);
     }
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalculationException {
-        return calcDiffFromParams(
+    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+        return differenceFromParams(
                 pixelVals, nrgChnlIndexFirst, nrgChnlIndexSecond, width, minDifference);
     }
 }

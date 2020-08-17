@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
@@ -59,12 +59,12 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithChannel(ObjectMask object, Channel chnl)
+    protected double calculateWithChannel(ObjectMask object, Channel channel)
             throws FeatureCalculationException {
 
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
-                        outsideAtThreshold, do3D, object, binaryVoxels(chnl), ignoreAtThreshold);
+                        outsideAtThreshold, do3D, object, binaryVoxels(channel), ignoreAtThreshold);
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 

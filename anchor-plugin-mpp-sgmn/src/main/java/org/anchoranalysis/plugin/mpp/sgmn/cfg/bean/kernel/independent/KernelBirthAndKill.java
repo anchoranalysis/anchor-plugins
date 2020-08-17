@@ -47,7 +47,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
@@ -71,10 +71,10 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
 
     @Override
     public Optional<CfgNRGPixelized> makeProposal(
-            Optional<CfgNRGPixelized> exst, KernelCalcContext context)
+            Optional<CfgNRGPixelized> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
@@ -90,7 +90,7 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
         try {
             toKill =
                     KernelBirthAndKillHelper.determineKillObjects(
-                            memoNew, exst.get(), regionID, overlapRatioThreshold);
+                            memoNew, existing.get(), regionID, overlapRatioThreshold);
         } catch (OperationFailedException e) {
             throw new KernelCalcNRGException("Cannot add kill-objects", e);
         }
@@ -103,12 +103,12 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
         return OptionalUtilities.map(
                 pmmAdditional,
                 pmm ->
-                        KernelBirthAndKillHelper.calcUpdatedNRG(
-                                exst.get(), memoNew, pmm, toKill, propContext));
+                        KernelBirthAndKillHelper.updatedNRG(
+                                existing.get(), memoNew, pmm, toKill, propContext));
     }
 
     private Optional<VoxelizedMarkMemo> maybeMakeAdditionalBirth(
-            Mark markNew, CfgGen cfgGen, KernelCalcContext context) throws KernelCalcNRGException {
+            Mark markNew, CfgGen cfgGen, KernelCalculationContext context) throws KernelCalcNRGException {
         if (markProposerAdditionalBirth != null) {
             VoxelizedMarkMemo pmmAdditional =
                     KernelBirthAndKillHelper.makeAdditionalBirth(
@@ -133,15 +133,15 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
 
         double num = getProbNeg() * dimensions.calculateVolume() * poissonIntensity;
-        double dem = getProbPos() * propSize;
+        double dem = getProbPos() * proposalSize;
 
         assert num > 0;
         assert dem > 0;
@@ -154,12 +154,12 @@ public class KernelBirthAndKill extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         return String.format("birthAndKill(%d)", markNew.getId());
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized exst,
             CfgNRGPixelized accptd)

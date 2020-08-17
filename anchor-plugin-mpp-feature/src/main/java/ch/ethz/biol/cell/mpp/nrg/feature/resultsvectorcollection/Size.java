@@ -27,7 +27,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.results.FeatureResults;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.resultsvectorcollection.FeatureInputResults;
 
 public class Size extends FeatureResults {

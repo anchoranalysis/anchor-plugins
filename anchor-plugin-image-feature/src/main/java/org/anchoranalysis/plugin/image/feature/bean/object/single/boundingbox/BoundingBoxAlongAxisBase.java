@@ -33,7 +33,7 @@ import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -45,7 +45,7 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         FeatureInputSingleObject inputSessionless = input.get();
@@ -53,17 +53,17 @@ public abstract class BoundingBoxAlongAxisBase extends FeatureSingleObject {
         ReadableTuple3i point =
                 extractTupleForBoundingBox(inputSessionless.getObject().boundingBox());
 
-        return calcAxisValue(point);
+        return calculateAxisValue(point);
     }
 
     protected abstract ReadableTuple3i extractTupleForBoundingBox(BoundingBox box);
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("%s", axis);
     }
 
-    private double calcAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
+    private double calculateAxisValue(ReadableTuple3i point) throws FeatureCalculationException {
         try {
             return point.byDimension(AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {

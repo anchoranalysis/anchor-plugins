@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -35,9 +35,9 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return ShapeRegularityCalculator.calcShapeRegularity(centerSlice(input.get().getObject()));
+        return ShapeRegularityCalculator.calculateShapeRegularity(centerSlice(input.get().getObject()));
     }
 
     private ObjectMask centerSlice(ObjectMask object) {

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.orientation.DirectionVector;

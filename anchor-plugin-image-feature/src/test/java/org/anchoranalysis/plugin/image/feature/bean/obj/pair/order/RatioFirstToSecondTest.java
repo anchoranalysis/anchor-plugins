@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair.order;
 
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.RatioFirstToSecond;
 import org.anchoranalysis.plugin.image.feature.bean.obj.pair.ParamsFixtureHelper;
 import org.junit.Test;

@@ -58,8 +58,8 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
                     "Channel has zero x or y resolution. Cannot scale to min res.");
         }
 
-        int x = calcRatio(resolution.x(), minXYRes);
-        int y = calcRatio(resolution.y(), minXYRes);
+        int x = ratio(resolution.x(), minXYRes);
+        int y = ratio(resolution.y(), minXYRes);
 
         if (x < 0) {
             throw new OperationFailedException(
@@ -88,7 +88,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
     }
 
     // Returns x i.e. how much to downside where the factor is 2^x
-    private static int calcRatio(double cnrtRes, double minRes) {
+    private static int ratio(double cnrtRes, double minRes) {
 
         double ratio = minRes / cnrtRes;
 

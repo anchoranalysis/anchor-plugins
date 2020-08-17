@@ -67,26 +67,26 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
     @Override
     public Stack createFromStack(Stack stack) throws CreateException {
 
-        int numSlices = stack.dimensions().z();
+        int numberSlices = stack.dimensions().z();
 
-        int numColumns = calcNumColumns(numSlices);
+        int numberColumns = numberColumns(numberSlices);
 
         try {
             return stack.mapChannel(
-                    chnl ->
+                    channel ->
                             montageChnl(
-                                    chnl,
-                                    calcEffectiveColumns(numSlices, numColumns),
-                                    calcRowsForColumns(numSlices, numColumns),
-                                    calcFirstSlice(),
-                                    calcLastSlice(numSlices)));
+                                    channel,
+                                    fffectiveColumns(numberSlices, numberColumns),
+                                    rowsForColumns(numberSlices, numberColumns),
+                                    firstSlice(),
+                                    lastSlice(numberSlices)));
         } catch (OperationFailedException e) {
             throw new CreateException("Failed to execute map operation on a particular channel", e);
         }
     }
 
     private Channel montageChnl(
-            Channel in, int colsCalc, int rowsCalc, int firstSliceCalc, int lastSliceCalc) {
+            Channel in, int cols, int rows, int firstSlice, int lastSlice) {
 
         ImagePlus imp = IJWrap.createImagePlus(in);
 
@@ -94,18 +94,18 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
         ImagePlus res =
                 mm.makeMontage2(
                         imp,
-                        colsCalc,
-                        rowsCalc,
+                        cols,
+                        rows,
                         scale,
-                        firstSliceCalc,
-                        lastSliceCalc,
+                        firstSlice,
+                        lastSlice,
                         1,
                         borderWidth,
                         label);
         return IJWrap.chnlFromImagePlus(res, in.dimensions().resolution());
     }
 
-    private int calcNumColumns(int totalNumSlices) {
+    private int numberColumns(int totalNumSlices) {
         if (columns > 0) {
             return columns;
         } else {
@@ -114,7 +114,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
         }
     }
 
-    private int calcFirstSlice() {
+    private int firstSlice() {
         // ImageJ's slice indexing begins at 1, so we add 1 to our zero-based indexing
         if (sliceFirst >= 0) {
             return sliceFirst + 1;
@@ -123,7 +123,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
         }
     }
 
-    private int calcLastSlice(int totalNumSlices) {
+    private int lastSlice(int totalNumSlices) {
         // ImageJ's slice indexing begins at 1, so we add 1 to our zero-based indexing
         if (sliceLast >= 0) {
             return sliceLast + 1;
@@ -133,11 +133,11 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
     }
 
     // Possibly corrects if there are more columsn than slices
-    private static int calcEffectiveColumns(int totalNumSlices, int columns) {
+    private static int fffectiveColumns(int totalNumSlices, int columns) {
         return Math.min(totalNumSlices, columns);
     }
 
-    private static int calcRowsForColumns(int totalNumSlices, int columns) {
+    private static int rowsForColumns(int totalNumSlices, int columns) {
         return (int) Math.ceil(((double) totalNumSlices) / columns);
     }
 }

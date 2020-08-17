@@ -55,10 +55,10 @@ public class ObjectCollectionCompressionTest {
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
 
-        ObjectCollectionWithSize uncompressed = calcUncompressed(PATH_UNCOMPRESSED_OBJECTS);
+        ObjectCollectionWithSize uncompressed = calculateUncompressed(PATH_UNCOMPRESSED_OBJECTS);
 
         ObjectCollectionWithSize compressed =
-                calcCompressed(uncompressed.getObjects(), folder.getRoot().toPath());
+                calculateCompressed(uncompressed.getObjects(), folder.getRoot().toPath());
 
         double relativeSize = uncompressed.relativeSize(compressed);
 
@@ -68,7 +68,7 @@ public class ObjectCollectionCompressionTest {
         assertTrue(relativeSize > 6 && relativeSize < 6.1);
     }
 
-    private ObjectCollectionWithSize calcUncompressed(String pathIn) {
+    private ObjectCollectionWithSize calculateUncompressed(String pathIn) {
 
         // Read the object, and write it again, this time compressed
         ObjectCollection objects = testLoader.openObjectsFromTestPath(pathIn);
@@ -78,7 +78,7 @@ public class ObjectCollectionCompressionTest {
         return new ObjectCollectionWithSize(objects, size);
     }
 
-    private static ObjectCollectionWithSize calcCompressed(
+    private static ObjectCollectionWithSize calculateCompressed(
             ObjectCollection objectsUncompressed, Path root)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {

@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ConstantWeight;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.mark.extractweight.ExtractWeightFromMark;
@@ -56,7 +56,7 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
 
     @Override
     public Optional<CfgFromPartition> makeProposal(
-            Optional<CfgFromPartition> exst, KernelCalcContext context)
+            Optional<CfgFromPartition> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
         Optional<Cfg> cfg = InitCfgUtilities.propose(cfgProposer, context);
@@ -71,9 +71,9 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -82,12 +82,12 @@ public class KernelInitialCfgFromPartition extends KernelIndependent<CfgFromPart
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         return String.format("initialCfgWithPartition(size=%d)", this.lastCfg.size());
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgFromPartition exst,
             CfgFromPartition accptd)

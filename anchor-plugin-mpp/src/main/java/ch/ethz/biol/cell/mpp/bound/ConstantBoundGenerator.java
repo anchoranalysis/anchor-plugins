@@ -47,7 +47,7 @@ public class ConstantBoundGenerator extends BoundCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public BidirectionalBound calcBound(Point3d point, RotationMatrix rotMatrix) {
+    public BidirectionalBound calculateBound(Point3d point, RotationMatrix rotMatrix) {
         return new BidirectionalBound(Optional.of(constantBound), Optional.of(constantBound));
     }
 }

@@ -58,7 +58,7 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
         }
 
         try {
-            return ScaleFactorUtilities.calcRelativeScale(
+            return ScaleFactorUtilities.relativeScale(
                     dimensions.get().extent(), dimensionsTarget.create().extent());
         } catch (CreateException e) {
             throw new OperationFailedException(e);

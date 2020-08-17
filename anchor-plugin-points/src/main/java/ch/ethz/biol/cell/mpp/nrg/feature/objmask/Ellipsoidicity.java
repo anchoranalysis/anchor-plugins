@@ -27,7 +27,7 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.objmask;
 
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class Ellipsoidicity extends EllipsoidBase {

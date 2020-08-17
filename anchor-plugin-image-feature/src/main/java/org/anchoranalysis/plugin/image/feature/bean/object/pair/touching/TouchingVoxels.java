@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -51,7 +51,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
@@ -63,11 +63,11 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
             return 0;
         }
 
-        return calcWithIntersection(
+        return calculateWithIntersection(
                 inputSessionless.getFirst(), inputSessionless.getSecond(), boxIntersect.get());
     }
 
-    protected abstract double calcWithIntersection(
+    protected abstract double calculateWithIntersection(
             ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException;
 

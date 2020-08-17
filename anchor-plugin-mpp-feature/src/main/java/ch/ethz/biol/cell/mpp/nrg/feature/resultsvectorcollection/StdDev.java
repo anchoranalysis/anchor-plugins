@@ -32,7 +32,7 @@ import cern.jet.stat.Descriptive;
 public class StdDev extends FeatureResultsFromIndex {
 
     @Override
-    protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
+    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
         double sum = Descriptive.sum(featureVals);
         double var =
                 Descriptive.variance(

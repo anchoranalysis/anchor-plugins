@@ -137,7 +137,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         try {
             List<List<Point3i>> pointsXY =
                     getPointsFromOrientationXYProposer()
-                            .calcPoints(
+                            .calculatePoints(
                                     point,
                                     orientation,
                                     dimensions.z() > 1,

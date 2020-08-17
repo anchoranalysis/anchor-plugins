@@ -37,7 +37,7 @@ import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelInitialCfg extends KernelIndependent<Cfg> {
@@ -54,16 +54,16 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
     }
 
     @Override
-    public Optional<Cfg> makeProposal(Optional<Cfg> exst, KernelCalcContext context)
+    public Optional<Cfg> makeProposal(Optional<Cfg> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
         this.lastCfg = InitCfgUtilities.propose(cfgProposer, context);
         return lastCfg;
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -72,12 +72,12 @@ public class KernelInitialCfg extends KernelIndependent<Cfg> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         return String.format("initialCfg(size=%d)", this.lastCfg.map(Cfg::size).orElse(-1));
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection, Cfg exst, Cfg accptd)
             throws UpdateMarkSetException {
         // NOTHING TO DO

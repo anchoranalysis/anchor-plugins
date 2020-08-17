@@ -52,10 +52,10 @@ public abstract class PixelScoreCalculateLevelBase extends PixelScoreSingleChnl 
             throws InitException {
 
         try {
-            Histogram hist = histograms.get(histChnlIndex);
-            level = calculateLevel.calculateLevel(hist);
+            Histogram histogram = histograms.get(histChnlIndex);
+            level = calculateLevel.calculateLevel(histogram);
 
-            beforeCalcSetup(hist, level);
+            beforeCalcSetup(histogram, level);
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }
@@ -63,11 +63,11 @@ public abstract class PixelScoreCalculateLevelBase extends PixelScoreSingleChnl 
 
     @Override
     protected double deriveScoreFromPixelVal(int pixelVal) {
-        return calcForPixel(pixelVal, level);
+        return calculateForPixel(pixelVal, level);
     }
 
     protected abstract void beforeCalcSetup(Histogram hist, int level)
             throws OperationFailedException;
 
-    protected abstract double calcForPixel(int pxlValue, int level);
+    protected abstract double calculateForPixel(int pxlValue, int level);
 }

@@ -41,17 +41,17 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
 
     @Override
-    protected double calcEccentricityForEllipsoid(double[] radii, Orientation orientation) {
+    protected double eccentricityForEllipsoid(double[] radii, Orientation orientation) {
 
-        Tuple2<Double, Double> pair = selectTwoRadii(radii, calcAngles(orientation));
+        Tuple2<Double, Double> pair = selectTwoRadii(radii, angles(orientation));
 
-        return calcEccentricity(
+        return eccentricity(
                 pair._1(), // Major
                 pair._2() // Minor
                 );
     }
 
-    private static Double[] calcAngles(Orientation orientation) {
+    private static Double[] angles(Orientation orientation) {
 
         RotationMatrix rotMatrix = orientation.createRotationMatrix();
 
@@ -61,15 +61,15 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
         return IntStream.range(0, 3)
                 .mapToObj(
                         index ->
-                                calcAngleForDimension(
+                                angleForDimension(
                                         index, rotMatrix, unitVectorZ, unitVectorZRev))
                 .toArray(Double[]::new);
     }
 
-    private static double calcAngleForDimension(
+    private static double angleForDimension(
             int dimIndex, RotationMatrix rotMatrix, Vector3d unitVectorZ, Vector3d unitVectorZRev) {
 
-        Vector3d rot = new Vector3d(rotMatrix.calcRotatedPoint(unitVectorInDirection(dimIndex)));
+        Vector3d rot = new Vector3d(rotMatrix.rotatedPoint(unitVectorInDirection(dimIndex)));
 
         return Math.min(
                 cosAngleBetweenVectors(rot, unitVectorZ),

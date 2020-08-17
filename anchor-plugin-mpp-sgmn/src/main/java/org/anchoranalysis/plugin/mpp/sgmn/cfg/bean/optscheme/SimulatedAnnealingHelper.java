@@ -96,7 +96,7 @@ class SimulatedAnnealingHelper {
 
         int iter = 0;
         do {
-            optStep.setTemperature(annealScheme.calcTemp(iter));
+            optStep.setTemperature(annealScheme.calculateTemperature(iter));
 
             applyKernelToOptStep(
                     optStep,

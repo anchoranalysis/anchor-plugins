@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class AbsoluteValue<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
@@ -37,12 +37,12 @@ public class AbsoluteValue<T extends FeatureInput> extends FeatureGenericSingleE
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return Math.abs(input.calc(getItem()));
     }
 
     @Override
-    public String getDscrLong() {
-        return String.format("abs(%s)", getItem().getDscrLong());
+    public String descriptionLong() {
+        return String.format("abs(%s)", getItem().descriptionLong());
     }
 }

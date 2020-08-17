@@ -46,11 +46,11 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
@@ -87,10 +87,10 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
     @Override
     public Optional<CfgNRGPixelized> makeProposal(
-            Optional<CfgNRGPixelized> exst, KernelCalcContext context)
+            Optional<CfgNRGPixelized> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
@@ -103,8 +103,8 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
             return Optional.empty();
         }
 
-        VoxelizedMarkMemo pmmSrc = exst.get().getMemoForMark(pair.getSource());
-        VoxelizedMarkMemo pmmDest = exst.get().getMemoForMark(pair.getDestination());
+        VoxelizedMarkMemo pmmSrc = existing.get().getMemoForMark(pair.getSource());
+        VoxelizedMarkMemo pmmDest = existing.get().getMemoForMark(pair.getDestination());
 
         // How and why does this happen?
         if (pmmSrc == null || pmmDest == null) {
@@ -131,7 +131,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
         return Optional.of(
                 createCfgNRG(
                         markAdded.get(),
-                        exst.get(),
+                        existing.get(),
                         propContext.getNrgStack(),
                         propContext.getRegionMap()));
     }
@@ -151,7 +151,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.rmvTwo(srcIndex, destIndex, nrgStack.getNrgStack());
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove indexes %d and %d", srcIndex, destIndex), e);
         }
@@ -160,7 +160,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
 
         try {
             newNRG.add(pmm, nrgStack.getNrgStack());
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException("Cannot add pmm", e);
         }
 
@@ -168,9 +168,9 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -178,7 +178,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized exst,
             CfgNRGPixelized accptd)
@@ -216,7 +216,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         if (pair != null && pair.getSource() != null && pair.getDestination() != null) {
             return String.format(
                     "merge %d and %d into %d",

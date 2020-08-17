@@ -62,7 +62,7 @@ public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
     // END BEAN PARAMTERS
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return String.format("%s", getBeanName());
     }
 
@@ -87,7 +87,7 @@ public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
         TransformationContext transformationContext =
                 new TransformationContext(
                         initContext.getDualStack().getNrgStack().dimensions(),
-                        initContext.calcContext(cfgGenContext),
+                        initContext.calculateContext(cfgGenContext),
                         initContext.getLogger());
 
         T best =

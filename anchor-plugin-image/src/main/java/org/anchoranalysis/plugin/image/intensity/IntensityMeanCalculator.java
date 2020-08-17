@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -41,12 +41,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
 
-    public static double calcMeanIntensityObject(Channel chnl, ObjectMask object)
+    public static double calculateMeanIntensityObject(Channel chnl, ObjectMask object)
             throws FeatureCalculationException {
-        return calcMeanIntensityObject(chnl, object, false);
+        return calculateMeanIntensityObject(chnl, object, false);
     }
 
-    public static double calcMeanIntensityObject(
+    public static double calculateMeanIntensityObject(
             Channel chnl, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
         checkContained(object.boundingBox(), chnl.dimensions().extent());

@@ -27,10 +27,9 @@
 package org.anchoranalysis.test.feature.plugins;
 
 import static org.junit.Assert.assertTrue;
-
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResultsVectorTestUtilities {

@@ -30,8 +30,8 @@ import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -54,7 +54,7 @@ class CalculateOutlineNumberVoxelFaces
      */
     private final boolean suppress3D;
 
-    private static int calcSurfaceSize(
+    private static int calculateSurfaceSize(
             ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D)
             throws OperationFailedException {
 
@@ -88,7 +88,7 @@ class CalculateOutlineNumberVoxelFaces
     @Override
     protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
         try {
-            return calcSurfaceSize(
+            return calculateSurfaceSize(
                     params.getObject(), params.dimensionsRequired(), mip, suppress3D);
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);

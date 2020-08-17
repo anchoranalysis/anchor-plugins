@@ -27,16 +27,16 @@
 package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class Min extends FeatureHistogramStatistic {
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
-            return histogram.calcMinimum();
+            return histogram.calculateMinimum();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

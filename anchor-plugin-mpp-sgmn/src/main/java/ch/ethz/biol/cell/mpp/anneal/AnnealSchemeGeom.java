@@ -46,13 +46,13 @@ public class AnnealSchemeGeom extends AnnealScheme {
 
     // Guaranteed to be called only once for each iteration
     @Override
-    public final double calcTemp(int iter) {
+    public final double calculateTemperature(int iter) {
         this.currentTemp *= this.rate;
         return this.currentTemp;
     }
 
     @Override
-    public final double crntTemp() {
+    public final double currentTemperature() {
         return this.currentTemp;
     }
 }

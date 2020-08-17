@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -147,7 +147,7 @@ public class ExportFeaturesTaskTest {
                 });
 
         // If caching is working, then the feature should be calculated exactly once
-        verify(feature, times(1)).calc(any());
+        verify(feature, times(1)).calculate(any());
     }
 
     /**
