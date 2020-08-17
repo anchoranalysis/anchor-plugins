@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
@@ -27,68 +28,75 @@ import org.junit.Test;
 
 public class OutlinePreserveRelativeSizeTest {
 
-    private static final SizeXY SIZE = new SizeXY(300,200);
-    
+    private static final SizeXY SIZE = new SizeXY(300, 200);
+
     private static final int NUMBER_INTERSECTING = 4;
     private static final int NUMBER_NOT_INTERSECTING = 2;
-    
+
     private static final ObjectCollection OBJECTS =
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
-                    NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);  
+                    NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
 
-    
     private static final Stack BACKGROUND = NRGStackFixture.create(true, false).asStack();
-    
+
     @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
-    
+
     @Test
     public void testThumbnails() throws OperationFailedException, CreateException {
-        
+
         List<DisplayStack> thumbnails = createAndWriteThumbnails();
-        
-        assertEquals("number of thumbnails", thumbnails.size(), NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING);
-        for( DisplayStack thumbnail : thumbnails ) {
+
+        assertEquals(
+                "number of thumbnails",
+                thumbnails.size(),
+                NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING);
+        for (DisplayStack thumbnail : thumbnails) {
             assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.dimensions().extent());
         }
-        
-        DualComparer comparer = DualComparerFactory.compareTemporaryFolderToTest(writer.getFolder(), "thumbnails", "thumbnails01");
-        assertTrue("thumbnails are identical to saved copy", comparer.compareTwoSubdirectories(".") );
+
+        DualComparer comparer =
+                DualComparerFactory.compareTemporaryFolderToTest(
+                        writer.getFolder(), "thumbnails", "thumbnails01");
+        assertTrue(
+                "thumbnails are identical to saved copy", comparer.compareTwoSubdirectories("."));
     }
-    
-    /** 
+
+    /**
      * Creates thumbnails and writes them to the temporary folder
-     *  
-     * @throws OperationFailedException */
+     *
+     * @throws OperationFailedException
+     */
     private List<DisplayStack> createAndWriteThumbnails() throws OperationFailedException {
         OutlinePreserveRelativeSize outline = createOutline();
-        outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND) );
-        
+        outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
+
         try {
             List<DisplayStack> thumbnails = thumbnailsFor(outline, OBJECTS);
-            writer.writeList("thumbnails", thumbnails );
-            outline.end();        
+            writer.writeList("thumbnails", thumbnails);
+            outline.end();
             return thumbnails;
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-    
-    private static List<DisplayStack> thumbnailsFor(OutlinePreserveRelativeSize outline, ObjectCollection objects) throws CreateException {
-        return objects.stream().mapToList( object->
-            outline.thumbnailFor( ObjectCollectionFactory.of(object) )
-        );
+
+    private static List<DisplayStack> thumbnailsFor(
+            OutlinePreserveRelativeSize outline, ObjectCollection objects) throws CreateException {
+        return objects.stream()
+                .mapToList(object -> outline.thumbnailFor(ObjectCollectionFactory.of(object)));
     }
-        
+
     private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {
-        return new StreamableCollection<>(() -> objects.streamStandardJava().map(ObjectMask::boundingBox));
+        return new StreamableCollection<>(
+                () -> objects.streamStandardJava().map(ObjectMask::boundingBox));
     }
-    
+
     private static OutlinePreserveRelativeSize createOutline() {
         OutlinePreserveRelativeSize outline = new OutlinePreserveRelativeSize();
-        outline.setColorUnselectedObjects( new RGBColorBean(Color.BLUE));
+        outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
         outline.setOutlineWidth(1);
         outline.setSize(SIZE);
-        outline.setInterpolator( new InterpolatorBeanLanczos() );
+        outline.setInterpolator(new InterpolatorBeanLanczos());
         return outline;
     }
 }

@@ -79,7 +79,8 @@ public class WatershedYeongTest {
     }
 
     private ObjectMask maskAsObject(String path) {
-        return new ObjectMask(BinaryVoxelsFactory.reuseByte( channelFor(PATH_MASK).voxels().asByte() ));
+        return new ObjectMask(
+                BinaryVoxelsFactory.reuseByte(channelFor(PATH_MASK).voxels().asByte()));
     }
 
     private Channel channelFor(String path) {

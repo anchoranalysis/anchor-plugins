@@ -75,8 +75,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
             // Are we missing a Z slice?
             for (int z = 0; z < bvb.extent().z(); z++) {
 
-                ImageProcessor ip =
-                        IJWrap.imageProcessorByte(bvb.voxels().slices(), z);
+                ImageProcessor ip = IJWrap.imageProcessorByte(bvb.voxels().slices(), z);
                 binaryPlugin.run(ip);
             }
         }
@@ -91,10 +90,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
 
         try {
             BinaryVoxels<ByteBuffer> bvoxelsOut = doCommand(bvb, command, iterations);
-            return new Mask(
-                    bvoxelsOut,
-                    mask.dimensions().resolution()
-                    );
+            return new Mask(bvoxelsOut, mask.dimensions().resolution());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

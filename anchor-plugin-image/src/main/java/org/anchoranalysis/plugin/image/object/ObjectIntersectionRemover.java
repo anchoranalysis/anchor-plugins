@@ -1,18 +1,20 @@
 package org.anchoranalysis.plugin.image.object;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectIntersectionRemover {
 
-    public static ObjectCollection removeIntersectingVoxels(ObjectCollection objects, ImageDimensions dimensions, boolean errorDisconnectedObjects) throws OperationFailedException {
+    public static ObjectCollection removeIntersectingVoxels(
+            ObjectCollection objects, ImageDimensions dimensions, boolean errorDisconnectedObjects)
+            throws OperationFailedException {
         ObjectCollection objectsDuplicated = objects.duplicate();
 
         for (int i = 0; i < objects.size(); i++) {
@@ -66,18 +68,19 @@ public class ObjectIntersectionRemover {
         assignOffVoxels(objectWrite, objectRead, intersection);
         assignOffVoxels(objectRead, objectWriteDuplicated, intersection);
     }
-    
+
     /**
      * Sets voxels to be OFF if they match a (a certain part of a) a second-mask
-     * 
+     *
      * @param object the object-mask
-     * @param restrictTo only consider this part of the mask (expressed in global coordinates, and whose extent must be the same as {@code boxToBeAssigned}
+     * @param restrictTo only consider this part of the mask (expressed in global coordinates, and
+     *     whose extent must be the same as {@code boxToBeAssigned}
      */
-    private static void assignOffVoxels(ObjectMask objectToAlter, ObjectMask object, BoundingBox restrictTo) {
-        objectToAlter.assignOff()
-        .toObject(object, restrictTo);
+    private static void assignOffVoxels(
+            ObjectMask objectToAlter, ObjectMask object, BoundingBox restrictTo) {
+        objectToAlter.assignOff().toObject(object, restrictTo);
     }
-    
+
     private static void maybeErrorDisconnectedObjects(ObjectMask objectWrite, String description)
             throws OperationFailedException {
         if (!objectWrite.checkIfConnected()) {

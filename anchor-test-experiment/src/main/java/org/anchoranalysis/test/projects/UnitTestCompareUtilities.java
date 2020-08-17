@@ -51,8 +51,6 @@ public class UnitTestCompareUtilities {
      */
     public static DualComparer execExperiment(
             String experimentName, String experimentIdentifierOutput) {
-        
-        
 
         String pathTestDataFolder = createPathTestDataFolder(experimentName);
 
@@ -64,7 +62,10 @@ public class UnitTestCompareUtilities {
                 Optional.of(createPathReplacementInput(pathTestDataFolder)),
                 Optional.of(createPathReplacementOutput(pathTestDataFolder)));
 
-        return DualComparerFactory.compareTwoSubdirectoriesInLoader(testLoader, createPathSavedOutput(experimentName), createPathOutput(experimentIdentifierOutput));
+        return DualComparerFactory.compareTwoSubdirectoriesInLoader(
+                testLoader,
+                createPathSavedOutput(experimentName),
+                createPathOutput(experimentIdentifierOutput));
     }
 
     /**
@@ -106,7 +107,8 @@ public class UnitTestCompareUtilities {
         String pathOutput = createPathOutput(experimentIdentifierOutput);
         String pathSavedOutput = createPathSavedOutput(experimentName);
 
-        return DualComparerFactory.compareTwoSubdirectoriesInLoader(testLoader, pathSavedOutput, testLoaderTemp, pathOutput);
+        return DualComparerFactory.compareTwoSubdirectoriesInLoader(
+                testLoader, pathSavedOutput, testLoaderTemp, pathOutput);
     }
 
     private static String createPathExperiment(String experimentName) {

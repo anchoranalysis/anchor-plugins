@@ -67,9 +67,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
      * @throws FeatureCalculationException
      */
     protected abstract double deriveScore(
-            double featureValue,
-            double mean,
-            FeatureResultSupplier stdDev)
+            double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException;
 
     @Override

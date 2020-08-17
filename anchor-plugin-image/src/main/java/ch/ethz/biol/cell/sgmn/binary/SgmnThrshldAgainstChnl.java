@@ -60,9 +60,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 
     @Override
     public BinaryVoxels<ByteBuffer> segment(
-            VoxelsWrapper voxels,
-            BinarySegmentationParameters params,
-            Optional<ObjectMask> object)
+            VoxelsWrapper voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
             throws SegmentationFailedException {
 
         Voxels<?> voxelsIn = voxels.any();
@@ -109,9 +107,9 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
 
     /**
      * Creates voxels to be outputted
-     * <p>
-     * If the input voxels are 8-bit we do it in place, otherwise, we create a new binary-voxels
-     * 
+     *
+     * <p>If the input voxels are 8-bit we do it in place, otherwise, we create a new binary-voxels
+     *
      * @param voxels
      * @return
      */

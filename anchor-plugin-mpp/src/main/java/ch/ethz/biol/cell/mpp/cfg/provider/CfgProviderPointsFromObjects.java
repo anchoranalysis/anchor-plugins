@@ -59,8 +59,7 @@ public class CfgProviderPointsFromObjects extends CfgProvider {
 
             out.add(
                     MarkPointListFactory.create(
-                            PointsFromObject.listFrom3d(object),
-                            i // We assign an unique integer ID
+                            PointsFromObject.listFrom3d(object), i // We assign an unique integer ID
                             ));
         }
         return out;

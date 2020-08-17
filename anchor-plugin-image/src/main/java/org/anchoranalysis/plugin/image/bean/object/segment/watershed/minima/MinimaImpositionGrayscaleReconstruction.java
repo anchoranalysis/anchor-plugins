@@ -73,7 +73,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         VoxelsWrapper voxelsIntensity = chnl.voxels();
 
         VoxelsAssigner zeroAssigner = voxelsIntensity.assignValue(0);
-        
+
         // We set the EDM to 0 at the points of the minima
         objects.forEach(zeroAssigner::toObject);
 
@@ -82,9 +82,8 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
         if (containingMask.isPresent()) {
             voxelsIntensity
                     .any()
-                    .assignValue((int) voxelsIntensity.getVoxelDataType().maxValue()).toObject(
-                            containingMask.get()
-                    );
+                    .assignValue((int) voxelsIntensity.getVoxelDataType().maxValue())
+                    .toObject(containingMask.get());
         }
 
         VoxelsWrapper markerForReconstruction =
@@ -96,16 +95,14 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
         return ChannelFactory.instance().create(reconBuffer.any(), chnl.dimensions().resolution());
     }
-    
-    private VoxelsWrapper createMarkerImageFromGradient(
-            Mask marker,
-            VoxelsWrapper gradientImage) {
+
+    private VoxelsWrapper createMarkerImageFromGradient(Mask marker, VoxelsWrapper gradientImage) {
 
         VoxelsWrapper out =
                 VoxelsFactory.instance()
                         .create(gradientImage.any().extent(), gradientImage.getVoxelDataType());
         out.assignValue((int) gradientImage.getVoxelDataType().maxValue()).toAll();
-        
+
         ObjectMask object = new ObjectMask(marker.binaryVoxels());
         gradientImage.copyVoxelsTo(object, out, object.boundingBox());
         return out;

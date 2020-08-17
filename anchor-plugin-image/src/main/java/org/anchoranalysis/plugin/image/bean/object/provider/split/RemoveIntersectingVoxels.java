@@ -48,11 +48,11 @@ public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimens
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects)
-            throws CreateException {
-        
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+
         try {
-            return ObjectIntersectionRemover.removeIntersectingVoxels(objects, createDimensions(), errorDisconnectedObjects);
+            return ObjectIntersectionRemover.removeIntersectingVoxels(
+                    objects, createDimensions(), errorDisconnectedObjects);
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

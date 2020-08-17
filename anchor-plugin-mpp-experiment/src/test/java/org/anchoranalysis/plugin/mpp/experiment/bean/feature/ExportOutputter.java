@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /** Helpful routines and constants related to outputting for {@link ExportFeaturesTaskTest} */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExportOutputter {
 
     // Saved output locations for particular tests

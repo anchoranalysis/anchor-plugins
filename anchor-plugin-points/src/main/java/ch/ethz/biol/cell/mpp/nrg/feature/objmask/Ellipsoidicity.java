@@ -36,7 +36,6 @@ public class Ellipsoidicity extends EllipsoidBase {
     protected double calc(FeatureInputSingleObject input, MarkEllipsoid me)
             throws FeatureCalculationException {
 
-        return EllipticityCalculatorHelper.calc(
-                input.getObject(), me, input.dimensionsRequired());
+        return EllipticityCalculatorHelper.calc(input.getObject(), me, input.dimensionsRequired());
     }
 }

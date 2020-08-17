@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.error.AnchorIOException;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {
 
     /** The debug-mode for everything that isn't the main input */

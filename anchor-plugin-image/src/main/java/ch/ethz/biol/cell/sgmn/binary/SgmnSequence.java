@@ -71,7 +71,8 @@ public class SgmnSequence extends BinarySegmentation {
 
         // A bounding-box capturing what part of the scene is being segmented
         BoundingBox box =
-                objectMask.map(ObjectMask::boundingBox)
+                objectMask
+                        .map(ObjectMask::boundingBox)
                         .orElseGet(() -> new BoundingBox(voxels.any()));
 
         // A mask that evolves as we move through each segmentation to be increasingly smaller.

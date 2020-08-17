@@ -53,7 +53,9 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
     public Channel createFromChannel(Channel channel) throws CreateException {
 
         return createFor(
-                channel, objects.create(), DimChecker.createSameSize(chnlOutput, "chnlOutput", channel));
+                channel,
+                objects.create(),
+                DimChecker.createSameSize(chnlOutput, "chnlOutput", channel));
     }
 
     protected abstract Channel createFor(

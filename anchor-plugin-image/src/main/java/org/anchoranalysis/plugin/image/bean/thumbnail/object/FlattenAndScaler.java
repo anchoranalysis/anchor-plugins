@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -49,37 +49,46 @@ import org.anchoranalysis.image.stack.Stack;
 
 @RequiredArgsConstructor
 class FlattenAndScaler {
-    
+
     /** scale-factor to apply to objects and stacks */
     @Getter private final ScaleFactor scaleFactor;
+
     private final Interpolator interpolator;
 
-    /**
-     * A scaled version of the objects
-     */
+    /** A scaled version of the objects */
     private ScaledObjectCollection objectsScaled;
-    
+
     /**
-     * An efficiently searchable index of the unscaled objects, indexed by their scaled bounding-boxes
+     * An efficiently searchable index of the unscaled objects, indexed by their scaled
+     * bounding-boxes
      */
     private ObjectCollectionRTree objectsIndexed;
 
     /**
-     * Constructor 
-     * 
-     * @param boundingBoxes supplies a stream of bounding-boxes that specify each unscaled regions that we will generate thumbnails for
+     * Constructor
+     *
+     * @param boundingBoxes supplies a stream of bounding-boxes that specify each unscaled regions
+     *     that we will generate thumbnails for
      * @param allObjects all the objects that can appear in the thumbnails
      * @param numberBoundingBoxes the total number of bounding-boxes in the stream
      * @param interpolator interpolator for scaling stack
      * @param targetSize the target size which objects will be scaled-down to fit inside
-     * @throws OperationFailedException if there are too many objects 
+     * @throws OperationFailedException if there are too many objects
      */
-    public FlattenAndScaler(StreamableCollection<BoundingBox> boundingBoxes, ObjectCollection allObjects, Interpolator interpolator, Extent targetSize) throws OperationFailedException {
-        this.scaleFactor = ScaleFactorCalculator.factorSoEachBoundingBoxFitsIn(boundingBoxes, targetSize);
+    public FlattenAndScaler(
+            StreamableCollection<BoundingBox> boundingBoxes,
+            ObjectCollection allObjects,
+            Interpolator interpolator,
+            Extent targetSize)
+            throws OperationFailedException {
+        this.scaleFactor =
+                ScaleFactorCalculator.factorSoEachBoundingBoxFitsIn(boundingBoxes, targetSize);
         this.interpolator = interpolator;
 
-        this.objectsScaled = allObjects.scale(scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
-        this.objectsIndexed = new ObjectCollectionRTree(objectsScaled.asCollectionOrderNotPreserved());
+        this.objectsScaled =
+                allObjects.scale(scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
+        this.objectsIndexed =
+                new ObjectCollectionRTree(objectsScaled.asCollectionOrderNotPreserved());
     }
 
     /**
@@ -121,7 +130,8 @@ class FlattenAndScaler {
      *
      * @param object unscaled object
      * @return a scaled object
-     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link #scaleObject}
+     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link
+     *     #scaleObject}
      */
     public ObjectCollection scaleObjects(ObjectCollection objects) throws OperationFailedException {
         try {
@@ -130,21 +140,26 @@ class FlattenAndScaler {
             throw e.asOperationFailedException();
         }
     }
-    
+
     /**
      * Objects (scaled) that intersect with a particular bounding-box
-     * 
-     * @param box a search occurs for objects that intersect with this box (which has already been scaled)
-     * @param excludeFromAdding these objects are excluded from the search (specifically, any object found that has the same bounding-box and number of pixels)
-     * @return the objects that intersect with the bounding-box except any in {@code excludeFromAdding}
-     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link #scaleObject}
+     *
+     * @param box a search occurs for objects that intersect with this box (which has already been
+     *     scaled)
+     * @param excludeFromAdding these objects are excluded from the search (specifically, any object
+     *     found that has the same bounding-box and number of pixels)
+     * @return the objects that intersect with the bounding-box except any in {@code
+     *     excludeFromAdding}
+     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link
+     *     #scaleObject}
      */
-    public ObjectCollection objectsThatIntersectWith(BoundingBox box, ObjectCollection excludeFromAdding) throws OperationFailedException {
-        
+    public ObjectCollection objectsThatIntersectWith(
+            BoundingBox box, ObjectCollection excludeFromAdding) throws OperationFailedException {
+
         ObjectCollection intersectingObjects = objectsIndexed.intersectsWith(box);
-        
+
         Set<ObjectMask> excludeSet = excludeFromAdding.stream().toSet();
-        
+
         return intersectingObjects.stream().filterExclude(excludeSet::contains);
     }
 

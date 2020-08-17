@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
@@ -43,13 +44,12 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import lombok.AllArgsConstructor;
 
 /**
- * TODO integrate into a factory or common class with {@link CreateVoxelsFromPixelwiseFeatureWithMask}
- * 
- * @author Owen Feehan
+ * TODO integrate into a factory or common class with {@link
+ * CreateVoxelsFromPixelwiseFeatureWithMask}
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 public class CreateVoxelsFromPixelwiseFeature {

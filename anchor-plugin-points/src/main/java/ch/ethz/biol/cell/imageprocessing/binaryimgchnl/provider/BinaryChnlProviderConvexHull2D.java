@@ -49,8 +49,7 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
     protected Mask createFromMask(Mask mask, Mask outline) throws CreateException {
         try {
             List<Point2i> pointsOnConvexHull =
-                    ConvexHullUtilities.convexHull2D(
-                            PointsFromMask.listFrom2i(outline));
+                    ConvexHullUtilities.convexHull2D(PointsFromMask.listFrom2i(outline));
 
             // Reuse the channel-created for the outline, to output the results
             changeMaskToShowPointsOnly(outline, pointsOnConvexHull);

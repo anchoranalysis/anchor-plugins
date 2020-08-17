@@ -57,7 +57,6 @@ public class ChnlProviderEmpty extends ChannelProvider {
     public Channel create() throws CreateException {
         ImageDimensions dimensions =
                 new ImageDimensions(new Extent(sx, sy, sz), new ImageResolution());
-        return ChannelFactory.instance()
-                .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+        return ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
     }
 }

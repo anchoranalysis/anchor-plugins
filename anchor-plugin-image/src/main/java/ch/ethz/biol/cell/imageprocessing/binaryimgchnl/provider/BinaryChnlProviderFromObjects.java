@@ -61,7 +61,10 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
     }
 
     private static Mask createChannelFromObjectsMultiplex(
-            ObjectCollection objects, ImageDimensions dimensions, BinaryValues outVal, boolean invert) {
+            ObjectCollection objects,
+            ImageDimensions dimensions,
+            BinaryValues outVal,
+            boolean invert) {
         if (invert) {
             return MaskFromObjects.createFromNotObjects(objects, dimensions, outVal);
         } else {

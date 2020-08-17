@@ -41,7 +41,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
 
     /** If fewer voxels exist in an object than this, it is assumed to be perfectly ellipsoidal */
     private static final int MINIMUM_NUMBER_VOXELS = 12;
-    
+
     // START BEAN PROPERTIES
     /** Iff true, supresses covariance in the z-direction. */
     @BeanField @Getter @Setter private boolean suppressZ = false;

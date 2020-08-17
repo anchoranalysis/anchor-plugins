@@ -96,7 +96,8 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
-    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) throws CreateException {
+    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels)
+            throws CreateException {
         return createFactory(minNumberVoxels).createConnectedComponents(mask);
     }
 
@@ -106,7 +107,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
         VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extracter();
-        
+
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
                 mask.dimensions().z(),
@@ -114,7 +115,8 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                 z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
     }
 
-    private static BinaryVoxels<ByteBuffer> extractSlice(VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
+    private static BinaryVoxels<ByteBuffer> extractSlice(
+            VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
         return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 

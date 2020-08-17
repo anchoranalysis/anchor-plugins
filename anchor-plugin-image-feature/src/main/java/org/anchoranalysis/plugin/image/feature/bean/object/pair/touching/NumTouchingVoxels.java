@@ -62,8 +62,7 @@ public class NumTouchingVoxels extends TouchingVoxels {
         }
     }
 
-    private int numTouchingFrom(
-            ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
+    private int numTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
             throws OperationFailedException {
         BoundingBox boxIntersectRelative = RelativeUtilities.createRelBBox(boxIntersect, source);
         return calcNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);

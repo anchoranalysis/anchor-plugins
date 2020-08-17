@@ -67,8 +67,8 @@ class NaiveGreedyMerge {
 
     @Value
     private static class MergeRange {
-        private int start;   // NOSONAR
-        private int end;     // NOSONAR
+        private int start; // NOSONAR
+        private int end; // NOSONAR
     }
 
     /**
@@ -82,7 +82,7 @@ class NaiveGreedyMerge {
         // Stack structure, last in, first out
         Deque<MergeRange> stack = new ArrayDeque<>();
 
-        stack.add( new MergeRange(0, 0) );
+        stack.add(new MergeRange(0, 0));
 
         while (!stack.isEmpty()) {
             tryMergeWithinRange(objects, stack.pop(), stack::push);
@@ -116,12 +116,13 @@ class NaiveGreedyMerge {
                     // After a successful merge, we don't try to merge again
                     break;
                 }
-
             }
         }
     }
-    
-    private boolean tryMergeOnIndices(ObjectCollection objects, int i, int j, Consumer<MergeRange> consumer) throws OperationFailedException {
+
+    private boolean tryMergeOnIndices(
+            ObjectCollection objects, int i, int j, Consumer<MergeRange> consumer)
+            throws OperationFailedException {
         Optional<ObjectMask> merged = tryMerge(objects.get(i), objects.get(j));
         if (merged.isPresent()) {
             removeTwoIndices(objects, i, j);
@@ -134,7 +135,6 @@ class NaiveGreedyMerge {
         } else {
             return false;
         }
-
     }
 
     private Optional<ObjectMask> tryMerge(ObjectMask source, ObjectMask destination)
@@ -172,7 +172,7 @@ class NaiveGreedyMerge {
         BinaryVoxels<ByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
         return new ObjectMask(new BoundingBox(point, extent), voxels);
     }
-    
+
     private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
         if (i < j) {
             objects.remove(j);

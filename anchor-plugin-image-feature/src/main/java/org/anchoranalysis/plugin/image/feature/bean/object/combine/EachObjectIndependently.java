@@ -89,8 +89,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public DisplayStack createThumbailFor(FeatureInputSingleObject input)
-            throws CreateException {
+    public DisplayStack createThumbailFor(FeatureInputSingleObject input) throws CreateException {
         return getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject()));
     }
 

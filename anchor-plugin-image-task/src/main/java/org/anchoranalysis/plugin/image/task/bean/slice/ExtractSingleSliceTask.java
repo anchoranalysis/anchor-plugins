@@ -212,7 +212,8 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
                 NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
 
                 // Calculate feature for this slice
-                double featVal = session.calculate(new FeatureInputStack(nrgStackSlice.getNrgStack()));
+                double featVal =
+                        session.calculate(new FeatureInputStack(nrgStackSlice.getNrgStack()));
 
                 logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 

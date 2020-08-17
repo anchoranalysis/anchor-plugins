@@ -54,12 +54,14 @@ final class BoundingBoxMap {
                 });
     }
 
-    public ObjectCollection deriveObjects(Voxels<IntBuffer> matS)
-            throws OperationFailedException {
+    public ObjectCollection deriveObjects(Voxels<IntBuffer> matS) throws OperationFailedException {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,
-                (pointRange, index) -> matS.extracter().voxelsEqualTo(index + 1).deriveObject(pointRange.deriveBoundingBox()));
+                (pointRange, index) ->
+                        matS.extracter()
+                                .voxelsEqualTo(index + 1)
+                                .deriveObject(pointRange.deriveBoundingBox()));
     }
 
     public int addPointForValue(Point3i point, int val) {

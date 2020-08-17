@@ -45,7 +45,9 @@ class CompareHelper {
             Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths)
             throws OperationFailedException {
 
-        DualComparer comparer = DualComparerFactory.compareExplicitFolderToTest(pathAbsoluteOutput, pathRelativeSaved);
+        DualComparer comparer =
+                DualComparerFactory.compareExplicitFolderToTest(
+                        pathAbsoluteOutput, pathRelativeSaved);
 
         for (String path : relativePaths) {
             assertIdentical(comparer, path);

@@ -40,9 +40,9 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Scales all the objects in the collection by a particular scale-factor.
- * <p>
- * Note that the order of object is not perserved in the scaled object-collection.
- * 
+ *
+ * <p>Note that the order of object is not perserved in the scaled object-collection.
+ *
  * @author Owen Feehan
  */
 public class Scale extends ObjectCollectionProviderWithDimensions {
@@ -52,21 +52,19 @@ public class Scale extends ObjectCollectionProviderWithDimensions {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects)
-            throws CreateException {
+    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
         ImageDimensions dimensions = createDimensions();
-        
+
         ScaleFactor scaleFactor;
         try {
             scaleFactor = scaleCalculator.calc(Optional.of(dimensions));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
-        
+
         try {
-            ScaledObjectCollection scaledObjects = objects.scale(
-                    scaleFactor, dimensions.extent()); 
+            ScaledObjectCollection scaledObjects = objects.scale(scaleFactor, dimensions.extent());
             return scaledObjects.asCollectionOrderNotPreserved();
         } catch (OperationFailedException e) {
             throw new CreateException(e);

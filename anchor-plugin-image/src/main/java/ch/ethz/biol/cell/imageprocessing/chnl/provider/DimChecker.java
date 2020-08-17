@@ -67,13 +67,15 @@ public class DimChecker {
      * Checks a channel to make sure it's the same size as an an existing channel
      *
      * @param maskToCheck the channel whose size will be compared
-     * @param channelToCheckName a user-meaningful string to identify the chnlToCheck in error messages
-     * @param dimensionsFromChannel the dimensions it must equal from chnl (identified as chnl in error
-     *     messages)
+     * @param channelToCheckName a user-meaningful string to identify the chnlToCheck in error
+     *     messages
+     * @param dimensionsFromChannel the dimensions it must equal from chnl (identified as chnl in
+     *     error messages)
      * @return the newly created channel
      * @throws CreateException
      */
-    public static void check(Mask maskToCheck, String channelToCheckName, ImageDimensions dimensionsFromChannel)
+    public static void check(
+            Mask maskToCheck, String channelToCheckName, ImageDimensions dimensionsFromChannel)
             throws CreateException {
         check(maskToCheck.dimensions(), channelToCheckName, dimensionsFromChannel);
     }
@@ -119,13 +121,17 @@ public class DimChecker {
     }
 
     private static void check(
-            ImageDimensions dimensionsToCheck, String channelToCheckName, ImageDimensions dimensionsFromChannel)
+            ImageDimensions dimensionsToCheck,
+            String channelToCheckName,
+            ImageDimensions dimensionsFromChannel)
             throws CreateException {
         if (!dimensionsFromChannel.equals(dimensionsToCheck)) {
             throw new CreateException(
                     String.format(
                             "chnl (%s) and %s (%s) must have the same dimensions",
-                            dimensionsFromChannel.toString(), channelToCheckName, dimensionsToCheck.toString()));
+                            dimensionsFromChannel.toString(),
+                            channelToCheckName,
+                            dimensionsToCheck.toString()));
         }
     }
 }

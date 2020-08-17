@@ -63,10 +63,7 @@ public abstract class GroupMapByName<S, T> {
      * @param nounT a word to describe a single instance of T in user error messages
      * @param createEmpty
      */
-    public GroupMapByName(
-            String nounT,
-            String manifestFunction,
-            Supplier<T> createEmpty) {
+    public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
         super();
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;

@@ -51,11 +51,10 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
 public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     // START BEAN PROPERTIES
-    /** 
-     * The number of dilations and erosions to apply and whether to do in the Z dimension
-     **/
-    @BeanField @Getter @Setter private MorphologicalIterations iterations = new MorphologicalIterations();
-    
+    /** The number of dilations and erosions to apply and whether to do in the Z dimension */
+    @BeanField @Getter @Setter
+    private MorphologicalIterations iterations = new MorphologicalIterations();
+
     /**
      * Iff TRUE, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed)
@@ -108,12 +107,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calc(
-                CalculateShellObjectMask.of(
-                        input.resolver(),
-                        iterations,
-                        0,
-                        inverse));
+        return input.calc(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
     private Optional<ObjectMask> intersectWithNRGMask(ObjectMask object, NRGStack nrgStack) {
@@ -138,7 +132,6 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
                 "%s,%s,inverse=%s",
                 super.getParamDscr(),
                 iterations.describePropertiesFriendly(),
-                inverse ? "true" : "false"
-                );
+                inverse ? "true" : "false");
     }
 }

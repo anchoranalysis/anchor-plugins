@@ -180,7 +180,8 @@ public class FromObjects<T extends FeatureInput>
                         startCalculator(context.getRowSource(), initParams, context.getLogger()),
                         initParams,
                         suppressErrors,
-                        OptionalUtilities.createFromFlag(context.isThumbnailsEnabled(), this::createThumbnailForInput),
+                        OptionalUtilities.createFromFlag(
+                                context.isThumbnailsEnabled(), this::createThumbnailForInput),
                         context);
         processAllProviders(
                 descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
@@ -188,7 +189,7 @@ public class FromObjects<T extends FeatureInput>
         // Arbitrary, we need a return-type
         return 0;
     }
-    
+
     private Optional<DisplayStack> createThumbnailForInput(T input) throws CreateException {
         return Optional.of(combine.createThumbailFor(input));
     }
@@ -212,7 +213,7 @@ public class FromObjects<T extends FeatureInput>
             Optional<String> groupGeneratorName,
             CalculateFeaturesFromProvider<T> calculator)
             throws OperationFailedException {
-        
+
         // For every object-collection-provider
         for (NamedBean<ObjectCollectionProvider> ni : objects) {
             calculator.processProvider(

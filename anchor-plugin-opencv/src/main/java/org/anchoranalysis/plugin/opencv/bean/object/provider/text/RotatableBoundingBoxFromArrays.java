@@ -133,8 +133,7 @@ class RotatableBoundingBoxFromArrays {
     }
 
     private static Point3d meanPoint(Point3d point1, Point3d point2) {
-        return new Point3d(
-                (point1.x() + point2.x()) / 2, (point1.y() + point2.y()) / 2, 0);
+        return new Point3d((point1.x() + point2.x()) / 2, (point1.y() + point2.y()) / 2, 0);
     }
 
     public static Point3d convert3d(Point2f p) {

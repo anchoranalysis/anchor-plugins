@@ -133,7 +133,8 @@ public class NamedChnlsAppend extends NamedChnlsBase {
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
             PathSupplier outPath =
-                    OperationOutFilePath.cachedOutPathFor(ni.getValue(), ncc::pathForBinding, debugMode);
+                    OperationOutFilePath.cachedOutPathFor(
+                            ni.getValue(), ncc::pathForBinding, debugMode);
 
             if (forceEagerEvaluation) {
                 Path path = outPath.get();

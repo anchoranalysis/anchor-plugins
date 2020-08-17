@@ -77,9 +77,9 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
         double rangeMult = 255 / (rangeMax - rangeMin);
 
-        IterateVoxelsAsInt.changeEachPoint(voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
+        IterateVoxelsAsInt.changeEachPoint(
+                voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
     }
-
 
     /** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
     private static int roundAndClip(double value) {

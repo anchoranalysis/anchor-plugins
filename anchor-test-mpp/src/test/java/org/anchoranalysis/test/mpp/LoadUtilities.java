@@ -50,9 +50,7 @@ public class LoadUtilities {
     private static ObjectMask largestObjFromStack(Stack stack) throws CreateException {
 
         CreateFromConnectedComponentsFactory cc = new CreateFromConnectedComponentsFactory();
-        ObjectCollection objects =
-                cc.createConnectedComponents(
-                        new Mask(stack.getChannel(0)));
+        ObjectCollection objects = cc.createConnectedComponents(new Mask(stack.getChannel(0)));
 
         return findLargestObj(objects);
     }

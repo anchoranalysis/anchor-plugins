@@ -53,10 +53,7 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
     // END BEAN PROPERTIES
 
     @Override
-    protected double deriveScore(
-            double featureValue,
-            double mean,
-            FeatureResultSupplier stdDev)
+    protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
         if (ignoreHigherSide && featureValue > mean) {

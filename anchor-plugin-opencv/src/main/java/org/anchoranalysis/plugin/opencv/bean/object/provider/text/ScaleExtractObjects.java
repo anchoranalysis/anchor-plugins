@@ -46,7 +46,8 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 class ScaleExtractObjects {
 
     public static ObjectCollection apply(
-            List<WithConfidence<ObjectMask>> list, ScaleFactor scaleFactor, Extent extent) throws OperationFailedException {
+            List<WithConfidence<ObjectMask>> list, ScaleFactor scaleFactor, Extent extent)
+            throws OperationFailedException {
         // Scale back to the needed original resolution
         return scaleObjects(extractObjects(list), scaleFactor, extent);
     }
@@ -56,7 +57,8 @@ class ScaleExtractObjects {
     }
 
     private static ObjectCollection scaleObjects(
-            ObjectCollection objects, ScaleFactor scaleFactor, Extent extent) throws OperationFailedException {
+            ObjectCollection objects, ScaleFactor scaleFactor, Extent extent)
+            throws OperationFailedException {
         return objects.scale(scaleFactor, extent).asCollectionOrderNotPreserved();
     }
 }

@@ -74,13 +74,13 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
         VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
         VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());
-        
+
         assignerOff.toAll();
         for (int i = 0; i < vertices.length; i++) {
-            
+
             // Note this is not the usual {@code Point3d} type we use
-            Point3d point = vertices[i];        
-            
+            Point3d point = vertices[i];
+
             assignerOn.toVoxel((int) point.x, (int) point.y, (int) point.z);
         }
 

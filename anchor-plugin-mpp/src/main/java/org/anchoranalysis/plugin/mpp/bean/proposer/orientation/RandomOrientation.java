@@ -52,7 +52,8 @@ public class RandomOrientation extends OrientationProposer {
     public Optional<Orientation> propose(
             Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator)
             throws ProposalAbnormalFailureException {
-        return Optional.of(bounds.randomOrientation(randomNumberGenerator, dimensions.resolution()));
+        return Optional.of(
+                bounds.randomOrientation(randomNumberGenerator, dimensions.resolution()));
     }
 
     @Override

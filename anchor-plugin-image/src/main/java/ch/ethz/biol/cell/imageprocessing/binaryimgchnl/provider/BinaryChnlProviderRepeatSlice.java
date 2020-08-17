@@ -56,14 +56,12 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
 
         ImageDimensions dimSource = dimensions.create();
 
-        if (mask.dimensions().x() != dimSource.x()
-                && mask.dimensions().y() != dimSource.y()) {
+        if (mask.dimensions().x() != dimSource.x() && mask.dimensions().y() != dimSource.y()) {
             throw new CreateException("dims do not match");
         }
 
         Channel chnlOut =
-                ChannelFactory.instance()
-                        .create(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
         int volumeXY = voxelsIn.extent().volumeXY();

@@ -73,21 +73,14 @@ class CalculatePairIntersectionCommutative
         // can be expensive, and we want
         //  them also cached
         ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccFirstToSecond =
-                CalculatePairIntersection.of(
-                        cache,
-                        childDilation1,
-                        childDilation2,
-                        iterations,
-                        0
-                        );
+                CalculatePairIntersection.of(cache, childDilation1, childDilation2, iterations, 0);
         ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccSecondToFirst =
                 CalculatePairIntersection.of(
                         cache,
                         childDilation1,
                         childDilation2,
                         iterations.copyChangeIterationsDilation(0),
-                        iterations.getIterationsDilation()
-                        );
+                        iterations.getIterationsDilation());
         return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
     }
 

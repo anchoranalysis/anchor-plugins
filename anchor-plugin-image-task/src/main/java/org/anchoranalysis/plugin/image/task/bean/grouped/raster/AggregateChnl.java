@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * A channel associated with a count. This is a useful structure for finding the mean of many
  * channels
  */
-@Accessors(fluent=true)
+@Accessors(fluent = true)
 class AggregateChnl {
 
     // We create only when we have the first channel, so dimensions can then be determined
@@ -57,8 +57,7 @@ class AggregateChnl {
                             chnl.dimensions(), raster.dimensions()));
         }
 
-        VoxelsArithmetic.add(
-                raster.voxels().asInt(), chnl.voxels(), chnl.getVoxelDataType());
+        VoxelsArithmetic.add(raster.voxels().asInt(), chnl.voxels(), chnl.getVoxelDataType());
 
         count++;
     }
@@ -76,21 +75,16 @@ class AggregateChnl {
                     "No channels have been added, so cannot create mean");
         }
 
-        Channel chnlOut =
-                ChannelFactory.instance()
-                        .create(raster.dimensions(), outputType);
+        Channel chnlOut = ChannelFactory.instance().create(raster.dimensions(), outputType);
 
-        VoxelsArithmetic.divide(
-                raster.voxels().asInt(), count, chnlOut.voxels(), outputType);
+        VoxelsArithmetic.divide(raster.voxels().asInt(), count, chnlOut.voxels(), outputType);
 
         return chnlOut;
     }
 
     private void createRasterIfNecessary(ImageDimensions dim) {
         if (raster == null) {
-            this.raster =
-                    ChannelFactory.instance()
-                            .create(dim, VoxelDataTypeUnsignedInt.INSTANCE);
+            this.raster = ChannelFactory.instance().create(dim, VoxelDataTypeUnsignedInt.INSTANCE);
         }
     }
 }

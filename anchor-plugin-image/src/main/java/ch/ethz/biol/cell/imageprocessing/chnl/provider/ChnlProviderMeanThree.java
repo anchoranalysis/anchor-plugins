@@ -44,8 +44,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .create(
-                                chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxels(
                 chnlOut.voxels().asByte(),

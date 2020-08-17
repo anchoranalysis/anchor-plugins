@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.feature.addcriteria.BBoxIntersection;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGScheme;
 import org.anchoranalysis.anchor.mpp.feature.nrg.scheme.NRGSchemeWithSharedFeatures;
@@ -37,10 +39,8 @@ import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.test.LoggingFixture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NRGSchemeFixture {
 
     /**

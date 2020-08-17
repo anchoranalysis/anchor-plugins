@@ -66,7 +66,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     protected boolean precondition(ObjectCollection objectsToFilter) {
         return true;
     }
-    
+
     @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
@@ -80,7 +80,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
         assert (chnlSingleRegion != null);
         voxels = chnlSingleRegion.voxels().any();
     }
-    
+
     @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {
@@ -88,18 +88,18 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
         int thresholdResolved = threshold(dim);
 
         Extent extent = object.extent();
-        
+
         for (int z = 0; z < extent.z(); z++) {
 
             ByteBuffer bb = object.sliceBufferLocal(z);
 
-            VoxelBuffer<?> bbChnl = voxels.slice( z + object.boundingBox().cornerMin().z() );
+            VoxelBuffer<?> bbChnl = voxels.slice(z + object.boundingBox().cornerMin().z());
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
                     int offset = extent.offset(x, y);
-                    
+
                     if (bb.get(offset) == object.binaryValuesByte().getOnByte()) {
 
                         int y1 = y + object.boundingBox().cornerMin().y();
@@ -122,7 +122,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::resolution), AxisType.X));
+                Math.ceil(
+                        threshold.resolveForAxis(dim.map(ImageDimensions::resolution), AxisType.X));
     }
 
     @Override

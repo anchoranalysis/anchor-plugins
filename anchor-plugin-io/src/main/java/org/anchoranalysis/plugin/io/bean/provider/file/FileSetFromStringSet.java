@@ -45,9 +45,9 @@ public class FileSetFromStringSet extends FileProviderWithDirectoryString {
     // END BEAN PROPERTIES
 
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
-        return FunctionalList.mapToList(filePaths.set(), path -> resolvePath(directory,path) );
+        return FunctionalList.mapToList(filePaths.set(), path -> resolvePath(directory, path));
     }
-    
+
     private File resolvePath(Path directory, String path) {
         return directory.resolve(Paths.get(path)).toFile();
     }

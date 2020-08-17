@@ -43,8 +43,7 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
 
-    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator)
-            throws CreateException {
+    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator) throws CreateException {
 
         ScaleFactor scaleFactor;
         try {

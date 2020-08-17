@@ -42,20 +42,19 @@ public class Shell extends DerivedObject {
 
     // START BEAN PROPERTIES
     /** The number of dilations and erosions to apply and whether to do in the Z dimension */
-    @BeanField @Getter @Setter private MorphologicalIterations iterations = new MorphologicalIterations();
+    @BeanField @Getter @Setter
+    private MorphologicalIterations iterations = new MorphologicalIterations();
     // END BEAN PROPERTIES
 
     @Override
     protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
                     throws FeatureCalculationException {
-        return CalculateShellObjectMask.of(
-                session, iterations, 0, false);
+        return CalculateShellObjectMask.of(session, iterations, 0, false);
     }
 
     @Override
     public ChildCacheName cacheName() {
-        return new ChildCacheName(
-                Shell.class, iterations.uniquelyIdentifyAllProperties());
+        return new ChildCacheName(Shell.class, iterations.uniquelyIdentifyAllProperties());
     }
 }

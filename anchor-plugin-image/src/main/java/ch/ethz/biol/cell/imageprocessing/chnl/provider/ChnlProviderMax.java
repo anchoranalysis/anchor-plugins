@@ -45,26 +45,26 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 
         VoxelDataType combinedType =
                 CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
-        Channel chnlOut =
-                ChannelFactory.instance()
-                        .create(chnl1.dimensions(), combinedType);
+        Channel chnlOut = ChannelFactory.instance().create(chnl1.dimensions(), combinedType);
 
         setMaxInOutputVoxels(
-                chnlOut.voxels().asByte(),
-                chnl1.voxels().asByte(),
-                chnl2.voxels().asByte());
+                chnlOut.voxels().asByte(), chnl1.voxels().asByte(), chnl2.voxels().asByte());
 
         return chnlOut;
     }
 
     @Override
     protected void processVoxels(
-            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
         setMaxInOutputVoxels(voxelsOut, voxelsIn1, voxelsIn2);
     }
 
     private static void setMaxInOutputVoxels(
-            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
         int volumeXY = voxelsIn1.extent().volumeXY();
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 

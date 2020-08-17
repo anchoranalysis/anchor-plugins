@@ -35,10 +35,7 @@ import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     @Override
-    protected double deriveScore(
-            double featureValue,
-            double mean,
-            FeatureResultSupplier stdDev)
+    protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
         return FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.get());

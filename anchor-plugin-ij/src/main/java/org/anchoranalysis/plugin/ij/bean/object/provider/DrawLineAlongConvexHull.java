@@ -48,14 +48,13 @@ import org.anchoranalysis.image.object.ObjectMask;
  * @author feehano
  */
 public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
-    
+
     @Override
     protected ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
         return objects.stream().map(this::transform);
     }
 
-    private ObjectMask transform(ObjectMask object)
-            throws CreateException {
+    private ObjectMask transform(ObjectMask object) throws CreateException {
         try {
             List<Point2i> pointsConvexHull =
                     ConvexHullUtilities.convexHull2D(ConvexHullUtilities.pointsOnOutline(object));

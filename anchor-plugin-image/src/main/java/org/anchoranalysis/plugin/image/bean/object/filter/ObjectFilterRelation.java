@@ -55,7 +55,7 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     protected boolean precondition(ObjectCollection objectsToFilter) {
         return true;
     }
-    
+
     @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {

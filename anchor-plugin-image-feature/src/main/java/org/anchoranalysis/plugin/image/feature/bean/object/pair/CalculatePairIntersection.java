@@ -73,8 +73,7 @@ class CalculatePairIntersection
             ChildCacheName cacheLeft,
             ChildCacheName cacheRight,
             MorphologicalIterations iterations,
-            int iterationsSecond
-    ) {
+            int iterationsSecond) {
         // We use two additional caches, for the calculations involving the single objects, as these
         // can be expensive, and we want
         //  them also cached

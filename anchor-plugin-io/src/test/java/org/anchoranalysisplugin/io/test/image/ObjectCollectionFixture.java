@@ -49,8 +49,8 @@ class ObjectCollectionFixture {
      * Creates an object-collection containing between a random number of objects (uniformly sampled
      * from a range)
      *
-     * <p>Each object has a position and extent that is randomly-sampled, and contains voxels that are
-     * each randomly on or off.
+     * <p>Each object has a position and extent that is randomly-sampled, and contains voxels that
+     * are each randomly on or off.
      *
      * @param minNumberObjects minimum number of objects (inclusive)
      * @param maxNumberObjects maximum number of objects (exclusive)

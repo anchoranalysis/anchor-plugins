@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
@@ -37,7 +38,6 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import lombok.AllArgsConstructor;
 
 /**
  * Takes three RGB channels and projects them into a canvas of width/height in the form of a new RGB
@@ -68,8 +68,7 @@ class ExtractProjectedStack {
     private Channel createProjectedChannel(Channel chnlIn) {
 
         // Then the mode is off
-        if (!extent.isPresent()
-                || chnlIn.dimensions().extent().equals(extent.get())) {
+        if (!extent.isPresent() || chnlIn.dimensions().extent().equals(extent.get())) {
             return chnlIn;
         } else {
             Point3i crnrPos = createTarget(chnlIn.dimensions(), extent.get());
@@ -91,7 +90,8 @@ class ExtractProjectedStack {
         return crnrPos;
     }
 
-    private static BoundingBox boxToProject(Point3i crnrPos, Extent extentChannel, Extent extentTarget) {
+    private static BoundingBox boxToProject(
+            Point3i crnrPos, Extent extentChannel, Extent extentTarget) {
         return new BoundingBox(crnrPos, extentChannel)
                 .intersection()
                 .with(new BoundingBox(extentTarget))
@@ -103,7 +103,8 @@ class ExtractProjectedStack {
         return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
-    private static Point3i createSourceCorner(BoundingBox boxToProject, ImageDimensions dimensions) {
+    private static Point3i createSourceCorner(
+            BoundingBox boxToProject, ImageDimensions dimensions) {
         Point3i sourceCorner = new Point3i(0, 0, 0);
 
         if (boxToProject.extent().x() < dimensions.x()) {
@@ -117,14 +118,19 @@ class ExtractProjectedStack {
     }
 
     private Channel copyPixels(
-            BoundingBox boxSource, BoundingBox boxToProject, Channel channelDestination, Extent extentOut) {
+            BoundingBox boxSource,
+            BoundingBox boxToProject,
+            Channel channelDestination,
+            Extent extentOut) {
 
         Channel chnlOut =
                 ChannelFactory.instance()
                         .create(
-                                new ImageDimensions(extentOut, channelDestination.dimensions().resolution()),
+                                new ImageDimensions(
+                                        extentOut, channelDestination.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
-        channelDestination.voxels()
+        channelDestination
+                .voxels()
                 .asByte()
                 .extracter()
                 .boxCopyTo(boxSource, chnlOut.voxels().asByte(), boxToProject);

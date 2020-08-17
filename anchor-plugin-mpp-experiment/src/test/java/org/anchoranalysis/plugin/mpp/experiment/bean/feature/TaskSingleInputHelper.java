@@ -110,7 +110,7 @@ class TaskSingleInputHelper {
     private static <T extends InputFromManager, S, V extends Task<T, S>>
             boolean runTaskOnSingleInput(T input, V task, Path pathForOutputs)
                     throws OperationFailedException {
-        
+
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
@@ -123,12 +123,12 @@ class TaskSingleInputHelper {
                     createParametersExperiment(pathForOutputs, bom.getDelegate(), logger);
 
             S sharedState = task.beforeAnyJobIsExecuted(bom, paramsExp);
-            
+
             boolean successful =
                     task.executeJob(new ParametersUnbound<>(paramsExp, input, sharedState, false));
 
             task.afterAllJobsAreExecuted(sharedState, paramsExp.getContext());
-            
+
             return successful;
         } catch (AnchorIOException
                 | ExperimentExecutionException

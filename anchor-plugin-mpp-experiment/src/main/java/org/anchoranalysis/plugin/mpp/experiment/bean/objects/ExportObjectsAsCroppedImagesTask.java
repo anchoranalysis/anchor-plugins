@@ -147,9 +147,8 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
         generatorSeq.start();
-        objects.streamStandardJava().forEach( object->
-            generatorSeq.add( new ObjectsWithBoundingBox(object) )
-        );
+        objects.streamStandardJava()
+                .forEach(object -> generatorSeq.add(new ObjectsWithBoundingBox(object)));
         generatorSeq.end();
     }
 
@@ -159,7 +158,8 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacksSet stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacksSet stacks =
+                    createStacksFromProviders(listStackProvider, paramsInit, logger);
             NamedStacksSet stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 

@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 final class FindEqualVoxels {
@@ -169,7 +169,9 @@ final class FindEqualVoxels {
 
         ProcessVoxelNeighbor<Optional<Integer>> process =
                 ProcessVoxelNeighborFactory.within(
-                        objectMask, slidingBuffer.extent(), new PointTester(stack, slidingBuffer, matS));
+                        objectMask,
+                        slidingBuffer.extent(),
+                        new PointTester(stack, slidingBuffer, matS));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(true);
 

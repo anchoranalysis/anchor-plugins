@@ -47,6 +47,7 @@ class PointListForConvex {
     }
 
     public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxels<ByteBuffer> voxels) {
-        return list.stream().anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, voxels));
+        return list.stream()
+                .anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, voxels));
     }
 }

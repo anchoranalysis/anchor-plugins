@@ -85,8 +85,10 @@ public class BinaryChnlProviderInvertTest {
         assertVoxelsOn("after", expectedNumberVoxelsAfter, maskAfter);
     }
 
-    private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D) throws CreateException {
-        return OptionalUtilities.createFromFlagChecked(flag, ()->createWithRectangle(CORNER_MASK, do3D) );
+    private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D)
+            throws CreateException {
+        return OptionalUtilities.createFromFlagChecked(
+                flag, () -> createWithRectangle(CORNER_MASK, do3D));
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {
@@ -97,8 +99,7 @@ public class BinaryChnlProviderInvertTest {
     }
 
     private static void assertVoxelsOn(String messagePrefix, long expectedNumberVoxels, Mask mask) {
-        assertEquals(
-                messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.voxelsOn().count());
+        assertEquals(messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.voxelsOn().count());
     }
 
     private static Point3i addHalfHeightInY(Point3i in) {

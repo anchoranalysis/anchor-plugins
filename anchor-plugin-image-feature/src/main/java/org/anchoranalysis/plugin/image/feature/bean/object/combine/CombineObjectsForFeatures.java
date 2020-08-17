@@ -96,7 +96,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Derives a list of inputs (i.e. rows in a feature table)
      *
      * <p>This should be called only ONCE, and always before {@link
-     * #createThumbailFor(FeatureInput)}. It starts a <i>batch</i> of related calls to {#link createThumbailFor}
+     * #createThumbailFor(FeatureInput)}. It starts a <i>batch</i> of related calls to {#link
+     * createThumbailFor}
      *
      * @param objects the objects from which inputs are derived
      * @param nrgStack nrg-stack used during feature calculation
@@ -111,11 +112,12 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             boolean thumbnailsEnabled,
             Logger logger)
             throws CreateException {
-        
+
         List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
         if (thumbnailsEnabled) {
             try {
-                thumbnail.start(objects, scaledBoundingBoxes(inputs), Optional.of(nrgStack.asStack()));
+                thumbnail.start(
+                        objects, scaledBoundingBoxes(inputs), Optional.of(nrgStack.asStack()));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -137,8 +139,6 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public void endBatchAndCleanup() {
         thumbnail.end();
     }
-    
-    
 
     /**
      * Derives a list of inputs from an object-collection
@@ -155,18 +155,18 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
             throws CreateException;
-    
+
     /**
-     * Creates a bounding-box that tightly fits the input to a particular table row (could be for one or more objects)
-     * 
+     * Creates a bounding-box that tightly fits the input to a particular table row (could be for
+     * one or more objects)
+     *
      * @param input the input
      * @return a bounding-box that fully fits around all objects used in input
      */
     protected abstract BoundingBox boundingBoxThatSpansInput(T input);
-    
+
     private StreamableCollection<BoundingBox> scaledBoundingBoxes(List<T> inputs) {
-       return new StreamableCollection<>(
-            () -> inputs.stream().map(this::boundingBoxThatSpansInput)
-       );
+        return new StreamableCollection<>(
+                () -> inputs.stream().map(this::boundingBoxThatSpansInput));
     }
 }

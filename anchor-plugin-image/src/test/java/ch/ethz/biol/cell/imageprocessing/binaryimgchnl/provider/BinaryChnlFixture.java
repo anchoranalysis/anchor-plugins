@@ -26,6 +26,8 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -34,15 +36,13 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.image.ChannelFixture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Creates {@link Mask} instantiations for tests.
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BinaryChnlFixture {
 
     public static final int WIDTH = 40;

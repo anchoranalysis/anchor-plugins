@@ -50,10 +50,9 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.Calcu
 public class Intersection extends FeatureDeriveFromPair {
 
     // START BEAN PROPERTIES
-    /** 
-     * The number of dilations and erosions to apply to determine if two objects intersect
-     **/    
-    @BeanField @Getter @Setter private MorphologicalIterations iterations = new MorphologicalIterations(); 
+    /** The number of dilations and erosions to apply to determine if two objects intersect */
+    @BeanField @Getter @Setter
+    private MorphologicalIterations iterations = new MorphologicalIterations();
 
     @BeanField @Getter @Setter private double emptyValue = 255;
     // END BEAN PROPERTIES
@@ -66,7 +65,7 @@ public class Intersection extends FeatureDeriveFromPair {
             throw new BeanMisconfiguredException("iterationsDilation must be >= 1");
         }
     }
-    
+
     @Override
     public double calc(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
@@ -82,20 +81,13 @@ public class Intersection extends FeatureDeriveFromPair {
 
     /** A unique cache-name for the intersection of how we find a parameterization */
     private ChildCacheName cacheIntersectionName() {
-        String id =
-                String.format(
-                        "intersection_%s",
-                        iterations.uniquelyIdentifyAllProperties()
-                );
+        String id = String.format("intersection_%s", iterations.uniquelyIdentifyAllProperties());
         return new ChildCacheName(Intersection.class, id);
     }
 
     private FeatureCalculation<Optional<ObjectMask>, FeatureInputPairObjects> createCalculation(
             SessionInput<FeatureInputPairObjects> input) {
         return CalculatePairIntersectionCommutative.of(
-                input,
-                CACHE_NAME_FIRST,
-                CACHE_NAME_SECOND,
-                iterations);
+                input, CACHE_NAME_FIRST, CACHE_NAME_SECOND, iterations);
     }
 }

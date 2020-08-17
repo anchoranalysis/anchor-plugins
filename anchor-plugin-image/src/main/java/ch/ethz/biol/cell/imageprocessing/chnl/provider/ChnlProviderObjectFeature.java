@@ -72,15 +72,14 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         Feature<FeatureInputSingleObject> feature = featureProvider.create();
 
         try {
-            NRGStackWithParams nrgStack = new NRGStackWithParams( createNrgStack(chnl) );
+            NRGStackWithParams nrgStack = new NRGStackWithParams(createNrgStack(chnl));
 
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(feature);
-            
+
             return createOutputChnl(
                     chnl.dimensions(),
                     objectsSource,
-                    object -> valueToAssignForObject(object, calculator, nrgStack)
-            );
+                    object -> valueToAssignForObject(object, calculator, nrgStack));
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
@@ -121,11 +120,10 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     private Channel createOutputChnl(
             ImageDimensions dimensions,
             ObjectCollection objectsSource,
-            CheckedToIntFunction<ObjectMask,FeatureCalculationException> valueToAssign
-    )  throws FeatureCalculationException {
+            CheckedToIntFunction<ObjectMask, FeatureCalculationException> valueToAssign)
+            throws FeatureCalculationException {
         Channel out =
-                ChannelFactory.instance()
-                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         out.assignValue(valueNoObject).toAll();
         for (ObjectMask object : objectsSource) {
             out.assignValue(valueToAssign.applyAsInt(object)).toObject(object);
@@ -133,8 +131,12 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
 
         return out;
     }
-    
-    private int valueToAssignForObject(ObjectMask object, FeatureCalculatorSingle<FeatureInputSingleObject> calculator, NRGStackWithParams nrgStack) throws FeatureCalculationException {
+
+    private int valueToAssignForObject(
+            ObjectMask object,
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator,
+            NRGStackWithParams nrgStack)
+            throws FeatureCalculationException {
         double featVal = calculator.calculate(new FeatureInputSingleObject(object, nrgStack));
         return (int) (factor * featVal);
     }

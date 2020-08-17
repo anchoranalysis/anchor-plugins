@@ -92,7 +92,8 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException {
+        public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
+                throws RasterIOException {
             return progressReporter -> convert(progressReporter, in, seriesNum);
         }
 
@@ -119,8 +120,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         public int numberFrames() throws OperationFailedException {
             return in.numberFrames();
         }
-        
-        private TimeSequence convert(ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
+
+        private TimeSequence convert(
+                ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
                 throws OperationFailedException {
 
             try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {

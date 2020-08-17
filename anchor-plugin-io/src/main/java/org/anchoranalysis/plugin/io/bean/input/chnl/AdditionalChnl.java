@@ -27,15 +27,15 @@
 package org.anchoranalysis.plugin.io.bean.input.chnl;
 
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
 import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.PathSupplier;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class AdditionalChnl {
-    
+
     private String chnlName;
     private int chnlIndex;
     private PathSupplier filePath;

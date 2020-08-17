@@ -119,8 +119,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private ObjectMask objectForFilled(Point3i root, Mask mask)
-            throws TraverseOutlineException {
+    private ObjectMask objectForFilled(Point3i root, Mask mask) throws TraverseOutlineException {
         // Important, so we can use the contains function later
         return createObjectForPoint(root, mask).shiftToOrigin();
     }
@@ -166,8 +165,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
                                                     "An undefined max-distance is not supported"));
 
             // We make sure the box is within our scene boundaries
-            BoundingBox box =
-                    createBoxAroundPoint(root, maxDistance, mask.dimensions().extent());
+            BoundingBox box = createBoxAroundPoint(root, maxDistance, mask.dimensions().extent());
 
             // This is our final intersection box, that we use for traversing and memorizing pixels
             //  that we have already visited

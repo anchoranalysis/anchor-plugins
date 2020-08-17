@@ -45,18 +45,12 @@ public class ChnlProviderMaskOut extends ChnlProviderOneMask {
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
         Channel chnlOut =
-                ChannelFactory.instance()
-                        .create(channel.dimensions(), channel.getVoxelDataType());
-        
+                ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
+
         // Create an object-mask from the mask
         ObjectMask object = new ObjectMask(mask.binaryVoxels());
-        
-        channel.voxels()
-                .copyVoxelsTo(
-                        object,
-                        chnlOut.voxels(),
-                        object.boundingBox()
-                );
+
+        channel.voxels().copyVoxelsTo(object, chnlOut.voxels(), object.boundingBox());
 
         return chnlOut;
     }

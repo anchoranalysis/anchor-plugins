@@ -62,8 +62,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .create(
-                                chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
         populateChnl(chnl, chnlOut, lrc);
         return chnlOut;
     }
@@ -105,14 +104,14 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
         Point3i point = new Point3i();
 
-        for (point.setZ(0); point.z()<extent.z(); point.incrementZ()) {
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer bbIn = voxelsIn.sliceBuffer( point.z() );
-            ByteBuffer bbOut = voxelsOut.sliceBuffer( point.z() );
+            ByteBuffer bbIn = voxelsIn.sliceBuffer(point.z());
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(point.z());
 
             int index = 0;
-            for (point.setY(0); point.y()<extent.y(); point.incrementY()) {
-                for (point.setX(0); point.x()<extent.x(); point.incrementX()) {
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                     int val = ByteConverter.unsignedByteToInt(bbIn.get(index));
 
