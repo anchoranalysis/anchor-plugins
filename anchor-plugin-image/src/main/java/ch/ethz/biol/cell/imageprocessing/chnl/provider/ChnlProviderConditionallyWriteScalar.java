@@ -28,39 +28,27 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
 
 public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderOneValue {
 
     @Override
     public Channel createFromChnlValue(Channel chnl, double value) throws CreateException {
-        processVoxelBox(chnl.getVoxelBox().any(), value);
+        processVoxels(chnl.voxels().any(), value);
         return chnl;
     }
 
     /** Whether to overwrite the current voxel-value with the constant? */
     protected abstract boolean shouldOverwriteVoxelWithConstant(int voxel, int constant);
 
-    private void processVoxelBox(VoxelBox<?> vb, double value) {
+    private void processVoxels(Voxels<?> voxels, double constantToAssign) {
 
-        int constant = (int) Math.floor(value);
+        int constantAsInt = (int) Math.floor(constantToAssign);
 
-        Extent e = vb.extent();
-        int volumeXY = e.getVolumeXY();
-        for (int z = 0; z < e.getZ(); z++) {
-
-            VoxelBuffer<?> buf = vb.getPixelsForPlane(z);
-
-            for (int i = 0; i < volumeXY; i++) {
-
-                int voxel = buf.getInt(i);
-
-                if (shouldOverwriteVoxelWithConstant(voxel, constant)) {
-                    buf.putInt(i, constant);
-                }
-            }
-        }
+        IterateVoxelsAsInt.assignEachMatchingPoint(
+                voxels,
+                value -> shouldOverwriteVoxelWithConstant(value, constantAsInt),
+                constantAsInt);
     }
 }

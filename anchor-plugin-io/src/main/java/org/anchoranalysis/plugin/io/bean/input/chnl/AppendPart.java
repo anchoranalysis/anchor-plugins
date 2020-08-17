@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -43,6 +42,7 @@ import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesConc
 import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.PathSupplier;
 
 /**
  * Appends another channel to an existing NamedChnlInputBase
@@ -62,7 +62,7 @@ class AppendPart extends NamedChnlsInputPart {
             NamedChnlsInputPart delegate,
             String chnlName,
             int chnlIndex,
-            CallableWithException<Path, AnchorIOException> filePath,
+            PathSupplier filePath,
             RasterReader rasterReader) {
         super();
         this.delegate = delegate;

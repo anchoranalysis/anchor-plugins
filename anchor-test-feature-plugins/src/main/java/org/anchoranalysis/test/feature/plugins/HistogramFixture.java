@@ -48,7 +48,7 @@ public class HistogramFixture {
 
         Histogram h = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrValBy(i, i);
+            h.incrValueBy(i, i);
         }
         return h;
     }
@@ -57,7 +57,7 @@ public class HistogramFixture {
 
         Histogram h = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrValBy(i, MAX_VAL - i);
+            h.incrValueBy(i, MAX_VAL - i);
         }
         return h;
     }

@@ -66,7 +66,7 @@ class SgmnMPPOutputter {
         ColoredCfg coloredCfg =
                 new ColoredCfg(
                         cfgNRG.getCfg(),
-                        outputManager.getOutputWriteSettings().genDefaultColorIndex(20),
+                        outputManager.getOutputWriteSettings().defaultColorIndexFor(20),
                         new IDGetterIter<Mark>());
 
         ColoredCfgWithDisplayStack coloredCfgDisplayStack =
@@ -98,7 +98,7 @@ class SgmnMPPOutputter {
                 "finalCfgRaster",
                 () ->
                         new CfgMaskCollectionDifferentValuesGenerator(
-                                coloredCfgDisplayStack.getStack().getDimensions(),
+                                coloredCfgDisplayStack.getStack().dimensions(),
                                 rm,
                                 coloredCfgDisplayStack.getCfg().getCfg()));
     }

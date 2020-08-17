@@ -26,16 +26,17 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
-
-    private ShapeRegularityCalculator() {}
 
     public static double calcShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();
-        int perimeter = NumberVoxelsAtBorder.numBorderPixels(object, false, false, false);
+        int perimeter = NumberVoxelsAtBorder.numberBorderPixels(object, false, false, false);
         return calcValues(area, perimeter);
     }
 

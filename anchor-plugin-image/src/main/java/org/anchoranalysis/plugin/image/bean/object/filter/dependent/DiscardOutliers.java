@@ -115,7 +115,6 @@ public class DiscardOutliers extends ObjectFilterPredicate {
 
     @Override
     protected void end() throws OperationFailedException {
-        super.end();
         featureVals = null;
         if (getLogger() != null) {
             getLogger().messageLogger().log("END DiscardOutliers");
@@ -128,7 +127,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         DoubleArrayList featureVals = new DoubleArrayList();
         for (ObjectMask objectMask : objects) {
             try {
-                featureVals.add(calculator.calc(new FeatureInputSingleObject(objectMask)));
+                featureVals.add(calculator.calculate(new FeatureInputSingleObject(objectMask)));
             } catch (FeatureCalculationException e) {
                 throw new OperationFailedException(e);
             }

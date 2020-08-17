@@ -31,16 +31,14 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -62,35 +60,28 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.getDimensions().getRes());
+                new BinarySegmentationParameters(channel.dimensions().resolution());
 
-        BinaryVoxelBox<ByteBuffer> bvb = segment.sgmn(channel.getVoxelBox(), params, mask);
-        return createFromBinaryVoxelBox(
+        BinaryVoxels<ByteBuffer> bvb = segment.segment(channel.voxels(), params, objectMask);
+        return createFromVoxels(
                 bvb,
-                channel.getDimensions().getRes(),
-                mask.map(objectMask -> objectMask.getBoundingBox().cornerMin()));
+                channel.dimensions().resolution(),
+                objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 
-    private ObjectCollection createFromBinaryVoxelBox(
-            BinaryVoxelBox<ByteBuffer> bvb,
-            ImageResolution res,
-            Optional<ReadableTuple3i> maskShiftBy)
-            throws SegmentationFailedException {
-        Mask bic =
-                new Mask(
-                        ChannelFactory.instance().create(bvb.getVoxelBox(), res),
-                        bvb.getBinaryValues());
+    private ObjectCollection createFromVoxels(
+            BinaryVoxels<ByteBuffer> bvb,
+            ImageResolution resolution,
+            Optional<ReadableTuple3i> maskShiftBy) {
+        Mask mask = new Mask(bvb, resolution);
+
         CreateFromConnectedComponentsFactory creator =
                 new CreateFromConnectedComponentsFactory(minNumberVoxels);
-        try {
-            return maybeShiftObjects(creator.createConnectedComponents(bic), maskShiftBy);
-        } catch (CreateException e) {
-            throw new SegmentationFailedException(e);
-        }
+        return maybeShiftObjects(creator.createConnectedComponents(mask), maskShiftBy);
     }
 
     private static ObjectCollection maybeShiftObjects(

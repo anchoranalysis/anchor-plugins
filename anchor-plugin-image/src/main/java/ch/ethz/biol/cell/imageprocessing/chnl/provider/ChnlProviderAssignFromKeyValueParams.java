@@ -35,7 +35,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
@@ -46,7 +46,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         KeyValueParams params;
         try {
@@ -66,11 +66,11 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
         byte valueByte = (byte) Double.parseDouble(params.getProperty(key));
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
-        int volumeXY = vb.extent().getVolumeXY();
-        for (int z = 0; z < vb.extent().getZ(); z++) {
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+        int volumeXY = voxels.extent().volumeXY();
+        for (int z = 0; z < voxels.extent().z(); z++) {
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int offset = 0;
             while (offset < volumeXY) {
@@ -78,6 +78,6 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
             }
         }
 
-        return chnl;
+        return channel;
     }
 }

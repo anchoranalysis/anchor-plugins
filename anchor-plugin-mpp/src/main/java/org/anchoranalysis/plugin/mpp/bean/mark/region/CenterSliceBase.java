@@ -42,17 +42,17 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
     protected VoxelStatistics createStatisticsFor(
             VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
 
-        BoundingBox bbox = boundingBoxForRegion(pm);
+        BoundingBox box = boundingBoxForRegion(pm);
 
-        int zCenter = zCenterFromMark(mark, bbox);
+        int zCenter = zCenterFromMark(mark, box);
 
-        return createStatisticsForBBox(pm, dimensions, bbox, zCenter);
+        return createStatisticsForBBox(pm, dimensions, box, zCenter);
     }
 
     protected abstract VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox bbox, int zCenter);
+            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox box, int zCenter);
 
-    private static int zCenterFromMark(Mark markUncasted, BoundingBox bbox) throws CreateException {
+    private static int zCenterFromMark(Mark markUncasted, BoundingBox box) throws CreateException {
         if (!(markUncasted instanceof MarkAbstractPosition)) {
             throw new CreateException(
                     "Only marks that inherit from MarkAbstractPosition are supported");
@@ -60,6 +60,6 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 
         MarkAbstractPosition mark = (MarkAbstractPosition) markUncasted;
 
-        return (int) Math.round(mark.getPos().getZ()) - bbox.cornerMin().getZ();
+        return (int) Math.round(mark.getPos().z()) - box.cornerMin().z();
     }
 }

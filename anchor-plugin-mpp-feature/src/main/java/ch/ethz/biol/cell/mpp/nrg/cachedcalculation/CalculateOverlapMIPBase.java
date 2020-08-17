@@ -54,14 +54,14 @@ public abstract class CalculateOverlapMIPBase
         VoxelizedMark pm1 = mark1.voxelized();
         VoxelizedMark pm2 = mark2.voxelized();
 
-        if (!pm1.getBoundingBoxMIP().intersection().existsWith(pm2.getBoundingBoxMIP())) {
+        if (!pm1.boundingBoxFlattened().intersection().existsWith(pm2.boundingBoxFlattened())) {
             return 0.0;
         }
 
         MaxIntensityProjectionPair pair =
                 new MaxIntensityProjectionPair(
-                        pm1.getVoxelBoxMIP(),
-                        pm2.getVoxelBoxMIP(),
+                        pm1.voxelsMaximumIntensityProjection(),
+                        pm2.voxelsMaximumIntensityProjection(),
                         regionMembershipForMark(mark1),
                         regionMembershipForMark(mark2));
 

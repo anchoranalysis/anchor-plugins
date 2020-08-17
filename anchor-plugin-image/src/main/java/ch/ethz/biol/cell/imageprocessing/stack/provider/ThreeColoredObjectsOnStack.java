@@ -39,7 +39,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
@@ -82,7 +82,7 @@ public class ThreeColoredObjectsOnStack extends StackProviderRGBFromObjectBase {
         ColorList colors = new ColorList();
 
         ObjectCollection objects =
-                ObjectCollectionFactory.from(
+                ObjectCollectionFactory.of(
                         addWithColor(objectsRed, COLOR_RED, colors),
                         addWithColor(objectsGreen, COLOR_GREEN, colors),
                         addWithColor(objectsBlue, COLOR_BLUE, colors));

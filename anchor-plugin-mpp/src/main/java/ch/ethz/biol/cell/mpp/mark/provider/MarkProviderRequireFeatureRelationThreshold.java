@@ -60,7 +60,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
     @BeanField @Getter @Setter private RelationBean relation;
 
     @BeanField @OptionalBean @Getter @Setter
-    private ImageDimProvider dim = new GuessDimFromInputImage();
+    private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
@@ -87,8 +87,8 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
     }
 
     private Optional<ImageDimensions> dimensions() throws CreateException {
-        if (dim != null) {
-            return Optional.of(dim.create());
+        if (dimensions != null) {
+            return Optional.of(dimensions.create());
         } else {
             return Optional.empty();
         }
@@ -106,7 +106,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
                             new FeatureInitParams(),
                             getInitializationParameters().getFeature().getSharedFeatureSet(),
                             getLogger());
-            return session.calc(input);
+            return session.calculate(input);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);

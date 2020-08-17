@@ -50,10 +50,12 @@ public abstract class ChnlProviderLevel extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         return createFor(
-                chnl, objects.create(), DimChecker.createSameSize(chnlOutput, "chnlOutput", chnl));
+                channel,
+                objects.create(),
+                DimChecker.createSameSize(chnlOutput, "chnlOutput", channel));
     }
 
     protected abstract Channel createFor(

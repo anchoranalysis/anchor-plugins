@@ -31,17 +31,17 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 // Rewrites the intensity for each object-mask (assume no overlap) so that its mean is 128
 public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjectsSource {
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         for (ObjectMask object : objectsSource) {
 
@@ -51,12 +51,12 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
 
                 if (meanIntensity == 0.0) {
                     // Special case. The mean can only be 0.0, if all pixels are 0
-                    vb.setPixelsCheckMask(object, 128);
+                    voxels.assignValue(128).toObject(object);
                     continue;
                 }
 
                 double scaleFactor = 128 / meanIntensity;
-                vb.scalePixelsCheckMask(object, scaleFactor);
+                voxels.arithmetic().multiplyBy(object, scaleFactor);
             } catch (FeatureCalculationException e) {
                 throw new CreateException(e);
             }

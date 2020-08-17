@@ -40,6 +40,6 @@ public class Extent<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
     @Override
     protected double calcForAxis(ImageDimensions dimensions, AxisType axis) {
-        return dimensions.getExtent().getValueByDimension(axis);
+        return dimensions.extent().valueByDimension(axis);
     }
 }

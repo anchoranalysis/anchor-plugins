@@ -45,7 +45,7 @@ public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForM
     }
 
     @Override
-    public String genTitleStr() throws OperationFailedException {
+    public String title() throws OperationFailedException {
         return title;
     }
 }

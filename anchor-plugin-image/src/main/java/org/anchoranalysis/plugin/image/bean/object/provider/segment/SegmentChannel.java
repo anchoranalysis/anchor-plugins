@@ -43,7 +43,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithChannel;
 
@@ -60,20 +59,18 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
     @Override
     protected ObjectCollection createFromChnl(Channel chnlSource) throws CreateException {
 
-        Optional<ObjectMask> maskAsObject = createMask();
+        Optional<ObjectMask> maskAsObject = createObjectMask();
 
         try {
             return sgmn.segment(
-                    chnlSource,
-                    maskAsObject,
-                    createSeeds(chnlSource.getDimensions(), maskAsObject));
+                    chnlSource, maskAsObject, createSeeds(chnlSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }
     }
 
-    private Optional<ObjectMask> createMask() throws CreateException {
-        return OptionalFactory.create(mask).map(CreateFromEntireChnlFactory::createObject);
+    private Optional<ObjectMask> createObjectMask() throws CreateException {
+        return OptionalFactory.create(mask).map(ObjectMask::new);
     }
 
     private Optional<SeedCollection> createSeeds(
@@ -88,9 +85,9 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
             throws CreateException {
         return OptionalUtilities.map(
                         maskAsObject,
-                        mask ->
+                        object ->
                                 SeedsFactory.createSeedsWithMask(
-                                        seeds, mask, new Point3i(0, 0, 0), dim))
+                                        seeds, object, new Point3i(0, 0, 0), dim))
                 .orElseGet(() -> SeedsFactory.createSeedsWithoutMask(seeds));
     }
 }

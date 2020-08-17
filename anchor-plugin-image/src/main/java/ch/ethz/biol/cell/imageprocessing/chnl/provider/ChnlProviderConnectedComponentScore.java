@@ -34,14 +34,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
@@ -53,7 +53,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         LevelResultCollection lrc =
@@ -62,8 +62,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnl.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
         populateChnl(chnl, chnlOut, lrc);
         return chnlOut;
     }
@@ -96,27 +95,23 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
     private void populateChnl(Channel regionIn, Channel regionOut, LevelResultCollection lrc) {
 
-        VoxelBox<ByteBuffer> vbIn = regionIn.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbOut = regionOut.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsIn = regionIn.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = regionOut.voxels().asByte();
 
-        assert (vbIn.extent().equals(vbOut.extent()));
+        assert (voxelsIn.extent().equals(voxelsOut.extent()));
 
-        Extent e = vbIn.extent();
+        Extent extent = voxelsIn.extent();
 
-        Point3d point = new Point3d();
+        Point3i point = new Point3i();
 
-        for (int z = 0; z < e.getZ(); z++) {
-            point.setZ(z);
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer bbIn = vbIn.getPixelsForPlane(z).buffer();
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer bbIn = voxelsIn.sliceBuffer(point.z());
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(point.z());
 
             int index = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                point.setY(y);
-
-                for (int x = 0; x < e.getX(); x++) {
-                    point.setX(x);
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
                     int val = ByteConverter.unsignedByteToInt(bbIn.get(index));
 

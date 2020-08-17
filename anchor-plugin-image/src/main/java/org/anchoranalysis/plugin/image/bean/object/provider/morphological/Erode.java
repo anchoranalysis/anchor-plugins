@@ -59,7 +59,7 @@ public class Erode extends ObjectCollectionProviderMorphological {
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (!outsideAtThreshold && getDim() == null) {
+        if (!outsideAtThreshold && getDimensions() == null) {
             throw new BeanMisconfiguredException(
                     "If outsideAtThreshold==false then dim must be set");
         }

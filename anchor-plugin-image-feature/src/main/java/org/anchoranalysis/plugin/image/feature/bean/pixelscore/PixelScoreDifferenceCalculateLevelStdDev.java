@@ -55,8 +55,8 @@ public class PixelScoreDifferenceCalculateLevelStdDev extends PixelScoreCalculat
         Histogram greaterThan =
                 hist.threshold(new RelationToConstant(new GreaterThanEqualToBean(), level));
 
-        this.widthLessThan = lessThan.stdDev() * widthFactor;
-        this.widthGreaterThan = greaterThan.stdDev() * widthFactor;
+        this.widthLessThan = lessThan.standardDeviation() * widthFactor;
+        this.widthGreaterThan = greaterThan.standardDeviation() * widthFactor;
     }
 
     @Override

@@ -39,8 +39,8 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
 /**
  * Only takes pixels where indexNonZero has a nonzero pixel
  *
- * <p>This involves a trick where we count how many pixels exist in our mask and we take the highest
- * num-pixels to match this from our initial histogram
+ * <p>This involves a trick where we count how many pixels exist in our object-mask and we take the
+ * highest number pixels to match this from our initial histogram
  */
 @EqualsAndHashCode(callSuper = true)
 public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {

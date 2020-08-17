@@ -35,14 +35,14 @@ import org.anchoranalysis.image.convert.IJWrap;
 public class ChnlProviderMedianFilterIJ3D extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        ImagePlus imp = IJWrap.createImagePlus(chnl);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        ImagePlus imp = IJWrap.createImagePlus(channel);
 
         Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();
         plugin.setup("", imp);
 
         ImagePlus impOut = plugin.Hybrid3dMedianizer(imp);
 
-        return IJWrap.chnlFromImagePlus(impOut, chnl.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(impOut, channel.dimensions().resolution());
     }
 }

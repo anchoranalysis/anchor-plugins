@@ -38,6 +38,9 @@ import org.anchoranalysis.plugin.points.calculate.ellipse.ObjectWithEllipse;
 // Calculates the ellipticity of an object-mask (on the COG slice if it's a zstack)
 public class Ellipticity extends FeatureSingleObject {
 
+    /** If fewer voxels exist than this, an object is deemed to be perfectly elliptical */
+    private static final int MINIMUM_NUMBER_VOXELS = 6;
+
     @Override
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
@@ -58,12 +61,12 @@ public class Ellipticity extends FeatureSingleObject {
 
         ObjectMask object = both.getObject();
 
-        // If we have these few pixels, assume we are perfectly ellipsoid
-        if (object.numPixelsLessThan(6)) {
+        // If we have these few pixels, assume we are perfect ellipse
+        if (object.voxelsOn().lowerCountExistsThan(MINIMUM_NUMBER_VOXELS)) {
             return 1.0;
         }
 
         return EllipticityCalculatorHelper.calc(
-                object, both.getMark(), inputSessionless.getDimensionsRequired());
+                object, both.getMark(), inputSessionless.dimensionsRequired());
     }
 }

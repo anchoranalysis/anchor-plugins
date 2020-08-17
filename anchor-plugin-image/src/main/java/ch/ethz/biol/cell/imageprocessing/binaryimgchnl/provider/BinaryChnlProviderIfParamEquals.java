@@ -41,7 +41,7 @@ public class BinaryChnlProviderIfParamEquals extends BinaryChnlProviderElseBase 
     // END BEAN PROPERTIES
 
     @Override
-    protected boolean condition(Mask chnl) throws CreateException {
+    protected boolean condition(Mask mask) throws CreateException {
         return condition.isConditionTrue();
     }
 }

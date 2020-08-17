@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.operator.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
@@ -53,10 +53,7 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
     // END BEAN PROPERTIES
 
     @Override
-    protected double deriveScore(
-            double featureValue,
-            double mean,
-            CallableWithException<Double, FeatureCalculationException> stdDev)
+    protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
         if (ignoreHigherSide && featureValue > mean) {
@@ -68,6 +65,6 @@ public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
         }
 
         return GaussianScoreCalculator.calc(
-                mean, stdDev.call(), featureValue, rewardHigherSide, rewardLowerSide);
+                mean, stdDev.get(), featureValue, rewardHigherSide, rewardLowerSide);
     }
 }

@@ -81,7 +81,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
                 path =
                         RootPathMap.instance()
                                 .split(path, rootName, params.context().isDebugEnabled())
-                                .getPath();
+                                .getRemainder();
             } catch (AnchorIOException e) {
                 throw new JobExecutionException(e);
             }

@@ -39,13 +39,14 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class ChnlProviderDimSource extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
     public Channel create() throws CreateException {
-        return createFromDim(dim.create());
+        return createFromDimensions(dimensions.create());
     }
 
-    protected abstract Channel createFromDim(ImageDimensions dim) throws CreateException;
+    protected abstract Channel createFromDimensions(ImageDimensions dimensions)
+            throws CreateException;
 }

@@ -64,7 +64,7 @@ public class ObjectWithMaximumFeature extends ObjectCollectionProviderWithFeatur
             double maxVal = 0;
             for (ObjectMask object : objects) {
 
-                double featureVal = session.calc(new FeatureInputSingleObject(object));
+                double featureVal = session.calculate(new FeatureInputSingleObject(object));
 
                 if (max == null || featureVal > maxVal) {
                     max = object;

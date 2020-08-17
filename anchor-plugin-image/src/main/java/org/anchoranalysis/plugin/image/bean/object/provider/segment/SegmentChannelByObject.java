@@ -60,7 +60,7 @@ public class SegmentChannelByObject extends ObjectCollectionProviderUnaryWithCha
             ObjectCollection objectsSource, Channel channelToSegment) throws CreateException {
         try {
             return objectsSource.stream()
-                    .flatMapWithException(
+                    .flatMap(
                             SegmentationFailedException.class,
                             object -> segmentObject(object, channelToSegment));
 

@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
 import java.nio.file.Path;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
@@ -36,9 +38,8 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeatureEvaluatorFixture {
-
-    private FeatureEvaluatorFixture() {}
 
     public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg(
             Feature<T> feature, Logger logger, Path modelDirectory) throws CreateException {

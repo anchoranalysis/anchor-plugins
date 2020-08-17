@@ -30,8 +30,7 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -43,7 +42,7 @@ import org.junit.Test;
 
 public class WatershedYeongTest {
 
-    private static final String PATH_CHNL_BLURRED = "chnlInBlurred.tif";
+    private static final String PATH_CHANNEL_BLURRED = "chnlInBlurred.tif";
     private static final String PATH_MASK = "mask.tif";
 
     private static final String PATH_EXPECTED_NO_MASKS_NO_SEEDS =
@@ -69,22 +68,22 @@ public class WatershedYeongTest {
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         WatershedYeong sgmn = new WatershedYeong();
 
-        Optional<ObjectMask> mask = pathMask.map(path -> mask(path));
+        Optional<ObjectMask> objectMask = pathMask.map(this::maskAsObject);
 
         ObjectCollection objectsResult =
-                sgmn.segment(chnl(PATH_CHNL_BLURRED), mask, Optional.empty());
+                sgmn.segment(channelFor(PATH_CHANNEL_BLURRED), objectMask, Optional.empty());
 
         ObjectCollection objectsExpected = loader.openObjectsFromTestPath(pathObjectsExpected);
 
         assertTrue(objectsExpected.equalsDeep(objectsResult));
     }
 
-    private ObjectMask mask(String path) {
-        Mask chnl = new Mask(chnl(PATH_MASK), BinaryValues.getDefault());
-        return new ObjectMask(chnl.binaryVoxelBox());
+    private ObjectMask maskAsObject(String path) {
+        return new ObjectMask(
+                BinaryVoxelsFactory.reuseByte(channelFor(PATH_MASK).voxels().asByte()));
     }
 
-    private Channel chnl(String path) {
-        return loader.openChnlFromTestPath(path);
+    private Channel channelFor(String path) {
+        return loader.openChannelFromTestPath(path);
     }
 }

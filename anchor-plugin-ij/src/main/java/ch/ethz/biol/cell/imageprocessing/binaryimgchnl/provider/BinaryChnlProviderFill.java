@@ -56,39 +56,39 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask bic) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
-        Mask bicDup = fillChnl(bic);
+        Mask maskDuplicated = fillMask(mask);
 
         return fillHoles(
-                filterObjectsFromBinaryImage(bicDup),
-                bic,
-                bic.getDimensions(),
+                filterObjectsFromMask(maskDuplicated),
+                mask,
+                mask.dimensions(),
                 BinaryValues.getDefault());
     }
 
-    private Mask fillChnl(Mask bic) throws CreateException {
-        Mask bicInv = new Mask(bic.getChannel(), bic.getBinaryValues().createInverted());
+    private Mask fillMask(Mask mask) throws CreateException {
+        Mask maskInverted = new Mask(mask.channel(), mask.binaryValues().createInverted());
 
-        Mask bicDup = bic.duplicate();
+        Mask maskDuplicated = mask.duplicate();
 
         try {
-            BinaryChnlProviderIJBinary.fill(bicDup.binaryVoxelBox());
+            BinaryChnlProviderIJBinary.fill(maskDuplicated.binaryVoxels());
         } catch (OperationFailedException e1) {
             throw new CreateException(e1);
         }
 
-        BinaryChnlAnd.apply(bicDup, bicInv);
+        BinaryChnlAnd.apply(maskDuplicated, maskInverted);
 
-        return bicDup;
+        return maskDuplicated;
     }
 
-    private ObjectCollection filterObjectsFromBinaryImage(Mask bi) throws CreateException {
+    private ObjectCollection filterObjectsFromMask(Mask mask) throws CreateException {
 
         CreateFromConnectedComponentsFactory objectCreator =
                 new CreateFromConnectedComponentsFactory();
 
-        return filterObjects(objectCreator.createConnectedComponents(bi), bi.getDimensions());
+        return filterObjects(objectCreator.createConnectedComponents(mask), mask.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, ImageDimensions dimensions)
@@ -103,7 +103,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     private double determineMaxVolume(ImageDimensions dim) throws CreateException {
         if (maxVolume != null) {
             try {
-                return maxVolume.resolveToVoxels(Optional.of(dim.getRes()));
+                return maxVolume.resolveToVoxels(Optional.of(dim.resolution()));
             } catch (UnitValueException e) {
                 throw new CreateException(e);
             }
@@ -115,7 +115,7 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     private boolean includeObject(
             ObjectMask object, ImageDimensions dimensions, double maxVolumeResolved) {
         // It's not allowed touch the border
-        if (skipAtBorder && object.getBoundingBox().atBorderXY(dimensions)) {
+        if (skipAtBorder && object.boundingBox().atBorderXY(dimensions)) {
             return false;
         }
 
@@ -124,9 +124,9 @@ public class BinaryChnlProviderFill extends BinaryChnlProviderOne {
     }
 
     private static Mask fillHoles(
-            ObjectCollection filled, Mask src, ImageDimensions sd, BinaryValues bvOut) {
-        Mask bcSelected = MaskFromObjects.createFromObjects(filled, sd, bvOut);
-        BinaryChnlOr.binaryOr(bcSelected, src);
-        return bcSelected;
+            ObjectCollection filled, Mask source, ImageDimensions dimensions, BinaryValues bvOut) {
+        Mask maskFromObjects = MaskFromObjects.createFromObjects(filled, dimensions, bvOut);
+        BinaryChnlOr.binaryOr(maskFromObjects, source);
+        return maskFromObjects;
     }
 }

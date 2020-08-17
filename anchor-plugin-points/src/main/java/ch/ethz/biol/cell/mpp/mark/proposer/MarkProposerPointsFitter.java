@@ -79,7 +79,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
                     pointsProposer.propose(
                             point,
                             inputMark.getMark(),
-                            context.getDimensions(),
+                            context.dimensions(),
                             context.getRandomNumberGenerator(),
                             context.getErrorNode().add("pointsProposer"));
 
@@ -91,7 +91,7 @@ public class MarkProposerPointsFitter extends MarkProposer {
             List<Point3f> fitList =
                     FunctionalList.mapToList(points.get(), PointConverter::floatFromInt);
 
-            pointsFitter.fit(fitList, inputMark.getMark(), context.getDimensions());
+            pointsFitter.fit(fitList, inputMark.getMark(), context.dimensions());
 
         } catch (PointsFitterException | InsufficientPointsException e) {
 

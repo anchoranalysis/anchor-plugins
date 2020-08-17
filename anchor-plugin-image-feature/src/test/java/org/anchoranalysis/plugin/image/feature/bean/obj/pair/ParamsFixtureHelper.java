@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -34,6 +36,7 @@ import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
 import org.anchoranalysis.test.feature.plugins.objects.ParamsOverlappingCircleFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParamsFixtureHelper {
 
     /** A particular result that should be the same for the same-size case in both directions */
@@ -41,8 +44,6 @@ public class ParamsFixtureHelper {
 
     /** The overlap ratio expected to max-volume */
     public static final double OVERLAP_RATIO_TO_MAX_VOLUME_DIFFERENT_SIZE = 0.7210325608682898;
-
-    private ParamsFixtureHelper() {}
 
     /**
      * Tests two overlapping circles, assuming feature returns 0 if non-overlapping, and double

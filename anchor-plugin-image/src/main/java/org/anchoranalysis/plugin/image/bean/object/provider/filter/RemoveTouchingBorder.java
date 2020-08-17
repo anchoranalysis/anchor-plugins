@@ -56,9 +56,9 @@ public class RemoveTouchingBorder extends ObjectCollectionProviderWithDimensions
 
     private boolean atBorder(ObjectMask object, ImageDimensions dim) {
         if (useZ) {
-            return object.getBoundingBox().atBorder(dim);
+            return object.boundingBox().atBorder(dim);
         } else {
-            return object.getBoundingBox().atBorderXY(dim);
+            return object.boundingBox().atBorderXY(dim);
         }
     }
 }

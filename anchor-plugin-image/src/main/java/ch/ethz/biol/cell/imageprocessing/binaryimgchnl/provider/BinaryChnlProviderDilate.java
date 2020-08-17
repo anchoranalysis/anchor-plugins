@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 
@@ -63,9 +63,9 @@ public class BinaryChnlProviderDilate extends BinaryChnlProviderMorphOp {
     @Override
     protected void applyMorphOp(Mask imgChnl, boolean do3D) throws CreateException {
 
-        BinaryVoxelBox<ByteBuffer> out =
+        BinaryVoxels<ByteBuffer> out =
                 MorphologicalDilation.dilate(
-                        imgChnl.binaryVoxelBox(),
+                        imgChnl.binaryVoxels(),
                         do3D,
                         getIterations(),
                         backgroundVb(),

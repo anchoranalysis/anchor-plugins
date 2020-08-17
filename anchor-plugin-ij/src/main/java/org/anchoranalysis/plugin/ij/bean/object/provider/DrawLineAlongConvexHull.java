@@ -32,10 +32,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
 
 /**
  * Draws a lines between successive points on the convex-hull of an object.
@@ -48,16 +47,14 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author feehano
  */
-public class DrawLineAlongConvexHull extends ObjectCollectionProviderWithDimensions {
+public class DrawLineAlongConvexHull extends ObjectCollectionProviderUnary {
 
     @Override
-    public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
-        ImageDimensions dimensions = createDimensions();
-        return objects.stream().map(object -> transform(object, dimensions));
+    protected ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
+        return objects.stream().map(this::transform);
     }
 
-    private ObjectMask transform(ObjectMask object, ImageDimensions dimensions)
-            throws CreateException {
+    private ObjectMask transform(ObjectMask object) throws CreateException {
         try {
             List<Point2i> pointsConvexHull =
                     ConvexHullUtilities.convexHull2D(ConvexHullUtilities.pointsOnOutline(object));

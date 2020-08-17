@@ -26,24 +26,21 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.segment.watershed.minima.grayscalereconstruction.GrayscaleReconstructionByErosion;
 
 public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
@@ -52,22 +49,6 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
     @BeanField @Getter @Setter private GrayscaleReconstructionByErosion grayscaleReconstruction;
     // END BEAN PROPERTIES
 
-    private VoxelBoxWrapper createMarkerImageFromGradient(
-            VoxelBox<ByteBuffer> markerMaskVb,
-            BinaryValuesByte maskBV,
-            VoxelBoxWrapper gradientImage) {
-
-        VoxelBoxWrapper out =
-                VoxelBoxFactory.instance()
-                        .create(gradientImage.any().extent(), gradientImage.getVoxelDataType());
-        out.any().setAllPixelsTo((int) gradientImage.getVoxelDataType().maxValue());
-
-        BoundingBox all = new BoundingBox(markerMaskVb.extent());
-        gradientImage.copyPixelsToCheckMask(all, out, all, markerMaskVb, maskBV);
-        return out;
-    }
-
-    // containingMask can be null
     @Override
     public Channel imposeMinima(
             Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask)
@@ -77,46 +58,53 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
             throw new OperationFailedException("There must be at least one seed");
         }
 
-        seeds.verifySeedsAreInside(chnl.getDimensions().getExtent());
+        seeds.verifySeedsAreInside(chnl.dimensions().extent());
 
-        ObjectCollection masks = seeds.createMasks();
+        ObjectCollection objects = seeds.deriveObjects();
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
                 MaskFromObjects.createFromObjects(
-                        masks, chnl.getDimensions(), masks.getFirstBinaryValues());
+                        objects, chnl.dimensions(), objects.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original
         chnl = chnl.duplicate();
 
-        VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
+        VoxelsWrapper voxelsIntensity = chnl.voxels();
+
+        VoxelsAssigner zeroAssigner = voxelsIntensity.assignValue(0);
 
         // We set the EDM to 0 at the points of the minima
-        for (ObjectMask object : masks) {
-            vbIntensity.any().setPixelsCheckMask(object, 0);
-        }
+        objects.forEach(zeroAssigner::toObject);
 
         // We set the EDM to 255 outside the channel, otherwise the reconstruction will be messed up
-        // Better alternative is to apply the reconstruction only on the ask
+        // Better alternative is to apply the reconstruction only on the mask
         if (containingMask.isPresent()) {
-            vbIntensity
+            voxelsIntensity
                     .any()
-                    .setPixelsCheckMask(
-                            containingMask.get(),
-                            (int) vbIntensity.getVoxelDataType().maxValue(),
-                            masks.getFirstBinaryValuesByte().getOffByte());
+                    .assignValue((int) voxelsIntensity.getVoxelDataType().maxValue())
+                    .toObject(containingMask.get());
         }
 
-        VoxelBoxWrapper markerForReconstruction =
-                createMarkerImageFromGradient(
-                        markerMask.getChannel().getVoxelBox().asByte(),
-                        markerMask.getBinaryValues().createByte(),
-                        vbIntensity);
+        VoxelsWrapper markerForReconstruction =
+                createMarkerImageFromGradient(markerMask, voxelsIntensity);
 
-        VoxelBoxWrapper reconBuffer =
+        VoxelsWrapper reconBuffer =
                 grayscaleReconstruction.reconstruction(
-                        vbIntensity, markerForReconstruction, containingMask);
+                        voxelsIntensity, markerForReconstruction, containingMask);
 
-        return ChannelFactory.instance().create(reconBuffer.any(), chnl.getDimensions().getRes());
+        return ChannelFactory.instance().create(reconBuffer.any(), chnl.dimensions().resolution());
+    }
+
+    private VoxelsWrapper createMarkerImageFromGradient(Mask marker, VoxelsWrapper gradientImage) {
+
+        VoxelsWrapper out =
+                VoxelsFactory.instance()
+                        .create(gradientImage.any().extent(), gradientImage.getVoxelDataType());
+        out.assignValue((int) gradientImage.getVoxelDataType().maxValue()).toAll();
+
+        ObjectMask object = new ObjectMask(marker.binaryVoxels());
+        gradientImage.copyVoxelsTo(object, out, object.boundingBox());
+        return out;
     }
 }

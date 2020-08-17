@@ -37,6 +37,6 @@ public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<Feat
     @Override
     protected FeatureInputMark createFeatureCalcParams(
             Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack) {
-        return new FeatureInputMark(mark, Optional.of(nrgStack.getDimensions()));
+        return new FeatureInputMark(mark, Optional.of(nrgStack.dimensions()));
     }
 }

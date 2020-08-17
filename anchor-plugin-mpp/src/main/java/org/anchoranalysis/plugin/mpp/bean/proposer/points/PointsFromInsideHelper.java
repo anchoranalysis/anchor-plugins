@@ -39,34 +39,34 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 class PointsFromInsideHelper {
 
     private final PointListForConvex pointsConvexRoot;
 
     private final BoundingBox boundingBox;
-    private final BinaryVoxelBox<ByteBuffer> voxelBoxFilled;
+    private final BinaryVoxels<ByteBuffer> voxelsFilled;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
     public PointsFromInsideHelper(
-            PointListForConvex pointsConvexRoot, Mask chnlFilled, BoundingBox bbox) {
+            PointListForConvex pointsConvexRoot, Mask maskFilled, BoundingBox box) {
         this.pointsConvexRoot = pointsConvexRoot;
-        this.boundingBox = bbox;
-        this.voxelBoxFilled = chnlFilled.binaryVoxelBox();
-        this.cornerMin = bbox.cornerMin();
-        this.cornerMax = bbox.calcCornerMax();
+        this.boundingBox = box;
+        this.voxelsFilled = maskFilled.binaryVoxels();
+        this.cornerMin = box.cornerMin();
+        this.cornerMax = box.calculateCornerMax();
     }
 
     public List<Point3i> convexOnly(
-            Mask chnl, Point3d pointRoot, int skipAfterSuccessiveEmptySlices) {
-        Preconditions.checkArgument(chnl.getDimensions().contains(boundingBox));
+            Mask mask, Point3d pointRoot, int skipAfterSuccessiveEmptySlices) {
+        Preconditions.checkArgument(mask.dimensions().contains(boundingBox));
 
-        int startZ = (int) Math.floor(pointRoot.getZ());
+        int startZ = (int) Math.floor(pointRoot.z());
 
         List<Point3i> listOut = new ArrayList<>();
 
@@ -75,8 +75,8 @@ class PointsFromInsideHelper {
 
         successiveEmptySlices =
                 iterateOverSlices(
-                        IntStream.rangeClosed(startZ, cornerMax.getZ()),
-                        chnl,
+                        IntStream.rangeClosed(startZ, cornerMax.z()),
+                        mask,
                         successiveEmptySlices,
                         skipAfterSuccessiveEmptySlices,
                         listOut::add);
@@ -86,8 +86,8 @@ class PointsFromInsideHelper {
             return listOut;
         }
         iterateOverSlices(
-                IntStreamEx.rangeClosed(startZ - 1, cornerMin.getZ(), -1),
-                chnl,
+                IntStreamEx.rangeClosed(startZ - 1, cornerMin.z(), -1),
+                mask,
                 successiveEmptySlices,
                 skipAfterSuccessiveEmptySlices,
                 listOut::add);
@@ -97,20 +97,20 @@ class PointsFromInsideHelper {
 
     private int iterateOverSlices(
             IntStream zRange,
-            Mask chnl,
+            Mask mask,
             int successiveEmptySlices,
             int skipAfterSuccessiveEmptySlices,
             Consumer<Point3i> processPoint) {
-        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        VoxelBox<ByteBuffer> vb = chnl.getChannel().getVoxelBox().asByte();
-        Extent extent = vb.extent();
+        Voxels<ByteBuffer> voxels = mask.channel().voxels().asByte();
+        Extent extent = voxels.extent();
 
         Iterator<Integer> itr = zRange.iterator();
         while (itr.hasNext()) {
             int z = itr.next();
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;
@@ -133,13 +133,13 @@ class PointsFromInsideHelper {
             int z,
             Consumer<Point3i> processPoint) {
         boolean addedToSlice = false;
-        for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-            for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+        for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+            for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
                 if (bb.get(offset) == bvb.getOnByte()) {
 
                     Point3i point = new Point3i(x, y, z);
-                    if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelBoxFilled)) {
+                    if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {
                         addedToSlice = true;
                         processPoint.accept(point);
                     }

@@ -46,7 +46,7 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
@@ -85,15 +85,15 @@ public class BackgroundSubtractShortTask extends RasterTask {
             Channel bgSubOut =
                     ChnlProviderIJBackgroundSubtractor.subtractBackground(
                             inputImage, radius, false);
-            VoxelBox<?> vbSubOut = bgSubOut.getVoxelBox().any();
+            Voxels<?> voxelsSubOut = bgSubOut.voxels().any();
 
-            double maxPixel = vbSubOut.ceilOfMaxPixel();
+            double maxPixel = voxelsSubOut.extracter().voxelWithMaxIntensity();
 
             double scaleRatio = 255.0 / maxPixel;
 
             // We go from 2048 to 256
             if (scaleDownIntensityFactor != 1) {
-                vbSubOut.multiplyBy(scaleRatio);
+                voxelsSubOut.arithmetic().multiplyBy(scaleRatio);
             }
 
             ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();

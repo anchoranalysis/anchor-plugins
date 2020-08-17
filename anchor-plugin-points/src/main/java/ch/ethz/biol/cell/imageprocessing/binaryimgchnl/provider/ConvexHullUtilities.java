@@ -26,18 +26,17 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.FindOutline;
-import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -99,16 +98,16 @@ public class ConvexHullUtilities {
 
         int count = 0;
         do {
-            int x1 = points.get(p1).getX();
-            int y1 = points.get(p1).getY();
+            int x1 = points.get(p1).x();
+            int y1 = points.get(p1).y();
             p2 = p1 + 1;
 
             if (p2 == points.size()) {
                 p2 = 0;
             }
 
-            int x2 = points.get(p2).getX();
-            int y2 = points.get(p2).getY();
+            int x2 = points.get(p2).x();
+            int y2 = points.get(p2).y();
             p3 = p2 + 1;
 
             if (p3 == points.size()) {
@@ -117,8 +116,8 @@ public class ConvexHullUtilities {
 
             int determinate;
             do {
-                int x3 = points.get(p3).getX();
-                int y3 = points.get(p3).getY();
+                int x3 = points.get(p3).x();
+                int y3 = points.get(p3).y();
                 determinate = x1 * (y2 - y3) - y1 * (x2 - x3) + (y3 * x2 - y2 * x3);
                 if (determinate > 0) {
                     x2 = x3;
@@ -156,19 +155,11 @@ public class ConvexHullUtilities {
     }
 
     public static List<Point2i> pointsOnAllOutlines(ObjectCollection objects) {
-        List<Point2i> points = new ArrayList<>();
-
-        for (ObjectMask object : objects) {
-            addPointsFromObjOutline(object, points);
-        }
-
-        return points;
+        return PointsFromObject.listFromAllOutlines2i(objects);
     }
 
-    public static List<Point2i> pointsOnOutline(ObjectMask obj) {
-        List<Point2i> points = new ArrayList<>();
-        addPointsFromObjOutline(obj, points);
-        return points;
+    public static List<Point2i> pointsOnOutline(ObjectMask object) throws CreateException {
+        return PointsFromObject.listFromOutline2i(object);
     }
 
     private static int calculateStartingIndex(List<Point2i> pointsIn) {
@@ -177,7 +168,7 @@ public class ConvexHullUtilities {
         int x;
         int y;
         for (int i = 0; i < pointsIn.size(); i++) {
-            y = pointsIn.get(i).getY();
+            y = pointsIn.get(i).y();
             if (y < smallestY) {
                 smallestY = y;
             }
@@ -186,19 +177,13 @@ public class ConvexHullUtilities {
         int smallestX = Integer.MAX_VALUE;
         int p1 = 0;
         for (int i = 0; i < pointsIn.size(); i++) {
-            x = pointsIn.get(i).getX();
-            y = pointsIn.get(i).getY();
+            x = pointsIn.get(i).x();
+            y = pointsIn.get(i).y();
             if (y == smallestY && x < smallestX) {
                 smallestX = x;
                 p1 = i;
             }
         }
         return p1;
-    }
-
-    private static void addPointsFromObjOutline(ObjectMask object, List<Point2i> points) {
-        ObjectMask outline = FindOutline.outline(object, 1, true, false);
-        PointsFromBinaryVoxelBox.addPointsFromVoxelBox(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), points);
     }
 }

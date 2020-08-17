@@ -41,9 +41,9 @@ public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromChnl(Mask chnl) throws CreateException {
-        if (condition(chnl)) {
-            return chnl;
+    protected Mask createFromMask(Mask mask) throws CreateException {
+        if (condition(mask)) {
+            return mask;
         } else {
             return binaryChnlElse.create();
         }
@@ -53,5 +53,5 @@ public abstract class BinaryChnlProviderElseBase extends BinaryChnlProviderOne {
      * If this evaluates true, the binary-channel will be returned as-is, otherwise {@link
      * binaryChnlElse} is returned
      */
-    protected abstract boolean condition(Mask chnl) throws CreateException;
+    protected abstract boolean condition(Mask mask) throws CreateException;
 }

@@ -43,7 +43,7 @@ public class WalkShortestPathTest {
 
         ObjectMask object = WalkShortestPath.walkLine(point1, point2);
 
-        assertTrue(object.binaryVoxelBox().countOn() == 24);
+        assertTrue(object.binaryVoxels().countOn() == 24);
         assertTrue(object.contains(new Point3i(4, 19, 0)));
         assertTrue(object.contains(new Point3i(11, 3, 0)));
     }

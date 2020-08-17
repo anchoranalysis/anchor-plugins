@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /** Base class for performing morphological operations */
 public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
@@ -55,18 +55,18 @@ public abstract class BinaryChnlProviderMorphOp extends BinaryChnlProviderOne {
     protected abstract void applyMorphOp(Mask imgChnl, boolean do3D) throws CreateException;
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
         // Gets outline
-        applyMorphOp(chnl, (chnl.getDimensions().getZ() > 1) && !suppress3D);
+        applyMorphOp(mask, (mask.dimensions().z() > 1) && !suppress3D);
 
-        return chnl;
+        return mask;
     }
 
-    protected Optional<VoxelBox<ByteBuffer>> backgroundVb() throws CreateException {
+    protected Optional<Voxels<ByteBuffer>> backgroundVb() throws CreateException {
 
         if (minIntensityValue > 0) {
-            return Optional.of(backgroundChnlProvider.create().getVoxelBox().asByte());
+            return Optional.of(backgroundChnlProvider.create().voxels().asByte());
         } else {
             return Optional.empty();
         }

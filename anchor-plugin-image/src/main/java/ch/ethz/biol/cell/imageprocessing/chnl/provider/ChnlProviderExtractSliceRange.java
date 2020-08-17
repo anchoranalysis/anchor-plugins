@@ -39,7 +39,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
 
@@ -50,24 +50,24 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
     // END BEANS
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         ChannelFactoryByte factory = new ChannelFactoryByte();
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
-        Extent e = chnl.getDimensions().getExtent().duplicateChangeZ(sliceEnd - sliceStart + 1);
+        Extent e = channel.dimensions().extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel chnlOut =
                 factory.createEmptyInitialised(
-                        new ImageDimensions(e, chnl.getDimensions().getRes()));
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+                        new ImageDimensions(e, channel.dimensions().resolution()));
+        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
-        int volumeXY = vb.extent().getVolumeXY();
+        int volumeXY = voxels.extent().volumeXY();
         for (int z = sliceStart; z <= sliceEnd; z++) {
 
-            ByteBuffer bbIn = vb.getPixelsForPlane(z).buffer();
-            ByteBuffer bbOut = vbOut.getPixelsForPlane(z - sliceStart).buffer();
+            ByteBuffer bbIn = voxels.sliceBuffer(z);
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z - sliceStart);
 
             for (int i = 0; i < volumeXY; i++) {
                 bbOut.put(i, bbIn.get(i));

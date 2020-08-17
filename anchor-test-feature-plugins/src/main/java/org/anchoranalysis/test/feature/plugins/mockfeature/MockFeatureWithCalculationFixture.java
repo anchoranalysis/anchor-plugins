@@ -29,7 +29,10 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 import static org.junit.Assert.assertEquals;
 
 import java.util.function.ToDoubleFunction;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.function.CheckedRunnable;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -45,15 +48,11 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  * @author Owen Feehan
  *
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockFeatureWithCalculationFixture {
 
     public static final ToDoubleFunction<FeatureInputSingleObject> DEFAULT_FUNC_NUM_PIXELS =
             input -> (double) input.getObject().numberVoxelsOn();
-
-    @FunctionalInterface
-    public interface RunnableWithException<E extends Exception> {
-        public void run() throws E;
-    }
 
     /**
      * Executes an operation, and afterwards asserts an expected number of times certain internal
@@ -68,7 +67,7 @@ public class MockFeatureWithCalculationFixture {
     public static void executeAndAssertCount(
             int expectedCountCalc,
             int expectedCountExecute,
-            RunnableWithException<OperationFailedException> operation)
+            CheckedRunnable<OperationFailedException> operation)
             throws OperationFailedException {
         // We rely on static variables in the class, so no concurrency allowed
         synchronized (MockCalculation.class) {

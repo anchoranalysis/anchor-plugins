@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
@@ -5,16 +30,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.io.generator.raster.bbox.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
+import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -57,7 +86,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      */
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
-    /** Interpolator used when scaling */
+    /** Interpolator used when scaling the background */
     @BeanField @Getter @Setter
     private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
 
@@ -71,7 +100,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * Optionally outline the other (unselected for the thumbnail) objects in this particular color.
      * If not set, these objects aren't outlined at all..
      */
-    @BeanField @OptionalBean @Getter @Setter private RGBColorBean colorUnselectedObjects;
+    @BeanField @OptionalBean @Getter @Setter
+    private RGBColorBean colorUnselectedObjects = new RGBColorBean(0, 0, 255);
     // END BEAN PROPERTIES
 
     private DrawObjectOnStackGenerator generator;
@@ -79,7 +109,10 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private Extent sceneExtentScaled;
 
     @Override
-    public void start(ObjectCollection objects, Optional<Stack> backgroundSource)
+    public void start(
+            ObjectCollection objects,
+            StreamableCollection<BoundingBox> boundingBoxes,
+            Optional<Stack> backgroundSource)
             throws OperationFailedException {
 
         if (objects.isEmpty()) {
@@ -87,38 +120,67 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             return;
         }
 
+        Interpolator interpolatorBackground = interpolator.create();
+
         // Determine what to scale the objects and any background by
         scaler =
                 new FlattenAndScaler(
-                        ObjectScalingHelper.scaleEachObjectFitsIn(objects, size.asExtent()),
-                        interpolator.create());
+                        boundingBoxes, objects, interpolatorBackground, size.asExtent());
 
-        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, objects));
+        setupGenerator(
+                objects,
+                determineBackgroundMaybeOutlined(backgroundSource, interpolatorBackground));
     }
 
     @Override
     public DisplayStack thumbnailFor(ObjectCollection objects) throws CreateException {
-        assert (objects.size() == 1);
+
         // For now only work with the first object in the collection
         try {
-            ObjectMask objectScaled = scaler.scaleObject(objects.get(0));
+            ObjectsWithBoundingBox objectsScaled =
+                    new ObjectsWithBoundingBox(scaler.scaleObjects(objects));
+
+            assert (!objectsScaled
+                    .boundingBox()
+                    .extent()
+                    .anyDimensionIsLargerThan(size.asExtent()));
 
             // Find a bounding-box of target size in which objectScaled is centered
             BoundingBox centeredBox =
                     CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
-                            objectScaled.getBoundingBox(), size.asExtent(), sceneExtentScaled);
+                            objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
 
-            assert (centeredBox.extent().equals(size.asExtent()));
-            assert (sceneExtentScaled.contains(centeredBox));
+            assert centeredBox.extent().equals(size.asExtent());
+            assert sceneExtentScaled.contains(centeredBox);
 
-            ObjectMask objectCentered = objectScaled.mapBoundingBoxChangeExtent(centeredBox);
-
-            generator.setIterableElement(objectCentered);
+            generator.setIterableElement(determineObjectsForGenerator(objectsScaled, centeredBox));
 
             return DisplayStack.create(generator.generate());
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);
+        }
+    }
+
+    @Override
+    public void end() {
+        // Garbage collect the scaler as it contains a cache of scaled-objects
+        scaler = null;
+    }
+
+    private ObjectsWithBoundingBox determineObjectsForGenerator(
+            ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox)
+            throws OperationFailedException {
+        ObjectsWithBoundingBox objectsMapped = objectsScaled.mapBoundingBoxToBigger(centeredBox);
+
+        // Add any other objects which intersect with the scaled-bounding box, excluding
+        //  the object themselves
+        if (colorUnselectedObjects != null) {
+            return objectsMapped.addObjectsNoBoundingBoxChange(
+                    scaler.objectsThatIntersectWith(
+                            objectsMapped.boundingBox(), objectsScaled.objects()));
+        } else {
+            return objectsMapped;
         }
     }
 
@@ -129,35 +191,32 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * @param backgroundUnscaled unscaled background if it exists
      */
     private void setupGenerator(
-            ObjectCollection objectsUnscaled, Optional<Stack> backgroundScaled) {
+            ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {
+
         sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
 
         // Create a generator that draws objects on the background
-        generator = DrawObjectOnStackGenerator.createFromStack(backgroundScaled, outlineWidth);
+        generator =
+                DrawObjectOnStackGenerator.createFromStack(
+                        backgroundScaled, outlineWidth, createColorIndex(false));
     }
 
-    private Optional<Stack> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, ObjectCollection objects)
-            throws OperationFailedException {
-        Optional<Stack> backgroundScaled =
-                BackgroundHelper.determineBackgroundAndScale(
-                        backgroundSource, backgroundChannelIndex, scaler);
-
-        if (colorUnselectedObjects != null && backgroundScaled.isPresent()) {
-            // Draw the other objects (scaled) onto the background. The objects are memoized as we
-            // do again
-            // individually at a later point.
-            DrawOutlineHelper drawOutlineHelper =
-                    new DrawOutlineHelper(colorUnselectedObjects, outlineWidth, scaler);
-            return Optional.of(drawOutlineHelper.drawObjects(backgroundScaled.get(), objects));
-        } else {
-            return backgroundScaled;
-        }
+    private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
+            Optional<Stack> backgroundSource, Interpolator interpolator) {
+        BackgroundSelector backgroundHelper =
+                new BackgroundSelector(
+                        backgroundChannelIndex, scaler.getScaleFactor(), interpolator);
+        return backgroundHelper.determineBackground(backgroundSource);
     }
 
-    @Override
-    public void end() {
-        // Garbage collect the scaler as it contains a cache of scaled-objects
-        scaler = null;
+    /**
+     * Creates a suitable color index for distinguishing between the different types of objects that
+     * appear
+     *
+     * @param pairs whether pairs are being used or not
+     * @return the color index
+     */
+    private ColorIndex createColorIndex(boolean pairs) {
+        return new ThumbnailColorIndex(pairs, colorUnselectedObjects.toAWTColor());
     }
 }

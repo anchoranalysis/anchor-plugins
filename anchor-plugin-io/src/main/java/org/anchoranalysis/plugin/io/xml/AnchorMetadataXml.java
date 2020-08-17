@@ -90,9 +90,9 @@ public class AnchorMetadataXml {
             elmnRes.appendChild(yRes);
             elmnRes.appendChild(zRes);
 
-            xRes.appendChild(doc.createTextNode(Double.toString(res.getX())));
-            yRes.appendChild(doc.createTextNode(Double.toString(res.getY())));
-            zRes.appendChild(doc.createTextNode(Double.toString(res.getZ())));
+            xRes.appendChild(doc.createTextNode(Double.toString(res.x())));
+            yRes.appendChild(doc.createTextNode(Double.toString(res.y())));
+            zRes.appendChild(doc.createTextNode(Double.toString(res.z())));
 
             XmlOutputter.writeXmlToFile(doc, filePath);
 
@@ -105,9 +105,9 @@ public class AnchorMetadataXml {
 
         // Initialize to defaults
         ImageResolution res = new ImageResolution();
-        double x = res.getX();
-        double y = res.getY();
-        double z = res.getZ();
+        double x = res.x();
+        double y = res.y();
+        double z = res.z();
 
         for (int i = 0; i < nodeList.getLength(); i++) {
 

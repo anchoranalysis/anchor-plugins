@@ -55,7 +55,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     @BeanField @OptionalBean @Getter @Setter private UnitValueDistance maxDistance;
     // END BEANS
 
-    private Mask binaryImage = null;
+    private Mask mask;
     private Channel chnl;
 
     @Override
@@ -74,20 +74,20 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte bvb = binaryImage.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {
             pointDouble.increment(step);
 
-            Point3i point = PointConverter.intFromDouble(pointDouble);
+            Point3i point = PointConverter.intFromDoubleFloor(pointDouble);
 
             // We do check
             if (failsDistanceCondition(centerPoint, pointDouble)) {
                 return Optional.empty();
             }
 
-            ImageDimensions dimensions = binaryImage.getDimensions();
+            ImageDimensions dimensions = mask.dimensions();
             if (!dimensions.contains(point)) {
                 return Optional.empty();
             }
@@ -144,16 +144,16 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = chnl.getVoxelBox().asByte().getPixelsForPlane(point.getZ()).buffer();
+        ByteBuffer buffer = chnl.voxels().asByte().sliceBuffer(point.z());
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 
     private void createBinaryImageIfNecessary() throws OperationFailedException {
         // The first time, we establish the binaryImage
-        if (binaryImage == null) {
+        if (mask == null) {
             try {
-                binaryImage = binaryChnl.create();
-                chnl = binaryImage.getChannel();
+                mask = binaryChnl.create();
+                chnl = mask.channel();
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }
@@ -172,15 +172,10 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         // We do check
         if (maxDistance != null) {
             double distance =
-                    binaryImage
-                            .getDimensions()
-                            .getRes()
-                            .distanceZRelative(centerPoint, pointDouble);
+                    mask.dimensions().resolution().distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(binaryImage.getDimensions().getRes()),
-                            centerPoint,
-                            pointDouble);
+                            Optional.of(mask.dimensions().resolution()), centerPoint, pointDouble);
             return distance > maxDistanceResolved;
         } else {
             return false;

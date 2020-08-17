@@ -38,9 +38,9 @@ public class CenterSlice extends CenterSliceBase {
 
     @Override
     protected VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox bbox, int zCenter) {
+            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox box, int zCenter) {
 
-        if (zCenter < 0 || zCenter >= bbox.extent().getZ()) {
+        if (zCenter < 0 || zCenter >= box.extent().z()) {
             return new VoxelStatisticsCombined();
         }
 

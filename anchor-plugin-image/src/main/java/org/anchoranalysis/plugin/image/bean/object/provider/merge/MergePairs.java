@@ -87,7 +87,7 @@ public class MergePairs extends MergeWithFeature {
             double threshold =
                     featureEvaluatorThreshold
                             .createAndStartSession()
-                            .calc(FeatureInputNull.instance());
+                            .calculate(FeatureInputNull.instance());
 
             return new AssignPriorityFromPair(
                     createCalculatorForPairs(), threshold, relation.create());

@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.test.bean;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -45,9 +47,8 @@ import org.anchoranalysis.core.log.Logger;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanTestChecker {
-
-    private BeanTestChecker() {}
 
     /**
      * Checks if a bean has all necessary items, throwing a run-time exception if it does not

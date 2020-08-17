@@ -45,16 +45,18 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
+    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
         Channel chnl =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(dimSource, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         BinaryValues bvOut = BinaryValues.getDefault();
 
+        Mask mask = new Mask(chnl, bvOut);
+
         if (createOn) {
-            chnl.getVoxelBox().any().setAllPixelsTo(bvOut.getOnInt());
+            mask.assignOn().toAll();
         }
-        return new Mask(chnl, bvOut);
+
+        return mask;
     }
 }

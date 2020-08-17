@@ -110,6 +110,7 @@ class TaskSingleInputHelper {
     private static <T extends InputFromManager, S, V extends Task<T, S>>
             boolean runTaskOnSingleInput(T input, V task, Path pathForOutputs)
                     throws OperationFailedException {
+
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 

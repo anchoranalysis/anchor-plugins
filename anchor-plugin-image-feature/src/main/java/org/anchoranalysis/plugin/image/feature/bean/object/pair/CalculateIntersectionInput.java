@@ -50,7 +50,7 @@ class CalculateIntersectionInput
             return Optional.empty();
         }
 
-        assert (delegate.get().hasPixelsGreaterThan(0));
+        assert (delegate.get().voxelsOn().anyExists());
         assert (delegate.get() != null);
 
         return Optional.of(

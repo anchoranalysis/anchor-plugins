@@ -36,9 +36,9 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class SgmnRepeat extends BinarySegmentationOne {
 
@@ -47,18 +47,18 @@ public class SgmnRepeat extends BinarySegmentationOne {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmnFromSgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> sgmnFromSgmn(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxelBox<ByteBuffer> outOld = null;
+        BinaryVoxels<ByteBuffer> outOld = null;
 
         int cnt = 0;
         while (cnt++ < maxIter) {
-            BinaryVoxelBox<ByteBuffer> outNew = sgmn.sgmn(voxelBox, params, mask);
+            BinaryVoxels<ByteBuffer> outNew = sgmn.segment(voxels, params, objectMask);
 
             if (outNew == null) {
                 return outOld;
@@ -67,10 +67,10 @@ public class SgmnRepeat extends BinarySegmentationOne {
             outOld = outNew;
 
             // Increasingly tightens the obj-mask used for the segmentation
-            mask =
+            objectMask =
                     Optional.of(
-                            mask.isPresent()
-                                    ? new ObjectMask(mask.get().getBoundingBox(), outNew)
+                            objectMask.isPresent()
+                                    ? new ObjectMask(objectMask.get().boundingBox(), outNew)
                                     : new ObjectMask(outNew));
         }
 

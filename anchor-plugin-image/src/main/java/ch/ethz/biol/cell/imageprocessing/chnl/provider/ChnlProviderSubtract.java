@@ -28,19 +28,21 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderSubtract extends ChnlProviderTwoVoxelMapping {
 
     @Override
-    protected void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
+    protected void processVoxels(
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
 
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
-            ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();
-            ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            ByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 

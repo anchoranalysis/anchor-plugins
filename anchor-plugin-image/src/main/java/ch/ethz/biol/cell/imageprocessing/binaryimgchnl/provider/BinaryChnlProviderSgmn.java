@@ -40,12 +40,10 @@ import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
@@ -59,19 +57,16 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
     @Override
     protected Mask createFromSource(Channel chnlSource) throws CreateException {
-        return new Mask(
-                sgmnResult(chnlSource),
-                chnlSource.getDimensions().getRes(),
-                ChannelFactory.instance().get(VoxelDataTypeUnsignedByte.INSTANCE));
+        return new Mask(sgmnResult(chnlSource), chnlSource.dimensions().resolution());
     }
 
-    private BinaryVoxelBox<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
-        Optional<ObjectMask> omMask = mask(chnl.getDimensions());
+    private BinaryVoxels<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {
+        Optional<ObjectMask> omMask = objectFromMask(chnl.dimensions());
 
-        BinarySegmentationParameters params = createParams(chnl.getDimensions());
+        BinarySegmentationParameters params = createParams(chnl.dimensions());
 
         try {
-            return sgmn.sgmn(chnl.getVoxelBox(), params, omMask);
+            return sgmn.segment(chnl.voxels(), params, omMask);
 
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
@@ -80,12 +75,12 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
     private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
         return new BinarySegmentationParameters(
-                dim.getRes(), OptionalFactory.create(histogramProvider));
+                dim.resolution(), OptionalFactory.create(histogramProvider));
     }
 
-    private Optional<ObjectMask> mask(ImageDimensions dim) throws CreateException {
-        Optional<Mask> maskChnl =
+    private Optional<ObjectMask> objectFromMask(ImageDimensions dim) throws CreateException {
+        Optional<Mask> maskChannel =
                 ChnlProviderNullableCreator.createOptionalCheckSize(mask, "mask", dim);
-        return maskChnl.map(chnl -> new ObjectMask(chnl.binaryVoxelBox()));
+        return maskChannel.map(chnl -> new ObjectMask(chnl.binaryVoxels()));
     }
 }

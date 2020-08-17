@@ -36,12 +36,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -94,7 +96,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * Derives a list of inputs (i.e. rows in a feature table)
      *
      * <p>This should be called only ONCE, and always before {@link
-     * #createThumbailFor(FeatureInput)}
+     * #createThumbailFor(FeatureInput)}. It starts a <i>batch</i> of related calls to {#link
+     * createThumbailFor}
      *
      * @param objects the objects from which inputs are derived
      * @param nrgStack nrg-stack used during feature calculation
@@ -103,21 +106,38 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the list of inputs
      * @throws CreateException
      */
-    public List<T> deriveInputs(
+    public List<T> deriveInputsStartBatch(
             ObjectCollection objects,
             NRGStackWithParams nrgStack,
             boolean thumbnailsEnabled,
             Logger logger)
             throws CreateException {
+
         List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
         if (thumbnailsEnabled) {
             try {
-                thumbnail.start(objects, Optional.of(nrgStack.asStack()));
+                thumbnail.start(
+                        objects, scaledBoundingBoxes(inputs), Optional.of(nrgStack.asStack()));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
         }
         return inputs;
+    }
+
+    /**
+     * Creates a thumbnail for a particular input
+     *
+     * @param input the input
+     * @return the thumbnail
+     */
+    public abstract DisplayStack createThumbailFor(T input) throws CreateException;
+
+    /**
+     * Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch
+     */
+    public void endBatchAndCleanup() {
+        thumbnail.end();
     }
 
     /**
@@ -137,17 +157,16 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             throws CreateException;
 
     /**
-     * Creates a thumbnail for a particular input
+     * Creates a bounding-box that tightly fits the input to a particular table row (could be for
+     * one or more objects)
      *
      * @param input the input
-     * @return the thumbnail (if its supported)
+     * @return a bounding-box that fully fits around all objects used in input
      */
-    public abstract Optional<DisplayStack> createThumbailFor(T input) throws CreateException;
+    protected abstract BoundingBox boundingBoxThatSpansInput(T input);
 
-    /**
-     * Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch
-     */
-    public void endBatchAndCleanup() {
-        thumbnail.end();
+    private StreamableCollection<BoundingBox> scaledBoundingBoxes(List<T> inputs) {
+        return new StreamableCollection<>(
+                () -> inputs.stream().map(this::boundingBoxThatSpansInput));
     }
 }

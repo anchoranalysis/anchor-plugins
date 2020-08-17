@@ -30,7 +30,7 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -39,38 +39,38 @@ public class ChnlProviderMax extends ChnlProviderTwoVoxelMapping {
 
     public static Channel createMax(Channel chnl1, Channel chnl2) throws CreateException {
 
-        if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
+        if (!chnl1.dimensions().equals(chnl2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 
         VoxelDataType combinedType =
                 CombineTypes.combineTypes(chnl1.getVoxelDataType(), chnl2.getVoxelDataType());
-        Channel chnlOut =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(chnl1.getDimensions(), combinedType);
+        Channel chnlOut = ChannelFactory.instance().create(chnl1.dimensions(), combinedType);
 
-        setMaxInOutputVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte());
+        setMaxInOutputVoxels(
+                chnlOut.voxels().asByte(), chnl1.voxels().asByte(), chnl2.voxels().asByte());
 
         return chnlOut;
     }
 
     @Override
-    protected void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
-        setMaxInOutputVoxelBox(vbOut, vbIn1, vbIn2);
+    protected void processVoxels(
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
+        setMaxInOutputVoxels(voxelsOut, voxelsIn1, voxelsIn2);
     }
 
-    private static void setMaxInOutputVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2) {
-        int volumeXY = vbIn1.extent().getVolumeXY();
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+    private static void setMaxInOutputVoxels(
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
+        int volumeXY = voxelsIn1.extent().volumeXY();
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            VoxelBuffer<?> in1 = vbIn1.getPixelsForPlane(z);
-            VoxelBuffer<?> in2 = vbIn2.getPixelsForPlane(z);
-            VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
+            VoxelBuffer<?> in1 = voxelsIn1.slice(z);
+            VoxelBuffer<?> in2 = voxelsIn2.slice(z);
+            VoxelBuffer<?> out = voxelsOut.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

@@ -40,6 +40,6 @@ public class VoxelPhysicalSize<T extends FeatureInputNRG> extends ForSpecificAxi
 
     @Override
     protected double calcForAxis(ImageDimensions dimensions, AxisType axis) {
-        return dimensions.getRes().getValueByDimension(axis);
+        return dimensions.resolution().valueByDimension(axis);
     }
 }

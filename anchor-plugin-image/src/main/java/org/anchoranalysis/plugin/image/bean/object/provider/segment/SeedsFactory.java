@@ -62,7 +62,7 @@ class SeedsFactory {
         for (ObjectMask object : seeds) {
             out.add(
                     createSeedWithinMask(
-                            object, containingMask.getBoundingBox(), subtractFromCornerMin, dim));
+                            object, containingMask.boundingBox(), subtractFromCornerMin, dim));
         }
         return out;
     }
@@ -78,9 +78,7 @@ class SeedsFactory {
             ImageDimensions dim)
             throws CreateException {
 
-        ObjectMask seed =
-                object.mapBoundingBoxPreserveExtent(
-                        bbox -> bbox.shiftBackBy(subtractFromCornerMin));
+        ObjectMask seed = object.shiftBackBy(subtractFromCornerMin);
 
         // If a seed object is partially located outside an object, the above line might fail, so we
         // should test
@@ -90,17 +88,17 @@ class SeedsFactory {
     private static ObjectMask ensureInsideContainer(
             ObjectMask seed, BoundingBox containingBBox, ImageDimensions dimensions)
             throws CreateException {
-        if (!containingBBox.contains().box(seed.getBoundingBox())) {
-            // We only take the part of the seed object that intersects with our bbox
-            BoundingBox bboxIntersect =
+        if (!containingBBox.contains().box(seed.boundingBox())) {
+            // We only take the part of the seed object that intersects with our box
+            BoundingBox boxIntersect =
                     containingBBox
                             .intersection()
-                            .withInside(seed.getBoundingBox(), dimensions.getExtent())
+                            .withInside(seed.boundingBox(), dimensions.extent())
                             .orElseThrow(
                                     () ->
                                             new CreateException(
                                                     "No bounding box intersection exists between seed and containing bounding-box"));
-            return seed.region(bboxIntersect, false);
+            return seed.region(boxIntersect, false);
         } else {
             return seed;
         }

@@ -38,7 +38,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
@@ -53,38 +53,38 @@ public class ChnlProviderZScore extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         Histogram hist = histogram.create();
 
-        VoxelBox<ByteBuffer> out = chnl.getVoxelBox().asByteOrCreateEmpty(alwaysDuplicate);
+        Voxels<ByteBuffer> out = channel.voxels().asByteOrCreateEmpty(alwaysDuplicate);
 
         try {
-            transformBufferToZScore(hist.mean(), hist.stdDev(), chnl, out);
+            transformBufferToZScore(hist.mean(), hist.standardDeviation(), channel, out);
         } catch (OperationFailedException e) {
             throw new CreateException(
                     "An occurred calculating the mean or std-dev of a channel's histogram");
         }
 
-        return ChannelFactory.instance().create(out, chnl.getDimensions().getRes());
+        return ChannelFactory.instance().create(out, channel.dimensions().resolution());
     }
 
     private void transformBufferToZScore(
-            double histMean, double histStdDev, Channel chnl, VoxelBox<ByteBuffer> out) {
+            double histMean, double histStdDev, Channel chnl, Voxels<ByteBuffer> out) {
 
         // We loop through each item
-        Extent e = chnl.getDimensions().getExtent();
+        Extent e = chnl.dimensions().extent();
 
-        int volumeXY = e.getVolumeXY();
+        int volumeXY = e.volumeXY();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> vbIn = chnl.getVoxelBox().any().getPixelsForPlane(z);
-            VoxelBuffer<?> vbOut = out.getPixelsForPlane(z);
+            VoxelBuffer<?> voxelsIn = chnl.voxels().slice(z);
+            VoxelBuffer<?> voxelsOut = out.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 
-                int val = vbIn.getInt(offset);
+                int val = voxelsIn.getInt(offset);
 
                 double zScoreDbl = (((double) val) - histMean) / histStdDev;
 
@@ -99,7 +99,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
                     valOut = VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
                 }
 
-                vbOut.putInt(offset, valOut);
+                voxelsOut.putInt(offset, valOut);
             }
         }
     }

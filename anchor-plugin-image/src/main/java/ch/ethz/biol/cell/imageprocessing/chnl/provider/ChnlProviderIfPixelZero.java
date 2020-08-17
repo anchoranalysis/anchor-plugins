@@ -34,7 +34,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.CombineTypes;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -70,15 +70,15 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", chnl);
+        Channel ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", channel);
 
         VoxelDataType combinedType =
-                CombineTypes.combineTypes(chnl.getVoxelDataType(), ifZero.getVoxelDataType());
+                CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
 
-        double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
-        return mergeViaZeroCheck(chnl, ifZero, combinedType, multFact);
+        double multFact = (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
+        return mergeViaZeroCheck(channel, ifZero, combinedType, multFact);
     }
 
     /**
@@ -108,33 +108,31 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
             VoxelDataType combinedType,
             double multFactorIfNonZero) {
 
-        Channel channelOut =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(channel.getDimensions(), combinedType);
+        Channel channelOut = ChannelFactory.instance().create(channel.dimensions(), combinedType);
 
         // We know these are all the same types from the logic above, so we can safetly cast
-        processVoxelBox(
-                channelOut.getVoxelBox(),
-                channel.getVoxelBox(),
-                channelIfPixelZero.getVoxelBox(),
+        processVoxels(
+                channelOut.voxels(),
+                channel.voxels(),
+                channelIfPixelZero.voxels(),
                 multFactorIfNonZero);
 
         return channelOut;
     }
 
-    private static void processVoxelBox(
-            VoxelBoxWrapper vbOut,
-            VoxelBoxWrapper vbIn,
-            VoxelBoxWrapper vbIfZero,
+    private static void processVoxels(
+            VoxelsWrapper voxelsOut,
+            VoxelsWrapper voxelsIn,
+            VoxelsWrapper voxelsIfZero,
             double multFactorIfNonZero) {
 
-        int volumeXY = vbIn.any().extent().getVolumeXY();
+        int volumeXY = voxelsIn.extent().volumeXY();
 
-        for (int z = 0; z < vbOut.any().extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            VoxelBuffer<?> in1 = vbIn.any().getPixelsForPlane(z);
-            VoxelBuffer<?> in2 = vbIfZero.any().getPixelsForPlane(z);
-            VoxelBuffer<?> out = vbOut.any().getPixelsForPlane(z);
+            VoxelBuffer<?> in1 = voxelsIn.slice(z);
+            VoxelBuffer<?> in2 = voxelsIfZero.slice(z);
+            VoxelBuffer<?> out = voxelsOut.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

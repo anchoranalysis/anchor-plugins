@@ -29,9 +29,10 @@ package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
@@ -40,8 +41,9 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFacto
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
+@AllArgsConstructor
 final class FindEqualVoxels {
 
     private static class PointTester
@@ -49,7 +51,7 @@ final class FindEqualVoxels {
 
         private Deque<Point3i> stack;
 
-        private EncodedVoxelBox matS;
+        private EncodedVoxels matS;
 
         // Arguments for each point
         private int lowestNeighborVal;
@@ -58,7 +60,7 @@ final class FindEqualVoxels {
         private EncodedIntBuffer bufS;
         private int z1;
 
-        public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxelBox matS) {
+        public PointTester(Deque<Point3i> stack, SlidingBuffer<?> rbb, EncodedVoxels matS) {
             super(rbb);
             this.stack = stack;
             this.matS = matS;
@@ -103,13 +105,13 @@ final class FindEqualVoxels {
                     // We take anything
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                     return false;
                 } else {
                     if (valPoint < lowestNeighborVal) {
                         lowestNeighborVal = valPoint;
                         lowestNeighborIndex =
-                                matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                                EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                     }
                     return false;
                 }
@@ -125,28 +127,17 @@ final class FindEqualVoxels {
                 if (valPoint < sourceVal && valPoint < lowestNeighborVal) {
                     lowestNeighborVal = valPoint;
                     lowestNeighborIndex =
-                            matS.getEncoding().encodeDirection(xChange, yChange, zChange);
+                            EncodedVoxels.ENCODING.encodeDirection(xChange, yChange, zChange);
                 }
                 return false;
             }
         }
     }
 
-    private final VoxelBox<?> bufferValuesToFindEqual;
-    private final EncodedVoxelBox matS;
+    private final Voxels<?> bufferValuesToFindEqual;
+    private final EncodedVoxels matS;
     private final boolean do3D;
-    private final Optional<ObjectMask> mask;
-
-    public FindEqualVoxels(
-            VoxelBox<?> bufferValuesToFindEqual,
-            EncodedVoxelBox temporaryMarkVisitedBuffer,
-            boolean do3D,
-            Optional<ObjectMask> mask) {
-        this.bufferValuesToFindEqual = bufferValuesToFindEqual;
-        this.matS = temporaryMarkVisitedBuffer;
-        this.do3D = do3D;
-        this.mask = mask;
-    }
+    private final Optional<ObjectMask> objectMask;
 
     public EqualVoxelsPlateau createPlateau(Point3i point) {
 
@@ -154,7 +145,7 @@ final class FindEqualVoxels {
 
         int valToFind =
                 bufferValuesToFindEqual
-                        .getPixelsForPlane(point.getZ())
+                        .slice(point.z())
                         .getInt(bufferValuesToFindEqual.extent().offsetSlice(point));
 
         SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
@@ -178,7 +169,9 @@ final class FindEqualVoxels {
 
         ProcessVoxelNeighbor<Optional<Integer>> process =
                 ProcessVoxelNeighborFactory.within(
-                        mask, slidingBuffer.extent(), new PointTester(stack, slidingBuffer, matS));
+                        objectMask,
+                        slidingBuffer.extent(),
+                        new PointTester(stack, slidingBuffer, matS));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(true);
 
@@ -186,13 +179,13 @@ final class FindEqualVoxels {
             Point3i point = stack.pop();
 
             // If we've already visited this point, we skip it
-            EncodedIntBuffer bbVisited = matS.getPixelsForPlane(point.getZ());
+            EncodedIntBuffer bbVisited = matS.getPixelsForPlane(point.z());
             int offset = slidingBuffer.extent().offsetSlice(point);
             if (bbVisited.isTemporary(offset)) {
                 continue;
             }
 
-            slidingBuffer.seek(point.getZ());
+            slidingBuffer.seek(point.z());
 
             Optional<Integer> lowestNeighborIndex =
                     IterateVoxels.callEachPointInNeighborhood(

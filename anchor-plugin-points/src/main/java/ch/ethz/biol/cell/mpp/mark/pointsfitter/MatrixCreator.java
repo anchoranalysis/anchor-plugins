@@ -93,9 +93,9 @@ class MatrixCreator {
         for (int i = 0; i < points.size(); i++) {
             Point3f point = points.get(i);
 
-            float x = point.getX() + inputPointShift;
-            float y = point.getY() + inputPointShift;
-            float z = point.getZ() + inputPointShift;
+            float x = point.x() + inputPointShift;
+            float y = point.y() + inputPointShift;
+            float z = point.z() + inputPointShift;
 
             matrix.set(i, 0, Math.pow(x, 2)); // xx
             matrix.set(i, 1, Math.pow(y, 2)); // yy

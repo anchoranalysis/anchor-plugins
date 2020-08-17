@@ -36,13 +36,13 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.points.PointRange;
 
 /**
- * Takes an existing binaryChnl and fits a box around the *On* pixels.
+ * Takes an existing mask and fits a box around the ON pixels.
  *
  * <p>The tightest box that fits is always used
  *
@@ -56,41 +56,41 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Mask createFromChnl(Mask bic) throws CreateException {
+    public Mask createFromMask(Mask mask) throws CreateException {
 
         if (slicesSeperately) {
-            Extent e = bic.getDimensions().getExtent();
-            for (int z = 0; z < e.getZ(); z++) {
+            Extent e = mask.dimensions().extent();
+            for (int z = 0; z < e.z(); z++) {
 
-                BoundingBox bbox = calcNarrowestBoxAroundMask(bic.extractSlice(z).binaryVoxelBox());
-                bic.binaryVoxelBox().setPixelsToOn(bbox.shiftToZ(z));
+                BoundingBox box = calcNarrowestBoxAroundMask(mask.extractSlice(z).binaryVoxels());
+                mask.assignOn().toBox(box.shiftToZ(z));
             }
         } else {
-            BoundingBox bbox = calcNarrowestBoxAroundMask(bic.binaryVoxelBox());
-            bic.binaryVoxelBox().setPixelsToOn(bbox);
+            BoundingBox box = calcNarrowestBoxAroundMask(mask.binaryVoxels());
+            mask.binaryVoxels().assignOn().toBox(box);
         }
 
-        return bic;
+        return mask;
     }
 
-    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxelBox<ByteBuffer> vb)
+    private BoundingBox calcNarrowestBoxAroundMask(BinaryVoxels<ByteBuffer> voxels)
             throws CreateException {
 
         PointRange pointRange = new PointRange();
 
-        Extent extent = vb.extent();
+        Extent extent = voxels.extent();
 
-        BinaryValuesByte bvb = vb.getBinaryValues().createByte();
+        BinaryValuesByte bvb = voxels.binaryValues().createByte();
 
         Point3i point = new Point3i(0, 0, 0);
-        for (point.setZ(0); point.getZ() < extent.getZ(); point.incrementZ()) {
+        for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer buf = vb.getPixelsForPlane(point.getZ()).buffer();
+            ByteBuffer buf = voxels.sliceBuffer(point.z());
 
-            for (point.setY(0); point.getY() < extent.getY(); point.incrementY()) {
-                for (point.setX(0); point.getX() < extent.getX(); point.incrementX()) {
+            for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
+                for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
 
-                    int offset = extent.offset(point.getX(), point.getY());
+                    int offset = extent.offsetSlice(point);
                     if (buf.get(offset) == bvb.getOnByte()) {
                         pointRange.add(point);
                     }

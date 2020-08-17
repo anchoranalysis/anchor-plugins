@@ -53,6 +53,6 @@ class CalculateHistogramInput
     @Override
     protected FeatureInputHistogram deriveFromDelegate(
             FeatureInputHistogram params, Histogram delegate) {
-        return new FeatureInputHistogram(delegate, params.getResOptional());
+        return new FeatureInputHistogram(delegate, params.getResolutionOptional());
     }
 }

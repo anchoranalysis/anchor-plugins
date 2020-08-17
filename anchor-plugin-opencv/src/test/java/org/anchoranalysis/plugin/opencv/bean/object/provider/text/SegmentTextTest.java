@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.core.error.CreateException;
@@ -37,6 +36,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -62,26 +62,42 @@ public class SegmentTextTest {
     @Test
     public void testCar() throws AnchorIOException, CreateException, InitException {
 
-        SegmentText provider = createAndInitProvider("car.jpg");
+        Stack stack = createStack("car.jpg");
+
+        SegmentText provider = createAndInitProvider(stack);
 
         ObjectCollection objects = provider.create();
 
         assertTrue(objects.size() == 3);
 
-        assertBoxAtIndex(objects, 0, boxAt(439, 311, 76, 37));
-        assertBoxAtIndex(objects, 1, boxAt(310, 318, 109, 36));
-        assertBoxAtIndex(objects, 2, boxAt(393, 199, 29, 26));
+        assertAtLeastOneObjectHasBox(objects, boxAt(312, 319, 107, 34));
+        assertAtLeastOneObjectHasBox(objects, boxAt(394, 200, 27, 25));
+        assertAtLeastOneObjectHasBox(objects, boxAt(440, 312, 73, 36));
     }
 
-    private void assertBoxAtIndex(ObjectCollection objects, int index, BoundingBox box) {
-        assertEquals("box at index " + index, box, objects.get(index).getBoundingBox());
+    private Stack createStack(String imageFilename) {
+        return testLoader.openStackFromTestPath(imageFilename);
     }
 
-    private SegmentText createAndInitProvider(String imageFilename) throws InitException {
+    private void assertAtLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
+        assertTrue(
+                "at least one object has box: " + box.toString(),
+                atLeastOneObjectHasBox(objects, box));
+    }
+
+    private boolean atLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
+        for (ObjectMask object : objects) {
+            if (object.boundingBox().equals(box)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private SegmentText createAndInitProvider(Stack stack) throws InitException {
 
         SegmentText provider = new SegmentText();
 
-        Stack stack = testLoader.openStackFromTestPath(imageFilename);
         provider.setStackProvider(new StackProviderHolder(stack));
 
         initProvider(

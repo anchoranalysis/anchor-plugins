@@ -91,6 +91,6 @@ public class GuessDimFromInputImage extends ImageDimProvider {
                             "Stack %s has no channels, so dimensions cannot be inferred.",
                             keyThatExists));
         }
-        return chnl.getDimensions();
+        return chnl.dimensions();
     }
 }

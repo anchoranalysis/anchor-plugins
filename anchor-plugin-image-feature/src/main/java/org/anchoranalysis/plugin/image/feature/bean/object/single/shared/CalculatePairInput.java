@@ -40,13 +40,13 @@ import org.anchoranalysis.image.object.ObjectMask;
 class CalculatePairInput
         extends FeatureCalculation<FeatureInputPairObjects, FeatureInputSingleObject> {
 
-    private final Mask chnl;
+    private final Mask mask;
 
     @Override
     protected FeatureInputPairObjects execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        ObjectMask objFromBinary = new ObjectMask(chnl.binaryVoxelBox());
+        ObjectMask objFromBinary = new ObjectMask(mask.binaryVoxels());
 
         return new FeatureInputPairObjects(
                 input.getObject(), objFromBinary, input.getNrgStackOptional());

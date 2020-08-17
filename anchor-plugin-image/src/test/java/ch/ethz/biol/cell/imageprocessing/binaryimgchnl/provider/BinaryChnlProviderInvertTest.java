@@ -31,6 +31,7 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -44,12 +45,12 @@ public class BinaryChnlProviderInvertTest {
 
     @Test
     public void testWithoutMask2d() throws CreateException {
-        testRectangle(false, false, expectedNumPixelsAfterWithoutMask(false));
+        testRectangle(false, false, expectedNumberVoxelsAfterWithoutRestriction(false));
     }
 
     @Test
     public void testWithoutMask3d() throws CreateException {
-        testRectangle(true, false, expectedNumPixelsAfterWithoutMask(true));
+        testRectangle(true, false, expectedNumberVoxelsAfterWithoutRestriction(true));
     }
 
     @Test
@@ -62,46 +63,43 @@ public class BinaryChnlProviderInvertTest {
         testRectangle(true, true, 720);
     }
 
-    private static int expectedNumPixelsBefore(boolean do3D) {
+    private static int expectedNumberVoxelsBefore(boolean do3D) {
         return WIDTH * HEIGHT * depth(do3D);
     }
 
-    private static long expectedNumPixelsAfterWithoutMask(boolean do3D) {
-        return extent(do3D).getVolume() - expectedNumPixelsBefore(do3D);
+    private static long expectedNumberVoxelsAfterWithoutRestriction(boolean do3D) {
+        return extent(do3D).calculateVolume() - expectedNumberVoxelsBefore(do3D);
     }
 
-    private static void testRectangle(boolean do3D, boolean mask, long expectedNumPixelsAfter)
+    private static void testRectangle(boolean do3D, boolean mask, long expectedNumberVoxelsAfter)
             throws CreateException {
 
-        Mask chnlBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
+        Mask maskBefore = createWithRectangle(CORNER_RECTANGLE, do3D);
 
-        Optional<Mask> chnlMask = createMask(do3D, mask);
+        Optional<Mask> restrictTo = createRestrictTo(mask, do3D);
 
-        assertPixelsOn("before", expectedNumPixelsBefore(do3D), chnlBefore);
+        assertVoxelsOn("before", expectedNumberVoxelsBefore(do3D), maskBefore);
 
-        Mask chnlAfter = createProviderInvert(chnlBefore, chnlMask).create();
+        Mask maskAfter = createProviderInvert(maskBefore, restrictTo).create();
 
-        assertPixelsOn("after", expectedNumPixelsAfter, chnlAfter);
+        assertVoxelsOn("after", expectedNumberVoxelsAfter, maskAfter);
     }
 
-    private static Optional<Mask> createMask(boolean do3D, boolean mask) throws CreateException {
-        if (mask) {
-            return Optional.of(createWithRectangle(CORNER_MASK, do3D));
-        } else {
-            return Optional.empty();
-        }
+    private static Optional<Mask> createRestrictTo(boolean flag, boolean do3D)
+            throws CreateException {
+        return OptionalUtilities.createFromFlagChecked(
+                flag, () -> createWithRectangle(CORNER_MASK, do3D));
     }
 
-    private static MaskProvider createProviderInvert(Mask chnl, Optional<Mask> mask) {
+    private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {
         BinaryChnlProviderInvert provider = new BinaryChnlProviderInvert();
-        provider.setBinaryChnl(ProviderFixture.providerFor(chnl));
-        mask.ifPresent(m -> provider.setMask(ProviderFixture.providerFor(m)));
+        provider.setBinaryChnl(ProviderFixture.providerFor(mask));
+        restrictTo.ifPresent(m -> provider.setRestrictTo(ProviderFixture.providerFor(m)));
         return provider;
     }
 
-    private static void assertPixelsOn(String messagePrefix, long expectedNumPixels, Mask chnl) {
-        assertEquals(
-                messagePrefix + "PixelsOn", expectedNumPixels, chnl.binaryVoxelBox().countOn());
+    private static void assertVoxelsOn(String messagePrefix, long expectedNumberVoxels, Mask mask) {
+        assertEquals(messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.voxelsOn().count());
     }
 
     private static Point3i addHalfHeightInY(Point3i in) {

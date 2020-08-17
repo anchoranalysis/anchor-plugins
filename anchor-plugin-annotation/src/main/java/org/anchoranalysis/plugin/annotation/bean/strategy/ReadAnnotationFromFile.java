@@ -28,13 +28,14 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.wholeimage.WholeImageLabelAnnotationReader;
 import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
 import org.anchoranalysis.io.error.AnchorIOException;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {
-
-    private ReadAnnotationFromFile() {}
 
     public static Optional<WholeImageLabelAnnotation> readCheckExists(Path path) {
 

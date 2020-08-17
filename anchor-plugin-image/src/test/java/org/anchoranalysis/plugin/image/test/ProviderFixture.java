@@ -29,6 +29,8 @@ package org.anchoranalysis.plugin.image.test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
@@ -48,9 +50,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProviderFixture {
-
-    private ProviderFixture() {}
 
     public static ObjectCollectionProvider providerFor(ObjectMask obj) {
         return providerFor(ObjectCollectionFactory.of(obj));
@@ -78,10 +79,10 @@ public class ProviderFixture {
         return provider;
     }
 
-    public static MaskProvider providerFor(Mask chnl) {
+    public static MaskProvider providerFor(Mask mask) {
         MaskProvider provider = mock(MaskProvider.class);
         try {
-            when(provider.create()).thenReturn(chnl);
+            when(provider.create()).thenReturn(mask);
         } catch (CreateException e) {
         }
         when(provider.duplicateBean()).thenReturn(provider);

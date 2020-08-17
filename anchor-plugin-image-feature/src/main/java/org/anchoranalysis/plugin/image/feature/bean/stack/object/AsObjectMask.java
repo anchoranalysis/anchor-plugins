@@ -48,7 +48,10 @@ public class AsObjectMask extends FeatureStack {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
 
-    /** The channel that that forms the binary mask */
+    /**
+     * The channel that that forms an object-mask with the bounding-box set to entire channel's
+     * dimensions
+     */
     @BeanField @Getter @Setter private int nrgIndex = 0;
     // END BEAN PROPERTIES
 

@@ -38,11 +38,11 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationThreshold;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 // Performs a thresholding that accepts only channel values with intensities
@@ -58,25 +58,25 @@ public class SgmnThrshldAboveMinBound extends BinarySegmentation {
     private BinarySegmentationThreshold delegate = new BinarySegmentationThreshold();
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels,
             BinarySegmentationParameters params,
-            Optional<ObjectMask> mask)
+            Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
         setUpDelegate(
-                voxelBox.any().extent(),
+                voxels.any().extent(),
                 params.getRes()
                         .orElseThrow(
                                 () ->
                                         new SegmentationFailedException(
                                                 "Image-resolution is required but missing")));
 
-        return delegate.sgmn(voxelBox, params, mask);
+        return delegate.segment(voxels, params, objectMask);
     }
 
     private void setUpDelegate(Extent e, ImageResolution res) {
-        double minBound = markBounds.getMinResolved(res, e.getZ() > 1 && !suppress3D);
+        double minBound = markBounds.getMinResolved(res, e.z() > 1 && !suppress3D);
 
         int threshold = (int) Math.floor(minBound);
 

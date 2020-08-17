@@ -40,7 +40,7 @@ public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends Feat
 
     @Override
     public double calc(SessionInput<T> input) throws FeatureCalculationException {
-        return calcFromDims(input.get().getDimensionsRequired());
+        return calcFromDims(input.get().dimensionsRequired());
     }
 
     protected abstract double calcFromDims(ImageDimensions dimensions)

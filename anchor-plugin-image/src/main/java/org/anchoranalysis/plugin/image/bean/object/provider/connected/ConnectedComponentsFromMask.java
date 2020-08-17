@@ -38,11 +38,13 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.values.BinaryValues;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -67,7 +69,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Mask bi = binaryChnl.create();
+        Mask mask = binaryChnl.create();
 
         StopWatch sw = new StopWatch();
         sw.start();
@@ -77,12 +79,12 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(bi.getDimensions().getRes())));
+                                            Optional.of(mask.dimensions().resolution())));
 
             if (bySlices) {
-                return createObjectsBySlice(bi, minNumberVoxels);
+                return createObjectsBySlice(mask, minNumberVoxels);
             } else {
-                return createObjects3D(bi, minNumberVoxels);
+                return createObjects3D(mask, minNumberVoxels);
             }
 
         } catch (UnitValueException e) {
@@ -94,34 +96,36 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
-    private ObjectCollection createObjects3D(Mask bi, int minNumberVoxels) throws CreateException {
-        CreateFromConnectedComponentsFactory objectCreator = createFactory(minNumberVoxels);
-        return objectCreator.createConnectedComponents(bi);
+    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels)
+            throws CreateException {
+        return createFactory(minNumberVoxels).createConnectedComponents(mask);
     }
 
-    private ObjectCollection createObjectsBySlice(Mask chnl, int minNumberVoxels)
+    private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
             throws CreateException {
 
         CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
+        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extracter();
+
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
-                chnl.getDimensions().getZ(),
+                mask.dimensions().z(),
                 CreateException.class,
-                z -> createForSlice(creator, createBinaryVoxelBox(chnl, z), z));
+                z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
     }
 
-    private static BinaryVoxelBox<ByteBuffer> createBinaryVoxelBox(Mask chnl, int z) {
-        return new BinaryVoxelBoxByte(chnl.getVoxelBox().extractSlice(z), chnl.getBinaryValues());
+    private static BinaryVoxels<ByteBuffer> extractSlice(
+            VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
+        return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 
     private ObjectCollection createForSlice(
             CreateFromConnectedComponentsFactory objectCreator,
-            BinaryVoxelBox<ByteBuffer> bvb,
-            int z)
-            throws CreateException {
+            BinaryVoxels<ByteBuffer> bvb,
+            int z) {
         // respecify the z
         return objectCreator.createConnectedComponents(bvb).stream()
-                .mapBoundingBox(bbox -> bbox.shiftToZ(z));
+                .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));
     }
 }

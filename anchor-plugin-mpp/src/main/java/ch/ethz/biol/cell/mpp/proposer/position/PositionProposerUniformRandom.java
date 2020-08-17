@@ -45,15 +45,15 @@ public class PositionProposerUniformRandom extends PositionProposerBean {
     @Override
     public Optional<Point3d> propose(ProposerContext context) {
 
-        double x = sampleAlongAxis(context, ImageDimensions::getX);
-        double y = sampleAlongAxis(context, ImageDimensions::getY);
-        double z = suppressZ ? 0 : sampleAlongAxis(context, ImageDimensions::getZ);
+        double x = sampleAlongAxis(context, ImageDimensions::x);
+        double y = sampleAlongAxis(context, ImageDimensions::y);
+        double z = suppressZ ? 0 : sampleAlongAxis(context, ImageDimensions::z);
         return Optional.of(new Point3d(x, y, z));
     }
 
     private static double sampleAlongAxis(
             ProposerContext context, ToIntFunction<ImageDimensions> extentForAxis) {
         return context.getRandomNumberGenerator()
-                .sampleDoubleFromRange(extentForAxis.applyAsInt(context.getDimensions()));
+                .sampleDoubleFromRange(extentForAxis.applyAsInt(context.dimensions()));
     }
 }

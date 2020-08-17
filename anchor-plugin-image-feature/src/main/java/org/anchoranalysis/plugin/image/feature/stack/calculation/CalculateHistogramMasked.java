@@ -33,7 +33,6 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -71,7 +70,6 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
     }
 
     private Mask extractMask(NRGStack nrgStack) {
-        Channel chnl = nrgStack.getChannel(nrgIndexMask);
-        return new Mask(chnl, BinaryValues.getDefault());
+        return new Mask(nrgStack.getChannel(nrgIndexMask));
     }
 }

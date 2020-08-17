@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 final class BoundingBoxMap {
 
@@ -54,12 +54,14 @@ final class BoundingBoxMap {
                 });
     }
 
-    public ObjectCollection deriveObjects(VoxelBox<IntBuffer> matS)
-            throws OperationFailedException {
+    public ObjectCollection deriveObjects(Voxels<IntBuffer> matS) throws OperationFailedException {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,
-                (pointRange, index) -> matS.equalMask(pointRange.deriveBoundingBox(), index + 1));
+                (pointRange, index) ->
+                        matS.extracter()
+                                .voxelsEqualTo(index + 1)
+                                .deriveObject(pointRange.deriveBoundingBox()));
     }
 
     public int addPointForValue(Point3i point, int val) {

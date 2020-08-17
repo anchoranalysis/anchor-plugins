@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
+import lombok.Getter;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
@@ -38,9 +39,9 @@ import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
  */
 public class PrioritisedVertex {
 
-    private ObjectVertex vertex;
-    private double priority;
-    private boolean considerForMerge;
+    @Getter private ObjectVertex vertex;
+    @Getter private double priority;
+    @Getter private boolean considerForMerge;
 
     /**
      * Constructor
@@ -57,17 +58,5 @@ public class PrioritisedVertex {
         this.vertex = new ObjectVertex(object, payload);
         this.priority = priority;
         this.considerForMerge = considerForMerge;
-    }
-
-    public ObjectVertex getOmWithFeature() {
-        return vertex;
-    }
-
-    public double getPriority() {
-        return priority;
-    }
-
-    public boolean isConsiderForMerge() {
-        return considerForMerge;
     }
 }

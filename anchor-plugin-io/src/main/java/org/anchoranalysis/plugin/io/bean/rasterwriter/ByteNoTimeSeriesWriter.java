@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * A writer that doesn't support time-series and byte (8-bit) type only
@@ -75,7 +75,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
 
             writer.setMetadataRetrieve(
                     MetadataUtilities.createMetadata(
-                            stack.getDimensions(),
+                            stack.dimensions(),
                             stack.getNumberChannels(),
                             PixelType.UINT8,
                             makeRGB,
@@ -83,7 +83,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
             writer.setInterleaved(false);
             writer.setId(filePath.toString());
 
-            if (!writer.canDoStacks() && stack.getDimensions().getZ() > 1) {
+            if (!writer.canDoStacks() && stack.dimensions().z() > 1) {
                 throw new RasterIOException("The writer must support stacks for Z > 1");
             }
 
@@ -109,10 +109,10 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
         int cnt = 0;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             Channel chnl = stack.getChannel(c);
-            VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+            Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
-            for (int z = 0; z < stack.getDimensions().getZ(); z++) {
-                writer.saveBytes(cnt++, vb.getPixelsForPlane(z).buffer().array());
+            for (int z = 0; z < stack.dimensions().z(); z++) {
+                writer.saveBytes(cnt++, voxels.sliceBuffer(z).array());
             }
         }
     }

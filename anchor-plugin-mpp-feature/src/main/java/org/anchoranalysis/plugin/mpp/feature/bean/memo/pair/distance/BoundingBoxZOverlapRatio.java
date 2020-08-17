@@ -58,27 +58,27 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
-        BoundingBox bbox1 = bbox(inputSessionless, FeatureInputPairMemo::getObj1);
-        BoundingBox bbox2 = bbox(inputSessionless, FeatureInputPairMemo::getObj2);
+        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObj1);
+        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObj2);
 
         // Check the bounding boxes intersect in general (including XY)
-        if (!bbox1.intersection().existsWith(bbox2)) {
+        if (!box1.intersection().existsWith(box2)) {
             return 0.0;
         }
 
-        return calcOverlap(bbox1, bbox2, inputSessionless.getDimensionsRequired());
+        return calcOverlap(box1, box2, inputSessionless.dimensionsRequired());
     }
 
-    private double calcOverlap(BoundingBox bbox1, BoundingBox bbox2, ImageDimensions dim) {
+    private double calcOverlap(BoundingBox box1, BoundingBox box2, ImageDimensions dim) {
 
-        Optional<BoundingBox> bboxOverlap = bbox1.intersection().withInside(bbox2, dim.getExtent());
-        if (!bboxOverlap.isPresent()) {
+        Optional<BoundingBox> boxOverlap = box1.intersection().withInside(box2, dim.extent());
+        if (!boxOverlap.isPresent()) {
             return 0;
         }
 
-        int minExtentZ = Math.min(zFor(bbox1), zFor(bbox2));
+        int minExtentZ = Math.min(zFor(box1), zFor(box2));
 
-        double overlapZ = (double) zFor(bboxOverlap.get());
+        double overlapZ = (double) zFor(boxOverlap.get());
 
         if (normalize) {
             return overlapZ / minExtentZ;
@@ -87,7 +87,7 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
         }
     }
 
-    private static int zFor(BoundingBox bbox) {
-        return bbox.extent().getZ();
+    private static int zFor(BoundingBox box) {
+        return box.extent().z();
     }
 }

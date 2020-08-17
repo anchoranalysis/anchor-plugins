@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -51,6 +52,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -178,13 +180,18 @@ public class FromObjects<T extends FeatureInput>
                         startCalculator(context.getRowSource(), initParams, context.getLogger()),
                         initParams,
                         suppressErrors,
-                        Optional.of(combine::createThumbailFor),
+                        OptionalUtilities.createFromFlag(
+                                context.isThumbnailsEnabled(), this::createThumbnailForInput),
                         context);
         processAllProviders(
                 descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;
+    }
+
+    private Optional<DisplayStack> createThumbnailForInput(T input) throws CreateException {
+        return Optional.of(combine.createThumbailFor(input));
     }
 
     private FeatureCalculatorMulti<T> startCalculator(

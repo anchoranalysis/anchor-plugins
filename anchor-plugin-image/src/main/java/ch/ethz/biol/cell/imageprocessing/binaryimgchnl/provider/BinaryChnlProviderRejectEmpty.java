@@ -33,10 +33,10 @@ import org.anchoranalysis.image.binary.mask.Mask;
 public class BinaryChnlProviderRejectEmpty extends BinaryChnlProviderOne {
 
     @Override
-    public Mask createFromChnl(Mask binaryImgChnl) throws CreateException {
-        if (!binaryImgChnl.hasHighValues()) {
+    public Mask createFromMask(Mask mask) throws CreateException {
+        if (!mask.voxelsOn().anyExists()) {
             throw new CreateException("binaryImgChnl has no high values");
         }
-        return binaryImgChnl;
+        return mask;
     }
 }

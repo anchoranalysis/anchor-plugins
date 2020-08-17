@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
@@ -55,14 +55,14 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
     @Override
     public Channel create() throws CreateException {
 
-        ImageDimensions sdTarget = chnlTargetDimensions.create().getDimensions();
+        ImageDimensions dimensionsTarget = chnlTargetDimensions.create().dimensions();
 
         Channel slice = chnlSlice.create();
 
-        checkDimensions(slice.getDimensions(), sdTarget);
+        checkDimensions(slice.dimensions(), dimensionsTarget);
 
         try {
-            return createExpandedChnl(sdTarget, slice.getVoxelBox().asByte());
+            return createExpandedChnl(dimensionsTarget, slice.voxels().asByte());
         } catch (IncorrectVoxelDataTypeException e) {
             throw new CreateException("chnlSlice must have unsigned 8 bit data");
         }
@@ -70,25 +70,26 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
 
     private static void checkDimensions(ImageDimensions dimSrc, ImageDimensions dimTarget)
             throws CreateException {
-        if (dimSrc.getX() != dimTarget.getX()) {
+        if (dimSrc.x() != dimTarget.x()) {
             throw new CreateException("x dimension is not equal");
         }
-        if (dimSrc.getY() != dimTarget.getY()) {
+        if (dimSrc.y() != dimTarget.y()) {
             throw new CreateException("y dimension is not equal");
         }
     }
 
-    private Channel createExpandedChnl(ImageDimensions sdTarget, VoxelBox<ByteBuffer> vbSlice) {
+    private Channel createExpandedChnl(
+            ImageDimensions dimensionsTarget, Voxels<ByteBuffer> voxelsSlice) {
 
         Channel chnl =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(sdTarget, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensionsTarget, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbOut = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-            ByteBuffer bb = vbSlice.duplicate().getPixelsForPlane(0).buffer();
-            vbOut.setPixelsForPlane(z, VoxelBufferByte.wrap(bb));
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
+            ByteBuffer bb = voxelsSlice.duplicate().sliceBuffer(0);
+            voxelsOut.replaceSlice(z, VoxelBufferByte.wrap(bb));
         }
 
         return chnl;

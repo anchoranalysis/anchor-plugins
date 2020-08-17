@@ -98,7 +98,8 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
         try {
             return new ResultsVectorWithThumbnail(
-                    results, extractThumbnail(factory.getNrgStack(), context.isThumbnails()));
+                    results,
+                    extractThumbnail(factory.getNrgStack(), context.isThumbnailsEnabled()));
         } catch (CreateException e) {
             throw new NamedFeatureCalculationException(e);
         }
@@ -109,7 +110,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             FeatureList<FeatureInputStack> features)
             throws NamedFeatureCalculationException {
         try {
-            return factory.calculatorForAll(features).calc(new FeatureInputStack());
+            return factory.calculatorForAll(features).calculate(new FeatureInputStack());
         } catch (InitException e) {
             throw new NamedFeatureCalculationException(e);
         }

@@ -43,7 +43,6 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
@@ -52,7 +51,7 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -113,8 +112,8 @@ public class ScaleTask extends RasterTask {
     private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
             throws JobExecutionException {
         // Our output collections
-        NamedStacks stackCollection = new NamedStacks();
-        NamedStacks stackCollectionMIP = new NamedStacks();
+        NamedStacksSet stackCollection = new NamedStacksSet();
+        NamedStacksSet stackCollectionMIP = new NamedStacksSet();
 
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
@@ -148,13 +147,13 @@ public class ScaleTask extends RasterTask {
     }
 
     private void populateOutputCollectionsFromSharedObjects(
-            ImageInitParams so,
-            NamedStacks stackCollection,
-            NamedStacks stackCollectionMIP,
+            ImageInitParams params,
+            NamedStacksSet stackCollection,
+            NamedStacksSet stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Set<String> chnlNames = so.getStackCollection().keys();
+        Set<String> chnlNames = params.getStackCollection().keys();
         for (String chnlName : chnlNames) {
 
             // If this output is not allowed we simply skip
@@ -165,17 +164,12 @@ public class ScaleTask extends RasterTask {
             }
 
             try {
-                Channel chnlIn = so.getStackCollection().getException(chnlName).getChannel(0);
+                Channel chnlIn = params.getStackCollection().getException(chnlName).getChannel(0);
 
                 Channel chnlOut;
                 if (forceBinary) {
-                    Mask binaryImg = new Mask(chnlIn, BinaryValues.getDefault());
-                    chnlOut =
-                            BinaryChnlProviderScaleXY.scale(
-                                            binaryImg,
-                                            scaleCalculator,
-                                            InterpolatorFactory.getInstance().binaryResizing())
-                                    .getChannel();
+                    Mask mask = new Mask(chnlIn);
+                    chnlOut = BinaryChnlProviderScaleXY.scale(mask, scaleCalculator).channel();
                 } else {
                     chnlOut =
                             ChnlProviderScale.scale(

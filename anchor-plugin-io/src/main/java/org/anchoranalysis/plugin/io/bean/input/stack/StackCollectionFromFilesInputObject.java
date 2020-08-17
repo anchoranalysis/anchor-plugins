@@ -33,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
@@ -86,8 +85,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public CallableWithProgressReporter<TimeSequence, OperationFailedException>
-            createStackSequenceForSeries(int seriesNum) throws RasterIOException {
+    public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
+            throws RasterIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
@@ -117,18 +116,18 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesNum).call(progressReporter);
+                        return createStackSequenceForSeries(seriesNum).get(progressReporter);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }
                 });
     }
 
-    private static CallableWithProgressReporter<TimeSequence, OperationFailedException>
-            openRasterAsOperation(final OpenedRaster openedRaster, final int seriesNum) {
-        return pr -> {
+    private static TimeSequenceSupplier openRasterAsOperation(
+            final OpenedRaster openedRaster, final int seriesNum) {
+        return progressReporter -> {
             try {
-                return openedRaster.open(seriesNum, pr);
+                return openedRaster.open(seriesNum, progressReporter);
             } catch (RasterIOException e) {
                 throw new OperationFailedException(e);
             }

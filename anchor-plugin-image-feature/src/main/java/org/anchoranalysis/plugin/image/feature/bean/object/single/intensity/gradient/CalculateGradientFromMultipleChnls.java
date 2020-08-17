@@ -37,13 +37,13 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
@@ -97,32 +97,31 @@ class CalculateGradientFromMultipleChnls
     private void putGradientValue(
             ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl) {
 
-        BinaryVoxelBox<ByteBuffer> bvb = object.binaryVoxelBox();
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
-        BoundingBox bbox = object.getBoundingBox();
+        BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
+        Voxels<?> voxels = chnl.voxels().any();
+        BoundingBox box = object.boundingBox();
 
-        Extent e = vb.extent();
-        Extent eMask = bbox.extent();
+        Extent e = voxels.extent();
+        Extent eMask = box.extent();
 
-        BinaryValuesByte bvbMask = bvb.getBinaryValues().createByte();
+        BinaryValuesByte bvbMask = bvb.binaryValues().createByte();
 
         // Tracks where are writing to on the output list.
         int pointIndex = 0;
 
-        for (int z = 0; z < eMask.getZ(); z++) {
+        for (int z = 0; z < eMask.z(); z++) {
 
-            VoxelBuffer<?> bb = vb.getPixelsForPlane(z + bbox.cornerMin().getZ());
-            VoxelBuffer<ByteBuffer> bbMask = bvb.getPixelsForPlane(z);
+            VoxelBuffer<?> bb = voxels.slice(z + box.cornerMin().z());
+            VoxelBuffer<ByteBuffer> bbMask = bvb.voxels().slice(z);
 
-            for (int y = 0; y < eMask.getY(); y++) {
-                for (int x = 0; x < eMask.getX(); x++) {
+            for (int y = 0; y < eMask.y(); y++) {
+                for (int x = 0; x < eMask.x(); x++) {
 
                     int offsetMask = eMask.offset(x, y);
 
                     if (bbMask.buffer().get(offsetMask) == bvbMask.getOnByte()) {
 
-                        int offset =
-                                e.offset(x + bbox.cornerMin().getX(), y + bbox.cornerMin().getY());
+                        int offset = e.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
 
                         int gradVal = bb.getInt(offset) - subtractConstant;
 
@@ -146,19 +145,6 @@ class CalculateGradientFromMultipleChnls
         }
         assert (out != null);
 
-        switch (axisIndex) {
-            case 0:
-                out.setX(gradVal);
-                return;
-            case 1:
-                out.setY(gradVal);
-                return;
-            case 2:
-                out.setZ(gradVal);
-                return;
-            default:
-                assert false;
-                return;
-        }
+        out.setValueByDimension(axisIndex, gradVal);
     }
 }

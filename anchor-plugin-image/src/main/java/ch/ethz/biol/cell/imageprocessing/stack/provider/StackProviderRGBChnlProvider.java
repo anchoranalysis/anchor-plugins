@@ -72,10 +72,10 @@ public class StackProviderRGBChnlProvider extends StackProvider {
         }
 
         if (existing == null) {
-            return toCombine.getDimensions();
+            return toCombine.dimensions();
         }
 
-        if (!existing.equals(toCombine.getDimensions())) {
+        if (!existing.equals(toCombine.dimensions())) {
             throw new IncorrectImageSizeException("dims are not equal");
         }
 
@@ -90,11 +90,11 @@ public class StackProviderRGBChnlProvider extends StackProvider {
             throw new IllegalArgumentException("All chnls are null");
         }
 
-        ImageDimensions sd = null;
-        sd = combineWithExisting(sd, chnlRed);
-        sd = combineWithExisting(sd, chnlGreen);
-        sd = combineWithExisting(sd, chnlBlue);
-        return sd;
+        ImageDimensions dimensions = null;
+        dimensions = combineWithExisting(dimensions, chnlRed);
+        dimensions = combineWithExisting(dimensions, chnlGreen);
+        dimensions = combineWithExisting(dimensions, chnlBlue);
+        return dimensions;
     }
 
     private static void addToStack(
@@ -102,7 +102,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
             throws IncorrectImageSizeException, CreateException {
 
         if (chnl == null) {
-            chnl = ChannelFactory.instance().createEmptyInitialised(dimensions, outputChnlType);
+            chnl = ChannelFactory.instance().create(dimensions, outputChnlType);
         }
 
         if (!outputChnlType.equals(chnl.getVoxelDataType())) {
@@ -175,12 +175,12 @@ public class StackProviderRGBChnlProvider extends StackProvider {
             Channel chnlRed, Channel chnlGreen, Channel chnlBlue, VoxelDataType outputType)
             throws CreateException {
         try {
-            ImageDimensions sd = createDimensions(chnlRed, chnlGreen, chnlBlue);
+            ImageDimensions dimensions = createDimensions(chnlRed, chnlGreen, chnlBlue);
 
             Stack out = new Stack();
-            addToStack(out, chnlRed, sd, outputType);
-            addToStack(out, chnlGreen, sd, outputType);
-            addToStack(out, chnlBlue, sd, outputType);
+            addToStack(out, chnlRed, dimensions, outputType);
+            addToStack(out, chnlGreen, dimensions, outputType);
+            addToStack(out, chnlBlue, dimensions, outputType);
             return out;
         } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);

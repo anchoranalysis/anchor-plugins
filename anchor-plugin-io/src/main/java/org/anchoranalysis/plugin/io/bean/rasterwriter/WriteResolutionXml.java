@@ -51,22 +51,22 @@ public class WriteResolutionXml extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String dfltExt() {
-        return writer.dfltExt();
+    public String defaultExtension() {
+        return writer.defaultExtension();
     }
 
     @Override
     public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
         writer.writeStackByte(stack, filePath, makeRGB);
-        writeResolutionXml(filePath, stack.getDimensions().getRes());
+        writeResolutionXml(filePath, stack.dimensions().resolution());
     }
 
     @Override
     public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
         writer.writeStackShort(stack, filePath, makeRGB);
-        writeResolutionXml(filePath, stack.getDimensions().getRes());
+        writeResolutionXml(filePath, stack.dimensions().resolution());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class WriteResolutionXml extends RasterWriter {
 
         // We assume all the stacks in the series have the same dimension, and write only one
         // metadata file
-        writeResolutionXml(filePath, stackSeries.get(0).getDimensions().getRes());
+        writeResolutionXml(filePath, stackSeries.get(0).dimensions().resolution());
     }
 
     private void writeResolutionXml(Path filePath, ImageResolution res) throws RasterIOException {

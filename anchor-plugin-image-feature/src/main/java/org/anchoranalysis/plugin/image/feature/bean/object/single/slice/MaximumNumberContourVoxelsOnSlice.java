@@ -46,15 +46,15 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
             throws FeatureCalculationException {
         ObjectMask object = input.get().getObject();
 
-        return numVoxelsOnContour(sliceWithMaxNumVoxels(object));
+        return numberVoxelsOnContour(sliceWithMaxNumberVoxels(object));
     }
 
-    private static ObjectMask sliceWithMaxNumVoxels(ObjectMask obj) {
-        return obj.extractSlice(indexOfSliceWithMaxNumVoxels(obj), false);
+    private static ObjectMask sliceWithMaxNumberVoxels(ObjectMask object) {
+        return object.extractSlice(indexOfSliceWithMaxNumberVoxels(object), false);
     }
 
-    private static int numVoxelsOnContour(ObjectMask obj) {
-        return FindOutline.outline(obj, 1, true, false).binaryVoxelBox().countOn();
+    private static int numberVoxelsOnContour(ObjectMask obj) {
+        return FindOutline.outline(obj, 1, true, false).binaryVoxels().countOn();
     }
 
     private static int cntForByteBuffer(ByteBuffer bb, byte equalVal) {
@@ -67,20 +67,20 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
         return cnt;
     }
 
-    private static int indexOfSliceWithMaxNumVoxels(ObjectMask object) {
+    private static int indexOfSliceWithMaxNumberVoxels(ObjectMask object) {
 
         int max = 0;
         int ind = 0;
 
-        for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
-            ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
-            int cnt = cntForByteBuffer(bb, object.getBinaryValuesByte().getOnByte());
+        for (int z = 0; z < object.boundingBox().extent().z(); z++) {
+            ByteBuffer bb = object.sliceBufferLocal(z);
+            int count = cntForByteBuffer(bb, object.binaryValuesByte().getOnByte());
 
-            if (cnt > max) {
-                max = cnt;
+            if (count > max) {
+                max = count;
                 ind = z;
             }
         }
-        return ind;
+        return ind + object.boundingBox().cornerMin().z();
     }
 }

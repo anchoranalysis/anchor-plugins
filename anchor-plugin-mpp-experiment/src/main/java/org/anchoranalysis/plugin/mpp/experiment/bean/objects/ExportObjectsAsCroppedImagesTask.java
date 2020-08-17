@@ -48,8 +48,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
@@ -75,11 +75,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
-    /** The channels we apply the masks to - all assumed to be of same dimension */
+    /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProvider = new ArrayList<>();
 
-    /** The channels we apply the masks to - all assumed to be of same dimension */
+    /** The channels we extract the object-masks from - all assumed to be of same dimension */
     @BeanField @OptionalBean @Getter @Setter
     private List<NamedBean<StackProvider>> listStackProviderMIP = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     @BeanField @Getter @Setter private boolean extendInZ = false;
 
     /**
-     * If true, rather than writing out a bounding-box around the object mask, the entire image is
+     * If true, rather than writing out a bounding-box around the object-mask, the entire image is
      * written
      */
     @BeanField @Getter @Setter private boolean keepEntireImage = false;
@@ -140,14 +140,15 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private void outputGeneratorSeq(
-            IterableGenerator<ObjectMask> generator,
+            IterableGenerator<ObjectsWithBoundingBox> generator,
             ObjectCollection objects,
             BoundIOContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<ObjectMask> generatorSeq =
+        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> generatorSeq =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
         generatorSeq.start();
-        objects.streamStandardJava().forEach(generatorSeq::add);
+        objects.streamStandardJava()
+                .forEach(object -> generatorSeq.add(new ObjectsWithBoundingBox(object)));
         generatorSeq.end();
     }
 
@@ -157,8 +158,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
-            NamedStacks stacksProjected =
+            NamedStacksSet stacks =
+                    createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacksSet stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 
             if (stacks.keys().isEmpty()) {
@@ -166,18 +168,18 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 return;
             }
 
-            ImageDimensions dimensions = stacks.getArbitraryElement().getDimensions();
+            ImageDimensions dimensions = stacks.getArbitraryElement().dimensions();
 
             outputGeneratorSeq(
                     createGenerator(dimensions, stacks, stacksProjected),
-                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.getZ()),
+                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.z()),
                     context);
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private static NamedStacks createStacksFromProviders(
+    private static NamedStacksSet createStacksFromProviders(
             List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
@@ -205,11 +207,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks.withoutUniformSizeConstraint();
     }
 
-    private IterableGenerator<ObjectMask> createGenerator(
-            ImageDimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
+    private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
+            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
 
-        IterableGenerator<ObjectMask> generator =
+        IterableGenerator<ObjectsWithBoundingBox> generator =
                 new BuildGeneratorHelper(outlineWidth)
                         .forStacks(
                                 dimensions,

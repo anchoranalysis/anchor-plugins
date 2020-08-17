@@ -48,13 +48,13 @@ public class StackProviderRGBSingleChnlProvider extends StackProvider {
 
         Channel chnlIn = chnl.create();
 
-        ImageDimensions sd = chnlIn.getDimensions();
+        ImageDimensions dimensions = chnlIn.dimensions();
 
         try {
             Stack out = new Stack();
-            addToStack(out, chnlIn, sd);
-            addToStack(out, chnlIn, sd);
-            addToStack(out, chnlIn, sd);
+            addToStack(out, chnlIn, dimensions);
+            addToStack(out, chnlIn, dimensions);
+            addToStack(out, chnlIn, dimensions);
             return out;
         } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);

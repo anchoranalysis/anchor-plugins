@@ -77,7 +77,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     private boolean isDistanceMoreThanMax(FeatureInputPairObjects params)
             throws FeatureCalculationException {
 
-        if (!params.getResOptional().isPresent()) {
+        if (!params.getResolutionOptional().isPresent()) {
             throw new FeatureCalculationException(
                     "This feature requires an Image-Res in the input");
         }
@@ -87,7 +87,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
 
         double distance = calcDistance(cog1, cog2);
         try {
-            return distance > calcMaxDistance(cog1, cog2, params.getResOptional());
+            return distance > calcMaxDistance(cog1, cog2, params.getResolutionOptional());
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

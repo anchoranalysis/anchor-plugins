@@ -85,7 +85,7 @@ public class ObjectWithMaximumFeatureFromEachMatchedCollection
 
         for (ObjectMask objectMask : objects) {
 
-            double featureVal = session.calc(new FeatureInputSingleObject(objectMask));
+            double featureVal = session.calculate(new FeatureInputSingleObject(objectMask));
 
             if (!max.isPresent() || featureVal > maxVal) {
                 max = Optional.of(objectMask);

@@ -48,17 +48,18 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
     // END BEAN FIELDS
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
-        return createMaskedImage(chnl);
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return createMaskedImage(mask);
     }
 
-    private Mask createMaskedImage(Mask bi) throws CreateException {
+    private Mask createMaskedImage(Mask mask) throws CreateException {
 
         return MaskFromObjects.createFromObjects(
-                connectedComponents(bi, inverted), bi.getDimensions(), bi.getBinaryValues());
+                connectedComponents(mask, inverted), mask.dimensions(), mask.binaryValues());
     }
 
-    private ObjectCollection connectedComponents(Mask bi, boolean inverted) throws CreateException {
+    private ObjectCollection connectedComponents(Mask mask, boolean inverted)
+            throws CreateException {
 
         int resolveMinNum;
         try {
@@ -66,7 +67,7 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
                     (int)
                             Math.floor(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(bi.getDimensions().getRes())));
+                                            Optional.of(mask.dimensions().resolution())));
         } catch (UnitValueException e) {
             throw new CreateException(e);
         }
@@ -74,14 +75,14 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
         CreateFromConnectedComponentsFactory createObjects =
                 new CreateFromConnectedComponentsFactory(resolveMinNum);
         if (inverted) {
-            Mask biInverted =
+            Mask maskInverted =
                     new Mask(
-                            bi.getChannel(),
-                            bi.getBinaryValues()
+                            mask.channel(),
+                            mask.binaryValues()
                                     .createInverted()); // In case we've inverted the binary values
-            return createObjects.createConnectedComponents(biInverted);
+            return createObjects.createConnectedComponents(maskInverted);
         } else {
-            return createObjects.createConnectedComponents(bi);
+            return createObjects.createConnectedComponents(mask);
         }
     }
 }

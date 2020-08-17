@@ -27,6 +27,7 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIfPixelZero;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
@@ -34,7 +35,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -64,17 +64,17 @@ class CalcOutlineRGB {
         if (background.getNumberChannels() == 3) {
             return apply(
                     outline,
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(1),
-                    background.createChnlDuplicate(2),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(1),
+                    background.createChannelDuplicate(2),
                     blueToAssign,
                     createShort);
         } else {
             return apply(
                     outline,
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(0),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(0),
                     blueToAssign,
                     createShort);
         }
@@ -100,27 +100,25 @@ class CalcOutlineRGB {
                         ? VoxelDataTypeUnsignedShort.INSTANCE
                         : VoxelDataTypeUnsignedByte.INSTANCE;
 
-        Channel chnlGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
-        Channel chnlBlue = MaxChnls.apply(backgroundBlue, blueToAssign, outputType);
+        Channel channelGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
+        Channel channelBlue = MaxChnls.apply(backgroundBlue, blueToAssign, outputType);
 
         return StackProviderRGBChnlProvider.createRGBStack(
-                backgroundRed, chnlGreen, chnlBlue, outputType);
+                backgroundRed, channelGreen, channelBlue, outputType);
     }
 
     private static Channel imposeOutlineOnChnl(
             Mask outline, Channel chnl, VoxelDataType outputType) {
 
         double multFact =
-                (double) outputType.maxValue() / outline.getChannel().getVoxelDataType().maxValue();
+                (double) outputType.maxValue() / outline.channel().getVoxelDataType().maxValue();
 
         return ChnlProviderIfPixelZero.mergeViaZeroCheck(
-                outline.getChannel(), chnl, outputType, multFact);
+                outline.channel(), chnl, outputType, multFact);
     }
 
-    private static void zeroPixels(Mask outline, Channel[] chnlArr) {
-        ObjectMask objectOutline = CreateFromEntireChnlFactory.createObject(outline);
-        for (Channel chnl : chnlArr) {
-            chnl.getVoxelBox().any().setPixelsCheckMask(objectOutline, 0);
-        }
+    private static void zeroPixels(Mask outline, Channel[] channels) {
+        ObjectMask objectOutline = new ObjectMask(outline);
+        Arrays.stream(channels).forEach(channel -> channel.assignValue(0).toObject(objectOutline));
     }
 }

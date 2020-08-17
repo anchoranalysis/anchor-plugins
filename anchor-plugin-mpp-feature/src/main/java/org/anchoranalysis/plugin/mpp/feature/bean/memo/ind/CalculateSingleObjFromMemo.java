@@ -55,10 +55,10 @@ class CalculateSingleObjFromMemo
         ObjectWithProperties om =
                 params.getPxlPartMemo()
                         .getMark()
-                        .calcMask(
-                                params.getDimensionsRequired(),
+                        .deriveObject(
+                                params.dimensionsRequired(),
                                 regionMap.membershipWithFlagsForIndex(index),
                                 BinaryValuesByte.getDefault());
-        return om.getMask();
+        return om.withoutProperties();
     }
 }

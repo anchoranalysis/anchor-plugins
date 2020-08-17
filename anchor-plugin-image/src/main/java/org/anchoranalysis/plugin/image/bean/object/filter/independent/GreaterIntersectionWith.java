@@ -71,6 +71,11 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
     }
 
     @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+
+    @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {
 
@@ -82,7 +87,6 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
 
     @Override
     protected void end() throws OperationFailedException {
-        super.end();
         intersectionGreater = null;
         intersectionLesser = null;
     }

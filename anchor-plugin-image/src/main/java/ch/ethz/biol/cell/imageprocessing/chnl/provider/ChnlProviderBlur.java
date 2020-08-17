@@ -50,14 +50,14 @@ public class ChnlProviderBlur extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         try {
-            strategy.blur(chnl.getVoxelBox(), chnl.getDimensions(), getLogger().messageLogger());
+            strategy.blur(channel.voxels(), channel.dimensions(), getLogger().messageLogger());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
 
-        return chnl;
+        return channel;
     }
 }

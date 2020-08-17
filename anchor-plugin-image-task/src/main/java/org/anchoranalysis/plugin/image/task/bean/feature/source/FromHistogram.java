@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.IdentityOperation;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
@@ -116,7 +115,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                                     context.getRowSource(),
                                     context.getModelDirectory(),
                                     context.getLogger())
-                            .calc(new FeatureInputHistogram(histogram, Optional.empty()));
+                            .calculate(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
             KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());
@@ -153,7 +152,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
         paramsInit
                 .getHistogramCollection()
-                .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, new IdentityOperation<>(inputtedHist));
+                .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
         return paramsInit;
     }
 

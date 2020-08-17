@@ -77,14 +77,14 @@ class MultiFile {
     private void checkSliceNum(Stack stackForFile, Optional<Integer> sliceNum, Path filePath)
             throws RasterIOException {
         if (sliceNum.isPresent()) {
-            if (stackForFile.getDimensions().getZ() != 1) {
+            if (stackForFile.dimensions().z() != 1) {
                 throw new RasterIOException(
                         String.format(
                                 "A sliceNum %d is specified, but the file '%s' has more than one slice",
                                 sliceNum.get(), filePath));
             }
         } else {
-            if (stackForFile.getDimensions().getZ() != size.getRangeZ().getSize()) {
+            if (stackForFile.dimensions().z() != size.getRangeZ().getSize()) {
                 throw new RasterIOException(
                         String.format("File '%s' has an incorrect number of slices", filePath));
             }

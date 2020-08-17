@@ -49,7 +49,7 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 
     // START BEAN PROPERTIES
     /* Image-resolution */
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dim;
+    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimensions;
     // END BEAN PROPERTIES
 
     @FunctionalInterface
@@ -59,7 +59,7 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
 
     protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
         try {
-            return OptionalFactory.create(dim).map(ImageDimensions::getRes);
+            return OptionalFactory.create(dimensions).map(ImageDimensions::resolution);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

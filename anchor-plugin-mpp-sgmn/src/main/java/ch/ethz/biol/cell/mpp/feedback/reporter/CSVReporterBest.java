@@ -30,7 +30,6 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.nrg.cfg.CfgNRGPixelized;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
@@ -85,12 +84,8 @@ public class CSVReporterBest extends FeedbackReceiverBean<CfgNRGPixelized> {
     }
 
     private Optional<FileOutput> createOutput(
-            OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) throws ReporterException {
-        try {
-            return CSVReporterUtilities.createFileOutputFor(
-                    "csvStatsBest", initParams, "event_aggregate_stats");
-        } catch (OutputWriteFailedException e) {
-            throw new ReporterException(e);
-        }
+            OptimizationFeedbackInitParams<CfgNRGPixelized> initParams) {
+        return CSVReporterUtilities.createFileOutputFor(
+                "csvStatsBest", initParams, "event_aggregate_stats");
     }
 }

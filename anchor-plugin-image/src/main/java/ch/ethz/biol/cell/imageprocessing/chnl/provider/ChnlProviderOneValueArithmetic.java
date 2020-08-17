@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
@@ -48,17 +48,17 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 
         int constant = (int) value;
 
-        Channel chnlOut = FACTORY.createEmptyInitialised(chnl.getDimensions());
+        Channel chnlOut = FACTORY.createEmptyInitialised(chnl.dimensions());
 
-        VoxelBox<?> vbIn = chnl.getVoxelBox().any();
-        VoxelBox<?> vbOut = chnlOut.getVoxelBox().any();
+        Voxels<?> voxelsIn = chnl.voxels().any();
+        Voxels<?> voxelsOut = chnlOut.voxels().any();
 
-        int volumeXY = chnl.getDimensions().getVolumeXY();
+        int volumeXY = chnl.dimensions().volumeXY();
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
 
-            VoxelBuffer<?> in = vbIn.getPixelsForPlane(z);
-            VoxelBuffer<?> out = vbOut.getPixelsForPlane(z);
+            VoxelBuffer<?> in = voxelsIn.slice(z);
+            VoxelBuffer<?> out = voxelsOut.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 
@@ -66,7 +66,7 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 
                 int result = binaryOp(voxelVal, constant);
 
-                out.putInt(offset, cropValToByteRange(result));
+                out.putInt(offset, cropValueToByteRange(result));
             }
         }
 
@@ -76,7 +76,7 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
     /** The binary arithmetic operation that combines the voxel-value and the constant-value */
     protected abstract int binaryOp(int voxel, int constant);
 
-    private static int cropValToByteRange(int result) {
+    private static int cropValueToByteRange(int result) {
 
         if (result < 0) {
             return 0;

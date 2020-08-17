@@ -27,9 +27,10 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Optional;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.core.error.InitException;
@@ -38,17 +39,14 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
 
@@ -68,9 +66,9 @@ class NaiveGreedyMerge {
     private final Logger logger;
 
     @Value
-    private static class MergeParams {
-        private int startSrc;
-        private int endSrc;
+    private static class MergeRange {
+        private int start; // NOSONAR
+        private int end; // NOSONAR
     }
 
     /**
@@ -81,30 +79,28 @@ class NaiveGreedyMerge {
      */
     public ObjectCollection tryMerge(ObjectCollection objects) throws OperationFailedException {
 
-        List<MergeParams> stack = new ArrayList<>();
-        MergeParams mergeParams = new MergeParams(0, 0);
+        // Stack structure, last in, first out
+        Deque<MergeRange> stack = new ArrayDeque<>();
 
-        stack.add(mergeParams);
+        stack.add(new MergeRange(0, 0));
 
         while (!stack.isEmpty()) {
-            MergeParams params = stack.remove(0);
-            tryMergeOnIndices(objects, params, stack);
+            tryMergeWithinRange(objects, stack.pop(), stack::push);
         }
 
         return objects;
     }
 
     /**
-     * Tries to merge a particular subset of objects in objects based upon the parameters in
-     * mergeParams
+     * Tries to merge a particular subset of objects in objects based upon the current range
      *
      * @param objects the entire set of objects
-     * @param mergeParams parameters that determine which objects are considered for merge
+     * @param range parameters that determine which objects are considered for merge
      * @param stack the entire list of future parameters to also be considered
      * @throws OperationFailedException
      */
-    private void tryMergeOnIndices(
-            ObjectCollection objects, MergeParams mergeParams, List<MergeParams> stack)
+    private void tryMergeWithinRange(
+            ObjectCollection objects, MergeRange range, Consumer<MergeRange> consumer)
             throws OperationFailedException {
 
         try {
@@ -113,36 +109,31 @@ class NaiveGreedyMerge {
             throw new OperationFailedException(e);
         }
 
-        for (int i = mergeParams.getStartSrc(); i < objects.size(); i++) {
-            for (int j = mergeParams.getEndSrc(); j < objects.size(); j++) {
+        for (int i = range.getStart(); i < objects.size(); i++) {
+            for (int j = range.getEnd(); j < objects.size(); j++) {
 
-                if (i == j) {
-                    continue;
-                }
-
-                Optional<ObjectMask> merged = tryMerge(objects.get(i), objects.get(j));
-
-                if (merged.isPresent()) {
-                    removeTwoIndices(objects, i, j);
-                    objects.add(merged.get());
-
-                    int startPos = Math.max(i - 1, 0);
-                    stack.add(new MergeParams(startPos, startPos));
-
-                    // After a succesful merge, we don't try to merge again
+                if (i != j && tryMergeOnIndices(objects, i, j, consumer)) {
+                    // After a successful merge, we don't try to merge again
                     break;
                 }
             }
         }
     }
 
-    private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
-        if (i < j) {
-            objects.remove(j);
-            objects.remove(i);
+    private boolean tryMergeOnIndices(
+            ObjectCollection objects, int i, int j, Consumer<MergeRange> consumer)
+            throws OperationFailedException {
+        Optional<ObjectMask> merged = tryMerge(objects.get(i), objects.get(j));
+        if (merged.isPresent()) {
+            removeTwoIndices(objects, i, j);
+            objects.add(merged.get());
+
+            int startPos = Math.max(i - 1, 0);
+            consumer.accept(new MergeRange(startPos, startPos));
+
+            return true;
         } else {
-            objects.remove(i);
-            objects.remove(j);
+            return false;
         }
     }
 
@@ -166,10 +157,10 @@ class NaiveGreedyMerge {
     private ObjectMask merge(ObjectMask source, ObjectMask destination) {
         if (replaceWithMidpoint) {
             Point3i pointNew =
-                    PointConverter.intFromDouble(
+                    PointConverter.intFromDoubleFloor(
                             Point3d.midPointBetween(
-                                    source.getBoundingBox().midpoint(),
-                                    destination.getBoundingBox().midpoint()));
+                                    source.boundingBox().midpoint(),
+                                    destination.boundingBox().midpoint()));
             return createSinglePixelObject(pointNew);
         } else {
             return ObjectMaskMerger.merge(source, destination);
@@ -177,10 +168,18 @@ class NaiveGreedyMerge {
     }
 
     private static ObjectMask createSinglePixelObject(Point3i point) {
-        Extent e = new Extent(1, 1, 1);
-        VoxelBox<ByteBuffer> vb = VoxelBoxFactory.getByte().create(e);
-        BinaryVoxelBox<ByteBuffer> bvb = new BinaryVoxelBoxByte(vb, BinaryValues.getDefault());
-        bvb.setAllPixelsToOn();
-        return new ObjectMask(new BoundingBox(point, e), bvb);
+        Extent extent = new Extent(1, 1, 1);
+        BinaryVoxels<ByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
+        return new ObjectMask(new BoundingBox(point, extent), voxels);
+    }
+
+    private static void removeTwoIndices(ObjectCollection objects, int i, int j) {
+        if (i < j) {
+            objects.remove(j);
+            objects.remove(i);
+        } else {
+            objects.remove(i);
+            objects.remove(j);
+        }
     }
 }

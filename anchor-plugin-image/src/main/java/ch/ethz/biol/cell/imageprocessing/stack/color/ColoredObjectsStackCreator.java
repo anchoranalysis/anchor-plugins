@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.generator.raster.obj.rgb.DrawObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;

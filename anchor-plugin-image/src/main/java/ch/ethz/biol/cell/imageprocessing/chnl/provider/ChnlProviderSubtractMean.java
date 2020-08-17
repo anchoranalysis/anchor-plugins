@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
@@ -45,46 +45,46 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        double mean = calculateMean(chnl, mask);
+        double mean = calculateMean(channel, mask);
 
         int meanInt = (int) Math.round(mean);
 
         if (subtractFromMaskOnly) {
-            subtractMeanMask(chnl, mask, meanInt);
+            subtractMeanMask(channel, mask, meanInt);
         } else {
-            subtractMeanAll(chnl, meanInt);
+            subtractMeanAll(channel, meanInt);
         }
 
-        return chnl;
+        return channel;
     }
 
     private double calculateMean(Channel chnl, Mask mask) {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbMask.extent();
+        Extent extent = voxelsMask.extent();
 
-        BinaryValuesByte bvb = mask.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
         double sum = 0.0;
-        double cnt = 0;
+        double count = 0;
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bbMask = vbMask.getPixelsForPlane(z).buffer();
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bbMask.get(offset) == bvb.getOnByte()) {
-                        int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
-                        sum += intens;
-                        cnt++;
+                        int intensity = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
+                        sum += intensity;
+                        count++;
                     }
 
                     offset++;
@@ -92,30 +92,30 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             return 0;
         }
 
-        return sum / cnt;
+        return sum / count;
     }
 
     private void subtractMeanMask(Channel chnl, Mask mask, int mean) {
 
-        VoxelBox<ByteBuffer> vbMask = mask.getChannel().getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbMask.extent();
+        Extent e = voxelsMask.extent();
 
-        BinaryValuesByte bvb = mask.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbMask = vbMask.getPixelsForPlane(z).buffer();
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bbMask.get(offset) == bvb.getOnByte()) {
                         int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
@@ -136,17 +136,17 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
     private void subtractMeanAll(Channel chnl, int mean) {
 
-        VoxelBox<ByteBuffer> vbIntensity = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = vbIntensity.extent();
+        Extent e = voxelsIntensity.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbIntensity = vbIntensity.getPixelsForPlane(z).buffer();
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
                     int intensSub = (intens - mean);

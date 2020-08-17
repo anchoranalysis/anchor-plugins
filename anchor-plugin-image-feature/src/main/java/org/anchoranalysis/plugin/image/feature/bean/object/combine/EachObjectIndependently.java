@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -73,25 +73,28 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                         object ->
                                 new FeatureInputSingleObject(
                                         checkObjectInsideScene(
-                                                object, nrgStack.getDimensions().getExtent()),
+                                                object, nrgStack.dimensions().extent()),
                                         nrgStack));
     }
 
     private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)
             throws CreateException {
-        if (!extent.contains(object.getBoundingBox())) {
+        if (!extent.contains(object.boundingBox())) {
             throw new CreateException(
                     String.format(
                             "Object is not (perhaps fully) contained inside the scene: %s is not in %s",
-                            object.getBoundingBox(), extent));
+                            object.boundingBox(), extent));
         }
         return object;
     }
 
     @Override
-    public Optional<DisplayStack> createThumbailFor(FeatureInputSingleObject input)
-            throws CreateException {
-        return Optional.of(
-                getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject())));
+    public DisplayStack createThumbailFor(FeatureInputSingleObject input) throws CreateException {
+        return getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject()));
+    }
+
+    @Override
+    protected BoundingBox boundingBoxThatSpansInput(FeatureInputSingleObject input) {
+        return input.getObject().boundingBox();
     }
 }

@@ -34,6 +34,6 @@ public class ChnlProviderFromBinary extends ChnlProviderMask {
 
     @Override
     protected Channel createFromMask(Mask mask) throws CreateException {
-        return mask.getChannel();
+        return mask.channel();
     }
 }

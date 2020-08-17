@@ -63,9 +63,9 @@ public class ClipHistogramMax extends CalculateLevelOne {
 
         Histogram out = new HistogramArray(histogram.getMaxBin());
         for (int i = histogram.getMinBin(); i <= maxVal; i++) {
-            out.incrValBy(i, histogram.getCount(i));
+            out.incrValueBy(i, histogram.getCount(i));
         }
-        out.incrValBy(maxVal, numAbove);
+        out.incrValueBy(maxVal, numAbove);
         return out;
     }
 }

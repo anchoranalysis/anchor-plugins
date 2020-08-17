@@ -29,31 +29,20 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
 
 public class ChnlProviderInvert extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        VoxelBoxWrapper vb = chnl.getVoxelBox();
+        VoxelsWrapper voxels = channel.voxels();
 
-        int maxVal = (int) vb.getVoxelDataType().maxValue();
+        int maxValue = (int) voxels.getVoxelDataType().maxValue();
 
-        int volumeXY = vb.any().extent().getVolumeXY();
+        IterateVoxelsAsInt.changeEachPoint(voxels.any(), value -> maxValue - value);
 
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-
-            VoxelBuffer<?> bb = vb.any().getPixelsForPlane(z);
-
-            for (int offset = 0; offset < volumeXY; offset++) {
-
-                int invertedValue = maxVal - bb.getInt(offset);
-                bb.putInt(offset, invertedValue);
-            }
-        }
-
-        return chnl;
+        return channel;
     }
 }

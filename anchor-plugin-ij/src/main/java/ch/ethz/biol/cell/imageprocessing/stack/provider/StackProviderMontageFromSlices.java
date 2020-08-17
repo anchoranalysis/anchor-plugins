@@ -67,7 +67,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
     @Override
     public Stack createFromStack(Stack stack) throws CreateException {
 
-        int numSlices = stack.getDimensions().getZ();
+        int numSlices = stack.dimensions().z();
 
         int numColumns = calcNumColumns(numSlices);
 
@@ -102,7 +102,7 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
                         1,
                         borderWidth,
                         label);
-        return IJWrap.chnlFromImagePlus(res, in.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(res, in.dimensions().resolution());
     }
 
     private int calcNumColumns(int totalNumSlices) {

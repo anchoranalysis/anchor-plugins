@@ -31,17 +31,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.function.UnaryOperatorWithException;
+import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ScaledObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 
@@ -63,24 +65,32 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     @Override
     public ObjectCollection segment(
             Channel chnl,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
         Interpolator interpolator = createInterpolator();
 
-        ScaleFactor scaleFactor = determineScaleFactor(chnl.getDimensions());
+        ScaleFactor scaleFactor = determineScaleFactor(chnl.dimensions());
+
+        Extent extent = chnl.dimensions().extent();
 
         // Perform segmentation on scaled versions of the channel, mask and seeds
         ObjectCollection scaledSegmentationResult =
                 upstreamSegmentation.segment(
                         scaleChannel(chnl, scaleFactor, interpolator),
-                        scaleMask(mask, scaleFactor, interpolator),
-                        scaleSeeds(seeds, scaleFactor));
+                        scaleMask(objectMask, scaleFactor, extent),
+                        scaleSeeds(seeds, scaleFactor, extent));
 
         // Segment and scale results back up to original-scale
-        return scaleResultToOriginalScale(scaledSegmentationResult, scaleFactor);
+        try {
+            return scaleResultToOriginalScale(
+                            scaledSegmentationResult, scaleFactor, chnl.dimensions().extent())
+                    .asCollectionOrderNotPreserved();
+        } catch (OperationFailedException e) {
+            throw new SegmentationFailedException(e);
+        }
     }
 
     private Channel scaleChannel(Channel chnl, ScaleFactor scaleFactor, Interpolator interpolator) {
@@ -88,16 +98,18 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private Optional<ObjectMask> scaleMask(
-            Optional<ObjectMask> mask, ScaleFactor scaleFactor, Interpolator interpolator)
+            Optional<ObjectMask> objectMask, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
 
-        return mapScale(mask, object -> object.scale(scaleFactor, interpolator), "mask");
+        return mapScale(
+                objectMask, object -> object.scale(scaleFactor, Optional.of(extent)), "mask");
     }
 
     private Optional<SeedCollection> scaleSeeds(
-            Optional<SeedCollection> seeds, ScaleFactor scaleFactor)
+            Optional<SeedCollection> seeds, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
-        return mapScale(seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor), "seeds");
+        return mapScale(
+                seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor, extent), "seeds");
     }
 
     private ScaleFactor determineScaleFactor(ImageDimensions dimensions)
@@ -109,8 +121,10 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private ObjectCollection scaleResultToOriginalScale(ObjectCollection objects, ScaleFactor sf) {
-        return objects.scale(sf.invert(), createInterpolator());
+    private ScaledObjectCollection scaleResultToOriginalScale(
+            ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
+            throws OperationFailedException {
+        return objects.scale(scaleFactor.invert(), originalExtent);
     }
 
     /**
@@ -125,7 +139,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
      */
     private static <T> Optional<T> mapScale(
             Optional<T> optional,
-            UnaryOperatorWithException<T, OperationFailedException> scaleFunc,
+            CheckedUnaryOperator<T, OperationFailedException> scaleFunc,
             String textualDscrInError)
             throws SegmentationFailedException {
         try {
@@ -139,22 +153,23 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private static SeedCollection scaleSeeds(SeedCollection seedsUnscaled, ScaleFactor sf)
+    private static SeedCollection scaleSeeds(
+            SeedCollection seedsUnscaled, ScaleFactor scaleFactor, Extent extent)
             throws OperationFailedException {
 
-        if (sf.getX() != sf.getY()) {
+        if (scaleFactor.x() != scaleFactor.y()) {
             throw new OperationFailedException(
                     "scaleFactor in X and Y must be equal to scale seeds");
         }
 
         SeedCollection seedsScaled = seedsUnscaled.duplicate();
-        seedsScaled.scaleXY(sf.getX());
+        seedsScaled.scaleXY(scaleFactor.x(), extent);
         return seedsScaled;
     }
 
     private Interpolator createInterpolator() {
         return interpolate
-                ? InterpolatorFactory.getInstance().binaryResizing()
+                ? InterpolatorFactory.getInstance().rasterResizing()
                 : InterpolatorFactory.getInstance().noInterpolation();
     }
 }

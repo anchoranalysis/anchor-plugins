@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -40,9 +42,8 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
-
-    private ExtractFromProvider() {}
 
     public static NRGStackWithParams extractStack(
             StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger)

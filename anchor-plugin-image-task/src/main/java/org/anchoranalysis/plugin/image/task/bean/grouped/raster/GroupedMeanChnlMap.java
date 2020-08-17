@@ -61,7 +61,7 @@ class GroupedMeanChnlMap extends GroupMapByName<Channel, AggregateChnl> {
         VoxelDataType outputType = chnlChecker.getChnlType();
 
         try {
-            Channel mean = agg.createMeanChnl(outputType);
+            Channel mean = agg.createMeanChannel(outputType);
             generator.setIterableElement(mean);
             context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generator);
 
@@ -69,8 +69,8 @@ class GroupedMeanChnlMap extends GroupMapByName<Channel, AggregateChnl> {
                     .logFormatted(
                             "Writing chnl %s with %d items and numPixels>100=%d and outputType=%s",
                             outputName,
-                            agg.getCnt(),
-                            mean.getVoxelBox().any().countGreaterThan(100),
+                            agg.count(),
+                            mean.voxelsGreaterThan(100).count(),
                             outputType);
 
         } catch (OperationFailedException e) {
