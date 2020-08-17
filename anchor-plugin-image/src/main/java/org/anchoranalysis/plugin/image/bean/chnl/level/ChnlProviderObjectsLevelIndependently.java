@@ -49,7 +49,7 @@ public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
             throws CreateException {
 
         try {
-            LevelResultCollection lrc =
+            LevelResultCollection results =
                     LevelResultCollectionFactory.createCollection(
                             chnlIntensity,
                             objects,
@@ -58,8 +58,8 @@ public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
                             getLogger().messageLogger());
 
             Voxels<?> voxelsOutput = chnlOutput.voxels().any();
-            for (LevelResult lr : lrc) {
-                voxelsOutput.setPixelsCheckMask(lr.getObject(), lr.getLevel());
+            for (LevelResult result : results) {
+                voxelsOutput.assignValue(result.getLevel()).toObject(result.getObject());
             }
 
             return chnlOutput;

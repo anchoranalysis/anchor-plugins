@@ -48,7 +48,7 @@ final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<I
     }
 
     @Override
-    public void notifyChangeZ(int z) {
+    public void notifyChangeSlice(int z) {
         offsetZ = extent.offset(0, 0, z);
     }
 

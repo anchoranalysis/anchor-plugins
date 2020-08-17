@@ -42,7 +42,6 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an {@link ObjectFilter}
 public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProviderChnlSource {
@@ -62,22 +61,18 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
     @Override
     protected Mask createFromSource(Channel chnlSource) throws CreateException {
 
-        Mask channel = binaryChnlMain.create();
+        Mask mask = binaryChnlMain.create();
 
-        ObjectMask objectMain = CreateFromEntireChnlFactory.createObject(channel);
-        ObjectMask objectCompareTo =
-                CreateFromEntireChnlFactory.createObject(binaryChnlCompareTo.create());
-
-        FeatureCalculatorSingle<FeatureInputSingleObject> session = createSession();
+        FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createCalculator();
 
         return calcRelation(
-                objectMain,
-                objectCompareTo,
-                channel,
-                NRGStackUtilities.addNrgStack(session, chnlSource));
+                new ObjectMask(mask),
+                new ObjectMask(binaryChnlCompareTo.create()),
+                mask,
+                NRGStackUtilities.addNrgStack(calculator, chnlSource));
     }
 
-    private FeatureCalculatorSingle<FeatureInputSingleObject> createSession()
+    private FeatureCalculatorSingle<FeatureInputSingleObject> createCalculator()
             throws CreateException {
         try {
             return FeatureSession.with(

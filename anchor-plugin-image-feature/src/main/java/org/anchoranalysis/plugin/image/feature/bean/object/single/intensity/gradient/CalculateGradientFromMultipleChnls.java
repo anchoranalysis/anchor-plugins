@@ -112,7 +112,7 @@ class CalculateGradientFromMultipleChnls
         for (int z = 0; z < eMask.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z + box.cornerMin().z());
-            VoxelBuffer<ByteBuffer> bbMask = bvb.slice(z);
+            VoxelBuffer<ByteBuffer> bbMask = bvb.voxels().slice(z);
 
             for (int y = 0; y < eMask.y(); y++) {
                 for (int x = 0; x < eMask.x(); x++) {

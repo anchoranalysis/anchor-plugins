@@ -104,7 +104,11 @@ public class SegmentText extends ObjectCollectionProvider {
                         pathToEastModel());
 
         // Scale each object-mask and extract as an object-collection
-        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair._2(), stack.dimensions().extent());
+        try {
+            return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair._2(), stack.dimensions().extent());
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     /**

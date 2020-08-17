@@ -87,8 +87,8 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
         Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 
         for (int z = 0; z < chnl.dimensions().z(); z++) {
-            ByteBuffer bb = voxelsSlice.duplicate().slice(0).buffer();
-            voxelsOut.updateSlice(z, VoxelBufferByte.wrap(bb));
+            ByteBuffer bb = voxelsSlice.duplicate().sliceBuffer(0);
+            voxelsOut.replaceSlice(z, VoxelBufferByte.wrap(bb));
         }
 
         return chnl;

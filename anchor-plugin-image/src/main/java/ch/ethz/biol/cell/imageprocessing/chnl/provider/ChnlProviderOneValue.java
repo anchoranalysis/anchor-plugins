@@ -45,8 +45,8 @@ public abstract class ChnlProviderOneValue extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return createFromChnlValue(chnl, value);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return createFromChnlValue(channel, value);
     }
 
     protected abstract Channel createFromChnlValue(Channel chnl, double value)

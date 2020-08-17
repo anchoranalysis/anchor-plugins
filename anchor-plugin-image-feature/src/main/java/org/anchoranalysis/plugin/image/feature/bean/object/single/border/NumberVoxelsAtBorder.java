@@ -51,11 +51,11 @@ public class NumberVoxelsAtBorder extends FeatureSingleObject {
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return (double)
-                numBorderPixels(
+                numberBorderPixels(
                         input.get().getObject(), ignoreAtThreshold, outsideAtThreshold, do3D);
     }
 
-    public static int numBorderPixels(
+    public static int numberBorderPixels(
             ObjectMask object,
             boolean ignoreAtThreshold,
             boolean outsideAtThreshold,

@@ -43,7 +43,6 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithChannel;
 
@@ -73,7 +72,7 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
     }
 
     private Optional<ObjectMask> createObjectMask() throws CreateException {
-        return OptionalFactory.create(mask).map(CreateFromEntireChnlFactory::createObject);
+        return OptionalFactory.create(mask).map(ObjectMask::new);
     }
 
     private Optional<SeedCollection> createSeeds(

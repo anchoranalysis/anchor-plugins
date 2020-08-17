@@ -28,14 +28,11 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
 import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.math.moment.ImageMoments;
@@ -58,46 +55,27 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
     @Override
     protected ImageMoments execute(FeatureInputSingleObject params) {
         return new ImageMoments(
-                createPointMatrixFromObjectVoxelPositions(params.getObject()), suppressZ, false);
+                createPointMatrixFromObject(params.getObject()), suppressZ, false);
     }
 
     /**
-     * Creates a point-matrix with the distance of each point to the origin of the bounding-box
+     * Creates a point-matrix with the distance of each point in each dimension to the origin of the bounding-box
      *
-     * @param object
-     * @return
+     * @param object object whose ON voxels form the points in the matrix
+     * @return newly created matrix
      */
-    private static DoubleMatrix2D createPointMatrixFromObjectVoxelPositions(ObjectMask object) {
-
-        List<Point3i> listPts = new ArrayList<>();
-
-        Extent e = object.voxels().extent();
-
-        for (int z = 0; z < e.z(); z++) {
-            ByteBuffer bb = object.voxels().slice(z).buffer();
-
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-
-                    if (bb.get(offset++) == object.binaryValuesByte().getOnByte()) {
-                        listPts.add(new Point3i(x, y, z));
-                    }
-                }
-            }
-        }
-
-        return createPointMatrixInteger(listPts);
+    private static DoubleMatrix2D createPointMatrixFromObject(ObjectMask object) {
+        return createPointMatrixInteger( object.derivePointsLocal() );
     }
 
     private static DoubleMatrix2D createPointMatrixInteger(List<Point3i> points) {
-        DoubleMatrix2D mat = DoubleFactory2D.dense.make(points.size(), 3);
+        DoubleMatrix2D matrix = DoubleFactory2D.dense.make(points.size(), 3);
         for (int i = 0; i < points.size(); i++) {
             Point3i point = points.get(i);
-            mat.set(i, 0, point.x());
-            mat.set(i, 1, point.y());
-            mat.set(i, 2, point.z());
+            matrix.set(i, 0, point.x());
+            matrix.set(i, 1, point.y());
+            matrix.set(i, 2, point.z());
         }
-        return mat;
+        return matrix;
     }
 }

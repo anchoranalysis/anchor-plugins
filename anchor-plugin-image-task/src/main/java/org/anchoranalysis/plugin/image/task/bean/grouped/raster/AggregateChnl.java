@@ -32,16 +32,19 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedInt;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * A channel associated with a count. This is a useful structure for finding the mean of many
  * channels
  */
+@Accessors(fluent=true)
 class AggregateChnl {
 
     // We create only when we have the first channel, so dimensions can then be determined
     private Channel raster = null;
-    private int cnt = 0;
+    @Getter private int count = 0;
 
     public synchronized void addChnl(Channel chnl) throws OperationFailedException {
 
@@ -57,7 +60,7 @@ class AggregateChnl {
         VoxelsArithmetic.add(
                 raster.voxels().asInt(), chnl.voxels(), chnl.getVoxelDataType());
 
-        cnt++;
+        count++;
     }
 
     /**
@@ -66,9 +69,9 @@ class AggregateChnl {
      * @return the channel with newly created voxels
      * @throws OperationFailedException
      */
-    public Channel createMeanChnl(VoxelDataType outputType) throws OperationFailedException {
+    public Channel createMeanChannel(VoxelDataType outputType) throws OperationFailedException {
 
-        if (cnt == 0) {
+        if (count == 0) {
             throw new OperationFailedException(
                     "No channels have been added, so cannot create mean");
         }
@@ -78,7 +81,7 @@ class AggregateChnl {
                         .createEmptyInitialised(raster.dimensions(), outputType);
 
         VoxelsArithmetic.divide(
-                raster.voxels().asInt(), cnt, chnlOut.voxels(), outputType);
+                raster.voxels().asInt(), count, chnlOut.voxels(), outputType);
 
         return chnlOut;
     }
@@ -89,9 +92,5 @@ class AggregateChnl {
                     ChannelFactory.instance()
                             .createEmptyInitialised(dim, VoxelDataTypeUnsignedInt.INSTANCE);
         }
-    }
-
-    public int getCnt() {
-        return cnt;
     }
 }

@@ -47,7 +47,7 @@ public class SliceAt extends ObjectCollectionProviderUnary {
                         objectMask -> objectMask.boundingBox().contains().z(index),
                         objectMask ->
                                 objectMask.extractSlice(
-                                        index - objectMask.boundingBox().cornerMin().z(),
+                                        index,
                                         false));
     }
 }

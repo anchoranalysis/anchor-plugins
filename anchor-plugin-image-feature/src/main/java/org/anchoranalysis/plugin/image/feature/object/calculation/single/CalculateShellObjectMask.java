@@ -47,8 +47,8 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 public class CalculateShellObjectMask
         extends FeatureCalculation<ObjectMask, FeatureInputSingleObject> {
 
-    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDilation;
-    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion;
+    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> calculateDilation;
+    private final ResolvedCalculation<ObjectMask, FeatureInputSingleObject> calculateErosion;
     private final int iterationsErosionSecond;
     private final boolean do3D;
     private final boolean inverse;
@@ -73,8 +73,7 @@ public class CalculateShellObjectMask
 
         ImageDimensions dimensions = input.dimensionsRequired();
 
-        ObjectMask shell =
-                createShellObject(input, ccDilation, ccErosion, iterationsErosionSecond, do3D);
+        ObjectMask shell = createShellObject(input);
 
         if (inverse) {
             ObjectMask duplicated = input.getObject().duplicate();
@@ -82,11 +81,8 @@ public class CalculateShellObjectMask
             Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, dimensions);
             omShellIntersected.ifPresent(
                     shellIntersected ->
-                            duplicated
-                                    .binaryVoxels()
-                                    .setPixelsCheckMaskOff(
-                                            shellIntersected.relMaskTo(
-                                                    duplicated.boundingBox())));
+                            assignOffTo(duplicated,shellIntersected));
+
             return duplicated;
 
         } else {
@@ -99,39 +95,44 @@ public class CalculateShellObjectMask
         return String.format(
                 "%s ccDilation=%s, ccErosion=%s, do3D=%s, inverse=%s, iterationsErosionSecond=%d",
                 super.toString(),
-                ccDilation.toString(),
-                ccErosion.toString(),
+                calculateDilation.toString(),
+                calculateErosion.toString(),
                 do3D ? "true" : "false",
                 inverse ? "true" : "false",
                 iterationsErosionSecond);
     }
 
-    private static ObjectMask createShellObject(
-            FeatureInputSingleObject input,
-            ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDilation,
-            ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion,
-            int iterationsErosionSecond,
-            boolean do3D)
-            throws FeatureCalculationException {
+    private ObjectMask createShellObject(FeatureInputSingleObject input) throws FeatureCalculationException {
 
-        ObjectMask objectDilated = ccDilation.getOrCalculate(input).duplicate();
-        ObjectMask objectEroded = ccErosion.getOrCalculate(input);
+        ObjectMask dilated = calculateDilation.getOrCalculate(input).duplicate();
+        ObjectMask eroded = calculateErosion.getOrCalculate(input);
 
         // Maybe apply a second erosion
+        dilated = maybeErodeSecondTime(dilated);
+
+        assignOffTo(dilated,eroded);
+        return dilated;
+    }
+    
+    private ObjectMask maybeErodeSecondTime(ObjectMask object) throws FeatureCalculationException {
         try {
-            objectDilated =
-                    iterationsErosionSecond > 0
-                            ? MorphologicalErosion.createErodedObject(
-                                    objectDilated, null, do3D, iterationsErosionSecond, true, null)
-                            : objectDilated;
+            if (iterationsErosionSecond > 0) {
+                    return MorphologicalErosion.createErodedObject(
+                            object, null, do3D, iterationsErosionSecond, true, null);
+            } else {
+                return object;
+            }
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }
-
-        ObjectMask relMask = objectEroded.relMaskTo(objectDilated.boundingBox());
-
-        objectDilated.binaryVoxels().setPixelsCheckMaskOff(relMask);
-
-        return objectDilated;
+    }
+    
+    /** 
+     * Assigns off pixels to an object-mask based on another object-mask specified in global-cordinates
+     *  
+     *  @param
+     */
+    private static void assignOffTo(ObjectMask toAssignTo, ObjectMask objectMask) {
+        toAssignTo.assignOff().toObject(objectMask);
     }
 }

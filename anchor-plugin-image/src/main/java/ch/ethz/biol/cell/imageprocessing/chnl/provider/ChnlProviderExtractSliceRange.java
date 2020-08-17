@@ -50,24 +50,24 @@ public class ChnlProviderExtractSliceRange extends ChnlProviderOne {
     // END BEANS
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         ChannelFactoryByte factory = new ChannelFactoryByte();
 
-        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
-        Extent e = chnl.dimensions().extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
+        Extent e = channel.dimensions().extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel chnlOut =
                 factory.createEmptyInitialised(
-                        new ImageDimensions(e, chnl.dimensions().resolution()));
+                        new ImageDimensions(e, channel.dimensions().resolution()));
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();
         for (int z = sliceStart; z <= sliceEnd; z++) {
 
-            ByteBuffer bbIn = voxels.slice(z).buffer();
-            ByteBuffer bbOut = voxelsOut.slice(z - sliceStart).buffer();
+            ByteBuffer bbIn = voxels.sliceBuffer(z);
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z - sliceStart);
 
             for (int i = 0; i < volumeXY; i++) {
                 bbOut.put(i, bbIn.get(i));

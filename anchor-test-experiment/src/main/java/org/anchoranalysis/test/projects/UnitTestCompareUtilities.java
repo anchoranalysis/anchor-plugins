@@ -31,6 +31,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
+import org.anchoranalysis.test.image.DualComparerFactory;
 import org.junit.rules.TemporaryFolder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -50,10 +51,12 @@ public class UnitTestCompareUtilities {
      */
     public static DualComparer execExperiment(
             String experimentName, String experimentIdentifierOutput) {
-        TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
+        
+        
 
         String pathTestDataFolder = createPathTestDataFolder(experimentName);
 
+        TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
         ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(testLoader);
 
         launcher.runExperiment(
@@ -61,12 +64,7 @@ public class UnitTestCompareUtilities {
                 Optional.of(createPathReplacementInput(pathTestDataFolder)),
                 Optional.of(createPathReplacementOutput(pathTestDataFolder)));
 
-        String pathOutput = createPathOutput(experimentIdentifierOutput);
-        String pathSavedOutput = createPathSavedOutput(experimentName);
-
-        return new DualComparer(
-                testLoader.createForSubdirectory(pathSavedOutput),
-                testLoader.createForSubdirectory(pathOutput));
+        return DualComparerFactory.compareTwoSubdirectoriesInLoader(testLoader, createPathSavedOutput(experimentName), createPathOutput(experimentIdentifierOutput));
     }
 
     /**
@@ -108,9 +106,7 @@ public class UnitTestCompareUtilities {
         String pathOutput = createPathOutput(experimentIdentifierOutput);
         String pathSavedOutput = createPathSavedOutput(experimentName);
 
-        return new DualComparer(
-                testLoader.createForSubdirectory(pathSavedOutput),
-                testLoaderTemp.createForSubdirectory(pathOutput));
+        return DualComparerFactory.compareTwoSubdirectoriesInLoader(testLoader, pathSavedOutput, testLoaderTemp, pathOutput);
     }
 
     private static String createPathExperiment(String experimentName) {

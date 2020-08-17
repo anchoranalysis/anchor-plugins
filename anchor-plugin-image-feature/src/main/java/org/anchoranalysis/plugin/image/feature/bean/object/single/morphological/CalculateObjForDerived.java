@@ -46,7 +46,7 @@ class CalculateObjForDerived
     protected Optional<FeatureInputSingleObject> deriveFromDelegate(
             FeatureInputSingleObject input, ObjectMask delegate) {
 
-        if (delegate == null || !delegate.hasPixelsGreaterThan(0)) {
+        if (delegate == null || !delegate.voxelsOn().anyExists()) {
             return Optional.empty();
         }
 

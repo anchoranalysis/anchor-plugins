@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObjectsSource {
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         Voxels<?> voxels = chnl.voxels().any();
@@ -51,12 +51,12 @@ public class ChnlProviderNormaliseIntensityForObjects extends ChnlProviderOneObj
 
                 if (meanIntensity == 0.0) {
                     // Special case. The mean can only be 0.0, if all pixels are 0
-                    voxels.setPixelsCheckMask(object, 128);
+                    voxels.assignValue(128).toObject(object);
                     continue;
                 }
 
                 double scaleFactor = 128 / meanIntensity;
-                voxels.scalePixelsCheckMask(object, scaleFactor);
+                voxels.arithmetic().multiplyBy(object, scaleFactor);
             } catch (FeatureCalculationException e) {
                 throw new CreateException(e);
             }

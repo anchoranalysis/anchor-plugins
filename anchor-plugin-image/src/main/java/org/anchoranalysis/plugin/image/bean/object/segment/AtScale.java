@@ -43,6 +43,7 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ScaledObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 
@@ -79,11 +80,15 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         ObjectCollection scaledSegmentationResult =
                 upstreamSegmentation.segment(
                         scaleChannel(chnl, scaleFactor, interpolator),
-                        scaleMask(objectMask, scaleFactor, interpolator, extent),
+                        scaleMask(objectMask, scaleFactor, extent),
                         scaleSeeds(seeds, scaleFactor, extent));
 
         // Segment and scale results back up to original-scale
-        return scaleResultToOriginalScale(scaledSegmentationResult, scaleFactor, chnl.dimensions().extent());
+        try {
+            return scaleResultToOriginalScale(scaledSegmentationResult, scaleFactor, chnl.dimensions().extent()).asCollectionOrderNotPreserved();
+        } catch (OperationFailedException e) {
+            throw new SegmentationFailedException(e);
+        }
     }
 
     private Channel scaleChannel(Channel chnl, ScaleFactor scaleFactor, Interpolator interpolator) {
@@ -91,10 +96,10 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
     }
 
     private Optional<ObjectMask> scaleMask(
-            Optional<ObjectMask> objectMask, ScaleFactor scaleFactor, Interpolator interpolator, Extent extent)
+            Optional<ObjectMask> objectMask, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
 
-        return mapScale(objectMask, object -> object.scale(scaleFactor, interpolator, Optional.of(extent)), "mask");
+        return mapScale(objectMask, object -> object.scale(scaleFactor, Optional.of(extent)), "mask");
     }
 
     private Optional<SeedCollection> scaleSeeds(
@@ -112,8 +117,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private ObjectCollection scaleResultToOriginalScale(ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent) {
-        return objects.scale(scaleFactor.invert(), createInterpolator(), Optional.of(originalExtent));
+    private ScaledObjectCollection scaleResultToOriginalScale(ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent) throws OperationFailedException {
+        return objects.scale(scaleFactor.invert(), originalExtent);
     }
 
     /**
@@ -157,7 +162,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
     private Interpolator createInterpolator() {
         return interpolate
-                ? InterpolatorFactory.getInstance().binaryResizing()
+                ? InterpolatorFactory.getInstance().rasterResizing()
                 : InterpolatorFactory.getInstance().noInterpolation();
     }
 }

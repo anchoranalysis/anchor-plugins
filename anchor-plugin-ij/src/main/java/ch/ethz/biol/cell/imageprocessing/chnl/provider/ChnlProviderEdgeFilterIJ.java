@@ -36,10 +36,10 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel out = chnl.duplicate();
-        VoxelsWrapper voxelsDuplicated = chnl.duplicate().voxels();
+        Channel out = channel.duplicate();
+        VoxelsWrapper voxelsDuplicated = channel.duplicate().voxels();
 
         for (int z = 0; z < out.dimensions().z(); z++) {
 

@@ -33,8 +33,8 @@ import org.anchoranalysis.image.channel.Channel;
 public class ChnlProviderExtractMiddleSlice extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        int z = (chnl.dimensions().z() - 1) / 2;
-        return chnl.extractSlice(z);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        int z = (channel.dimensions().z() - 1) / 2;
+        return channel.extractSlice(z);
     }
 }

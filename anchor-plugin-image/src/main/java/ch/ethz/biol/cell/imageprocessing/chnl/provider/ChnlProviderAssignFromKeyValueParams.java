@@ -46,7 +46,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         KeyValueParams params;
         try {
@@ -66,11 +66,11 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
 
         byte valueByte = (byte) Double.parseDouble(params.getProperty(key));
 
-        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();
         for (int z = 0; z < voxels.extent().z(); z++) {
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int offset = 0;
             while (offset < volumeXY) {
@@ -78,6 +78,6 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
             }
         }
 
-        return chnl;
+        return channel;
     }
 }

@@ -71,7 +71,7 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
     }
 
     @Override
-    public void notifyChangeZ(int z) {
+    public void notifyChangeSlice(int z) {
         bbS = bufferPlus.getSPlane(z);
     }
 }

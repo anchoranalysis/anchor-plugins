@@ -68,6 +68,6 @@ public class CalculateEllipseLeastSquares
     private static ObjectMask extractEllipseSlice(ObjectMask object) {
         int zSliceCenter = (int) object.centerOfGravity().z();
         return object.extractSlice(
-                zSliceCenter - object.boundingBox().cornerMin().z(), false);
+                zSliceCenter, false);
     }
 }

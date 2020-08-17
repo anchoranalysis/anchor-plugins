@@ -46,9 +46,9 @@ public class ChnlProviderIfParamEquals extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
         if (condition.isConditionTrue()) {
-            return chnl;
+            return channel;
         } else {
             return chnlElse.create();
         }

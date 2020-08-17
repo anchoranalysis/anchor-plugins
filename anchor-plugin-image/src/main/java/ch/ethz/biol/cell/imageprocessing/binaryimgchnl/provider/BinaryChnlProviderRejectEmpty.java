@@ -34,7 +34,7 @@ public class BinaryChnlProviderRejectEmpty extends BinaryChnlProviderOne {
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        if (!mask.hasOn()) {
+        if (!mask.voxelsOn().anyExists()) {
             throw new CreateException("binaryImgChnl has no high values");
         }
         return mask;

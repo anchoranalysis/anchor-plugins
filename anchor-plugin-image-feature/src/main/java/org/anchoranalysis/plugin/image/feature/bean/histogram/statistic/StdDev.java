@@ -36,7 +36,7 @@ public class StdDev extends FeatureHistogramStatistic {
     @Override
     protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
-            return histogram.stdDev();
+            return histogram.standardDeviation();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

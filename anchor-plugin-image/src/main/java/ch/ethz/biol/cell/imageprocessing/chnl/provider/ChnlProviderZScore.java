@@ -53,20 +53,20 @@ public class ChnlProviderZScore extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         Histogram hist = histogram.create();
 
-        Voxels<ByteBuffer> out = chnl.voxels().asByteOrCreateEmpty(alwaysDuplicate);
+        Voxels<ByteBuffer> out = channel.voxels().asByteOrCreateEmpty(alwaysDuplicate);
 
         try {
-            transformBufferToZScore(hist.mean(), hist.stdDev(), chnl, out);
+            transformBufferToZScore(hist.mean(), hist.standardDeviation(), channel, out);
         } catch (OperationFailedException e) {
             throw new CreateException(
                     "An occurred calculating the mean or std-dev of a channel's histogram");
         }
 
-        return ChannelFactory.instance().create(out, chnl.dimensions().resolution());
+        return ChannelFactory.instance().create(out, channel.dimensions().resolution());
     }
 
     private void transformBufferToZScore(
@@ -79,7 +79,7 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
         for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> voxelsIn = chnl.voxels().any().slice(z);
+            VoxelBuffer<?> voxelsIn = chnl.voxels().slice(z);
             VoxelBuffer<?> voxelsOut = out.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {

@@ -36,7 +36,7 @@ public class Max extends FeatureHistogramStatistic {
     @Override
     protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
-            return histogram.calcMax();
+            return histogram.calcMaximum();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

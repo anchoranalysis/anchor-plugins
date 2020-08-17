@@ -42,10 +42,10 @@ public abstract class ChnlProviderOneObjectsSource extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel channel) throws CreateException {
-        return createFromChnl(channel, objects.create());
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return createFromChannel(channel, objects.create());
     }
 
-    protected abstract Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected abstract Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException;
 }

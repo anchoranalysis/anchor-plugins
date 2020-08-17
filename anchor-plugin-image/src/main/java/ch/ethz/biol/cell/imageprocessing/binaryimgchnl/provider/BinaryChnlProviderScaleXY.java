@@ -35,19 +35,15 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.BinaryChnlProviderOne;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
-
-    @BeanField @Getter @Setter private boolean interpolate = true;
     // END BEAN PROPERTIES
 
-    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator, Interpolator interpolator)
+    public static Mask scale(Mask mask, ScaleCalculator scaleCalculator)
             throws CreateException {
 
         ScaleFactor scaleFactor;
@@ -62,15 +58,11 @@ public class BinaryChnlProviderScaleXY extends BinaryChnlProviderOne {
             return mask;
         }
 
-        return mask.scaleXY(scaleFactor, interpolator);
+        return mask.scaleXY(scaleFactor);
     }
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        Interpolator interpolator =
-                interpolate
-                        ? InterpolatorFactory.getInstance().binaryResizing()
-                        : InterpolatorFactory.getInstance().noInterpolation();
-        return scale(mask, scaleCalculator, interpolator);
+        return scale(mask, scaleCalculator);
     }
 }

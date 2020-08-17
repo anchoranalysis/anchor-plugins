@@ -53,7 +53,7 @@ public class HistogramProviderBelow extends HistogramProviderOne {
     public Histogram createFromHistogram(Histogram h) throws CreateException {
 
         for (int i = threshold; i <= h.getMaxBin(); i++) {
-            h.transferVal(i, threshold - 1);
+            h.transferValue(i, threshold - 1);
         }
         return h;
     }

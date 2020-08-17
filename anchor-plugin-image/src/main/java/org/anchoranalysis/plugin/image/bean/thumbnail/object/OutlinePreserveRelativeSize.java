@@ -41,9 +41,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -90,7 +90,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
     /** 
-     * Interpolator used when scaling
+     * Interpolator used when scaling the background
      **/
     @BeanField @Getter @Setter
     private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
@@ -121,16 +121,16 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             return;
         }
         
-        Interpolator interpolatorCreated = interpolator.create();
+        Interpolator interpolatorBackground = interpolator.create();
         
         // Determine what to scale the objects and any background by
         scaler =
                 new FlattenAndScaler(
                         boundingBoxes,
                         objects,
-                        interpolatorCreated, size.asExtent());
+                        interpolatorBackground, size.asExtent());
 
-        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, interpolatorCreated));
+        setupGenerator(objects, determineBackgroundMaybeOutlined(backgroundSource, interpolatorBackground));
     }
 
     @Override

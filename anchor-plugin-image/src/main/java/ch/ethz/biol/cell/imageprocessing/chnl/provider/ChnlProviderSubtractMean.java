@@ -45,19 +45,19 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        double mean = calculateMean(chnl, mask);
+        double mean = calculateMean(channel, mask);
 
         int meanInt = (int) Math.round(mean);
 
         if (subtractFromMaskOnly) {
-            subtractMeanMask(chnl, mask, meanInt);
+            subtractMeanMask(channel, mask, meanInt);
         } else {
-            subtractMeanAll(chnl, meanInt);
+            subtractMeanAll(channel, meanInt);
         }
 
-        return chnl;
+        return channel;
     }
 
     private double calculateMean(Channel chnl, Mask mask) {
@@ -65,26 +65,26 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
         Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
         Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
 
-        Extent e = voxelsMask.extent();
+        Extent extent = voxelsMask.extent();
 
         BinaryValuesByte bvb = mask.binaryValues().createByte();
 
         double sum = 0.0;
-        double cnt = 0;
+        double count = 0;
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bbMask = voxelsMask.slice(z).buffer();
-            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
+            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (bbMask.get(offset) == bvb.getOnByte()) {
-                        int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
-                        sum += intens;
-                        cnt++;
+                        int intensity = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
+                        sum += intensity;
+                        count++;
                     }
 
                     offset++;
@@ -92,11 +92,11 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
             }
         }
 
-        if (cnt == 0) {
+        if (count == 0) {
             return 0;
         }
 
-        return sum / cnt;
+        return sum / count;
     }
 
     private void subtractMeanMask(Channel chnl, Mask mask, int mean) {
@@ -110,8 +110,8 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbMask = voxelsMask.slice(z).buffer();
-            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
+            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {
@@ -142,7 +142,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bbIntensity = voxelsIntensity.slice(z).buffer();
+            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {

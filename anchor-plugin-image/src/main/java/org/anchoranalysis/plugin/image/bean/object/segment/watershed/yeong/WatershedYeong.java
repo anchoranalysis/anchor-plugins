@@ -132,7 +132,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     private static void convertAllToConnectedComponents(
             EncodedVoxels matS, Optional<ObjectMask> objectMask) {
         IterateVoxels.callEachPoint(
-                objectMask, matS.voxels(), new ConvertAllToConnectedComponents(matS));
+                matS.voxels(), objectMask, new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(
@@ -141,8 +141,8 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
         final BoundingBoxMap bbm = new BoundingBoxMap();
 
         IterateVoxels.callEachPoint(
-                objectMask,
                 matS,
+                objectMask,
                 (Point3i point, IntBuffer buffer, int offset) -> {
                     int crntVal = buffer.get(offset);
                     buffer.put(offset, bbm.addPointForValue(point, crntVal) + 1);

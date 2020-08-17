@@ -33,6 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -65,19 +66,21 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         Feature<FeatureInputSingleObject> feature = featureProvider.create();
 
         try {
-            NRGStack nrgStack = createNrgStack(chnl);
+            NRGStackWithParams nrgStack = new NRGStackWithParams( createNrgStack(chnl) );
 
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(feature);
+            
             return createOutputChnl(
                     chnl.dimensions(),
                     objectsSource,
-                    createSession(feature),
-                    new NRGStackWithParams(nrgStack));
+                    object -> valueToAssignForObject(object, calculator, nrgStack)
+            );
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
@@ -118,19 +121,21 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     private Channel createOutputChnl(
             ImageDimensions dimensions,
             ObjectCollection objectsSource,
-            FeatureCalculatorSingle<FeatureInputSingleObject> session,
-            NRGStackWithParams nrgStackParams)
-            throws FeatureCalculationException {
-        Channel chnlOut =
+            CheckedToIntFunction<ObjectMask,FeatureCalculationException> valueToAssign
+    )  throws FeatureCalculationException {
+        Channel out =
                 ChannelFactory.instance()
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
-        chnlOut.voxels().any().setAllPixelsTo(valueNoObject);
+        out.assignValue(valueNoObject).toAll();
         for (ObjectMask object : objectsSource) {
-
-            double featVal = session.calc(new FeatureInputSingleObject(object, nrgStackParams));
-            chnlOut.voxels().any().setPixelsCheckMask(object, (int) (factor * featVal));
+            out.assignValue(valueToAssign.applyAsInt(object)).toObject(object);
         }
 
-        return chnlOut;
+        return out;
+    }
+    
+    private int valueToAssignForObject(ObjectMask object, FeatureCalculatorSingle<FeatureInputSingleObject> calculator, NRGStackWithParams nrgStack) throws FeatureCalculationException {
+        double featVal = calculator.calc(new FeatureInputSingleObject(object, nrgStack));
+        return (int) (factor * featVal);
     }
 }

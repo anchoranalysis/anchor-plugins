@@ -43,7 +43,7 @@ public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
                         .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Mask mask = new Mask(channel);
-        mask.binaryVoxels().setAllPixelsToOn();
+        mask.assignOn().toAll();
         return mask;
     }
 }

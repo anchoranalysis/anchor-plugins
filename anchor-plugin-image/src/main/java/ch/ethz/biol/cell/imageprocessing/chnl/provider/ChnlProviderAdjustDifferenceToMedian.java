@@ -55,7 +55,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
@@ -86,10 +86,10 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            ByteBuffer bbChnl = voxels.slice(z).buffer();
-            ByteBuffer bbChnlLookup = voxelsLookup.slice(z).buffer();
+            ByteBuffer bbChnl = voxels.sliceBuffer(z);
+            ByteBuffer bbChnlLookup = voxelsLookup.sliceBuffer(z);
             ByteBuffer bbMask =
-                    object.voxels().slice(z - cornerMin.z()).buffer();
+                    object.sliceBufferGlobal(z);
 
             int objectMaskOffset = 0;
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {

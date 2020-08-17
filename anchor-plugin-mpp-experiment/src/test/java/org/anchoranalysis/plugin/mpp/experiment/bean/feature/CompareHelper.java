@@ -34,8 +34,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
 import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.DualComparer;
+import org.anchoranalysis.test.image.DualComparerFactory;
 
 class CompareHelper {
 
@@ -44,11 +44,8 @@ class CompareHelper {
     public static void compareOutputWithSaved(
             Path pathAbsoluteOutput, String pathRelativeSaved, String[] relativePaths)
             throws OperationFailedException {
-        TestLoader loaderTempDir = TestLoader.createFromExplicitDirectory(pathAbsoluteOutput);
-        TestLoader loaderSavedObjects =
-                TestLoader.createFromMavenWorkingDirectory(pathRelativeSaved);
 
-        DualComparer comparer = new DualComparer(loaderTempDir, loaderSavedObjects);
+        DualComparer comparer = DualComparerFactory.compareExplicitFolderToTest(pathAbsoluteOutput, pathRelativeSaved);
 
         for (String path : relativePaths) {
             assertIdentical(comparer, path);

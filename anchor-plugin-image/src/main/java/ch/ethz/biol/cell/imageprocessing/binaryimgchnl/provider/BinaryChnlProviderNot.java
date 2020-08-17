@@ -51,8 +51,8 @@ public class BinaryChnlProviderNot extends BinaryChnlProviderReceive {
         // All the on voxels in the receive, are put onto crnt
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bufSrc = maskCurrent.voxels().slice(z).buffer();
-            ByteBuffer bufReceive = maskReceiver.voxels().slice(z).buffer();
+            ByteBuffer bufSrc = maskCurrent.voxels().sliceBuffer(z);
+            ByteBuffer bufReceive = maskReceiver.voxels().sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {

@@ -61,7 +61,7 @@ public class SgmnInv extends BinarySegmentationOne {
         // We invert each item in the voxels
         for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
             for (int index = 0; index < volumeXY; index++) {
 
                 byte val = bb.get(index);

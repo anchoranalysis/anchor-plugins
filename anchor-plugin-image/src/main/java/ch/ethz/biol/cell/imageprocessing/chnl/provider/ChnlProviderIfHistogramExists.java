@@ -42,12 +42,12 @@ public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         Histogram hist = histogramProvider.create();
 
         if (hist != null) {
-            return chnl;
+            return channel;
         } else {
             throw new CreateException("histogram is null");
         }

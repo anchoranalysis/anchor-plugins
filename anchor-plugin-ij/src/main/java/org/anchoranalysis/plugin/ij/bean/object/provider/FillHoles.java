@@ -40,7 +40,6 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -67,11 +66,11 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
         for (ObjectMask objectMask : objects) {
 
-            BinaryVoxels<ByteBuffer> bvb = objectMask.binaryVoxels();
-            BinaryVoxels<ByteBuffer> bvbDup = bvb.duplicate();
+            BinaryVoxels<ByteBuffer> voxels = objectMask.binaryVoxels();
+            BinaryVoxels<ByteBuffer> voxelsDuplicated = voxels.duplicate();
 
             try {
-                BinaryChnlProviderIJBinary.fill(bvbDup);
+                BinaryChnlProviderIJBinary.fill(voxelsDuplicated);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -80,15 +79,14 @@ public class FillHoles extends ObjectCollectionProviderUnary {
                 // Let's make an object for our mask
                 ObjectMask objectRegion = maskChnl.get().region(objectMask.boundingBox(), true);
 
-                BoundingBox boxAll = new BoundingBox(bvb.extent());
+                ObjectMask objectRegionAtOrigin = objectRegion.shiftToOrigin();
 
                 // We do an and operation with the mask
-                bvbDup.copyPixelsToCheckMask(
-                        boxAll,
-                        bvb.voxels(),
-                        boxAll,
-                        objectRegion.voxels(),
-                        objectRegion.binaryValuesByte());
+                voxelsDuplicated.extracter().objectCopyTo(
+                        objectRegionAtOrigin,
+                        voxels.voxels(),
+                        objectRegionAtOrigin.boundingBox()
+                );
             }
         }
         return objects;

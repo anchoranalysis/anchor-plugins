@@ -69,7 +69,7 @@ public class BinarySegmentByObject extends ObjectCollectionProviderUnaryWithChan
 
     private ObjectMask sgmnObject(ObjectMask object, Channel channelSource)
             throws SegmentationFailedException {
-        Voxels<?> voxels = channelSource.voxels().any().region(object.boundingBox(), true);
+        Voxels<?> voxels = channelSource.extracter().region(object.boundingBox(), true);
 
         BinaryVoxels<ByteBuffer> bvb =
                 binarySgmn.segment(

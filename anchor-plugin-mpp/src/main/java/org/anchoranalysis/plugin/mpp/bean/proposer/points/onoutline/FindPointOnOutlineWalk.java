@@ -80,7 +80,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         while (true) {
             pointDouble.increment(step);
 
-            Point3i point = PointConverter.intFromDouble(pointDouble);
+            Point3i point = PointConverter.intFromDoubleFloor(pointDouble);
 
             // We do check
             if (failsDistanceCondition(centerPoint, pointDouble)) {
@@ -144,7 +144,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = chnl.voxels().asByte().slice(point.z()).buffer();
+        ByteBuffer buffer = chnl.voxels().asByte().sliceBuffer(point.z());
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 

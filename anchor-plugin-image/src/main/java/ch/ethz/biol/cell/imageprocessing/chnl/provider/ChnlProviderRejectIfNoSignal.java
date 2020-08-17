@@ -44,9 +44,9 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
     // END BEANS
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Histogram h = HistogramFactory.create(chnl);
+        Histogram h = HistogramFactory.create(channel);
 
         double percent = h.percentGreaterEqualTo(minIntensity);
 
@@ -56,6 +56,6 @@ public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
                             "Rejecting as %f < %f for intensity %d",
                             percent, minRatio, minIntensity));
         }
-        return chnl;
+        return channel;
     }
 }

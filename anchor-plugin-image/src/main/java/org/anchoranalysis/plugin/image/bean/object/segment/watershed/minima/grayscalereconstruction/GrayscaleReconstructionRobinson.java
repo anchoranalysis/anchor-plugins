@@ -75,7 +75,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         // TODO make more efficient
         // Find maximum value of makerVb.... we can probably get this elsewhere without having to
         // iterate the image again
-        int maxValue = markerVb.any().ceilOfMaxPixel();
+        int maxValue = markerVb.extracter().voxelWithMaxIntensity();
 
         PriorityQueueIndexRangeDownhill<Point3i> queue =
                 new PriorityQueueIndexRangeDownhill<>(maxValue);
@@ -147,7 +147,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         for (int z = 0; z < e.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z);
-            VoxelBuffer<ByteBuffer> bbFinalized = voxelsFinalized.slice(z);
+            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {
@@ -157,7 +157,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                         int val = bb.getInt(offset);
                         if (val != 0) {
                             queue.put(new Point3i(x, y, z), val);
-                            bbFinalized.buffer().put(offset, maskOn);
+                            bbFinalized.put(offset, maskOn);
                         }
                     }
 
@@ -182,14 +182,14 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         for (int z = crnrpointMin.z(); z <= crnrpointMax.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z);
-            VoxelBuffer<ByteBuffer> bbFinalized = voxelsFinalized.slice(z);
-            VoxelBuffer<ByteBuffer> bbMask =
-                    containingMask.voxels().slice(z - crnrpointMin.z());
+            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            ByteBuffer bbMask =
+                    containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
             for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {
                 for (int x = crnrpointMin.x(); x <= crnrpointMax.x(); x++) {
-                    if (bbMask.buffer().get(offset) == maskOn) {
+                    if (bbMask.get(offset) == maskOn) {
 
                         int offsetGlobal = e.offset(x, y);
 
@@ -197,7 +197,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                             int val = bb.getInt(offsetGlobal);
                             if (val != 0) {
                                 queue.put(new Point3i(x, y, z), val);
-                                bbFinalized.buffer().put(offsetGlobal, maskOn);
+                                bbFinalized.put(offsetGlobal, maskOn);
                             }
                         }
                     }

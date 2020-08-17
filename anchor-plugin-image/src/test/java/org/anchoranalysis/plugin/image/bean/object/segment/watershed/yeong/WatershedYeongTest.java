@@ -68,7 +68,7 @@ public class WatershedYeongTest {
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         WatershedYeong sgmn = new WatershedYeong();
 
-        Optional<ObjectMask> objectMask = pathMask.map(path -> maskAsObject(path));
+        Optional<ObjectMask> objectMask = pathMask.map(this::maskAsObject);
 
         ObjectCollection objectsResult =
                 sgmn.segment(channelFor(PATH_CHANNEL_BLURRED), objectMask, Optional.empty());

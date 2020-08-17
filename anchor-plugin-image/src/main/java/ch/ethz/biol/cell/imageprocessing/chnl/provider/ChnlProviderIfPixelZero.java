@@ -70,15 +70,15 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", chnl);
+        Channel ifZero = DimChecker.createSameSize(chnlIfPixelZero, "chnlIfPixelZero", channel);
 
         VoxelDataType combinedType =
-                CombineTypes.combineTypes(chnl.getVoxelDataType(), ifZero.getVoxelDataType());
+                CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
 
-        double multFact = (double) combinedType.maxValue() / chnl.getVoxelDataType().maxValue();
-        return mergeViaZeroCheck(chnl, ifZero, combinedType, multFact);
+        double multFact = (double) combinedType.maxValue() / channel.getVoxelDataType().maxValue();
+        return mergeViaZeroCheck(channel, ifZero, combinedType, multFact);
     }
 
     /**
@@ -128,13 +128,13 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
             VoxelsWrapper voxelsIfZero,
             double multFactorIfNonZero) {
 
-        int volumeXY = voxelsIn.any().extent().volumeXY();
+        int volumeXY = voxelsIn.extent().volumeXY();
 
-        for (int z = 0; z < voxelsOut.any().extent().z(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            VoxelBuffer<?> in1 = voxelsIn.any().slice(z);
-            VoxelBuffer<?> in2 = voxelsIfZero.any().slice(z);
-            VoxelBuffer<?> out = voxelsOut.any().slice(z);
+            VoxelBuffer<?> in1 = voxelsIn.slice(z);
+            VoxelBuffer<?> in2 = voxelsIfZero.slice(z);
+            VoxelBuffer<?> out = voxelsOut.slice(z);
 
             for (int offset = 0; offset < volumeXY; offset++) {
 

@@ -36,7 +36,7 @@ public class Min extends FeatureHistogramStatistic {
     @Override
     protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
         try {
-            return histogram.calcMin();
+            return histogram.calcMinimum();
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

@@ -55,10 +55,10 @@ public class BinaryChnlProviderRejectIfOnGreaterThan extends BinaryChnlProviderO
     }
 
     private void testChnl(Mask mask) throws CreateException {
-        int cnt = mask.countOn();
+        int count = mask.voxelsOn().count();
         long volume = mask.dimensions().calculateVolume();
 
-        double ratio = ((double) cnt) / volume;
+        double ratio = ((double) count) / volume;
 
         if (ratio > maxRatioOn) {
             throw new CreateException(

@@ -93,10 +93,8 @@ class WalkShortestPath {
             assert (point1.z() == point2.z());
 
             drawLineOnVoxelBuffer(
-                    object.binaryVoxels()
-                            .voxels()
-                            .slice(point1.z() - box.cornerMin().z()),
-                    object.binaryVoxels().voxels().extent(),
+                    object.binaryVoxels().slice(point1.z() - box.cornerMin().z()),
+                    object.binaryVoxels().extent(),
                     object.binaryVoxels().binaryValues().createByte(),
                     point1,
                     point2,

@@ -47,8 +47,8 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return createFromChnl(chnl, radiusInVoxels(chnl.dimensions()));
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return createFromChnl(channel, radiusInVoxels(channel.dimensions()));
     }
 
     protected abstract Channel createFromChnl(Channel chnl, int radius) throws CreateException;

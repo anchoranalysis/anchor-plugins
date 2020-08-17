@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -66,7 +66,7 @@ class AddPaddingToGenerator {
     }
     
     private static ObjectsWithBoundingBox maybePadObjects(ObjectsWithBoundingBox objects, ImageDimensions dimensions, Padding padding) throws OperationFailedException {
-       if (objects.numberObjects()==1) {
+       if (objects.size()==1) {
            return new ObjectsWithBoundingBox( maybePadObject(objects.get(0), dimensions, padding) );
        } else {
            throw new OperationFailedException("Padding is only supported for single-objects");

@@ -33,9 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
 /**
  * Copies the pixels from chnlAssignFrom to chnl (possibly masking)
@@ -51,30 +49,29 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel chnlSrc, Mask mask)
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask)
             throws CreateException {
 
         assign(
-                chnlSrc,
-                DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", chnlSrc),
+                channel,
+                DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", channel),
                 mask);
 
-        return chnlSrc;
+        return channel;
     }
 
-    private void assign(Channel chnlSrc, Channel chnlAssignFrom, Mask mask) {
+    private void assign(Channel assignTo, Channel assignFrom, Mask mask) {
 
-        ObjectMask object = CreateFromEntireChnlFactory.createObject(mask);
-        BoundingBox box = new BoundingBox(chnlSrc.dimensions().extent());
+        ObjectMask object = new ObjectMask(mask);
 
-        chnlAssignFrom
+        assignFrom
                 .voxels()
                 .asByte()
-                .copyPixelsToCheckMask(
-                        box,
-                        chnlSrc.voxels().asByte(),
-                        box,
-                        object.voxels(),
-                        object.binaryValuesByte());
+                .extracter()
+                .objectCopyTo(
+                        object,
+                        assignTo.voxels().asByte(),
+                        object.boundingBox());
+                        
     }
 }

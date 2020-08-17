@@ -33,6 +33,6 @@ public class BinaryChnlProviderAlternativeIfEmpty extends BinaryChnlProviderElse
 
     @Override
     protected boolean condition(Mask mask) throws CreateException {
-        return mask.hasOn();
+        return mask.voxelsOn().anyExists();
     }
 }

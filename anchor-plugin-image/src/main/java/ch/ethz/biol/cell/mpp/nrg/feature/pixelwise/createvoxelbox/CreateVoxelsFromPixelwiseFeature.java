@@ -86,7 +86,7 @@ public class CreateVoxelsFromPixelwiseFeature {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {

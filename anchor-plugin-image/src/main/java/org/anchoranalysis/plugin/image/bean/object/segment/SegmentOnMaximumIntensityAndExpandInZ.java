@@ -93,7 +93,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     private boolean isAny3d(ObjectCollection objects) {
         return objects.stream()
-                .anyMatch(objectMask -> objectMask.voxels().extent().z() > 1);
+                .anyMatch(objectMask -> objectMask.extent().z() > 1);
     }
 
     private BinaryVoxels<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {

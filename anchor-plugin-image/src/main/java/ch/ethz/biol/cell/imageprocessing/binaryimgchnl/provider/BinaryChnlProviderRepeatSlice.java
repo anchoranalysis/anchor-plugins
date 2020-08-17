@@ -69,9 +69,9 @@ public class BinaryChnlProviderRepeatSlice extends BinaryChnlProviderOne {
         int volumeXY = voxelsIn.extent().volumeXY();
         for (int z = 0; z < chnlOut.dimensions().extent().z(); z++) {
 
-            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
-            ByteBuffer bbIn = voxelsIn.slice(0).buffer();
+            ByteBuffer bbIn = voxelsIn.sliceBuffer(0);
             for (int i = 0; i < volumeXY; i++) {
                 bbOut.put(i, bbIn.get(i));
             }

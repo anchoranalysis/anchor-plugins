@@ -172,8 +172,7 @@ public class ScaleTask extends RasterTask {
                     chnlOut =
                             BinaryChnlProviderScaleXY.scale(
                                             mask,
-                                            scaleCalculator,
-                                            InterpolatorFactory.getInstance().binaryResizing())
+                                            scaleCalculator)
                                     .channel();
                 } else {
                     chnlOut =

@@ -61,19 +61,19 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        List<Channel> listAdditional = additionalChnls(chnl.dimensions());
+        List<Channel> listAdditional = additionalChnls(channel.dimensions());
 
         try {
             pixelScore.init(histograms(), Optional.empty());
-            calcScoresIntoVoxels(chnl.voxels(), listAdditional, pixelScore);
+            calcScoresIntoVoxels(channel.voxels(), listAdditional, pixelScore);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
 
-        return chnl;
+        return channel;
     }
 
     private List<Histogram> histograms() throws CreateException {
@@ -90,14 +90,14 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];
 
-        Extent e = voxels.any().extent();
+        Extent e = voxels.extent();
         for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.any().slice(z);
+            VoxelBuffer<?> bb = voxels.slice(z);
 
             for (int i = 0; i < listAdditional.size(); i++) {
                 Channel additional = listAdditional.get(i);
-                arrByteBuffer[i] = additional.voxels().asByte().slice(z).buffer();
+                arrByteBuffer[i] = additional.voxels().asByte().sliceBuffer(z);
             }
 
             int offset = 0;

@@ -110,7 +110,7 @@ class PointsFromInsideHelper {
         while (itr.hasNext()) {
             int z = itr.next();
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;

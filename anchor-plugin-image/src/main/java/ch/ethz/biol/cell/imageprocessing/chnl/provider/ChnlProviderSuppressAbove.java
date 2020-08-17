@@ -50,19 +50,19 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Histogram hist = HistogramFactory.create(chnl, mask);
+        Histogram hist = HistogramFactory.create(channel, mask);
 
         try {
             double intensityThrshldDbl = hist.quantile(quantile);
 
-            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), chnl.voxels().asByte());
+            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), channel.voxels().asByte());
         } catch (OperationFailedException e) {
             throw new CreateException("An error occurred computing a quantile", e);
         }
 
-        return chnl;
+        return channel;
     }
 
     /** Replaces any pixels with value > threshold, with the threshold value */
@@ -73,7 +73,7 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
 
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {

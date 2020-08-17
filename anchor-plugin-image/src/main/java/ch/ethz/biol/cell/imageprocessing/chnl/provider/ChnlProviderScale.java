@@ -51,8 +51,8 @@ public class ChnlProviderScale extends ChnlProviderOne {
     // End BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return scale(chnl, scaleCalculator, interpolator.create(), getLogger().messageLogger());
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return scale(channel, scaleCalculator, interpolator.create(), getLogger().messageLogger());
     }
 
     public static Channel scale(
