@@ -59,9 +59,11 @@ public class CalculateShellObjectMask
             int iterationsErosionSecond,
             boolean inverse) {
         ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccDilation =
-                CalculateDilation.of(params, iterations.getIterationsDilation(), iterations.isDo3D());
+                CalculateDilation.of(
+                        params, iterations.getIterationsDilation(), iterations.isDo3D());
         ResolvedCalculation<ObjectMask, FeatureInputSingleObject> ccErosion =
-                CalculateErosion.ofResolved(params, iterations.getIterationsErosion(), iterations.isDo3D());
+                CalculateErosion.ofResolved(
+                        params, iterations.getIterationsErosion(), iterations.isDo3D());
 
         return new CalculateShellObjectMask(
                 ccDilation, ccErosion, iterationsErosionSecond, iterations.isDo3D(), inverse);
@@ -80,8 +82,7 @@ public class CalculateShellObjectMask
 
             Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, dimensions);
             omShellIntersected.ifPresent(
-                    shellIntersected ->
-                            assignOffTo(duplicated,shellIntersected));
+                    shellIntersected -> assignOffTo(duplicated, shellIntersected));
 
             return duplicated;
 
@@ -102,7 +103,8 @@ public class CalculateShellObjectMask
                 iterationsErosionSecond);
     }
 
-    private ObjectMask createShellObject(FeatureInputSingleObject input) throws FeatureCalculationException {
+    private ObjectMask createShellObject(FeatureInputSingleObject input)
+            throws FeatureCalculationException {
 
         ObjectMask dilated = calculateDilation.getOrCalculate(input).duplicate();
         ObjectMask eroded = calculateErosion.getOrCalculate(input);
@@ -110,15 +112,15 @@ public class CalculateShellObjectMask
         // Maybe apply a second erosion
         dilated = maybeErodeSecondTime(dilated);
 
-        assignOffTo(dilated,eroded);
+        assignOffTo(dilated, eroded);
         return dilated;
     }
-    
+
     private ObjectMask maybeErodeSecondTime(ObjectMask object) throws FeatureCalculationException {
         try {
             if (iterationsErosionSecond > 0) {
-                    return MorphologicalErosion.createErodedObject(
-                            object, null, do3D, iterationsErosionSecond, true, null);
+                return MorphologicalErosion.createErodedObject(
+                        object, null, do3D, iterationsErosionSecond, true, null);
             } else {
                 return object;
             }
@@ -126,11 +128,12 @@ public class CalculateShellObjectMask
             throw new FeatureCalculationException(e);
         }
     }
-    
-    /** 
-     * Assigns off pixels to an object-mask based on another object-mask specified in global-cordinates
-     *  
-     *  @param
+
+    /**
+     * Assigns off pixels to an object-mask based on another object-mask specified in
+     * global-cordinates
+     *
+     * @param
      */
     private static void assignOffTo(ObjectMask toAssignTo, ObjectMask objectMask) {
         toAssignTo.assignOff().toObject(objectMask);

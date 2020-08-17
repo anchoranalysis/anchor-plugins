@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GaussianScoreCalculator {
 
     public static double calc(

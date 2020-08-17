@@ -75,7 +75,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         ScaleFactor scaleFactor = determineScaleFactor(chnl.dimensions());
 
         Extent extent = chnl.dimensions().extent();
-        
+
         // Perform segmentation on scaled versions of the channel, mask and seeds
         ObjectCollection scaledSegmentationResult =
                 upstreamSegmentation.segment(
@@ -85,7 +85,9 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         // Segment and scale results back up to original-scale
         try {
-            return scaleResultToOriginalScale(scaledSegmentationResult, scaleFactor, chnl.dimensions().extent()).asCollectionOrderNotPreserved();
+            return scaleResultToOriginalScale(
+                            scaledSegmentationResult, scaleFactor, chnl.dimensions().extent())
+                    .asCollectionOrderNotPreserved();
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
@@ -99,13 +101,15 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             Optional<ObjectMask> objectMask, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
 
-        return mapScale(objectMask, object -> object.scale(scaleFactor, Optional.of(extent)), "mask");
+        return mapScale(
+                objectMask, object -> object.scale(scaleFactor, Optional.of(extent)), "mask");
     }
 
     private Optional<SeedCollection> scaleSeeds(
             Optional<SeedCollection> seeds, ScaleFactor scaleFactor, Extent extent)
             throws SegmentationFailedException {
-        return mapScale(seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor, extent), "seeds");
+        return mapScale(
+                seeds, seedCollection -> scaleSeeds(seedCollection, scaleFactor, extent), "seeds");
     }
 
     private ScaleFactor determineScaleFactor(ImageDimensions dimensions)
@@ -117,7 +121,9 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private ScaledObjectCollection scaleResultToOriginalScale(ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent) throws OperationFailedException {
+    private ScaledObjectCollection scaleResultToOriginalScale(
+            ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
+            throws OperationFailedException {
         return objects.scale(scaleFactor.invert(), originalExtent);
     }
 
@@ -147,7 +153,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private static SeedCollection scaleSeeds(SeedCollection seedsUnscaled, ScaleFactor scaleFactor, Extent extent)
+    private static SeedCollection scaleSeeds(
+            SeedCollection seedsUnscaled, ScaleFactor scaleFactor, Extent extent)
             throws OperationFailedException {
 
         if (scaleFactor.x() != scaleFactor.y()) {

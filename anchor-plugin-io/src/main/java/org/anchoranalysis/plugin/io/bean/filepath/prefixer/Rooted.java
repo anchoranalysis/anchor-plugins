@@ -81,7 +81,9 @@ public class Rooted extends FilePathPrefixer {
             throws FilePathPrefixerException {
         try {
             Path pathInWithoutRoot =
-                    RootPathMap.instance().split(input.getPath(), rootName, debugMode).getRemainder();
+                    RootPathMap.instance()
+                            .split(input.getPath(), rootName, debugMode)
+                            .getRemainder();
             return new PathWithDescription(pathInWithoutRoot, input.getDescriptiveName());
         } catch (AnchorIOException e) {
             throw new FilePathPrefixerException(e);

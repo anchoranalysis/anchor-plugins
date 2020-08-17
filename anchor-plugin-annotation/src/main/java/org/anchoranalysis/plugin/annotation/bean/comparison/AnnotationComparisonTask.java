@@ -136,8 +136,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             throws JobExecutionException {
 
         // Get a matching set of groups for this image
-        IAddAnnotation<T> addAnnotation =
-                sharedState.groupsForImage(descriptiveSplit);
+        IAddAnnotation<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
 
         Optional<ObjectsToCompare> objectsToCompare =
                 ObjectsToCompareFactory.create(

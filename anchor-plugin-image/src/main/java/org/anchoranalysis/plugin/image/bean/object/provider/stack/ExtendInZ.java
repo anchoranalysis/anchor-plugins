@@ -65,8 +65,7 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
         BoundingBox box = object.boundingBox().changeExtentZ(dim.z());
 
         Voxels<ByteBuffer> voxels =
-                createVoxelsOfDuplicatedPlanes(
-                        object.voxels().slice(0), box.extent());
+                createVoxelsOfDuplicatedPlanes(object.voxels().slice(0), box.extent());
 
         return new ObjectMask(box, voxels, object.binaryValues());
     }

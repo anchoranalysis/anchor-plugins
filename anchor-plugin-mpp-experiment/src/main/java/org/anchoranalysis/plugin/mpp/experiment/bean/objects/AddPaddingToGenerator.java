@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,8 +39,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Adds optional padding to objects before being passed into another generator
- * <p>
- * TODO This is quite inefficient as it changes the object-mask's voxel-buffers to use the ENTIRE
+ *
+ * <p>TODO This is quite inefficient as it changes the object-mask's voxel-buffers to use the ENTIRE
  * image each time. There's a better way to do this.
  *
  * @author Owen Feehan
@@ -64,15 +64,16 @@ class AddPaddingToGenerator {
                     }
                 });
     }
-    
-    private static ObjectsWithBoundingBox maybePadObjects(ObjectsWithBoundingBox objects, ImageDimensions dimensions, Padding padding) throws OperationFailedException {
-       if (objects.size()==1) {
-           return new ObjectsWithBoundingBox( maybePadObject(objects.get(0), dimensions, padding) );
-       } else {
-           throw new OperationFailedException("Padding is only supported for single-objects");
-       }
+
+    private static ObjectsWithBoundingBox maybePadObjects(
+            ObjectsWithBoundingBox objects, ImageDimensions dimensions, Padding padding)
+            throws OperationFailedException {
+        if (objects.size() == 1) {
+            return new ObjectsWithBoundingBox(maybePadObject(objects.get(0), dimensions, padding));
+        } else {
+            throw new OperationFailedException("Padding is only supported for single-objects");
+        }
     }
-    
 
     /**
      * Adds padding (if set) to an object-mask

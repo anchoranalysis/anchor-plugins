@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.Seed;
@@ -34,10 +36,8 @@ import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MarkSeeds {
 
     public static void apply(
@@ -58,7 +58,8 @@ class MarkSeeds {
 
             throwExceptionIfNotConnected(object);
 
-            IterateVoxels.overMasks(object, containingMask, createPointProcessor(matS, minimaStore));
+            IterateVoxels.overMasks(
+                    object, containingMask, createPointProcessor(matS, minimaStore));
         }
     }
 

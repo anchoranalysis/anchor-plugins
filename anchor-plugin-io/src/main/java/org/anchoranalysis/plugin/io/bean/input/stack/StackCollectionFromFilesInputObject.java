@@ -85,7 +85,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         }
     }
 
-    public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum) throws RasterIOException {
+    public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
+            throws RasterIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
@@ -122,7 +123,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 });
     }
 
-    private static TimeSequenceSupplier openRasterAsOperation(final OpenedRaster openedRaster, final int seriesNum) {
+    private static TimeSequenceSupplier openRasterAsOperation(
+            final OpenedRaster openedRaster, final int seriesNum) {
         return progressReporter -> {
             try {
                 return openedRaster.open(seriesNum, progressReporter);

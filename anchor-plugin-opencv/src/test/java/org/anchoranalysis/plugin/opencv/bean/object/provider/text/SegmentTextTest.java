@@ -58,33 +58,35 @@ public class SegmentTextTest {
 
     private TestLoaderImageIO testLoader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
-    
+
     @Test
     public void testCar() throws AnchorIOException, CreateException, InitException {
 
         Stack stack = createStack("car.jpg");
-        
+
         SegmentText provider = createAndInitProvider(stack);
 
         ObjectCollection objects = provider.create();
-        
+
         assertTrue(objects.size() == 3);
-        
+
         assertAtLeastOneObjectHasBox(objects, boxAt(312, 319, 107, 34));
         assertAtLeastOneObjectHasBox(objects, boxAt(394, 200, 27, 25));
         assertAtLeastOneObjectHasBox(objects, boxAt(440, 312, 73, 36));
     }
-    
+
     private Stack createStack(String imageFilename) {
         return testLoader.openStackFromTestPath(imageFilename);
     }
 
     private void assertAtLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        assertTrue("at least one object has box: " + box.toString(), atLeastOneObjectHasBox(objects, box));
+        assertTrue(
+                "at least one object has box: " + box.toString(),
+                atLeastOneObjectHasBox(objects, box));
     }
-    
+
     private boolean atLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        for( ObjectMask object : objects) {
+        for (ObjectMask object : objects) {
             if (object.boundingBox().equals(box)) {
                 return true;
             }

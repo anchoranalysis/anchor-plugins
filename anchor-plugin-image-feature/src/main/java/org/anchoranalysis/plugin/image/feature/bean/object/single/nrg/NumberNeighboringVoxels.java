@@ -68,8 +68,7 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 
-    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel chnl)
-            throws FeatureCalculationException {
+    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel chnl) throws FeatureCalculationException {
         try {
             return BinaryVoxelsFactory.reuseByte(chnl.voxels().asByte());
 

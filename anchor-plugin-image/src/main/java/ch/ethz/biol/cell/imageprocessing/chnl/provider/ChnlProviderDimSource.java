@@ -47,5 +47,6 @@ public abstract class ChnlProviderDimSource extends ChannelProvider {
         return createFromDimensions(dimensions.create());
     }
 
-    protected abstract Channel createFromDimensions(ImageDimensions dimensions) throws CreateException;
+    protected abstract Channel createFromDimensions(ImageDimensions dimensions)
+            throws CreateException;
 }

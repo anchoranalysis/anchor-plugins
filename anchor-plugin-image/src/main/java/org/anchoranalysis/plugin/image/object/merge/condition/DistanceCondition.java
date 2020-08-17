@@ -65,9 +65,7 @@ public class DistanceCondition implements BeforeCondition {
 
         double maxDistanceResolved =
                 resolveDistance(
-                        res,
-                        source.boundingBox().midpoint(),
-                        destination.boundingBox().midpoint());
+                        res, source.boundingBox().midpoint(), destination.boundingBox().midpoint());
 
         if (distance >= maxDistanceResolved) {
             return false;

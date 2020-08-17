@@ -41,8 +41,7 @@ class WrappedImageDim implements Comparable<WrappedImageDim> {
     public String toString() {
         // Whether we display in 3d form or 2d is dependent on if there's more than 1 z-slice
         if (dimensions.z() > 1) {
-            return String.format(
-                    "%dx%dx%d", dimensions.x(), dimensions.y(), dimensions.z());
+            return String.format("%dx%dx%d", dimensions.x(), dimensions.y(), dimensions.z());
         } else {
             return String.format("%dx%d", dimensions.x(), dimensions.y());
         }

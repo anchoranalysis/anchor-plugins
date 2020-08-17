@@ -124,7 +124,8 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
         return point1.distanceSquared(point2) < 1.0;
     }
 
-    private static boolean isPointOnObject(Point3d point, VoxelsExtracter<ByteBuffer> extracter, Extent extent, BinaryValues bv) {
+    private static boolean isPointOnObject(
+            Point3d point, VoxelsExtracter<ByteBuffer> extracter, Extent extent, BinaryValues bv) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 

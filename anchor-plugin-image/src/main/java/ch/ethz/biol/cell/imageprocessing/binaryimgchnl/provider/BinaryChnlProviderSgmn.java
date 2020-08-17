@@ -57,10 +57,7 @@ public class BinaryChnlProviderSgmn extends BinaryChnlProviderChnlSource {
 
     @Override
     protected Mask createFromSource(Channel chnlSource) throws CreateException {
-        return new Mask(
-                sgmnResult(chnlSource),
-                chnlSource.dimensions().resolution()
-                );
+        return new Mask(sgmnResult(chnlSource), chnlSource.dimensions().resolution());
     }
 
     private BinaryVoxels<ByteBuffer> sgmnResult(Channel chnl) throws CreateException {

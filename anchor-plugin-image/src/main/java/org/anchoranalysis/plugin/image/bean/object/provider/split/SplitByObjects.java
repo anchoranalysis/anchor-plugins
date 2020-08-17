@@ -88,8 +88,10 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
         // An Integer buffer with 0 by default and the same bounds as the object to be split
         BoundedVoxels<IntBuffer> voxelsId =
-                new BoundedVoxels<>( objectToSplit.boundingBox(),
-                        VoxelsFactory.getInt().createInitialized(objectToSplit.boundingBox().extent()) );
+                new BoundedVoxels<>(
+                        objectToSplit.boundingBox(),
+                        VoxelsFactory.getInt()
+                                .createInitialized(objectToSplit.boundingBox().extent()));
 
         // Populate boundedVbId with id values
         int cnt = 1;
@@ -107,10 +109,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
             // Now we do a flood fill for each number, pretending it's a binary image of 0 and i
             // The code will not change pixels that don't match ON
             return ObjectCollectionFactory.flatMapFromRange(
-                    1,
-                    cnt,
-                    CreateException.class,
-                    i -> createObjectForIndex(i, voxelsId));
+                    1, cnt, CreateException.class, i -> createObjectForIndex(i, voxelsId));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -119,13 +118,12 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
     /** Creates objects from all connected-components in a buffer with particular voxel values */
     private static ObjectCollection createObjectForIndex(
-            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels)
-            throws CreateException {
+            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels) throws CreateException {
         BinaryVoxels<IntBuffer> binaryVoxels =
                 BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValues(0, voxelEqualTo));
 
         // for every object we add the objToSplit Bounding Box corner, to restore it to global
         // coordinates
-        return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy( voxels.cornerMin() );
+        return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(voxels.cornerMin());
     }
 }

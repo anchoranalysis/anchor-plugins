@@ -94,8 +94,7 @@ public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContai
         int zLow = container.boundingBox().cornerMin().z();
         int zHigh = container.boundingBox().calculateCornerMax().z();
 
-        Extent extent =
-                objectFlattened.boundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);
+        Extent extent = objectFlattened.boundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);
         ReadableTuple3i cornerMin =
                 objectFlattened.boundingBox().cornerMin().duplicateChangeZ(zLow);
 

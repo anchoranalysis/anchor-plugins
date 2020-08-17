@@ -42,7 +42,7 @@ public class ChnlProviderInvert extends ChnlProviderOne {
         int maxValue = (int) voxels.getVoxelDataType().maxValue();
 
         IterateVoxelsAsInt.changeEachPoint(voxels.any(), value -> maxValue - value);
-        
+
         return channel;
     }
 }

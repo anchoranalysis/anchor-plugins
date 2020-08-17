@@ -51,14 +51,15 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
     /** If true co-voariance is suprpessed in z-dimension */
-    @BeanField @Getter @Setter
-    private boolean suppressZ = false;
-    
-    /** A value to return if there are too few voxels (less than {@code MIN_NUM_VOXELS} to calculate moments
-     *  <p>A warning message is also written to the log. 
-     * */
-    @BeanField @Getter @Setter
-    private double valueIfTooFewVoxels = Double.NaN;
+    @BeanField @Getter @Setter private boolean suppressZ = false;
+
+    /**
+     * A value to return if there are too few voxels (less than {@code MIN_NUM_VOXELS} to calculate
+     * moments
+     *
+     * <p>A warning message is also written to the log.
+     */
+    @BeanField @Getter @Setter private double valueIfTooFewVoxels = Double.NaN;
     // END BEAN PROPERTIES
 
     @Override
@@ -67,9 +68,9 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
 
         if (input.get().getObject().voxelsOn().lowerCountExistsThan(MIN_NUM_VOXELS)) {
             String errorMessage = errorMessageIfTooFewPixels();
-            
+
             getLogger().errorReporter().recordError(ImageMomentsBase.class, errorMessage);
-            
+
             return valueIfTooFewVoxels;
         }
 

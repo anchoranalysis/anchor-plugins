@@ -27,9 +27,9 @@
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderIfPixelZero;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.Arrays;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -119,8 +119,6 @@ class CalcOutlineRGB {
 
     private static void zeroPixels(Mask outline, Channel[] channels) {
         ObjectMask objectOutline = new ObjectMask(outline);
-        Arrays.stream(channels).forEach( channel ->
-            channel.assignValue(0).toObject(objectOutline)    
-        );
+        Arrays.stream(channels).forEach(channel -> channel.assignValue(0).toObject(objectOutline));
     }
 }

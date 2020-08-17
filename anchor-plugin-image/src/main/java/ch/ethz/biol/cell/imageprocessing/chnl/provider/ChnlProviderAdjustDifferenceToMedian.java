@@ -63,8 +63,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
         try {
             for (ObjectMask object : objectsSource) {
 
-                Histogram histogram =
-                        HistogramFactory.create(lookup.voxels(), Optional.of(object));
+                Histogram histogram = HistogramFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, chnl, lookup, (int) Math.round(histogram.mean()));
             }
 
@@ -88,8 +87,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
 
             ByteBuffer bbChnl = voxels.sliceBuffer(z);
             ByteBuffer bbChnlLookup = voxelsLookup.sliceBuffer(z);
-            ByteBuffer bbMask =
-                    object.sliceBufferGlobal(z);
+            ByteBuffer bbMask = object.sliceBufferGlobal(z);
 
             int objectMaskOffset = 0;
             for (int y = cornerMin.y(); y < cornerMax.y(); y++) {

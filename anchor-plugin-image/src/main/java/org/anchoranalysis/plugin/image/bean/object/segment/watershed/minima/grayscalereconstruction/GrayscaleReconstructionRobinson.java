@@ -91,7 +91,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             populateQueueFromNonZeroPixels(queue, markerVb.any(), voxelsFinalized);
         }
 
-        readFromQueueUntilEmpty(queue, markerVb.any(), maskVb.any(), voxelsFinalized, containingMask);
+        readFromQueueUntilEmpty(
+                queue, markerVb.any(), maskVb.any(), voxelsFinalized, containingMask);
 
         return markerVb;
     }
@@ -183,8 +184,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
             VoxelBuffer<?> bb = voxels.slice(z);
             ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
-            ByteBuffer bbMask =
-                    containingMask.sliceBufferGlobal(z);
+            ByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
             for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {

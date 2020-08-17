@@ -74,7 +74,7 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
     protected boolean precondition(ObjectCollection objectsToFilter) {
         return true;
     }
-    
+
     @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {

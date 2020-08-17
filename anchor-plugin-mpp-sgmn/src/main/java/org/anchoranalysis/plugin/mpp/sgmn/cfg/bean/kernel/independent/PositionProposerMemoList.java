@@ -89,10 +89,10 @@ class PositionProposerMemoList implements PositionProposer {
         byte flags = rm.flags();
 
         Point3i rel =
-                Point3i.immutableSubtract(PointConverter.intFromDoubleFloor(point), box.cornerMin());
+                Point3i.immutableSubtract(
+                        PointConverter.intFromDoubleFloor(point), box.cornerMin());
 
-        byte membershipExst =
-                pm.voxels().sliceBuffer(rel.z()).get(box.extent().offsetSlice(rel));
+        byte membershipExst = pm.voxels().sliceBuffer(rel.z()).get(box.extent().offsetSlice(rel));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {

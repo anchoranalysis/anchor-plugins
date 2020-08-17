@@ -54,18 +54,18 @@ class CalculateSecondMoments extends FeatureCalculation<ImageMoments, FeatureInp
 
     @Override
     protected ImageMoments execute(FeatureInputSingleObject params) {
-        return new ImageMoments(
-                createPointMatrixFromObject(params.getObject()), suppressZ, false);
+        return new ImageMoments(createPointMatrixFromObject(params.getObject()), suppressZ, false);
     }
 
     /**
-     * Creates a point-matrix with the distance of each point in each dimension to the origin of the bounding-box
+     * Creates a point-matrix with the distance of each point in each dimension to the origin of the
+     * bounding-box
      *
      * @param object object whose ON voxels form the points in the matrix
      * @return newly created matrix
      */
     private static DoubleMatrix2D createPointMatrixFromObject(ObjectMask object) {
-        return createPointMatrixInteger( object.derivePointsLocal() );
+        return createPointMatrixInteger(object.derivePointsLocal());
     }
 
     private static DoubleMatrix2D createPointMatrixInteger(List<Point3i> points) {

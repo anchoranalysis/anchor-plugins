@@ -54,7 +54,7 @@ import org.anchoranalysis.plugin.opencv.CVInit;
  */
 @NoArgsConstructor
 public class HOGFeature extends FeatureStack {
-    
+
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
@@ -69,7 +69,7 @@ public class HOGFeature extends FeatureStack {
     /** Which index to return from the HOG descriptor */
     @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
-    
+
     public HOGFeature(SizeXY resizeTo, int index) {
         super();
         this.resizeTo = resizeTo;

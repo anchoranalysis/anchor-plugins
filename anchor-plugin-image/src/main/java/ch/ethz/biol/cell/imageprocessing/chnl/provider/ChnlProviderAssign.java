@@ -49,13 +49,9 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChannel(Channel channel, Mask mask)
-            throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        assign(
-                channel,
-                DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", channel),
-                mask);
+        assign(channel, DimChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", channel), mask);
 
         return channel;
     }
@@ -68,10 +64,6 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
                 .voxels()
                 .asByte()
                 .extracter()
-                .objectCopyTo(
-                        object,
-                        assignTo.voxels().asByte(),
-                        object.boundingBox());
-                        
+                .objectCopyTo(object, assignTo.voxels().asByte(), object.boundingBox());
     }
 }

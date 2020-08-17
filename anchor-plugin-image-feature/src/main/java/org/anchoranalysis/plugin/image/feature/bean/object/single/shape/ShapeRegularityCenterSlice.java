@@ -42,7 +42,6 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
 
     private ObjectMask centerSlice(ObjectMask object) {
         int zSliceCenter = (int) object.centerOfGravity().z();
-        return object.extractSlice(
-                zSliceCenter, false);
+        return object.extractSlice(zSliceCenter, false);
     }
 }

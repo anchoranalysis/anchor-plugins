@@ -72,8 +72,8 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
             throws FeatureCalculationException;
 
     /**
-     * The intersection of the bounding box of one object-mask with the (dilated by 1 bounding-box) of the
-     * other
+     * The intersection of the bounding box of one object-mask with the (dilated by 1 bounding-box)
+     * of the other
      */
     private Optional<BoundingBox> boxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {

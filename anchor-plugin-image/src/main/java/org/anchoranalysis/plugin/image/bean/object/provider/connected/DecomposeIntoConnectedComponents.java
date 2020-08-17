@@ -55,8 +55,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
                 new CreateFromConnectedComponentsFactory(bigNeighborhood, 1);
 
         return objects.stream()
-                .flatMap(
-                        CreateException.class, objectMask -> createObjects3D(objectMask, creator));
+                .flatMap(CreateException.class, objectMask -> createObjects3D(objectMask, creator));
     }
 
     private ObjectCollection createObjects3D(

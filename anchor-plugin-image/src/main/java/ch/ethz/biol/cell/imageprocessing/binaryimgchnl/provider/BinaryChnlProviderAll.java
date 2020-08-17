@@ -39,8 +39,7 @@ public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
     protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
         Channel channel =
-                ChannelFactory.instance()
-                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Mask mask = new Mask(channel);
         mask.assignOn().toAll();

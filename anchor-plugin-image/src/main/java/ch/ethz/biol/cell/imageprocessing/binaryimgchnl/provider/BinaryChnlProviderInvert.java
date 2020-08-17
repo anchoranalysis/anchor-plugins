@@ -45,7 +45,10 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 
     // START BEAN FIELDS
-    /** If set, the inversion only occurs on a particular region of the mask, as determined by this mask */
+    /**
+     * If set, the inversion only occurs on a particular region of the mask, as determined by this
+     * mask
+     */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider restrictTo;
 
     @BeanField @Getter @Setter private boolean forceChangeBytes = false;
@@ -65,7 +68,8 @@ public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
                 MaskInverter.invert(maskToInvert);
                 return maskToInvert;
             } else {
-                return new Mask(maskToInvert.channel(), maskToInvert.binaryValues().createInverted());
+                return new Mask(
+                        maskToInvert.channel(), maskToInvert.binaryValues().createInverted());
             }
         }
     }

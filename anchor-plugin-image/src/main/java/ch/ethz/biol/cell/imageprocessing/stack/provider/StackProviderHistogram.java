@@ -50,7 +50,7 @@ public class StackProviderHistogram extends StackProvider {
     @BeanField @Getter @Setter private HistogramProvider histogramProvider;
 
     /** Size of the image produced showing a plot of the histogram */
-    @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024,768);
+    @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024, 768);
     // END BEAN PROPERTIES
 
     @Override
@@ -61,7 +61,8 @@ public class StackProviderHistogram extends StackProvider {
 
             PlotInstance gi = HistogramPlot.create(listHI.iterator(), null, null);
 
-            BufferedImage bi = GraphOutputter.createBufferedImage(gi, size.getWidth(), size.getHeight());
+            BufferedImage bi =
+                    GraphOutputter.createBufferedImage(gi, size.getWidth(), size.getHeight());
 
             return CreateStackFromBufferedImage.create(bi);
 

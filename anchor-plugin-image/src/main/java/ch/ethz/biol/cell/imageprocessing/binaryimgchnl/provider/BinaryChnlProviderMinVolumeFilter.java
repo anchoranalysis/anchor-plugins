@@ -58,7 +58,8 @@ public class BinaryChnlProviderMinVolumeFilter extends BinaryChnlProviderOne {
                 connectedComponents(mask, inverted), mask.dimensions(), mask.binaryValues());
     }
 
-    private ObjectCollection connectedComponents(Mask mask, boolean inverted) throws CreateException {
+    private ObjectCollection connectedComponents(Mask mask, boolean inverted)
+            throws CreateException {
 
         int resolveMinNum;
         try {

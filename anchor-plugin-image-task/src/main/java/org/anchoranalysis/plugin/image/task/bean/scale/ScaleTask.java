@@ -169,11 +169,7 @@ public class ScaleTask extends RasterTask {
                 Channel chnlOut;
                 if (forceBinary) {
                     Mask mask = new Mask(chnlIn);
-                    chnlOut =
-                            BinaryChnlProviderScaleXY.scale(
-                                            mask,
-                                            scaleCalculator)
-                                    .channel();
+                    chnlOut = BinaryChnlProviderScaleXY.scale(mask, scaleCalculator).channel();
                 } else {
                     chnlOut =
                             ChnlProviderScale.scale(

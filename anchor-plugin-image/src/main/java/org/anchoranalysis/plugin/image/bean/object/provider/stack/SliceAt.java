@@ -45,9 +45,6 @@ public class SliceAt extends ObjectCollectionProviderUnary {
         return objects.stream()
                 .filterAndMap(
                         objectMask -> objectMask.boundingBox().contains().z(index),
-                        objectMask ->
-                                objectMask.extractSlice(
-                                        index,
-                                        false));
+                        objectMask -> objectMask.extractSlice(index, false));
     }
 }

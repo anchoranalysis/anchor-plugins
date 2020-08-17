@@ -56,7 +56,8 @@ public class HOGFeatureTest {
     }
 
     private double featureValForIndex(int index) throws FeatureCalculationException {
-        HOGFeature feature = new HOGFeature( new SizeXY(64, 64), index );
-        return FeatureSession.calculateWith(feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogErrorReporter());
+        HOGFeature feature = new HOGFeature(new SizeXY(64, 64), index);
+        return FeatureSession.calculateWith(
+                feature, new FeatureInputStack(stack), LoggingFixture.suppressedLogErrorReporter());
     }
 }

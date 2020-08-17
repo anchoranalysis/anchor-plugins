@@ -52,10 +52,7 @@ public class BinaryChnlProviderThrshld extends BinaryChnlProviderChnlSource {
             BinaryVoxels<ByteBuffer> bvb =
                     thresholder.threshold(
                             chnlSource.voxels(), bvOut, Optional.empty(), Optional.empty());
-            return new Mask(
-                    bvb,
-                    chnlSource.dimensions().resolution()
-                    );
+            return new Mask(bvb, chnlSource.dimensions().resolution());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

@@ -62,8 +62,8 @@ class StatsHelper {
 
             // We adjust the z coordinate to point to the channel
             int zTarget = z + object.boundingBox().cornerMin().z();
-            
-            ObjectMask slice = object.extractSlice(zTarget,true);
+
+            ObjectMask slice = object.extractSlice(zTarget, true);
 
             if (slice.voxelsOn().anyExists()) {
                 double mean =

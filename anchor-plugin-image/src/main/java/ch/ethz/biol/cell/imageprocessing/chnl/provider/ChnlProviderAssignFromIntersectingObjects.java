@@ -45,11 +45,10 @@ import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
 /**
- * Matches source-objects to target objects, based upon intersection, and assigns the
- * value in the respective source object to the target object
- * 
- * @author Owen Feehan
+ * Matches source-objects to target objects, based upon intersection, and assigns the value in the
+ * respective source object to the target object
  *
+ * @author Owen Feehan
  */
 public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
@@ -66,9 +65,12 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
         ObjectCollection target = objectsTarget.create();
 
         VoxelsExtracter<?> extracter = channel.extracter();
-        
+
         streamIntersectingObjects(source, target)
-                .forEach(pair -> channel.assignValue(getValueForObject(extracter, pair._1())).toObject(pair._2()));
+                .forEach(
+                        pair ->
+                                channel.assignValue(getValueForObject(extracter, pair._1()))
+                                        .toObject(pair._2()));
         return channel;
     }
 

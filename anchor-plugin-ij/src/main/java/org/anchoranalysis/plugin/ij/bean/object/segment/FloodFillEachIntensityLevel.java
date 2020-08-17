@@ -95,8 +95,12 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     private int floodFillChannel(Channel channel) throws OperationFailedException {
         ImageProcessor imageProcessor =
                 IJWrap.imageProcessorByte(channel.voxels().asByte().slices(), 0);
-        
-        FloodFillHelper helper = new FloodFillHelper(minimumBoundingBoxVolume, BinaryValuesByte.getDefault().getOnByte(), imageProcessor); 
+
+        FloodFillHelper helper =
+                new FloodFillHelper(
+                        minimumBoundingBoxVolume,
+                        BinaryValuesByte.getDefault().getOnByte(),
+                        imageProcessor);
         return helper.floodFill2D(startingIntensity);
     }
 
@@ -107,11 +111,13 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
      * @param numberLabels the number of objects, so that the label ids are a sequence (1,numLabels)
      *     inclusive.
      * @return a derived collection of objects
-     * @throws OperationFailedException 
+     * @throws OperationFailedException
      */
-    private ObjectCollection objectsFromLabels(Channel channel, int numberLabels) throws OperationFailedException {
+    private ObjectCollection objectsFromLabels(Channel channel, int numberLabels)
+            throws OperationFailedException {
         try {
-            return new CreateObjectsFromLabels(channel.voxels().asByte(), 1, numberLabels).create(minimumBoundingBoxVolume);
+            return new CreateObjectsFromLabels(channel.voxels().asByte(), 1, numberLabels)
+                    .create(minimumBoundingBoxVolume);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

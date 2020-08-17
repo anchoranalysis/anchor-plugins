@@ -27,12 +27,12 @@
 package org.anchoranalysis.test.feature.plugins.objects;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.geometry.Point2i;
+import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParamsOverlappingCircleFixture {
 
     private static final int DEFAULT_CIRCLE_RADIUS = 30;

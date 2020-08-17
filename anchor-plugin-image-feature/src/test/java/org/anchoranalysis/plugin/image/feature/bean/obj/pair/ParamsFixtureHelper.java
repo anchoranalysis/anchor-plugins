@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.pair;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
@@ -33,10 +35,8 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
 import org.anchoranalysis.test.feature.plugins.objects.ParamsOverlappingCircleFixture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParamsFixtureHelper {
 
     /** A particular result that should be the same for the same-size case in both directions */

@@ -34,7 +34,9 @@ public class ChnlProviderMin extends ChnlProviderTwoVoxelMapping {
 
     @Override
     protected void processVoxels(
-            Voxels<ByteBuffer> voxelsOut, Voxels<ByteBuffer> voxelsIn1, Voxels<ByteBuffer> voxelsIn2) {
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2) {
 
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 

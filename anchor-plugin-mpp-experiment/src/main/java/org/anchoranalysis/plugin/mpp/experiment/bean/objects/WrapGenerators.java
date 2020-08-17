@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,9 +25,9 @@
  */
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.stream.Stream;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
@@ -35,7 +35,8 @@ import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 
 /**
- * Exposes an iterable generator that accepts other kinds of objects as one that accepts a {@link ObjectsWithBoundingBox}
+ * Exposes an iterable generator that accepts other kinds of objects as one that accepts a {@link
+ * ObjectsWithBoundingBox}
  *
  * @author Owen Feehan
  */
@@ -43,8 +44,8 @@ import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 class WrapGenerators {
 
     /**
-     * Gives an existing generator that accepts bounding-boxes an interface that accepts
-     * {@link ObjectsWithBoundingBox}
+     * Gives an existing generator that accepts bounding-boxes an interface that accepts {@link
+     * ObjectsWithBoundingBox}
      *
      * @param generator existing generator to wrap
      * @param flatten whether the bounding-box should be flattened in the z dimension
@@ -53,12 +54,12 @@ class WrapGenerators {
     public static IterableGenerator<ObjectsWithBoundingBox> wrapBoundingBox(
             IterableGenerator<BoundingBox> generator, boolean flatten) {
         return IterableGeneratorBridge.createOneToMany(
-                generator, objects -> Stream.of(boundingBoxFromObject(objects, flatten)) );
+                generator, objects -> Stream.of(boundingBoxFromObject(objects, flatten)));
     }
 
     /**
-     * Gives an existing generator that accepts single-object-masks an interface that accepts
-     * {@link ObjectsWithBoundingBox}
+     * Gives an existing generator that accepts single-object-masks an interface that accepts {@link
+     * ObjectsWithBoundingBox}
      *
      * @param generator existing generator to wrap
      * @param flatten whether the bounding-box should be flattened in the z dimension
@@ -67,10 +68,11 @@ class WrapGenerators {
     public static IterableGenerator<ObjectsWithBoundingBox> wrapObjectMask(
             IterableGenerator<ObjectMask> generator) {
         return IterableGeneratorBridge.createOneToMany(
-                generator, objects -> objects.objects().streamStandardJava() );
+                generator, objects -> objects.objects().streamStandardJava());
     }
-    
-    private static BoundingBox boundingBoxFromObject(ObjectsWithBoundingBox objects, boolean flatten) {
+
+    private static BoundingBox boundingBoxFromObject(
+            ObjectsWithBoundingBox objects, boolean flatten) {
         if (flatten) {
             return objects.boundingBox().flattenZ();
         } else {

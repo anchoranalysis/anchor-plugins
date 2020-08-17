@@ -67,8 +67,7 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
             AxisType axisType = AxisTypeConverter.createFromString(axis);
 
             Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
-            return arbPoint.map(point -> (double) point.byDimension(axisType))
-                    .orElse(emptyValue);
+            return arbPoint.map(point -> (double) point.byDimension(axisType)).orElse(emptyValue);
 
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());

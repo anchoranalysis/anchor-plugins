@@ -48,5 +48,6 @@ public abstract class ChnlProviderOneMask extends ChnlProviderOne {
         return createFromMaskedChannel(channel, maskChnl);
     }
 
-    protected abstract Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException;
+    protected abstract Channel createFromMaskedChannel(Channel channel, Mask mask)
+            throws CreateException;
 }

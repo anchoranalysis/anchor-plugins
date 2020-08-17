@@ -70,9 +70,7 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
     public Channel createFromChannel(Channel chnlIn) throws CreateException {
 
         Channel chnlIntermediate =
-                ChannelFactory.instance()
-                        .create(
-                                chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
+                ChannelFactory.instance().create(chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
         Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
 
         NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);

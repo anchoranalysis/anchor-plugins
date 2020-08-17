@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class ScaleFactorInt {

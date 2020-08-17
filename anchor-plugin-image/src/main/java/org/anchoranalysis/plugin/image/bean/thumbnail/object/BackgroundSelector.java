@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,10 +33,10 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * Selects a background from an optional stack with an unknown number of channels, and assigns a scale-factor
- * 
- * @author Owen Feehan
+ * Selects a background from an optional stack with an unknown number of channels, and assigns a
+ * scale-factor
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class BackgroundSelector {
@@ -44,17 +44,16 @@ class BackgroundSelector {
     private int backgroundChannelIndex;
     private ScaleFactor scaleFactor;
     private Interpolator interpolator;
-    
+
     public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource) {
         return backgroundSource.flatMap(this::determineScaledBackground);
     }
-    
+
     private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource) {
-        return determineBackground(backgroundSource).map( stack->
-            ScaleableBackground.scaleBy(stack,scaleFactor,interpolator)
-        );
+        return determineBackground(backgroundSource)
+                .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, interpolator));
     }
-    
+
     /** Derives a background-stack from a stack that is a source of possible backgrounds */
     private Optional<Stack> determineBackground(Stack backgroundSource) {
 

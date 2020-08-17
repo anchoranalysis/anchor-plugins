@@ -82,11 +82,12 @@ public class FillHoles extends ObjectCollectionProviderUnary {
                 ObjectMask objectRegionAtOrigin = objectRegion.shiftToOrigin();
 
                 // We do an and operation with the mask
-                voxelsDuplicated.extracter().objectCopyTo(
-                        objectRegionAtOrigin,
-                        voxels.voxels(),
-                        objectRegionAtOrigin.boundingBox()
-                );
+                voxelsDuplicated
+                        .extracter()
+                        .objectCopyTo(
+                                objectRegionAtOrigin,
+                                voxels.voxels(),
+                                objectRegionAtOrigin.boundingBox());
             }
         }
         return objects;

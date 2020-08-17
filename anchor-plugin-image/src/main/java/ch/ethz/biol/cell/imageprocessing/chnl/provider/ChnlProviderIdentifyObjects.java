@@ -38,7 +38,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
 
     private static final LabelObjects LABELLER = new LabelObjects();
-    
+
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objectsSource)
             throws CreateException {

@@ -69,7 +69,8 @@ public class ThresholdedVolume extends ObjectFilterRelation {
 
     private int resolveThreshold(Optional<ImageDimensions> dim) throws OperationFailedException {
         try {
-            return (int) Math.floor(threshold.resolveToVoxels(dim.map(ImageDimensions::resolution)));
+            return (int)
+                    Math.floor(threshold.resolveToVoxels(dim.map(ImageDimensions::resolution)));
         } catch (UnitValueException e) {
             throw new OperationFailedException(e);
         }

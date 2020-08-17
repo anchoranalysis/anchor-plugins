@@ -40,7 +40,7 @@ public class Ellipticity extends FeatureSingleObject {
 
     /** If fewer voxels exist than this, an object is deemed to be perfectly elliptical */
     private static final int MINIMUM_NUMBER_VOXELS = 6;
-    
+
     @Override
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {

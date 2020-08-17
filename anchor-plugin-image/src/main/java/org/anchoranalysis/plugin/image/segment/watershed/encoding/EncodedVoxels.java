@@ -38,11 +38,12 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
-@AllArgsConstructor @Accessors(fluent=true)
+@AllArgsConstructor
+@Accessors(fluent = true)
 public final class EncodedVoxels {
 
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
-    
+
     @Getter private final Voxels<IntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
@@ -151,8 +152,7 @@ public final class EncodedVoxels {
             assert (e.contains(point)); // NOSONAR
 
             // Replace with intelligence slices buffer?
-            int nextVal =
-                    voxels.sliceBuffer(point.z()).get(e.offsetSlice(point));
+            int nextVal = voxels.sliceBuffer(point.z()).get(e.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);

@@ -46,6 +46,9 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
 
         int constantAsInt = (int) Math.floor(constantToAssign);
 
-        IterateVoxelsAsInt.assignEachMatchingPoint(voxels, value -> shouldOverwriteVoxelWithConstant(value, constantAsInt), constantAsInt);
+        IterateVoxelsAsInt.assignEachMatchingPoint(
+                voxels,
+                value -> shouldOverwriteVoxelWithConstant(value, constantAsInt),
+                constantAsInt);
     }
 }

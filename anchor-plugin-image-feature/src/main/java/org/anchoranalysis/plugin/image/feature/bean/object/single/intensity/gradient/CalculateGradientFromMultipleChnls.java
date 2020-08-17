@@ -121,8 +121,7 @@ class CalculateGradientFromMultipleChnls
 
                     if (bbMask.buffer().get(offsetMask) == bvbMask.getOnByte()) {
 
-                        int offset =
-                                e.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
+                        int offset = e.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
 
                         int gradVal = bb.getInt(offset) - subtractConstant;
 

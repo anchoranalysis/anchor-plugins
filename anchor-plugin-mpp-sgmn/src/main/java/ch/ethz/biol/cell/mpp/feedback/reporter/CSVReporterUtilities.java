@@ -41,8 +41,7 @@ public class CSVReporterUtilities {
     public static Optional<FileOutput> createFileOutputFor(
             String outputName,
             OptimizationFeedbackInitParams<CfgNRGPixelized> initParams,
-            String manifestDscrFunction)
-            {
+            String manifestDscrFunction) {
         return FileOutputFromManager.create(
                 "csv",
                 Optional.of(new ManifestDescription("csv", manifestDscrFunction)),

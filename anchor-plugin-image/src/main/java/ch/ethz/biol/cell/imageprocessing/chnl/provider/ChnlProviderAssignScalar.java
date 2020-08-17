@@ -47,6 +47,6 @@ public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
     }
 
     private void assignScalar(Channel chnlSrc, Mask mask, int value) {
-        chnlSrc.assignValue(value).toObject( new ObjectMask(mask) );
+        chnlSrc.assignValue(value).toObject(new ObjectMask(mask));
     }
 }

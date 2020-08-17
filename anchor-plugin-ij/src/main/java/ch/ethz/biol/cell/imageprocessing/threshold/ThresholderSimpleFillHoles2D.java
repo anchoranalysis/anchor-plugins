@@ -80,8 +80,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
         binaryPlugin.setNPasses(1);
 
         for (int z = 0; z < thresholded.extent().z(); z++) {
-            ImageProcessor ip =
-                    IJWrap.imageProcessor(new VoxelsWrapper(thresholded.voxels()), z);
+            ImageProcessor ip = IJWrap.imageProcessor(new VoxelsWrapper(thresholded.voxels()), z);
             binaryPlugin.run(ip);
         }
 

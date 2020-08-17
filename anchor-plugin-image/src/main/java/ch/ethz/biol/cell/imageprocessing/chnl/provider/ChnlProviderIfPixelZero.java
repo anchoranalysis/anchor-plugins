@@ -108,9 +108,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
             VoxelDataType combinedType,
             double multFactorIfNonZero) {
 
-        Channel channelOut =
-                ChannelFactory.instance()
-                        .create(channel.dimensions(), combinedType);
+        Channel channelOut = ChannelFactory.instance().create(channel.dimensions(), combinedType);
 
         // We know these are all the same types from the logic above, so we can safetly cast
         processVoxels(

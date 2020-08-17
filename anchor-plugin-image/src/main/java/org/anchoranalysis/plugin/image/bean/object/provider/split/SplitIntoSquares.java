@@ -44,17 +44,16 @@ import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Splits objects into sub-objects by cutting by an orthogonal square lattice (like a chessboard).
- * 
+ *
  * <p>Only splits in x and y dimensions; the z-dimension is unaffected.
- * 
+ *
  * <p>The cuts are mostly squares, but sometimes cuts are rectangles in the leftover space, which
  * are never larger in any dimension than {@code squareSize}
- * 
- * <p>An optional minimim number of ON voxels is applied to any object (after it has been cut)
- * to exist in the created collection.
- * 
- * @author Owen Feehan
  *
+ * <p>An optional minimim number of ON voxels is applied to any object (after it has been cut) to
+ * exist in the created collection.
+ *
+ * @author Owen Feehan
  */
 public class SplitIntoSquares extends ObjectCollectionProviderUnary {
 
@@ -77,29 +76,27 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
 
         Iterator<BoundingBox> iterator = new SquareIterator(extent, squareSize, 1, extent.z());
 
-        return ObjectCollectionFactory.mapFromOptional(iterator, box->
-            maybeExtractSquare(object, box)
-        );
+        return ObjectCollectionFactory.mapFromOptional(
+                iterator, box -> maybeExtractSquare(object, box));
     }
-    
-    private Optional<ObjectMask> maybeExtractSquare(
-            ObjectMask objectToSplit, BoundingBox box) {
+
+    private Optional<ObjectMask> maybeExtractSquare(ObjectMask objectToSplit, BoundingBox box) {
 
         ObjectMask square = extractFromObject(objectToSplit, box);
-                
+
         // We only add the square if there's at least one voxel in it
-        if (!square.voxelsOn().higherCountExistsThan(minNumberVoxels-1)) {
+        if (!square.voxelsOn().higherCountExistsThan(minNumberVoxels - 1)) {
             return Optional.empty();
         }
 
         return Optional.of(square);
     }
-    
+
     private ObjectMask extractFromObject(ObjectMask objectToSplit, BoundingBox box) {
 
         // Voxels for the new square
         Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extracter().region(box, false);
-        
+
         return new ObjectMask(
                 box.shiftBy(objectToSplit.boundingBox().cornerMin()),
                 voxelsNew,

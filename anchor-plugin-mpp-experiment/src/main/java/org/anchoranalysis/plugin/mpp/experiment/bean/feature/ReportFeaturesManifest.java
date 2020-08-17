@@ -83,8 +83,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
             }
 
             writer.get()
-                    .writeHeaders(
-                            ReportFeatureUtilities.headerNames(listReportFeatures, logger));
+                    .writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
 
             Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
             while (itr.hasNext()) {

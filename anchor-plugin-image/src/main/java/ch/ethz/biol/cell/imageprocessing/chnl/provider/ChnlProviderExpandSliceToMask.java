@@ -78,7 +78,8 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
         }
     }
 
-    private Channel createExpandedChnl(ImageDimensions dimensionsTarget, Voxels<ByteBuffer> voxelsSlice) {
+    private Channel createExpandedChnl(
+            ImageDimensions dimensionsTarget, Voxels<ByteBuffer> voxelsSlice) {
 
         Channel chnl =
                 ChannelFactory.instance()

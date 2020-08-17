@@ -193,13 +193,14 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
 
     @Override
     public DisplayStack createThumbailFor(FeatureInputPairObjects input) throws CreateException {
-        // A collection is made with the left-object as first element, and the right-object as the second
+        // A collection is made with the left-object as first element, and the right-object as the
+        // second
         ObjectCollection objects = ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
         return getThumbnail().thumbnailFor(objects);
     }
 
     @Override
     protected BoundingBox boundingBoxThatSpansInput(FeatureInputPairObjects input) {
-        return ObjectMaskMerger.mergeBoundingBoxes( Stream.of(input.getFirst(), input.getSecond()) );
+        return ObjectMaskMerger.mergeBoundingBoxes(Stream.of(input.getFirst(), input.getSecond()));
     }
 }

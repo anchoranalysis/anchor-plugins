@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.test.bean;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
@@ -34,8 +36,6 @@ import org.anchoranalysis.bean.init.params.BeanInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.log.Logger;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Checks to see if a bean has been misconfigured, when created manually in tests (thereby skipping
@@ -47,7 +47,7 @@ import lombok.NoArgsConstructor;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BeanTestChecker {
 
     /**

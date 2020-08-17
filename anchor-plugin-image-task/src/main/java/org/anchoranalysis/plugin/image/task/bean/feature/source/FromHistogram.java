@@ -152,7 +152,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
         paramsInit
                 .getHistogramCollection()
-                .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, ()->inputtedHist);
+                .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
         return paramsInit;
     }
 
