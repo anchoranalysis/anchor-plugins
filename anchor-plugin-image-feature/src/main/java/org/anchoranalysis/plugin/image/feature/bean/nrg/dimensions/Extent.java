@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class Extent<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
     @Override
-    protected double calcForAxis(ImageDimensions dimensions, AxisType axis) {
+    protected double calculateForAxis(ImageDimensions dimensions, AxisType axis) {
         return dimensions.extent().valueByDimension(axis);
     }
 }

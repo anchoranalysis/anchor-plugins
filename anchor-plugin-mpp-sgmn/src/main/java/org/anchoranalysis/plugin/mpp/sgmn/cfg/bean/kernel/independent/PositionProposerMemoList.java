@@ -69,13 +69,13 @@ class PositionProposerMemoList implements PositionProposer {
 
             // We keep randomly picking a memo from the list
             // And randomly taking positions until we find a position that matches
-            VoxelizedMark pm = randomMemo(context).voxelized();
+            VoxelizedMark voxelized = randomMemo(context).voxelized();
 
-            BoundingBox box = pm.boundingBox();
+            BoundingBox box = voxelized.boundingBox();
 
             Point3d point = randomPosition(box, context.getRandomNumberGenerator());
 
-            if (insideRelevantRegion(pm, rm, point, box)) {
+            if (insideRelevantRegion(voxelized, rm, point, box)) {
                 return Optional.of(point);
             }
         }
@@ -84,22 +84,22 @@ class PositionProposerMemoList implements PositionProposer {
     }
 
     private boolean insideRelevantRegion(
-            VoxelizedMark pm, RegionMembership rm, Point3d point, BoundingBox box) {
+            VoxelizedMark voxelized, RegionMembership rm, Point3d point, BoundingBox box) {
 
         byte flags = rm.flags();
 
-        Point3i rel =
+        Point3i pointRelative =
                 Point3i.immutableSubtract(
                         PointConverter.intFromDoubleFloor(point), box.cornerMin());
 
-        byte membershipExst = pm.voxels().sliceBuffer(rel.z()).get(box.extent().offsetSlice(rel));
+        byte membershipExst = voxelized.voxels().sliceBuffer(pointRelative.z()).get(box.extent().offsetSlice(pointRelative));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {
             return false;
         }
 
-        byte membership = markBlock.evalPointInside(point);
+        byte membership = markBlock.isPointInside(point);
 
         // If it's inside our block mark, then we don't consider it
         return !rm.isMemberFlag(membership, flags);

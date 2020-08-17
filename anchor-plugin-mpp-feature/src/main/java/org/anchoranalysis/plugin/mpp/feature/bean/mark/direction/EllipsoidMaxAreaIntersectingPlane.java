@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -43,7 +43,7 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class EllipsoidMaxAreaIntersectingPlane extends FeatureMarkDirection {
 
     @Override
-    protected double calcForEllipsoid(
+    protected double calculateForEllipsoid(
             MarkEllipsoid mark,
             Orientation orientation,
             RotationMatrix rotMatrix,
@@ -53,7 +53,7 @@ public class EllipsoidMaxAreaIntersectingPlane extends FeatureMarkDirection {
         double[] radii = mark.createRadiiArray();
 
         normalToPlane.normalize();
-        Point3d beta = rotMatrix.calcRotatedPoint(new Point3d(normalToPlane));
+        Point3d beta = rotMatrix.rotatedPoint(new Point3d(normalToPlane));
 
         double beta1Squared = Math.pow(beta.x(), 2);
         double beta2Squared = Math.pow(beta.y(), 2);

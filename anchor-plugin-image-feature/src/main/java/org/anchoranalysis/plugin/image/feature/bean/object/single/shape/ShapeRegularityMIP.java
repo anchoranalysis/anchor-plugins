@@ -27,16 +27,16 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public class ShapeRegularityMIP extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return ShapeRegularityCalculator.calcShapeRegularity(
+        return ShapeRegularityCalculator.calculateShapeRegularity(
                 input.get().getObject().duplicate().flattenZ());
     }
 }

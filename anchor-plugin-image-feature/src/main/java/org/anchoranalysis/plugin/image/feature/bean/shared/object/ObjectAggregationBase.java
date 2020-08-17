@@ -35,8 +35,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -66,7 +66,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
 
     @Override
     protected double calc(
-            CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException {
 
         if (createdObjects == null) {
@@ -74,7 +74,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
         }
 
         return deriveStatistic(
-                featureValsForObjects(featureForSingleObject, calcForChild, createdObjects));
+                featureValsForObjects(featureForSingleObject, calculateForChild, createdObjects));
     }
 
     protected abstract double deriveStatistic(DoubleArrayList featureVals);
@@ -89,7 +89,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
 
     private DoubleArrayList featureValsForObjects(
             Feature<FeatureInputSingleObject> feature,
-            CalcForChild<T> calcForChild,
+            CalculateForChild<T> calculateForChild,
             ObjectCollection objects)
             throws FeatureCalculationException {
         DoubleArrayList featureVals = new DoubleArrayList();
@@ -97,10 +97,10 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
         // Calculate a feature on each object-mask
         for (int i = 0; i < objects.size(); i++) {
 
-            double val =
-                    calcForChild.calc(
+            double value =
+                    calculateForChild.calculate(
                             feature, new CalculateInputFromStack<>(objects, i), cacheName(i));
-            featureVals.add(val);
+            featureVals.add(value);
         }
         return featureVals;
     }

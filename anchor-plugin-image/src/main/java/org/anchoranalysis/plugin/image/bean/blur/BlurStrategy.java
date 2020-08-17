@@ -55,7 +55,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
             VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException;
 
-    protected double calcSigma(ImageDimensions dimensions, MessageLogger logger)
+    protected double calculateSigma(ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
         double sigmaToUse = sigma;

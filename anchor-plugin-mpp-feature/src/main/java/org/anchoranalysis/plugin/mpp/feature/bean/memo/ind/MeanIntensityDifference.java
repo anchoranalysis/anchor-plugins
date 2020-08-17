@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,21 +47,21 @@ public class MeanIntensityDifference extends FeatureSingleMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> params)
+    public double calculate(SessionInput<FeatureInputSingleMemo> params)
             throws FeatureCalculationException {
 
-        VoxelizedMark pm = params.get().getPxlPartMemo().voxelized();
+        VoxelizedMark mark = params.get().getPxlPartMemo().voxelized();
 
         double meanInside =
-                pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
+                mark.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_INSIDE).mean();
         double meanShell =
-                pm.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
+                mark.statisticsForAllSlices(0, GlobalRegionIdentifiers.SUBMARK_SHELL).mean();
 
         return ((meanInside - meanShell) - minDiff) / 255;
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("minDiff=%f", minDiff);
     }
 }

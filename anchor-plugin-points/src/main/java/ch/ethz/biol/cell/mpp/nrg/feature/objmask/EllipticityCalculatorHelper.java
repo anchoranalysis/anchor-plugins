@@ -44,10 +44,10 @@ class EllipticityCalculatorHelper {
     }
 
     private static double calc(ObjectMask object, ObjectMask objectCompare) {
-        return calcWithMerged(object, objectCompare, ObjectMaskMerger.merge(object, objectCompare));
+        return calculateWithMerged(object, objectCompare, ObjectMaskMerger.merge(object, objectCompare));
     }
 
-    private static double calcWithMerged(
+    private static double calculateWithMerged(
             ObjectMask object, ObjectMask objectCompare, ObjectMask merged) {
         int numPixelsCompare = objectCompare.numberVoxelsOn();
         int numUnion = merged.numberVoxelsOn();

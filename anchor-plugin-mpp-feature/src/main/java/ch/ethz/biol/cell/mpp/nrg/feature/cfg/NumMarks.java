@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.mpp.nrg.feature.cfg;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureCfg;
 import org.anchoranalysis.anchor.mpp.feature.bean.cfg.FeatureInputCfg;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class NumMarks extends FeatureCfg {
 

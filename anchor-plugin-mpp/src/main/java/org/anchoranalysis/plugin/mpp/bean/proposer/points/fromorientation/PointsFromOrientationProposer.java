@@ -43,7 +43,7 @@ public abstract class PointsFromOrientationProposer
     public abstract void clearVisualizationState();
 
     // Optionally one can specify a maxDistance used to find a contour point, -1 disables
-    public abstract List<List<Point3i>> calcPoints(
+    public abstract List<List<Point3i>> calculatePoints(
             Point3d centerPoint,
             Orientation orientation,
             boolean do3D,

@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
@@ -45,7 +45,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
 
         MemoCollection memoMarks = input.get().getPxlPartMemo();
 
@@ -53,15 +53,15 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
             return 0.0;
         }
 
-        return calcStatistic(input, memoMarks);
+        return calculateStatistic(input, memoMarks);
     }
 
-    private double calcStatistic(SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
+    private double calculateStatistic(SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
             throws FeatureCalculationException {
 
         double[] vals = new double[memoMarks.size()];
 
-        double mean = calcForEachItem(input, memoMarks, vals);
+        double mean = calculateForEachItem(input, memoMarks, vals);
 
         if (mean == 0.0) {
             return Double.POSITIVE_INFINITY;
@@ -71,7 +71,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     }
 
     /** Calculates the feature on each mark separately, populating vals, and returns the mean */
-    private double calcForEachItem(
+    private double calculateForEachItem(
             SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks, double[] vals)
             throws FeatureCalculationException {
 
@@ -83,7 +83,7 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
 
             double v =
                     input.forChild()
-                            .calc(
+                            .calculate(
                                     item,
                                     new CalculateDeriveSingleMemoInput(index),
                                     new ChildCacheName(CoefficientOfVarianceFromAll.class, i));

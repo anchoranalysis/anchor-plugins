@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.dependent.mark;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelReplace;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.CfgFromPartition;
@@ -42,10 +42,10 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
 
     @Override
     public Optional<CfgFromPartition> makeProposal(
-            Optional<CfgFromPartition> exst, KernelCalcContext context)
+            Optional<CfgFromPartition> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
@@ -53,7 +53,7 @@ public class KernelReplacePartition extends KernelReplace<CfgFromPartition> {
             init(createBirthKernel(getBirthRepeats()), new KernelDeathPartition());
         }
 
-        return super.makeProposal(exst, context);
+        return super.makeProposal(existing, context);
     }
 
     private static KernelBirthPartition createBirthKernel(int repeats) {

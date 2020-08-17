@@ -36,7 +36,7 @@ import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;

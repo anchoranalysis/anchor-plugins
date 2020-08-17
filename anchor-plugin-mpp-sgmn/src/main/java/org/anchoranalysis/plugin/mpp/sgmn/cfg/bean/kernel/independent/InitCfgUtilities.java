@@ -34,13 +34,13 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.CfgProposer;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class InitCfgUtilities {
 
-    public static Optional<Cfg> propose(CfgProposer cfgProposer, KernelCalcContext context)
+    public static Optional<Cfg> propose(CfgProposer cfgProposer, KernelCalculationContext context)
             throws KernelCalcNRGException {
         ProposerContext propContext = context.proposer();
 

@@ -48,14 +48,14 @@ public abstract class ObjectCollectionProviderMorphological
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
-        Optional<Extent> extent = calcExtent();
+        Optional<Extent> extent = deriveExtent();
         return objects.stream().map(objectMask -> applyMorphologicalOperation(objectMask, extent));
     }
 
     protected abstract ObjectMask applyMorphologicalOperation(
             ObjectMask object, Optional<Extent> extent) throws CreateException;
 
-    protected Optional<Extent> calcExtent() throws CreateException {
+    protected Optional<Extent> deriveExtent() throws CreateException {
         return createDims().map(ImageDimensions::extent);
     }
 }

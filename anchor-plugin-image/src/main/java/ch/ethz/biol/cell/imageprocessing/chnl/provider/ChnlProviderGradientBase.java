@@ -60,7 +60,7 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 
         GradientCalculator calculator =
                 new GradientCalculator(createDimensionArr(), (float) scaleFactor, addSum);
-        calculator.calculateGradient(chnlIn.voxels(), chnlIntermediate.voxels().asFloat());
+        calculator.gradient(chnlIn.voxels(), chnlIntermediate.voxels().asFloat());
 
         return convertToOutputType(chnlIntermediate);
     }

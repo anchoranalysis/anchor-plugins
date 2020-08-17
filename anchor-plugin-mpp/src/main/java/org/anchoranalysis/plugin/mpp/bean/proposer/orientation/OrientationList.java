@@ -58,7 +58,7 @@ class OrientationList {
 
         BidirectionalBound bib;
         try {
-            bib = boundCalculator.calcBound(mark.centerPoint(), orientation.createRotationMatrix());
+            bib = boundCalculator.calculateBound(mark.centerPoint(), orientation.createRotationMatrix());
         } catch (OperationFailedException e) {
             throw new ProposalAbnormalFailureException(e);
         }

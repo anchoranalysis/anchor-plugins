@@ -40,24 +40,24 @@ import org.anchoranalysis.feature.cache.SessionInput;
 public class MinimumDistanceByDimension extends FeaturePairMemo {
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input) {
+    public double calculate(SessionInput<FeatureInputPairMemo> input) {
 
         FeatureInputPairMemo params = input.get();
 
-        Point3d cp =
+        Point3d centerPoint =
                 distanceVector(
                         params.getObj1().getMark().centerPoint(),
                         params.getObj2().getMark().centerPoint());
 
-        return minDimension(cp, params.getObj1().getMark().numDims() >= 3);
+        return minDimension(centerPoint, params.getObj1().getMark().numDims() >= 3);
     }
 
     /** Calculates the distance between two points in each dimension independently */
     private static Point3d distanceVector(Point3d point1, Point3d point2) {
-        Point3d cp = new Point3d(point1);
-        cp.subtract(point2);
-        cp.absolute();
-        return cp;
+        Point3d point1Duplicated = new Point3d(point1);
+        point1Duplicated.subtract(point2);
+        point1Duplicated.absolute();
+        return point1Duplicated;
     }
 
     private static double minDimension(Point3d cp, boolean hasZ) {

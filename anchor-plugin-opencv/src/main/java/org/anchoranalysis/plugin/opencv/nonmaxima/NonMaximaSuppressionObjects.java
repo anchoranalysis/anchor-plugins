@@ -50,7 +50,7 @@ public class NonMaximaSuppressionObjects extends NonMaximaSuppression<ObjectMask
     @Override
     protected double overlapScoreFor(ObjectMask item1, ObjectMask item2) {
         ObjectMask merged = ObjectMaskMerger.merge(item1, item2);
-        return OverlapCalculator.calcOverlapRatio(item1, item2, merged);
+        return OverlapCalculator.calculateOverlapRatio(item1, item2, merged);
     }
 
     @Override

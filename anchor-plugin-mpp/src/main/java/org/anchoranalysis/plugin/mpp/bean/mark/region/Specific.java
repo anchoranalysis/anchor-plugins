@@ -38,11 +38,11 @@ public class Specific extends SelectSlicesBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
+            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException {
         if (getSliceID() == -1) {
-            return pm.statisticsForAllSlices(getIndex(), getRegionID());
+            return voxelized.statisticsForAllSlices(getIndex(), getRegionID());
         } else {
-            return this.sliceStatisticsForRegion(pm, getSliceID());
+            return this.sliceStatisticsForRegion(voxelized, getSliceID());
         }
     }
 }

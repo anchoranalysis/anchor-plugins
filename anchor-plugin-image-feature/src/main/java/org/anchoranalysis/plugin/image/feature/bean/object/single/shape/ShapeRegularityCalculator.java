@@ -34,13 +34,13 @@ import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberV
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
 
-    public static double calcShapeRegularity(ObjectMask object) {
+    public static double calculateShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();
         int perimeter = NumberVoxelsAtBorder.numberBorderPixels(object, false, false, false);
-        return calcValues(area, perimeter);
+        return calculateValues(area, perimeter);
     }
 
-    private static double calcValues(double area, int perimeter) {
+    private static double calculateValues(double area, int perimeter) {
 
         if (perimeter == 0) {
             return 0.0;

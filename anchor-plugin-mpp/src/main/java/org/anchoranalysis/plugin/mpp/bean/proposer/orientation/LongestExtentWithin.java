@@ -66,7 +66,7 @@ public class LongestExtentWithin extends OrientationProposer {
             ResolvedBound minMaxBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .calcMinMax(dimensions.resolution(), dimensions.z() > 1);
+                            .calculateMinMax(dimensions.resolution(), dimensions.z() > 1);
             return findAllOrientations(mark, minMaxBound, dimensions).sample(randomNumberGenerator);
 
         } catch (NamedProviderGetException e) {

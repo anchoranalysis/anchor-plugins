@@ -32,9 +32,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -64,12 +64,12 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
             throws InitException;
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return calc(input.forChild(), item);
     }
 
     protected abstract double calc(
-            CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException;
 
     @Override

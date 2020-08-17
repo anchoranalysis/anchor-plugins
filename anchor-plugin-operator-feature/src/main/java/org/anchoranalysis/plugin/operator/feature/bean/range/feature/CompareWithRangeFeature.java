@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange;
 import org.anchoranalysis.plugin.operator.feature.bean.range.RangeCompareBase;
@@ -77,9 +77,9 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format(
                 "min=%s,max=%s,withinValue=%f,%s",
-                min.getFriendlyName(), max.getFriendlyName(), withinValue, super.getParamDscr());
+                min.getFriendlyName(), max.getFriendlyName(), withinValue, super.describeParams());
     }
 }

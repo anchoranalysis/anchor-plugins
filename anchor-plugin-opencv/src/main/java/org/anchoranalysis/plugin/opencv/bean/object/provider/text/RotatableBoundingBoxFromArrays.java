@@ -113,7 +113,7 @@ class RotatableBoundingBoxFromArrays {
 
         RotationMatrix rotMatrix = orientation.createRotationMatrix();
 
-        Point3d rotated = rotMatrix.calcRotatedPoint(convert3d(unrotated));
+        Point3d rotated = rotMatrix.rotatedPoint(convert3d(unrotated));
         rotated.add(PointConverter.doubleFromInt(offset));
         return rotated;
     }

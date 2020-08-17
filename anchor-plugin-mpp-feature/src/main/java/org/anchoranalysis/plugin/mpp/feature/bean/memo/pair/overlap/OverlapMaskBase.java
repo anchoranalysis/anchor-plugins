@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
@@ -60,28 +60,28 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
         return input.calc(new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue));
     }
 
-    protected double calcVolumeAgg(
+    protected double volumeAgg(
             VoxelizedMarkMemo obj1,
             VoxelizedMarkMemo obj2,
             int regionID,
             RelationBean relationToThreshold,
             LongBinaryOperator statFunc) {
-        return calcVolumeStat(obj1, obj2, regionID, relationToThreshold, statFunc);
+        return volumeStatistic(obj1, obj2, regionID, relationToThreshold, statFunc);
     }
 
-    protected double calcVolumeStat(
+    protected double volumeStatistic(
             VoxelizedMarkMemo obj1,
             VoxelizedMarkMemo obj2,
             int regionID,
             RelationBean relationToThreshold,
             LongBinaryOperator statFunc) {
 
-        long size1 = sizeForObj(obj1, regionID, relationToThreshold);
-        long size2 = sizeForObj(obj2, regionID, relationToThreshold);
+        long size1 = sizeForObject(obj1, regionID, relationToThreshold);
+        long size2 = sizeForObject(obj2, regionID, relationToThreshold);
         return statFunc.applyAsLong(size1, size2);
     }
 
-    private long sizeForObj(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
+    private long sizeForObject(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
         VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
         return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
     }

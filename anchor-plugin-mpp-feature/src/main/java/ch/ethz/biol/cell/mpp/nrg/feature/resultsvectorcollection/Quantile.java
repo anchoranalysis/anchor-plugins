@@ -42,7 +42,7 @@ public class Quantile extends FeatureResultsFromIndex {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
+    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
         featureVals.sort();
 
         double quantileFinal = asPercentage ? quantile / 100 : quantile;

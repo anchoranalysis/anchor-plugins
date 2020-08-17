@@ -62,7 +62,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
         Histogram histogram = HistogramFactory.create(voxels);
 
-        double rangeMin = histogram.calcMinimum();
+        double rangeMin = histogram.calculateMinimum();
         double rangeMax = histogram.quantile(quantile);
 
         // To avoid a situation where we have a 0 range

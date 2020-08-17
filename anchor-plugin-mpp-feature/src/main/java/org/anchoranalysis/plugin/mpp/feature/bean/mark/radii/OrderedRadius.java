@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class OrderedRadius extends FeatureMark {
 
@@ -42,7 +42,7 @@ public class OrderedRadius extends FeatureMark {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         if (input.get().getMark() instanceof MarkConic) {
 

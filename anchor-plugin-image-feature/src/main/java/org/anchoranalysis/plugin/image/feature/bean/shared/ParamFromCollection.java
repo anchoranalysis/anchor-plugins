@@ -34,8 +34,8 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 
@@ -77,7 +77,7 @@ public class ParamFromCollection<T extends FeatureInput> extends FeatureOperator
     }
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return val;
     }
 }

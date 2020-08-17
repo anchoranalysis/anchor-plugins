@@ -65,7 +65,7 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
 
     // Calculates the points in both directions
     @Override
-    public List<List<Point3i>> calcPoints(
+    public List<List<Point3i>> calculatePoints(
             Point3d centerPoint,
             Orientation orientation,
             boolean do3D,

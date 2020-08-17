@@ -42,11 +42,11 @@ import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
@@ -62,17 +62,17 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
     @Override
     public Optional<CfgNRGPixelized> makeProposal(
-            Optional<CfgNRGPixelized> exst, KernelCalcContext context)
+            Optional<CfgNRGPixelized> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
         ProposerContext propContext = context.proposer();
 
         try {
-            this.markExst = markFromCfgProposer.markFromCfg(exst.get().getCfg(), propContext);
+            this.markExst = markFromCfgProposer.markFromCfg(existing.get().getCfg(), propContext);
         } catch (ProposalAbnormalFailureException e) {
             throw new KernelCalcNRGException(
                     "Could not propose a mark due to an abnormal exception", e);
@@ -85,8 +85,8 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
             return Optional.empty();
         }
 
-        int markExstIndex = exst.get().getCfg().indexOf(markExst.get());
-        VoxelizedMarkMemo pmmMarkExst = exst.get().getMemoForIndex(markExstIndex);
+        int markExstIndex = existing.get().getCfg().indexOf(markExst.get());
+        VoxelizedMarkMemo pmmMarkExst = existing.get().getMemoForIndex(markExstIndex);
 
         try {
             // Let's get positions for our two marks
@@ -102,7 +102,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
 
         return Optional.of(
                 createCfgNRG(
-                        exst.get(),
+                        existing.get(),
                         propContext.getNrgStack().getNrgStack(),
                         pairNew.get(),
                         markExstIndex));
@@ -122,7 +122,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         CfgNRGPixelized newNRG = exst.shallowCopy();
         try {
             newNRG.rmv(markExstIndex, nrgStack);
-        } catch (NamedFeatureCalculationException e1) {
+        } catch (NamedFeatureCalculateException e1) {
             throw new KernelCalcNRGException(
                     String.format("Cannot remove index %d", markExstIndex), e1);
         }
@@ -130,7 +130,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
         try {
             newNRG.add(pair.getSource(), nrgStack);
             newNRG.add(pair.getDestination(), nrgStack);
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException("Cannot add source and destination", e);
         }
 
@@ -138,9 +138,9 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -148,7 +148,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         if (markExst.isPresent() && pairNew.isPresent()) {
             return String.format(
                     "%s %d into %d into %d",
@@ -162,7 +162,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized exst,
             CfgNRGPixelized accptd)

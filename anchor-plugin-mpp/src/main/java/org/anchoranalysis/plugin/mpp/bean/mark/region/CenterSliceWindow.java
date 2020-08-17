@@ -53,7 +53,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 
     @Override
     protected VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox box, int zCenter) {
+            VoxelizedMark mark, ImageDimensions dimensions, BoundingBox box, int zCenter) {
 
         // If our z-center is off scene we bring it to the closest value, but we guard against the
         // case where the top of the mark is also off scene
@@ -69,7 +69,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 
         // Early exit if the windowSize is 0
         if (windowSize == 0) {
-            return sliceStatisticsForRegion(pm, zCenter);
+            return sliceStatisticsForRegion(mark, zCenter);
         }
 
         int zLow = Math.max(zCenter - windowSize, 0);
@@ -77,7 +77,7 @@ public class CenterSliceWindow extends CenterSliceBase {
 
         VoxelStatisticsCombined out = new VoxelStatisticsCombined();
         for (int z = zLow; z <= zHigh; z++) {
-            out.add(sliceStatisticsForRegion(pm, z));
+            out.add(sliceStatisticsForRegion(mark, z));
         }
         return out;
     }

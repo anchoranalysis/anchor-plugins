@@ -57,7 +57,7 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
         ObjectCollection mergeObjects(ObjectCollection objects) throws OperationFailedException;
     }
 
-    protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
+    protected Optional<ImageResolution> resolutionOptional() throws OperationFailedException {
         try {
             return OptionalFactory.create(dimensions).map(ImageDimensions::resolution);
         } catch (CreateException e) {
@@ -65,8 +65,8 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
         }
     }
 
-    protected ImageResolution calcResRequired() throws OperationFailedException {
-        return calcResOptional()
+    protected ImageResolution resolutionRequired() throws OperationFailedException {
+        return resolutionOptional()
                 .orElseThrow(
                         () ->
                                 new OperationFailedException(

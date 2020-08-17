@@ -61,11 +61,11 @@ class CreateScaledInput {
 
         Mat input = resizeMatToTarget(original, targetExtent);
 
-        return Tuple.of(input, calcRelativeScale(original, input));
+        return Tuple.of(input, relativeScale(original, input));
     }
 
-    private static ScaleFactor calcRelativeScale(Mat original, Mat resized) {
-        return ScaleFactorUtilities.calcRelativeScale(
+    private static ScaleFactor relativeScale(Mat original, Mat resized) {
+        return ScaleFactorUtilities.relativeScale(
                 extentFromMat(resized), extentFromMat(original));
     }
 

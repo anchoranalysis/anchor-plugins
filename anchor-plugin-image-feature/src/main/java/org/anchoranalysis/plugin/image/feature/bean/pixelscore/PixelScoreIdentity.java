@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.pixelscore;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 
 public class PixelScoreIdentity extends PixelScore {
@@ -47,7 +47,7 @@ public class PixelScoreIdentity extends PixelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
         double pxlValue = pixelVals[nrgChnlIndex];
 

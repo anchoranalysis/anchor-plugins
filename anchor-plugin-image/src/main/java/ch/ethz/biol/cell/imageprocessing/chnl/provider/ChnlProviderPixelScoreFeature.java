@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
@@ -67,7 +67,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
         try {
             pixelScore.init(histograms(), Optional.empty());
-            calcScoresIntoVoxels(channel.voxels(), listAdditional, pixelScore);
+            scoresToVoxels(channel.voxels(), listAdditional, pixelScore);
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
@@ -84,7 +84,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
         }
     }
 
-    private static void calcScoresIntoVoxels(
+    private static void scoresToVoxels(
             VoxelsWrapper voxels, List<Channel> listAdditional, PixelScore pixelScore)
             throws FeatureCalculationException {
 
@@ -104,7 +104,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
             for (int y = 0; y < e.y(); y++) {
                 for (int x = 0; x < e.x(); x++) {
 
-                    double result = pixelScore.calc(createParams(bb, arrByteBuffer, offset));
+                    double result = pixelScore.calculate(createParams(bb, arrByteBuffer, offset));
 
                     int valOut = (int) Math.round(result);
 

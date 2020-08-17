@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class Volume extends FeatureMarkRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
         return input.get().getMark().volume(getRegionID());
     }
 }

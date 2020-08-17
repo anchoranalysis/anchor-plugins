@@ -66,14 +66,14 @@ public abstract class IndexedRegionBase extends MarkRegion {
     }
 
     protected abstract VoxelStatistics createStatisticsFor(
-            VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException;
+            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException;
 
-    protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark pm, int z) {
-        return pm.statisticsFor(index, regionID, z);
+    protected VoxelStatistics sliceStatisticsForRegion(VoxelizedMark voxelized, int z) {
+        return voxelized.statisticsFor(index, regionID, z);
     }
 
-    protected BoundingBox boundingBoxForRegion(VoxelizedMark pm) {
-        return pm.boundingBox();
+    protected BoundingBox boundingBoxForRegion(VoxelizedMark vozelized) {
+        return vozelized.boundingBox();
     }
 
     @Override

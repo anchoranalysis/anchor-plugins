@@ -85,21 +85,21 @@ class MetadataUtilities {
         meta.setPixelsPhysicalSizeY(createLength(dimensions.resolution().y() * dimensions.y()), 0);
         meta.setPixelsPhysicalSizeZ(createLength(dimensions.resolution().z() * dimensions.z()), 0);
 
-        addNumChnls(meta, calcNumChnls(makeRGB), calcSamplesPerPixel(makeRGB), seriesNum);
+        addNumberChannels(meta, calculateNumberChannels(makeRGB), calculateSamplesPerPixel(makeRGB), seriesNum);
 
         return meta;
     }
 
-    private static int calcNumChnls(boolean makeRGB) {
+    private static int calculateNumberChannels(boolean makeRGB) {
         return makeRGB ? 1 : 3;
     }
 
-    private static int calcSamplesPerPixel(boolean makeRGB) {
-        // We do the opposite of calcNumChnls
-        return calcNumChnls(!makeRGB);
+    private static int calculateSamplesPerPixel(boolean makeRGB) {
+        // We do the opposite of calculateNumChnls
+        return calculateNumberChannels(!makeRGB);
     }
 
-    private static void addNumChnls(
+    private static void addNumberChannels(
             IMetadata meta, int numChnl, int samplesPerPixel, int seriesNum) {
         for (int i = 0; i < numChnl; i++) {
             meta.setChannelID(String.format("Channel:%d:%d", seriesNum, i), seriesNum, i);

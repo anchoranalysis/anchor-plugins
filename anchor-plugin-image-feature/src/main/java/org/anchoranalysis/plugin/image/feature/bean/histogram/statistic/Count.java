@@ -47,7 +47,7 @@ public class Count extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) {
+    protected double calculateStatisticFrom(Histogram histogram) {
         if (threshold != null) {
             return histogram.countThreshold(threshold);
         } else {
@@ -56,8 +56,8 @@ public class Count extends FeatureHistogramStatistic {
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format(
-                "%f,%s,threshold=%s", threshold, super.getParamDscr(), threshold.toString());
+                "%f,%s,threshold=%s", threshold, super.describeParams(), threshold.toString());
     }
 }

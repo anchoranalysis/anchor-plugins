@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
@@ -84,11 +84,11 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         super.start(dim, objectsToFilter);
 
         // Now we calculate feature values for each object, and a standard deviation
-        featureVals = calcFeatures(objectsToFilter, featureEvaluator.createAndStartSession());
+        featureVals = calculateFeatures(objectsToFilter, featureEvaluator.createAndStartSession());
 
         featureMap = createFeatureMap(objectsToFilter, featureVals);
 
-        double quantileVal = calcQuantile(featureVals);
+        double quantileVal = calculateQuantile(featureVals);
         minVal = quantileVal * minRatio;
 
         if (getLogger() != null) {
@@ -121,7 +121,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         }
     }
 
-    private static DoubleArrayList calcFeatures(
+    private static DoubleArrayList calculateFeatures(
             ObjectCollection objects, FeatureCalculatorSingle<FeatureInputSingleObject> calculator)
             throws OperationFailedException {
         DoubleArrayList featureVals = new DoubleArrayList();
@@ -147,7 +147,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         return map;
     }
 
-    private double calcQuantile(DoubleArrayList featureVals) {
+    private double calculateQuantile(DoubleArrayList featureVals) {
         DoubleArrayList featureValsSorted = featureVals.copy();
         featureValsSorted.sort();
         return Descriptive.quantile(featureValsSorted, quantile);

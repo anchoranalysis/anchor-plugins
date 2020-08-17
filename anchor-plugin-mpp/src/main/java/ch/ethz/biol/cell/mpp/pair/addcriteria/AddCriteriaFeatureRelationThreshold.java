@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.ImageDimensions;
@@ -73,7 +73,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
             return relation.create().isRelationToValueTrue(featureVal, threshold);
 
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new IncludeMarksFailureException(e);
         }
     }

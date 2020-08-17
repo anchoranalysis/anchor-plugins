@@ -45,14 +45,14 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
-        return extractFromPxlMark(pm);
+            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException {
+        return extractFromVoxelized(voxelized);
     }
 
-    protected abstract VoxelStatistics extractFromPxlMark(VoxelizedMark pm) throws CreateException;
+    protected abstract VoxelStatistics extractFromVoxelized(VoxelizedMark voxelized) throws CreateException;
 
-    protected VoxelStatistics statisticsForAllSlices(VoxelizedMark pm, boolean useNonZeroIndex) {
-        return pm.statisticsForAllSlicesMaskSlice(
+    protected VoxelStatistics statisticsForAllSlices(VoxelizedMark voxelized, boolean useNonZeroIndex) {
+        return voxelized.statisticsForAllSlicesMaskSlice(
                 useNonZeroIndex ? indexNonZero : getIndex(), getRegionID(), indexNonZero);
     }
 

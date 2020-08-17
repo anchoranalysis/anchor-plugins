@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -65,7 +65,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
 
         FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createCalculator();
 
-        return calcRelation(
+        return calculateRelation(
                 new ObjectMask(mask),
                 new ObjectMask(binaryChnlCompareTo.create()),
                 mask,
@@ -85,7 +85,7 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
         }
     }
 
-    private Mask calcRelation(
+    private Mask calculateRelation(
             ObjectMask objectMain,
             ObjectMask objectCompareTo,
             Mask maskMain,

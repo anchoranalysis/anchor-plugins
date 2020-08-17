@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 public class MeanFromAll extends FeatureAllMemo {
 
@@ -45,7 +45,7 @@ public class MeanFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
 
         MemoCollection memo = input.get().getPxlPartMemo();
 
@@ -59,7 +59,7 @@ public class MeanFromAll extends FeatureAllMemo {
 
             sum +=
                     input.forChild()
-                            .calc(
+                            .calculate(
                                     item,
                                     new CalculateDeriveSingleMemoInput(i),
                                     new ChildCacheName(MeanFromAll.class, i));

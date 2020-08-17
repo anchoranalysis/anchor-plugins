@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -67,7 +67,7 @@ public class Intersection extends FeatureDeriveFromPair {
     }
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         return CalculateInputFromDelegateOption.calc(

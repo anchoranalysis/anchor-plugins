@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
@@ -56,7 +56,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputPairObjects> input)
+    public double calculate(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
 
         FeatureInputPairObjects inputSessionless = input.get();
@@ -85,15 +85,15 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
         Point3d cog1 = params.getFirst().centerOfGravity();
         Point3d cog2 = params.getSecond().centerOfGravity();
 
-        double distance = calcDistance(cog1, cog2);
+        double distance = calculateDistance(cog1, cog2);
         try {
-            return distance > calcMaxDistance(cog1, cog2, params.getResolutionOptional());
+            return distance > calculateMaxDistance(cog1, cog2, params.getResolutionOptional());
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    private double calcDistance(Point3d cog1, Point3d cog2) {
+    private double calculateDistance(Point3d cog1, Point3d cog2) {
         if (suppressZ) {
             cog1.setZ(0);
             cog2.setZ(0);
@@ -102,7 +102,7 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     }
 
     // We measure the euclidian distance between center-points
-    private double calcMaxDistance(Point3d cog1, Point3d cog2, Optional<ImageResolution> res)
+    private double calculateMaxDistance(Point3d cog1, Point3d cog2, Optional<ImageResolution> res)
             throws OperationFailedException {
         DirectionVector vec = DirectionVector.createBetweenTwoPoints(cog1, cog2);
         return maxDistance.resolve(res, vec);

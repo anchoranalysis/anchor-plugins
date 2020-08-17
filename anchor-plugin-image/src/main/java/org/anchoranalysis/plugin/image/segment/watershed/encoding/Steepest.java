@@ -37,15 +37,15 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFacto
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 
-public final class SteepestCalc {
+public final class Steepest {
 
     private static class PointTester
             extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Integer> {
 
         private WatershedEncoding encoder;
 
-        private int steepestDrctn;
-        private int steepestVal;
+        private int direction;
+        private int value;
 
         public PointTester(WatershedEncoding encoder, SlidingBuffer<?> rbb) {
             super(rbb);
@@ -55,8 +55,8 @@ public final class SteepestCalc {
         @Override
         public void initSource(int sourceVal, int sourceOffsetXY) {
             super.initSource(sourceVal, sourceOffsetXY);
-            this.steepestVal = sourceVal;
-            this.steepestDrctn = WatershedEncoding.CODE_MINIMA;
+            this.value = sourceVal;
+            this.direction = WatershedEncoding.CODE_MINIMA;
         }
 
         @Override
@@ -65,13 +65,13 @@ public final class SteepestCalc {
             int gValNeighborhood = getInt(xChange, yChange);
 
             if (gValNeighborhood == sourceVal) {
-                steepestDrctn = WatershedEncoding.CODE_PLATEAU;
+                direction = WatershedEncoding.CODE_PLATEAU;
                 return true;
             }
 
-            if (gValNeighborhood < steepestVal) {
-                steepestVal = gValNeighborhood;
-                steepestDrctn = encoder.encodeDirection(xChange, yChange, zChange);
+            if (gValNeighborhood < value) {
+                value = gValNeighborhood;
+                direction = encoder.encodeDirection(xChange, yChange, zChange);
                 return true;
             }
 
@@ -81,7 +81,7 @@ public final class SteepestCalc {
         /** The steepest direction */
         @Override
         public Integer collectResult() {
-            return steepestDrctn;
+            return direction;
         }
     }
 
@@ -97,7 +97,7 @@ public final class SteepestCalc {
      *     instead of 6 in 3D
      * @param mask
      */
-    public SteepestCalc(
+    public Steepest(
             SlidingBuffer<?> rbb,
             WatershedEncoding encoder,
             boolean do3D,
@@ -111,7 +111,7 @@ public final class SteepestCalc {
     }
 
     // Calculates the steepest descent
-    public int calcSteepestDescent(Point3i point, int val, int indxBuffer) {
+    public int steepestDescent(Point3i point, int val, int indxBuffer) {
         return IterateVoxels.callEachPointInNeighborhood(
                 point, neighborhood, do3D, process, val, indxBuffer);
     }

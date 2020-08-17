@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
@@ -128,13 +128,13 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
                 context.addResultsFor(
                         labelsForInput.apply(input),
                         new ResultsVectorWithThumbnail(
-                                calculator.calc(
+                                calculator.calculate(
                                         input, context.getLogger().errorReporter(), suppressErrors),
                                 OptionalUtilities.flatMap(
                                         thumbnailForInput, func -> func.apply(input))));
             }
 
-        } catch (NamedFeatureCalculationException | CreateException e) {
+        } catch (NamedFeatureCalculateException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }

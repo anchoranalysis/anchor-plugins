@@ -60,7 +60,7 @@ public class CfgProposerFromSerializedCfg extends CfgProposer {
     }
 
     @Override
-    public String getBeanDscr() {
+    public String descriptionBean() {
         return toString();
     }
 

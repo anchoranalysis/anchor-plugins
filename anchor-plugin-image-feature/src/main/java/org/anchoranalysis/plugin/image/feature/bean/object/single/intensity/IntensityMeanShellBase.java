@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
@@ -84,7 +84,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     @Override
-    protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
             throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
@@ -102,7 +102,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
             }
         }
 
-        return calcForShell(objectShell, chnl);
+        return calculateForShell(objectShell, chnl);
     }
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
@@ -114,7 +114,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
         return object.intersect(createNrgMask(nrgStack), nrgStack.dimensions());
     }
 
-    protected abstract double calcForShell(ObjectMask shell, Channel chnl)
+    protected abstract double calculateForShell(ObjectMask shell, Channel chnl)
             throws FeatureCalculationException;
 
     private ObjectMask createNrgMask(NRGStack nrgStack) {
@@ -127,10 +127,10 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format(
                 "%s,%s,inverse=%s",
-                super.getParamDscr(),
+                super.describeParams(),
                 iterations.describePropertiesFriendly(),
                 inverse ? "true" : "false");
     }

@@ -69,7 +69,7 @@ public class LongestExtent extends OrientationProposer {
 
             try {
                 bib =
-                        boundCalculator.calcBound(
+                        boundCalculator.calculateBound(
                                 markC.getPos(), new Orientation2D(angle).createRotationMatrix());
             } catch (OperationFailedException e) {
                 throw new ProposalAbnormalFailureException(e);

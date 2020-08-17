@@ -38,12 +38,12 @@ public class CenterSlice extends CenterSliceBase {
 
     @Override
     protected VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox box, int zCenter) {
+            VoxelizedMark mark, ImageDimensions dimensions, BoundingBox box, int zCenter) {
 
         if (zCenter < 0 || zCenter >= box.extent().z()) {
             return new VoxelStatisticsCombined();
         }
 
-        return sliceStatisticsForRegion(pm, zCenter);
+        return sliceStatisticsForRegion(mark, zCenter);
     }
 }

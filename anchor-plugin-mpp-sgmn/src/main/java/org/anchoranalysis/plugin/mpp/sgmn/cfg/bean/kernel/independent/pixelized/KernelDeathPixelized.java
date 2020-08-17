@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.kernel.independent.KernelDeath;
 
@@ -46,7 +46,7 @@ public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized nrgExst,
             CfgNRGPixelized nrgNew)
@@ -68,10 +68,10 @@ public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
         return Optional.of(
                 new MarkAnd<>(
                         exst.getMemoForIndex(index).getMark(),
-                        calcUpdatedNRGAfterRemoval(index, exst, propContext)));
+                        updatedNRGAfterRemoval(index, exst, propContext)));
     }
 
-    private static CfgNRGPixelized calcUpdatedNRGAfterRemoval(
+    private static CfgNRGPixelized updatedNRGAfterRemoval(
             int index, CfgNRGPixelized exst, ProposerContext propContext)
             throws KernelCalcNRGException {
         // We calculate a new NRG by exchanging our marks
@@ -79,7 +79,7 @@ public class KernelDeathPixelized extends KernelDeath<CfgNRGPixelized> {
 
         try {
             newNRG.rmv(index, propContext.getNrgStack().getNrgStack());
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException(String.format("Cannot remove index %d", index), e);
         }
 

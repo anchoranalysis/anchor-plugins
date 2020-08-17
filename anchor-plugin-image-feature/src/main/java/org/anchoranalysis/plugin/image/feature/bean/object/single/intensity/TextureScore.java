@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -49,15 +49,15 @@ public class TextureScore extends FeatureNrgChnl {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
         Channel chnlGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
 
         return scoreFromMeans(
-                IntensityMeanCalculator.calcMeanIntensityObject(chnl, object),
-                IntensityMeanCalculator.calcMeanIntensityObject(chnlGradient, object));
+                IntensityMeanCalculator.calculateMeanIntensityObject(chnl, object),
+                IntensityMeanCalculator.calculateMeanIntensityObject(chnlGradient, object));
     }
 
     private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {

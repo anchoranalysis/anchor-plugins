@@ -32,7 +32,7 @@ import cern.jet.stat.Descriptive;
 public class Sum extends FeatureResultsFromIndex {
 
     @Override
-    protected double calcStatisticFromFeatureVal(DoubleArrayList featureVals) {
+    protected double statisticFromFeatureValue(DoubleArrayList featureVals) {
         return Descriptive.sum(featureVals);
     }
 }

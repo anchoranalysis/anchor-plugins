@@ -27,8 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.size.SizeXY;

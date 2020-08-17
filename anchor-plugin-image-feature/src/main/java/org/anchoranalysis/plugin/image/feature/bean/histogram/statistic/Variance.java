@@ -32,7 +32,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Variance extends FeatureHistogramStatistic {
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) {
+    protected double calculateStatisticFrom(Histogram histogram) {
         return histogram.variance();
     }
 }

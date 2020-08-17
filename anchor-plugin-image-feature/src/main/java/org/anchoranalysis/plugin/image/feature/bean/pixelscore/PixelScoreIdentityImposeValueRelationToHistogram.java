@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.pixelwise.PixelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -58,7 +58,7 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
     private int histMax;
 
     @Override
-    public double calc(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
         double pxlValue = pixelVals[nrgChnlIndexCheck];
 
@@ -73,9 +73,9 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
             throws InitException {
         try {
             if (max) {
-                histMax = histograms.get(histIndex).calcMaximum();
+                histMax = histograms.get(histIndex).calculateMaximum();
             } else {
-                histMax = histograms.get(histIndex).calcMinimum();
+                histMax = histograms.get(histIndex).calculateMinimum();
             }
         } catch (OperationFailedException e) {
             throw new InitException(e);

@@ -55,7 +55,7 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
         int gVal = bufferPlus.getG(indxBuffer);
 
         // Calculate steepest descent. -1 indicates that there is no steepest descent
-        int chainCode = bufferPlus.calcSteepestDescent(point, gVal, indxBuffer);
+        int chainCode = bufferPlus.steepestDescent(point, gVal, indxBuffer);
 
         if (bufferPlus.isMinima(chainCode)) {
             // Treat as local minima

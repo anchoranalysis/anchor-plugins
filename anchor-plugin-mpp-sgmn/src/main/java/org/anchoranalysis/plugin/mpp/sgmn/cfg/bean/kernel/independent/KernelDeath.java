@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T> {
@@ -40,14 +40,14 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
     private Optional<Mark> markRmv = Optional.empty();
 
     @Override
-    public Optional<T> makeProposal(Optional<T> exst, KernelCalcContext context)
+    public Optional<T> makeProposal(Optional<T> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
-        Optional<MarkAnd<Mark, T>> markNrg = removeAndUpdateNrg(exst.get(), context.proposer());
+        Optional<MarkAnd<Mark, T>> markNrg = removeAndUpdateNrg(existing.get(), context.proposer());
         markRmv = markNrg.map(MarkAnd::getMark);
         return markNrg.map(MarkAnd::getCfgNrg);
     }
@@ -56,19 +56,19 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
             T exst, ProposerContext context) throws KernelCalcNRGException;
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntens,
             ImageDimensions dimensions,
             double densityRatio) {
 
-        if (exstSize <= 1) {
+        if (existingSize <= 1) {
             return Math.min(1.0, densityRatio);
         }
 
         // Birth prob
-        double num = getProbNeg() * exstSize;
+        double num = getProbNeg() * existingSize;
 
         // Death prob
         double dem = getProbPos() * dimensions.calculateVolume() * poissonIntens;
@@ -77,7 +77,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         if (markRmv.isPresent()) {
             return String.format("death(%d)", markRmv.get().getId());
         } else {

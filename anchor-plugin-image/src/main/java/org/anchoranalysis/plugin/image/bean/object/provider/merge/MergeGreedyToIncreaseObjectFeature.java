@@ -73,7 +73,7 @@ public class MergeGreedyToIncreaseObjectFeature extends MergeWithOptionalDistanc
                             replaceWithMidpoint,
                             maybeDistanceCondition(),
                             new IncreaseFeatureCondition(featureEvaluator),
-                            calcResOptional(),
+                            resolutionOptional(),
                             getLogger());
 
             return mergeMultiplex(objectsSource, merger::tryMerge);

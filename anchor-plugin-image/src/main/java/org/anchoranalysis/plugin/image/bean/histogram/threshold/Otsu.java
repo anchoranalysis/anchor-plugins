@@ -48,7 +48,7 @@ public class Otsu extends CalculateLevel {
     @Override
     public int calculateLevel(Histogram hist) throws OperationFailedException {
 
-        long totalSum = hist.calcSum();
+        long totalSum = hist.calculateSum();
         long totalCount = hist.getTotalCount();
 
         long runningSum = 0;
@@ -58,8 +58,8 @@ public class Otsu extends CalculateLevel {
         int thresholdChosen = 0;
 
         // Search for max between-class variance
-        int minIntensity = hist.calcMinimum() + 1;
-        int maxIntensity = hist.calcMaximum() - 1;
+        int minIntensity = hist.calculateMinimum() + 1;
+        int maxIntensity = hist.calculateMaximum() - 1;
         for (int k = minIntensity; k <= maxIntensity; k++) { // Avoid min and max
             runningSum += k * hist.getCount(k);
             runningCount += hist.getCount(k);

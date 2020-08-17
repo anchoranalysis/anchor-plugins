@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
@@ -71,13 +71,13 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcWithRes(double value, ImageResolution res)
+    protected double calculateWithResolution(double value, ImageResolution resolution)
             throws FeatureCalculationException {
 
         try {
-            Optional<ImageResolution> resOpt = Optional.of(res);
-            double minVoxels = min.resolveToVoxels(resOpt);
-            double maxVoxels = max.resolveToVoxels(resOpt);
+            Optional<ImageResolution> resolutionOptional = Optional.of(resolution);
+            double minVoxels = min.resolveToVoxels(resolutionOptional);
+            double maxVoxels = max.resolveToVoxels(resolutionOptional);
 
             if (value >= minVoxels && value <= maxVoxels) {
                 return within;
@@ -91,7 +91,7 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("min=%s,max=%s,within=%8.3f outside=%8.3f", min, max, within, outside);
     }
 }

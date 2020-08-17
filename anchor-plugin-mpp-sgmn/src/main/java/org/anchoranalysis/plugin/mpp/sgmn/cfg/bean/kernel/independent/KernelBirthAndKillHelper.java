@@ -42,8 +42,8 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -54,7 +54,7 @@ class KernelBirthAndKillHelper {
             Mark markNew,
             List<VoxelizedMarkMemo> toKill,
             CfgGen cfgGen,
-            KernelCalcContext context)
+            KernelCalculationContext context)
             throws KernelCalcNRGException {
 
         VoxelizedMarkMemo pmmAdditional = null;
@@ -125,7 +125,7 @@ class KernelBirthAndKillHelper {
         return outList;
     }
 
-    public static CfgNRGPixelized calcUpdatedNRG(
+    public static CfgNRGPixelized updatedNRG(
             CfgNRGPixelized exst,
             VoxelizedMarkMemo memoNew,
             VoxelizedMarkMemo pmmAdditional, // Can be NULL
@@ -142,7 +142,7 @@ class KernelBirthAndKillHelper {
         try {
             newNRG.add(memoNew, propContext.getNrgStack().getNrgStack());
             assert !Double.isNaN(newNRG.getTotal());
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException("Cannot add memoNew", e);
         }
 
@@ -150,7 +150,7 @@ class KernelBirthAndKillHelper {
             try {
                 newNRG.rmv(memo, propContext.getNrgStack().getNrgStack());
                 assert !Double.isNaN(newNRG.getTotal());
-            } catch (NamedFeatureCalculationException e) {
+            } catch (NamedFeatureCalculateException e) {
                 throw new KernelCalcNRGException("Cannot remove memo", e);
             }
         }
@@ -159,7 +159,7 @@ class KernelBirthAndKillHelper {
 
             try {
                 newNRG.add(pmmAdditional, propContext.getNrgStack().getNrgStack());
-            } catch (NamedFeatureCalculationException e) {
+            } catch (NamedFeatureCalculateException e) {
                 throw new KernelCalcNRGException("Cannot add pmmAdditional", e);
             }
         }

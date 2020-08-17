@@ -38,10 +38,10 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcContext;
+import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
 
 public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
@@ -54,9 +54,9 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
     private Mark markNew;
 
     @Override
-    public double calcAccptProb(
-            int exstSize,
-            int propSize,
+    public double calculateAcceptanceProbability(
+            int existingSize,
+            int proposalSize,
             double poissonIntensity,
             ImageDimensions dimensions,
             double densityRatio) {
@@ -64,7 +64,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
     }
 
     @Override
-    public String dscrLast() {
+    public String describeLast() {
         if (markNew != null) {
             return String.format("%s(%d)", getBeanName(), markExst.getId());
         } else {
@@ -73,7 +73,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
     }
 
     @Override
-    public void updateAfterAccpt(
+    public void updateAfterAcceptance(
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             CfgNRGPixelized exst,
             CfgNRGPixelized accptd)
@@ -90,19 +90,19 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
 
     @Override
     public Optional<CfgNRGPixelized> makeProposal(
-            Optional<CfgNRGPixelized> exst, KernelCalcContext context)
+            Optional<CfgNRGPixelized> existing, KernelCalculationContext context)
             throws KernelCalcNRGException {
 
-        if (!exst.isPresent()) {
+        if (!existing.isPresent()) {
             return Optional.empty();
         }
 
         ProposerContext propContext = context.proposer();
 
         // Pick an element from the existing configuration
-        int index = exst.get().getCfg().randomIndex(propContext.getRandomNumberGenerator());
+        int index = existing.get().getCfg().randomIndex(propContext.getRandomNumberGenerator());
 
-        markExst = exst.get().getCfg().get(index);
+        markExst = existing.get().getCfg().get(index);
 
         // We copy the particular mark in question
         markNew = markExst.duplicate();
@@ -123,10 +123,10 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
         }
 
         // We calculate a new NRG by exchanging our marks
-        CfgNRGPixelized newNRG = exst.get().shallowCopy();
+        CfgNRGPixelized newNRG = existing.get().shallowCopy();
         try {
             newNRG.exchange(index, pmmMarkNew, propContext.getNrgStack());
-        } catch (NamedFeatureCalculationException e) {
+        } catch (NamedFeatureCalculateException e) {
             throw new KernelCalcNRGException(String.format("Cannot exchange index %d", index), e);
         }
 

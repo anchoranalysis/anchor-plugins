@@ -161,8 +161,8 @@ public class FormatConverterTask extends RasterTask {
 
         for (int t = 0; t < sizeT; t++) {
 
-            CalcOutputName calcOutputName =
-                    new CalcOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
+            CalculateOutputName namer =
+                    new CalculateOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
@@ -171,15 +171,15 @@ public class FormatConverterTask extends RasterTask {
             chnlConversionStyle.convert(
                     chnlNames,
                     getterForTimepoint,
-                    (name, stack) -> addStackToOutput(name, stack, calcOutputName),
+                    (name, stack) -> addStackToOutput(name, stack, namer),
                     logger);
 
             logger.messageLogger().logFormatted("Ending time-point: %d", t);
         }
     }
 
-    private void addStackToOutput(String name, Stack stack, CalcOutputName calcOutputName) {
-        generatorSeq.add(stack, calcOutputName.calcOutputName(name));
+    private void addStackToOutput(String name, Stack stack, CalculateOutputName calculateOutputName) {
+        generatorSeq.add(stack, calculateOutputName.outputName(name));
     }
 
     private ChannelGetter maybeAddConverter(ChannelGetter chnlGetter) throws CreateException {

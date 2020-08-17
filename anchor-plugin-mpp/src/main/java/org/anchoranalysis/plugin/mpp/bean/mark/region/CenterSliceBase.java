@@ -40,17 +40,17 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
+            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException {
 
-        BoundingBox box = boundingBoxForRegion(pm);
+        BoundingBox box = boundingBoxForRegion(voxelized);
 
         int zCenter = zCenterFromMark(mark, box);
 
-        return createStatisticsForBBox(pm, dimensions, box, zCenter);
+        return createStatisticsForBBox(voxelized, dimensions, box, zCenter);
     }
 
     protected abstract VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark pm, ImageDimensions dimensions, BoundingBox box, int zCenter);
+            VoxelizedMark mark, ImageDimensions dimensions, BoundingBox box, int zCenter);
 
     private static int zCenterFromMark(Mark markUncasted, BoundingBox box) throws CreateException {
         if (!(markUncasted instanceof MarkAbstractPosition)) {

@@ -74,7 +74,7 @@ class ConsiderProposalHelper {
         Optional<T> crnt = optStep.getCrnt();
 
         double accptProb =
-                accptProbCalculator.calcAccptProb(
+                accptProbCalculator.calculateAcceptanceProb(
                         optStep.getKernel().getKernel(),
                         crnt,
                         proposal,

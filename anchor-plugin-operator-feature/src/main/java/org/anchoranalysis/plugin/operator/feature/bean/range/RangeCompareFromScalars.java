@@ -44,8 +44,8 @@ public abstract class RangeCompareFromScalars<T extends FeatureInput> extends Ra
     // END BEAN PROPERTIES
 
     @Override
-    public String getParamDscr() {
-        return String.format("min=%f,max=%f,%s", min, max, super.getParamDscr());
+    public String describeParams() {
+        return String.format("min=%f,max=%f,%s", min, max, super.describeParams());
     }
 
     @Override

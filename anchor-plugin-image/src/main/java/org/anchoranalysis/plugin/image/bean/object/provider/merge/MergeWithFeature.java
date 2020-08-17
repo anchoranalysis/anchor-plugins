@@ -125,7 +125,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
         MergeGraph graph;
         try {
-            graph = createGraph(objects, calcResOptional());
+            graph = createGraph(objects, resolutionOptional());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.ImageMoments;
 
@@ -54,12 +54,11 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcFeatureResultFromMoments(ImageMoments moments)
-            throws FeatureCalculationException {
-        return calcFeatureResultFromSpecificMoment(moments.get(index));
+    protected double calculateFromAllMoments(ImageMoments moments) throws FeatureCalculationException {
+        return calculateFromSpecificMoment(moments.get(index));
     }
 
     /** Calculates the result for the specific moment identified by index */
-    protected abstract double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
+    protected abstract double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException;
 }

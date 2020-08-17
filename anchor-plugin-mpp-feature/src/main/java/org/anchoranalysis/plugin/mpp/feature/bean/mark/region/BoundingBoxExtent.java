@@ -35,7 +35,7 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
@@ -51,7 +51,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         ImageDimensions dimensions = input.get().getDimensionsRequired();
 
@@ -68,7 +68,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("%s", axis);
     }
 

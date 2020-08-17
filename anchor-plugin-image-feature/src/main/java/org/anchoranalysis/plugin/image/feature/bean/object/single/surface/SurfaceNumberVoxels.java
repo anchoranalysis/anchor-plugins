@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**

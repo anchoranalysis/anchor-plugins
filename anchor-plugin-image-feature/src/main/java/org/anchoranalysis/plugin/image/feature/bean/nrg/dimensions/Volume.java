@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class Volume<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
     @Override
-    protected double calcFromDims(ImageDimensions dim) {
+    protected double calculateFromDimensions(ImageDimensions dim) {
         return dim.calculateVolume();
     }
 }
