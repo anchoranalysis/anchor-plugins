@@ -97,7 +97,7 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
         }
 
         try {
-            double nrg = session.calc(createFeatureCalcParams(mark, regionMap, nrgStack));
+            double nrg = session.calculate(createFeatureCalcParams(mark, regionMap, nrgStack));
 
             return (nrg >= minVal);
 

@@ -38,7 +38,6 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
-import org.anchoranalysis.core.progress.CallableWithProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
@@ -93,9 +92,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         }
 
         @Override
-        public CallableWithProgressReporter<TimeSequence, OperationFailedException>
-                createStackSequenceForSeries(int seriesNum) throws RasterIOException {
-            return new OperationConvert(in, seriesNum);
+        public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
+                throws RasterIOException {
+            return progressReporter -> convert(progressReporter, in, seriesNum);
         }
 
         @Override
@@ -121,22 +120,9 @@ public class ConvertNamedChnlsToStack extends InputManager<StackSequenceInput> {
         public int numberFrames() throws OperationFailedException {
             return in.numberFrames();
         }
-    }
 
-    /**
-     * The operation of doing the conversion
-     *
-     * @author Owen Feehan
-     */
-    @AllArgsConstructor
-    private class OperationConvert
-            implements CallableWithProgressReporter<TimeSequence, OperationFailedException> {
-
-        private NamedChnlsInput in;
-        private int seriesNum;
-
-        @Override
-        public TimeSequence call(ProgressReporter progressReporter)
+        private TimeSequence convert(
+                ProgressReporter progressReporter, NamedChnlsInput in, int seriesNum)
                 throws OperationFailedException {
 
             try (ProgressReporterMultiple prm = new ProgressReporterMultiple(progressReporter, 2)) {

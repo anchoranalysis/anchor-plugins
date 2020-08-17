@@ -118,8 +118,8 @@ public class SplitContourSmoothingSpline {
         }
 
         double[] u = integerSequence(pointsToFit.size() + numExtraPoints);
-        double[] x = extractFromPoint(pointsToFit, Point3i::getX, pointsExtra, numExtraPoints);
-        double[] y = extractFromPoint(pointsToFit, Point3i::getY, pointsExtra, numExtraPoints);
+        double[] x = extractFromPoint(pointsToFit, Point3i::x, pointsExtra, numExtraPoints);
+        double[] y = extractFromPoint(pointsToFit, Point3i::y, pointsExtra, numExtraPoints);
 
         // We use two smoothing splines with respect to artificial parameter u (just an integer
         // sequence)

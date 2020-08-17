@@ -60,13 +60,13 @@ public class ChnlProviderConverterHistogram extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         Histogram hist;
         if (histogramProvider != null) {
             hist = histogramProvider.create();
         } else {
-            hist = HistogramFactory.create(chnl);
+            hist = HistogramFactory.create(channel);
         }
 
         ChnlConverterAttached<Histogram, ?> converter = chnlConverter.createConverter();
@@ -81,7 +81,7 @@ public class ChnlProviderConverterHistogram extends ChnlProviderOne {
                 changeExisting
                         ? ConversionPolicy.CHANGE_EXISTING_CHANNEL
                         : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
-        chnl = converter.convert(chnl, conversionPolicy);
-        return chnl;
+        channel = converter.convert(channel, conversionPolicy);
+        return channel;
     }
 }

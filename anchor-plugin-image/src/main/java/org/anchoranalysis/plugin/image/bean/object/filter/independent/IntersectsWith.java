@@ -52,6 +52,11 @@ public class IntersectsWith extends ObjectFilterPredicate {
     private ObjectCollection intersectWithAnyOneObject;
 
     @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+
+    @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
@@ -71,7 +76,6 @@ public class IntersectsWith extends ObjectFilterPredicate {
 
     @Override
     protected void end() throws OperationFailedException {
-        super.end();
         intersectWithAnyOneObject = null;
     }
 }

@@ -55,8 +55,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
                 new CreateFromConnectedComponentsFactory(bigNeighborhood, 1);
 
         return objects.stream()
-                .flatMapWithException(
-                        CreateException.class, objectMask -> createObjects3D(objectMask, creator));
+                .flatMap(CreateException.class, objectMask -> createObjects3D(objectMask, creator));
     }
 
     private ObjectCollection createObjects3D(
@@ -64,10 +63,10 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
             throws CreateException {
 
         ObjectCollection objects =
-                createObjectMasks.createConnectedComponents(unconnected.binaryVoxelBox());
+                createObjectMasks.createConnectedComponents(unconnected.binaryVoxels());
 
         // Adjust the crnr of each object, by adding on the original starting point of our
         // object-mask
-        return objects.shiftBy(unconnected.getBoundingBox().cornerMin());
+        return objects.shiftBy(unconnected.boundingBox().cornerMin());
     }
 }

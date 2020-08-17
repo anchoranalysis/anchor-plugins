@@ -29,11 +29,11 @@ package ch.ethz.biol.cell.imageprocessing.voxelbox.pixelsforplane;
 import ij.process.ShortProcessor;
 import java.nio.ShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.pixelsforplane.PixelsForPlane;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public class PixelsFromShortProcessor implements PixelsForPlane<ShortBuffer> {
+public class PixelsFromShortProcessor implements PixelsForSlice<ShortBuffer> {
 
     private ShortProcessor processor;
     private Extent extent;
@@ -45,12 +45,12 @@ public class PixelsFromShortProcessor implements PixelsForPlane<ShortBuffer> {
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> getPixelsForPlane(int z) {
+    public VoxelBuffer<ShortBuffer> slice(int z) {
         return VoxelBufferShort.wrap((short[]) processor.getPixels());
     }
 
     @Override
-    public void setPixelsForPlane(int z, VoxelBuffer<ShortBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<ShortBuffer> pixels) {
         assert (z == 0);
         processor.setPixels(pixels.buffer().array());
     }

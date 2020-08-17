@@ -38,6 +38,7 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 
 /**
  * Finds the intersection between the dilated versions of two objects (and then performs some
@@ -66,31 +67,20 @@ class CalculatePairIntersectionCommutative
             SessionInput<FeatureInputPairObjects> cache,
             ChildCacheName childDilation1,
             ChildCacheName childDilation2,
-            int iterationsDilation,
-            int iterationsErosion,
-            boolean do3D) {
+            MorphologicalIterations iterations) {
 
         // We use two additional caches, for the calculations involving the single objects, as these
         // can be expensive, and we want
         //  them also cached
         ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccFirstToSecond =
-                CalculatePairIntersection.of(
-                        cache,
-                        childDilation1,
-                        childDilation2,
-                        iterationsDilation,
-                        0,
-                        do3D,
-                        iterationsErosion);
+                CalculatePairIntersection.of(cache, childDilation1, childDilation2, iterations, 0);
         ResolvedCalculation<Optional<ObjectMask>, FeatureInputPairObjects> ccSecondToFirst =
                 CalculatePairIntersection.of(
                         cache,
                         childDilation1,
                         childDilation2,
-                        0,
-                        iterationsDilation,
-                        do3D,
-                        iterationsErosion);
+                        iterations.copyChangeIterationsDilation(0),
+                        iterations.getIterationsDilation());
         return new CalculatePairIntersectionCommutative(ccFirstToSecond, ccSecondToFirst);
     }
 

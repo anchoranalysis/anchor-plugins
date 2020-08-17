@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -43,6 +44,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -51,7 +53,9 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
@@ -169,7 +173,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                         objects.asList(),
                         Function.identity(),
                         (vector1, vector2, numberVoxels) -> numberVoxels,
-                        nrgStack.getNrgStack().getDimensions().getExtent(),
+                        nrgStack.getNrgStack().dimensions().extent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
@@ -188,7 +192,15 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public Optional<DisplayStack> createThumbailFor(FeatureInputPairObjects input) {
-        return Optional.empty();
+    public DisplayStack createThumbailFor(FeatureInputPairObjects input) throws CreateException {
+        // A collection is made with the left-object as first element, and the right-object as the
+        // second
+        ObjectCollection objects = ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
+        return getThumbnail().thumbnailFor(objects);
+    }
+
+    @Override
+    protected BoundingBox boundingBoxThatSpansInput(FeatureInputPairObjects input) {
+        return ObjectMaskMerger.mergeBoundingBoxes(Stream.of(input.getFirst(), input.getSecond()));
     }
 }

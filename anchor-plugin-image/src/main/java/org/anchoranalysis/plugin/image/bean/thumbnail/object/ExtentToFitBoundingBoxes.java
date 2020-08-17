@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Collection;
@@ -32,12 +57,12 @@ class ExtentToFitBoundingBoxes {
     public static Extent derive(Stream<BoundingBox> boundingBoxes) {
 
         List<ReadableTuple3i> cornersMax =
-                boundingBoxes.map(BoundingBox::calcCornerMax).collect(Collectors.toList());
+                boundingBoxes.map(BoundingBox::calculateCornerMax).collect(Collectors.toList());
 
         return new Extent(
-                maxDimensionValue(cornersMax, ReadableTuple3i::getX) + 1,
-                maxDimensionValue(cornersMax, ReadableTuple3i::getY) + 1,
-                maxDimensionValue(cornersMax, ReadableTuple3i::getZ) + 1);
+                maxDimensionValue(cornersMax, ReadableTuple3i::x) + 1,
+                maxDimensionValue(cornersMax, ReadableTuple3i::y) + 1,
+                maxDimensionValue(cornersMax, ReadableTuple3i::z) + 1);
     }
 
     private static int maxDimensionValue(

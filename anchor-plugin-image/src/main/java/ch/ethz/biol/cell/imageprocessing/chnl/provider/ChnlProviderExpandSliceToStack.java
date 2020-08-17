@@ -35,8 +35,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
@@ -47,29 +46,28 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromDim(ImageDimensions dim) throws CreateException {
+    protected Channel createFromDimensions(ImageDimensions dimensions) throws CreateException {
 
         Channel chnl = slice.create();
 
-        ImageDimensions sdSrc = chnl.getDimensions();
+        ImageDimensions dimensionsSource = chnl.dimensions();
 
-        if (sdSrc.getX() != dim.getX()) {
+        if (dimensionsSource.x() != dimensions.x()) {
             throw new CreateException("x dimension is not equal");
         }
-        if (sdSrc.getY() != dim.getY()) {
+        if (dimensionsSource.y() != dimensions.y()) {
             throw new CreateException("y dimension is not equal");
         }
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(dim, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
-        VoxelBox<ByteBuffer> vbSlice = chnl.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbOut = chnlOut.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxelsSlice = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();
 
-        for (int z = 0; z < chnlOut.getDimensions().getZ(); z++) {
-            VoxelBuffer<ByteBuffer> bb = vbSlice.duplicate().getPixelsForPlane(0);
-            vbOut.setPixelsForPlane(z, bb);
+        for (int z = 0; z < chnlOut.dimensions().z(); z++) {
+            voxelsOut.replaceSlice(z, voxelsSlice.duplicate().slice(0));
         }
 
         return chnlOut;

@@ -35,10 +35,11 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageResolution;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 
 public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
@@ -72,34 +73,35 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i point, BinaryVoxelBox<ByteBuffer> bvb) {
+            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> bvb) {
         return isPointConvexTo(root, point, bvb, false);
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i destPoint, BinaryVoxelBox<ByteBuffer> bvb, boolean debug) {
+            Point3i root, Point3i destPoint, BinaryVoxels<ByteBuffer> voxels, boolean debug) {
 
         Point3d distance = relVector(root, destPoint);
         double mag =
                 Math.pow(
-                        Math.pow(distance.getX(), 2)
-                                + Math.pow(distance.getY(), 2)
-                                + Math.pow(distance.getZ(), 2),
+                        Math.pow(distance.x(), 2)
+                                + Math.pow(distance.y(), 2)
+                                + Math.pow(distance.z(), 2),
                         0.5);
 
         if (mag > 0.0) {
             distance.scale(1 / mag);
         }
 
-        // Now we keep checking that points are inside the mask until we reach our final point
+        // Now we keep checking that points are inside the region until we reach our final point
         Point3d point = PointConverter.doubleFromInt(root);
+        VoxelsExtracter<ByteBuffer> extracter = voxels.extracter();
         while (!pointEquals(point, destPoint)) {
 
             if (debug) {
                 System.out.printf("%s ", point.toString()); // NOSONAR
             }
 
-            if (!isPointOnObj(point, bvb.getVoxelBox(), bvb.getBinaryValues())) {
+            if (!isPointOnObject(point, extracter, voxels.extent(), voxels.binaryValues())) {
 
                 if (debug) {
                     System.out.printf("failed%n%n"); // NOSONAR
@@ -115,21 +117,22 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
     @Override
     public boolean considerVisit(Point3i point, int distanceAlongContour, ObjectMask object) {
-        return isPointConvexTo(root, point, object.binaryVoxelBox());
+        return isPointConvexTo(root, point, object.binaryVoxels());
     }
 
     private static boolean pointEquals(Point3d point1, Point3i point2) {
         return point1.distanceSquared(point2) < 1.0;
     }
 
-    private static boolean isPointOnObj(Point3d point, VoxelBox<ByteBuffer> vb, BinaryValues bv) {
+    private static boolean isPointOnObject(
+            Point3d point, VoxelsExtracter<ByteBuffer> extracter, Extent extent, BinaryValues bv) {
 
-        Point3i pointInt = PointConverter.intFromDouble(point);
+        Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 
-        if (!vb.extent().contains(pointInt)) {
+        if (!extent.contains(pointInt)) {
             return false;
         }
 
-        return vb.getVoxel(pointInt) == bv.getOnInt();
+        return extracter.voxel(pointInt) == bv.getOnInt();
     }
 }

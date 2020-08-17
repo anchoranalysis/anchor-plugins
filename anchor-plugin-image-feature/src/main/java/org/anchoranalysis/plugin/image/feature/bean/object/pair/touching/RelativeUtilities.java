@@ -47,9 +47,10 @@ class RelativeUtilities {
      * @return a new bounding box with relative coordinates
      */
     public static BoundingBox createRelBBox(BoundingBox box, ObjectMask objectRelativeBase) {
-        BoundingBox bboxIntersectRel =
-                new BoundingBox(box.relPosTo(objectRelativeBase.getBoundingBox()), box.extent());
-        return bboxIntersectRel.clipTo(objectRelativeBase.getBoundingBox().extent());
+        BoundingBox boxIntersectRel =
+                new BoundingBox(
+                        box.relativePositionTo(objectRelativeBase.boundingBox()), box.extent());
+        return boxIntersectRel.clipTo(objectRelativeBase.boundingBox().extent());
     }
 
     /**
@@ -60,7 +61,7 @@ class RelativeUtilities {
      * @return a new object with new bounding-box (but with identical memory used for the mask)
      */
     public static ObjectMask createRelMask(ObjectMask object, ObjectMask objectRelativeBase) {
-        return object.relMaskTo(objectRelativeBase.getBoundingBox())
+        return object.relativeMaskTo(objectRelativeBase.boundingBox())
                 .mapBoundingBoxPreserveExtent(BoundingBox::reflectThroughOrigin);
     }
 }

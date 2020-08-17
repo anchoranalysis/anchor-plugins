@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 public class BinaryChnlProviderDuplicate extends BinaryChnlProviderOne {
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
-        return chnl.duplicate();
+    public Mask createFromMask(Mask mask) throws CreateException {
+        return mask.duplicate();
     }
 }

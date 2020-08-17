@@ -32,7 +32,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
@@ -44,30 +44,29 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
-        processVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte(),
-                chnl3.getVoxelBox().asByte());
+        processVoxels(
+                chnlOut.voxels().asByte(),
+                chnl1.voxels().asByte(),
+                chnl2.voxels().asByte(),
+                chnl3.voxels().asByte());
 
         return chnlOut;
     }
 
-    private void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut,
-            VoxelBox<ByteBuffer> vbIn1,
-            VoxelBox<ByteBuffer> vbIn2,
-            VoxelBox<ByteBuffer> vbIn3) {
+    private void processVoxels(
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2,
+            Voxels<ByteBuffer> voxelsIn3) {
 
-        for (int z = 0; z < vbOut.extent().getZ(); z++) {
+        for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = vbIn1.getPixelsForPlane(z).buffer();
-            ByteBuffer in2 = vbIn2.getPixelsForPlane(z).buffer();
-            ByteBuffer in3 = vbIn3.getPixelsForPlane(z).buffer();
-            ByteBuffer out = vbOut.getPixelsForPlane(z).buffer();
+            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            ByteBuffer in3 = voxelsIn3.sliceBuffer(z);
+            ByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 
@@ -92,11 +91,11 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
     private void checkDims(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
 
-        if (!chnl1.getDimensions().equals(chnl2.getDimensions())) {
+        if (!chnl1.dimensions().equals(chnl2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 
-        if (!chnl2.getDimensions().equals(chnl3.getDimensions())) {
+        if (!chnl2.dimensions().equals(chnl3.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
     }

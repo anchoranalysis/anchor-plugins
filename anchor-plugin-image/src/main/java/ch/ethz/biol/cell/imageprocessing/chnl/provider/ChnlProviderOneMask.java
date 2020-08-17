@@ -42,11 +42,12 @@ public abstract class ChnlProviderOneMask extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
         Mask maskChnl = mask.create();
-        DimChecker.check(chnl, maskChnl);
-        return createFromMaskedChnl(chnl, maskChnl);
+        DimChecker.check(channel, maskChnl);
+        return createFromMaskedChannel(channel, maskChnl);
     }
 
-    protected abstract Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException;
+    protected abstract Channel createFromMaskedChannel(Channel channel, Mask mask)
+            throws CreateException;
 }

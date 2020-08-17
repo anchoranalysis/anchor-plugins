@@ -40,14 +40,14 @@ import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 class MakePlateauLowerComplete {
 
     private static class PointTester implements ProcessChangedPointAbsoluteMasked<List<Point3i>> {
 
         // STATIC
-        private EncodedVoxelBox matS;
+        private EncodedVoxels matS;
 
         private final List<Point3i> foundPoints = new ArrayList<>();
 
@@ -56,7 +56,7 @@ class MakePlateauLowerComplete {
         private int z1;
         private final byte maskValueOff;
 
-        public PointTester(EncodedVoxelBox matS, BinaryValuesByte bv) {
+        public PointTester(EncodedVoxels matS, BinaryValuesByte bv) {
             super();
             this.matS = matS;
             this.maskValueOff = bv.getOffByte();
@@ -104,7 +104,7 @@ class MakePlateauLowerComplete {
     }
 
     public void makeBufferLowerCompleteForPlateau(
-            EncodedVoxelBox matS, Optional<MinimaStore> minimaStore) {
+            EncodedVoxels matS, Optional<MinimaStore> minimaStore) {
 
         assert (plateau.hasPoints());
         if (plateau.isOnlyEdge()) {
@@ -130,14 +130,14 @@ class MakePlateauLowerComplete {
         }
     }
 
-    private void pointEdgeToNeighboring(EncodedVoxelBox matS) {
+    private void pointEdgeToNeighboring(EncodedVoxels matS) {
         // We set them all to their neighboring points
         for (PointWithNeighbor pointNeighbor : plateau.getPointsEdge()) {
             matS.setPoint(pointNeighbor.getPoint(), pointNeighbor.getNeighborIndex());
         }
     }
 
-    private void pointInnerToEdge(EncodedVoxelBox matS) {
+    private void pointInnerToEdge(EncodedVoxels matS) {
         // Iterate through each edge pixel, and look for neighboring points in the Inner pixels
         //   for any such point, point towards the edge pixel, and move to the new edge list
         List<Point3i> searchPoints = plateau.pointsEdge();
@@ -149,7 +149,7 @@ class MakePlateauLowerComplete {
 
             ProcessVoxelNeighbor<List<Point3i>> process =
                     ProcessVoxelNeighborFactory.withinMask(
-                            object, new PointTester(matS, object.getBinaryValuesByte()));
+                            object, new PointTester(matS, object.binaryValuesByte()));
 
             while (!searchPoints.isEmpty()) {
                 searchPoints = findPointsFor(searchPoints, neighborhood, process);

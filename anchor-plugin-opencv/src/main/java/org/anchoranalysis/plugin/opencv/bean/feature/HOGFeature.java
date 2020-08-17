@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import java.util.Optional;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -51,6 +52,7 @@ import org.anchoranalysis.plugin.opencv.CVInit;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor
 public class HOGFeature extends FeatureStack {
 
     static {
@@ -67,6 +69,12 @@ public class HOGFeature extends FeatureStack {
     /** Which index to return from the HOG descriptor */
     @BeanField @NonNegative @Getter @Setter private int index = 0;
     // END BEAN PROPRERTIES
+
+    public HOGFeature(SizeXY resizeTo, int index) {
+        super();
+        this.resizeTo = resizeTo;
+        this.index = index;
+    }
 
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)

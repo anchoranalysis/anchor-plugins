@@ -51,7 +51,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
@@ -67,23 +67,21 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
     // END BEAN
 
     @Override
-    public Channel createFromChnl(Channel chnlIn) throws CreateException {
+    public Channel createFromChannel(Channel chnlIn) throws CreateException {
 
         Channel chnlIntermediate =
-                ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnlIn.getDimensions(), VoxelDataTypeFloat.INSTANCE);
-        VoxelBox<FloatBuffer> vb = chnlIntermediate.getVoxelBox().asFloat();
+                ChannelFactory.instance().create(chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
+        Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
 
-        NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(vb);
+        NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);
 
         if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
             NativeImg<UnsignedByteType, ByteArray> natIn =
-                    ImgLib2Wrap.wrapByte(chnlIn.getVoxelBox().asByte());
+                    ImgLib2Wrap.wrapByte(chnlIn.voxels().asByte());
             process(natIn, natOut, (float) scaleFactor);
         } else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
             NativeImg<UnsignedShortType, ShortArray> natIn =
-                    ImgLib2Wrap.wrapShort(chnlIn.getVoxelBox().asShort());
+                    ImgLib2Wrap.wrapShort(chnlIn.voxels().asShort());
             process(natIn, natOut, (float) scaleFactor);
         } else {
             throw new CreateException("Input type must be unsigned byte or short");

@@ -37,6 +37,6 @@ public class BoundingBoxNumberVoxels extends FeatureSingleObject {
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        return input.get().getObject().getBoundingBox().extent().getVolume();
+        return input.get().getObject().boundingBox().extent().calculateVolume();
     }
 }

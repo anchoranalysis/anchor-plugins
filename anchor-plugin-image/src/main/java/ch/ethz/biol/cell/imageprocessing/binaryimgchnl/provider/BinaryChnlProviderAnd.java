@@ -35,8 +35,9 @@ public class BinaryChnlProviderAnd extends BinaryChnlProviderReceive {
 
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
-    protected Mask createFromChnlReceive(Mask chnl, Mask receiveChnl) throws CreateException {
-        BinaryChnlAnd.apply(chnl, receiveChnl);
-        return chnl;
+    protected Mask createFromChnlReceive(Mask maskCurrent, Mask maskReceive)
+            throws CreateException {
+        BinaryChnlAnd.apply(maskCurrent, maskReceive);
+        return maskCurrent;
     }
 }

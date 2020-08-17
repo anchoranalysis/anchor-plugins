@@ -37,15 +37,15 @@ import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParame
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Performs a threshold on each pixel, by comparing the pixel value to another channel
 //  It sets a pixel as high, if it is greater than or equal to the pixel in the other "Thrshld"
@@ -59,24 +59,22 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxelBox<ByteBuffer> sgmn(
-            VoxelBoxWrapper voxelBox,
-            BinarySegmentationParameters params,
-            Optional<ObjectMask> object)
+    public BinaryVoxels<ByteBuffer> segment(
+            VoxelsWrapper voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
             throws SegmentationFailedException {
 
-        VoxelBox<?> voxelBoxIn = voxelBox.any();
-        VoxelBox<ByteBuffer> voxelBoxOut = createOutputChnl(voxelBox);
+        Voxels<?> voxelsIn = voxels.any();
+        Voxels<ByteBuffer> voxelsOut = createOutputVoxels(voxels);
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 
         SliceThresholder sliceThresholder = createThresholder(object, bvb);
         sliceThresholder.sgmnAll(
-                voxelBoxIn,
-                createThresholdedVoxelBox(voxelBox.any().extent()),
-                createOutputChnl(voxelBox));
+                voxelsIn,
+                createThresholdedVoxels(voxels.any().extent()),
+                createOutputVoxels(voxels));
 
-        return new BinaryVoxelBoxByte(voxelBoxOut, bvb.createInt());
+        return BinaryVoxelsFactory.reuseByte(voxelsOut, bvb.createInt());
     }
 
     private SliceThresholder createThresholder(Optional<ObjectMask> object, BinaryValuesByte bvb) {
@@ -87,7 +85,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
                 .orElseGet(() -> new SliceThresholderWithoutMask(bvb));
     }
 
-    private VoxelBox<?> createThresholdedVoxelBox(Extent voxelBoxExtent)
+    private Voxels<?> createThresholdedVoxels(Extent voxelsExtent)
             throws SegmentationFailedException {
 
         Channel threshold;
@@ -97,24 +95,30 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
             throw new SegmentationFailedException(e);
         }
 
-        VoxelBox<?> vbThrshld = threshold.getVoxelBox().any();
+        Voxels<?> voxelsThresholded = threshold.voxels().any();
 
-        if (!vbThrshld.extent().equals(voxelBoxExtent)) {
+        if (!voxelsThresholded.extent().equals(voxelsExtent)) {
             throw new SegmentationFailedException(
-                    "chnlProviderThrshld is of different size to voxelBox");
+                    "chnlProviderThrshld is of different size to voxels");
         }
 
-        return vbThrshld;
+        return voxelsThresholded;
     }
 
-    // If the input voxel-box is 8-bit we do it in place
-    // Otherwise, we create a new binary voxelbox buffer
-    private VoxelBox<ByteBuffer> createOutputChnl(VoxelBoxWrapper voxelBox) {
+    /**
+     * Creates voxels to be outputted
+     *
+     * <p>If the input voxels are 8-bit we do it in place, otherwise, we create a new binary-voxels
+     *
+     * @param voxels
+     * @return
+     */
+    private Voxels<ByteBuffer> createOutputVoxels(VoxelsWrapper voxels) {
 
-        if (voxelBox.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
-            return voxelBox.asByte();
+        if (voxels.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+            return voxels.asByte();
         } else {
-            return VoxelBoxFactory.getByte().create(voxelBox.any().extent());
+            return VoxelsFactory.getByte().createInitialized(voxels.any().extent());
         }
     }
 }

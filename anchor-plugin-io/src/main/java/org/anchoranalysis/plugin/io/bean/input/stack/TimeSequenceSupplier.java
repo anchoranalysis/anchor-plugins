@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,10 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.io.bean.input.stack;
 
-package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.stack.TimeSequence;
 
-class PointPixelsOrMarkAsMinimaWrap {
+@FunctionalInterface
+public interface TimeSequenceSupplier {
 
-    private PointPixelsOrMarkAsMinimaWrap() {}
+    TimeSequence get(ProgressReporter progressReporter) throws OperationFailedException;
 }

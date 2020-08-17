@@ -31,21 +31,21 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel dup = chnl.duplicate();
-        VoxelBoxWrapper vbDup = dup.getVoxelBox();
+        Channel out = channel.duplicate();
+        VoxelsWrapper voxelsDuplicated = channel.duplicate().voxels();
 
-        for (int z = 0; z < dup.getDimensions().getZ(); z++) {
+        for (int z = 0; z < out.dimensions().z(); z++) {
 
-            ImageProcessor ip = IJWrap.imageProcessor(vbDup, z);
+            ImageProcessor ip = IJWrap.imageProcessor(voxelsDuplicated, z);
             ip.filter(ImageProcessor.FIND_EDGES);
         }
-        return dup;
+        return out;
     }
 }

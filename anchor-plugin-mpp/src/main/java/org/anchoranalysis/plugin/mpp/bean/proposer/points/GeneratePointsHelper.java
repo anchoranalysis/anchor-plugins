@@ -37,16 +37,16 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
-import org.anchoranalysis.image.points.PointsFromBinaryChnl;
+import org.anchoranalysis.image.points.PointsFromMask;
 
 @AllArgsConstructor
 class GeneratePointsHelper {
 
     private Point3d pointRoot;
-    private final Optional<Mask> chnlFilled;
+    private final Optional<Mask> maskFilled;
     private int maxZDistance;
     private int skipZDistance;
-    private Mask chnl;
+    private Mask mask;
     private ImageDimensions dimensions;
 
     public List<Point3i> generatePoints(List<List<Point3i>> pointsXY)
@@ -66,19 +66,19 @@ class GeneratePointsHelper {
             List<Point3i> pointsAlongContour, PointListForConvex pointList)
             throws OperationFailedException {
 
-        BoundingBox bbox = BoundingBoxFromPoints.forList(pointsAlongContour);
+        BoundingBox box = BoundingBoxFromPoints.forList(pointsAlongContour);
 
-        int zLow = Math.max(0, bbox.cornerMin().getZ() - maxZDistance);
-        int zHigh = Math.min(dimensions.getZ(), bbox.cornerMin().getZ() + maxZDistance);
+        int zLow = Math.max(0, box.cornerMin().z() - maxZDistance);
+        int zHigh = Math.min(dimensions.z(), box.cornerMin().z() + maxZDistance);
 
-        if (chnlFilled.isPresent()) {
-            return new PointsFromInsideHelper(pointList, chnlFilled.get(), bbox)
-                    .convexOnly(chnl, pointRoot, skipZDistance);
+        if (maskFilled.isPresent()) {
+            return new PointsFromInsideHelper(pointList, maskFilled.get(), box)
+                    .convexOnly(mask, pointRoot, skipZDistance);
         } else {
-            return PointsFromBinaryChnl.pointsFromChnlInsideBox(
-                    chnl,
-                    bbox.duplicateChangeZ(zLow, zHigh - zLow),
-                    (int) Math.floor(pointRoot.getZ()),
+            return PointsFromMask.listFromSlicesInsideBox3i(
+                    mask,
+                    box.changeZ(zLow, zHigh - zLow),
+                    (int) Math.floor(pointRoot.z()),
                     skipZDistance);
         }
     }

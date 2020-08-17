@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
- * Creates object masks from a {@link Cfg} where (a particular region of) each mark creates an
+ * Creates object-masks from a {@link Cfg} where (a particular region of) each mark creates an
  * object.
  *
  * @author Owen Feehan
@@ -56,7 +56,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
-    @BeanField @Getter @Setter private ImageDimProvider dim = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
@@ -64,9 +64,9 @@ public class FromCfg extends ObjectCollectionProvider {
 
         Cfg cfg = cfgProvider.create();
 
-        ImageDimensions dims = dim.create();
+        ImageDimensions dims = dimensions.create();
 
-        return cfg.calcMask(
+        return cfg.deriveObjects(
                         dims,
                         regionMap.membershipWithFlagsForIndex(regionID),
                         BinaryValuesByte.getDefault())

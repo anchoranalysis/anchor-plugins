@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -136,12 +136,11 @@ public class AnnotationComparisonTask<T extends Assignment>
             throws JobExecutionException {
 
         // Get a matching set of groups for this image
-        IAddAnnotation<T> addAnnotation =
-                sharedState.groupsForImage(input.descriptiveName(), descriptiveSplit);
+        IAddAnnotation<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
 
         Optional<ObjectsToCompare> objectsToCompare =
                 ObjectsToCompareFactory.create(
-                        input, addAnnotation, background.getDimensions(), context);
+                        input, addAnnotation, background.dimensions(), context);
         return OptionalUtilities.map(
                 objectsToCompare,
                 objects ->
@@ -165,7 +164,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             throws JobExecutionException {
 
         try {
-            NamedStacks stackCollection = new NamedStacks();
+            NamedStacksSet stackCollection = new NamedStacksSet();
             inputObject.getInputObject().addToStoreInferNames(stackCollection);
             return DisplayStack.create(stackCollection.getException(backgroundChnlName));
 
@@ -191,7 +190,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         try {
             T assignment =
                     assigner.createAssignment(
-                            objectsToCompare, background.getDimensions(), useMIP, context);
+                            objectsToCompare, background.dimensions(), useMIP, context);
 
             addAnnotation.addAcceptedAnnotation(assignment);
 

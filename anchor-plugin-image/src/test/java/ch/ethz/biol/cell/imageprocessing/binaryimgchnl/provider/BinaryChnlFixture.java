@@ -26,39 +26,38 @@
 
 package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxFactory;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.test.image.ChnlFixture;
+import org.anchoranalysis.test.image.ChannelFixture;
 
 /**
  * Creates {@link Mask} instantiations for tests.
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BinaryChnlFixture {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 7;
     public static final int DEPTH = 3;
 
-    private BinaryChnlFixture() {}
-
     public static Mask createWithRectangle(Point3i crnr, boolean do3D) throws CreateException {
 
-        Mask chnl = new Mask(BinaryVoxelBoxFactory.instance().create(extent(do3D)));
-
-        chnl.binaryVoxelBox().setPixelsCheckMaskOn(createRectange(crnr, do3D));
-
-        return chnl;
+        Mask mask = new Mask(BinaryVoxelsFactory.createEmptyOff(extent(do3D)));
+        mask.assignOn().toObject(createRectange(crnr, do3D));
+        return mask;
     }
 
     public static Extent extent(boolean do3D) {
-        return do3D ? ChnlFixture.MEDIUM_3D : ChnlFixture.MEDIUM_2D;
+        return do3D ? ChannelFixture.MEDIUM_3D : ChannelFixture.MEDIUM_2D;
     }
 
     public static int depth(boolean do3D) {
@@ -69,7 +68,7 @@ class BinaryChnlFixture {
     private static ObjectMask createRectange(Point3i crnr, boolean do3D) {
         ObjectMask object =
                 new ObjectMask(new BoundingBox(crnr, new Extent(WIDTH, HEIGHT, depth(do3D))));
-        object.binaryVoxelBox().setAllPixelsToOn();
+        object.assignOn().toAll();
         return object;
     }
 }

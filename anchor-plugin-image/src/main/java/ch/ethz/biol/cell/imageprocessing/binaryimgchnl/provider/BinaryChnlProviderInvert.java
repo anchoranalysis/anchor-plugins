@@ -45,38 +45,44 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 public class BinaryChnlProviderInvert extends BinaryChnlProviderOne {
 
     // START BEAN FIELDS
-    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
+    /**
+     * If set, the inversion only occurs on a particular region of the mask, as determined by this
+     * mask
+     */
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider restrictTo;
 
     @BeanField @Getter @Setter private boolean forceChangeBytes = false;
     // END BEAN FIELDS
 
     @Override
-    public Mask createFromChnl(Mask chnl) throws CreateException {
+    public Mask createFromMask(Mask maskToInvert) throws CreateException {
 
-        Optional<Mask> maskChnl = OptionalFactory.create(mask);
+        Optional<Mask> restricted = OptionalFactory.create(restrictTo);
 
-        if (maskChnl.isPresent()) {
-            invertWithMask(chnl, maskChnl.get());
-            return chnl;
-        }
-
-        if (forceChangeBytes) {
-            MaskInverter.invertChnl(chnl);
+        if (restricted.isPresent()) {
+            invertWithMask(maskToInvert, restricted.get());
+            return maskToInvert;
         } else {
-            return new Mask(chnl.getChannel(), chnl.getBinaryValues().createInverted());
+
+            if (forceChangeBytes) {
+                MaskInverter.invert(maskToInvert);
+                return maskToInvert;
+            } else {
+                return new Mask(
+                        maskToInvert.channel(), maskToInvert.binaryValues().createInverted());
+            }
         }
-        return chnl;
     }
 
-    private void invertWithMask(Mask chnl, Mask mask) {
+    private void invertWithMask(Mask maskToInvert, Mask restricted) {
 
-        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+        BinaryValuesByte bvb = maskToInvert.binaryValues().createByte();
         final byte byteOn = bvb.getOnByte();
         final byte byteOff = bvb.getOffByte();
 
         IterateVoxels.callEachPoint(
-                chnl.binaryVoxelBox().getVoxelBox(),
-                mask,
+                maskToInvert.binaryVoxels().voxels(),
+                restricted,
                 (Point3i point, ByteBuffer buffer, int offset) -> {
                     byte val = buffer.get(offset);
 

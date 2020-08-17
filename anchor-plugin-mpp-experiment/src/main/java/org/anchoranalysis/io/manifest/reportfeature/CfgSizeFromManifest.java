@@ -39,14 +39,14 @@ import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
 public class CfgSizeFromManifest extends ReportFeatureForManifest {
 
     @Override
-    public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger)
+    public String featureDescription(ManifestRecorderFile object, Logger logger)
             throws OperationFailedException {
 
         FinderSerializedObject<Cfg> finder =
                 new FinderSerializedObject<>(
                         "cfg", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 
-        ManifestRecorder manifest = obj.call();
+        ManifestRecorder manifest = object.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException("Cannot find cfg in manifest");
@@ -65,7 +65,7 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
     }
 
     @Override
-    public String genTitleStr() throws OperationFailedException {
+    public String title() throws OperationFailedException {
         return "cfgSize";
     }
 }

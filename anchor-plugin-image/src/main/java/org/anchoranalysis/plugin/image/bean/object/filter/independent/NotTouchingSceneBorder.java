@@ -33,6 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 
@@ -49,6 +50,11 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
     // END BEAN PROPERTIES
 
     @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+
+    @Override
     protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException {
 
@@ -56,21 +62,26 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             throw new OperationFailedException("Image-dimensions are required for this operation");
         }
 
-        if (object.getBoundingBox().atBorderXY(dim.get())) {
+        if (object.boundingBox().atBorderXY(dim.get())) {
             return false;
         }
 
         if (includeZ) {
-            ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-            if (cornerMin.getZ() == 0) {
+            ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+            if (cornerMin.z() == 0) {
                 return false;
             }
 
-            ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
-            if (cornerMax.getZ() == (dim.get().getZ() - 1)) {
+            ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
+            if (cornerMax.z() == (dim.get().z() - 1)) {
                 return false;
             }
         }
         return true;
+    }
+
+    @Override
+    protected void end() throws OperationFailedException {
+        // NOTHING TO DO
     }
 }

@@ -41,17 +41,17 @@ import org.anchoranalysis.image.object.ObjectMask;
 class ExtendObjectsInZHelper {
 
     public static ObjectMask createExtendedObject(
-            ObjectMask flat, ObjectMask container, BoundingBox bbox, int zCenter)
+            ObjectMask flat, ObjectMask container, BoundingBox box, int zCenter)
             throws CreateException {
 
-        Extent extent = bbox.extent();
+        Extent extent = box.extent();
 
-        ObjectMask objectNew = container.region(bbox, false);
+        ObjectMask objectNew = container.region(box, false);
 
-        ByteBuffer bbFlat = flat.getVoxelBox().getPixelsForPlane(0).buffer();
+        ByteBuffer bbFlat = flat.sliceBufferLocal(0);
 
-        int zLow = bbox.cornerMin().getZ();
-        int zHigh = bbox.calcCornerMax().getZ();
+        int zLow = box.cornerMin().z();
+        int zHigh = box.calculateCornerMax().z();
 
         if (zCenter > zHigh) {
             zCenter = zHigh;
@@ -76,7 +76,7 @@ class ExtendObjectsInZHelper {
         boolean andMode = true;
         boolean writtenOneSlice = false;
 
-        int volumeXY = extent.getVolumeXY();
+        int volumeXY = extent.volumeXY();
 
         // Start in the mid point, and go upwards
         Iterator<Integer> itr = zRange.iterator();
@@ -86,7 +86,7 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            ByteBuffer bbExst = objectNew.getVoxelBox().getPixelsForPlane(zRel).buffer();
+            ByteBuffer bbExst = objectNew.sliceBufferLocal(zRel);
 
             if (andMode) { // NOSONAR
 
@@ -94,8 +94,8 @@ class ExtendObjectsInZHelper {
                         volumeXY,
                         bbExst,
                         bbFlat,
-                        objectNew.getBinaryValuesByte(),
-                        flat.getBinaryValuesByte())) {
+                        objectNew.binaryValuesByte(),
+                        flat.binaryValuesByte())) {
                     writtenOneSlice = true;
                 } else {
                     // As soon as we have no pixel high, we switch to simply clearing instead, so
@@ -106,7 +106,7 @@ class ExtendObjectsInZHelper {
                 }
 
             } else {
-                setBufferLow(extent.getVolumeXY(), bbExst, objectNew.getBinaryValuesByte());
+                setBufferLow(extent.volumeXY(), bbExst, objectNew.binaryValuesByte());
             }
         }
 

@@ -71,7 +71,7 @@ public class StackProviderChnlProvider extends StackProvider {
         if (chnl != null) {
             return new Stack(chnl.create());
         } else {
-            return new Stack(binaryChnl.create().getChannel());
+            return new Stack(binaryChnl.create().channel());
         }
     }
 }

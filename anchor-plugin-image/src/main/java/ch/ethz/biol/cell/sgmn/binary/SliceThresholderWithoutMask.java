@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.sgmn.binary;
 import java.nio.ByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 public class SliceThresholderWithoutMask extends SliceThresholder {
@@ -39,28 +39,27 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
     }
 
     @Override
-    public void sgmnAll(
-            VoxelBox<?> voxelBoxIn, VoxelBox<?> vbThrshld, VoxelBox<ByteBuffer> voxelBoxOut) {
-        for (int z = 0; z < voxelBoxIn.extent().getZ(); z++) {
+    public void sgmnAll(Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+        for (int z = 0; z < voxelsIn.extent().z(); z++) {
             sgmnSlice(
-                    voxelBoxIn.extent(),
-                    voxelBoxIn.getPixelsForPlane(z),
-                    vbThrshld.getPixelsForPlane(z),
-                    voxelBoxOut.getPixelsForPlane(z));
+                    voxelsIn.extent(),
+                    voxelsIn.slice(z),
+                    voxelsThrshld.slice(z),
+                    voxelsOut.slice(z));
         }
     }
 
     private void sgmnSlice(
             Extent extent,
-            VoxelBuffer<?> vbIn,
-            VoxelBuffer<?> vbThrshld,
+            VoxelBuffer<?> voxelsIn,
+            VoxelBuffer<?> voxelsThrshld,
             VoxelBuffer<ByteBuffer> bbOut) {
         ByteBuffer out = bbOut.buffer();
 
         int offset = 0;
-        for (int y = 0; y < extent.getY(); y++) {
-            for (int x = 0; x < extent.getX(); x++) {
-                writeThresholdedByte(offset, out, vbIn, vbThrshld);
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
+                writeThresholdedByte(offset, out, voxelsIn, voxelsThrshld);
                 offset++;
             }
         }

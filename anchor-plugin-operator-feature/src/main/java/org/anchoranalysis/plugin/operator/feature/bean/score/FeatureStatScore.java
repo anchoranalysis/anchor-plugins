@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.operator.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
 /**
  * Calculates a score based upon the statistical mean and std-deviation
@@ -67,9 +67,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
      * @throws FeatureCalculationException
      */
     protected abstract double deriveScore(
-            double featureValue,
-            double mean,
-            CallableWithException<Double, FeatureCalculationException> stdDev)
+            double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException;
 
     @Override

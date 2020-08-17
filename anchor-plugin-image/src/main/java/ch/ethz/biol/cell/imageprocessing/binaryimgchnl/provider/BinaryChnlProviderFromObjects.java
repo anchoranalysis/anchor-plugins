@@ -37,7 +37,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
 
-/** Creates a BinaryImgChannel from a collection of object masks */
+/** Creates a BinaryImgChannel from a collection of object-masks */
 public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
 
     // START BEAN
@@ -47,8 +47,8 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
     // END BEAN
 
     @Override
-    protected Mask createFromSource(ImageDimensions dimSource) throws CreateException {
-        return create(objects.create(), dimSource, invert);
+    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
+        return create(objects.create(), dimensions, invert);
     }
 
     private static Mask create(
@@ -57,15 +57,18 @@ public class BinaryChnlProviderFromObjects extends BinaryChnlProviderDimSource {
         BinaryValues bv = BinaryValues.getDefault();
 
         Mask maskedImage = createChannelFromObjectsMultiplex(objects, dimensions, bv, invert);
-        return new Mask(maskedImage.getChannel(), bv);
+        return new Mask(maskedImage.channel(), bv);
     }
 
     private static Mask createChannelFromObjectsMultiplex(
-            ObjectCollection objects, ImageDimensions sd, BinaryValues outVal, boolean invert) {
+            ObjectCollection objects,
+            ImageDimensions dimensions,
+            BinaryValues outVal,
+            boolean invert) {
         if (invert) {
-            return MaskFromObjects.createFromNotObjects(objects, sd, outVal);
+            return MaskFromObjects.createFromNotObjects(objects, dimensions, outVal);
         } else {
-            return MaskFromObjects.createFromObjects(objects, sd, outVal);
+            return MaskFromObjects.createFromObjects(objects, dimensions, outVal);
         }
     }
 }

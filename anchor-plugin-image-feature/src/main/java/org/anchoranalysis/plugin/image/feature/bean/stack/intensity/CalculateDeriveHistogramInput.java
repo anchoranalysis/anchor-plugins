@@ -53,6 +53,6 @@ class CalculateDeriveHistogramInput
     protected FeatureInputHistogram execute(FeatureInputStack input)
             throws FeatureCalculationException {
         return new FeatureInputHistogram(
-                histogramCalculation.getOrCalculate(input), input.getResOptional());
+                histogramCalculation.getOrCalculate(input), input.getResolutionOptional());
     }
 }

@@ -69,7 +69,7 @@ public class SegmentText extends ObjectCollectionProvider {
      * we don't allow dramatically higher resolutions that this, so text objects remain roughly in
      * size proportionate to what EAST was trained on.
      */
-    private static final int MAX_SCALE_FACTOR = (720 / EAST_EXTENT.getY());
+    private static final int MAX_SCALE_FACTOR = (720 / EAST_EXTENT.y());
 
     // START BEAN PROPERTIES
     /** An RGB stack to look for text in */
@@ -92,19 +92,23 @@ public class SegmentText extends ObjectCollectionProvider {
 
         // Scales the input to the largest acceptable-extent
         Tuple2<Mat, ScaleFactor> pair =
-                CreateScaledInput.apply(
-                        stack, findLargestExtent(stack.getDimensions().getExtent()));
+                CreateScaledInput.apply(stack, findLargestExtent(stack.dimensions().extent()));
 
         // Convert marks to object-masks
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
                 EastObjectsExtractor.apply(
                         pair._1(),
-                        stack.getDimensions().getRes(),
+                        stack.dimensions().resolution(),
                         minConfidence,
                         pathToEastModel());
 
         // Scale each object-mask and extract as an object-collection
-        return ScaleExtractObjects.apply(maybeFilterList(objectsWithConfidence), pair._2());
+        try {
+            return ScaleExtractObjects.apply(
+                    maybeFilterList(objectsWithConfidence), pair._2(), stack.dimensions().extent());
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     /**
@@ -133,7 +137,7 @@ public class SegmentText extends ObjectCollectionProvider {
                             stack.getNumberChannels()));
         }
 
-        if (stack.getDimensions().getZ() > 1) {
+        if (stack.dimensions().z() > 1) {
             throw new CreateException("z-stacks are not supported by this algorithm");
         }
 

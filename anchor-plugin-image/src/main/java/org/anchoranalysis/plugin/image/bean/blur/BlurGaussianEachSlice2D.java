@@ -31,7 +31,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * Performs a Gaussian-blur in 2D on each slice independently
@@ -41,20 +41,18 @@ import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
 public class BlurGaussianEachSlice2D extends BlurStrategy {
 
     @Override
-    public void blur(VoxelBoxWrapper voxelBox, ImageDimensions dimensions, MessageLogger logger)
+    public void blur(VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
         double sigma = calcSigma(dimensions, logger);
 
-        Extent e = voxelBox.any().extent();
+        Extent e = voxels.any().extent();
         double[] sigmaArr = new double[] {sigma, sigma};
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
             GaussianBlurUtilities.applyBlur(
-                    ImgLib2Wrap.wrap(voxelBox.any().getPixelsForPlane(z), e),
-                    dimensions.getRes(),
-                    sigmaArr);
+                    ImgLib2Wrap.wrap(voxels.slice(z), e), dimensions.resolution(), sigmaArr);
         }
     }
 }

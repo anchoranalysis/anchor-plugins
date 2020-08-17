@@ -95,7 +95,7 @@ public class ObjectAsPoints extends MarkProposer {
             points = new ArrayList<>();
 
             for (ObjectMask object : objects.create()) {
-                points.add(PointsFromObject.fromAsDouble(object));
+                points.add(PointsFromObject.listFrom3d(object));
             }
         }
     }

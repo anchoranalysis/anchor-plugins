@@ -33,11 +33,11 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBoxByte;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
 
 @AllArgsConstructor
@@ -50,21 +50,21 @@ class CalculateMaskInput<T extends FeatureInputNRG>
     @Override
     protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
-        BinaryVoxelBox<ByteBuffer> bvb = binaryVoxelBox(mask);
+        BinaryVoxels<ByteBuffer> bvb = binaryVoxels(mask);
 
         return new FeatureInputSingleObject(new ObjectMask(bvb), input.getNrgStackOptional());
     }
 
-    private static BinaryVoxelBox<ByteBuffer> binaryVoxelBox(Mask mask)
+    private static BinaryVoxels<ByteBuffer> binaryVoxels(Mask mask)
             throws FeatureCalculationException {
-        VoxelBox<ByteBuffer> voxelBox;
+        Voxels<ByteBuffer> voxels;
         try {
-            voxelBox = mask.getChannel().getVoxelBox().asByte();
+            voxels = mask.channel().voxels().asByte();
         } catch (IncorrectVoxelDataTypeException e) {
             throw new FeatureCalculationException(
                     "mask has incompatible data type, it must be unsigned 8-bit", e);
         }
 
-        return new BinaryVoxelBoxByte(voxelBox, mask.getBinaryValues());
+        return BinaryVoxelsFactory.reuseByte(voxels, mask.binaryValues());
     }
 }

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /** Assigns a scalar to the portion of the image covered by a mask */
 public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
@@ -41,14 +41,12 @@ public class ChnlProviderAssignScalar extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) {
-        assignScalar(chnl, mask, (int) value);
-        return chnl;
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) {
+        assignScalar(channel, mask, (int) value);
+        return channel;
     }
 
     private void assignScalar(Channel chnlSrc, Mask mask, int value) {
-        chnlSrc.getVoxelBox()
-                .any()
-                .setPixelsCheckMask(CreateFromEntireChnlFactory.createObject(mask), value);
+        chnlSrc.assignValue(value).toObject(new ObjectMask(mask));
     }
 }

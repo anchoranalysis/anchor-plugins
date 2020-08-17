@@ -58,6 +58,6 @@ class CalculateHistogramForNrgChannel
                 HistogramFactory.createHistogramIgnoreZero(
                         channel, params.getObject(), excludeZero);
 
-        return new FeatureInputHistogram(hist, params.getResOptional());
+        return new FeatureInputHistogram(hist, params.getResolutionOptional());
     }
 }

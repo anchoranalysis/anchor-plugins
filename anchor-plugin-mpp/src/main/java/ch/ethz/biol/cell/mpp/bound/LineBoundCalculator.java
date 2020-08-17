@@ -44,7 +44,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
 public class LineBoundCalculator extends BoundCalculator {
@@ -60,14 +60,14 @@ public class LineBoundCalculator extends BoundCalculator {
             throws OperationFailedException {
 
         try {
-            Channel outlineChnl = outlineProvider.create().getChannel();
+            Channel outlineChnl = outlineProvider.create().channel();
             assert (outlineChnl != null);
 
             ResolvedBound minMax =
                     getInitializationParameters()
                             .getMarkBounds()
                             .calcMinMax(
-                                    outlineChnl.getDimensions().getRes(),
+                                    outlineChnl.dimensions().resolution(),
                                     rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
@@ -112,15 +112,15 @@ public class LineBoundCalculator extends BoundCalculator {
     }
 
     private double maxReachablePoint(
-            Channel voxels, Point3d point, Point3d marg, int maxPossiblePoint) {
+            Channel channel, Point3d point, Point3d marg, int maxPossiblePoint) {
 
-        VoxelBox<ByteBuffer> vb = voxels.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
         // This only exists in 2d for now so we can use a slice byteArray
         ByteBuffer arr = null;
 
         int zPrev = 0;
-        arr = vb.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
+        arr = voxels.slices().slice(zPrev).buffer();
 
         Point3d runningDbl = new Point3d();
 
@@ -128,19 +128,19 @@ public class LineBoundCalculator extends BoundCalculator {
             runningDbl.add(marg);
 
             Point3i runningInt =
-                    PointConverter.intFromDouble(Point3d.immutableAdd(point, runningDbl));
+                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDbl));
 
-            ImageDimensions sd = voxels.getDimensions();
-            if (sd.contains(runningInt)) {
+            ImageDimensions dimensions = channel.dimensions();
+            if (dimensions.contains(runningInt)) {
                 return -1;
             }
 
-            if (runningInt.getZ() != zPrev) {
-                zPrev = runningInt.getZ();
-                arr = vb.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
+            if (runningInt.z() != zPrev) {
+                zPrev = runningInt.z();
+                arr = voxels.slices().slice(zPrev).buffer();
             }
 
-            int index = sd.offsetSlice(runningInt);
+            int index = dimensions.offsetSlice(runningInt);
             int v = ByteConverter.unsignedByteToInt(arr.get(index));
 
             if (v > 0) {
@@ -148,16 +148,16 @@ public class LineBoundCalculator extends BoundCalculator {
                 return extra
                         + normZMag(
                                 runningDbl,
-                                voxels.getDimensions().getRes().getZRelativeResolution());
+                                channel.dimensions().resolution().getZRelativeResolution());
             }
         }
         return -1;
     }
 
     private double normZMag(Point3d point, double zMult) {
-        double dx = point.getX();
-        double dy = point.getY();
-        double dz = point.getZ() * zMult;
+        double dx = point.x();
+        double dy = point.y();
+        double dz = point.z() * zMult;
         return Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
     }
 }

@@ -77,7 +77,7 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
         double[] arrDistances = new double[] {distanceX, distanceY, distanceZ};
 
         List<Point3f> pointsCurrent = points;
-        Extent extent = dimensions.getExtent();
+        Extent extent = dimensions.extent();
 
         // Try each dimension: x, y, and z respectively
         for (int d = 0; d < 3; d++) {
@@ -115,11 +115,11 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
     }
 
     private static float reflectedValue(Point3f point, Extent extent, int dimension, boolean min) {
-        float unreflectedValue = point.getValueByDimension(dimension);
+        float unreflectedValue = point.valueByDimension(dimension);
         if (min) {
             return unreflectedValue * -1;
         } else {
-            float extentInDimension = extent.getValueByDimension(dimension);
+            float extentInDimension = extent.valueByDimension(dimension);
             return (2 * extentInDimension) - unreflectedValue;
         }
     }
@@ -132,12 +132,12 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
             boolean min,
             double[] arrDistances) {
 
-        double dimensionMax = extent.getValueByDimension(dimension);
+        double dimensionMax = extent.valueByDimension(dimension);
         double maxAllowedDistance = arrDistances[dimension];
 
         for (Point3f point : points) {
 
-            double valueForDimension = point.getValueByDimension(dimension);
+            double valueForDimension = point.valueByDimension(dimension);
             double distance = min ? valueForDimension : dimensionMax - valueForDimension;
 
             if (distance > maxAllowedDistance) {

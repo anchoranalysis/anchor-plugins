@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 
 import cern.colt.list.DoubleArrayList;
 import cern.jet.stat.Descriptive;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,8 +39,7 @@ import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.FindOutline;
-import org.anchoranalysis.image.points.PointsFromBinaryVoxelBox;
+import org.anchoranalysis.image.points.PointsFromObject;
 
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
@@ -59,7 +57,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         ObjectMask object = input.get().getObject();
 
         // Get the outline
-        List<Point3i> pointsOutline = createMaskOutlineAsPoints(object, 1);
+        List<Point3i> pointsOutline = PointsFromObject.listFromOutline3i(object);
 
         // Distances from the center to each point on the outline
         DoubleArrayList distances = distancesToPoints(object.centerOfGravity(), pointsOutline);
@@ -71,8 +69,7 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         DoubleArrayList distances = new DoubleArrayList(pointsTo.size());
         for (Point3i point : pointsTo) {
 
-            Point3d shifted =
-                    new Point3d(point.getX() + 0.5, point.getY() + 0.5, point.getZ() + 0.5);
+            Point3d shifted = new Point3d(point.x() + 0.5, point.y() + 0.5, point.z() + 0.5);
 
             distances.add(pointFrom.distance(shifted));
         }
@@ -94,16 +91,5 @@ public class ObjectRadiusStandardDeviation extends FeatureSingleObject {
         } else {
             return stdDev;
         }
-    }
-
-    private static List<Point3i> createMaskOutlineAsPoints(ObjectMask mask, int numberErosions) {
-
-        List<Point3i> pointsOutline = new ArrayList<>();
-
-        ObjectMask outline = FindOutline.outline(mask, numberErosions, false, true);
-        PointsFromBinaryVoxelBox.addPointsFromVoxelBox3D(
-                outline.binaryVoxelBox(), outline.getBoundingBox().cornerMin(), pointsOutline);
-
-        return pointsOutline;
     }
 }

@@ -62,9 +62,7 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     }
 
     /** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
-    protected boolean precondition(ObjectCollection objectsToFilter) {
-        return true;
-    }
+    protected abstract boolean precondition(ObjectCollection objectsToFilter);
 
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
@@ -75,7 +73,5 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     protected abstract boolean match(ObjectMask object, Optional<ImageDimensions> dim)
             throws OperationFailedException;
 
-    protected void end() throws OperationFailedException {
-        // Default implementation, nothing to do
-    }
+    protected abstract void end() throws OperationFailedException;
 }

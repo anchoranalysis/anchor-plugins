@@ -49,11 +49,11 @@ public class GreatestAreaSlice extends IndexedRegionBase {
     protected VoxelStatistics createStatisticsFor(
             VoxelizedMark pm, Mark mark, ImageDimensions dimensions) throws CreateException {
 
-        BoundingBox bbox = boundingBoxForRegion(pm);
+        BoundingBox box = boundingBoxForRegion(pm);
 
         long maxArea = -1;
         VoxelStatistics psMax = null;
-        for (int z = 0; z < bbox.extent().getZ(); z++) {
+        for (int z = 0; z < box.extent().z(); z++) {
 
             VoxelStatistics ps = sliceStatisticsForRegion(pm, z);
             long num = ps.countThreshold(threshold);

@@ -83,8 +83,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
             }
 
             writer.get()
-                    .writeHeaders(
-                            ReportFeatureUtilities.genHeaderNames(listReportFeatures, logger));
+                    .writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
 
             Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
             while (itr.hasNext()) {
@@ -92,7 +91,7 @@ public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCoupl
                 CoupledManifests mr = itr.next();
 
                 List<TypedValue> rowElements =
-                        ReportFeatureUtilities.genElementList(
+                        ReportFeatureUtilities.elementList(
                                 listReportFeatures, mr.getFileManifest(), logger);
 
                 try {

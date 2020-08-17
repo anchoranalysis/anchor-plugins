@@ -37,10 +37,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 
@@ -59,7 +60,12 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     @BeanField @Getter @Setter private UnitValueDistance threshold;
     // END BEAN PROPERTIES
 
-    private VoxelBox<?> vb;
+    private Voxels<?> voxels;
+
+    @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
 
     @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
@@ -72,7 +78,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
             throw new OperationFailedException(e);
         }
         assert (chnlSingleRegion != null);
-        vb = chnlSingleRegion.getVoxelBox().any();
+        voxels = chnlSingleRegion.voxels().any();
     }
 
     @Override
@@ -81,25 +87,27 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         int thresholdResolved = threshold(dim);
 
-        for (int z = 0; z < object.getBoundingBox().extent().getZ(); z++) {
+        Extent extent = object.extent();
 
-            ByteBuffer bb = object.getVoxelBox().getPixelsForPlane(z).buffer();
+        for (int z = 0; z < extent.z(); z++) {
 
-            int z1 = z + object.getBoundingBox().cornerMin().getZ();
-            VoxelBuffer<?> bbChnl = vb.getPixelsForPlane(z1);
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
-            for (int y = 0; y < object.getBoundingBox().extent().getY(); y++) {
-                for (int x = 0; x < object.getBoundingBox().extent().getX(); x++) {
+            VoxelBuffer<?> bbChnl = voxels.slice(z + object.boundingBox().cornerMin().z());
 
-                    int offset = object.getBoundingBox().extent().offset(x, y);
-                    if (bb.get(offset) == object.getBinaryValuesByte().getOnByte()) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
-                        int y1 = y + object.getBoundingBox().cornerMin().getY();
-                        int x1 = x + object.getBoundingBox().cornerMin().getX();
+                    int offset = extent.offset(x, y);
 
-                        int offsetGlobal = vb.extent().offset(x1, y1);
+                    if (bb.get(offset) == object.binaryValuesByte().getOnByte()) {
 
-                        // Now we get a value from the vb
+                        int y1 = y + object.boundingBox().cornerMin().y();
+                        int x1 = x + object.boundingBox().cornerMin().x();
+
+                        int offsetGlobal = voxels.extent().offset(x1, y1);
+
+                        // Now we get a value from the voxels
                         int val = bbChnl.getInt(offsetGlobal);
                         if (val >= thresholdResolved) {
                             return true;
@@ -114,11 +122,12 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.map(ImageDimensions::getRes), AxisType.X));
+                Math.ceil(
+                        threshold.resolveForAxis(dim.map(ImageDimensions::resolution), AxisType.X));
     }
 
     @Override
     protected void end() throws OperationFailedException {
-        vb = null;
+        voxels = null;
     }
 }

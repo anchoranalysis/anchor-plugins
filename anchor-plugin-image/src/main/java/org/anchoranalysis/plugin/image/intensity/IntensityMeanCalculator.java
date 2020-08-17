@@ -35,7 +35,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -49,32 +49,31 @@ public class IntensityMeanCalculator {
     public static double calcMeanIntensityObject(
             Channel chnl, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
-        checkContained(object.getBoundingBox(), chnl.getDimensions().getExtent());
+        checkContained(object.boundingBox(), chnl.dimensions().extent());
 
-        VoxelBoxWrapper vbIntensity = chnl.getVoxelBox();
+        VoxelsWrapper voxelsIntensity = chnl.voxels();
 
-        BoundingBox bbox = object.getBoundingBox();
+        BoundingBox box = object.boundingBox();
 
-        ReadableTuple3i cornerMin = bbox.cornerMin();
-        ReadableTuple3i cornerMax = bbox.calcCornerMax();
+        ReadableTuple3i cornerMin = box.cornerMin();
+        ReadableTuple3i cornerMax = box.calculateCornerMax();
 
         double sum = 0.0;
         int cnt = 0;
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bbIntens = vbIntensity.any().getPixelsForPlane(z);
-            ByteBuffer bbMask =
-                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+            VoxelBuffer<?> bbIntensity = voxelsIntensity.slice(z);
+            ByteBuffer bbMask = object.sliceBufferGlobal(z);
 
             int offsetMask = 0;
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
-                    if (bbMask.get(offsetMask) == object.getBinaryValuesByte().getOnByte()) {
-                        int offsetIntens = vbIntensity.any().extent().offset(x, y);
+                    if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
+                        int offsetIntens = voxelsIntensity.any().extent().offset(x, y);
 
-                        int val = bbIntens.getInt(offsetIntens);
+                        int val = bbIntensity.getInt(offsetIntens);
 
                         if (excludeZero && val == 0) {
                             offsetMask++;
@@ -97,13 +96,13 @@ public class IntensityMeanCalculator {
         return sum / cnt;
     }
 
-    private static void checkContained(BoundingBox bbox, Extent extent)
+    private static void checkContained(BoundingBox box, Extent extent)
             throws FeatureCalculationException {
-        if (!extent.contains(bbox)) {
+        if (!extent.contains(box)) {
             throw new FeatureCalculationException(
                     String.format(
                             "The object's bounding-box (%s) is not contained within the dimensions of the channel %s",
-                            bbox, extent));
+                            box, extent));
         }
     }
 }

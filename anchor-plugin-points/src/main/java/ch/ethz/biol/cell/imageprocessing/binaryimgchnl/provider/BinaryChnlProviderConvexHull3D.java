@@ -37,12 +37,13 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
     @Override
-    protected Mask createFromChnl(Mask chnlIn, Mask outline) throws CreateException {
+    protected Mask createFromMask(Mask maskIn, Mask outline) throws CreateException {
         MessageLogger logger = getLogger().messageLogger();
         List<Point3d> extPoints = pointsFromChnl(outline);
 
@@ -68,36 +69,38 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
         }
 
         // we write the vertices to the outline
-        Channel out = outline.getChannel();
-        VoxelBox<ByteBuffer> vbOut = out.getVoxelBox().asByte();
+        Channel out = outline.channel();
+        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
-        vbOut.setAllPixelsTo(outline.getBinaryValues().getOffInt());
+        VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
+        VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());
+
+        assignerOff.toAll();
         for (int i = 0; i < vertices.length; i++) {
+
+            // Note this is not the usual {@code Point3d} type we use
             Point3d point = vertices[i];
-            vbOut.setVoxel(
-                    (int) point.x,
-                    (int) point.y,
-                    (int) point.z,
-                    outline.getBinaryValues().getOnInt());
+
+            assignerOn.toVoxel((int) point.x, (int) point.y, (int) point.z);
         }
 
         return outline;
     }
 
     // We use it here as it uses the quickHull3D Point3d primitive
-    private static List<Point3d> pointsFromChnl(Mask chnl) {
+    private static List<Point3d> pointsFromChnl(Mask mask) {
 
         List<Point3d> listOut = new ArrayList<>();
 
-        BinaryValuesByte bvb = chnl.getBinaryValues().createByte();
+        BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Extent e = chnl.getVoxelBox().extent();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = mask.voxels().extent();
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = chnl.getVoxelBox().getPixelsForPlane(z).buffer();
+            ByteBuffer bb = mask.voxels().sliceBuffer(z);
 
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     if (bb.get() == bvb.getOnByte()) {
                         listOut.add(new Point3d(x, y, z));

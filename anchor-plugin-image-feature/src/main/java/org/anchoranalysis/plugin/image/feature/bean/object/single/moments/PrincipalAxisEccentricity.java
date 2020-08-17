@@ -73,7 +73,7 @@ public class PrincipalAxisEccentricity extends ImageMomentsBase {
     }
 
     @Override
-    protected double resultIfTooFewPixels() {
-        return 1.0;
+    protected String errorMessageIfTooFewPixels() {
+        return "Too few voxels to determine principal axes and therefore eccentricity";
     }
 }

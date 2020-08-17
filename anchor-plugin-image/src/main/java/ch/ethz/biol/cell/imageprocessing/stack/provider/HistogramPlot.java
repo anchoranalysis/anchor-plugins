@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.GraphInstance;
+import org.anchoranalysis.anchor.plot.PlotInstance;
 import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.anchor.plot.index.LinePlot;
 import org.anchoranalysis.core.error.CreateException;
@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HistogramPlot {
 
-    public static GraphInstance create(
+    public static PlotInstance create(
             Iterator<HistogramItem> itr,
             Optional<AxisLimits> domainLimits,
             Optional<AxisLimits> rangeLimits)

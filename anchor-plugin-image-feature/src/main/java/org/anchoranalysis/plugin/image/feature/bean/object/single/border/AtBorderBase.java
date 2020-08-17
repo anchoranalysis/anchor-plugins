@@ -48,8 +48,7 @@ public abstract class AtBorderBase extends FeatureSingleObject {
 
     private boolean isInputAtBorder(FeatureInputSingleObject input)
             throws FeatureCalculationException {
-        return isBoundingBoxAtBorder(
-                input.getObject().getBoundingBox(), input.getDimensionsRequired());
+        return isBoundingBoxAtBorder(input.getObject().boundingBox(), input.dimensionsRequired());
     }
 
     protected abstract boolean isBoundingBoxAtBorder(

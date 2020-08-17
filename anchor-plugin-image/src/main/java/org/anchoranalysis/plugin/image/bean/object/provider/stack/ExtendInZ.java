@@ -33,9 +33,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
 
 /**
@@ -62,21 +62,20 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
 
     private static ObjectMask expandZ(ObjectMask object, ImageDimensions dim) {
 
-        BoundingBox bbox = object.getBoundingBox().duplicateChangeExtentZ(dim.getZ());
+        BoundingBox box = object.boundingBox().changeExtentZ(dim.z());
 
-        VoxelBox<ByteBuffer> voxelBox =
-                createVoxelBoxOfDuplicatedPlanes(
-                        object.getVoxelBox().getPixelsForPlane(0), bbox.extent());
+        Voxels<ByteBuffer> voxels =
+                createVoxelsOfDuplicatedPlanes(object.voxels().slice(0), box.extent());
 
-        return new ObjectMask(bbox, voxelBox, object.getBinaryValues());
+        return new ObjectMask(box, voxels, object.binaryValues());
     }
 
-    private static VoxelBox<ByteBuffer> createVoxelBoxOfDuplicatedPlanes(
+    private static Voxels<ByteBuffer> createVoxelsOfDuplicatedPlanes(
             VoxelBuffer<ByteBuffer> planeIn, Extent extent) {
-        VoxelBox<ByteBuffer> voxelBox = VoxelBoxFactory.getByte().create(extent);
-        for (int z = 0; z < extent.getZ(); z++) {
-            voxelBox.setPixelsForPlane(z, planeIn);
+        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
+        for (int z = 0; z < extent.z(); z++) {
+            voxels.replaceSlice(z, planeIn);
         }
-        return voxelBox;
+        return voxels;
     }
 }

@@ -66,7 +66,8 @@ public abstract class FeatureListProviderAggregatePair
     @BeanField @Getter @Setter private String prependString;
 
     /** Method for reducing all pairs into a single value e.g. Mean, Max, Min etc. */
-    @BeanField @SkipInit private FeatureListElem<FeatureInputPairObjects> reduce = new Mean<>();
+    @BeanField @Getter @Setter @SkipInit
+    private FeatureListElem<FeatureInputPairObjects> reduce = new Mean<>();
     // END BEAN PROPERTIES
 
     @Override

@@ -94,7 +94,7 @@ public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
             throws FeatureCalculationException {
         DoubleArrayList featureVals = new DoubleArrayList();
 
-        // Calculate a feature on each obj mask
+        // Calculate a feature on each object-mask
         for (int i = 0; i < objects.size(); i++) {
 
             double val =

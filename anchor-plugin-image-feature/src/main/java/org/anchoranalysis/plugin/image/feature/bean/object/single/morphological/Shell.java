@@ -35,29 +35,26 @@ import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
 
 public class Shell extends DerivedObject {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int iterationsDilation = 0;
-
-    @BeanField @Getter @Setter private int iterationsErosion = 0;
-
-    @BeanField @Getter @Setter private boolean do3D = true;
+    /** The number of dilations and erosions to apply and whether to do in the Z dimension */
+    @BeanField @Getter @Setter
+    private MorphologicalIterations iterations = new MorphologicalIterations();
     // END BEAN PROPERTIES
 
     @Override
     protected FeatureCalculation<ObjectMask, FeatureInputSingleObject>
             createCachedCalculationForDerived(CalculationResolver<FeatureInputSingleObject> session)
                     throws FeatureCalculationException {
-        return CalculateShellObjectMask.of(
-                session, iterationsDilation, iterationsErosion, 0, do3D, false);
+        return CalculateShellObjectMask.of(session, iterations, 0, false);
     }
 
     @Override
     public ChildCacheName cacheName() {
-        return new ChildCacheName(
-                Shell.class, iterationsDilation + "_" + iterationsErosion + "_" + do3D);
+        return new ChildCacheName(Shell.class, iterations.uniquelyIdentifyAllProperties());
     }
 }

@@ -39,6 +39,6 @@ public class CalculateDeriveCfgInput
     @Override
     protected FeatureInputCfg execute(FeatureInputAllMemo input)
             throws FeatureCalculationException {
-        return new FeatureInputCfg(input.getPxlPartMemo().asCfg(), input.getDimensionsOptional());
+        return new FeatureInputCfg(input.getPxlPartMemo().asCfg(), input.dimensionsOptional());
     }
 }

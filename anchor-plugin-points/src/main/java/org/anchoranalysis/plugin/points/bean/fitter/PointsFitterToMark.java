@@ -49,7 +49,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
-    @BeanField @Getter @Setter private ImageDimProvider dim;
+    @BeanField @Getter @Setter private ImageDimProvider dimensions;
 
     /** If an object has fewer points than before being fitted, we ignore */
     @BeanField @Positive @Getter @Setter private int minNumPoints = 1;
@@ -71,6 +71,6 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
     }
 
     public ImageDimensions createDim() throws CreateException {
-        return dim.create();
+        return dimensions.create();
     }
 }

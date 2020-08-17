@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.plugin.opencv;
 
-public class CVInit {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private CVInit() {}
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class CVInit {
 
     /**
      * This routine must always be executed at least once before calling any routines in the OpenCV

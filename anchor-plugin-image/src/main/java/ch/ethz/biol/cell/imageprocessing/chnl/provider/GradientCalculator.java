@@ -36,8 +36,8 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * Calculates the gradient in one or more dimensions
@@ -82,7 +82,7 @@ class GradientCalculator {
      * @param gradientOut where to output the gradient to
      * @throws CreateException
      */
-    public void calculateGradient(VoxelBoxWrapper signalIn, VoxelBox<FloatBuffer> gradientOut) {
+    public void calculateGradient(VoxelsWrapper signalIn, Voxels<FloatBuffer> gradientOut) {
 
         calcGradientImgLib2(
                 ImgLib2Wrap.wrap(signalIn), // Input channel

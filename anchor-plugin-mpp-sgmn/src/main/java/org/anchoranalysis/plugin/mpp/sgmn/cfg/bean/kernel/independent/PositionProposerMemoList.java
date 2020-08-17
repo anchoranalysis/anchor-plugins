@@ -71,11 +71,11 @@ class PositionProposerMemoList implements PositionProposer {
             // And randomly taking positions until we find a position that matches
             VoxelizedMark pm = randomMemo(context).voxelized();
 
-            BoundingBox bbox = pm.getBoundingBox();
+            BoundingBox box = pm.boundingBox();
 
-            Point3d point = randomPosition(bbox, context.getRandomNumberGenerator());
+            Point3d point = randomPosition(box, context.getRandomNumberGenerator());
 
-            if (insideRelevantRegion(pm, rm, point, bbox)) {
+            if (insideRelevantRegion(pm, rm, point, box)) {
                 return Optional.of(point);
             }
         }
@@ -84,15 +84,15 @@ class PositionProposerMemoList implements PositionProposer {
     }
 
     private boolean insideRelevantRegion(
-            VoxelizedMark pm, RegionMembership rm, Point3d point, BoundingBox bbox) {
+            VoxelizedMark pm, RegionMembership rm, Point3d point, BoundingBox box) {
 
         byte flags = rm.flags();
 
         Point3i rel =
-                Point3i.immutableSubtract(PointConverter.intFromDouble(point), bbox.cornerMin());
+                Point3i.immutableSubtract(
+                        PointConverter.intFromDoubleFloor(point), box.cornerMin());
 
-        byte membershipExst =
-                pm.getVoxelBox().getPixelsForPlane(rel.getZ()).get(bbox.extent().offsetSlice(rel));
+        byte membershipExst = pm.voxels().sliceBuffer(rel.z()).get(box.extent().offsetSlice(rel));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {
@@ -110,20 +110,20 @@ class PositionProposerMemoList implements PositionProposer {
     }
 
     private static Point3d randomPosition(
-            BoundingBox bbox, RandomNumberGenerator randomNumberGenerator) {
+            BoundingBox box, RandomNumberGenerator randomNumberGenerator) {
         return new Point3d(
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getX),
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getY),
-                randomFromExtent(bbox, randomNumberGenerator, ReadableTuple3i::getZ));
+                randomFromExtent(box, randomNumberGenerator, ReadableTuple3i::x),
+                randomFromExtent(box, randomNumberGenerator, ReadableTuple3i::y),
+                randomFromExtent(box, randomNumberGenerator, ReadableTuple3i::z));
     }
 
     private static int randomFromExtent(
-            BoundingBox bbox,
+            BoundingBox box,
             RandomNumberGenerator randomNumberGenerator,
             ToIntFunction<ReadableTuple3i> extract) {
-        int corner = extract.applyAsInt(bbox.cornerMin());
+        int corner = extract.applyAsInt(box.cornerMin());
         return corner
                 + randomNumberGenerator.sampleIntFromRange(
-                        extract.applyAsInt(bbox.extent().asTuple()));
+                        extract.applyAsInt(box.extent().asTuple()));
     }
 }

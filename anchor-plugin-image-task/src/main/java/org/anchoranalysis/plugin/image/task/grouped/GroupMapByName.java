@@ -29,10 +29,9 @@ package org.anchoranalysis.plugin.image.task.grouped;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Supplier;
 import org.anchoranalysis.core.collection.MapCreate;
-import org.anchoranalysis.core.error.AnchorNeverOccursException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.MultiNameFactory;
@@ -64,10 +63,7 @@ public abstract class GroupMapByName<S, T> {
      * @param nounT a word to describe a single instance of T in user error messages
      * @param createEmpty
      */
-    public GroupMapByName(
-            String nounT,
-            String manifestFunction,
-            CallableWithException<T, AnchorNeverOccursException> createEmpty) {
+    public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
         super();
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;

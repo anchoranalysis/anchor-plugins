@@ -51,18 +51,18 @@ public class NumberVoxelsAtBorder extends FeatureSingleObject {
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return (double)
-                numBorderPixels(
+                numberBorderPixels(
                         input.get().getObject(), ignoreAtThreshold, outsideAtThreshold, do3D);
     }
 
-    public static int numBorderPixels(
+    public static int numberBorderPixels(
             ObjectMask object,
             boolean ignoreAtThreshold,
             boolean outsideAtThreshold,
             boolean do3D) {
         OutlineKernel3 kernel =
                 new OutlineKernel3(
-                        object.getBinaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
-        return ApplyKernel.applyForCount(kernel, object.getVoxelBox());
+                        object.binaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
+        return ApplyKernel.applyForCount(kernel, object.voxels());
     }
 }

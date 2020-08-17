@@ -72,9 +72,9 @@ public class EllipsoidAxisRatio extends FeatureMarkDirection {
         double a2 = Math.pow(radii[1], -2);
         double a3 = Math.pow(radii[2], -2);
 
-        double beta1 = beta.getX();
-        double beta2 = beta.getY();
-        double beta3 = beta.getZ();
+        double beta1 = beta.x();
+        double beta2 = beta.y();
+        double beta3 = beta.z();
 
         double beta1Squared = Math.pow(beta1, 2);
         double beta2Squared = Math.pow(beta2, 2);

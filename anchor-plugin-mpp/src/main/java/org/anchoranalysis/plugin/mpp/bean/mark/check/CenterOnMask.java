@@ -50,7 +50,7 @@ public class CenterOnMask extends CheckMarkBinaryChnl {
     }
 
     private Point3i derivePoint(Point3d center) {
-        Point3i centerAsInt = PointConverter.intFromDouble(center);
+        Point3i centerAsInt = PointConverter.intFromDoubleFloor(center);
 
         if (suppressZ) {
             centerAsInt.setZ(0);

@@ -43,7 +43,7 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadius
         ImagePlus imp = IJWrap.createImagePlus(chnl);
 
         BackgroundSubtracter plugin = new BackgroundSubtracter();
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
             plugin.rollingBallBackground(
                     imp.getStack().getProcessor(z + 1),
                     radius,
@@ -54,6 +54,6 @@ public class ChnlProviderIJBackgroundSubtractor extends ChnlProviderFilterRadius
                     true);
         }
 
-        return IJWrap.chnlFromImagePlus(imp, chnl.getDimensions().getRes());
+        return IJWrap.chnlFromImagePlus(imp, chnl.dimensions().resolution());
     }
 }

@@ -52,24 +52,23 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
     private static int calcSurfaceSize(
             ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D) {
 
-        boolean do3D = (dimensions.getZ() > 1) && !suppress3D;
+        boolean do3D = (dimensions.z() > 1) && !suppress3D;
 
         if (do3D && mip) {
             // If we're in 3D mode AND MIP mode, then we get a maximum intensity projection
 
-            OutlineKernel3 kernel = new OutlineKernel3(object.getBinaryValuesByte(), false, false);
+            OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, false);
 
-            return ApplyKernel.applyForCount(kernel, object.getVoxelBox().maxIntensityProj());
+            return ApplyKernel.applyForCount(kernel, object.extracter().projectionMax());
 
         } else {
             return ApplyKernel.applyForCount(
-                    new OutlineKernel3(object.getBinaryValuesByte(), false, do3D),
-                    object.getVoxelBox());
+                    new OutlineKernel3(object.binaryValuesByte(), false, do3D), object.voxels());
         }
     }
 
     @Override
     protected Integer execute(FeatureInputSingleObject input) throws FeatureCalculationException {
-        return calcSurfaceSize(input.getObject(), input.getDimensionsRequired(), mip, suppress3D);
+        return calcSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
     }
 }

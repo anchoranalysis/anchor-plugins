@@ -61,9 +61,9 @@ public class MinimumDistanceByDimension extends FeaturePairMemo {
     }
 
     private static double minDimension(Point3d cp, boolean hasZ) {
-        double min = Math.min(cp.getX(), cp.getY());
+        double min = Math.min(cp.x(), cp.y());
         if (hasZ) {
-            min = Math.min(min, cp.getZ());
+            min = Math.min(min, cp.z());
         }
         return min;
     }

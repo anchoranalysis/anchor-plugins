@@ -54,8 +54,8 @@ public class FitResult {
         mark.setShellRad(shellRad);
         mark.setMarksExplicit(centerPoint, orientation, radiiAsPoint());
 
-        BoundingBox bbox = mark.bboxAllRegions(sceneDim);
-        if (bbox.extent().getX() < 1 || bbox.extent().getY() < 1 || bbox.extent().getZ() < 1) {
+        BoundingBox box = mark.boxAllRegions(sceneDim);
+        if (box.extent().x() < 1 || box.extent().y() < 1 || box.extent().z() < 1) {
             throw new PointsFitterException("Ellipsoid is outside scene");
         }
     }

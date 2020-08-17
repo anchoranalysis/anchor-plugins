@@ -69,11 +69,11 @@ public class BinaryChnlComparer extends Comparer {
                 return new NotFound<>(maskPath, "No mask exists");
             }
 
-            Mask chnl =
+            Mask mask =
                     RasterReaderUtilities.openBinaryChnl(
                             rasterReader, maskPath, createBinaryValues());
 
-            return new Found<>(convertToObjects(chnl));
+            return new Found<>(convertToObjects(mask));
 
         } catch (AnchorIOException | RasterIOException e) {
             throw new CreateException(e);
@@ -88,7 +88,7 @@ public class BinaryChnlComparer extends Comparer {
         }
     }
 
-    private static ObjectCollection convertToObjects(Mask chnl) {
-        return ObjectCollectionFactory.of(chnl);
+    private static ObjectCollection convertToObjects(Mask mask) {
+        return ObjectCollectionFactory.of(mask);
     }
 }

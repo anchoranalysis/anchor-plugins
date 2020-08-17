@@ -96,7 +96,7 @@ public class IncludeRandomObjects extends PointsProposer {
     private static void maybeAddToList(
             ObjectMask object, List<Point3i> out, RandomNumberGenerator randomNumberGenerator) {
         if (randomNumberGenerator.sampleDoubleZeroAndOne() > 0.5) {
-            out.addAll(PointsFromObject.fromAsInteger(object));
+            out.addAll(PointsFromObject.listFrom3i(object));
         }
     }
 }

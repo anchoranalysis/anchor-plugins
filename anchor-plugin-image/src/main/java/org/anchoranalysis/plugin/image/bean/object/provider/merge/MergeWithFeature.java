@@ -162,7 +162,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         }
 
         // When we decide to merge, we save the merged object
-        saveObjects.ifPresent(so -> so.add(edgeToMerge.getEdge().getOmWithFeature().getObject()));
+        saveObjects.ifPresent(so -> so.add(edgeToMerge.getEdge().getVertex().getObject()));
 
         graph.merge(edgeToMerge);
 

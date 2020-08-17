@@ -56,6 +56,6 @@ public class CalculateDeriveMarkInput
 
         Mark mark = list.getMemoForIndex(0).getMark();
 
-        return new FeatureInputMark(mark, params.getDimensionsOptional());
+        return new FeatureInputMark(mark, params.dimensionsOptional());
     }
 }

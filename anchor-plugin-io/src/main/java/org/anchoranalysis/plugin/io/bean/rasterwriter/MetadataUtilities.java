@@ -46,8 +46,8 @@ class MetadataUtilities {
 
     // NOTE: Tidy up exceptions later
     public static IMetadata createMetadata(
-            ImageDimensions sd,
-            int numChnl,
+            ImageDimensions dimensions,
+            int numberChannels,
             PixelType pixelType,
             boolean makeRGB,
             boolean pretendSeries)
@@ -66,24 +66,24 @@ class MetadataUtilities {
         meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesNum, 0);
         meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesNum);
         meta.setPixelsType(pixelType, seriesNum);
-        meta.setPixelsSizeC(new PositiveInteger(numChnl), seriesNum);
+        meta.setPixelsSizeC(new PositiveInteger(numberChannels), seriesNum);
 
-        meta.setPixelsSizeX(new PositiveInteger(sd.getX()), seriesNum);
-        meta.setPixelsSizeY(new PositiveInteger(sd.getY()), seriesNum);
+        meta.setPixelsSizeX(new PositiveInteger(dimensions.x()), seriesNum);
+        meta.setPixelsSizeY(new PositiveInteger(dimensions.y()), seriesNum);
 
         // We pretend Z-stacks are Time frames as it makes it easier to
         //   view in other software if they are a series
         if (pretendSeries) {
-            meta.setPixelsSizeT(new PositiveInteger(sd.getZ()), seriesNum);
+            meta.setPixelsSizeT(new PositiveInteger(dimensions.z()), seriesNum);
             meta.setPixelsSizeZ(new PositiveInteger(1), seriesNum);
         } else {
             meta.setPixelsSizeT(new PositiveInteger(1), seriesNum);
-            meta.setPixelsSizeZ(new PositiveInteger(sd.getZ()), seriesNum);
+            meta.setPixelsSizeZ(new PositiveInteger(dimensions.z()), seriesNum);
         }
 
-        meta.setPixelsPhysicalSizeX(createLength(sd.getRes().getX() * sd.getX()), 0);
-        meta.setPixelsPhysicalSizeY(createLength(sd.getRes().getY() * sd.getY()), 0);
-        meta.setPixelsPhysicalSizeZ(createLength(sd.getRes().getZ() * sd.getZ()), 0);
+        meta.setPixelsPhysicalSizeX(createLength(dimensions.resolution().x() * dimensions.x()), 0);
+        meta.setPixelsPhysicalSizeY(createLength(dimensions.resolution().y() * dimensions.y()), 0);
+        meta.setPixelsPhysicalSizeZ(createLength(dimensions.resolution().z() * dimensions.z()), 0);
 
         addNumChnls(meta, calcNumChnls(makeRGB), calcSamplesPerPixel(makeRGB), seriesNum);
 

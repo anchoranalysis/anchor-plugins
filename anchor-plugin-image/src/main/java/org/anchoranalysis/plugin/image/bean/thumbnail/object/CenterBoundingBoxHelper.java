@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import lombok.AccessLevel;
@@ -97,9 +122,7 @@ class CenterBoundingBoxHelper {
     /** Creates a new point where negative-values are retained, and non-negative values are zero */
     private static Point3i keepOnlyNegative(Point3i point) {
         return new Point3i(
-                negativeOrZero(point.getX()),
-                negativeOrZero(point.getY()),
-                negativeOrZero(point.getZ()));
+                negativeOrZero(point.x()), negativeOrZero(point.y()), negativeOrZero(point.z()));
     }
 
     /**
@@ -108,9 +131,9 @@ class CenterBoundingBoxHelper {
      */
     private static Point3i keepOnlyExcess(Point3i point, Extent sceneExtent) {
         return new Point3i(
-                keepOnlyExcess(point.getX(), sceneExtent.getX()),
-                keepOnlyExcess(point.getY(), sceneExtent.getY()),
-                keepOnlyExcess(point.getZ(), sceneExtent.getZ()));
+                keepOnlyExcess(point.x(), sceneExtent.x()),
+                keepOnlyExcess(point.y(), sceneExtent.y()),
+                keepOnlyExcess(point.z(), sceneExtent.z()));
     }
 
     private static int negativeOrZero(int val) {

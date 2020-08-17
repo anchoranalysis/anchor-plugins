@@ -66,7 +66,7 @@ public class CfgProposerSimple extends CfgProposer {
                     context.getRandomNumberGenerator()
                             .generatePoisson(
                                     cfgGen.getReferencePoissonIntensity()
-                                            * context.getDimensions().getVolume());
+                                            * context.dimensions().calculateVolume());
             return distribution.nextInt();
         }
     }

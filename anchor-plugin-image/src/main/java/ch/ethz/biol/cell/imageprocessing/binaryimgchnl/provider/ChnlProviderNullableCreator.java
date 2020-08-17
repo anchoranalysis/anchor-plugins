@@ -28,6 +28,8 @@ package ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider;
 
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -42,9 +44,8 @@ import org.anchoranalysis.image.extent.ImageDimensions;
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ChnlProviderNullableCreator {
-
-    private ChnlProviderNullableCreator() {}
 
     public static Optional<Channel> createOptionalCheckSize(
             ChannelProvider chnlProvider, String chnlProviderName, ImageDimensions dim)

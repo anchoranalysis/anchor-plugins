@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
@@ -49,11 +49,11 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
 
         GaussianBlur gb = new GaussianBlur();
 
-        VoxelBoxWrapper vb = chnl.getVoxelBox();
+        VoxelsWrapper voxels = chnl.voxels();
 
         // Are we missing a Z slice?
-        for (int z = 0; z < chnl.getDimensions().getZ(); z++) {
-            ImageProcessor processor = IJWrap.imageProcessor(vb, z);
+        for (int z = 0; z < chnl.dimensions().z(); z++) {
+            ImageProcessor processor = IJWrap.imageProcessor(voxels, z);
             gb.blur(processor, sigma); // NOSONAR
         }
 
@@ -61,7 +61,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
     }
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return blur(chnl);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return blur(channel);
     }
 }

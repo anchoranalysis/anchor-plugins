@@ -44,8 +44,8 @@ public class MaxRatioRadii extends FeatureMark {
 
         MarkEllipse mark = (MarkEllipse) input.get().getMark();
 
-        double rad1 = mark.getRadii().getX();
-        double rad2 = mark.getRadii().getY();
+        double rad1 = mark.getRadii().x();
+        double rad2 = mark.getRadii().y();
 
         assert (!Double.isNaN(rad1));
         assert (!Double.isNaN(rad2));

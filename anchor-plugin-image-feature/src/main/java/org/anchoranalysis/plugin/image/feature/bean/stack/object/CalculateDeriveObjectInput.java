@@ -30,9 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -53,10 +51,7 @@ public class CalculateDeriveObjectInput
     private ObjectMask extractObjectMask(FeatureInputStack input)
             throws FeatureCalculationException {
 
-        NRGStackWithParams nrgStack = input.getNrgStackRequired();
-
-        Mask binary = new Mask(nrgStack.getChannel(nrgIndex), BinaryValues.getDefault());
-
-        return new ObjectMask(binary.binaryVoxelBox());
+        Mask mask = new Mask(input.getNrgStackRequired().getChannel(nrgIndex));
+        return new ObjectMask(mask.binaryVoxels());
     }
 }

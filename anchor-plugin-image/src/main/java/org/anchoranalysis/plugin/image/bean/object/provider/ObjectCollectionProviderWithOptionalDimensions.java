@@ -48,13 +48,13 @@ public abstract class ObjectCollectionProviderWithOptionalDimensions
         extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dim;
+    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimensions;
     // END BEAN PROPERTIES
 
     /** Returns the dimensions or NULL if none are provided */
     protected Optional<ImageDimensions> createDims() throws CreateException {
-        if (dim != null) {
-            return Optional.of(dim.create());
+        if (dimensions != null) {
+            return Optional.of(dimensions.create());
         } else {
             return Optional.empty();
         }

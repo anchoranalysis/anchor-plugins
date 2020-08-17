@@ -115,6 +115,6 @@ public class CfgProposerFromObjects extends CfgProposer {
     private MarkEllipsoid createFromObject(ObjectMask object, NRGStackWithParams nrgStack)
             throws CreateException {
         return EllipsoidFactory.createMarkEllipsoidLeastSquares(
-                object, nrgStack.getDimensions(), suppressZCovariance, shellRad);
+                object, nrgStack.dimensions(), suppressZCovariance, shellRad);
     }
 }

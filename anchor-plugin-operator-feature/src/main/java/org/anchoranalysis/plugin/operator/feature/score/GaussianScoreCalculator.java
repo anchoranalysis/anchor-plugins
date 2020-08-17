@@ -27,15 +27,16 @@
 package org.anchoranalysis.plugin.operator.feature.score;
 
 import cern.jet.random.Normal;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Calculates a Gaussian Score
  *
  * @author Owen Feehan
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GaussianScoreCalculator {
-
-    private GaussianScoreCalculator() {}
 
     public static double calc(
             double mean,

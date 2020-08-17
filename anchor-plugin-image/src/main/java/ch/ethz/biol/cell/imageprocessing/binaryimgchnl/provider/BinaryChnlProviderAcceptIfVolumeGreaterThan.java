@@ -40,8 +40,8 @@ public class BinaryChnlProviderAcceptIfVolumeGreaterThan extends BinaryChnlProvi
 
     @Override
     protected Mask createFromChnlReceive(Mask larger, Mask smaller) throws CreateException {
-        int countLarger = larger.countHighValues();
-        int countSmaller = smaller.countHighValues();
+        int countLarger = larger.voxelsOn().count();
+        int countSmaller = smaller.voxelsOn().count();
 
         double ratio = ((double) countSmaller) / countLarger;
 

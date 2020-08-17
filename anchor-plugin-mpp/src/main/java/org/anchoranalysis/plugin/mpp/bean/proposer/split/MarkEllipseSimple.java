@@ -68,7 +68,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
         Orientation2D orientation = (Orientation2D) markCast.getOrientation();
 
-        if (markCast.getRadii().getX() > markCast.getRadii().getY()) {
+        if (markCast.getRadii().x() > markCast.getRadii().y()) {
             // We do not correct the orientation
             return createMarksForOrientation(orientation, mark, context, cfgGen, false);
         } else {
@@ -89,7 +89,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
         Orientation2D exstOrientation = (Orientation2D) exst.getOrientation();
 
         dup.setMarks(
-                new Point2d(exst.getRadii().getY(), exst.getRadii().getX()),
+                new Point2d(exst.getRadii().y(), exst.getRadii().x()),
                 new Orientation2D(exstOrientation.getAngleRadians() + (Math.PI / 2)));
         return pmmDup;
     }
@@ -109,7 +109,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
                         orientation,
                         markExstCast,
                         context.getRandomNumberGenerator(),
-                        context.getDimensions(),
+                        context.dimensions(),
                         minRadScaleStart,
                         minRadScaleEnd,
                         wigglePos);
@@ -173,13 +173,13 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             Orientation2D orientation,
             MarkEllipse markExst,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions sd,
+            ImageDimensions dimensions,
             double minRadScaleStart,
             double minRadScaleEnd,
             boolean wigglePos) {
 
         double extent =
-                markExst.getRadii().getX()
+                markExst.getRadii().x()
                         * randomNumberGenerator.sampleDoubleFromRange(
                                 minRadScaleStart, minRadScaleEnd);
 
@@ -189,13 +189,13 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
         Point3d point1 =
                 new Point3d(
-                        pointArr1[0] + markExst.getPos().getX(),
-                        pointArr1[1] + markExst.getPos().getY(),
+                        pointArr1[0] + markExst.getPos().x(),
+                        pointArr1[1] + markExst.getPos().y(),
                         0);
         Point3d point2 =
                 new Point3d(
-                        pointArr2[0] + markExst.getPos().getX(),
-                        pointArr2[1] + markExst.getPos().getY(),
+                        pointArr2[0] + markExst.getPos().x(),
+                        pointArr2[1] + markExst.getPos().y(),
                         0);
 
         if (wigglePos) {
@@ -203,7 +203,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             point1.add(randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE));
             point2.add(randomPointXY(randomNumberGenerator, WIGGLE_MAX_SIZE));
         }
-        return ifBothPointsInside(sd, point1, point2);
+        return ifBothPointsInside(dimensions, point1, point2);
     }
 
     private static Point3d randomPointXY(

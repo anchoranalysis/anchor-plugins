@@ -26,14 +26,17 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
@@ -56,9 +59,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
     @BeanField @Getter @Setter private String filePrefix = "movie";
 
-    @BeanField @Getter @Setter private int width = -1;
-
-    @BeanField @Getter @Setter private int height = -1;
+    @BeanField @OptionalBean @Getter @Setter private SizeXY size;
 
     @BeanField @Getter @Setter private int startIndex = 0; // this does nothing atm
 
@@ -67,10 +68,6 @@ public class MovieFromSlicesTask extends RasterTask {
 
     private int index = 0;
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
-
-    public MovieFromSlicesTask() {
-        super();
-    }
 
     @Override
     public void startSeries(
@@ -121,16 +118,17 @@ public class MovieFromSlicesTask extends RasterTask {
             Channel green = ncc.getChannel("green", 0, progressReporter);
 
             //
-            if (!red.getDimensions().equals(blue.getDimensions())
-                    || !blue.getDimensions().equals(green.getDimensions())) {
+            if (!red.dimensions().equals(blue.dimensions())
+                    || !blue.dimensions().equals(green.dimensions())) {
                 throw new JobExecutionException("Scene dimensions do not match");
             }
 
             Stack sliceOut = null;
 
-            ExtractProjectedStack extract = new ExtractProjectedStack(width, height);
+            ExtractProjectedStack extract =
+                    new ExtractProjectedStack(Optional.ofNullable(size).map(SizeXY::asExtent));
 
-            for (int z = 0; z < red.getDimensions().getZ(); z++) {
+            for (int z = 0; z < red.dimensions().z(); z++) {
 
                 sliceOut = extract.extractAndProjectStack(red, green, blue, z);
 

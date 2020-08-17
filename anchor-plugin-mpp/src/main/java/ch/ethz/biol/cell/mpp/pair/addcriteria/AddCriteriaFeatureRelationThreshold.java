@@ -68,7 +68,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
             double featureVal =
                     session.orElseThrow(() -> new IncludeMarksFailureException("No session exists"))
-                            .calc(params, FeatureListFactory.from(feature))
+                            .calculate(params, FeatureListFactory.from(feature))
                             .get(0);
 
             return relation.create().isRelationToValueTrue(featureVal, threshold);

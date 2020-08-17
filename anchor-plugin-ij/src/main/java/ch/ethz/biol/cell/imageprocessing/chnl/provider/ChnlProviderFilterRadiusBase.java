@@ -47,8 +47,8 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return createFromChnl(chnl, radiusInVoxels(chnl.getDimensions()));
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return createFromChnl(channel, radiusInVoxels(channel.dimensions()));
     }
 
     protected abstract Channel createFromChnl(Channel chnl, int radius) throws CreateException;
@@ -57,7 +57,7 @@ public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
         if (radiusInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.getRes()));
+            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.resolution()));
         } else {
             return (int) radius;
         }

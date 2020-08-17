@@ -36,14 +36,14 @@ import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParame
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ExtendObjectsInto3DMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * Perform a segmentation in a MIP instead of z-stacks, and fits the result back into a 3D
@@ -66,12 +66,12 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
     @Override
     public ObjectCollection segment(
             Channel chnl,
-            Optional<ObjectMask> mask,
+            Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
             throws SegmentationFailedException {
 
-        if (mask.isPresent()) {
+        if (objectMask.isPresent()) {
             throw new SegmentationFailedException(
                     "An object-mask is not supported for this operation");
         }
@@ -92,18 +92,17 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
     }
 
     private boolean isAny3d(ObjectCollection objects) {
-        return objects.stream()
-                .anyMatch(objectMask -> objectMask.getVoxelBox().extent().getZ() > 1);
+        return objects.stream().anyMatch(objectMask -> objectMask.extent().z() > 1);
     }
 
-    private BinaryVoxelBox<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {
+    private BinaryVoxels<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(chnl.getDimensions().getRes());
+                new BinarySegmentationParameters(chnl.dimensions().resolution());
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
-        VoxelBox<ByteBuffer> stackBinary = vb.duplicate();
-        return segmentStack.sgmn(new VoxelBoxWrapper(stackBinary), params, Optional.empty());
+        Voxels<ByteBuffer> stackBinary = voxels.duplicate();
+        return segmentStack.segment(new VoxelsWrapper(stackBinary), params, Optional.empty());
     }
 
     private static SeedCollection flattenSeedsInZ(SeedCollection seeds) {

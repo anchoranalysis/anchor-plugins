@@ -51,7 +51,7 @@ import org.opencv.core.MatOfFloat;
 class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
 
     /**
-     * Optionally resizes the image before calculating the descriptor (useful for achiving
+     * Optionally resizes the image before calculating the descriptor (useful for achieving
      * constant-sized descriptors for different sized images)
      */
     private final Optional<SizeXY> resizeTo;
@@ -63,7 +63,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             Stack stack = extractStack(input);
-            Extent extent = stack.getDimensions().getExtent();
+            Extent extent = stack.dimensions().extent();
 
             checkSize(extent);
 
@@ -99,7 +99,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     }
 
     private void checkSize(Extent extent) throws FeatureCalculationException {
-        if (extent.getZ() > 1) {
+        if (extent.z() > 1) {
             throw new FeatureCalculationException(
                     "The image is 3D, but the feture only supports 2D images");
         }

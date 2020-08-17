@@ -51,8 +51,8 @@ public class ChnlProviderScale extends ChnlProviderOne {
     // End BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return scale(chnl, scaleCalculator, interpolator.create(), getLogger().messageLogger());
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return scale(channel, scaleCalculator, interpolator.create(), getLogger().messageLogger());
     }
 
     public static Channel scale(
@@ -62,16 +62,16 @@ public class ChnlProviderScale extends ChnlProviderOne {
             MessageLogger logger)
             throws CreateException {
         try {
-            logger.logFormatted("incoming Image Resolution: %s\n", chnl.getDimensions().getRes());
+            logger.logFormatted("incoming Image Resolution: %s\n", chnl.dimensions().resolution());
 
-            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.getDimensions()));
+            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.dimensions()));
 
             logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
 
             Channel chnlOut = chnl.scaleXY(scaleFactor, interpolator);
 
             logger.logFormatted(
-                    "outgoing Image Resolution: %s\n", chnlOut.getDimensions().getRes());
+                    "outgoing Image Resolution: %s\n", chnlOut.dimensions().resolution());
 
             return chnlOut;
 

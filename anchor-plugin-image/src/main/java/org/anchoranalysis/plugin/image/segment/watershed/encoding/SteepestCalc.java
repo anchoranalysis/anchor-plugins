@@ -102,11 +102,11 @@ public final class SteepestCalc {
             WatershedEncoding encoder,
             boolean do3D,
             boolean bigNeighborhood,
-            Optional<ObjectMask> mask) {
+            Optional<ObjectMask> objectMask) {
         this.do3D = do3D;
         this.process =
                 ProcessVoxelNeighborFactory.within(
-                        mask, rbb.extent(), new PointTester(encoder, rbb));
+                        objectMask, rbb.extent(), new PointTester(encoder, rbb));
         this.neighborhood = NeighborhoodFactory.of(bigNeighborhood);
     }
 

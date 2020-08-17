@@ -60,7 +60,7 @@ public class VolumeMin extends CheckMark {
 
         double volMin;
         try {
-            volMin = minVolume.resolveToVoxels(Optional.of(nrgStack.getDimensions().getRes()));
+            volMin = minVolume.resolveToVoxels(Optional.of(nrgStack.dimensions().resolution()));
         } catch (UnitValueException e) {
             throw new CheckException(
                     "The volume-min check, had a unit Value Exception: " + e.toString());

@@ -32,8 +32,8 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.SizeExtents;
@@ -59,16 +59,16 @@ class MultiBuffer {
             Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
         // Specific Channel Number, but no specific Slice Number
         Channel chnl = stackForFile.getChannel(0);
-        VoxelBox<?> vb = chnl.getVoxelBox().any();
+        Voxels<?> voxels = chnl.voxels().any();
 
         int chnlIndexResolved = size.getRangeC().index(chnlNum);
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
         if (sliceNum.isPresent()) {
-            copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, vb, sliceNum.get());
+            copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, voxels, sliceNum.get());
 
         } else {
-            copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, vb);
+            copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, voxels);
         }
     }
 
@@ -78,7 +78,7 @@ class MultiBuffer {
 
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
             Channel chnl = stackForFile.getChannel(c);
-            copyFirstSliceForChnl(timeIndexResolved, c, chnl.getVoxelBox().any(), sliceNum);
+            copyFirstSliceForChnl(timeIndexResolved, c, chnl.voxels().any(), sliceNum);
         }
     }
 
@@ -90,7 +90,7 @@ class MultiBuffer {
         // Then we have to guess the channel
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
             Channel chnl = stackForFile.getChannel(c);
-            copyAllSlicesForChnl(timeIndexResolved, c, chnl.getVoxelBox().any());
+            copyAllSlicesForChnl(timeIndexResolved, c, chnl.voxels().any());
         }
     }
 
@@ -100,8 +100,8 @@ class MultiBuffer {
 
         for (int c = 0; c < size.getRangeC().getSize(); c++) {
 
-            Channel chnl = ChannelFactory.instance().createEmptyUninitialised(dimensions, dataType);
-            copyAllBuffersTo(t, c, chnl.getVoxelBox());
+            Channel chnl = ChannelFactory.instance().createUninitialised(dimensions, dataType);
+            copyAllBuffersTo(t, c, chnl.voxels());
 
             try {
                 stack.addChannel(chnl);
@@ -113,19 +113,19 @@ class MultiBuffer {
     }
 
     @SuppressWarnings("unchecked")
-    private void copyAllBuffersTo(int t, int c, VoxelBoxWrapper vb) {
+    private void copyAllBuffersTo(int t, int c, VoxelsWrapper voxels) {
         for (int z = 0; z < size.getRangeZ().getSize(); z++) {
-            vb.any().setPixelsForPlane(z, buffers[t][c][z]);
+            voxels.any().replaceSlice(z, buffers[t][c][z]);
         }
     }
 
-    private void copyFirstSliceForChnl(int t, int c, VoxelBox<?> vb, int sliceNum) {
-        buffers[t][c][size.getRangeZ().index(sliceNum)] = vb.getPixelsForPlane(0);
+    private void copyFirstSliceForChnl(int t, int c, Voxels<?> voxels, int sliceNum) {
+        buffers[t][c][size.getRangeZ().index(sliceNum)] = voxels.slice(0);
     }
 
-    private void copyAllSlicesForChnl(int t, int c, VoxelBox<?> vb) {
-        for (int z = 0; z < vb.extent().getZ(); z++) {
-            buffers[t][c][z] = vb.getPixelsForPlane(z);
+    private void copyAllSlicesForChnl(int t, int c, Voxels<?> voxels) {
+        for (int z = 0; z < voxels.extent().z(); z++) {
+            buffers[t][c][z] = voxels.slice(z);
         }
     }
 }

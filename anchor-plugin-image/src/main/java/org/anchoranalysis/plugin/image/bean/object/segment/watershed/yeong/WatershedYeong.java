@@ -42,10 +42,10 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxelBox;
+import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 /**
  * A 'rainfall' watershed algorithm
@@ -80,19 +80,19 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
-        EncodedVoxelBox matS = createS(channel.getDimensions().getExtent());
+        EncodedVoxels matS = createS(channel.dimensions().extent());
 
         Optional<MinimaStore> minimaStore =
                 OptionalFactory.create(exitWithMinima, MinimaStore::new);
 
         if (seeds.isPresent()) {
-            MarkSeeds.apply(seeds.get(), matS, minimaStore, mask);
+            MarkSeeds.apply(seeds.get(), matS, minimaStore, objectMask);
         }
 
-        pointPixelsOrMarkAsMinima(channel.getVoxelBox().any(), matS, mask, minimaStore);
+        pointPixelsOrMarkAsMinima(channel.voxels().any(), matS, objectMask, minimaStore);
 
         // Special behavior where we just want to find the minima and nothing more
         if (minimaStore.isPresent()) {
@@ -104,46 +104,45 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
         }
 
         // TODO let's only work on the areas with regions
-        convertAllToConnectedComponents(matS, mask);
+        convertAllToConnectedComponents(matS, objectMask);
 
         try {
-            return createObjectsFromLabels(matS.getVoxelBox(), mask);
+            return createObjectsFromLabels(matS.voxels(), objectMask);
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }
     }
 
     /** Create 'S' matrix */
-    private EncodedVoxelBox createS(Extent extent) {
-        VoxelBox<IntBuffer> matSVoxelBox = VoxelBoxFactory.getInt().create(extent);
-        return new EncodedVoxelBox(matSVoxelBox);
+    private EncodedVoxels createS(Extent extent) {
+        return new EncodedVoxels(VoxelsFactory.getInt().createInitialized(extent));
     }
 
     private static void pointPixelsOrMarkAsMinima(
-            VoxelBox<?> vbImg,
-            EncodedVoxelBox matS,
-            Optional<ObjectMask> mask,
+            Voxels<?> voxelsImg,
+            EncodedVoxels matS,
+            Optional<ObjectMask> objectMask,
             Optional<MinimaStore> minimaStore) {
 
-        SlidingBufferPlus buffer = new SlidingBufferPlus(vbImg, matS, mask, minimaStore);
+        SlidingBufferPlus buffer = new SlidingBufferPlus(voxelsImg, matS, objectMask, minimaStore);
         IterateVoxels.callEachPoint(
-                mask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
+                objectMask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
     }
 
     private static void convertAllToConnectedComponents(
-            EncodedVoxelBox matS, Optional<ObjectMask> mask) {
+            EncodedVoxels matS, Optional<ObjectMask> objectMask) {
         IterateVoxels.callEachPoint(
-                mask, matS.getVoxelBox(), new ConvertAllToConnectedComponents(matS));
+                matS.voxels(), objectMask, new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(
-            VoxelBox<IntBuffer> matS, Optional<ObjectMask> mask) throws CreateException {
+            Voxels<IntBuffer> matS, Optional<ObjectMask> objectMask) throws CreateException {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 
         IterateVoxels.callEachPoint(
-                mask,
                 matS,
+                objectMask,
                 (Point3i point, IntBuffer buffer, int offset) -> {
                     int crntVal = buffer.get(offset);
                     buffer.put(offset, bbm.addPointForValue(point, crntVal) + 1);

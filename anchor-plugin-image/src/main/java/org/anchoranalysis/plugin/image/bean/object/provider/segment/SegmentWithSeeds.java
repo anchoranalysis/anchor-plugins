@@ -128,33 +128,33 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
             MatchedObject matchedObject, Channel channel, SegmentChannelIntoObjects sgmn)
             throws SegmentationFailedException, CreateException {
 
-        BoundingBox bboxSource = matchedObject.getSource().getBoundingBox();
+        BoundingBox boxSource = matchedObject.getSource().boundingBox();
 
         // We create a new object-mask for the new channel
-        ObjectMask objectLocal = new ObjectMask(matchedObject.getSource().binaryVoxelBox());
+        ObjectMask objectLocal = new ObjectMask(matchedObject.getSource().binaryVoxels());
 
         SeedCollection seedsObj =
                 SeedsFactory.createSeedsWithMask(
                         matchedObject.getMatches(),
                         objectLocal,
-                        bboxSource.cornerMin(),
-                        channel.getDimensions());
+                        boxSource.cornerMin(),
+                        channel.dimensions());
 
         ObjectCollection sgmnObjects =
                 sgmn.segment(
-                        createChannelForBox(channel, bboxSource),
+                        createChannelForBox(channel, boxSource),
                         Optional.of(objectLocal),
                         Optional.of(seedsObj));
 
         // We shift each object back to were it belongs globally
-        return sgmnObjects.shiftBy(bboxSource.cornerMin());
+        return sgmnObjects.shiftBy(boxSource.cornerMin());
     }
 
     private static Channel createChannelForBox(Channel channel, BoundingBox boundingBox) {
         // We make a channel just for the object
         return ChannelFactory.instance()
                 .create(
-                        channel.getVoxelBox().any().region(boundingBox, false),
-                        channel.getDimensions().getRes());
+                        channel.extracter().region(boundingBox, false),
+                        channel.dimensions().resolution());
     }
 }

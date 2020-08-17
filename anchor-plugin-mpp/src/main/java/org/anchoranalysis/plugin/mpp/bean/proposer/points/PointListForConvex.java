@@ -31,7 +31,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelBox;
+import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 
 class PointListForConvex {
 
@@ -42,11 +42,12 @@ class PointListForConvex {
     }
 
     public boolean convexWithAtLeastOnePoint(
-            Point3i root, Point3i point, BinaryVoxelBox<ByteBuffer> vb) {
-        return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, vb);
+            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> voxels) {
+        return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, voxels);
     }
 
-    public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxelBox<ByteBuffer> vb) {
-        return list.stream().anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, vb));
+    public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxels<ByteBuffer> voxels) {
+        return list.stream()
+                .anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, voxels));
     }
 }

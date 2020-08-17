@@ -38,7 +38,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram
 // creation
@@ -50,34 +50,34 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromMaskedChnl(Channel chnl, Mask mask) throws CreateException {
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Histogram hist = HistogramFactory.create(chnl, mask);
+        Histogram hist = HistogramFactory.create(channel, mask);
 
         try {
             double intensityThrshldDbl = hist.quantile(quantile);
 
-            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), chnl.getVoxelBox().asByte());
+            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), channel.voxels().asByte());
         } catch (OperationFailedException e) {
             throw new CreateException("An error occurred computing a quantile", e);
         }
 
-        return chnl;
+        return channel;
     }
 
     /** Replaces any pixels with value > threshold, with the threshold value */
-    private static void replacePixelsAbove(int threshold, VoxelBox<ByteBuffer> vb) {
+    private static void replacePixelsAbove(int threshold, Voxels<ByteBuffer> voxels) {
         byte meanIntensityByte = (byte) threshold;
 
-        Extent e = vb.extent();
+        Extent e = voxels.extent();
 
-        for (int z = 0; z < e.getZ(); z++) {
+        for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = vb.getPixelsForPlane(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     int val = ByteConverter.unsignedByteToInt(bb.get(offset));
                     if (val > threshold) {

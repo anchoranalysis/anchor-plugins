@@ -47,21 +47,21 @@ class CalculateIntersectionOfDilatedBoundingBox
     protected Optional<BoundingBox> execute(FeatureInputPairObjects input)
             throws FeatureCalculationException {
         return findIntersectionOfDilatedBoundingBox(
-                input.getFirst(), input.getSecond(), input.getDimensionsRequired().getExtent());
+                input.getFirst(), input.getSecond(), input.dimensionsRequired().extent());
     }
 
     private Optional<BoundingBox> findIntersectionOfDilatedBoundingBox(
             ObjectMask first, ObjectMask second, Extent extent) {
 
         // Grow each bounding box
-        BoundingBox bboxFirst = dilatedBoundingBoxFor(first, extent);
-        BoundingBox bboxSecond = dilatedBoundingBoxFor(second, extent);
+        BoundingBox boxFirst = dilatedBoundingBoxFor(first, extent);
+        BoundingBox boxSecond = dilatedBoundingBoxFor(second, extent);
 
         // Find the intersection
-        return bboxFirst.intersection().withInside(bboxSecond, extent);
+        return boxFirst.intersection().withInside(boxSecond, extent);
     }
 
     private BoundingBox dilatedBoundingBoxFor(ObjectMask object, Extent extent) {
-        return object.getVoxelBoxBounded().dilate(do3D, Optional.of(extent));
+        return object.boundedVoxels().dilate(do3D, Optional.of(extent));
     }
 }

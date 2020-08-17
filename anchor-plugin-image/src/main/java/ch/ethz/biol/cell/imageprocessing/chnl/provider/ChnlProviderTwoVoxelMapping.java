@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
 
 /**
@@ -49,17 +49,15 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
-                                chnl1.getDimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
-        processVoxelBox(
-                chnlOut.getVoxelBox().asByte(),
-                chnl1.getVoxelBox().asByte(),
-                chnl2.getVoxelBox().asByte());
+        processVoxels(chnlOut.voxels().asByte(), chnl1.voxels().asByte(), chnl2.voxels().asByte());
 
         return chnlOut;
     }
 
-    protected abstract void processVoxelBox(
-            VoxelBox<ByteBuffer> vbOut, VoxelBox<ByteBuffer> vbIn1, VoxelBox<ByteBuffer> vbIn2);
+    protected abstract void processVoxels(
+            Voxels<ByteBuffer> voxelsOut,
+            Voxels<ByteBuffer> voxelsIn1,
+            Voxels<ByteBuffer> voxelsIn2);
 }

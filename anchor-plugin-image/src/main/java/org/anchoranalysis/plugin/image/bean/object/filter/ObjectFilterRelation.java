@@ -52,6 +52,11 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     private RelationToValue relationResolved;
 
     @Override
+    protected boolean precondition(ObjectCollection objectsToFilter) {
+        return true;
+    }
+
+    @Override
     protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         relationResolved = relation.create();

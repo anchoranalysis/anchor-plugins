@@ -55,6 +55,6 @@ public class ImposeResolution extends RasterReader {
     public OpenedRaster openFile(Path filepath) throws RasterIOException {
         return new OpenedRasterAlterDimensions(
                 rasterReader.openFile(filepath),
-                res -> Optional.of(new ImageResolution(resX, resY, keepZ ? res.getZ() : resZ)));
+                res -> Optional.of(new ImageResolution(resX, resY, keepZ ? res.z() : resZ)));
     }
 }

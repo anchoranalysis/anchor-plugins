@@ -53,11 +53,11 @@ class CalculateHistogramInputFromMemo
         try {
             VoxelStatistics stats =
                     pixelList.createStatisticsFor(
-                            input.getPxlPartMemo(), input.getDimensionsRequired());
+                            input.getPxlPartMemo(), input.dimensionsRequired());
 
             Histogram hist = maybeExcludeZeros(stats.histogram());
 
-            return new FeatureInputHistogram(hist, input.getResOptional());
+            return new FeatureInputHistogram(hist, input.getResolutionOptional());
         } catch (CreateException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

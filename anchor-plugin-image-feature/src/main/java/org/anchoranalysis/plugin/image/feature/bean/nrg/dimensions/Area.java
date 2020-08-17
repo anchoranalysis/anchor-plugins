@@ -39,6 +39,6 @@ public class Area<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
     @Override
     protected double calcFromDims(ImageDimensions dim) {
-        return dim.getVolumeXY();
+        return dim.volumeXY();
     }
 }

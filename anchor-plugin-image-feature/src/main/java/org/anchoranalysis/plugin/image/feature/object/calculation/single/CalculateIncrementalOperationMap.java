@@ -52,7 +52,7 @@ public abstract class CalculateIncrementalOperationMap
     @Override
     protected ObjectMask execute(FeatureInputSingleObject params, Integer key)
             throws FeatureCalculationException {
-        Extent extent = params.getDimensionsRequired().getExtent();
+        Extent extent = params.dimensionsRequired().extent();
 
         if (key == 0) {
             throw new FeatureCalculationException("Key must be > 0");

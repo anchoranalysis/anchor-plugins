@@ -49,8 +49,7 @@ class HistogramExtracter {
 
         try {
             if (!keyMask.isEmpty()) {
-                Mask mask = extractMask(keyMask);
-                return HistogramFactory.create(chnl, mask);
+                return HistogramFactory.create(chnl, extractMask(keyMask));
             } else {
                 return HistogramFactory.create(chnl);
             }

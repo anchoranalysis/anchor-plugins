@@ -31,6 +31,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
@@ -42,9 +44,8 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefineFixture {
-
-    private DefineFixture() {}
 
     /**
      * Creates a DefineOutputter

@@ -79,10 +79,10 @@ public class FeatureListImageTest {
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
 
-        ResultsVector rv1 = session.calc((FeatureInput) null);
+        ResultsVector rv1 = session.calculate((FeatureInput) null);
         ConstantsInListFixture.checkResultVector(rv1);
 
-        ResultsVector rv2 = session.calc((FeatureInput) null);
+        ResultsVector rv2 = session.calculate((FeatureInput) null);
         ConstantsInListFixture.checkResultVector(rv2);
     }
 
@@ -95,7 +95,7 @@ public class FeatureListImageTest {
                 createAndStart(histogramFeatures(loader));
 
         assertCalc(
-                session.calc(createParams(HistogramFixture.createAscending())),
+                session.calculate(createParams(HistogramFixture.createAscending())),
                 32450.0,
                 30870.0,
                 14685.0,
@@ -104,7 +104,7 @@ public class FeatureListImageTest {
                 0.005545343137254902);
 
         assertCalc(
-                session.calc(createParams(HistogramFixture.createDescending())),
+                session.calculate(createParams(HistogramFixture.createDescending())),
                 27730.0,
                 19110.0,
                 2145.0,
@@ -121,10 +121,10 @@ public class FeatureListImageTest {
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
 
-        ObjectMaskFixture objectFixture = new ObjectMaskFixture(NRG_STACK.getDimensions());
+        ObjectMaskFixture objectFixture = new ObjectMaskFixture(NRG_STACK.dimensions());
 
         assertCalc(
-                session.calc(createInput(objectFixture.create1())),
+                session.calculate(createInput(objectFixture.create1())),
                 31.5,
                 29.0,
                 3.0,
@@ -134,7 +134,7 @@ public class FeatureListImageTest {
                 560.0);
 
         assertCalc(
-                session.calc(createInput(objectFixture.create2())),
+                session.calculate(createInput(objectFixture.create2())),
                 7.5,
                 21.0,
                 7.0,
@@ -144,7 +144,7 @@ public class FeatureListImageTest {
                 66.0);
 
         assertCalc(
-                session.calc(createInput(objectFixture.create3())),
+                session.calculate(createInput(objectFixture.create3())),
                 21.5,
                 35.0,
                 2.0,
@@ -181,7 +181,7 @@ public class FeatureListImageTest {
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(
-                histogram, Optional.of(NRG_STACK.getDimensions().getRes()));
+                histogram, Optional.of(NRG_STACK.dimensions().resolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

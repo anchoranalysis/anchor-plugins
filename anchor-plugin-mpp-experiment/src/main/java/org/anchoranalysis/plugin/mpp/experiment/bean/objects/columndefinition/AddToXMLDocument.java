@@ -66,9 +66,9 @@ class AddToXMLDocument {
 
         topLevelParent.appendChild(createdElement);
 
-        appendIntegerNode(createdElement, "x", point.getX());
-        appendIntegerNode(createdElement, "y", point.getY());
-        appendIntegerNode(createdElement, "z", point.getZ());
+        appendIntegerNode(createdElement, "x", point.x());
+        appendIntegerNode(createdElement, "y", point.y());
+        appendIntegerNode(createdElement, "z", point.z());
     }
 
     /**

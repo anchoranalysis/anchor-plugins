@@ -57,7 +57,7 @@ public class CalculateEllipseLeastSquares
             ObjectMask object = extractEllipseSlice(input.getObject());
 
             // Shell Rad is arbitrary here for now
-            MarkEllipse mark = factory.create(object, nrgStack.getDimensions(), 0.2);
+            MarkEllipse mark = factory.create(object, nrgStack.dimensions(), 0.2);
 
             return new ObjectWithEllipse(object, mark);
         } catch (CreateException | InsufficientPointsException e) {
@@ -66,8 +66,7 @@ public class CalculateEllipseLeastSquares
     }
 
     private static ObjectMask extractEllipseSlice(ObjectMask object) {
-        int zSliceCenter = (int) object.centerOfGravity().getZ();
-        return object.extractSlice(
-                zSliceCenter - object.getBoundingBox().cornerMin().getZ(), false);
+        int zSliceCenter = (int) object.centerOfGravity().z();
+        return object.extractSlice(zSliceCenter, false);
     }
 }

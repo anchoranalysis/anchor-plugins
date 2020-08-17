@@ -32,7 +32,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 public class BinaryChnlProviderAlternativeIfEmpty extends BinaryChnlProviderElseBase {
 
     @Override
-    protected boolean condition(Mask chnl) throws CreateException {
-        return chnl.hasHighValues();
+    protected boolean condition(Mask mask) throws CreateException {
+        return mask.voxelsOn().anyExists();
     }
 }

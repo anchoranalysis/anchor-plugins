@@ -47,7 +47,7 @@ class HelperReadWriteObjects {
         if (hdf5) {
             return new GeneratorHDF5(compression);
         } else {
-            return new GeneratorTIFFDirectory();
+            return GeneratorTIFFDirectory.create();
         }
     }
 

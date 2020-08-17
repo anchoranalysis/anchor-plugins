@@ -56,32 +56,32 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
 
         FeatureInputPairObjects inputSessionless = input.get();
 
-        Optional<BoundingBox> bboxIntersect = bboxIntersectDilated(input);
+        Optional<BoundingBox> boxIntersect = boxIntersectDilated(input);
 
-        if (!bboxIntersect.isPresent()) {
+        if (!boxIntersect.isPresent()) {
             // No intersection, so therefore return 0
             return 0;
         }
 
         return calcWithIntersection(
-                inputSessionless.getFirst(), inputSessionless.getSecond(), bboxIntersect.get());
+                inputSessionless.getFirst(), inputSessionless.getSecond(), boxIntersect.get());
     }
 
     protected abstract double calcWithIntersection(
-            ObjectMask object1, ObjectMask object2, BoundingBox bboxIntersect)
+            ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException;
 
     /**
-     * The intersection of the bounding box of one mask with the (dilated by 1 bounding-box) of the
-     * other
+     * The intersection of the bounding box of one object-mask with the (dilated by 1 bounding-box)
+     * of the other
      */
-    private Optional<BoundingBox> bboxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
+    private Optional<BoundingBox> boxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
         return input.calc(new CalculateIntersectionOfDilatedBoundingBox(do3D));
     }
 
     protected CountKernel createCountKernelMask(ObjectMask object1, ObjectMask object2Relative) {
         return new CountKernelNeighborhoodMask(
-                do3D, object1.getBinaryValuesByte(), object2Relative, true);
+                do3D, object1.binaryValuesByte(), object2Relative, true);
     }
 }

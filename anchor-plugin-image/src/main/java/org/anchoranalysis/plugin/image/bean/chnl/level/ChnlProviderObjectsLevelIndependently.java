@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Calculates a threshold-level for each object independently
 public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
@@ -49,7 +49,7 @@ public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
             throws CreateException {
 
         try {
-            LevelResultCollection lrc =
+            LevelResultCollection results =
                     LevelResultCollectionFactory.createCollection(
                             chnlIntensity,
                             objects,
@@ -57,9 +57,9 @@ public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
                             numDilations,
                             getLogger().messageLogger());
 
-            VoxelBox<?> vbOutput = chnlOutput.getVoxelBox().any();
-            for (LevelResult lr : lrc) {
-                vbOutput.setPixelsCheckMask(lr.getObject(), lr.getLevel());
+            Voxels<?> voxelsOutput = chnlOutput.voxels().any();
+            for (LevelResult result : results) {
+                voxelsOutput.assignValue(result.getLevel()).toObject(result.getObject());
             }
 
             return chnlOutput;

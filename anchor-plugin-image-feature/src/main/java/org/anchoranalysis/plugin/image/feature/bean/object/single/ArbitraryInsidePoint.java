@@ -41,7 +41,7 @@ import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates deterministicly a point that is definitely inside the object mask. A selected axis is
+ * Calculates deterministicly a point that is definitely inside the object-mask. A selected axis is
  * outputted.
  *
  * @author Owen Feehan
@@ -67,8 +67,7 @@ public class ArbitraryInsidePoint extends FeatureSingleObject {
             AxisType axisType = AxisTypeConverter.createFromString(axis);
 
             Optional<Point3i> arbPoint = input.get().getObject().findArbitraryOnVoxel();
-            return arbPoint.map(point -> (double) point.getValueByDimension(axisType))
-                    .orElse(emptyValue);
+            return arbPoint.map(point -> (double) point.byDimension(axisType)).orElse(emptyValue);
 
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e.friendlyMessageHierarchy());

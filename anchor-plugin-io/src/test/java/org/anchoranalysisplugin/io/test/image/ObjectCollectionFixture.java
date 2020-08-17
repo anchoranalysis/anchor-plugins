@@ -34,7 +34,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class ObjectCollectionFixture {
 
@@ -50,8 +49,8 @@ class ObjectCollectionFixture {
      * Creates an object-collection containing between a random number of objects (uniformly sampled
      * from a range)
      *
-     * <p>Each mask has a position and extent that is randomly-sampled, and contains voxels that are
-     * each randomly on or off.
+     * <p>Each object has a position and extent that is randomly-sampled, and contains voxels that
+     * are each randomly on or off.
      *
      * @param minNumberObjects minimum number of objects (inclusive)
      * @param maxNumberObjects maximum number of objects (exclusive)
@@ -68,20 +67,19 @@ class ObjectCollectionFixture {
         return mockObject(crnr, e);
     }
 
-    private ObjectMask mockObject(Point3i crnr, Extent e) {
+    private ObjectMask mockObject(Point3i corner, Extent e) {
 
-        ObjectMask object = new ObjectMask(new BoundingBox(crnr, e));
+        ObjectMask object = new ObjectMask(new BoundingBox(corner, e));
 
-        int volumeXY = e.getVolumeXY();
-        for (int z = 0; z < e.getZ(); z++) {
+        int volumeXY = e.volumeXY();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<ByteBuffer> vb = object.getVoxelBox().getPixelsForPlane(z);
-            ByteBuffer bb = vb.buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int prevVal = 0;
 
             for (int i = 0; i < volumeXY; i++) {
-                prevVal = randomMaybeChangeVal(prevVal);
+                prevVal = randomMaybeChangeValue(prevVal);
                 bb.put((byte) prevVal);
             }
         }
@@ -91,27 +89,27 @@ class ObjectCollectionFixture {
     }
 
     /** Randomly returns 0 or 255 with equal probability. prevVal must be 0 or 255 */
-    private static int randomMaybeChangeVal(int prevVal) {
+    private static int randomMaybeChangeValue(int previousValue) {
         if (RANDOM.nextDouble() > PROBABILITY_CHANGE_VALUE) {
-            return prevVal;
+            return previousValue;
         } else {
-            return (255 - prevVal);
+            return (255 - previousValue);
         }
     }
 
     /** Randomly returns an extent within a scene */
     private static Extent randomExtent() {
-        int x = randomTotal(SCENE_EXTENT.getX() - 1) + 1;
-        int y = randomTotal(SCENE_EXTENT.getY() - 1) + 1;
-        int z = randomTotal(SCENE_EXTENT.getZ() - 1) + 1;
+        int x = randomTotal(SCENE_EXTENT.x() - 1) + 1;
+        int y = randomTotal(SCENE_EXTENT.y() - 1) + 1;
+        int z = randomTotal(SCENE_EXTENT.z() - 1) + 1;
         return new Extent(x, y, z);
     }
 
     /** A random starting corner, making sure there's enough room for the extent */
     private static Point3i randomCorner(Extent extent) {
-        int x = randomSubtract(SCENE_EXTENT.getX(), extent.getX());
-        int y = randomSubtract(SCENE_EXTENT.getY(), extent.getY());
-        int z = randomSubtract(SCENE_EXTENT.getZ(), extent.getZ());
+        int x = randomSubtract(SCENE_EXTENT.x(), extent.x());
+        int y = randomSubtract(SCENE_EXTENT.y(), extent.y());
+        int z = randomSubtract(SCENE_EXTENT.z(), extent.z());
         return new Point3i(x, y, z);
     }
 

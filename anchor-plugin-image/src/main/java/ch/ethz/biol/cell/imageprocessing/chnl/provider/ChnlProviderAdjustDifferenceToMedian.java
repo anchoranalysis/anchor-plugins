@@ -41,7 +41,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
+import org.anchoranalysis.image.voxel.Voxels;
 
 // Corrects a channel in the following way
 //  For each object:
@@ -55,7 +55,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         Channel lookup = DimChecker.createSameSize(chnlLookup, "chnlLookup", chnl);
@@ -63,8 +63,7 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
         try {
             for (ObjectMask object : objectsSource) {
 
-                Histogram histogram =
-                        HistogramFactory.create(lookup.getVoxelBox(), Optional.of(object));
+                Histogram histogram = HistogramFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, chnl, lookup, (int) Math.round(histogram.mean()));
             }
 
@@ -78,26 +77,25 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
     private void adjustObject(
             ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
 
-        ReadableTuple3i cornerMin = object.getBoundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.getBoundingBox().calcCornerMax();
+        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
 
-        VoxelBox<ByteBuffer> vb = chnl.getVoxelBox().asByte();
-        VoxelBox<ByteBuffer> vbLookup = chnlLookup.getVoxelBox().asByte();
+        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxelsLookup = chnlLookup.voxels().asByte();
 
-        for (int z = cornerMin.getZ(); z <= cornerMax.getZ(); z++) {
+        for (int z = cornerMin.z(); z < cornerMax.z(); z++) {
 
-            ByteBuffer bbChnl = vb.getPixelsForPlane(z).buffer();
-            ByteBuffer bbChnlLookup = vbLookup.getPixelsForPlane(z).buffer();
-            ByteBuffer bbMask =
-                    object.getVoxelBox().getPixelsForPlane(z - cornerMin.getZ()).buffer();
+            ByteBuffer bbChnl = voxels.sliceBuffer(z);
+            ByteBuffer bbChnlLookup = voxelsLookup.sliceBuffer(z);
+            ByteBuffer bbMask = object.sliceBufferGlobal(z);
 
-            int maskOffset = 0;
-            for (int y = cornerMin.getY(); y <= cornerMax.getY(); y++) {
-                for (int x = cornerMin.getX(); x <= cornerMax.getX(); x++) {
+            int objectMaskOffset = 0;
+            for (int y = cornerMin.y(); y < cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x < cornerMax.x(); x++) {
 
-                    if (bbMask.get(maskOffset++) == object.getBinaryValuesByte().getOnByte()) {
+                    if (bbMask.get(objectMaskOffset++) == object.binaryValuesByte().getOnByte()) {
 
-                        int offset = vb.extent().offset(x, y);
+                        int offset = voxels.extent().offset(x, y);
 
                         int lookupVal = ByteConverter.unsignedByteToInt(bbChnlLookup.get(offset));
                         int adj = (medianFromObject - lookupVal);

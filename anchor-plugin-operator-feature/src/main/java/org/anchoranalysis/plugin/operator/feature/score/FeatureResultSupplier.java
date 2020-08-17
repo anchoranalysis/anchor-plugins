@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-points
+ * anchor-plugin-operator-feature
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,43 +23,17 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.operator.feature.score;
 
-package org.anchoranalysis.plugin.points.calculate.ellipsoid;
-
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.CallableWithException;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Binds params with a CachedCalculation and exposes it as the {@link
- * org.anchoranalysis.core.functional.CallableWithException} interface
- *
- * <p>(reverse-currying)
+ * Supplies the result of a feature-calculation
  *
  * @author Owen Feehan
- * @param <S> result-type
- * @param <T> params-type
  */
-class CachedCalculationOperation<S, T extends FeatureInput>
-        implements CallableWithException<S, CreateException> {
+@FunctionalInterface
+public interface FeatureResultSupplier {
 
-    private ResolvedCalculation<S, T> cachedCalculation;
-    private T params;
-
-    public CachedCalculationOperation(ResolvedCalculation<S, T> cachedCalculation, T params) {
-        super();
-        this.cachedCalculation = cachedCalculation;
-        this.params = params;
-    }
-
-    @Override
-    public S call() throws CreateException {
-        try {
-            return cachedCalculation.getOrCalculate(params);
-        } catch (FeatureCalculationException e) {
-            throw new CreateException(e);
-        }
-    }
+    double get() throws FeatureCalculationException;
 }

@@ -33,11 +33,11 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.box.VoxelBox;
-import org.anchoranalysis.image.voxel.box.VoxelBoxWrapper;
-import org.anchoranalysis.image.voxel.box.factory.VoxelBoxFactory;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
 import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
@@ -48,15 +48,15 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueI
 public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByErosion {
 
     @Override
-    public VoxelBoxWrapper reconstruction(
-            VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjectMask> containingMask) {
+    public VoxelsWrapper reconstruction(
+            VoxelsWrapper maskVb, VoxelsWrapper markerVb, Optional<ObjectMask> containingMask) {
 
         // We flip everything because what occurs is erosion by Dilation, whereas we want
         // reconstruction by Erosion
         markerVb.subtractFromMaxValue();
         maskVb.subtractFromMaxValue();
 
-        VoxelBoxWrapper ret = reconstructionByDilation(maskVb, markerVb, containingMask);
+        VoxelsWrapper ret = reconstructionByDilation(maskVb, markerVb, containingMask);
         ret.subtractFromMaxValue();
 
         return ret;
@@ -65,17 +65,17 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     // we now have a markerForReconstruction in the same condition as the 'strong' condition in the
     // Robison paper
     // all pixels are either 0 or their final value (from chnl)
-    private VoxelBoxWrapper reconstructionByDilation(
-            VoxelBoxWrapper maskVb, VoxelBoxWrapper markerVb, Optional<ObjectMask> containingMask) {
+    private VoxelsWrapper reconstructionByDilation(
+            VoxelsWrapper maskVb, VoxelsWrapper markerVb, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
-        VoxelBox<ByteBuffer> vbFinalized =
-                VoxelBoxFactory.getByte().create(markerVb.any().extent());
+        Voxels<ByteBuffer> voxelsFinalized =
+                VoxelsFactory.getByte().createInitialized(markerVb.any().extent());
 
         // TODO make more efficient
         // Find maximum value of makerVb.... we can probably get this elsewhere without having to
         // iterate the image again
-        int maxValue = markerVb.any().ceilOfMaxPixel();
+        int maxValue = markerVb.extracter().voxelWithMaxIntensity();
 
         PriorityQueueIndexRangeDownhill<Point3i> queue =
                 new PriorityQueueIndexRangeDownhill<>(maxValue);
@@ -86,28 +86,29 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         //  for sake of keeping modularity
         if (containingMask.isPresent()) {
             populateQueueFromNonZeroPixelsMask(
-                    queue, markerVb.any(), vbFinalized, containingMask.get());
+                    queue, markerVb.any(), voxelsFinalized, containingMask.get());
         } else {
-            populateQueueFromNonZeroPixels(queue, markerVb.any(), vbFinalized);
+            populateQueueFromNonZeroPixels(queue, markerVb.any(), voxelsFinalized);
         }
 
-        readFromQueueUntilEmpty(queue, markerVb.any(), maskVb.any(), vbFinalized, containingMask);
+        readFromQueueUntilEmpty(
+                queue, markerVb.any(), maskVb.any(), voxelsFinalized, containingMask);
 
         return markerVb;
     }
 
     private void readFromQueueUntilEmpty(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
-            VoxelBox<?> markerVb,
-            VoxelBox<?> maskVb,
-            VoxelBox<ByteBuffer> vbFinalized,
+            Voxels<?> markerVb,
+            Voxels<?> maskVb,
+            Voxels<ByteBuffer> voxelsFinalized,
             Optional<ObjectMask> containingMask) {
 
         Extent extent = markerVb.extent();
 
         SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
         SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
-        SlidingBuffer<ByteBuffer> sbFinalized = new SlidingBuffer<>(vbFinalized);
+        SlidingBuffer<ByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
 
         BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 
@@ -118,15 +119,15 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                         new PointProcessor(sbMarker, sbMask, sbFinalized, queue, bvFinalized));
 
         Neighborhood neighborhood = NeighborhoodFactory.of(false);
-        boolean do3D = extent.getZ() > 1;
+        boolean do3D = extent.z() > 1;
 
         for (int nextVal = queue.nextValue(); nextVal != -1; nextVal = queue.nextValue()) {
 
             Point3i point = queue.get();
 
-            sbMarker.seek(point.getZ());
-            sbMask.seek(point.getZ());
-            sbFinalized.seek(point.getZ());
+            sbMarker.seek(point.z());
+            sbMask.seek(point.z());
+            sbFinalized.seek(point.z());
 
             // We have a point, and a value
             // Now we iterate through the neighbors (but only if they haven't been finalised)
@@ -138,26 +139,26 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
     private void populateQueueFromNonZeroPixels(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
-            VoxelBox<?> vb,
-            VoxelBox<ByteBuffer> vbFinalized) {
+            Voxels<?> voxels,
+            Voxels<ByteBuffer> voxelsFinalized) {
 
         byte maskOn = BinaryValuesByte.getDefault().getOnByte();
 
-        Extent e = vb.extent();
-        for (int z = 0; z < e.getZ(); z++) {
+        Extent e = voxels.extent();
+        for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
-            VoxelBuffer<ByteBuffer> bbFinalized = vbFinalized.getPixelsForPlane(z);
+            VoxelBuffer<?> bb = voxels.slice(z);
+            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.getY(); y++) {
-                for (int x = 0; x < e.getX(); x++) {
+            for (int y = 0; y < e.y(); y++) {
+                for (int x = 0; x < e.x(); x++) {
 
                     {
                         int val = bb.getInt(offset);
                         if (val != 0) {
                             queue.put(new Point3i(x, y, z), val);
-                            bbFinalized.buffer().put(offset, maskOn);
+                            bbFinalized.put(offset, maskOn);
                         }
                     }
 
@@ -169,27 +170,26 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
     private void populateQueueFromNonZeroPixelsMask(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
-            VoxelBox<?> vb,
-            VoxelBox<ByteBuffer> vbFinalized,
+            Voxels<?> voxels,
+            Voxels<ByteBuffer> voxelsFinalized,
             ObjectMask containingMask) {
 
-        ReadableTuple3i crnrpointMin = containingMask.getBoundingBox().cornerMin();
-        ReadableTuple3i crnrpointMax = containingMask.getBoundingBox().calcCornerMax();
+        ReadableTuple3i crnrpointMin = containingMask.boundingBox().cornerMin();
+        ReadableTuple3i crnrpointMax = containingMask.boundingBox().calculateCornerMax();
 
-        byte maskOn = containingMask.getBinaryValuesByte().getOnByte();
+        byte maskOn = containingMask.binaryValuesByte().getOnByte();
 
-        Extent e = vb.extent();
-        for (int z = crnrpointMin.getZ(); z <= crnrpointMax.getZ(); z++) {
+        Extent e = voxels.extent();
+        for (int z = crnrpointMin.z(); z <= crnrpointMax.z(); z++) {
 
-            VoxelBuffer<?> bb = vb.getPixelsForPlane(z);
-            VoxelBuffer<ByteBuffer> bbFinalized = vbFinalized.getPixelsForPlane(z);
-            VoxelBuffer<ByteBuffer> bbMask =
-                    containingMask.getVoxelBox().getPixelsForPlane(z - crnrpointMin.getZ());
+            VoxelBuffer<?> bb = voxels.slice(z);
+            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            ByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
-            for (int y = crnrpointMin.getY(); y <= crnrpointMax.getY(); y++) {
-                for (int x = crnrpointMin.getX(); x <= crnrpointMax.getX(); x++) {
-                    if (bbMask.buffer().get(offset) == maskOn) {
+            for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {
+                for (int x = crnrpointMin.x(); x <= crnrpointMax.x(); x++) {
+                    if (bbMask.get(offset) == maskOn) {
 
                         int offsetGlobal = e.offset(x, y);
 
@@ -197,7 +197,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
                             int val = bb.getInt(offsetGlobal);
                             if (val != 0) {
                                 queue.put(new Point3i(x, y, z), val);
-                                bbFinalized.buffer().put(offsetGlobal, maskOn);
+                                bbFinalized.put(offsetGlobal, maskOn);
                             }
                         }
                     }

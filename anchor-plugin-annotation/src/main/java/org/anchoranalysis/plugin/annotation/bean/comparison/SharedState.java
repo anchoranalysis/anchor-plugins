@@ -81,7 +81,7 @@ class SharedState<T extends Assignment> {
     }
 
     // descriptiveSplit can be null
-    public IAddAnnotation<T> groupsForImage(String identifier, SplitString descriptiveSplit) {
+    public IAddAnnotation<T> groupsForImage(SplitString descriptiveSplit) {
         AnnotationGroupList<T> list = new AnnotationGroupList<>();
         list.add(groupAll);
 
@@ -93,9 +93,7 @@ class SharedState<T extends Assignment> {
                 //   if it doesn't already exist
                 if (i < descriptiveSplit.getNumParts()) {
                     String groupName = descriptiveSplit.combineFirstElements(i + 1, "/");
-
-                    AnnotationGroup<T> group = getOrCreate(i, groupName);
-                    list.add(group);
+                    list.add(getOrCreate(i, groupName));
                 }
             }
         }

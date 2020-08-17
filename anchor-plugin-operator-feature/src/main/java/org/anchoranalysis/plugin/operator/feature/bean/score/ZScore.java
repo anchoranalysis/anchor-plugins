@@ -26,23 +26,18 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
-import org.anchoranalysis.core.functional.CallableWithException;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
+import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
 // Z-score of a value
 public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
 
     @Override
-    protected double deriveScore(
-            double featureValue,
-            double mean,
-            CallableWithException<Double, FeatureCalculationException> stdDev)
+    protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
-        double zScore = FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.call());
-        assert (!Double.isNaN(zScore));
-        return zScore;
+        return FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.get());
     }
 }

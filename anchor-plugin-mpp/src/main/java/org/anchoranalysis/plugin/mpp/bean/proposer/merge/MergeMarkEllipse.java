@@ -107,7 +107,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
                         randomNumberGenerator.sampleDoubleFromZeroCenteredRange(
                                 JITTER_HALF_WIDTH)));
 
-        return PointClipper.clip(pointNew, nrgStack.getDimensions());
+        return PointClipper.clip(pointNew, nrgStack.dimensions());
     }
 
     @SuppressWarnings("unused")
@@ -118,7 +118,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
         rel.subtract(pointB);
 
         // Calculation an angle from this vector
-        return new Orientation2D(Math.atan2(rel.getY(), rel.getX()));
+        return new Orientation2D(Math.atan2(rel.y(), rel.x()));
     }
 
     @Override

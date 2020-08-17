@@ -70,14 +70,14 @@ public class Mser extends SegmentChannelIntoObjects {
     @SuppressWarnings("unchecked")
     @Override
     public ObjectCollection segment(
-            Channel channel, Optional<ObjectMask> mask, Optional<SeedCollection> seeds)
+            Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
-        checkUnsupportedMask(mask);
+        checkUnsupportedObjectMask(objectMask);
         checkUnsupportedSeeds(seeds);
 
         @SuppressWarnings("rawtypes")
-        Img img = ImgLib2Wrap.wrap(channel.getVoxelBox());
+        Img img = ImgLib2Wrap.wrap(channel.voxels());
 
         final MserTree<?> treeDarkToBright =
                 MserTree.buildMserTree(img, delta, minSize, maxSize, maxVar, minDiversity, true);

@@ -33,12 +33,12 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calc.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
 
 public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 
@@ -51,11 +51,11 @@ public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
         return input.calc(new CalculateOverlap(regionID));
     }
 
-    protected BoundingBox bbox(
+    protected BoundingBox box(
             FeatureInputPairMemo input,
             Function<FeatureInputPairMemo, VoxelizedMarkMemo> funcExtract)
             throws FeatureCalculationException {
-        ImageDimensions sd = input.getDimensionsRequired();
-        return funcExtract.apply(input).getMark().bbox(sd, getRegionID());
+        Mark mark = funcExtract.apply(input).getMark();
+        return mark.box(input.dimensionsRequired(), getRegionID());
     }
 }
