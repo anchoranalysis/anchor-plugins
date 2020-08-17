@@ -61,7 +61,7 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyUninitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsSlice = chnl.voxels().asByte();
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();

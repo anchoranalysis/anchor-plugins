@@ -49,7 +49,7 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
+                        .create(
                                 chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
 
         processVoxels(

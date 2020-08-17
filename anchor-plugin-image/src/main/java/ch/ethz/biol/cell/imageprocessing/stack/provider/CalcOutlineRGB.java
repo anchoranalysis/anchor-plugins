@@ -64,17 +64,17 @@ class CalcOutlineRGB {
         if (background.getNumberChannels() == 3) {
             return apply(
                     outline,
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(1),
-                    background.createChnlDuplicate(2),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(1),
+                    background.createChannelDuplicate(2),
                     blueToAssign,
                     createShort);
         } else {
             return apply(
                     outline,
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(0),
-                    background.createChnlDuplicate(0),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(0),
+                    background.createChannelDuplicate(0),
                     blueToAssign,
                     createShort);
         }

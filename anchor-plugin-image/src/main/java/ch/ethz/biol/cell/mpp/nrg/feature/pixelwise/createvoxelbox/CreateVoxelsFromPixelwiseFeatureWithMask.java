@@ -127,7 +127,7 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
         Extent eMask = object.binaryVoxels().extent();
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 

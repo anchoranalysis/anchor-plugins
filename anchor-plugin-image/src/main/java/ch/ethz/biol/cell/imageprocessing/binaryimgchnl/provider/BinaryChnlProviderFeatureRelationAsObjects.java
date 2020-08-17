@@ -92,8 +92,8 @@ public class BinaryChnlProviderFeatureRelationAsObjects extends BinaryChnlProvid
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator)
             throws CreateException {
         try {
-            double valMain = calculator.calc(new FeatureInputSingleObject(objectMain));
-            double valCompareTo = calculator.calc(new FeatureInputSingleObject(objectCompareTo));
+            double valMain = calculator.calculate(new FeatureInputSingleObject(objectMain));
+            double valCompareTo = calculator.calculate(new FeatureInputSingleObject(objectCompareTo));
 
             if (relation.create().isRelationToValueTrue(valMain, valCompareTo)) {
                 return maskMain;

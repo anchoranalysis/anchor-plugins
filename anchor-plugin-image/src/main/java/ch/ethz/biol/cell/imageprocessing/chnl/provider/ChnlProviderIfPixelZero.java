@@ -110,7 +110,7 @@ public class ChnlProviderIfPixelZero extends ChnlProviderOne {
 
         Channel channelOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(channel.dimensions(), combinedType);
+                        .create(channel.dimensions(), combinedType);
 
         // We know these are all the same types from the logic above, so we can safetly cast
         processVoxels(

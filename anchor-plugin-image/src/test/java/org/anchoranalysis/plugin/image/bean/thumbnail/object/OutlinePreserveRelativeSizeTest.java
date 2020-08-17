@@ -24,7 +24,6 @@ import org.anchoranalysis.test.image.NRGStackFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 public class OutlinePreserveRelativeSizeTest {
 
@@ -40,9 +39,7 @@ public class OutlinePreserveRelativeSizeTest {
     
     private static final Stack BACKGROUND = NRGStackFixture.create(true, false).asStack();
     
-    @Rule public TemporaryFolder folder = new TemporaryFolder();
-    
-    private WriteIntoFolder writeStacks = new WriteIntoFolder(folder, false);
+    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
     
     @Test
     public void testThumbnails() throws OperationFailedException, CreateException {
@@ -54,7 +51,7 @@ public class OutlinePreserveRelativeSizeTest {
             assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.dimensions().extent());
         }
         
-        DualComparer comparer = DualComparerFactory.compareTemporaryFolderToTest(folder, "thumbnails", "thumbnails01");
+        DualComparer comparer = DualComparerFactory.compareTemporaryFolderToTest(writer.getFolder(), "thumbnails", "thumbnails01");
         assertTrue("thumbnails are identical to saved copy", comparer.compareTwoSubdirectories(".") );
     }
     
@@ -68,7 +65,7 @@ public class OutlinePreserveRelativeSizeTest {
         
         try {
             List<DisplayStack> thumbnails = thumbnailsFor(outline, OBJECTS);
-            writeStacks.writeList("thumbnails", thumbnails );
+            writer.writeList("thumbnails", thumbnails );
             outline.end();        
             return thumbnails;
         } catch (CreateException e) {

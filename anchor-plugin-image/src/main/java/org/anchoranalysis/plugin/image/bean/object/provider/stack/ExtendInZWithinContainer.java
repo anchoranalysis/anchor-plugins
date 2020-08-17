@@ -92,7 +92,7 @@ public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContai
             throws CreateException {
 
         int zLow = container.boundingBox().cornerMin().z();
-        int zHigh = container.boundingBox().calcCornerMax().z();
+        int zHigh = container.boundingBox().calculateCornerMax().z();
 
         Extent extent =
                 objectFlattened.boundingBox().extent().duplicateChangeZ(zHigh - zLow + 1);

@@ -83,7 +83,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
 
         double val;
         try {
-            val = featureSession.calc(new FeatureInputSingleObject(object));
+            val = featureSession.calculate(new FeatureInputSingleObject(object));
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }

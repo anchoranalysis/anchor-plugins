@@ -57,7 +57,7 @@ public class AssignPriorityFromPair extends AssignPriority {
             throws OperationFailedException {
 
         double resultPair =
-                featureCalculator.calcSuppressErrors(
+                featureCalculator.calculateSuppressErrors(
                         createInput(source, destination, merged), errorReporter);
 
         return new PrioritisedVertex(

@@ -78,7 +78,7 @@ public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
                     "'featureReport' output not enabled, as is required");
         }
 
-        List<String> headerNames = ReportFeatureUtilities.genHeaderNames(listReportFeatures, null);
+        List<String> headerNames = ReportFeatureUtilities.headerNames(listReportFeatures, null);
 
         headerNames.add(0, "id");
         writer.get().writeHeaders(headerNames);
@@ -120,7 +120,7 @@ public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
     private void writeFeaturesIntoReporter(
             MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
         List<TypedValue> rowElements =
-                ReportFeatureUtilities.genElementList(listReportFeatures, soMPP, logger);
+                ReportFeatureUtilities.elementList(listReportFeatures, soMPP, logger);
 
         rowElements.add(0, new TypedValue(inputDescriptiveName, false));
 

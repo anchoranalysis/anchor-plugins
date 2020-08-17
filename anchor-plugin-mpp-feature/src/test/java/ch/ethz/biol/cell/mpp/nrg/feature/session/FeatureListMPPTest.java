@@ -130,7 +130,7 @@ public class FeatureListMPPTest {
     private static void assertCfg(
             FeatureCalculatorMulti<FeatureInputCfg> session, Cfg cfg, double expected)
             throws CreateException, FeatureCalculationException, NamedFeatureCalculationException {
-        assertCalc(session.calc(new FeatureInputCfg(cfg, Optional.of(DIM))), expected);
+        assertCalc(session.calculate(new FeatureInputCfg(cfg, Optional.of(DIM))), expected);
     }
 
     private static void assertMark(
@@ -140,7 +140,7 @@ public class FeatureListMPPTest {
             double expected2,
             double expected3)
             throws CreateException, NamedFeatureCalculationException {
-        ResultsVector rv = session.calc(new FeatureInputMark(mark, Optional.of(DIM)));
+        ResultsVector rv = session.calculate(new FeatureInputMark(mark, Optional.of(DIM)));
         ResultsVectorTestUtilities.assertCalc(rv, expected1, expected2, expected3);
     }
 
@@ -155,10 +155,10 @@ public class FeatureListMPPTest {
         FeatureCalculatorMulti<FeatureInput> session =
                 createAndStart(ConstantsInListFixture.create());
 
-        ResultsVector rv1 = session.calc(params1);
+        ResultsVector rv1 = session.calculate(params1);
         ConstantsInListFixture.checkResultVector(rv1);
 
-        ResultsVector rv2 = session.calc(params2);
+        ResultsVector rv2 = session.calculate(params2);
         ConstantsInListFixture.checkResultVector(rv2);
     }
 }

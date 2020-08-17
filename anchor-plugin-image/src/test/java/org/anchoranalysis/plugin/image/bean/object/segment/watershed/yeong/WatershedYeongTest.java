@@ -83,6 +83,6 @@ public class WatershedYeongTest {
     }
 
     private Channel channelFor(String path) {
-        return loader.openChnlFromTestPath(path);
+        return loader.openChannelFromTestPath(path);
     }
 }

@@ -57,7 +57,7 @@ class ExtentToFitBoundingBoxes {
     public static Extent derive(Stream<BoundingBox> boundingBoxes) {
 
         List<ReadableTuple3i> cornersMax =
-                boundingBoxes.map(BoundingBox::calcCornerMax).collect(Collectors.toList());
+                boundingBoxes.map(BoundingBox::calculateCornerMax).collect(Collectors.toList());
 
         return new Extent(
                 maxDimensionValue(cornersMax, ReadableTuple3i::x) + 1,

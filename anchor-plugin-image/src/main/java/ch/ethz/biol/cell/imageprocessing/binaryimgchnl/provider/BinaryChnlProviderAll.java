@@ -40,7 +40,7 @@ public class BinaryChnlProviderAll extends BinaryChnlProviderDimSource {
 
         Channel channel =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
 
         Mask mask = new Mask(channel);
         mask.assignOn().toAll();

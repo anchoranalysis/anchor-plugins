@@ -78,7 +78,7 @@ class AggregateChnl {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(raster.dimensions(), outputType);
+                        .create(raster.dimensions(), outputType);
 
         VoxelsArithmetic.divide(
                 raster.voxels().asInt(), count, chnlOut.voxels(), outputType);
@@ -90,7 +90,7 @@ class AggregateChnl {
         if (raster == null) {
             this.raster =
                     ChannelFactory.instance()
-                            .createEmptyInitialised(dim, VoxelDataTypeUnsignedInt.INSTANCE);
+                            .create(dim, VoxelDataTypeUnsignedInt.INSTANCE);
         }
     }
 }

@@ -80,9 +80,9 @@ public class IncreaseFeatureCondition implements AfterCondition {
 
         // Feature source
         try {
-            double featureSrc = calc(source);
-            double featureDest = calc(destination);
-            double featureMerge = calc(merged);
+            double featureSrc = calculate(source);
+            double featureDest = calculate(destination);
+            double featureMerge = calculate(merged);
 
             // We skip if we don't increase the feature value for both objects
             return (featureMerge > featureSrc && featureMerge > featureDest);
@@ -92,7 +92,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
         }
     }
 
-    private double calc(ObjectMask object) throws FeatureCalculationException {
-        return session.calc(new FeatureInputSingleObject(object));
+    private double calculate(ObjectMask object) throws FeatureCalculationException {
+        return session.calculate(new FeatureInputSingleObject(object));
     }
 }

@@ -125,7 +125,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     )  throws FeatureCalculationException {
         Channel out =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
         out.assignValue(valueNoObject).toAll();
         for (ObjectMask object : objectsSource) {
             out.assignValue(valueToAssign.applyAsInt(object)).toObject(object);
@@ -135,7 +135,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     }
     
     private int valueToAssignForObject(ObjectMask object, FeatureCalculatorSingle<FeatureInputSingleObject> calculator, NRGStackWithParams nrgStack) throws FeatureCalculationException {
-        double featVal = calculator.calc(new FeatureInputSingleObject(object, nrgStack));
+        double featVal = calculator.calculate(new FeatureInputSingleObject(object, nrgStack));
         return (int) (factor * featVal);
     }
 }

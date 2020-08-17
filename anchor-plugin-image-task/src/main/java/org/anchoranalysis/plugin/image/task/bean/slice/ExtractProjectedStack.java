@@ -121,7 +121,7 @@ class ExtractProjectedStack {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(
+                        .create(
                                 new ImageDimensions(extentOut, channelDestination.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
         channelDestination.voxels()

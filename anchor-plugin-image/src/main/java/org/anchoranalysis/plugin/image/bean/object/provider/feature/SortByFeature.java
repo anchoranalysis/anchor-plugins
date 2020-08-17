@@ -75,7 +75,7 @@ public class SortByFeature extends ObjectCollectionProviderWithFeature {
                                     objectMask ->
                                             new ObjectWithFeatureValue(
                                                     objectMask,
-                                                    featureSession.calc(
+                                                    featureSession.calculate(
                                                             new FeatureInputSingleObject(
                                                                     objectMask))));
 

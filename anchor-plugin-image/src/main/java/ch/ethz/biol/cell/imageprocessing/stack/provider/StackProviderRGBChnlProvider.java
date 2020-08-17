@@ -102,7 +102,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
             throws IncorrectImageSizeException, CreateException {
 
         if (chnl == null) {
-            chnl = ChannelFactory.instance().createEmptyInitialised(dimensions, outputChnlType);
+            chnl = ChannelFactory.instance().create(dimensions, outputChnlType);
         }
 
         if (!outputChnlType.equals(chnl.getVoxelDataType())) {

@@ -109,7 +109,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
             FeatureList<FeatureInputStack> features)
             throws NamedFeatureCalculationException {
         try {
-            return factory.calculatorForAll(features).calc(new FeatureInputStack());
+            return factory.calculatorForAll(features).calculate(new FeatureInputStack());
         } catch (InitException e) {
             throw new NamedFeatureCalculationException(e);
         }

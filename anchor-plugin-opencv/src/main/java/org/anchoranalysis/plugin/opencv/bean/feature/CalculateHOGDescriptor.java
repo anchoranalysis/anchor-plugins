@@ -51,7 +51,7 @@ import org.opencv.core.MatOfFloat;
 class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputStack> {
 
     /**
-     * Optionally resizes the image before calculating the descriptor (useful for achiving
+     * Optionally resizes the image before calculating the descriptor (useful for achieving
      * constant-sized descriptors for different sized images)
      */
     private final Optional<SizeXY> resizeTo;

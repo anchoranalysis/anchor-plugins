@@ -79,12 +79,12 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
             ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
 
         ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calcCornerMax();
+        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
 
         Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
         Voxels<ByteBuffer> voxelsLookup = chnlLookup.voxels().asByte();
 
-        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
+        for (int z = cornerMin.z(); z < cornerMax.z(); z++) {
 
             ByteBuffer bbChnl = voxels.sliceBuffer(z);
             ByteBuffer bbChnlLookup = voxelsLookup.sliceBuffer(z);
@@ -92,8 +92,8 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
                     object.sliceBufferGlobal(z);
 
             int objectMaskOffset = 0;
-            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
-                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
+            for (int y = cornerMin.y(); y < cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x < cornerMax.x(); x++) {
 
                     if (bbMask.get(objectMaskOffset++) == object.binaryValuesByte().getOnByte()) {
 

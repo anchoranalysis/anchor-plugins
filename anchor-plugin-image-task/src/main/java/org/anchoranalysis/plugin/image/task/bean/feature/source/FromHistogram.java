@@ -115,7 +115,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                                     context.getRowSource(),
                                     context.getModelDirectory(),
                                     context.getLogger())
-                            .calc(new FeatureInputHistogram(histogram, Optional.empty()));
+                            .calculate(new FeatureInputHistogram(histogram, Optional.empty()));
 
             // Exports results as a KeyValueParams
             KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());

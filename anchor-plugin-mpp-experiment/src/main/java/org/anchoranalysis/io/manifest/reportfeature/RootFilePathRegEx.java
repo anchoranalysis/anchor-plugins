@@ -44,11 +44,11 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     // END BEAN PROPERTIES
 
     @Override
-    public String genFeatureStringFor(ManifestRecorderFile obj, Logger logger)
+    public String featureDescription(ManifestRecorderFile object, Logger logger)
             throws OperationFailedException {
 
         // We get the last three
-        Path path = obj.getRootPath();
+        Path path = object.getRootPath();
 
         String sep = File.separatorChar == '\\' ? "\\\\" : "/";
 
@@ -80,7 +80,7 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     }
 
     @Override
-    public String genTitleStr() throws OperationFailedException {
+    public String title() throws OperationFailedException {
         switch (groupNum) {
             case 0:
                 return "id";

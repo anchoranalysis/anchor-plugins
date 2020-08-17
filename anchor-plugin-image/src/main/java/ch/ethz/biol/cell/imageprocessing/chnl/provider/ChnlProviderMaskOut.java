@@ -46,7 +46,7 @@ public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(channel.dimensions(), channel.getVoxelDataType());
+                        .create(channel.dimensions(), channel.getVoxelDataType());
         
         // Create an object-mask from the mask
         ObjectMask object = new ObjectMask(mask.binaryVoxels());

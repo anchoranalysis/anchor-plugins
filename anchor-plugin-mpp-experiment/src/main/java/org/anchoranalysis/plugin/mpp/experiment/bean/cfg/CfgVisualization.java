@@ -56,7 +56,7 @@ class CfgVisualization {
             Cfg cfg, BoundOutputManagerRouteErrors outputManager, DisplayStack backgroundStack)
             throws OperationFailedException {
         ColorIndex colorIndex =
-                outputManager.getOutputWriteSettings().genDefaultColorIndex(cfg.size());
+                outputManager.getOutputWriteSettings().defaultColorIndexFor(cfg.size());
 
         WriterRouterErrors writeIfAllowed = outputManager.getWriterCheckIfAllowed();
         ColoredCfgWithDisplayStack cfgWithStack =
