@@ -47,7 +47,7 @@ public final class EncodedVoxels {
 
     public void setPoint(Point3i point, int code) {
         int offset = voxels.extent().offset(point.x(), point.y());
-        IntBuffer bbS = voxels.slice(point.z()).buffer();
+        IntBuffer bbS = voxels.sliceBuffer(point.z());
         bbS.put(offset, code);
     }
 
@@ -77,7 +77,7 @@ public final class EncodedVoxels {
     }
 
     public EncodedIntBuffer getPixelsForPlane(int z) {
-        return new EncodedIntBuffer(voxels.slice(z).buffer(), ENCODING);
+        return new EncodedIntBuffer(voxels.sliceBuffer(z), ENCODING);
     }
 
     public boolean hasTemporary() {
@@ -152,7 +152,7 @@ public final class EncodedVoxels {
 
             // Replace with intelligence slices buffer?
             int nextVal =
-                    voxels.slice(point.z()).buffer().get(e.offsetSlice(point));
+                    voxels.sliceBuffer(point.z()).get(e.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);

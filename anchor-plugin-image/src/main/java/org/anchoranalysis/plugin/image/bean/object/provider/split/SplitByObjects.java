@@ -33,7 +33,6 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
@@ -44,7 +43,6 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
 
@@ -88,10 +86,10 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
         //  a number for each object in objectsSplitBy
         // Then we find connected components
 
-        // Should be set to 0 by default
-        BoundedVoxels<IntBuffer> boundedVbId =
-                new BoundedVoxels<>(
-                        VoxelsFactory.getInt().createInitialized(objectToSplit.boundingBox().extent()));
+        // An Integer buffer with 0 by default and the same bounds as the object to be split
+        BoundedVoxels<IntBuffer> voxelsId =
+                new BoundedVoxels<>( objectToSplit.boundingBox(),
+                        VoxelsFactory.getInt().createInitialized(objectToSplit.boundingBox().extent()) );
 
         // Populate boundedVbId with id values
         int cnt = 1;
@@ -100,20 +98,9 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
             Optional<ObjectMask> intersect = objectToSplit.intersect(objectLocal, dim);
 
             // If there's no intersection, there's nothing to do
-            if (!intersect.isPresent()) {
-                continue;
+            if (intersect.isPresent()) {
+                voxelsId.assignValue(cnt++).toObject(intersect.get());
             }
-
-            ObjectMask intersectShifted =
-                    intersect
-                            .get()
-                            .mapBoundingBoxPreserveExtent(
-                                    box ->
-                                            box.shiftBackBy(
-                                                    objectToSplit.boundingBox().cornerMin()));
-
-            // We make the intersection relative to objToSplit
-            boundedVbId.voxels().setPixelsCheckMask(intersectShifted, cnt++);
         }
 
         try {
@@ -123,11 +110,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
                     1,
                     cnt,
                     CreateException.class,
-                    i ->
-                            createObjectForIndex(
-                                    i,
-                                    boundedVbId.voxels(),
-                                    objectToSplit.boundingBox().cornerMin()));
+                    i -> createObjectForIndex(i, voxelsId));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -136,13 +119,13 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
     /** Creates objects from all connected-components in a buffer with particular voxel values */
     private static ObjectCollection createObjectForIndex(
-            int voxelEqualTo, Voxels<IntBuffer> voxels, ReadableTuple3i shiftBy)
+            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels)
             throws CreateException {
         BinaryVoxels<IntBuffer> binaryVoxels =
-                BinaryVoxelsFactory.reuseInt(voxels, new BinaryValues(0, voxelEqualTo));
+                BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValues(0, voxelEqualTo));
 
-        // for every object we add the objToSplit Bounding Box crnr, to restore it to global
+        // for every object we add the objToSplit Bounding Box corner, to restore it to global
         // coordinates
-        return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy(shiftBy);
+        return CONNECTED_COMPONENTS_CREATOR.create(binaryVoxels).shiftBy( voxels.cornerMin() );
     }
 }

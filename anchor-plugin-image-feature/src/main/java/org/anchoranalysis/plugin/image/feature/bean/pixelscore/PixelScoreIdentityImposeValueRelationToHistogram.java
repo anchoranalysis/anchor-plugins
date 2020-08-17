@@ -73,9 +73,9 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
             throws InitException {
         try {
             if (max) {
-                histMax = histograms.get(histIndex).calcMax();
+                histMax = histograms.get(histIndex).calcMaximum();
             } else {
-                histMax = histograms.get(histIndex).calcMin();
+                histMax = histograms.get(histIndex).calcMinimum();
             }
         } catch (OperationFailedException e) {
             throw new InitException(e);

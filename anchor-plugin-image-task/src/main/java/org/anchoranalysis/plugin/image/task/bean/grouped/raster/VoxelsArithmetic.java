@@ -82,8 +82,8 @@ class VoxelsArithmetic {
 
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
 
-            IntBuffer in = voxelsIn.slice(z).buffer();
-            ShortBuffer out = voxelsOut.slice(z).buffer();
+            IntBuffer in = voxelsIn.sliceBuffer(z);
+            ShortBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
 
@@ -108,8 +108,8 @@ class VoxelsArithmetic {
 
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
 
-            IntBuffer in = voxelsIn.slice(z).buffer();
-            ByteBuffer out = voxelsOut.slice(z).buffer();
+            IntBuffer in = voxelsIn.sliceBuffer(z);
+            ByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
 
@@ -132,8 +132,8 @@ class VoxelsArithmetic {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
-            IntBuffer in1 = voxels.slice(z).buffer();
-            ShortBuffer in2 = toAdd.slice(z).buffer();
+            IntBuffer in1 = voxels.sliceBuffer(z);
+            ShortBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 
@@ -154,8 +154,8 @@ class VoxelsArithmetic {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
-            IntBuffer in1 = voxels.slice(z).buffer();
-            ByteBuffer in2 = toAdd.slice(z).buffer();
+            IntBuffer in1 = voxels.sliceBuffer(z);
+            ByteBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 

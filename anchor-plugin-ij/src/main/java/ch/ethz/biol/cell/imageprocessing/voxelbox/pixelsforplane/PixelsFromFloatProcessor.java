@@ -31,9 +31,9 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferFloat;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public class PixelsFromFloatProcessor implements PixelsForPlane<FloatBuffer> {
+public class PixelsFromFloatProcessor implements PixelsForSlice<FloatBuffer> {
 
     private FloatProcessor bp;
     private Extent extent;
@@ -45,12 +45,12 @@ public class PixelsFromFloatProcessor implements PixelsForPlane<FloatBuffer> {
     }
 
     @Override
-    public VoxelBuffer<FloatBuffer> getPixelsForPlane(int z) {
+    public VoxelBuffer<FloatBuffer> slice(int z) {
         return VoxelBufferFloat.wrap((float[]) bp.getPixels());
     }
 
     @Override
-    public void setPixelsForPlane(int z, VoxelBuffer<FloatBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<FloatBuffer> pixels) {
         assert (z == 0);
         bp.setPixels(pixels.buffer().array());
     }

@@ -37,7 +37,6 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromEntireChnlFactory;
 
 // Treats the entire binaryimgchnl as an object, and sees if it passes an {@link ObjectFilter}
 public class BinaryChnlProviderObjectFilterAsChannel extends BinaryChnlProviderElseBase {
@@ -49,7 +48,7 @@ public class BinaryChnlProviderObjectFilterAsChannel extends BinaryChnlProviderE
     @Override
     protected boolean condition(Mask mask) throws CreateException {
 
-        ObjectMask objectMask = CreateFromEntireChnlFactory.createObject(mask);
+        ObjectMask objectMask = new ObjectMask(mask);
 
         try {
             ObjectCollection objects =

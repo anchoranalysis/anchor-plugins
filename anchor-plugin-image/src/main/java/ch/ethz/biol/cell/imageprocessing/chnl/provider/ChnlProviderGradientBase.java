@@ -52,7 +52,7 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
     // END BEAN
 
     @Override
-    public Channel createFromChnl(Channel chnlIn) throws CreateException {
+    public Channel createFromChannel(Channel chnlIn) throws CreateException {
 
         // The gradient is calculated on a float
         Channel chnlIntermediate =

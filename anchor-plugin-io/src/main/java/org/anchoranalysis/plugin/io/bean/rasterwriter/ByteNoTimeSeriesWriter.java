@@ -112,7 +112,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
             Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
 
             for (int z = 0; z < stack.dimensions().z(); z++) {
-                writer.saveBytes(cnt++, voxels.slice(z).buffer().array());
+                writer.saveBytes(cnt++, voxels.sliceBuffer(z).array());
             }
         }
     }

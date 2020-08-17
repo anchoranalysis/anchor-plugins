@@ -37,6 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -86,17 +87,19 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         int thresholdResolved = threshold(dim);
 
-        for (int z = 0; z < object.boundingBox().extent().z(); z++) {
+        Extent extent = object.extent();
+        
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.voxels().slice(z).buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
-            int z1 = z + object.boundingBox().cornerMin().z();
-            VoxelBuffer<?> bbChnl = voxels.slice(z1);
+            VoxelBuffer<?> bbChnl = voxels.slice( z + object.boundingBox().cornerMin().z() );
 
-            for (int y = 0; y < object.boundingBox().extent().y(); y++) {
-                for (int x = 0; x < object.boundingBox().extent().x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
-                    int offset = object.boundingBox().extent().offset(x, y);
+                    int offset = extent.offset(x, y);
+                    
                     if (bb.get(offset) == object.binaryValuesByte().getOnByte()) {
 
                         int y1 = y + object.boundingBox().cornerMin().y();

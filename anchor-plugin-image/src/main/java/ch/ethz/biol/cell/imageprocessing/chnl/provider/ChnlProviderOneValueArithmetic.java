@@ -66,7 +66,7 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
 
                 int result = binaryOp(voxelVal, constant);
 
-                out.putInt(offset, cropValToByteRange(result));
+                out.putInt(offset, cropValueToByteRange(result));
             }
         }
 
@@ -76,7 +76,7 @@ public abstract class ChnlProviderOneValueArithmetic extends ChnlProviderOneValu
     /** The binary arithmetic operation that combines the voxel-value and the constant-value */
     protected abstract int binaryOp(int voxel, int constant);
 
-    private static int cropValToByteRange(int result) {
+    private static int cropValueToByteRange(int result) {
 
         if (result < 0) {
             return 0;

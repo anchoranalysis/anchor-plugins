@@ -98,7 +98,7 @@ public class MatConverter {
         assert (voxels.extent().z()) == 1;
 
         Mat mat = createEmptyMat(voxels.extent(), CvType.CV_8UC1);
-        mat.put(0, 0, voxels.slice(0).buffer().array());
+        mat.put(0, 0, voxels.sliceBuffer(0).array());
         return mat;
     }
 
@@ -157,7 +157,7 @@ public class MatConverter {
     }
 
     private static ByteBuffer bufferFromChnl(Channel chnl) {
-        return chnl.voxels().asByte().slice(0).buffer();
+        return chnl.voxels().asByte().sliceBuffer(0);
     }
 
     public static Mat createEmptyMat(Extent e, int type) {

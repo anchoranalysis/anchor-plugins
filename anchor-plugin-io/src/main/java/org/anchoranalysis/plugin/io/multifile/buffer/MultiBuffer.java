@@ -115,7 +115,7 @@ class MultiBuffer {
     @SuppressWarnings("unchecked")
     private void copyAllBuffersTo(int t, int c, VoxelsWrapper voxels) {
         for (int z = 0; z < size.getRangeZ().getSize(); z++) {
-            voxels.any().updateSlice(z, buffers[t][c][z]);
+            voxels.any().replaceSlice(z, buffers[t][c][z]);
         }
     }
 

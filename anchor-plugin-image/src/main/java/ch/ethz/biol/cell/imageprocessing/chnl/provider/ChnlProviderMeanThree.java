@@ -64,10 +64,10 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = voxelsIn1.slice(z).buffer();
-            ByteBuffer in2 = voxelsIn2.slice(z).buffer();
-            ByteBuffer in3 = voxelsIn3.slice(z).buffer();
-            ByteBuffer out = voxelsOut.slice(z).buffer();
+            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            ByteBuffer in3 = voxelsIn3.sliceBuffer(z);
+            ByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 

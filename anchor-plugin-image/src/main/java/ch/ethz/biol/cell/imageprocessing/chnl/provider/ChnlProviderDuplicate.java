@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 public class ChnlProviderDuplicate extends ChnlProviderOne {
 
     @Override
-    protected Channel createFromChnl(Channel chnl) throws CreateException {
-        return chnl.duplicate();
+    protected Channel createFromChannel(Channel channel) throws CreateException {
+        return channel.duplicate();
     }
 }

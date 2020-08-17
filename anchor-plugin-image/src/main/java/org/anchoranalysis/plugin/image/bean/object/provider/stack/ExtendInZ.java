@@ -75,7 +75,7 @@ public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
             VoxelBuffer<ByteBuffer> planeIn, Extent extent) {
         Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         for (int z = 0; z < extent.z(); z++) {
-            voxels.updateSlice(z, planeIn);
+            voxels.replaceSlice(z, planeIn);
         }
         return voxels;
     }

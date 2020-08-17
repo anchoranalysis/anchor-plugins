@@ -63,9 +63,8 @@ public class IntensityMeanCalculator {
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bbIntens = voxelsIntensity.any().slice(z);
-            ByteBuffer bbMask =
-                    object.voxels().slice(z - cornerMin.z()).buffer();
+            VoxelBuffer<?> bbIntensity = voxelsIntensity.slice(z);
+            ByteBuffer bbMask = object.sliceBufferGlobal(z);
 
             int offsetMask = 0;
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
@@ -74,7 +73,7 @@ public class IntensityMeanCalculator {
                     if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
                         int offsetIntens = voxelsIntensity.any().extent().offset(x, y);
 
-                        int val = bbIntens.getInt(offsetIntens);
+                        int val = bbIntensity.getInt(offsetIntens);
 
                         if (excludeZero && val == 0) {
                             offsetMask++;

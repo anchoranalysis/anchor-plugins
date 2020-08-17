@@ -71,8 +71,8 @@ public class OtsuWeighted extends CalculateLevel {
                         weightForeground, weightBackground);
 
         // Search for max between-class variance
-        int minIntensity = hist.calcMin() + 1;
-        int maxIntensity = hist.calcMax() - 1;
+        int minIntensity = hist.calcMinimum() + 1;
+        int maxIntensity = hist.calcMaximum() - 1;
 
         // If there's only zeroes
         if (maxIntensity == -1) {

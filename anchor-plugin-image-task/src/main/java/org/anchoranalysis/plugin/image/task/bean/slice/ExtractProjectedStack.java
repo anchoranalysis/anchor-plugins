@@ -61,11 +61,11 @@ class ExtractProjectedStack {
 
     private void extractAndProjectChnl(Channel chnl, int z, Stack stack)
             throws IncorrectImageSizeException {
-        Channel chnlProjected = createProjectedChnl(chnl.extractSlice(z));
+        Channel chnlProjected = createProjectedChannel(chnl.extractSlice(z).duplicate());
         stack.addChannel(chnlProjected);
     }
 
-    private Channel createProjectedChnl(Channel chnlIn) {
+    private Channel createProjectedChannel(Channel chnlIn) {
 
         // Then the mode is off
         if (!extent.isPresent()
@@ -99,11 +99,11 @@ class ExtractProjectedStack {
     }
 
     private static BoundingBox boxSrc(BoundingBox boxToProject, ImageDimensions dimensions) {
-        Point3i srcCrnrPos = createSrcCrnrPos(boxToProject, dimensions);
+        Point3i srcCrnrPos = createSourceCorner(boxToProject, dimensions);
         return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
-    private static Point3i createSrcCrnrPos(BoundingBox boxToProject, ImageDimensions dimensions) {
+    private static Point3i createSourceCorner(BoundingBox boxToProject, ImageDimensions dimensions) {
         Point3i sourceCorner = new Point3i(0, 0, 0);
 
         if (boxToProject.extent().x() < dimensions.x()) {
@@ -117,16 +117,17 @@ class ExtractProjectedStack {
     }
 
     private Channel copyPixels(
-            BoundingBox boxSrc, BoundingBox boxToProject, Channel chnl, Extent extentOut) {
+            BoundingBox boxSource, BoundingBox boxToProject, Channel channelDestination, Extent extentOut) {
 
         Channel chnlOut =
                 ChannelFactory.instance()
                         .createEmptyInitialised(
-                                new ImageDimensions(extentOut, chnl.dimensions().resolution()),
+                                new ImageDimensions(extentOut, channelDestination.dimensions().resolution()),
                                 VoxelDataTypeUnsignedByte.INSTANCE);
-        chnl.voxels()
+        channelDestination.voxels()
                 .asByte()
-                .copyPixelsTo(boxSrc, chnlOut.voxels().asByte(), boxToProject);
+                .extracter()
+                .boxCopyTo(boxSource, chnlOut.voxels().asByte(), boxToProject);
         return chnlOut;
     }
 }

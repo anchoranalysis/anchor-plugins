@@ -65,7 +65,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     public double calc(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        if (input.get().getObject().numPixelsLessThan(MIN_NUM_VOXELS)) {
+        if (input.get().getObject().voxelsOn().lowerCountExistsThan(MIN_NUM_VOXELS)) {
             String errorMessage = errorMessageIfTooFewPixels();
             
             getLogger().errorReporter().recordError(ImageMomentsBase.class, errorMessage);

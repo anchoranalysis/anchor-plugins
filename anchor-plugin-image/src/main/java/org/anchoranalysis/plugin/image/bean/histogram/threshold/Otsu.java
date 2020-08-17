@@ -58,8 +58,8 @@ public class Otsu extends CalculateLevel {
         int thresholdChosen = 0;
 
         // Search for max between-class variance
-        int minIntensity = hist.calcMin() + 1;
-        int maxIntensity = hist.calcMax() - 1;
+        int minIntensity = hist.calcMinimum() + 1;
+        int maxIntensity = hist.calcMaximum() - 1;
         for (int k = minIntensity; k <= maxIntensity; k++) { // Avoid min and max
             runningSum += k * hist.getCount(k);
             runningCount += hist.getCount(k);

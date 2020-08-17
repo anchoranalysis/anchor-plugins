@@ -60,15 +60,12 @@ class StatsHelper {
 
         for (int z = 0; z < object.boundingBox().extent().z(); z++) {
 
-            ObjectMask slice = object.extractSlice(z, true);
+            // We adjust the z coordinate to point to the channel
+            int zTarget = z + object.boundingBox().cornerMin().z();
+            
+            ObjectMask slice = object.extractSlice(zTarget,true);
 
-            // We adjust the z coordiante to point to the channel
-            int zTarget =
-                    slice.boundingBox().cornerMin().z()
-                            + object.boundingBox().cornerMin().z();
-            slice = slice.mapBoundingBoxPreserveExtent(box -> box.shiftToZ(zTarget));
-
-            if (slice.hasPixelsGreaterThan(0)) {
+            if (slice.voxelsOn().anyExists()) {
                 double mean =
                         IntensityMeanCalculator.calcMeanIntensityObject(chnl, slice, excludeZero);
 

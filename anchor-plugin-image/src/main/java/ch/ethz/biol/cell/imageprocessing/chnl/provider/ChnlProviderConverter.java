@@ -50,14 +50,14 @@ public class ChnlProviderConverter extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
         ChannelConverter<?> converter = chnlConverter.createConverter();
 
         ConversionPolicy conversionPolicy =
                 changeExisting
                         ? ConversionPolicy.CHANGE_EXISTING_CHANNEL
                         : ConversionPolicy.DO_NOT_CHANGE_EXISTING;
-        chnl = converter.convert(chnl, conversionPolicy);
-        return chnl;
+        channel = converter.convert(channel, conversionPolicy);
+        return channel;
     }
 }

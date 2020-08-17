@@ -63,11 +63,11 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
             for (int z = 0; z < e.z(); z++) {
 
                 BoundingBox box = calcNarrowestBoxAroundMask(mask.extractSlice(z).binaryVoxels());
-                mask.binaryVoxels().setPixelsToOn(box.shiftToZ(z));
+                mask.assignOn().toBox(box.shiftToZ(z));
             }
         } else {
             BoundingBox box = calcNarrowestBoxAroundMask(mask.binaryVoxels());
-            mask.binaryVoxels().setPixelsToOn(box);
+            mask.binaryVoxels().assignOn().toBox(box);
         }
 
         return mask;
@@ -85,7 +85,7 @@ public class BinaryChnlProviderBox extends BinaryChnlProviderOne {
         Point3i point = new Point3i(0, 0, 0);
         for (point.setZ(0); point.z() < extent.z(); point.incrementZ()) {
 
-            ByteBuffer buf = voxels.slice(point.z()).buffer();
+            ByteBuffer buf = voxels.sliceBuffer(point.z());
 
             for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
                 for (point.setX(0); point.x() < extent.x(); point.incrementX()) {

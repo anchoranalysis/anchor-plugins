@@ -29,8 +29,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import java.util.stream.Stream;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.io.generator.raster.boundingbox.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 

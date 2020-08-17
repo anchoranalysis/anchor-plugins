@@ -78,9 +78,7 @@ class SeedsFactory {
             ImageDimensions dim)
             throws CreateException {
 
-        ObjectMask seed =
-                object.mapBoundingBoxPreserveExtent(
-                        box -> box.shiftBackBy(subtractFromCornerMin));
+        ObjectMask seed = object.shiftBackBy(subtractFromCornerMin);
 
         // If a seed object is partially located outside an object, the above line might fail, so we
         // should test

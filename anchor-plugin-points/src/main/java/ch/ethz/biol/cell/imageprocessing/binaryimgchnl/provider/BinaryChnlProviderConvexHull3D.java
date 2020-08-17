@@ -38,6 +38,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
 
@@ -71,14 +72,16 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
         Channel out = outline.channel();
         Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
 
-        voxelsOut.setAllPixelsTo(outline.binaryValues().getOffInt());
+        VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
+        VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());
+        
+        assignerOff.toAll();
         for (int i = 0; i < vertices.length; i++) {
-            Point3d point = vertices[i];
-            voxelsOut.setVoxel(
-                    (int) point.x,
-                    (int) point.y,
-                    (int) point.z,
-                    outline.binaryValues().getOnInt());
+            
+            // Note this is not the usual {@code Point3d} type we use
+            Point3d point = vertices[i];        
+            
+            assignerOn.toVoxel((int) point.x, (int) point.y, (int) point.z);
         }
 
         return outline;
@@ -94,7 +97,7 @@ public class BinaryChnlProviderConvexHull3D extends ConvexHullBase {
         Extent e = mask.voxels().extent();
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = mask.voxels().slice(z).buffer();
+            ByteBuffer bb = mask.voxels().sliceBuffer(z);
 
             for (int y = 0; y < e.y(); y++) {
                 for (int x = 0; x < e.x(); x++) {

@@ -26,37 +26,23 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
+import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.object.LabelObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.Voxels;
 
 // Assigns a unique id number to each objects
 // Note behaviour is undefined when objects overlap with each other. An ID of either object
 // arbitrarily will be assigned.
 public class ChnlProviderIdentifyObjects extends ChnlProviderOneObjectsSource {
 
+    private static final LabelObjects LABELLER = new LabelObjects();
+    
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel channel, ObjectCollection objectsSource)
             throws CreateException {
-
-        Voxels<?> voxels = chnl.voxels().any();
-
-        if (objectsSource.size() > 255) {
-            throw new CreateException(
-                    String.format(
-                            "A maximum of 255 objects is allowed. There are %d",
-                            objectsSource.size()));
-        }
-
-        voxels.setAllPixelsTo(0);
-
-        int index = 1;
-        for (ObjectMask objects : objectsSource) {
-            voxels.setPixelsCheckMask(objects, index++);
-        }
-
-        return chnl;
+        LABELLER.labelObjectsInChannel(channel, objectsSource, Optional.empty());
+        return channel;
     }
 }

@@ -120,7 +120,7 @@ public class LineBoundCalculator extends BoundCalculator {
         ByteBuffer arr = null;
 
         int zPrev = 0;
-        arr = voxels.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
+        arr = voxels.slices().slice(zPrev).buffer();
 
         Point3d runningDbl = new Point3d();
 
@@ -128,7 +128,7 @@ public class LineBoundCalculator extends BoundCalculator {
             runningDbl.add(marg);
 
             Point3i runningInt =
-                    PointConverter.intFromDouble(Point3d.immutableAdd(point, runningDbl));
+                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDbl));
 
             ImageDimensions dimensions = channel.dimensions();
             if (dimensions.contains(runningInt)) {
@@ -137,7 +137,7 @@ public class LineBoundCalculator extends BoundCalculator {
 
             if (runningInt.z() != zPrev) {
                 zPrev = runningInt.z();
-                arr = voxels.getPlaneAccess().getPixelsForPlane(zPrev).buffer();
+                arr = voxels.slices().slice(zPrev).buffer();
             }
 
             int index = dimensions.offsetSlice(runningInt);

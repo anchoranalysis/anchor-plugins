@@ -33,7 +33,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.test.image.ChnlFixture;
+import org.anchoranalysis.test.image.ChannelFixture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -52,14 +52,12 @@ class BinaryChnlFixture {
     public static Mask createWithRectangle(Point3i crnr, boolean do3D) throws CreateException {
 
         Mask mask = new Mask(BinaryVoxelsFactory.createEmptyOff(extent(do3D)));
-
-        mask.binaryVoxels().setPixelsCheckMaskOn(createRectange(crnr, do3D));
-
+        mask.assignOn().toObject(createRectange(crnr, do3D));
         return mask;
     }
 
     public static Extent extent(boolean do3D) {
-        return do3D ? ChnlFixture.MEDIUM_3D : ChnlFixture.MEDIUM_2D;
+        return do3D ? ChannelFixture.MEDIUM_3D : ChannelFixture.MEDIUM_2D;
     }
 
     public static int depth(boolean do3D) {
@@ -70,7 +68,7 @@ class BinaryChnlFixture {
     private static ObjectMask createRectange(Point3i crnr, boolean do3D) {
         ObjectMask object =
                 new ObjectMask(new BoundingBox(crnr, new Extent(WIDTH, HEIGHT, depth(do3D))));
-        object.binaryVoxels().setAllPixelsToOn();
+        object.assignOn().toAll();
         return object;
     }
 }

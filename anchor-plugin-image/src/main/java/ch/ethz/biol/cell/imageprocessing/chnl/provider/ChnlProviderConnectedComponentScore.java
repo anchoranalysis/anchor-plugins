@@ -53,7 +53,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
     // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFromChnl(Channel chnl, ObjectCollection objectsSource)
+    protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
         LevelResultCollection lrc =
@@ -107,8 +107,8 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
         for (point.setZ(0); point.z()<extent.z(); point.incrementZ()) {
 
-            ByteBuffer bbIn = voxelsIn.slice( point.z() ).buffer();
-            ByteBuffer bbOut = voxelsOut.slice( point.z() ).buffer();
+            ByteBuffer bbIn = voxelsIn.sliceBuffer( point.z() );
+            ByteBuffer bbOut = voxelsOut.sliceBuffer( point.z() );
 
             int index = 0;
             for (point.setY(0); point.y()<extent.y(); point.incrementY()) {

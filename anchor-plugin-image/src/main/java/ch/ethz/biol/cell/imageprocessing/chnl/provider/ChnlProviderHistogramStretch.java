@@ -33,12 +33,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
@@ -47,24 +46,24 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
         try {
-            histogramStretch(chnl, quantile);
-            return chnl;
+            histogramStretch(channel, quantile);
+            return channel;
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }
 
-    private static void histogramStretch(Channel chnl, double quantile)
+    private static void histogramStretch(Channel channel, double quantile)
             throws OperationFailedException {
 
-        VoxelsWrapper voxels = chnl.voxels();
+        VoxelsWrapper voxels = channel.voxels();
 
-        Histogram hist = HistogramFactory.create(voxels);
+        Histogram histogram = HistogramFactory.create(voxels);
 
-        double rangeMin = hist.calcMin();
-        double rangeMax = hist.quantile(quantile);
+        double rangeMin = histogram.calcMinimum();
+        double rangeMax = histogram.quantile(quantile);
 
         // To avoid a situation where we have a 0 range
         if (rangeMax == rangeMin) {
@@ -76,29 +75,11 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
     private static void changeVoxels(Voxels<?> voxels, double rangeMin, double rangeMax) {
 
-        double rangeExtent = rangeMax - rangeMin;
-        double rangeMult = 255 / rangeExtent;
+        double rangeMult = 255 / (rangeMax - rangeMin);
 
-        Extent e = voxels.extent();
-        for (int z = 0; z < e.z(); z++) {
-
-            VoxelBuffer<?> bb = voxels.slice(z);
-
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-
-                    double val = (double) bb.getInt(offset);
-
-                    int stretched = roundAndClip((val - rangeMin) * rangeMult);
-
-                    bb.putInt(offset, stretched);
-
-                    offset++;
-                }
-            }
-        }
+        IterateVoxelsAsInt.changeEachPoint(voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
     }
+
 
     /** Rounds a value up or down, and clips to ensure its in the range 0..255 inclusive */
     private static int roundAndClip(double value) {

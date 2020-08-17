@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.points.PointsFromMask;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 
 // USES Gift wrap algorithm taken from FIJI PolygonRoi.java
 
@@ -61,13 +61,12 @@ public class BinaryChnlProviderConvexHull2D extends ConvexHullBase {
     }
 
     private void changeMaskToShowPointsOnly(Mask mask, List<Point2i> points) {
-        Voxels<?> voxels = mask.channel().voxels().any();
 
-        int on = mask.binaryValues().getOnInt();
-        int off = mask.binaryValues().getOffInt();
+        VoxelsAssigner assignerOn = mask.assignOn();
+        VoxelsAssigner assignerOff = mask.assignOff();
 
-        voxels.setAllPixelsTo(off);
+        assignerOff.toAll();
 
-        points.forEach(point -> voxels.setVoxel(point.x(), point.y(), 0, on));
+        points.forEach(point -> assignerOn.toVoxel(point.x(), point.y(), 0));
     }
 }

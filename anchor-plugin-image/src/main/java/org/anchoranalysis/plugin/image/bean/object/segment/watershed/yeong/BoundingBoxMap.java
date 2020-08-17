@@ -59,7 +59,7 @@ final class BoundingBoxMap {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,
-                (pointRange, index) -> matS.equalMask(pointRange.deriveBoundingBox(), index + 1));
+                (pointRange, index) -> matS.extracter().voxelsEqualTo(index + 1).deriveObject(pointRange.deriveBoundingBox()));
     }
 
     public int addPointForValue(Point3i point, int val) {

@@ -64,9 +64,9 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
 
         for (int z = 0; z < stack.dimensions().z(); z++) {
 
-            ByteBuffer red = voxelsRed.slice(z).buffer();
-            ByteBuffer green = voxelsGreen.slice(z).buffer();
-            ByteBuffer blue = voxelsBlue.slice(z).buffer();
+            ByteBuffer red = voxelsRed.sliceBuffer(z);
+            ByteBuffer green = voxelsGreen.sliceBuffer(z);
+            ByteBuffer blue = voxelsBlue.sliceBuffer(z);
 
             ByteBuffer merged =
                     ByteBuffer.allocate(red.capacity() + green.capacity() + blue.capacity());

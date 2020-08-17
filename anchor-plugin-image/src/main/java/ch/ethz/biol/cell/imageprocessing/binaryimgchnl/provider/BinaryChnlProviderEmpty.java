@@ -52,9 +52,12 @@ public class BinaryChnlProviderEmpty extends BinaryChnlProviderDimSource {
 
         BinaryValues bvOut = BinaryValues.getDefault();
 
+        Mask mask = new Mask(chnl, bvOut);
+        
         if (createOn) {
-            chnl.voxels().any().setAllPixelsTo(bvOut.getOnInt());
+            mask.assignOn().toAll();
         }
-        return new Mask(chnl, bvOut);
+        
+        return mask;
     }
 }

@@ -67,7 +67,7 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
     // END BEAN
 
     @Override
-    public Channel createFromChnl(Channel chnlIn) throws CreateException {
+    public Channel createFromChannel(Channel chnlIn) throws CreateException {
 
         Channel chnlIntermediate =
                 ChannelFactory.instance()

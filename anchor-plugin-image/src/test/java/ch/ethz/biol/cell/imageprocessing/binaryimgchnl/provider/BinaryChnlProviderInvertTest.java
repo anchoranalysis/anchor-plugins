@@ -98,7 +98,7 @@ public class BinaryChnlProviderInvertTest {
 
     private static void assertVoxelsOn(String messagePrefix, long expectedNumberVoxels, Mask mask) {
         assertEquals(
-                messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.countOn());
+                messagePrefix + "VoxelsOn", expectedNumberVoxels, mask.voxelsOn().count());
     }
 
     private static Point3i addHalfHeightInY(Point3i in) {

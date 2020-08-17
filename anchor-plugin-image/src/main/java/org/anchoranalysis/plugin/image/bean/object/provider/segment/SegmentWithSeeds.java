@@ -154,7 +154,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
         // We make a channel just for the object
         return ChannelFactory.instance()
                 .create(
-                        channel.voxels().any().region(boundingBox, false),
+                        channel.extracter().region(boundingBox, false),
                         channel.dimensions().resolution());
     }
 }

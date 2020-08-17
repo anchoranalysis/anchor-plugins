@@ -26,13 +26,11 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * Set pixels NOT IN the mask to 0, but keep pixels IN the mask identical.
@@ -44,22 +42,21 @@ import org.anchoranalysis.image.voxel.Voxels;
 public class ChnlProviderMaskOut extends ChnlProviderOneMask {
 
     @Override
-    protected Channel createFromMaskedChannel(Channel chnl, Mask mask) throws CreateException {
-
-        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
+    protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createEmptyInitialised(chnl.dimensions(), chnl.getVoxelDataType());
-
-        BoundingBox box = new BoundingBox(chnlOut.dimensions().extent());
-        chnl.voxels()
-                .copyPixelsToCheckMask(
-                        box,
+                        .createEmptyInitialised(channel.dimensions(), channel.getVoxelDataType());
+        
+        // Create an object-mask from the mask
+        ObjectMask object = new ObjectMask(mask.binaryVoxels());
+        
+        channel.voxels()
+                .copyVoxelsTo(
+                        object,
                         chnlOut.voxels(),
-                        box,
-                        voxelsMask,
-                        mask.binaryValues().createByte());
+                        object.boundingBox()
+                );
 
         return chnlOut;
     }

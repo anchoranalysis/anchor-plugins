@@ -157,7 +157,7 @@ class NaiveGreedyMerge {
     private ObjectMask merge(ObjectMask source, ObjectMask destination) {
         if (replaceWithMidpoint) {
             Point3i pointNew =
-                    PointConverter.intFromDouble(
+                    PointConverter.intFromDoubleFloor(
                             Point3d.midPointBetween(
                                     source.boundingBox().midpoint(),
                                     destination.boundingBox().midpoint()));

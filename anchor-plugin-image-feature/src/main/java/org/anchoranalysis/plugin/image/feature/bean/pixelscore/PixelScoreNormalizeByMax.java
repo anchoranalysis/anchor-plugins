@@ -46,7 +46,7 @@ public class PixelScoreNormalizeByMax extends PixelScoreSingleChnl {
     public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
             throws InitException {
         try {
-            maxEdge = histograms.get(getNrgChnlIndex()).calcMax();
+            maxEdge = histograms.get(getNrgChnlIndex()).calcMaximum();
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

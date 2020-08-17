@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.Seed;
@@ -71,13 +70,8 @@ class MarkSeeds {
 
     private static void throwExceptionIfNotConnected(ObjectMask obj)
             throws SegmentationFailedException {
-        try {
-            if (!obj.checkIfConnected()) {
-                throw new SegmentationFailedException("Seed must be a single connected-component");
-            }
-        } catch (OperationFailedException e) {
-            throw new SegmentationFailedException(
-                    "Cannot determine if a seed is a connected-component", e);
+        if (!obj.checkIfConnected()) {
+            throw new SegmentationFailedException("Seed must be a single connected-component");
         }
     }
 }

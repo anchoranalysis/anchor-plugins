@@ -118,7 +118,7 @@ class CalculatePairIntersection
             return Optional.empty();
         }
 
-        assert (omIntersection.get().hasPixelsGreaterThan(0));
+        assert (omIntersection.get().voxelsOn().anyExists());
 
         try {
             if (iterationsErosion > 0) {

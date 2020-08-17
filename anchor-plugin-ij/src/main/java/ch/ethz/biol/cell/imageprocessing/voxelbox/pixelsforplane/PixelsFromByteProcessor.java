@@ -31,9 +31,9 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
-import org.anchoranalysis.image.voxel.pixelsforplane.PixelsForPlane;
+import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
 
-public class PixelsFromByteProcessor implements PixelsForPlane<ByteBuffer> {
+public class PixelsFromByteProcessor implements PixelsForSlice<ByteBuffer> {
 
     private ByteProcessor bp;
     private Extent extent;
@@ -45,12 +45,12 @@ public class PixelsFromByteProcessor implements PixelsForPlane<ByteBuffer> {
     }
 
     @Override
-    public VoxelBuffer<ByteBuffer> getPixelsForPlane(int z) {
+    public VoxelBuffer<ByteBuffer> slice(int z) {
         return VoxelBufferByte.wrap((byte[]) bp.getPixels());
     }
 
     @Override
-    public void setPixelsForPlane(int z, VoxelBuffer<ByteBuffer> pixels) {
+    public void replaceSlice(int z, VoxelBuffer<ByteBuffer> pixels) {
         assert (z == 0);
         bp.setPixels(pixels.buffer().array());
     }

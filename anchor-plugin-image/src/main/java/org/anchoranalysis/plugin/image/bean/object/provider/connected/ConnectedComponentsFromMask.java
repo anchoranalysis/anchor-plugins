@@ -38,11 +38,13 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -103,22 +105,23 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
         CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
+        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extracter();
+        
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
                 mask.dimensions().z(),
                 CreateException.class,
-                z -> createForSlice(creator, createVoxels(mask, z), z));
+                z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
     }
 
-    private static BinaryVoxels<ByteBuffer> createVoxels(Mask mask, int z) {
-        return BinaryVoxelsFactory.reuseByte(mask.voxels().extractSlice(z), mask.binaryValues());
+    private static BinaryVoxels<ByteBuffer> extractSlice(VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
+        return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 
     private ObjectCollection createForSlice(
             CreateFromConnectedComponentsFactory objectCreator,
             BinaryVoxels<ByteBuffer> bvb,
-            int z)
-            throws CreateException {
+            int z) {
         // respecify the z
         return objectCreator.createConnectedComponents(bvb).stream()
                 .mapBoundingBoxPreserveExtent(box -> box.shiftToZ(z));

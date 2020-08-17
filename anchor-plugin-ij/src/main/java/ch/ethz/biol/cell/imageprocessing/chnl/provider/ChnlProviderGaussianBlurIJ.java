@@ -61,7 +61,7 @@ public class ChnlProviderGaussianBlurIJ extends ChnlProviderOne {
     }
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return blur(chnl);
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return blur(channel);
     }
 }

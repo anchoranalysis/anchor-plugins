@@ -91,8 +91,11 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
                 if (stats.histogram().hasAboveZero()) {
                     size +=
                             voxelsOutline
-                                    .extractSlice(z)
-                                    .countEqual(object.binaryValues().getOnInt());
+                                    .extracter()
+                                    .slice(z)
+                                    .extracter()
+                                    .voxelsEqualTo(object.binaryValues().getOnInt())
+                                    .count();
                 }
             }
             return size;

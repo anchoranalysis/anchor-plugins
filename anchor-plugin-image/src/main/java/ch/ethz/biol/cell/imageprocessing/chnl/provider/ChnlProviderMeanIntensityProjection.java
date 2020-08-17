@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 public class ChnlProviderMeanIntensityProjection extends ChnlProviderOne {
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-        return chnl.meanIntensityProjection();
+    public Channel createFromChannel(Channel channel) throws CreateException {
+        return channel.meanIntensityProjection();
     }
 }

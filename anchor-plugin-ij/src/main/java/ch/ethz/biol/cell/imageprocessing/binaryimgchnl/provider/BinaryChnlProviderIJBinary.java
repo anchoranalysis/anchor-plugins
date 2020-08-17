@@ -76,7 +76,7 @@ public class BinaryChnlProviderIJBinary extends BinaryChnlProviderOne {
             for (int z = 0; z < bvb.extent().z(); z++) {
 
                 ImageProcessor ip =
-                        IJWrap.imageProcessorByte(bvb.voxels().getPlaneAccess(), z);
+                        IJWrap.imageProcessorByte(bvb.voxels().slices(), z);
                 binaryPlugin.run(ip);
             }
         }

@@ -34,7 +34,6 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 class ObjectCollectionFixture {
 
@@ -68,20 +67,19 @@ class ObjectCollectionFixture {
         return mockObject(crnr, e);
     }
 
-    private ObjectMask mockObject(Point3i crnr, Extent e) {
+    private ObjectMask mockObject(Point3i corner, Extent e) {
 
-        ObjectMask object = new ObjectMask(new BoundingBox(crnr, e));
+        ObjectMask object = new ObjectMask(new BoundingBox(corner, e));
 
         int volumeXY = e.volumeXY();
         for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<ByteBuffer> voxels = object.voxels().slice(z);
-            ByteBuffer bb = voxels.buffer();
+            ByteBuffer bb = object.sliceBufferLocal(z);
 
             int prevVal = 0;
 
             for (int i = 0; i < volumeXY; i++) {
-                prevVal = randomMaybeChangeVal(prevVal);
+                prevVal = randomMaybeChangeValue(prevVal);
                 bb.put((byte) prevVal);
             }
         }
@@ -91,11 +89,11 @@ class ObjectCollectionFixture {
     }
 
     /** Randomly returns 0 or 255 with equal probability. prevVal must be 0 or 255 */
-    private static int randomMaybeChangeVal(int prevVal) {
+    private static int randomMaybeChangeValue(int previousValue) {
         if (RANDOM.nextDouble() > PROBABILITY_CHANGE_VALUE) {
-            return prevVal;
+            return previousValue;
         } else {
-            return (255 - prevVal);
+            return (255 - previousValue);
         }
     }
 

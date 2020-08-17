@@ -59,7 +59,7 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
 
             OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, false);
 
-            return ApplyKernel.applyForCount(kernel, object.voxels().maxIntensityProjection());
+            return ApplyKernel.applyForCount(kernel, object.extracter().projectionMax());
 
         } else {
             return ApplyKernel.applyForCount(

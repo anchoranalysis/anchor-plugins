@@ -106,7 +106,7 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             for (int y = 0; y <= e.y(); y++) {
                 for (int x = 0; x < e.x(); x++) {
@@ -135,8 +135,8 @@ public class CreateVoxelsFromPixelwiseFeatureWithMask {
 
             int zRel = z - cornerMin.z();
 
-            ByteBuffer bbMask = object.voxels().slice(zRel).buffer();
-            ByteBuffer bbOut = voxelsOut.slice(z).buffer();
+            ByteBuffer bbMask = object.sliceBufferLocal(zRel);
+            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {

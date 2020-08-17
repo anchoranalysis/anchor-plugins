@@ -41,11 +41,16 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 
-// Matches source-objects to target objects, based upon intersection, and assigns the
-//   value in the respective source object to the target object
+/**
+ * Matches source-objects to target objects, based upon intersection, and assigns the
+ * value in the respective source object to the target object
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
@@ -55,16 +60,16 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
-
-        Voxels<?> voxels = chnl.voxels().any();
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
         ObjectCollection source = objectsSource.create();
         ObjectCollection target = objectsTarget.create();
 
+        VoxelsExtracter<?> extracter = channel.extracter();
+        
         streamIntersectingObjects(source, target)
-                .forEach(pair -> voxels.setPixelsCheckMask(pair._2(), getValForMask(chnl, pair._1())));
-        return chnl;
+                .forEach(pair -> channel.assignValue(getValueForObject(extracter, pair._1())).toObject(pair._2()));
+        return channel;
     }
 
     /**
@@ -109,11 +114,8 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
         return mostIntersecting;
     }
 
-    private static int getValForMask(Channel chnl, ObjectMask object) {
-
-        Voxels<?> voxels = chnl.voxels().any();
-
-        return voxels.getVoxel(
+    private static int getValueForObject(VoxelsExtracter<?> extracter, ObjectMask object) {
+        return extracter.voxel(
                 object.findArbitraryOnVoxel().orElseThrow(AnchorImpossibleSituationException::new));
     }
 }

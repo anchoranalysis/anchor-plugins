@@ -179,7 +179,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                 // Level calculated from combined histograms
                 int level = calcLevelCombinedHist(om, vertexNeighbors);
 
-                voxelsOutput.setPixelsCheckMask(om.getObject(), level);
+                voxelsOutput.assignValue(level).toObject(om.getObject());
 
                 getLogger()
                         .messageLogger()

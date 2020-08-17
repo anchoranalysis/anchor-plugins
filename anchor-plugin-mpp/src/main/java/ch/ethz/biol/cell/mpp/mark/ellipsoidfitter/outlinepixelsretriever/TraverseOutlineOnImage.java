@@ -122,15 +122,14 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     private ObjectMask objectForFilled(Point3i root, Mask mask)
             throws TraverseOutlineException {
         // Important, so we can use the contains function later
-        return createObjectForPoint(root, mask)
-                .mapBoundingBoxPreserveExtent(box -> box.shiftTo(new Point3i(0, 0, 0)));
+        return createObjectForPoint(root, mask).shiftToOrigin();
     }
 
     private void callAfter(
             Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
-                BoundingBox.relPosTo(root, objectOutline.boundingBox().cornerMin());
+                BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
         try {
             visitScheduler.afterCreateObject(rootRelToMask, res, randomNumberGenerator);
         } catch (InitException e) {

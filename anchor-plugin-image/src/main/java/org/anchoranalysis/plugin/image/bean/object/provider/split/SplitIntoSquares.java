@@ -27,29 +27,42 @@
 package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
-// Chops objects up into squares (or mostly squares, sometimes rectangles at the very end)
-// Only chops in X and Y, Z is unaffected
+/**
+ * Splits objects into sub-objects by cutting by an orthogonal square lattice (like a chessboard).
+ * 
+ * <p>Only splits in x and y dimensions; the z-dimension is unaffected.
+ * 
+ * <p>The cuts are mostly squares, but sometimes cuts are rectangles in the leftover space, which
+ * are never larger in any dimension than {@code squareSize}
+ * 
+ * <p>An optional minimim number of ON voxels is applied to any object (after it has been cut)
+ * to exist in the created collection.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class SplitIntoSquares extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Positive @Getter @Setter private int squareSize = 10;
 
-    @BeanField @Getter @Setter private int minNumVoxels = 1;
+    /** Only includes squares that have at lesat this number of voxels */
+    @BeanField @Getter @Setter private int minNumberVoxels = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -58,89 +71,38 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
         return objectCollection.stream().flatMap(this::splitObject);
     }
 
-    // We want to add in any remaining space at the end into the last object, so we never have a
-    // rectangle
-    //  smaller than our squareSDize
     private ObjectCollection splitObject(ObjectMask object) {
 
-        ObjectCollection out = new ObjectCollection();
+        Extent extent = object.boundingBox().extent();
 
-        Extent e = object.boundingBox().extent();
+        Iterator<BoundingBox> iterator = new SquareIterator(extent, squareSize, 1, extent.z());
 
-        int numX = numSquaresAlongDimension(e.x());
-        int numY = numSquaresAlongDimension(e.y());
-
-        for (int y = 0; y < numY; y++) {
-
-            int startY = y * squareSize;
-
-            int endY = Math.min(startY + squareSize, e.y());
-
-            // Special treatment for last square
-            if (y == (numY - 1)) {
-                endY = Math.min(endY + squareSize, e.y());
-            }
-
-            int extentY = endY - startY;
-
-            for (int x = 0; x < numX; x++) {
-
-                int startX = x * squareSize;
-                int endX = Math.min(startX + squareSize, e.x());
-
-                // Special treatment for last square
-                if (x == (numX - 1)) {
-                    endX = Math.min(endX + squareSize, e.x());
-                }
-
-                createSquare(object, startX, startY, endX - startX, extentY).ifPresent(out::add);
-            }
-        }
-
-        return out;
+        return ObjectCollectionFactory.mapFromOptional(iterator, box->
+            maybeExtractSquare(object, box)
+        );
     }
+    
+    private Optional<ObjectMask> maybeExtractSquare(
+            ObjectMask objectToSplit, BoundingBox box) {
 
-    private Optional<ObjectMask> createSquare(
-            ObjectMask objToSplit, int startX, int startY, int extentX, int extentY) {
-
-        Extent extentNew = new Extent(extentX, extentY, objToSplit.voxels().extent().z());
-        BoundingBox srcBox = new BoundingBox(new Point3i(startX, startY, 0), extentNew);
-
-        // Voxels for the new square
-        Voxels<ByteBuffer> voxelsNew = VoxelsFactory.getByte().createInitialized(extentNew);
-
-        // Copy in mask-values from the source
-        objToSplit.voxels().copyPixelsTo(srcBox, voxelsNew, new BoundingBox(extentNew));
-
+        ObjectMask square = extractFromObject(objectToSplit, box);
+                
         // We only add the square if there's at least one voxel in it
-        if (!acceptSquare(voxelsNew, objToSplit.binaryValues().getOnInt())) {
+        if (!square.voxelsOn().higherCountExistsThan(minNumberVoxels-1)) {
             return Optional.empty();
         }
 
-        return Optional.of(
-                new ObjectMask(
-                        srcBox.shiftBy(objToSplit.boundingBox().cornerMin()),
-                        voxelsNew,
-                        objToSplit.binaryValuesByte()));
+        return Optional.of(square);
     }
+    
+    private ObjectMask extractFromObject(ObjectMask objectToSplit, BoundingBox box) {
 
-    private boolean acceptSquare(Voxels<ByteBuffer> voxelsNew, int maskOnValue) {
-        // We only add the square if there's at least one voxel in it
-        if (minNumVoxels == 1) {
-            return voxelsNew.hasEqualTo(maskOnValue);
-        } else {
-            int cntOn = voxelsNew.countEqual(maskOnValue);
-            return (cntOn >= minNumVoxels);
-        }
-    }
-
-    private int numSquaresAlongDimension(int extent) {
-        int num = extent / squareSize;
-        if (num != 0) {
-            return num;
-        } else {
-            // We force at least one, to catch the remainder
-            return 1;
-        }
+        // Voxels for the new square
+        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extracter().region(box, false);
+        
+        return new ObjectMask(
+                box.shiftBy(objectToSplit.boundingBox().cornerMin()),
+                voxelsNew,
+                objectToSplit.binaryValuesByte());
     }
 }

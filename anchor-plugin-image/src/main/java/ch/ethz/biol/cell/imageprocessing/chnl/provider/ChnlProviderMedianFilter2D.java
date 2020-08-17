@@ -129,20 +129,20 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
     }
 
     @Override
-    public Channel createFromChnl(Channel chnl) throws CreateException {
+    public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
         RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 
-        Channel dup = chnl.duplicate();
+        Channel dup = channel.duplicate();
         Voxels<ByteBuffer> voxelsDup = dup.voxels().asByte();
         Extent e = dup.dimensions().extent();
 
         for (int z = 0; z < e.z(); z++) {
 
-            ByteBuffer bb = voxels.slice(z).buffer();
-            ByteBuffer bbOut = voxelsDup.slice(z).buffer();
+            ByteBuffer bb = voxels.sliceBuffer(z);
+            ByteBuffer bbOut = voxelsDup.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {

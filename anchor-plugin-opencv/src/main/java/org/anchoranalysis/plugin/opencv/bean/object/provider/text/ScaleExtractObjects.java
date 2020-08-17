@@ -27,11 +27,10 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -47,7 +46,7 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 class ScaleExtractObjects {
 
     public static ObjectCollection apply(
-            List<WithConfidence<ObjectMask>> list, ScaleFactor scaleFactor, Extent extent) {
+            List<WithConfidence<ObjectMask>> list, ScaleFactor scaleFactor, Extent extent) throws OperationFailedException {
         // Scale back to the needed original resolution
         return scaleObjects(extractObjects(list), scaleFactor, extent);
     }
@@ -57,7 +56,7 @@ class ScaleExtractObjects {
     }
 
     private static ObjectCollection scaleObjects(
-            ObjectCollection objects, ScaleFactor scaleFactor, Extent extent) {
-        return objects.scale(scaleFactor, InterpolatorFactory.getInstance().binaryResizing(), Optional.of(extent));
+            ObjectCollection objects, ScaleFactor scaleFactor, Extent extent) throws OperationFailedException {
+        return objects.scale(scaleFactor, extent).asCollectionOrderNotPreserved();
     }
 }
