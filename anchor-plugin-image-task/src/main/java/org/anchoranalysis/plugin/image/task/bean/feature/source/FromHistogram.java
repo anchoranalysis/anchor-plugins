@@ -67,7 +67,7 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
  */
 public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHistogram> {
 
-    /** The name of the input histogram made available to histogramProvider */
+    /** The name of the input histogram made available to {@code histogram} */
     private static final String HISTOGRAM_INPUT_NAME_IN_PROVIDER = "input";
 
     // START BEAN PROPERTIES
@@ -77,10 +77,9 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
      *
      * <p>The histogram from the inputted CSV is available in the SharedObjects as "input".
      *
-     * <p>In this way histogramProvider can be used as a type of function around the original
-     * histogram.
+     * <p>In this way, {@code histogram} can approximate a function of the original histogram.
      */
-    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     public FromHistogram() {
@@ -104,10 +103,10 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
         // Reads histogram from file-system
         try {
-            Histogram histogram = readHistogramFromCsv(inputObject);
+            Histogram histogramRead = readHistogramFromCsv(inputObject);
 
-            if (histogramProvider != null) {
-                histogram = filterHistogramFromProvider(histogram, context.getContext());
+            if (histogram != null) {
+                histogramRead = filterHistogramFromProvider(histogramRead, context.getContext());
             }
 
             ResultsVector results =
@@ -115,7 +114,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
                                     context.getRowSource(),
                                     context.getModelDirectory(),
                                     context.getLogger())
-                            .calculate(new FeatureInputHistogram(histogram, Optional.empty()));
+                            .calculate(new FeatureInputHistogram(histogramRead, Optional.empty()));
 
             // Exports results as a KeyValueParams
             KeyValueParamsExporter.export(context.getFeatureNames(), results, context.getContext());
@@ -133,16 +132,16 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     private Histogram filterHistogramFromProvider(
             Histogram inputtedHistogram, BoundIOContext context) throws OperationFailedException {
 
-        HistogramProvider histogramProviderDuplicated = histogramProvider.duplicateBean();
+        HistogramProvider providerDuplicated = histogram.duplicateBean();
 
         try {
-            histogramProviderDuplicated.initRecursive(
+            providerDuplicated.initRecursive(
                     createImageInitParams(inputtedHistogram, context), context.getLogger());
 
-            return histogramProviderDuplicated.create();
+            return providerDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
             throw new OperationFailedException(
-                    "Cannot retrieve a histogram from histogramProvider", e);
+                    "Cannot retrieve a histogram from the provider", e);
         }
     }
 
@@ -151,7 +150,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
         paramsInit
-                .getHistogramCollection()
+                .histograms()
                 .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
         return paramsInit;
     }

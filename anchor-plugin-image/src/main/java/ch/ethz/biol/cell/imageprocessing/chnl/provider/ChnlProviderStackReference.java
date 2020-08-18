@@ -52,7 +52,7 @@ public class ChnlProviderStackReference extends ChannelProvider {
             if (chnl == null) {
                 Stack stack =
                         getInitializationParameters()
-                                .getStackCollection()
+                                .stacks()
                                 .getException(stackProviderID);
 
                 chnl = stack.getChannel(chnlIndex);

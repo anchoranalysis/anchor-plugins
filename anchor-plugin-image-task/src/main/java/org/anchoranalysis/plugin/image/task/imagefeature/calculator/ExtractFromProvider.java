@@ -51,34 +51,34 @@ class ExtractFromProvider {
 
         try {
             // Extract the NRG stack
-            StackProvider nrgStackProviderLoc = nrgStackProvider.duplicateBean();
-            nrgStackProviderLoc.initRecursive(initParams, logger);
+            StackProvider stackProviderDuplicated = nrgStackProvider.duplicateBean();
+            stackProviderDuplicated.initRecursive(initParams, logger);
 
-            return new NRGStackWithParams(nrgStackProviderLoc.create());
+            return new NRGStackWithParams(stackProviderDuplicated.create());
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    /** Creates and initializes a single-feature that is provided via a featureProvider */
+    /** Creates and initializes a single-feature that is provided via a {@link FeatureListProvider} */
     public static <T extends FeatureInput> Feature<T> extractFeature(
-            FeatureListProvider<T> featureProvider,
+            FeatureListProvider<T> featureListProvider,
             String featureProviderName,
             SharedFeaturesInitParams initParams,
             Logger logger)
             throws FeatureCalculationException {
 
         try {
-            featureProvider.initRecursive(initParams, logger);
+            featureListProvider.initRecursive(initParams, logger);
 
-            FeatureList<T> fl = featureProvider.create();
-            if (fl.size() != 1) {
+            FeatureList<T> features = featureListProvider.create();
+            if (features.size() != 1) {
                 throw new FeatureCalculationException(
                         String.format(
                                 "%s must return exactly one feature from its list. It currently returns %d",
-                                featureProviderName, fl.size()));
+                                featureProviderName, features.size()));
             }
-            return fl.get(0);
+            return features.get(0);
         } catch (CreateException | InitException e) {
             throw new FeatureCalculationException(e);
         }

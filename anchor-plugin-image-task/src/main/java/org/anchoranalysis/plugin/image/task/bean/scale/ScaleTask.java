@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
 import java.util.Set;
 import lombok.Getter;
@@ -56,6 +55,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY;
 
 /**
  * Scales many rasters
@@ -100,7 +100,7 @@ public class ScaleTask extends RasterTask {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
             nccfs.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(soImage.getStackCollection()), 0);
+                    new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -153,7 +153,7 @@ public class ScaleTask extends RasterTask {
             BoundIOContext context)
             throws JobExecutionException {
 
-        Set<String> chnlNames = params.getStackCollection().keys();
+        Set<String> chnlNames = params.stacks().keys();
         for (String chnlName : chnlNames) {
 
             // If this output is not allowed we simply skip
@@ -164,12 +164,12 @@ public class ScaleTask extends RasterTask {
             }
 
             try {
-                Channel chnlIn = params.getStackCollection().getException(chnlName).getChannel(0);
+                Channel chnlIn = params.stacks().getException(chnlName).getChannel(0);
 
                 Channel chnlOut;
                 if (forceBinary) {
                     Mask mask = new Mask(chnlIn);
-                    chnlOut = BinaryChnlProviderScaleXY.scale(mask, scaleCalculator).channel();
+                    chnlOut = ScaleXY.scale(mask, scaleCalculator).channel();
                 } else {
                     chnlOut =
                             ChnlProviderScale.scale(

@@ -30,13 +30,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.stack.Stack;
 
 @NoArgsConstructor
@@ -45,7 +46,7 @@ public class StackProviderChnlProvider extends StackProvider {
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
 
-    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
     // END BEAN PROPERTIES
 
     public StackProviderChnlProvider(ChannelProvider chnlProvider) {
@@ -57,7 +58,7 @@ public class StackProviderChnlProvider extends StackProvider {
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
 
-        if (!(chnl != null ^ binaryChnl != null)) {
+        if (!(chnl != null ^ mask != null)) {
             throw new BeanMisconfiguredException(
                     String.format(
                             "Either '%s' or '%s' must be non-null",
@@ -71,7 +72,7 @@ public class StackProviderChnlProvider extends StackProvider {
         if (chnl != null) {
             return new Stack(chnl.create());
         } else {
-            return new Stack(binaryChnl.create().channel());
+            return new Stack(mask.create().channel());
         }
     }
 }

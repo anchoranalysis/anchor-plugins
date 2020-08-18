@@ -57,7 +57,7 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     @BeanField @Getter @Setter
     private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
 
-    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogramProvider;
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     @Override
@@ -77,8 +77,8 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
     }
 
     private List<Histogram> histograms() throws CreateException {
-        if (histogramProvider != null) {
-            return Arrays.asList(histogramProvider.create());
+        if (histogram != null) {
+            return Arrays.asList(histogram.create());
         } else {
             return new ArrayList<>();
         }
@@ -90,33 +90,27 @@ public class ChnlProviderPixelScoreFeature extends ChnlProviderOne {
 
         ByteBuffer[] arrByteBuffer = new ByteBuffer[listAdditional.size()];
 
-        Extent e = voxels.extent();
-        for (int z = 0; z < e.z(); z++) {
+        Extent extent = voxels.extent();
+        extent.iterateOverZ( z-> {
 
-            VoxelBuffer<?> bb = voxels.slice(z);
+            VoxelBuffer<?> buffer = voxels.slice(z);
 
             for (int i = 0; i < listAdditional.size(); i++) {
                 Channel additional = listAdditional.get(i);
                 arrByteBuffer[i] = additional.voxels().asByte().sliceBuffer(z);
             }
+            
+            extent.iterateOverXY( (x,y,offset) -> {
+                double result = pixelScore.calculate(createParams(buffer, arrByteBuffer, offset));
 
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+                int valOut = (int) Math.round(result);
 
-                    double result = pixelScore.calculate(createParams(bb, arrByteBuffer, offset));
+                if (valOut < 0) valOut = 0;
+                if (valOut > 255) valOut = 255;
 
-                    int valOut = (int) Math.round(result);
-
-                    if (valOut < 0) valOut = 0;
-                    if (valOut > 255) valOut = 255;
-
-                    bb.putInt(offset, valOut);
-
-                    offset++;
-                }
-            }
-        }
+                buffer.putInt(offset, valOut);
+            });
+        });
     }
 
     private static int[] createParams(

@@ -38,8 +38,8 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CalcOutlineRGB {
@@ -97,8 +97,8 @@ class CalcOutlineRGB {
 
         VoxelDataType outputType =
                 createShort
-                        ? VoxelDataTypeUnsignedShort.INSTANCE
-                        : VoxelDataTypeUnsignedByte.INSTANCE;
+                        ? UnsignedShort.INSTANCE
+                        : UnsignedByte.INSTANCE;
 
         Channel channelGreen = imposeOutlineOnChnl(outline, backgroundGreen, outputType);
         Channel channelBlue = MaxChnls.apply(backgroundBlue, blueToAssign, outputType);

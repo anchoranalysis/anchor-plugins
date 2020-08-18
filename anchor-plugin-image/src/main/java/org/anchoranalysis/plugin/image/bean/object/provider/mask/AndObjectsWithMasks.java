@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -67,7 +67,7 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
         // Just the portion of the mask that matches the bounding box of our object
         ObjectMask objectPortion = mask.region(object.boundingBox(), true);
 
-        BinaryChnlAnd.apply(
+        MaskAnd.apply(
                 object.binaryVoxels().voxels(),
                 objectPortion.binaryVoxels().voxels(),
                 object.binaryVoxels().binaryValues().createByte(),

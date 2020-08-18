@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ChnlProviderMeanThree extends ChnlProviderThree {
 
@@ -44,7 +44,7 @@ public class ChnlProviderMeanThree extends ChnlProviderThree {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .create(chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl1.dimensions(), UnsignedByte.INSTANCE);
 
         processVoxels(
                 chnlOut.voxels().asByte(),

@@ -52,7 +52,7 @@ public class ChnlProviderAssignFromKeyValueParams extends ChnlProviderOne {
         try {
             params =
                     getInitializationParameters()
-                            .getParams()
+                            .params()
                             .getNamedKeyValueParamsCollection()
                             .getException(keyValueParamsID);
         } catch (NamedProviderGetException e) {

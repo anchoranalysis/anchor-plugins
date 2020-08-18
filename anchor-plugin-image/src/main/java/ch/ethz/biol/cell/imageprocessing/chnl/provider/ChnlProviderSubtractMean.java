@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 
 public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
 
@@ -47,119 +47,43 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        double mean = calculateMean(channel, mask);
+        Voxels<ByteBuffer> voxelsIntensity = channel.voxels().asByte();
+        
+        double mean = calculateMean(voxelsIntensity, mask);
 
-        int meanInt = (int) Math.round(mean);
+        int meanRounded = (int) Math.round(mean);
 
         if (subtractFromMaskOnly) {
-            subtractMeanMask(channel, mask, meanInt);
+            subtractMeanMask(voxelsIntensity, mask, meanRounded);
         } else {
-            subtractMeanAll(channel, meanInt);
+            subtractMeanAll(voxelsIntensity, meanRounded);
         }
 
         return channel;
     }
 
-    private double calculateMean(Channel chnl, Mask mask) {
-
-        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
-        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
-
-        Extent extent = voxelsMask.extent();
-
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
-
-        double sum = 0.0;
-        double count = 0;
-
-        for (int z = 0; z < extent.z(); z++) {
-
-            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
-            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < extent.y(); y++) {
-                for (int x = 0; x < extent.x(); x++) {
-
-                    if (bbMask.get(offset) == bvb.getOnByte()) {
-                        int intensity = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
-                        sum += intensity;
-                        count++;
-                    }
-
-                    offset++;
-                }
-            }
-        }
-
-        if (count == 0) {
-            return 0;
-        }
-
-        return sum / count;
+    private double calculateMean(Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
+        return IterateVoxelsByte.calculateMean(voxelsIntensity, mask.channel().voxels().asByte(), mask.getOnByte(), 0);
     }
 
-    private void subtractMeanMask(Channel chnl, Mask mask, int mean) {
-
-        Voxels<ByteBuffer> voxelsMask = mask.channel().voxels().asByte();
-        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
-
-        Extent e = voxelsMask.extent();
-
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
-
-        for (int z = 0; z < e.z(); z++) {
-
-            ByteBuffer bbMask = voxelsMask.sliceBuffer(z);
-            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-
-                    if (bbMask.get(offset) == bvb.getOnByte()) {
-                        int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
-                        int intensSub = (intens - mean);
-
-                        if (intensSub < 0) {
-                            intensSub = 0;
-                        }
-
-                        bbIntensity.put(offset, (byte) intensSub);
-                    }
-
-                    offset++;
-                }
-            }
-        }
+    private void subtractMeanMask(Voxels<ByteBuffer> voxelsIntensity, Mask mask, int mean) {
+        IterateVoxels.callEachPoint(voxelsIntensity, mask, (point, buffer, offset) -> processPoint(buffer, offset, mean)); 
     }
 
-    private void subtractMeanAll(Channel chnl, int mean) {
+    private void subtractMeanAll(Voxels<ByteBuffer> voxelsIntensity, int mean) {
+        IterateVoxels.callEachPoint(voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean) );
+    }
+    
+    private static void processPoint(ByteBuffer buffer, int offset, int mean) {
+        int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
+        
+        int intensitySubtracted = intensity - mean;
 
-        Voxels<ByteBuffer> voxelsIntensity = chnl.voxels().asByte();
-
-        Extent e = voxelsIntensity.extent();
-
-        for (int z = 0; z < e.z(); z++) {
-
-            ByteBuffer bbIntensity = voxelsIntensity.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-
-                    int intens = ByteConverter.unsignedByteToInt(bbIntensity.get(offset));
-                    int intensSub = (intens - mean);
-
-                    if (intensSub < 0) {
-                        intensSub = 0;
-                    }
-
-                    bbIntensity.put(offset, (byte) intensSub);
-
-                    offset++;
-                }
-            }
+        // Clip so it never falls below 0
+        if (intensitySubtracted < 0) {
+            intensitySubtracted = 0;
         }
+
+        buffer.put(offset, (byte) intensitySubtracted);
     }
 }

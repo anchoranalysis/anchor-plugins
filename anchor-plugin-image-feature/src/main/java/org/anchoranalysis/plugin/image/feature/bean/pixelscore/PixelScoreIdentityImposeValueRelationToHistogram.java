@@ -64,8 +64,9 @@ public class PixelScoreIdentityImposeValueRelationToHistogram extends PixelScore
 
         if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {
             return value;
+        } else {
+            return pixelVals[nrgChnlIndexFail];
         }
-        return pixelVals[nrgChnlIndexFail];
     }
 
     @Override

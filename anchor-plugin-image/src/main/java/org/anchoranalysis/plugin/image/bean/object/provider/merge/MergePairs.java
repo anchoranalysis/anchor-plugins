@@ -111,7 +111,7 @@ public class MergePairs extends MergeWithFeature {
                     new PairsTableCalculator(
                             new MergedPairsFeatures(
                                     FeatureListFactory.fromProvider(
-                                            featureEvaluatorMerge.getFeatureProvider())));
+                                            featureEvaluatorMerge.getFeature())));
             session.start(getInitializationParameters(), nrgStack, getLogger());
 
             return maybeWrapWithNRGStack(new FeatureCalculatorSingleFromMulti<>(session), nrgStack);

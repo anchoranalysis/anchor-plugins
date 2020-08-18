@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 public class ChnlProviderInvert extends ChnlProviderOne {
 
@@ -41,7 +41,7 @@ public class ChnlProviderInvert extends ChnlProviderOne {
 
         int maxValue = (int) voxels.getVoxelDataType().maxValue();
 
-        IterateVoxelsAsInt.changeEachPoint(voxels.any(), value -> maxValue - value);
+        IterateVoxelsVoxelBoxAsInt.changeEachPoint(voxels.any(), value -> maxValue - value);
 
         return channel;
     }

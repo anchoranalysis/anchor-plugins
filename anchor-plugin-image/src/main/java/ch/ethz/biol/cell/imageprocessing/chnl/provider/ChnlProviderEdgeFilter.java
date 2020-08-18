@@ -52,9 +52,9 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.Float;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 // 3x3 Sobel Filter
 public class ChnlProviderEdgeFilter extends ChnlProviderOne {
@@ -70,16 +70,16 @@ public class ChnlProviderEdgeFilter extends ChnlProviderOne {
     public Channel createFromChannel(Channel chnlIn) throws CreateException {
 
         Channel chnlIntermediate =
-                ChannelFactory.instance().create(chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
+                ChannelFactory.instance().create(chnlIn.dimensions(), Float.INSTANCE);
         Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
 
         NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);
 
-        if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (chnlIn.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
             NativeImg<UnsignedByteType, ByteArray> natIn =
                     ImgLib2Wrap.wrapByte(chnlIn.voxels().asByte());
             process(natIn, natOut, (float) scaleFactor);
-        } else if (chnlIn.getVoxelDataType().equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        } else if (chnlIn.getVoxelDataType().equals(UnsignedShort.INSTANCE)) {
             NativeImg<UnsignedShortType, ShortArray> natIn =
                     ImgLib2Wrap.wrapShort(chnlIn.voxels().asShort());
             process(natIn, natOut, (float) scaleFactor);

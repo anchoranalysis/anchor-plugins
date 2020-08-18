@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ChnlProviderZScore extends ChnlProviderOne {
 
@@ -95,8 +95,8 @@ public class ChnlProviderZScore extends ChnlProviderOne {
                     valOut = 0;
                 }
 
-                if (valOut > VoxelDataTypeUnsignedByte.MAX_VALUE_INT) {
-                    valOut = VoxelDataTypeUnsignedByte.MAX_VALUE_INT;
+                if (valOut > UnsignedByte.MAX_VALUE_INT) {
+                    valOut = UnsignedByte.MAX_VALUE_INT;
                 }
 
                 voxelsOut.putInt(offset, valOut);

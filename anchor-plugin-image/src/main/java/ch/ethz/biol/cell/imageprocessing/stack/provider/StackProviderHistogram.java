@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.stack.provider;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.plot.PlotInstance;
@@ -47,7 +48,7 @@ import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage
 public class StackProviderHistogram extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogram;
 
     /** Size of the image produced showing a plot of the histogram */
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024, 768);
@@ -57,14 +58,14 @@ public class StackProviderHistogram extends StackProvider {
     public Stack create() throws CreateException {
 
         try {
-            List<HistogramItem> listHI = histogramList(histogramProvider.create());
+            List<HistogramItem> histogramItems = histogramList(histogram.create());
 
-            PlotInstance gi = HistogramPlot.create(listHI.iterator(), null, null);
+            PlotInstance plot = HistogramPlot.create(histogramItems.iterator(), Optional.empty(), Optional.empty());
 
-            BufferedImage bi =
-                    GraphOutputter.createBufferedImage(gi, size.getWidth(), size.getHeight());
+            BufferedImage image =
+                    GraphOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
 
-            return CreateStackFromBufferedImage.create(bi);
+            return CreateStackFromBufferedImage.create(image);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
@@ -72,11 +73,10 @@ public class StackProviderHistogram extends StackProvider {
     }
 
     private static List<HistogramItem> histogramList(Histogram histogram) {
-        ArrayList<HistogramItem> listHI = new ArrayList<>();
+        List<HistogramItem> out = new ArrayList<>();
         for (int i = 1; i < histogram.size(); i++) {
-            HistogramItem hi = new HistogramItem(i, histogram.getCount(i));
-            listHI.add(hi);
+            out.add( new HistogramItem(i, histogram.getCount(i)) );
         }
-        return listHI;
+        return out;
     }
 }

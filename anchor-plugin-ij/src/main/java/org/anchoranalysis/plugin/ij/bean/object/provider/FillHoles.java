@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.ij.bean.object.provider;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderIJBinary;
 import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
@@ -42,6 +41,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.ij.mask.ApplyImageJMorphologicalOperation;
 
 /**
  * Fills holes in an object. Existing object-masks are overwritten (i.e. their memory buffers are
@@ -70,7 +70,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
             BinaryVoxels<ByteBuffer> voxelsDuplicated = voxels.duplicate();
 
             try {
-                BinaryChnlProviderIJBinary.fill(voxelsDuplicated);
+                ApplyImageJMorphologicalOperation.fill(voxelsDuplicated);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }

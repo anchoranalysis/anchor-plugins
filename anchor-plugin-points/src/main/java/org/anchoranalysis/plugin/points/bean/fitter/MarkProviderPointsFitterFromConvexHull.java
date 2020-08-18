@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.points.bean.fitter;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -42,6 +41,7 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
+import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
 
 // Applies a points fitter on the convex hull of some objects
 // Only works in 2D for now

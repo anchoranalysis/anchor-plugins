@@ -41,7 +41,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class StackProviderRGBChnlProvider extends StackProvider {
 
@@ -153,7 +153,7 @@ public class StackProviderRGBChnlProvider extends StackProvider {
 
         // If we have no channels, then default to unsigned 8-bit
         if (dataType == null) {
-            dataType = VoxelDataTypeUnsignedByte.INSTANCE;
+            dataType = UnsignedByte.INSTANCE;
         }
 
         return dataType;

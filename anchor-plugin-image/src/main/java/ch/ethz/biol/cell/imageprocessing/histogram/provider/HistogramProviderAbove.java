@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
+import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.histogram.Histogram;
  *
  * @author Owen Feehan
  */
-public class HistogramProviderAbove extends HistogramProviderOne {
+public class HistogramProviderAbove extends HistogramProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int threshold = 0;

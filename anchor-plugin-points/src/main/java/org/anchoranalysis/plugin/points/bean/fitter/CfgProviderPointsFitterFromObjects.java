@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.points.bean.fitter;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.ConvexHullUtilities;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
@@ -43,6 +42,7 @@ import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
 
 public class CfgProviderPointsFitterFromObjects extends CfgProvider {
 

@@ -47,7 +47,7 @@ public class HistogramProviderReference extends HistogramProvider {
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            histogram = so.getHistogramCollection().getException(id);
+            histogram = so.histograms().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

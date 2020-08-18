@@ -44,7 +44,7 @@ class FeatureEvaluatorFixture {
     public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg(
             Feature<T> feature, Logger logger, Path modelDirectory) throws CreateException {
         FeatureEvaluatorNrgStack<T> eval = new FeatureEvaluatorNrgStack<>();
-        eval.setFeatureProvider(ProviderFixture.providerFor(feature));
+        eval.setFeature(ProviderFixture.providerFor(feature));
         try {
             eval.init(SharedFeaturesInitParams.create(logger, modelDirectory), logger);
         } catch (InitException e) {

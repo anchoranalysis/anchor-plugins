@@ -61,8 +61,8 @@ class HistogramExtracter {
 
     private Mask extractMask(String stackName) throws JobExecutionException {
         try {
-            Channel chnl = source.extractChnl(stackName, false);
-            return new Mask(chnl, createMaskBinaryValues());
+            Channel extracted = source.extractChnl(stackName, false);
+            return new Mask(extracted, createMaskBinaryValues());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

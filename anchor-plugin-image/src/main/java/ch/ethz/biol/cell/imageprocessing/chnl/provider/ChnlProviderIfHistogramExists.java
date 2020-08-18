@@ -33,20 +33,17 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
 
 public class ChnlProviderIfHistogramExists extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private HistogramProvider histogramProvider;
+    @BeanField @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-
-        Histogram hist = histogramProvider.create();
-
-        if (hist != null) {
+        // TODO, do we wish to allow null histograms?
+        if (histogram.create() != null) {
             return channel;
         } else {
             throw new CreateException("histogram is null");

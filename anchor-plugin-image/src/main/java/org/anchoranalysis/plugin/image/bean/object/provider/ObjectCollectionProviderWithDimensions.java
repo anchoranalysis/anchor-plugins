@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class ObjectCollectionProviderWithDimensions extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
     // END BEAN PROPERTIES
 
     protected ImageDimensions createDimensions() throws CreateException {

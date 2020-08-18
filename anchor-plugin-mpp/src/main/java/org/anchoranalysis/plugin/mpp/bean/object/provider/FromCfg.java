@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.object.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
@@ -56,7 +56,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
