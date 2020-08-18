@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.intensity;
 import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
@@ -58,8 +59,9 @@ public class IntensityMeanCalculator {
         ReadableTuple3i cornerMin = box.cornerMin();
         ReadableTuple3i cornerMax = box.calculateCornerMax();
 
-        double sum = 0.0;
-        int cnt = 0;
+        //RunningSum running = IterateVoxelsByte.calculateSumAndCount(voxelsIntensity.asByte(), object);
+        
+        RunningSum running = new RunningSum();
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
@@ -71,17 +73,14 @@ public class IntensityMeanCalculator {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
 
                     if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
-                        int offsetIntens = voxelsIntensity.any().extent().offset(x, y);
+                        
+                        int offsetIntensity = voxelsIntensity.any().extent().offset(x, y);
 
-                        int val = bbIntensity.getInt(offsetIntens);
+                        int value = bbIntensity.getInt(offsetIntensity);
 
-                        if (excludeZero && val == 0) {
-                            offsetMask++;
-                            continue;
+                        if (!excludeZero || value != 0) {
+                            running.increment(value, 1);
                         }
-
-                        sum += val;
-                        cnt++;
                     }
 
                     offsetMask++;
@@ -89,11 +88,11 @@ public class IntensityMeanCalculator {
             }
         }
 
-        if (cnt == 0) {
+        if (running.getCount() == 0) {
             throw new FeatureCalculationException("There are 0 pixels in the object-mask");
         }
 
-        return sum / cnt;
+        return running.mean();
     }
 
     private static void checkContained(BoundingBox box, Extent extent)
