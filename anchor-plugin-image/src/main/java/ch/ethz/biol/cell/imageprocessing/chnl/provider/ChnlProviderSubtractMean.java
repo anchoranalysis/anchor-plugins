@@ -63,7 +63,7 @@ public class ChnlProviderSubtractMean extends ChnlProviderOneMask {
     }
 
     private double calculateMean(Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
-        return IterateVoxelsByte.calculateMean(voxelsIntensity, mask.channel().voxels().asByte(), mask.getOnByte(), 0);
+        return IterateVoxelsByte.calculateSumAndCount(voxelsIntensity, mask).mean(0);
     }
 
     private void subtractMeanMask(Voxels<ByteBuffer> voxelsIntensity, Mask mask, int mean) {

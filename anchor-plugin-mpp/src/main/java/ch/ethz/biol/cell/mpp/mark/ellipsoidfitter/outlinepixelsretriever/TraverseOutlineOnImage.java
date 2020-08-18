@@ -69,19 +69,19 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
             Point3i root, List<Point3i> listOut, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
 
-        Mask maskOutline = createOutline();
-        Mask maskFilled = createFilled();
+        Mask outline = createOutline();
+        Mask filled = createFilled();
 
-        checkDimensions(maskOutline.dimensions(), maskFilled.dimensions());
+        checkDimensions(outline.dimensions(), filled.dimensions());
 
-        useZ = useZ && (maskOutline.dimensions().z() > 1);
+        useZ = useZ && (outline.dimensions().z() > 1);
 
-        callBefore(maskOutline.dimensions().resolution(), randomNumberGenerator);
+        callBefore(outline.dimensions().resolution(), randomNumberGenerator);
 
-        objectOutline = createObjectForPoint(root, maskOutline);
+        objectOutline = createObjectForPoint(root, outline);
 
-        objectFilled = objectForFilled(root, maskFilled);
-        callAfter(root, maskOutline.dimensions().resolution(), randomNumberGenerator);
+        objectFilled = objectForFilled(root, filled);
+        callAfter(root, outline.dimensions().resolution(), randomNumberGenerator);
         traverseOutline(root, listOut);
     }
 
