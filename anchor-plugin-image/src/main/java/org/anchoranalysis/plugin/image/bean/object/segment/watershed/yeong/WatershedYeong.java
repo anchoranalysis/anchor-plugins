@@ -83,7 +83,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             Channel channel, Optional<ObjectMask> objectMask, Optional<SeedCollection> seeds)
             throws SegmentationFailedException {
 
-        EncodedVoxels matS = createS(channel.dimensions().extent());
+        EncodedVoxels matS = createS(channel.extent());
 
         Optional<MinimaStore> minimaStore =
                 OptionalFactory.create(exitWithMinima, MinimaStore::new);

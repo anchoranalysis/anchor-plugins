@@ -68,13 +68,13 @@ class ExtractProjectedStack {
     private Channel createProjectedChannel(Channel chnlIn) {
 
         // Then the mode is off
-        if (!extent.isPresent() || chnlIn.dimensions().extent().equals(extent.get())) {
+        if (!extent.isPresent() || chnlIn.extent().equals(extent.get())) {
             return chnlIn;
         } else {
             Point3i crnrPos = createTarget(chnlIn.dimensions(), extent.get());
 
             BoundingBox boxToProject =
-                    boxToProject(crnrPos, chnlIn.dimensions().extent(), extent.get());
+                    boxToProject(crnrPos, chnlIn.extent(), extent.get());
 
             BoundingBox boxSrc = boxSrc(boxToProject, chnlIn.dimensions());
 

@@ -63,7 +63,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             Stack stack = extractStack(input);
-            Extent extent = stack.dimensions().extent();
+            Extent extent = stack.extent();
 
             checkSize(extent);
 

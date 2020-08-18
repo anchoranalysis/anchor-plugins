@@ -44,7 +44,7 @@ import org.anchoranalysis.image.object.morph.MorphologicalDilation;
 public class LevelResultCollectionFactory {
 
     public static LevelResultCollection createCollection(
-            Channel chnl,
+            Channel channel,
             ObjectCollection objects,
             CalculateLevel calculateLevel,
             int numDilations,
@@ -65,15 +65,15 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel =
                         MorphologicalDilation.createDilatedObject(
                                 objectMask,
-                                Optional.of(chnl.dimensions().extent()),
-                                chnl.dimensions().z() > 1,
+                                Optional.of(channel.extent()),
+                                channel.dimensions().z() > 1,
                                 numDilations,
                                 false);
             } else {
                 objectForCalculateLevel = objectMask;
             }
 
-            Histogram h = HistogramFactory.create(chnl, objectForCalculateLevel);
+            Histogram h = HistogramFactory.create(channel, objectForCalculateLevel);
             int level;
             try {
                 level = calculateLevel.calculateLevel(h);

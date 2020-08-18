@@ -80,14 +80,14 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
         Extent extent = dimensions.extent();
 
         // Try each dimension: x, y, and z respectively
-        for (int d = 0; d < 3; d++) {
+        for (int dimension = 0; dimension < 3; dimension++) {
 
             // We try the min side and the max side
             for (int side = 0; side < 1; side++) {
 
                 // Are all points within
-                if (arePointsWithinDistanceOfBorder(points, extent, d, side == 0, arrDistances)) {
-                    pointsCurrent = reflectInDimension(pointsCurrent, extent, d, side == 0);
+                if (arePointsWithinDistanceOfBorder(points, extent, dimension, side == 0, arrDistances)) {
+                    pointsCurrent = reflectInDimension(pointsCurrent, extent, dimension, side == 0);
 
                     // It's not allowed be on both sides of the same dimensions
                     break;

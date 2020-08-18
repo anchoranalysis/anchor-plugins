@@ -148,7 +148,7 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                             objectsWithHistograms(objects, chnlIntensity),
                             ObjectMaskWithHistogram::getObject,
                             (v1, v2, numberVoxels) -> numberVoxels,
-                            chnlIntensity.dimensions().extent(),
+                            chnlIntensity.extent(),
                             true);
 
             Voxels<?> voxelsOutput = chnlOutput.voxels().any();

@@ -38,6 +38,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatConverter {
@@ -104,17 +105,17 @@ public class MatConverter {
 
     private static Mat matFromRGB(Channel chnlRed, Channel chnlGreen, Channel chnlBlue) {
 
-        Extent e = chnlRed.dimensions().extent();
-        assert (e.z()) == 1;
+        Extent extent = chnlRed.extent();
+        Preconditions.checkArgument(extent.z()==1);
 
-        Mat mat = createEmptyMat(chnlRed.dimensions().extent(), CvType.CV_8UC3);
+        Mat mat = createEmptyMat(chnlRed.extent(), CvType.CV_8UC3);
 
-        ByteBuffer red = bufferFromChnl(chnlRed);
-        ByteBuffer green = bufferFromChnl(chnlGreen);
-        ByteBuffer blue = bufferFromChnl(chnlBlue);
+        ByteBuffer red = bufferFromChannel(chnlRed);
+        ByteBuffer green = bufferFromChannel(chnlGreen);
+        ByteBuffer blue = bufferFromChannel(chnlBlue);
 
-        for (int y = 0; y < e.y(); y++) {
-            for (int x = 0; x < e.x(); x++) {
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
 
                 // Note BGR format in OpenCV
                 byte[] colArr = new byte[] {blue.get(), green.get(), red.get()};
@@ -122,26 +123,22 @@ public class MatConverter {
             }
         }
 
-        assert (!red.hasRemaining());
-        assert (!green.hasRemaining());
-        assert (!blue.hasRemaining());
-
         return mat;
     }
 
     private static void matToRGB(Mat mat, Channel chnlRed, Channel chnlGreen, Channel chnlBlue) {
 
-        Extent e = chnlRed.dimensions().extent();
-        assert (e.z()) == 1;
+        Extent extent = chnlRed.extent();
+        Preconditions.checkArgument(extent.z()==1);
 
-        ByteBuffer red = bufferFromChnl(chnlRed);
-        ByteBuffer green = bufferFromChnl(chnlGreen);
-        ByteBuffer blue = bufferFromChnl(chnlBlue);
+        ByteBuffer red = bufferFromChannel(chnlRed);
+        ByteBuffer green = bufferFromChannel(chnlGreen);
+        ByteBuffer blue = bufferFromChannel(chnlBlue);
 
         byte[] arr = new byte[3];
 
-        for (int y = 0; y < e.y(); y++) {
-            for (int x = 0; x < e.x(); x++) {
+        for (int y = 0; y < extent.y(); y++) {
+            for (int x = 0; x < extent.x(); x++) {
 
                 mat.get(y, x, arr);
 
@@ -156,11 +153,11 @@ public class MatConverter {
         assert (!blue.hasRemaining());
     }
 
-    private static ByteBuffer bufferFromChnl(Channel chnl) {
+    private static ByteBuffer bufferFromChannel(Channel chnl) {
         return chnl.voxels().asByte().sliceBuffer(0);
     }
 
-    public static Mat createEmptyMat(Extent e, int type) {
-        return new Mat(e.y(), e.x(), type);
+    public static Mat createEmptyMat(Extent extent, int type) {
+        return new Mat(extent.y(), extent.x(), type);
     }
 }

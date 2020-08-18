@@ -73,11 +73,11 @@ public class ChnlProviderZScore extends ChnlProviderOne {
             double histMean, double histStdDev, Channel chnl, Voxels<ByteBuffer> out) {
 
         // We loop through each item
-        Extent e = chnl.dimensions().extent();
+        Extent extent = chnl.extent();
 
-        int volumeXY = e.volumeXY();
+        int volumeXY = extent.volumeXY();
 
-        for (int z = 0; z < e.z(); z++) {
+        extent.iterateOverZ( z-> {
 
             VoxelBuffer<?> voxelsIn = chnl.voxels().slice(z);
             VoxelBuffer<?> voxelsOut = out.slice(z);
@@ -101,6 +101,6 @@ public class ChnlProviderZScore extends ChnlProviderOne {
 
                 voxelsOut.putInt(offset, valOut);
             }
-        }
+        });
     }
 }
