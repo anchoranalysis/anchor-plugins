@@ -50,14 +50,14 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int valueNoObject = 0;
 
-    @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> featureProvider;
+    @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> feature;
 
     @BeanField @Getter @Setter
     private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
@@ -69,12 +69,12 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
     protected Channel createFromChannel(Channel chnl, ObjectCollection objectsSource)
             throws CreateException {
 
-        Feature<FeatureInputSingleObject> feature = featureProvider.create();
+        Feature<FeatureInputSingleObject> featureCreated = feature.create();
 
         try {
             NRGStackWithParams nrgStack = new NRGStackWithParams(createNrgStack(chnl));
 
-            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(feature);
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(featureCreated);
 
             return createOutputChnl(
                     chnl.dimensions(),
@@ -113,7 +113,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
         return FeatureSession.with(
                 feature,
                 new FeatureInitParams(),
-                getInitializationParameters().getFeature().getSharedFeatureSet(),
+                getInitializationParameters().features().getSharedFeatureSet(),
                 getLogger());
     }
 
@@ -123,7 +123,7 @@ public class ChnlProviderObjectFeature extends ChnlProviderOneObjectsSource {
             CheckedToIntFunction<ObjectMask, FeatureCalculationException> valueToAssign)
             throws FeatureCalculationException {
         Channel out =
-                ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                ChannelFactory.instance().create(dimensions, UnsignedByte.INSTANCE);
         out.assignValue(valueNoObject).toAll();
         for (ObjectMask object : objectsSource) {
             out.assignValue(valueToAssign.applyAsInt(object)).toObject(object);

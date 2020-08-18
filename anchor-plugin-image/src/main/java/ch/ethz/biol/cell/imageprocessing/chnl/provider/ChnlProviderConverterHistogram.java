@@ -47,9 +47,9 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 public class ChnlProviderConverterHistogram extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
+    /** If set, a histogram used in conversion to describe input intensities (across perhaps multiple images). If unset, such a histogram is calculated from the current image. */
     @BeanField @OptionalBean @Getter @Setter
-    private HistogramProvider
-            histogramProvider; // If null, the histogram is calculated from the image
+    private HistogramProvider histogram;
 
     @BeanField @Getter @Setter private ConvertChannelToWithHistogram chnlConverter;
 
@@ -63,8 +63,8 @@ public class ChnlProviderConverterHistogram extends ChnlProviderOne {
     public Channel createFromChannel(Channel channel) throws CreateException {
 
         Histogram hist;
-        if (histogramProvider != null) {
-            hist = histogramProvider.create();
+        if (histogram != null) {
+            hist = histogram.create();
         } else {
             hist = HistogramFactory.create(channel);
         }

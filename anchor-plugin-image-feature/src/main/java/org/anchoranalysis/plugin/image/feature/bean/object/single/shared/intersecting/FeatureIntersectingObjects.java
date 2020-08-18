@@ -57,7 +57,7 @@ public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 
         ImageInitParams imageInit = new ImageInitParams(paramsInit.sharedObjectsRequired());
         try {
-            this.searchObjects = imageInit.getObjectCollection().getException(id);
+            this.searchObjects = imageInit.objects().getException(id);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

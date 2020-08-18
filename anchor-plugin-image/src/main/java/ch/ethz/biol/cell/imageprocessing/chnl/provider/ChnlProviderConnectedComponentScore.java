@@ -42,7 +42,7 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
 
@@ -62,7 +62,7 @@ public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsS
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .create(chnl.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl.dimensions(), UnsignedByte.INSTANCE);
         populateChannel(chnl, chnlOut, lrc);
         return chnlOut;
     }

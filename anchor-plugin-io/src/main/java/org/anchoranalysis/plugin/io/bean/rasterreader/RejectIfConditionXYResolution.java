@@ -81,9 +81,9 @@ public class RejectIfConditionXYResolution extends RasterReader {
             if (relation.isRelationToValueTrue(res.x(), value)) {
                 throw new RasterIOException(
                         "XY-resolution fufills condition, and is thus rejected");
+            } else {
+                return Optional.empty();
             }
-
-            return Optional.empty();
         }
     }
 

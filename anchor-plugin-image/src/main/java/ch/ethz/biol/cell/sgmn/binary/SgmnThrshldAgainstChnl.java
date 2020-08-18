@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 
 // Performs a threshold on each pixel, by comparing the pixel value to another channel
@@ -115,7 +115,7 @@ public class SgmnThrshldAgainstChnl extends BinarySegmentation {
      */
     private Voxels<ByteBuffer> createOutputVoxels(VoxelsWrapper voxels) {
 
-        if (voxels.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (voxels.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
             return voxels.asByte();
         } else {
             return VoxelsFactory.getByte().createInitialized(voxels.any().extent());

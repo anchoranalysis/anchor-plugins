@@ -41,6 +41,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.axis.AxisType;
@@ -50,7 +51,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -68,9 +68,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
     @BeanField @Getter @Setter
     private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
 
-    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnlFilled;
+    @BeanField @OptionalBean @Getter @Setter private Provider<Mask> maskFilled;
 
     @BeanField @Getter @Setter private ScalarProposer maxDistanceZ;
 
@@ -150,7 +150,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
                                     chnlFilled(),
                                     maxZDistance(randomNumberGenerator, dimensions.resolution()),
                                     skipZDistance(dimensions.resolution()),
-                                    binaryChnl.create(),
+                                    mask.create(),
                                     dimensions)
                             .generatePoints(pointsXY);
             return Optional.of(lastPointsAll);
@@ -175,6 +175,6 @@ public class XYOrientationExtendToZ extends PointsProposer {
     }
 
     private Optional<Mask> chnlFilled() throws CreateException {
-        return binaryChnlFilled != null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
+        return maskFilled != null ? Optional.of(maskFilled.create()) : Optional.empty();
     }
 }

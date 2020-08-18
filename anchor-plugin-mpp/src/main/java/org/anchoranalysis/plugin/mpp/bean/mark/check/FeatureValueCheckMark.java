@@ -53,7 +53,7 @@ import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 public abstract class FeatureValueCheckMark<T extends FeatureInput> extends CheckMark {
 
     // START BEANS
-    @BeanField @Getter @Setter private FeatureProvider<T> featureProvider;
+    @BeanField @Getter @Setter private FeatureProvider<T> feature;
 
     @BeanField @Getter @Setter protected double minVal = 0;
 
@@ -74,13 +74,13 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
     public void start(NRGStackWithParams nrgStack) throws OperationFailedException {
 
         try {
-            Feature<T> feature = featureProvider.create();
+            Feature<T> featureCreated = feature.create();
 
-            KeyValueParams kpv = createKeyValueParams();
+            KeyValueParams paramsCreated = createKeyValueParams();
 
             session =
                     FeatureSession.with(
-                            feature, new FeatureInitParams(kpv), sharedFeatureSet, getLogger());
+                            featureCreated, new FeatureInitParams(paramsCreated), sharedFeatureSet, getLogger());
 
         } catch (CreateException | InitException e) {
             session = null;

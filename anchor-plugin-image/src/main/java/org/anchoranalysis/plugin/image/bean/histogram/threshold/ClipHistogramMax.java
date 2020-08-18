@@ -36,7 +36,6 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 
 /**
  * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
@@ -61,11 +60,11 @@ public class ClipHistogramMax extends CalculateLevelOne {
         long numAbove =
                 histogram.countThreshold(new RelationToConstant(new GreaterThanBean(), maxVal));
 
-        Histogram out = new HistogramArray(histogram.getMaxBin());
+        Histogram out = new Histogram(histogram.getMaxBin());
         for (int i = histogram.getMinBin(); i <= maxVal; i++) {
-            out.incrValueBy(i, histogram.getCount(i));
+            out.incrementValueBy(i, histogram.getCount(i));
         }
-        out.incrValueBy(maxVal, numAbove);
+        out.incrementValueBy(maxVal, numAbove);
         return out;
     }
 }

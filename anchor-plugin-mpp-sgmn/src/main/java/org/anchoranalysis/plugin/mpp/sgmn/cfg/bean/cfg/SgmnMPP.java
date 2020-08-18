@@ -158,7 +158,7 @@ public class SgmnMPP extends CfgSgmn {
                     .apply();
 
             DualStack dualStack =
-                    wrapWithBackground(nrgStack, mppInit.getImage().getStackCollection());
+                    wrapWithBackground(nrgStack, mppInit.getImage().stacks());
 
             if (exitBeforeOpt) {
                 return new Cfg();

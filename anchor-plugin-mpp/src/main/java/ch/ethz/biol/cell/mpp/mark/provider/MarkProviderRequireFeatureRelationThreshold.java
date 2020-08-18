@@ -26,7 +26,7 @@
 
 package ch.ethz.biol.cell.mpp.mark.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,14 +53,14 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkProvider markProvider;
 
-    @BeanField @Getter @Setter private FeatureProvider<FeatureInputMark> featureProvider;
+    @BeanField @Getter @Setter private FeatureProvider<FeatureInputMark> feature;
 
     @BeanField @Getter @Setter private double threshold;
 
     @BeanField @Getter @Setter private RelationBean relation;
 
     @BeanField @OptionalBean @Getter @Setter
-    private ImageDimProvider dimensions = new GuessDimFromInputImage();
+    private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
@@ -79,9 +79,9 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
     }
 
     private boolean isFeatureAccepted(Mark mark) throws CreateException {
-        Feature<FeatureInputMark> feature = featureProvider.create();
+        Feature<FeatureInputMark> featureCreated = feature.create();
 
-        double featureVal = calculateInput(feature, mark);
+        double featureVal = calculateInput(featureCreated, mark);
 
         return relation.create().isRelationToValueTrue(featureVal, threshold);
     }

@@ -86,9 +86,9 @@ public class ImageDimProviderFromChnl extends ImageDimProvider {
 
         try {
             return OptionalUtilities.orFlat(
-                            getInitializationParameters().getChnlCollection().getOptional(id),
+                            getInitializationParameters().channels().getOptional(id),
                             getInitializationParameters()
-                                    .getStackCollection()
+                                    .stacks()
                                     .getOptional(id)
                                     .map(ImageDimProviderFromChnl::firstChnl))
                     .orElseThrow(

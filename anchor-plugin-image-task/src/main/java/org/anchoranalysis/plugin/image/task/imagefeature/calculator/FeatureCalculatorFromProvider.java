@@ -80,7 +80,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         this.nrgStack =
                 nrgStackFromProviderOrElse(
                         nrgStackProvider,
-                        CachedSupplier.cache(() -> allStacksAsOne(initParams.getStackCollection())),
+                        CachedSupplier.cache(() -> allStacksAsOne(initParams.stacks())),
                         context.getLogger());
         this.logger = context.getLogger();
     }
@@ -97,9 +97,9 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         try {
             Feature<T> feature =
                     ExtractFromProvider.extractFeature(
-                            provider, providerName, initParams.getFeature(), logger);
+                            provider, providerName, initParams.features(), logger);
 
-            return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+            return createSingleCalculator(feature, initParams.features().getSharedFeatureSet());
         } catch (InitException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -108,7 +108,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
             throws InitException {
-        return createMultiCalculator(features, initParams.getFeature().getSharedFeatureSet());
+        return createMultiCalculator(features, initParams.features().getSharedFeatureSet());
     }
 
     /** Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback */

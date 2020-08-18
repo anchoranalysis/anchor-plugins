@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderOneValue {
 
@@ -46,7 +46,7 @@ public abstract class ChnlProviderConditionallyWriteScalar extends ChnlProviderO
 
         int constantAsInt = (int) Math.floor(constantToAssign);
 
-        IterateVoxelsAsInt.assignEachMatchingPoint(
+        IterateVoxelsVoxelBoxAsInt.assignEachMatchingPoint(
                 voxels,
                 value -> shouldOverwriteVoxelWithConstant(value, constantAsInt),
                 constantAsInt);

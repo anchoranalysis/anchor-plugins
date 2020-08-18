@@ -35,6 +35,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.plugin.image.bean.mask.provider.Invert;
 import org.anchoranalysis.plugin.image.test.ProviderFixture;
 import org.junit.Test;
 
@@ -92,8 +93,8 @@ public class BinaryChnlProviderInvertTest {
     }
 
     private static MaskProvider createProviderInvert(Mask mask, Optional<Mask> restrictTo) {
-        BinaryChnlProviderInvert provider = new BinaryChnlProviderInvert();
-        provider.setBinaryChnl(ProviderFixture.providerFor(mask));
+        Invert provider = new Invert();
+        provider.setMask(ProviderFixture.providerFor(mask));
         restrictTo.ifPresent(m -> provider.setRestrictTo(ProviderFixture.providerFor(m)));
         return provider;
     }

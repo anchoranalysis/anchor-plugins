@@ -32,7 +32,7 @@ import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 /**
  * Takes the two channels and creates a NEW third channel whose pixels are a function of the two
@@ -49,7 +49,7 @@ public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .create(chnl1.dimensions(), VoxelDataTypeUnsignedByte.INSTANCE);
+                        .create(chnl1.dimensions(), UnsignedByte.INSTANCE);
 
         processVoxels(chnlOut.voxels().asByte(), chnl1.voxels().asByte(), chnl2.voxels().asByte());
 

@@ -36,7 +36,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.ImageResolution;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 /**
  * TODO change property names
@@ -57,6 +57,6 @@ public class ChnlProviderEmpty extends ChannelProvider {
     public Channel create() throws CreateException {
         ImageDimensions dimensions =
                 new ImageDimensions(new Extent(sx, sy, sz), new ImageResolution());
-        return ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+        return ChannelFactory.instance().create(dimensions, UnsignedByte.INSTANCE);
     }
 }

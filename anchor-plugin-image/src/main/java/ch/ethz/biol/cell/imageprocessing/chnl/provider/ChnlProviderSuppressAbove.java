@@ -35,10 +35,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
 // TODO consider using a generic histogram-feature and a FeatureCalculation to cache the histogram
 // creation
@@ -52,12 +52,12 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Histogram hist = HistogramFactory.create(channel, mask);
+        Histogram histogram = HistogramFactory.create(channel, mask);
 
         try {
-            double intensityThrshldDbl = hist.quantile(quantile);
+            double intensityThreshold = histogram.quantile(quantile);
 
-            replacePixelsAbove((int) Math.ceil(intensityThrshldDbl), channel.voxels().asByte());
+            replacePixelsAbove((int) Math.ceil(intensityThreshold), channel.voxels().asByte());
         } catch (OperationFailedException e) {
             throw new CreateException("An error occurred computing a quantile", e);
         }
@@ -69,24 +69,12 @@ public class ChnlProviderSuppressAbove extends ChnlProviderOneMask {
     private static void replacePixelsAbove(int threshold, Voxels<ByteBuffer> voxels) {
         byte meanIntensityByte = (byte) threshold;
 
-        Extent e = voxels.extent();
-
-        for (int z = 0; z < e.z(); z++) {
-
-            ByteBuffer bb = voxels.sliceBuffer(z);
-
-            int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
-
-                    int val = ByteConverter.unsignedByteToInt(bb.get(offset));
-                    if (val > threshold) {
-                        bb.put(offset, meanIntensityByte);
-                    }
-
-                    offset++;
-                }
+        IterateVoxels.callEachPoint(voxels, (point, buffer, offset) -> {
+            int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
+            if (intensity > threshold) {
+                buffer.put(offset, meanIntensityByte);
             }
-        }
+
+        });
     }
 }

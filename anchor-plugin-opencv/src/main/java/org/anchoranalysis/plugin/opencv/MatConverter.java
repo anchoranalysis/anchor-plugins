@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -86,7 +86,7 @@ public class MatConverter {
     }
 
     private static Mat makeGrayscale(Channel chnl) throws CreateException {
-        if (chnl.getVoxelDataType().equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        if (chnl.getVoxelDataType().equals(UnsignedByte.INSTANCE)) {
             return singleChannelMatFromVoxels(chnl.voxels().asByte());
         } else {
             throw new CreateException("Only 8-bit channels are supported");

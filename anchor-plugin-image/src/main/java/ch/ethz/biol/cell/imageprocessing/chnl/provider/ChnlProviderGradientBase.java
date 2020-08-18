@@ -37,7 +37,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeFloat;
+import org.anchoranalysis.image.voxel.datatype.Float;
 
 public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 
@@ -56,7 +56,7 @@ public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
 
         // The gradient is calculated on a float
         Channel chnlIntermediate =
-                ChannelFactory.instance().create(chnlIn.dimensions(), VoxelDataTypeFloat.INSTANCE);
+                ChannelFactory.instance().create(chnlIn.dimensions(), Float.INSTANCE);
 
         GradientCalculator calculator =
                 new GradientCalculator(createDimensionArr(), (float) scaleFactor, addSum);

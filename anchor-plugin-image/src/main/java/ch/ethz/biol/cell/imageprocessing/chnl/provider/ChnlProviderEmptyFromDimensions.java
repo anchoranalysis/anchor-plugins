@@ -33,8 +33,8 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 
@@ -50,8 +50,8 @@ public class ChnlProviderEmptyFromDimensions extends ChnlProviderDimSource {
 
         VoxelDataType typeOut =
                 createShort
-                        ? VoxelDataTypeUnsignedShort.INSTANCE
-                        : VoxelDataTypeUnsignedByte.INSTANCE;
+                        ? UnsignedShort.INSTANCE
+                        : UnsignedByte.INSTANCE;
 
         Channel chnlNew = ChannelFactory.instance().create(dimensions, typeOut);
         if (value != 0) {

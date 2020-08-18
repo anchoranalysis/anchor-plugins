@@ -28,10 +28,11 @@ package org.anchoranalysis.plugin.image.bean.object.provider.mask;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 
@@ -43,11 +44,11 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 public class FromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
     // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection create() throws CreateException {
-        return ObjectCollectionFactory.of(binaryChnl.create());
+        return ObjectCollectionFactory.of(mask.create());
     }
 }

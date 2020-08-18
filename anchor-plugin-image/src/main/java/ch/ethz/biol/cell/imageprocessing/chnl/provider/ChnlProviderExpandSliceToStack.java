@@ -36,7 +36,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 // Takes a 2-dimensional mask and converts into a 3-dimensional mask by repeating along the z-stack
 public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
@@ -61,7 +61,7 @@ public class ChnlProviderExpandSliceToStack extends ChnlProviderDimSource {
 
         Channel chnlOut =
                 ChannelFactory.instance()
-                        .createUninitialised(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensions, UnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsSlice = chnl.voxels().asByte();
         Voxels<ByteBuffer> voxelsOut = chnlOut.voxels().asByte();

@@ -46,20 +46,20 @@ class NRGStackHelper {
             ImageInitParams soImage, Optional<String> nrgParamsName, BoundIOContext context) {
 
         try {
-            if (soImage.getStackCollection().keys().contains("nrgStack")) {
+            if (soImage.stacks().keys().contains("nrgStack")) {
 
                 KeyValueParams params =
                         OptionalUtilities.flatMap(
                                         nrgParamsName,
                                         paramsName ->
-                                                soImage.getParams()
+                                                soImage.params()
                                                         .getNamedKeyValueParamsCollection()
                                                         .getOptional(paramsName))
                                 .orElseGet(KeyValueParams::new);
 
                 NRGStackWriter.writeNRGStack(
                         new NRGStackWithParams(
-                                soImage.getStackCollection().getException("nrgStack"), params),
+                                soImage.stacks().getException("nrgStack"), params),
                         context);
             }
         } catch (NamedProviderGetException e) {

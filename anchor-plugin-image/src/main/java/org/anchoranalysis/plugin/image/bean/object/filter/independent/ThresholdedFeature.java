@@ -81,32 +81,32 @@ public class ThresholdedFeature extends ObjectFilterRelation {
             ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation)
             throws OperationFailedException {
 
-        double val;
+        double value;
         try {
-            val = featureSession.calculate(new FeatureInputSingleObject(object));
+            value = featureSession.calculate(new FeatureInputSingleObject(object));
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
 
-        boolean succ = (relation.isRelationToValueTrue(val, threshold));
+        boolean matched = relation.isRelationToValueTrue(value, threshold);
 
         if (debug) {
-            if (succ) {
+            if (matched) {
                 getLogger()
                         .messageLogger()
                         .logFormatted(
                                 "%s\tVal=%f\tthreshold=%f\t  (Accepted)",
-                                object.centerOfGravity(), val, threshold);
+                                object.centerOfGravity(), value, threshold);
             } else {
                 getLogger()
                         .messageLogger()
                         .logFormatted(
                                 "%s\tVal=%f\tthreshold=%f",
-                                object.centerOfGravity(), val, threshold);
+                                object.centerOfGravity(), value, threshold);
             }
         }
 
-        return succ;
+        return matched;
     }
 
     @Override

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.define;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.ColoredObjectsOnStack;
 import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
@@ -50,7 +49,6 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
-import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 
 /**
  * Adds a visualization for all binary-masks and object-collections that are added using a
@@ -129,10 +127,10 @@ public class VisualizeOnBackground extends DefineAdderBean {
         return new NamedBean<>(inputName + SUFFIX, createVisualization.apply(inputName));
     }
 
-    private StackProvider visualizationBinaryMask(String binaryChnlProviderID) {
+    private StackProvider visualizationBinaryMask(String maskProviderID) {
         StackProviderOutlineRGB provider = new StackProviderOutlineRGB();
         addBackgroundProvider(provider);
-        provider.setMask(new BinaryChnlProviderReference(binaryChnlProviderID));
+        provider.setMask(new org.anchoranalysis.plugin.image.bean.mask.provider.Reference(maskProviderID));
         return provider;
     }
 
@@ -140,7 +138,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
         ColoredObjectsOnStack provider = new ColoredObjectsOnStack();
         provider.setOutline(true);
         addBackgroundProvider(provider);
-        provider.setObjects(new Reference(objectsProviderID));
+        provider.setObjects(new org.anchoranalysis.plugin.image.bean.object.provider.Reference(objectsProviderID));
         provider.setOutlineWidth(outlineWidth);
         return provider;
     }

@@ -30,6 +30,7 @@ import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitsc
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -37,7 +38,6 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -54,9 +54,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     @BeanField @Getter @Setter private boolean bigNeighborhood = true;
 
-    @BeanField @Getter @Setter private MaskProvider binaryChnlOutline;
+    @BeanField @Getter @Setter private Provider<Mask> maskOutline;
 
-    @BeanField @Getter @Setter private MaskProvider binaryChnlFilled;
+    @BeanField @Getter @Setter private Provider<Mask> maskFilled;
 
     @BeanField @Getter @Setter private boolean useZ = true;
     // END BEAN PROPERTIES
@@ -87,7 +87,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     private Mask createOutline() throws TraverseOutlineException {
         try {
-            return binaryChnlOutline.create();
+            return maskOutline.create();
         } catch (CreateException e) {
             throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
         }
@@ -95,7 +95,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
     private Mask createFilled() throws TraverseOutlineException {
         try {
-            return binaryChnlFilled.create();
+            return maskFilled.create();
         } catch (CreateException e) {
             throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
         }

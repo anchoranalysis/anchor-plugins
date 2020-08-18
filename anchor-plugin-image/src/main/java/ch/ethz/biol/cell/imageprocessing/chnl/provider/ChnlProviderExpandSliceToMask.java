@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferByte;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 /**
  * Takes a 2-dimensional mask and converts into a 3-dimensional mask along the z-stack but discards
@@ -83,7 +83,7 @@ public class ChnlProviderExpandSliceToMask extends ChannelProvider {
 
         Channel chnl =
                 ChannelFactory.instance()
-                        .createUninitialised(dimensionsTarget, VoxelDataTypeUnsignedByte.INSTANCE);
+                        .createUninitialised(dimensionsTarget, UnsignedByte.INSTANCE);
 
         Voxels<ByteBuffer> voxelsOut = chnl.voxels().asByte();
 

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.outline.FindOutline;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
 public class StackProviderOutlineRGB extends StackProviderWithBackground {
 
@@ -88,7 +88,7 @@ public class StackProviderOutlineRGB extends StackProviderWithBackground {
         if (chnlBlue != null) {
             return chnlBlue.create();
         } else {
-            return ChannelFactory.instance().create(dimensions, VoxelDataTypeUnsignedByte.INSTANCE);
+            return ChannelFactory.instance().create(dimensions, UnsignedByte.INSTANCE);
         }
     }
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.grouped;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 /**
  * Checks that the histograms created from channels all have the same data type, res, max-value etc.
@@ -66,11 +66,11 @@ public class ConsistentChannelChecker {
 
     private void setMaxValue(long histogramMaxValue) throws SetOperationFailedException {
 
-        if (histogramMaxValue > VoxelDataTypeUnsignedShort.MAX_VALUE) {
+        if (histogramMaxValue > UnsignedShort.MAX_VALUE) {
             throw new SetOperationFailedException(
                     String.format(
                             "Histogram max-value (%d) must be set less than %d",
-                            histogramMaxValue, VoxelDataTypeUnsignedShort.MAX_VALUE));
+                            histogramMaxValue, UnsignedShort.MAX_VALUE));
         }
 
         this.maxValue = histogramMaxValue;

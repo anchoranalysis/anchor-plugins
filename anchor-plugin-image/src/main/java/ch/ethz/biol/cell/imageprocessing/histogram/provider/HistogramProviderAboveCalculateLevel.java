@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.HistogramProviderOne;
+import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
  *
  * @author Owen Feehan
  */
-public class HistogramProviderAboveCalculateLevel extends HistogramProviderOne {
+public class HistogramProviderAboveCalculateLevel extends HistogramProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;

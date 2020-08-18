@@ -30,10 +30,10 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -55,7 +55,7 @@ import org.apache.commons.lang.time.StopWatch;
 public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
 
     @BeanField @Getter @Setter
     private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
@@ -69,7 +69,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Mask mask = binaryChnl.create();
+        Mask maskCreated = mask.create();
 
         StopWatch sw = new StopWatch();
         sw.start();
@@ -79,12 +79,12 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(mask.dimensions().resolution())));
+                                            Optional.of(maskCreated.dimensions().resolution())));
 
             if (bySlices) {
-                return createObjectsBySlice(mask, minNumberVoxels);
+                return createObjectsBySlice(maskCreated, minNumberVoxels);
             } else {
-                return createObjects3D(mask, minNumberVoxels);
+                return createObjects3D(maskCreated, minNumberVoxels);
             }
 
         } catch (UnitValueException e) {
@@ -96,8 +96,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
-    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels)
-            throws CreateException {
+    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
         return createFactory(minNumberVoxels).createConnectedComponents(mask);
     }
 

@@ -37,7 +37,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
@@ -77,7 +77,7 @@ public class ChnlProviderHistogramStretch extends ChnlProviderOne {
 
         double rangeMult = 255 / (rangeMax - rangeMin);
 
-        IterateVoxelsAsInt.changeEachPoint(
+        IterateVoxelsVoxelBoxAsInt.changeEachPoint(
                 voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
     }
 

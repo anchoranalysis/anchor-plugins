@@ -47,7 +47,7 @@ public class StackProviderInput extends StackProvider {
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            inputStack = so.getStackCollection().getException(StackIdentifiers.INPUT_IMAGE);
+            inputStack = so.stacks().getException(StackIdentifiers.INPUT_IMAGE);
         } catch (NamedProviderGetException e) {
             throw new InitException(e.summarize());
         }

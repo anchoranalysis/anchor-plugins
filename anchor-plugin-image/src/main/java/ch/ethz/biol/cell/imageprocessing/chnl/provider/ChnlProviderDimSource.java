@@ -26,7 +26,7 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimFromInputImage;
+import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public abstract class ChnlProviderDimSource extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimFromInputImage();
+    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
     // END BEAN PROPERTIES
 
     @Override
