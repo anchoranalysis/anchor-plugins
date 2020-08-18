@@ -73,7 +73,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                         object ->
                                 new FeatureInputSingleObject(
                                         checkObjectInsideScene(
-                                                object, nrgStack.dimensions().extent()),
+                                                object, nrgStack.extent()),
                                         nrgStack));
     }
 

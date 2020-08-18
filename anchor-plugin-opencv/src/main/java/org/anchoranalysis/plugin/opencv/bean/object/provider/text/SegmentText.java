@@ -92,7 +92,7 @@ public class SegmentText extends ObjectCollectionProvider {
 
         // Scales the input to the largest acceptable-extent
         Tuple2<Mat, ScaleFactor> pair =
-                CreateScaledInput.apply(stack, findLargestExtent(stack.dimensions().extent()));
+                CreateScaledInput.apply(stack, findLargestExtent(stack.extent()));
 
         // Convert marks to object-masks
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
@@ -105,7 +105,7 @@ public class SegmentText extends ObjectCollectionProvider {
         // Scale each object-mask and extract as an object-collection
         try {
             return ScaleExtractObjects.apply(
-                    maybeFilterList(objectsWithConfidence), pair._2(), stack.dimensions().extent());
+                    maybeFilterList(objectsWithConfidence), pair._2(), stack.extent());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

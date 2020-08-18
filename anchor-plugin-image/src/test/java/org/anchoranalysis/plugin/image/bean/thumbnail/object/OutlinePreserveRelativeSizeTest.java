@@ -51,7 +51,7 @@ public class OutlinePreserveRelativeSizeTest {
                 thumbnails.size(),
                 NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING);
         for (DisplayStack thumbnail : thumbnails) {
-            assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.dimensions().extent());
+            assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.extent());
         }
 
         DualComparer comparer =

@@ -37,7 +37,6 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 
@@ -59,12 +58,10 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
     public Mask createFromMask(Mask mask) throws CreateException {
 
         if (slicesSeperately) {
-            Extent e = mask.dimensions().extent();
-            for (int z = 0; z < e.z(); z++) {
-
+            mask.extent().iterateOverZ( z-> {
                 BoundingBox box = minimalBoxAroundMask(mask.extractSlice(z).binaryVoxels());
                 mask.assignOn().toBox(box.shiftToZ(z));
-            }
+            });
         } else {
             BoundingBox box = minimalBoxAroundMask(mask.binaryVoxels());
             mask.binaryVoxels().assignOn().toBox(box);

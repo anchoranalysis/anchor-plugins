@@ -137,30 +137,30 @@ public class ChnlProviderMedianFilter2D extends ChnlProviderOne {
 
         Channel dup = channel.duplicate();
         Voxels<ByteBuffer> voxelsDup = dup.voxels().asByte();
-        Extent e = dup.dimensions().extent();
+        Extent extent = dup.extent();
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
             ByteBuffer bb = voxels.sliceBuffer(z);
             ByteBuffer bbOut = voxelsDup.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
+            for (int y = 0; y < extent.y(); y++) {
 
                 int yMin = y - kernelHalfWidth;
                 int yMax = y + kernelHalfWidth;
 
                 yMin = Math.max(yMin, 0);
-                yMax = Math.min(yMax, e.y() - 1);
+                yMax = Math.min(yMax, extent.y() - 1);
 
-                for (int x = 0; x < e.x(); x++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     if (x == 0) {
                         set.clear();
-                        set.ppltAt(x, yMin, yMax, bb, e);
+                        set.ppltAt(x, yMin, yMax, bb, extent);
                     } else {
-                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, bb, e);
-                        set.addColumn(x + kernelHalfWidth, yMin, yMax, bb, e);
+                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, bb, extent);
+                        set.addColumn(x + kernelHalfWidth, yMin, yMax, bb, extent);
                     }
 
                     int median = set.median();

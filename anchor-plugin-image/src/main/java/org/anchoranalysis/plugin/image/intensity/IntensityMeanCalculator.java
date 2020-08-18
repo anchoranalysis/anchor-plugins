@@ -26,18 +26,15 @@
 
 package org.anchoranalysis.plugin.image.intensity;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.arithmetic.RunningSum;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
@@ -48,45 +45,19 @@ public class IntensityMeanCalculator {
     }
 
     public static double calculateMeanIntensityObject(
-            Channel chnl, ObjectMask object, boolean excludeZero)
+            Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
-        checkContained(object.boundingBox(), chnl.dimensions().extent());
-
-        VoxelsWrapper voxelsIntensity = chnl.voxels();
-
-        BoundingBox box = object.boundingBox();
-
-        ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
-
-        //RunningSum running = IterateVoxelsByte.calculateSumAndCount(voxelsIntensity.asByte(), object);
+        checkContained(object.boundingBox(), channel.extent());
         
         RunningSum running = new RunningSum();
 
-        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(channel.voxels().any(), object, (point, buffer, offset) -> {
+            int value = buffer.getInt(offset);
 
-            VoxelBuffer<?> bbIntensity = voxelsIntensity.slice(z);
-            ByteBuffer bbMask = object.sliceBufferGlobal(z);
-
-            int offsetMask = 0;
-            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
-                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
-
-                    if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
-                        
-                        int offsetIntensity = voxelsIntensity.any().extent().offset(x, y);
-
-                        int value = bbIntensity.getInt(offsetIntensity);
-
-                        if (!excludeZero || value != 0) {
-                            running.increment(value, 1);
-                        }
-                    }
-
-                    offsetMask++;
-                }
-            }
-        }
+            if (!excludeZero || value != 0) {
+                running.increment(value, 1);
+            }            
+        });
 
         if (running.getCount() == 0) {
             throw new FeatureCalculationException("There are 0 pixels in the object-mask");

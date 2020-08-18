@@ -58,7 +58,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
             throw new OperationFailedException("There must be at least one seed");
         }
 
-        seeds.verifySeedsAreInside(chnl.dimensions().extent());
+        seeds.verifySeedsAreInside(chnl.extent());
 
         ObjectCollection objects = seeds.deriveObjects();
 
