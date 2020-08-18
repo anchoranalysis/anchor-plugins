@@ -24,37 +24,24 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
+package org.anchoranalysis.plugin.image.intensity.level;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.object.ObjectMask;
 
-public class HistogramProviderChnl extends HistogramProvider {
+@AllArgsConstructor
+public class LevelResult {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @Getter private final int level;
 
-    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
-    // END BEAN PROPERTIES
+    @Getter private final ObjectMask object;
 
-    @Override
-    public Histogram create() throws CreateException {
+    @Getter private final Histogram histogram;
 
-        Channel chnlIn = chnl.create();
-
-        if (mask != null) {
-            return HistogramFactory.create(chnlIn, mask.create());
-        } else {
-            return HistogramFactory.create(chnlIn);
-        }
+    public double distanceSquaredTo(Point3i srcPoint) {
+        return object.boundingBox().midpoint().distanceSquared(srcPoint);
     }
 }

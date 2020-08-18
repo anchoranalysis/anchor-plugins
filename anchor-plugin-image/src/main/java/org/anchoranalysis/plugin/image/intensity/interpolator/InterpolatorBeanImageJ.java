@@ -24,39 +24,16 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
+package org.anchoranalysis.plugin.image.intensity.interpolator;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
+import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.interpolator.InterpolatorImageJ;
 
-public class LevelResultCollection implements Iterable<LevelResult> {
-
-    private List<LevelResult> list = new ArrayList<>();
-
-    public boolean add(LevelResult arg0) {
-        return list.add(arg0);
-    }
-
-    public LevelResult findClosestResult(Point3i point) {
-
-        double minDistance = Double.MAX_VALUE;
-        LevelResult min = null;
-
-        for (LevelResult levelResult : list) {
-
-            double distance = levelResult.distanceSquaredTo(point);
-            if (distance < minDistance) {
-                minDistance = distance;
-                min = levelResult;
-            }
-        }
-        return min;
-    }
+public class InterpolatorBeanImageJ extends InterpolatorBean {
 
     @Override
-    public Iterator<LevelResult> iterator() {
-        return list.iterator();
+    public Interpolator create() {
+        return new InterpolatorImageJ();
     }
 }

@@ -24,41 +24,55 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.chnl.level;
+package org.anchoranalysis.plugin.image.bean.channel.provider.level;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public abstract class ChnlProviderLevel extends ChnlProviderOne {
+/**
+ * Creates a channel with a level calculated for each object variously
+ * 
+ * @author Owen Feehan
+ *
+ */
+public abstract class LevelPerObjectBase extends ChnlProviderOne {
 
     // START BEAN PROPERTIES
-    /** The input (an intensity channel in the normal way) */
+    /** The objects for whom a level is calculated */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
-    @BeanField @Getter @Setter private ChannelProvider chnlOutput;
-
+    /** Method to calculate the level for a particular object. It is passed a histogram (calculated in different ways) for each object */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        return createFor(
+        Channel output = ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
+        writeLevelsForObjects(
                 channel,
                 objects.create(),
-                DimChecker.createSameSize(chnlOutput, "chnlOutput", channel));
+                output);
+        return output;
     }
 
-    protected abstract Channel createFor(
-            Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput)
+    /**
+     * Creates a channel with the levels for a set of objects
+     * 
+     * @param input the channel whose intensity is passed to {@code calculateLevel} as a histogram variously for particular objects
+     * @param objects the objects
+     * @param output the channel where the calculated-levels are written (for each object)
+     * @throws CreateException
+     */
+    protected abstract void writeLevelsForObjects(
+            Channel input, ObjectCollection objects, Channel output)
             throws CreateException;
 }

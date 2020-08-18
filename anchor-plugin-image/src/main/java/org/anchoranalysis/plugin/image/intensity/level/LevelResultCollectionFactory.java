@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
+package org.anchoranalysis.plugin.image.intensity.level;
 
 import java.util.Optional;
 import lombok.AccessLevel;

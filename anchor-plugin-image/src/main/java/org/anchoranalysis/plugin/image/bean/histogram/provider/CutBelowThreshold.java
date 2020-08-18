@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
+package org.anchoranalysis.plugin.image.bean.histogram.provider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,21 +34,27 @@ import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * Removes all items in the histogram below a certain threshold.
+ * This cuts a Histogram below a threshold BUT TRANSFERS ALL THE COUNT greater than equal to the threshold into the
+ * bin just below the threshold value
  *
- * <p>The incoming histogram is replaced i.e. this operation is MUTABLE.
+ * <p>Note that this is NOT SYMMETRIC behaviour with HistogramProviderAbove
  *
  * @author Owen Feehan
  */
-public class HistogramProviderAbove extends HistogramProviderUnary {
+public class CutBelowThreshold extends HistogramProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int threshold = 0;
+
+    @BeanField @Getter @Setter private boolean merge = false;
     // END BEAN PROPERTIES
 
     @Override
-    protected Histogram createFromHistogram(Histogram hist) throws CreateException {
-        hist.removeBelowThreshold(threshold);
-        return hist;
+    public Histogram createFromHistogram(Histogram h) throws CreateException {
+
+        for (int i = threshold; i <= h.getMaxBin(); i++) {
+            h.transferValue(i, threshold - 1);
+        }
+        return h;
     }
 }

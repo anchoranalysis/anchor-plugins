@@ -24,37 +24,37 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
+package org.anchoranalysis.plugin.image.bean.histogram.provider;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 
-public class HistogramProviderReference extends HistogramProvider {
+public class FromChannel extends HistogramProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String id = "";
+    @BeanField @Getter @Setter private ChannelProvider chnl;
+
+    @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 
-    private Histogram histogram;
-
     @Override
-    public void onInit(ImageInitParams so) throws InitException {
-        super.onInit(so);
-        try {
-            histogram = so.histograms().getException(id);
-        } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
+    public Histogram create() throws CreateException {
+
+        Channel chnlIn = chnl.create();
+
+        if (mask != null) {
+            return HistogramFactory.create(chnlIn, mask.create());
+        } else {
+            return HistogramFactory.create(chnlIn);
         }
-    }
-
-    @Override
-    public Histogram create() {
-        return histogram;
     }
 }

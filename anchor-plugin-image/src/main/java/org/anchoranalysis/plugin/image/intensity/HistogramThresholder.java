@@ -36,10 +36,10 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class HistogramThresholder {
 
     /** Retains the portion of the histogram greater or equal to the calculated-level */
-    public static Histogram withCalculateLevel(Histogram h, CalculateLevel calculateLevel)
+    public static Histogram withCalculateLevel(Histogram histogram, CalculateLevel calculateLevel)
             throws OperationFailedException {
-        int threshold = calculateLevel.calculateLevel(h);
-        h.removeBelowThreshold(threshold);
-        return h;
+        int threshold = calculateLevel.calculateLevel(histogram);
+        histogram.removeBelowThreshold(threshold);
+        return histogram;
     }
 }

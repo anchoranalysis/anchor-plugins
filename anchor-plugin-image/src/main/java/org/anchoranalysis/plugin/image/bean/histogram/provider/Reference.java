@@ -24,16 +24,37 @@
  * #L%
  */
 
-package anchor.image.bean.interpolator;
+package org.anchoranalysis.plugin.image.bean.histogram.provider;
 
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorImageJ;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.histogram.Histogram;
 
-public class InterpolatorBeanImageJ extends InterpolatorBean {
+public class Reference extends HistogramProvider {
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String id = "";
+    // END BEAN PROPERTIES
+
+    private Histogram histogram;
 
     @Override
-    public Interpolator create() {
-        return new InterpolatorImageJ();
+    public void onInit(ImageInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            histogram = so.histograms().getException(id);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
+        }
+    }
+
+    @Override
+    public Histogram create() {
+        return histogram;
     }
 }

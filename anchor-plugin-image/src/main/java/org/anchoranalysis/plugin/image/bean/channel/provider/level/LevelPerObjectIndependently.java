@@ -24,35 +24,51 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
+package org.anchoranalysis.plugin.image.bean.channel.provider.level;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
-import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResult;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollection;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollectionFactory;
 
 /**
- * Thresholds a histogram using a CalculateLevel keeping only the values greater equal than the
- * threshold
- *
+ * Creates a channel with different threshold-levels for each object, calculating the level
+ * only from the histogram of the particular object.
+ * 
  * @author Owen Feehan
+ *
  */
-public class HistogramProviderAboveCalculateLevel extends HistogramProviderUnary {
+public class LevelPerObjectIndependently extends LevelPerObjectBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+    @BeanField @Getter @Setter private int numberDilations = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public Histogram createFromHistogram(Histogram hist) throws CreateException {
+    protected void writeLevelsForObjects(Channel chnlIntensity, ObjectCollection objects, Channel output)
+            throws CreateException {
+
         try {
-            return HistogramThresholder.withCalculateLevel(hist, calculateLevel);
-        } catch (OperationFailedException e) {
+            LevelResultCollection results =
+                    LevelResultCollectionFactory.createCollection(
+                            chnlIntensity,
+                            objects,
+                            getCalculateLevel(),
+                            numberDilations,
+                            getLogger().messageLogger());
+
+            Voxels<?> voxelsOutput = output.voxels().any();
+            for (LevelResult result : results) {
+                voxelsOutput.assignValue(result.getLevel()).toObject(result.getObject());
+            }
+
+        } catch (CreateException e) {
             throw new CreateException(e);
         }
     }
