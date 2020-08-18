@@ -26,7 +26,6 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
-import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjectsStackCreator;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
+import org.anchoranalysis.plugin.image.intensity.color.ColoredObjectsStackCreator;
 
 public abstract class StackProviderRGBFromObjectBase extends StackProviderWithBackground {
 

@@ -26,7 +26,6 @@
 
 package ch.ethz.biol.cell.imageprocessing.stack.provider;
 
-import ch.ethz.biol.cell.imageprocessing.stack.color.ColoredObjectsStackCreator;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +40,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
+import org.anchoranalysis.plugin.image.intensity.color.ColoredObjectsStackCreator;
 
 public class ColoredObjectsOnStack extends StackProviderRGBFromObjectBase {
 

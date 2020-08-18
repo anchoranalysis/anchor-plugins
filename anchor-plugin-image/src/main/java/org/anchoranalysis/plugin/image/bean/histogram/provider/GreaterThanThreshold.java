@@ -24,47 +24,36 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.chnl.level;
+package org.anchoranalysis.plugin.image.bean.histogram.provider;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
+import org.anchoranalysis.image.bean.threshold.CalculateLevel;
+import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.plugin.image.intensity.HistogramThresholder;
 
-// Calculates a threshold-level for each object independently
-public class ChnlProviderObjectsLevelIndependently extends ChnlProviderLevel {
+/**
+ * Thresholds a histogram using a CalculateLevel keeping only the values greater equal than the
+ * threshold
+ *
+ * @author Owen Feehan
+ */
+public class GreaterThanThreshold extends HistogramProviderUnary {
 
-    // START BEAN
-    @BeanField @Getter @Setter private int numDilations = 0;
-    // END BEAN
+    // START BEAN PROPERTIES
+    /** Calculates the level for the threshold */ 
+    @BeanField @Getter @Setter private CalculateLevel calculateLevel;
+    // END BEAN PROPERTIES
 
     @Override
-    protected Channel createFor(Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput)
-            throws CreateException {
-
+    public Histogram createFromHistogram(Histogram source) throws CreateException {
         try {
-            LevelResultCollection results =
-                    LevelResultCollectionFactory.createCollection(
-                            chnlIntensity,
-                            objects,
-                            getCalculateLevel(),
-                            numDilations,
-                            getLogger().messageLogger());
-
-            Voxels<?> voxelsOutput = chnlOutput.voxels().any();
-            for (LevelResult result : results) {
-                voxelsOutput.assignValue(result.getLevel()).toObject(result.getObject());
-            }
-
-            return chnlOutput;
-
-        } catch (CreateException e) {
+            return HistogramThresholder.withCalculateLevel(source, calculateLevel);
+        } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
     }

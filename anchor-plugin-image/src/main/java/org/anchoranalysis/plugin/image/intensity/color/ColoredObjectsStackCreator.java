@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.color;
+package org.anchoranalysis.plugin.image.intensity.color;
 
 import io.vavr.control.Either;
 import lombok.AccessLevel;

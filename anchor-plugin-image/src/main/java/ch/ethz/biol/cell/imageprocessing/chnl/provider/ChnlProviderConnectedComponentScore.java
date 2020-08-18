@@ -26,9 +26,6 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResult;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollection;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.level.LevelResultCollectionFactory;
 import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +40,9 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResult;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollection;
+import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollectionFactory;
 
 public class ChnlProviderConnectedComponentScore extends ChnlProviderOneObjectsSource {
 

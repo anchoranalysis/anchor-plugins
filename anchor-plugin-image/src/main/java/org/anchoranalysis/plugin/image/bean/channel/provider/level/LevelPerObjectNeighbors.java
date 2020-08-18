@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.chnl.level;
+package org.anchoranalysis.plugin.image.bean.channel.provider.level;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,14 +48,12 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
-/*
+/**
  *  Calculates a threshold-level for each object collectively based on other objects
  *
- *  <p>
- *  A neighborhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
- *  </p>
+ *  <p>A neighborhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
  */
-public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
+public class LevelPerObjectNeighbors extends LevelPerObjectBase {
 
     // START BEAN
     /**
@@ -66,12 +64,10 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
     // END BEAN
 
     @Override
-    protected Channel createFor(Channel chnlIntensity, ObjectCollection objects, Channel chnlOutput)
+    protected void writeLevelsForObjects(Channel chnlIntensity, ObjectCollection objects, Channel output)
             throws CreateException {
         try {
-            setAgainstNeighbor(chnlIntensity, chnlOutput, objects, distance);
-
-            return chnlOutput;
+            setAgainstNeighbor(chnlIntensity, output, objects, distance);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
@@ -79,14 +75,14 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
     }
 
     private static void visit(
-            GraphWithEdgeTypes<ObjectMaskWithHistogram, Integer> graph,
-            List<ObjectMaskWithHistogram> currentVisit,
-            List<ObjectMaskWithHistogram> toVisit,
-            Set<ObjectMaskWithHistogram> visited) {
-        for (ObjectMaskWithHistogram omLocal : currentVisit) {
+            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            List<ObjectWithHistogram> currentVisit,
+            List<ObjectWithHistogram> toVisit,
+            Set<ObjectWithHistogram> visited) {
+        for (ObjectWithHistogram omLocal : currentVisit) {
 
-            Collection<ObjectMaskWithHistogram> adjacent = graph.adjacentVertices(omLocal);
-            for (ObjectMaskWithHistogram omAdjacent : adjacent) {
+            Collection<ObjectWithHistogram> adjacent = graph.adjacentVertices(omLocal);
+            for (ObjectWithHistogram omAdjacent : adjacent) {
                 if (!visited.contains(omAdjacent)) {
                     toVisit.add(omAdjacent);
                 }
@@ -96,21 +92,21 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
         }
     }
 
-    private static Collection<ObjectMaskWithHistogram> verticesWithinDistance(
-            GraphWithEdgeTypes<ObjectMaskWithHistogram, Integer> graph,
-            ObjectMaskWithHistogram om,
+    private static Collection<ObjectWithHistogram> verticesWithinDistance(
+            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            ObjectWithHistogram om,
             int neighborDistance) {
         if (neighborDistance == 1) {
             return graph.adjacentVertices(om);
         } else {
 
-            Set<ObjectMaskWithHistogram> visited = new HashSet<>();
+            Set<ObjectWithHistogram> visited = new HashSet<>();
 
-            List<ObjectMaskWithHistogram> toVisit = new ArrayList<>();
+            List<ObjectWithHistogram> toVisit = new ArrayList<>();
             toVisit.add(om);
 
             for (int i = 0; i < neighborDistance; i++) {
-                List<ObjectMaskWithHistogram> currentVisit = toVisit;
+                List<ObjectWithHistogram> currentVisit = toVisit;
                 toVisit = new ArrayList<>();
                 visit(graph, currentVisit, toVisit, visited);
             }
@@ -126,8 +122,8 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
     private static Histogram createSumHistograms(Histogram hist, Collection<Histogram> others)
             throws OperationFailedException {
         Histogram out = hist.duplicate();
-        for (Histogram h : others) {
-            out.addHistogram(h);
+        for (Histogram other : others) {
+            out.addHistogram(other);
         }
         return out;
     }
@@ -140,13 +136,13 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
             throws OperationFailedException {
 
         try {
-            CreateNeighborGraph<ObjectMaskWithHistogram> graphCreator =
+            CreateNeighborGraph<ObjectWithHistogram> graphCreator =
                     new CreateNeighborGraph<>(new EdgeAdderParameters(false));
 
-            GraphWithEdgeTypes<ObjectMaskWithHistogram, Integer> graph =
+            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph =
                     graphCreator.createGraph(
                             objectsWithHistograms(objects, chnlIntensity),
-                            ObjectMaskWithHistogram::getObject,
+                            ObjectWithHistogram::getObject,
                             (v1, v2, numberVoxels) -> numberVoxels,
                             chnlIntensity.extent(),
                             true);
@@ -154,9 +150,9 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
             Voxels<?> voxelsOutput = chnlOutput.voxels().any();
 
             // We don't need this for the computation, used only for outputting debugging
-            Map<ObjectMaskWithHistogram, Integer> mapLevel = new HashMap<>();
+            Map<ObjectWithHistogram, Integer> mapLevel = new HashMap<>();
 
-            for (ObjectMaskWithHistogram om : graph.vertexSet()) {
+            for (ObjectWithHistogram om : graph.vertexSet()) {
 
                 getLogger()
                         .messageLogger()
@@ -165,10 +161,10 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
                                 om.getObject().centerOfGravity());
 
                 // Get the neighbors of the current object
-                Collection<ObjectMaskWithHistogram> vertexNeighbors =
+                Collection<ObjectWithHistogram> vertexNeighbors =
                         verticesWithinDistance(graph, om, neighborDistance);
 
-                for (ObjectMaskWithHistogram neighbor : vertexNeighbors) {
+                for (ObjectWithHistogram neighbor : vertexNeighbors) {
                     getLogger()
                             .messageLogger()
                             .logFormatted(
@@ -195,18 +191,18 @@ public class ChnlProviderObjectsLevelNeighbors extends ChnlProviderLevel {
         }
     }
 
-    private static List<ObjectMaskWithHistogram> objectsWithHistograms(
+    private static List<ObjectWithHistogram> objectsWithHistograms(
             ObjectCollection objects, Channel chnlIntensity) {
         return objects.stream()
-                .mapToList(objectMask -> new ObjectMaskWithHistogram(objectMask, chnlIntensity));
+                .mapToList(objectMask -> new ObjectWithHistogram(objectMask, chnlIntensity));
     }
 
     private int calculateLevelCombinedHist(
-            ObjectMaskWithHistogram objectMask, Collection<ObjectMaskWithHistogram> vertices)
+            ObjectWithHistogram objectMask, Collection<ObjectWithHistogram> vertices)
             throws OperationFailedException {
 
         Collection<Histogram> histogramsFromVertices =
-                FunctionalList.mapToList(vertices, ObjectMaskWithHistogram::getHistogram);
+                FunctionalList.mapToList(vertices, ObjectWithHistogram::getHistogram);
 
         return getCalculateLevel()
                 .calculateLevel(

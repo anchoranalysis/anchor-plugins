@@ -24,24 +24,22 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.chnl.provider.level;
+package org.anchoranalysis.plugin.image.bean.channel.provider.level;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
-@AllArgsConstructor
-public class LevelResult {
-
-    @Getter private final int level;
+class ObjectWithHistogram {
 
     @Getter private final ObjectMask object;
 
     @Getter private final Histogram histogram;
 
-    public double distanceSquaredTo(Point3i srcPoint) {
-        return object.boundingBox().midpoint().distanceSquared(srcPoint);
+    public ObjectWithHistogram(ObjectMask object, Channel chnl) {
+        this.object = object;
+        this.histogram = HistogramFactory.create(chnl, object);
     }
 }

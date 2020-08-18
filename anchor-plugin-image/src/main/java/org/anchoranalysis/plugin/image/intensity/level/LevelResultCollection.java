@@ -24,37 +24,39 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.histogram.provider;
+package org.anchoranalysis.plugin.image.intensity.level;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
-import org.anchoranalysis.image.histogram.Histogram;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.anchoranalysis.core.geometry.Point3i;
 
-/**
- * This cuts a Histogram below a threshold BUT TRANSFERS ALL THE COUNT above the threshold into the
- * just below the threshold value
- *
- * <p>Note that this is NOT SYMMETRIC behaviour with HistogramProviderAbove
- *
- * @author Owen Feehan
- */
-public class HistogramProviderBelow extends HistogramProviderUnary {
+public class LevelResultCollection implements Iterable<LevelResult> {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int threshold = 0;
+    private List<LevelResult> list = new ArrayList<>();
 
-    @BeanField @Getter @Setter private boolean merge = false;
-    // END BEAN PROPERTIES
+    public boolean add(LevelResult arg0) {
+        return list.add(arg0);
+    }
+
+    public LevelResult findClosestResult(Point3i point) {
+
+        double minDistance = Double.MAX_VALUE;
+        LevelResult min = null;
+
+        for (LevelResult levelResult : list) {
+
+            double distance = levelResult.distanceSquaredTo(point);
+            if (distance < minDistance) {
+                minDistance = distance;
+                min = levelResult;
+            }
+        }
+        return min;
+    }
 
     @Override
-    public Histogram createFromHistogram(Histogram h) throws CreateException {
-
-        for (int i = threshold; i <= h.getMaxBin(); i++) {
-            h.transferValue(i, threshold - 1);
-        }
-        return h;
+    public Iterator<LevelResult> iterator() {
+        return list.iterator();
     }
 }
