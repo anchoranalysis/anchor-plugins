@@ -172,7 +172,7 @@ class IJFloodFiller {
     /**
      * This method is used by the particle analyzer to remove interior holes from particle masks.
      */
-    public void particleAnalyzerFill(
+    public void particleAnalyzerFill(   // NOSONAR
             int x, int y, double level1, double level2, ImageProcessor mask, Rectangle bounds) {
         int width = ip.getWidth();
         int height = ip.getHeight();

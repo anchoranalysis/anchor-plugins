@@ -51,7 +51,6 @@ public class IndexedCSVRows {
      */
     public IndexedCSVRows(ReadByLine csvFile, ColumnDefinition columnDefinition)
             throws CreateException {
-        assert (columnDefinition != null);
 
         try {
             String[] headers = csvFile.headers();

@@ -58,7 +58,7 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
  * @author Owen Feehan
  *
  */
-public class Segment extends FromChannelBase {
+public class SegmentChannel extends FromChannelBase {
 
     // START BEAN PROPERTIES
     /** Segmentation algorithm */

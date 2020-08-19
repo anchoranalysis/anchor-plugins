@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.extent(),
                             object.boundingBox().cornerMin());
 
-            Voxels<ByteBuffer> voxelsProjected = object.extracter().projectionMax();
+            Voxels<ByteBuffer> voxelsProjected = object.extract().projectMax();
             return ApplyKernel.applyForCount(kernel, voxelsProjected);
 
         } else {

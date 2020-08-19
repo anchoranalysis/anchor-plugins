@@ -59,7 +59,7 @@ final class BoundingBoxMap {
                 list,
                 Objects::nonNull,
                 (pointRange, index) ->
-                        matS.extracter()
+                        matS.extract()
                                 .voxelsEqualTo(index + 1)
                                 .deriveObject(pointRange.deriveBoundingBox()));
     }

@@ -31,7 +31,6 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
 import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.bean.optscheme.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.kernel.assigner.KernelAssignerCalcNRGFromKernel;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.optscheme.AccptProbCalculator;
@@ -48,7 +47,7 @@ public abstract class AssignMode<S, T, U> extends AnchorBean<AssignMode<S, T, U>
 
     public abstract AccptProbCalculator<T> probCalculator(AnnealScheme annealScheme);
 
-    public KernelAssigner<U, T> kernelAssigner(TransformationContext tc) {
+    public KernelAssigner<U, T> kernelAssigner() {
         return new KernelAssignerCalcNRGFromKernel<>(kernelStateBridge());
     }
 

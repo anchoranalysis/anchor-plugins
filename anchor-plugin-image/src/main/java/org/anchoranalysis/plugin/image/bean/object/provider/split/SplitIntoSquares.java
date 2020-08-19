@@ -95,7 +95,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     private ObjectMask extractFromObject(ObjectMask objectToSplit, BoundingBox box) {
 
         // Voxels for the new square
-        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extracter().region(box, false);
+        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extract().region(box, false);
 
         return new ObjectMask(
                 box.shiftBy(objectToSplit.boundingBox().cornerMin()),

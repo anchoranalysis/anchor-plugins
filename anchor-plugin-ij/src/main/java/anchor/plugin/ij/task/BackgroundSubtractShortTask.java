@@ -87,7 +87,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
                             inputImage, radius, false);
             Voxels<?> voxelsSubOut = bgSubOut.voxels().any();
 
-            double maxPixel = voxelsSubOut.extracter().voxelWithMaxIntensity();
+            double maxPixel = voxelsSubOut.extract().voxelWithMaxIntensity();
 
             double scaleRatio = 255.0 / maxPixel;
 

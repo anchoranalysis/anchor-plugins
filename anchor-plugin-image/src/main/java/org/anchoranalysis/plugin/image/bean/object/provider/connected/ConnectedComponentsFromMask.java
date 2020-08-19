@@ -105,7 +105,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
         CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
-        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extracter();
+        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extract();
 
         return ObjectCollectionFactory.flatMapFromRange(
                 0,

@@ -81,7 +81,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
         ObjectCollection objects =
                 upstreamSegmentation.segment(
-                        chnl.maxIntensityProjection(), Optional.empty(), seeds);
+                        chnl.projectMax(), Optional.empty(), seeds);
 
         if (isAny3d(objects)) {
             throw new SegmentationFailedException(

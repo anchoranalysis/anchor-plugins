@@ -32,6 +32,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
 import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import com.google.common.base.Preconditions;
 
 public class PixelsFromShortProcessor implements PixelsForSlice<ShortBuffer> {
 
@@ -51,7 +52,7 @@ public class PixelsFromShortProcessor implements PixelsForSlice<ShortBuffer> {
 
     @Override
     public void replaceSlice(int z, VoxelBuffer<ShortBuffer> pixels) {
-        assert (z == 0);
+        Preconditions.checkArgument(z==0);
         processor.setPixels(pixels.buffer().array());
     }
 

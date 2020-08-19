@@ -79,8 +79,8 @@ public class ConvexHullUtilities {
         }
     }
 
-    /** "Gift wrap" algorithm for convex-hull */
-    private static List<Point2i> filterPointsGiftWrap(List<Point2i> points)
+    /** "Gift wrap" algorithm for convex-hull from ImageJ */
+    private static List<Point2i> filterPointsGiftWrap(List<Point2i> points) // NOSONAR
             throws OperationFailedException {
 
         int xbase = 0;

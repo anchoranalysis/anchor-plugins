@@ -105,7 +105,7 @@ class SimulatedAnnealingHelper {
                     kernelProposer,
                     updatableMarkSetCollection,
                     assignMode.probCalculator(annealScheme),
-                    assignMode.kernelAssigner(context),
+                    assignMode.kernelAssigner(),
                     assignMode.kernelStateBridge().stateToKernel());
 
             try {

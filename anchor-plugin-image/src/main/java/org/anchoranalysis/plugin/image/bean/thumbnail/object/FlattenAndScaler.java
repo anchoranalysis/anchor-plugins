@@ -176,7 +176,7 @@ class FlattenAndScaler {
      * longer physically valid)
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
-        Channel scaled = channel.maxIntensityProjection().scaleXY(scaleFactor, interpolator);
+        Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
         scaled.updateResolution(new ImageResolution());
         return scaled;
     }

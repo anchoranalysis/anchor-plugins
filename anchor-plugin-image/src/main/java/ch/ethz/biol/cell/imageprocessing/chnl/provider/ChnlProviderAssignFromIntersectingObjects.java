@@ -64,7 +64,7 @@ public class ChnlProviderAssignFromIntersectingObjects extends ChannelProviderUn
         ObjectCollection source = objectsSource.create();
         ObjectCollection target = objectsTarget.create();
 
-        VoxelsExtracter<?> extracter = channel.extracter();
+        VoxelsExtracter<?> extracter = channel.extract();
 
         streamIntersectingObjects(source, target)
                 .forEach(
