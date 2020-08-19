@@ -54,7 +54,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
     }
 
     private static int numberVoxelsOnContour(ObjectMask obj) {
-        return FindOutline.outline(obj, 1, true, false).binaryVoxels().countOn();
+        return FindOutline.outline(obj, 1, false, true).binaryVoxels().countOn();
     }
 
     private static int cntForByteBuffer(ByteBuffer bb, byte equalVal) {

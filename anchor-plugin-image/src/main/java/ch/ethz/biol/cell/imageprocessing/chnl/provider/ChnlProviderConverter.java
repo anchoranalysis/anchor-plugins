@@ -31,13 +31,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 
 // Converts a chnl by applying a ChnlConverter. Does not need a histogram
-public class ChnlProviderConverter extends ChnlProviderOne {
+public class ChnlProviderConverter extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ConvertChannelTo chnlConverter;

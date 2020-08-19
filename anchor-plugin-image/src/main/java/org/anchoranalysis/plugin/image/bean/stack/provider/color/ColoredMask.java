@@ -24,38 +24,36 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
-import java.util.Iterator;
-import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.plot.AxisLimits;
-import org.anchoranalysis.anchor.plot.PlotInstance;
-import org.anchoranalysis.anchor.plot.bean.colorscheme.GraphColorScheme;
-import org.anchoranalysis.anchor.plot.index.LinePlot;
+import lombok.Getter;
+import lombok.Setter;
+import java.awt.Color;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class HistogramPlot {
+/**
+ * Draws a colored representation (outline or filled) of a {@link Mask} on a background
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ColoredMask extends ColoredBase {
 
-    public static PlotInstance create(
-            Iterator<HistogramItem> itr,
-            Optional<AxisLimits> domainLimits,
-            Optional<AxisLimits> rangeLimits)
-            throws CreateException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private MaskProvider mask;
+    
+    @BeanField @Getter @Setter private RGBColorBean color = new RGBColorBean(Color.green);
+    // END BEAN PROPERTIES
 
-        GraphColorScheme graphColorScheme = new GraphColorScheme();
-
-        LinePlot<HistogramItem> plot =
-                new LinePlot<>(
-                        "Histogram",
-                        new String[] {"Histogram"},
-                        (HistogramItem item, int yIndex) -> (double) item.getCount());
-        plot.getLabels().setX("Intensity");
-        plot.getLabels().setY("Voxel Count");
-        plot.setGraphColorScheme(graphColorScheme);
-
-        return plot.create(itr, domainLimits, rangeLimits);
+    @Override
+    protected ColoredObjectCollection coloredObjectsToDraw(ImageDimensions backgroundDimensions) throws CreateException {
+        ObjectMask maskAsObject = new ObjectMask(mask.create());
+        return new ColoredObjectCollection(maskAsObject, color.rgbColor());
     }
 }

@@ -49,6 +49,6 @@ public class Outline extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return FindOutline.outlineGuess3D(mask, force2D, outlineAtBoundary);
+        return FindOutline.outlineGuess3D(mask, 1, force2D, outlineAtBoundary);
     }
 }

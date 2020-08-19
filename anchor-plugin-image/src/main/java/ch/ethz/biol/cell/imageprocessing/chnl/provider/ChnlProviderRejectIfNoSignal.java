@@ -30,12 +30,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
-public class ChnlProviderRejectIfNoSignal extends ChnlProviderOne {
+public class ChnlProviderRejectIfNoSignal extends ChannelProviderUnary {
 
     // START BEANS
     @BeanField @Getter @Setter private int minIntensity = 40;

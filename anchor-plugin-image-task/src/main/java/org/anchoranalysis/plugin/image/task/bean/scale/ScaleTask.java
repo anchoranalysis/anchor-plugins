@@ -49,7 +49,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
@@ -135,8 +135,8 @@ public class ScaleTask extends RasterTask {
             BoundIOContext context) {
         BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 
-        StackCollectionOutputter.output(
-                StackCollectionOutputter.subset(
+        StacksOutputter.output(
+                StacksOutputter.subset(
                         stackCollection,
                         outputManager.outputAllowedSecondLevel(outputSecondLevelKey)),
                 outputManager.getDelegate(),

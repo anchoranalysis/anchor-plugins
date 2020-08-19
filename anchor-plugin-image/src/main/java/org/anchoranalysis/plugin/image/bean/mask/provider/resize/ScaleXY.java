@@ -54,7 +54,7 @@ public class ScaleXY extends MaskProviderUnary {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(Optional.of(mask.dimensions()));
+            scaleFactor = scaleCalculator.calculate(Optional.of(mask.dimensions()));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

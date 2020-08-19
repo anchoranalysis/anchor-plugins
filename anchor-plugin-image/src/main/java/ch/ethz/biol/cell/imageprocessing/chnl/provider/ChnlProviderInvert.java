@@ -27,12 +27,12 @@
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
-public class ChnlProviderInvert extends ChnlProviderOne {
+public class ChnlProviderInvert extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {

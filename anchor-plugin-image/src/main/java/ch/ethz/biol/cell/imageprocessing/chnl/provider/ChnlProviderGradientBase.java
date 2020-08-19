@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverter;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterToUns
 import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.image.voxel.datatype.Float;
 
-public abstract class ChnlProviderGradientBase extends ChnlProviderOne {
+public abstract class ChnlProviderGradientBase extends ChannelProviderUnary {
 
     // START BEAN
     @BeanField @Getter @Setter private double scaleFactor = 1.0;

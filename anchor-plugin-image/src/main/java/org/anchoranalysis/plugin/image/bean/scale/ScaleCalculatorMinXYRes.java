@@ -43,7 +43,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
             throws OperationFailedException {
 
         ImageResolution resolution =

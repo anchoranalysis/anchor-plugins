@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-opencv
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,39 +24,14 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.opencv.bean.stack.provider.color;
 
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
+import org.opencv.imgproc.Imgproc;
 
-public class StackProviderConcatenation extends StackProvider {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<BeanProviderAsStackBase<?, ?>> list = new ArrayList<>();
-    // END BEAN PROPERTIES
+public class ConvertRGBToLab extends ColorConverterBase {
 
     @Override
-    public Stack create() throws CreateException {
-
-        try {
-            Stack out = new Stack();
-
-            for (BeanProviderAsStackBase<?, ?> provider : list) {
-                out.addChannelsFrom(provider.createAsStack());
-            }
-
-            return out;
-
-        } catch (IncorrectImageSizeException e) {
-            throw new CreateException(e);
-        }
+    protected int colorSpaceCode() {
+        return Imgproc.COLOR_BGR2Lab;
     }
 }

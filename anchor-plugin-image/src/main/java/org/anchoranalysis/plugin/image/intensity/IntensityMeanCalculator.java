@@ -51,7 +51,7 @@ public class IntensityMeanCalculator {
         
         RunningSum running = new RunningSum();
 
-        IterateVoxelsVoxelBoxAsInt.callEachPoint(channel.voxels().any(), object, (point, buffer, offset) -> {
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(channel.voxels().any(), object, (buffer, offset) -> {
             int value = buffer.getInt(offset);
 
             if (!excludeZero || value != 0) {

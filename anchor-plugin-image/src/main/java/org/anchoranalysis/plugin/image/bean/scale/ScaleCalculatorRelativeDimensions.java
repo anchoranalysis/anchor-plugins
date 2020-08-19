@@ -48,7 +48,7 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
             throws OperationFailedException {
 
         Optional<ImageDimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);

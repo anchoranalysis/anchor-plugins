@@ -30,15 +30,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 
 /**
- * A {@link ChnlProviderOne} which has a scalar value field
+ * A {@link ChannelProviderUnary} which has a scalar value field
  *
  * @author Owen Feehan
  */
-public abstract class ChnlProviderOneValue extends ChnlProviderOne {
+public abstract class ChnlProviderOneValue extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double value;

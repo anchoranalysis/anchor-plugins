@@ -51,10 +51,10 @@ class ExtractFromProvider {
 
         try {
             // Extract the NRG stack
-            StackProvider stackProviderDuplicated = nrgStackProvider.duplicateBean();
-            stackProviderDuplicated.initRecursive(initParams, logger);
+            StackProvider providerDuplicated = nrgStackProvider.duplicateBean();
+            providerDuplicated.initRecursive(initParams, logger);
 
-            return new NRGStackWithParams(stackProviderDuplicated.create());
+            return new NRGStackWithParams(providerDuplicated.create());
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
-public class ChnlProviderHistogramStretch extends ChnlProviderOne {
+public class ChnlProviderHistogramStretch extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double quantile = 1.0;

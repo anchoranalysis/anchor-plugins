@@ -58,7 +58,7 @@ public class Scale extends ObjectCollectionProviderWithDimensions {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(Optional.of(dimensions));
+            scaleFactor = scaleCalculator.calculate(Optional.of(dimensions));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

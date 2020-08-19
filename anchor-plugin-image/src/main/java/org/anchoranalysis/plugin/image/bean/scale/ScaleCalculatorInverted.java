@@ -42,8 +42,8 @@ public class ScaleCalculatorInverted extends ScaleCalculator {
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
             throws OperationFailedException {
-        return scaleCalculator.calc(sourceDimensions).invert();
+        return scaleCalculator.calculate(sourceDimensions).invert();
     }
 }

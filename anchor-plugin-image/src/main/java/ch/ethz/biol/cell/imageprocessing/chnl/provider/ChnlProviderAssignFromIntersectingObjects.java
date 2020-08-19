@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.MatchedObject;
@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelp
  *
  * @author Owen Feehan
  */
-public class ChnlProviderAssignFromIntersectingObjects extends ChnlProviderOne {
+public class ChnlProviderAssignFromIntersectingObjects extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSource;

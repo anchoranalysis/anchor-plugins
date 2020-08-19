@@ -43,7 +43,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
@@ -57,7 +57,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShort;
 
 // 3x3 Sobel Filter
-public class ChnlProviderEdgeFilter extends ChnlProviderOne {
+public class ChnlProviderEdgeFilter extends ChannelProviderUnary {
 
     // START BEAN
     @BeanField @Getter @Setter private double scaleFactor = 1.0;

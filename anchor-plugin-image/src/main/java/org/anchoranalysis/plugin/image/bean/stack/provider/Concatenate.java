@@ -24,59 +24,47 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.plot.PlotInstance;
-import org.anchoranalysis.anchor.plot.io.GraphOutputter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.HistogramProvider;
+import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.bean.size.SizeXY;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 
-/** Displays a histogram */
-public class StackProviderHistogram extends StackProvider {
+/**
+ * Combines all the channels from one or more sources (stacks, channels etc.)
+ * 
+ * <p>All sources must provide images with the same dimensions, otherwise an exception is thrown.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class Concatenate extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private HistogramProvider histogram;
-
-    /** Size of the image produced showing a plot of the histogram */
-    @BeanField @Getter @Setter private SizeXY size = new SizeXY(1024, 768);
+    @BeanField @Getter @Setter private List<BeanProviderAsStackBase<?, ?>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
     public Stack create() throws CreateException {
 
         try {
-            List<HistogramItem> histogramItems = histogramList(histogram.create());
+            Stack out = new Stack();
 
-            PlotInstance plot = HistogramPlot.create(histogramItems.iterator(), Optional.empty(), Optional.empty());
+            for (BeanProviderAsStackBase<?, ?> provider : list) {
+                out.addChannelsFrom(provider.createAsStack());
+            }
 
-            BufferedImage image =
-                    GraphOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
+            return out;
 
-            return CreateStackFromBufferedImage.create(image);
-
-        } catch (OperationFailedException e) {
+        } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);
         }
-    }
-
-    private static List<HistogramItem> histogramList(Histogram histogram) {
-        List<HistogramItem> out = new ArrayList<>();
-        for (int i = 1; i < histogram.size(); i++) {
-            out.add( new HistogramItem(i, histogram.getCount(i)) );
-        }
-        return out;
     }
 }

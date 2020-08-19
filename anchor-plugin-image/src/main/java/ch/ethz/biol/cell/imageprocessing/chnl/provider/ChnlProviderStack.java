@@ -29,6 +29,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -42,17 +43,15 @@ public class ChnlProviderStack extends ChannelProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int chnlIndex = 0;
 
-    @BeanField @Getter @Setter private StackProvider stackProvider;
+    @BeanField @Getter @Setter private Provider<Stack> stack;
     // END BEAN PROPERTIES
 
-    public ChnlProviderStack(StackProvider stackProvider) {
-        this.stackProvider = stackProvider;
+    public ChnlProviderStack(StackProvider stack) {
+        this.stack = stack;
     }
 
     @Override
     public Channel create() throws CreateException {
-
-        Stack in = stackProvider.create();
-        return in.getChannel(chnlIndex);
+        return stack.create().getChannel(chnlIndex);
     }
 }

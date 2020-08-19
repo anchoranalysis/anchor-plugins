@@ -42,7 +42,7 @@ public abstract class ConvexHullBase extends MaskProviderUnary {
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return createFromMask(mask, FindOutline.outline(mask, true, erodeAtBoundary));
+        return createFromMask(mask, FindOutline.outline(mask, 1, true, erodeAtBoundary));
     }
 
     protected abstract Mask createFromMask(Mask mask, Mask outline) throws CreateException;

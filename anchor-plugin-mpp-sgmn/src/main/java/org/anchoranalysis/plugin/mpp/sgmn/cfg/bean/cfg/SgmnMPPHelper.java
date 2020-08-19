@@ -46,7 +46,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -61,8 +61,8 @@ class SgmnMPPHelper {
             ImageInitParams so, NRGStackWithParams nrgStack, BoundIOContext context) {
         BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 
-        StackCollectionOutputter.output(
-                StackCollectionOutputter.subset(
+        StacksOutputter.output(
+                StacksOutputter.subset(
                         CreateCombinedStack.apply(so),
                         outputManager.outputAllowedSecondLevel(StackOutputKeys.STACK)),
                 outputManager.getDelegate(),

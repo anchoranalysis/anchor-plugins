@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,59 +32,54 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
-public abstract class StackProviderWithBackground extends StackProvider {
+/**
+ * Colors three collections of objects in RED, GREEN, BLUE channels on top of a background.
+ *
+ * @author Owen Feehan
+ */
+public class ThreeColoredObjects extends ColoredBase {
+
+    private static final RGBColor COLOR_RED = new RGBColor(255, 0, 0);
+    private static final RGBColor COLOR_GREEN = new RGBColor(0, 255, 0);
+    private static final RGBColor COLOR_BLUE = new RGBColor(0, 0, 255);
 
     // START BEAN PROPERTIES
+    @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsRed;
 
-    // Either chnlProviderBackground or stackProviderBackground should be non-null
-    //  but not both
-    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBackground;
+    @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsBlue;
 
-    @BeanField @OptionalBean @Getter @Setter private StackProvider stackBackground;
-
-    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnlBackgroundMIP;
+    @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsGreen;
     // END BEAN PROPERTIES
 
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (chnlBackground == null && stackBackground == null) {
-            throw new BeanMisconfiguredException(
-                    "Either chnlBackground or stackBackground should be set");
-        }
 
-        if (chnlBackground != null && stackBackground != null) {
+        if (objectsRed == null && objectsBlue == null && objectsGreen == null) {
             throw new BeanMisconfiguredException(
-                    "Only one of chnlBackground and stackBackground should be set");
+                    "Either objectsRed or objectsBlue or objectsGreen must be non-null");
         }
     }
 
-    protected DisplayStack backgroundStack(boolean do3D) throws CreateException {
-        if (stackBackground != null) {
-            return DisplayStack.create(stackBackground.create());
-
-        } else {
-            return DisplayStack.create(backgroundChnl(do3D));
+    @Override
+    protected ColoredObjectCollection coloredObjectsToDraw(ImageDimensions backgroundDimensions) throws CreateException {
+        ColoredObjectCollection objects = new ColoredObjectCollection();
+        
+        try {
+            objects.addObjectsWithColor(objectsRed, COLOR_RED);
+            objects.addObjectsWithColor(objectsGreen, COLOR_GREEN);
+            objects.addObjectsWithColor(objectsBlue, COLOR_BLUE);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
         }
-    }
-
-    private Channel backgroundChnl(boolean do3D) throws CreateException {
-        if (do3D) {
-            return chnlBackground.create();
-        } else {
-
-            if (chnlBackgroundMIP != null) {
-                return chnlBackgroundMIP.create();
-            } else {
-                return chnlBackground.create().maxIntensityProjection();
-            }
-        }
+        return objects;
     }
 }

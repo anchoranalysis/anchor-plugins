@@ -28,12 +28,12 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import ij.process.ImageProcessor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
-public class ChnlProviderEdgeFilterIJ extends ChnlProviderOne {
+public class ChnlProviderEdgeFilterIJ extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
