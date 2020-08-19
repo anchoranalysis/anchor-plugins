@@ -28,14 +28,14 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderThree;
+import org.anchoranalysis.image.bean.provider.ChnlProviderTernary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
-public class ChnlProviderMeanThree extends ChnlProviderThree {
+public class ChnlProviderMeanThree extends ChnlProviderTernary {
 
     @Override
     protected Channel process(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {

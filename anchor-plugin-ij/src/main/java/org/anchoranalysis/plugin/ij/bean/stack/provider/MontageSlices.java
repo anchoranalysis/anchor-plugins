@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.ij.bean.stack.provider;
 
 import ij.ImagePlus;
 import ij.plugin.MontageMaker;
@@ -33,12 +33,12 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderOne;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.IJWrap;
 import org.anchoranalysis.image.stack.Stack;
 
-public class StackProviderMontageFromSlices extends StackProviderOne {
+public class MontageSlices extends StackProviderUnary {
 
     // START BEAN PROPERTIES
     /**
@@ -65,14 +65,14 @@ public class StackProviderMontageFromSlices extends StackProviderOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Stack createFromStack(Stack stack) throws CreateException {
+    public Stack createFromStack(Stack source) throws CreateException {
 
-        int numberSlices = stack.dimensions().z();
+        int numberSlices = source.dimensions().z();
 
         int numberColumns = numberColumns(numberSlices);
 
         try {
-            return stack.mapChannel(
+            return source.mapChannel(
                     channel ->
                             montageChnl(
                                     channel,

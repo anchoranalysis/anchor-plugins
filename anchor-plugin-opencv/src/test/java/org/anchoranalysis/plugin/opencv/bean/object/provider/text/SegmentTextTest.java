@@ -27,11 +27,10 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import static org.junit.Assert.assertTrue;
-
+import org.anchoranalysis.bean.ProviderHolder;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderHolder;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -98,7 +97,7 @@ public class SegmentTextTest {
 
         SegmentText provider = new SegmentText();
 
-        provider.setStackProvider(new StackProviderHolder(stack));
+        provider.setStack(new ProviderHolder<>(stack));
 
         initProvider(
                 provider,

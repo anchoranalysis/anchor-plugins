@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
  *
  * @author Owen Feehan
  */
-public class ChnlProviderBlur extends ChnlProviderOne {
+public class ChnlProviderBlur extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private BlurStrategy strategy = new BlurGaussian3D();

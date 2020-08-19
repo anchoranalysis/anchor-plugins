@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -59,7 +59,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *
  * @author Owen Feehan
  */
-public class ChnlProviderIfPixelZero extends ChnlProviderOne {
+public class ChnlProviderIfPixelZero extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     /**

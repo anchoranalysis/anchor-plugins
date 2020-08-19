@@ -35,13 +35,13 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
-public class ChnlProviderScale extends ChnlProviderOne {
+public class ChnlProviderScale extends ChannelProviderUnary {
 
     // Start BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
@@ -64,7 +64,7 @@ public class ChnlProviderScale extends ChnlProviderOne {
         try {
             logger.logFormatted("incoming Image Resolution: %s\n", chnl.dimensions().resolution());
 
-            ScaleFactor scaleFactor = scaleCalculator.calc(Optional.of(chnl.dimensions()));
+            ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(chnl.dimensions()));
 
             logger.logFormatted("Scale Factor: %s\n", scaleFactor.toString());
 

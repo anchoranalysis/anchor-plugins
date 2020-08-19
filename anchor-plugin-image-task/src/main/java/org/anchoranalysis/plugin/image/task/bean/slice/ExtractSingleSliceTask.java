@@ -50,7 +50,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -186,7 +186,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     private void outputSlices(
             BoundOutputManagerRouteErrors outputManager, NamedStacksSet stackCollection)
             throws OutputWriteFailedException {
-        StackCollectionOutputter.outputSubsetWithException(
+        StacksOutputter.outputSubsetWithException(
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);
     }
 

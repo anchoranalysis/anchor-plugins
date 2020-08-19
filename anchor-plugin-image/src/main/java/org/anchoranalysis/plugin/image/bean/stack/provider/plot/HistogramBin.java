@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-opencv
+ * anchor-plugin-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,14 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.color;
+package org.anchoranalysis.plugin.image.bean.stack.provider.plot;
 
-import org.opencv.imgproc.Imgproc;
+import org.anchoranalysis.core.index.IndexGetter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public class StackProviderConvertRGBToLab extends StackProviderCVColorConverter {
+/**
+ * One particular bin in a histogram
+ * 
+ * @author Owen Feehan
+ *
+ */
+@AllArgsConstructor
+class HistogramBin implements IndexGetter {
+
+    private int index;
+    @Getter private int count;
 
     @Override
-    protected int colorSpaceCode() {
-        return Imgproc.COLOR_BGR2Lab;
+    public int getIndex() {
+        return index;
     }
 }

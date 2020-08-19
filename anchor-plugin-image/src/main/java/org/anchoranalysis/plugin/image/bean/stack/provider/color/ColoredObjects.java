@@ -24,32 +24,33 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.image.stack.Stack;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.object.ObjectCollection;
 
-// Simply returns the inputStack
-public class StackProviderInput extends StackProvider {
+/**
+ * Draws a colored representation (outline or filled) of an {@link ObjectCollection} on a background
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ColoredObjects extends ColoredBaseWithGenerator {
 
-    private Stack inputStack;
+    // START BEAN PROPERTIES
+    /** Objects to draw on a background */
+    @BeanField @Getter @Setter private ObjectCollectionProvider objects;
+    // END BEAN PROPERTIES
 
     @Override
-    public Stack create() {
-        return inputStack;
+    protected ObjectCollection objectsToDraw(ImageDimensions backgroundDimensions)
+            throws CreateException {
+        return objects.create();
     }
 
-    @Override
-    public void onInit(ImageInitParams so) throws InitException {
-        super.onInit(so);
-        try {
-            inputStack = so.stacks().getException(StackIdentifiers.INPUT_IMAGE);
-        } catch (NamedProviderGetException e) {
-            throw new InitException(e.summarize());
-        }
-    }
 }

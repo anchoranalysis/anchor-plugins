@@ -24,11 +24,11 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.color;
+package org.anchoranalysis.plugin.opencv.bean.stack.provider.color;
 
 import org.opencv.imgproc.Imgproc;
 
-public class StackProviderConvertRGBToHSV extends StackProviderCVColorConverter {
+public class ConvertRGBToHSV extends ColorConverterBase {
 
     @Override
     protected int colorSpaceCode() {

@@ -26,29 +26,21 @@
 
 package org.anchoranalysis.plugin.mpp.bean.define;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.ColoredObjectsOnStack;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderChnlProvider;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineFromCfg;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderOutlineRGB;
-import ch.ethz.biol.cell.imageprocessing.stack.provider.StackProviderWithBackground;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
-import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderReference;
 
 /**
  * Adds a visualization for all binary-masks and object-collections that are added using a
@@ -67,7 +59,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 
     @BeanField @Getter @Setter private int outlineWidth = 1;
 
-    // If TRUE, backgroundID refers to a Stack, otherwise it's a Chnl
+    // If TRUE, backgroundID refers to a Stack, otherwise it's a Channel
     @BeanField @Getter @Setter private boolean stackBackground = false;
     // END BEAN PROPERTIES
 
@@ -81,11 +73,12 @@ public class VisualizeOnBackground extends DefineAdderBean {
             // We add all the existing definitions
             define.addAll(def);
 
+            CreateVisualizatonHelper creator = new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
+            
             // Now we add visualizations for the BinaryChnlProvider and object-collection providers
-            addVisualizationFor(def, define, MaskProvider.class, this::visualizationBinaryMask);
-            addVisualizationFor(
-                    def, define, ObjectCollectionProvider.class, this::visualizationObjects);
-            addVisualizationFor(def, define, CfgProvider.class, this::visualizationCfg);
+            addVisualizationFor(def, define, MaskProvider.class, creator::mask);
+            addVisualizationFor(def, define, ObjectCollectionProvider.class, creator::objects);
+            addVisualizationFor(def, define, CfgProvider.class, creator::marks);
 
         } catch (OperationFailedException e) {
             throw new BeanXmlException(e);
@@ -115,59 +108,15 @@ public class VisualizeOnBackground extends DefineAdderBean {
             Function<String, StackProvider> createVisualization)
             throws OperationFailedException {
 
-        for (NamedBean<AnchorBean<?>> nb : in.getList(listType)) {
+        Stream<String> beanNames = in.getList(listType).stream().map(NamedBean::getName);
 
-            NamedBean<StackProvider> nbViz = visualizationBean(createVisualization, nb.getName());
-            out.add(nbViz);
-        }
+        CheckedStream.forEach( beanNames, OperationFailedException.class, name->
+            out.add( visualizationBean(createVisualization, name) )
+        ); 
     }
 
     private NamedBean<StackProvider> visualizationBean(
             Function<String, StackProvider> createVisualization, String inputName) {
         return new NamedBean<>(inputName + SUFFIX, createVisualization.apply(inputName));
-    }
-
-    private StackProvider visualizationBinaryMask(String maskProviderID) {
-        StackProviderOutlineRGB provider = new StackProviderOutlineRGB();
-        addBackgroundProvider(provider);
-        provider.setMask(new org.anchoranalysis.plugin.image.bean.mask.provider.Reference(maskProviderID));
-        return provider;
-    }
-
-    private StackProvider visualizationObjects(String objectsProviderID) {
-        ColoredObjectsOnStack provider = new ColoredObjectsOnStack();
-        provider.setOutline(true);
-        addBackgroundProvider(provider);
-        provider.setObjects(new org.anchoranalysis.plugin.image.bean.object.provider.Reference(objectsProviderID));
-        provider.setOutlineWidth(outlineWidth);
-        return provider;
-    }
-
-    private StackProvider visualizationCfg(String cfgProviderID) {
-        StackProviderOutlineFromCfg provider = new StackProviderOutlineFromCfg();
-        provider.setBackgroundProvider(backgroundStack());
-        provider.setCfgProvider(new CfgProviderReference(cfgProviderID));
-        provider.setOutlineWidth(outlineWidth);
-        return provider;
-    }
-
-    private void addBackgroundProvider(StackProviderWithBackground provider) {
-        if (stackBackground) {
-            provider.setStackBackground(backgroundStack());
-        } else {
-            provider.setChnlBackground(backgroundChnl());
-        }
-    }
-
-    private StackProvider backgroundStack() {
-        if (stackBackground) {
-            return new StackProviderReference(backgroundID);
-        } else {
-            return new StackProviderChnlProvider(backgroundChnl());
-        }
-    }
-
-    private ChannelProvider backgroundChnl() {
-        return new ChnlProviderReference(backgroundID);
     }
 }

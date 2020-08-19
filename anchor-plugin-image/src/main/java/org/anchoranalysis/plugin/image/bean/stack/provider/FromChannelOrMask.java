@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,22 +35,36 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 
+/**
+ * Creates a stack from a channel or mask (reusing the voxel buffers)
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor
-public class StackProviderChnlProvider extends StackProvider {
+public class FromChannelOrMask extends StackProvider {
 
     // START BEAN PROPERTIES
+    /** A channel that is provided to the stack. Either this or {@code mask} must be set. */
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
 
+    /** A mask that is provided to the stack. Either this or {@code chnl} must be set. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
+    
+    /** If true, the output contains three channels (the input and two duplicates) instead of one */
+    @BeanField @Getter @Setter private boolean rgb = false;
     // END BEAN PROPERTIES
 
-    public StackProviderChnlProvider(ChannelProvider chnlProvider) {
-        this.chnl = chnlProvider;
+    public FromChannelOrMask(ChannelProvider channel) {
+        this.chnl = channel;
     }
 
     @Override
@@ -59,20 +73,34 @@ public class StackProviderChnlProvider extends StackProvider {
         super.checkMisconfigured(defaultInstances);
 
         if (!(chnl != null ^ mask != null)) {
-            throw new BeanMisconfiguredException(
-                    String.format(
-                            "Either '%s' or '%s' must be non-null",
-                            "chnlProvider", "binaryImgChnlProvider"));
+            throw new BeanMisconfiguredException("Either channel or mask must be set");
         }
     }
 
     @Override
     public Stack create() throws CreateException {
-
-        if (chnl != null) {
-            return new Stack(chnl.create());
+        return createStackFromChannel( channelFromSource() );
+    }
+    
+    /** Creates either a grayscale or RGB stack from the channel */
+    private Stack createStackFromChannel( Channel channel ) {
+        if (rgb) {
+            try {
+                return new Stack(channel, channel.duplicate(), channel.duplicate());
+            } catch (IncorrectImageSizeException e) {
+                throw new AnchorImpossibleSituationException();
+            }
         } else {
-            return new Stack(mask.create().channel());
+            return new Stack(channel);
+        }
+    }
+    
+    /** Identifies a channel from one of two sources */
+    private Channel channelFromSource() throws CreateException {
+        if (chnl != null) {
+            return chnl.create();
+        } else {
+            return mask.create().channel();
         }
     }
 }

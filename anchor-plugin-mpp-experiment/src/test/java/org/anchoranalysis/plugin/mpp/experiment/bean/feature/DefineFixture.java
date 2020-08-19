@@ -89,9 +89,9 @@ class DefineFixture {
         Stack stack = nrgStack.asStack();
 
         // Encapsulate in a mock
-        StackProvider stackProvider = mock(StackProvider.class);
-        when(stackProvider.create()).thenReturn(stack);
-        when(stackProvider.duplicateBean()).thenReturn(stackProvider);
-        return stackProvider;
+        StackProvider provider = mock(StackProvider.class);
+        when(provider.create()).thenReturn(stack);
+        when(provider.duplicateBean()).thenReturn(provider);
+        return provider;
     }
 }

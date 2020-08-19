@@ -38,7 +38,6 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
@@ -89,8 +88,8 @@ public class AnnotationCfgComparer extends Comparer {
                                         .get()
                                         .getRegionMap()
                                         .membershipWithFlagsForIndex(
-                                                annotation.get().getRegionID()),
-                                BinaryValuesByte.getDefault());
+                                                annotation.get().getRegionID())
+                                );
         return new Found<>(omwp.withoutProperties());
     }
 }

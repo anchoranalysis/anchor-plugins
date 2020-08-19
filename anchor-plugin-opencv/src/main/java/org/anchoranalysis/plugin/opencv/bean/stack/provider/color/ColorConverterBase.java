@@ -24,10 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean.color;
+package org.anchoranalysis.plugin.opencv.bean.stack.provider.color;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.stack.StackProviderOne;
+import org.anchoranalysis.image.bean.provider.stack.StackProviderUnary;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -48,7 +48,7 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author Owen Feehan
  */
-public abstract class StackProviderCVColorConverter extends StackProviderOne {
+public abstract class ColorConverterBase extends StackProviderUnary {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();

@@ -28,7 +28,7 @@ package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
 import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderTwo;
+import org.anchoranalysis.image.bean.provider.ChnlProviderBinary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
  *
  * @author Owen Feehan
  */
-public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderTwo {
+public abstract class ChnlProviderTwoVoxelMapping extends ChnlProviderBinary {
 
     @Override
     protected Channel process(Channel chnl1, Channel chnl2) throws CreateException {

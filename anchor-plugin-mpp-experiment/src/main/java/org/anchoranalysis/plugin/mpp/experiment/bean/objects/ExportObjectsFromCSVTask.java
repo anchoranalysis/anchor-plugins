@@ -163,7 +163,7 @@ public class ExportObjectsFromCSVTask
     private FilePathGenerator idGenerator; // Translates an input file name to a unique ID
 
     /** The stack that is the background for our objects */
-    @BeanField @Getter @Setter private StackProvider stackProvider;
+    @BeanField @Getter @Setter private StackProvider stack;
 
     /** Column definition for the CSVfiles */
     @BeanField @Getter @Setter private ColumnDefinition columnDefinition;
@@ -239,9 +239,9 @@ public class ExportObjectsFromCSVTask
     private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
-        StackProvider stackProviderDup = stackProvider.duplicateBean();
-        stackProviderDup.initRecursive(so, logger);
-        return DisplayStack.create(stackProviderDup.create());
+        StackProvider providerCopy = stack.duplicateBean();
+        providerCopy.initRecursive(so, logger);
+        return DisplayStack.create(providerCopy.create());
     }
 
     private Path idStringForPath(Optional<Path> path, boolean debugMode) throws AnchorIOException {
@@ -318,8 +318,7 @@ public class ExportObjectsFromCSVTask
             ObjectCollectionRTree objects,
             DisplayStack background)
             throws SetOperationFailedException {
-        Outline outlineWriter = new Outline(1);
-        outlineWriter.setForce2D(true);
+        Outline outlineWriter = new Outline(1, false);
 
         IterableCombinedListGenerator<CSVRow> listGenerator =
                 new IterableCombinedListGenerator<>(

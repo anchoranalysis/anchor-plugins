@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ImageDimProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
@@ -68,8 +67,8 @@ public class FromCfg extends ObjectCollectionProvider {
 
         return cfg.deriveObjects(
                         dims,
-                        regionMap.membershipWithFlagsForIndex(regionID),
-                        BinaryValuesByte.getDefault())
+                        regionMap.membershipWithFlagsForIndex(regionID)
+                        )
                 .withoutProperties();
     }
 }

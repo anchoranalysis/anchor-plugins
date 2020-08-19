@@ -24,35 +24,37 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderMax;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.region.chnlconverter.ChannelConverterMulti;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
+import org.anchoranalysis.image.stack.Stack;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class MaxChnls {
+/**
+ * Finds the input-stack using a conventional name of {@code input_image}
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class FromInput extends StackProvider {
 
-    public static Channel apply(Channel chnl1, Channel chnl2, VoxelDataType outputType)
-            throws CreateException {
-        Channel max = maxChnls(chnl1, chnl2);
-        return convert(max, outputType);
+    private Stack stack;
+
+    @Override
+    public Stack create() {
+        return stack;
     }
 
-    private static Channel maxChnls(Channel chnl1, Channel chnl2) throws CreateException {
-        if (chnl2 != null) {
-            return ChnlProviderMax.createMax(chnl1, chnl2);
-        } else {
-            return chnl1;
+    @Override
+    public void onInit(ImageInitParams so) throws InitException {
+        super.onInit(so);
+        try {
+            stack = so.stacks().getException(StackIdentifiers.INPUT_IMAGE);
+        } catch (NamedProviderGetException e) {
+            throw new InitException(e.summarize());
         }
-    }
-
-    private static Channel convert(Channel chnl, VoxelDataType outputType) {
-        ChannelConverterMulti chnlConverter = new ChannelConverterMulti();
-        return chnlConverter.convert(chnl, outputType);
     }
 }

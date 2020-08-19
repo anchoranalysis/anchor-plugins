@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-mpp
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,45 +24,39 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.mpp.bean.stack.provider;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWithGenerator;
 
-public class StackProviderRGBSingleChnlProvider extends StackProvider {
+/**
+ * Draws a colored representation (outline or filled) of an {@link Cfg} on a background
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class ColoredMarks extends ColoredBaseWithGenerator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private CfgProvider cfgProvider;
+    
+    @BeanField @Getter @Setter private int regionID = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public Stack create() throws CreateException {
-
-        Channel chnlIn = chnl.create();
-
-        ImageDimensions dimensions = chnlIn.dimensions();
-
-        try {
-            Stack out = new Stack();
-            addToStack(out, chnlIn, dimensions);
-            addToStack(out, chnlIn, dimensions);
-            addToStack(out, chnlIn, dimensions);
-            return out;
-        } catch (IncorrectImageSizeException e) {
-            throw new CreateException(e);
-        }
-    }
-
-    private void addToStack(Stack stack, Channel chnl, ImageDimensions dimensions)
-            throws IncorrectImageSizeException {
-        stack.addChannel(chnl.duplicate());
+    protected ObjectCollection objectsToDraw(ImageDimensions backgroundDimensions)
+            throws CreateException {
+        Cfg cfg = cfgProvider.create();
+        RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
+        return cfg.deriveObjects(backgroundDimensions, regionMembership).withoutProperties();
     }
 }

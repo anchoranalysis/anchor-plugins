@@ -31,11 +31,11 @@ import java.nio.file.Path;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -73,7 +73,7 @@ public class SegmentText extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
     /** An RGB stack to look for text in */
-    @BeanField @Getter @Setter private StackProvider stackProvider;
+    @BeanField @Getter @Setter private Provider<Stack> stack;
 
     /** Proposed bounding boxes below this confidence interval are removed */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
@@ -88,24 +88,24 @@ public class SegmentText extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Stack stack = createInput();
+        Stack stackCreated = createInput();
 
         // Scales the input to the largest acceptable-extent
         Tuple2<Mat, ScaleFactor> pair =
-                CreateScaledInput.apply(stack, findLargestExtent(stack.extent()));
+                CreateScaledInput.apply(stackCreated, findLargestExtent(stackCreated.extent()));
 
         // Convert marks to object-masks
         List<WithConfidence<ObjectMask>> objectsWithConfidence =
                 EastObjectsExtractor.apply(
                         pair._1(),
-                        stack.dimensions().resolution(),
+                        stackCreated.dimensions().resolution(),
                         minConfidence,
                         pathToEastModel());
 
         // Scale each object-mask and extract as an object-collection
         try {
             return ScaleExtractObjects.apply(
-                    maybeFilterList(objectsWithConfidence), pair._2(), stack.extent());
+                    maybeFilterList(objectsWithConfidence), pair._2(), stackCreated.extent());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
@@ -128,20 +128,20 @@ public class SegmentText extends ObjectCollectionProvider {
 
     private Stack createInput() throws CreateException {
 
-        Stack stack = stackProvider.create();
+        Stack stackCreated = stack.create();
 
-        if (stack.getNumberChannels() != 3) {
+        if (stackCreated.getNumberChannels() != 3) {
             throw new CreateException(
                     String.format(
                             "Non-RGB stacks are not supported by this algorithm. This stack has %d channels.",
-                            stack.getNumberChannels()));
+                            stackCreated.getNumberChannels()));
         }
 
-        if (stack.dimensions().z() > 1) {
+        if (stackCreated.dimensions().z() > 1) {
             throw new CreateException("z-stacks are not supported by this algorithm");
         }
 
-        return stack;
+        return stackCreated;
     }
 
     private List<WithConfidence<ObjectMask>> maybeFilterList(

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package ch.ethz.biol.cell.imageprocessing.stack.provider;
+package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +43,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
 
-public class StackProviderRGBChnlProvider extends StackProvider {
+public class ThreeChannels extends StackProvider {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider red;

@@ -67,7 +67,7 @@ class ContourListGenerator extends RasterGenerator
             new ShuffleColorSetGenerator(new HSBColorSetGenerator());
 
     public ContourListGenerator(DisplayStack stack) {
-        this(new Outline(1, true), null, stack);
+        this(new Outline(1, false), null, stack);
     }
 
     public ContourListGenerator(DisplayStack stack, List<Contour> contours)

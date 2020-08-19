@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.stack.region.chnlconverter.attached.ChnlConverte
 // Converts a chnl by applying a ChnlConverter. A histogram is used to determine the conversion.
 // This is either
 // calculated automatically from the incoming channel, or provided explicitly.
-public class ChnlProviderConverterHistogram extends ChnlProviderOne {
+public class ChnlProviderConverterHistogram extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     /** If set, a histogram used in conversion to describe input intensities (across perhaps multiple images). If unset, such a histogram is calculated from the current image. */

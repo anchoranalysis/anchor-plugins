@@ -51,7 +51,7 @@ public class CfgProviderScaleXY extends CfgProvider {
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(Optional.empty());
+            scaleFactor = scaleCalculator.calculate(Optional.empty());
         } catch (OperationFailedException e1) {
             throw new CreateException(e1);
         }

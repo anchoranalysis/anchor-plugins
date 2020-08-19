@@ -31,13 +31,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChnlProviderOne;
+import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.ImageDimensions;
 
 /** Groups some similar filters that use a 'radius' parameter */
-public abstract class ChnlProviderFilterRadiusBase extends ChnlProviderOne {
+public abstract class ChnlProviderFilterRadiusBase extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Positive @Getter @Setter private double radius = 2;
