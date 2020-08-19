@@ -26,14 +26,12 @@
 
 package ch.ethz.biol.cell.imageprocessing.chnl.provider;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
@@ -41,7 +39,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
 // Corrects a channel in the following way
 //  For each object:
@@ -77,39 +75,23 @@ public class ChnlProviderAdjustDifferenceToMedian extends ChnlProviderOneObjects
     private void adjustObject(
             ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
 
-        ReadableTuple3i cornerMin = object.boundingBox().cornerMin();
-        ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMaxExclusive();
+        IterateVoxels.callEachPointTwo(chnl.voxels().asByte(), chnlLookup.voxels().asByte(), object, (point, buffer, bufferLookup, offset) -> {
+            int lookupVal = ByteConverter.unsignedByteToInt(bufferLookup.get(offset));
 
-        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
-        Voxels<ByteBuffer> voxelsLookup = chnlLookup.voxels().asByte();
+            int valueExisting = ByteConverter.unsignedByteToInt(buffer.get(offset));
+            int valueToAssign = clipValue(valueExisting - medianFromObject + lookupVal);
 
-        for (int z = cornerMin.z(); z < cornerMax.z(); z++) {
-
-            ByteBuffer bbChnl = voxels.sliceBuffer(z);
-            ByteBuffer bbChnlLookup = voxelsLookup.sliceBuffer(z);
-            ByteBuffer bbMask = object.sliceBufferGlobal(z);
-
-            int objectMaskOffset = 0;
-            for (int y = cornerMin.y(); y < cornerMax.y(); y++) {
-                for (int x = cornerMin.x(); x < cornerMax.x(); x++) {
-
-                    if (bbMask.get(objectMaskOffset++) == object.binaryValuesByte().getOnByte()) {
-
-                        int offset = voxels.extent().offset(x, y);
-
-                        int lookupVal = ByteConverter.unsignedByteToInt(bbChnlLookup.get(offset));
-                        int adj = (medianFromObject - lookupVal);
-
-                        int crntVal = ByteConverter.unsignedByteToInt(bbChnl.get(offset));
-                        int valNew = crntVal - adj;
-
-                        if (valNew < 0) valNew = 0;
-                        if (valNew > 255) valNew = 255;
-
-                        bbChnl.put(offset, (byte) valNew);
-                    }
-                }
-            }
+            buffer.put(offset, (byte) valueToAssign);
+        });
+    }
+    
+    private static int clipValue(int value) {
+        if (value < 0) {
+            return 0;
+        } else if (value > 255) {
+            return 255;
+        } else {
+            return value;
         }
     }
 }

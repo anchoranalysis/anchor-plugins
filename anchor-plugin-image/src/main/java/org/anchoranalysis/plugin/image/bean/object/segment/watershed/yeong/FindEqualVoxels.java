@@ -42,6 +42,7 @@ import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
+import com.google.common.base.Preconditions;
 
 @AllArgsConstructor
 final class FindEqualVoxels {
@@ -143,22 +144,19 @@ final class FindEqualVoxels {
 
         EqualVoxelsPlateau plateau = new EqualVoxelsPlateau();
 
-        int valToFind =
-                bufferValuesToFindEqual
-                        .slice(point.z())
-                        .getInt(bufferValuesToFindEqual.extent().offsetSlice(point));
+        SlidingBuffer<?> slidingBuffer = new SlidingBuffer<>(bufferValuesToFindEqual);
 
-        SlidingBuffer<?> rbb = new SlidingBuffer<>(bufferValuesToFindEqual);
+        Deque<Point3i> stack = new LinkedList<>();
+        stack.push(point);
+        processStack(stack, slidingBuffer, plateau, valueToFind(point));
 
-        {
-            Deque<Point3i> stack = new LinkedList<>();
-            stack.push(point);
-            processStack(stack, rbb, plateau, valToFind);
-        }
-
-        assert (!plateau.hasNullItems());
+        Preconditions.checkArgument(!plateau.hasNullItems());
 
         return plateau;
+    }
+    
+    private int valueToFind(Point3i point) {
+        return bufferValuesToFindEqual.extract().voxel(point);
     }
 
     private void processStack(

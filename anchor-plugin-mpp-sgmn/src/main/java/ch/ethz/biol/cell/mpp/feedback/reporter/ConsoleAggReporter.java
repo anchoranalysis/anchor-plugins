@@ -96,7 +96,7 @@ public final class ConsoleAggReporter extends ReporterAgg<CfgNRGPixelized>
     public void reportEnd(OptimizationFeedbackEndParams<CfgNRGPixelized> optStep) {
         super.reportEnd(optStep);
         timer.stop();
-        System.out.printf(
-                "Optimization time took %e s%n", ((double) timer.getTime()) / 1000); // NOSONAR
+        System.out.printf(  // NOSONAR
+                "Optimization time took %e s%n", ((double) timer.getTime()) / 1000);
     }
 }

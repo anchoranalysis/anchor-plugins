@@ -94,7 +94,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
         // Now we keep checking that points are inside the region until we reach our final point
         Point3d point = PointConverter.doubleFromInt(root);
-        VoxelsExtracter<ByteBuffer> extracter = voxels.extracter();
+        VoxelsExtracter<ByteBuffer> extracter = voxels.extract();
         while (!pointEquals(point, destPoint)) {
 
             if (debug) {

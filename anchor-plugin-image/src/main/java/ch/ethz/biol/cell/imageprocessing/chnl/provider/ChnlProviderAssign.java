@@ -63,7 +63,7 @@ public class ChnlProviderAssign extends ChnlProviderOneMask {
         assignFrom
                 .voxels()
                 .asByte()
-                .extracter()
+                .extract()
                 .objectCopyTo(object, assignTo.voxels().asByte(), object.boundingBox());
     }
 }

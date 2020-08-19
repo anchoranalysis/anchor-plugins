@@ -69,16 +69,16 @@ public class RegExpFilePathParser extends FilePathParser {
             return false;
         }
 
-        chnlNum = ExtractGroup.maybeExtractInt(chnlGroupID, "chnl", matcher);
-        zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, "zSlice", matcher);
-        timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, "timeIndex", matcher);
+        chnlNum = ExtractGroup.maybeExtractInt(chnlGroupID, matcher);
+        zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, matcher);
+        timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, matcher);
 
         if (chnlNum == -1 || zSliceNum == -1 || timeIndex == -1) {
             return false;
         }
 
         if (keyGroupID > 0) {
-            Optional<String> extractedKey = ExtractGroup.extractStr(keyGroupID, matcher, "key");
+            Optional<String> extractedKey = ExtractGroup.extractString(keyGroupID, matcher);
             if (!extractedKey.isPresent() || (extractedKey.get().isEmpty() && keyRequired)) {
                 return false;
             }

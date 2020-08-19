@@ -34,6 +34,6 @@ public class ChnlProviderMIP extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return channel.maxIntensityProjection();
+        return channel.projectMax();
     }
 }

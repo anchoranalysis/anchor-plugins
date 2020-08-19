@@ -132,7 +132,7 @@ class ExtractProjectedStack {
         channelDestination
                 .voxels()
                 .asByte()
-                .extracter()
+                .extract()
                 .boxCopyTo(boxSource, chnlOut.voxels().asByte(), boxToProject);
         return chnlOut;
     }

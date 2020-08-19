@@ -83,7 +83,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
                 // We do an and operation with the mask
                 voxelsDuplicated
-                        .extracter()
+                        .extract()
                         .objectCopyTo(
                                 objectRegionAtOrigin,
                                 voxels.voxels(),

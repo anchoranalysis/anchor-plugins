@@ -34,8 +34,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractGroup {
 
-    public static Optional<String> extractStr(
-            int groupID, Matcher matcher, String failureGroupDescription) {
+    public static Optional<String> extractString(
+            int groupID, Matcher matcher) {
 
         if (groupID > matcher.groupCount()) {
             return Optional.empty();
@@ -44,21 +44,21 @@ class ExtractGroup {
         return Optional.of(matcher.group(groupID));
     }
 
-    public static int maybeExtractInt(int groupID, String failureDescr, Matcher matcher) {
+    public static int maybeExtractInt(int groupID, Matcher matcher) {
         if (groupID > 0) {
-            return extractInt(groupID, matcher, failureDescr);
+            return extractInt(groupID, matcher);
         } else {
             return 0;
         }
     }
 
-    private static int extractInt(int groupID, Matcher matcher, String failureGroupDescription) {
+    private static int extractInt(int groupID, Matcher matcher) {
 
         if (groupID > matcher.groupCount()) {
             return -1;
         }
 
-        Optional<String> groupText = extractStr(groupID, matcher, failureGroupDescription);
+        Optional<String> groupText = extractString(groupID, matcher);
         return groupText.map(Integer::parseInt).orElse(-1);
     }
 }

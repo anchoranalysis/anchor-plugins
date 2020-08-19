@@ -55,8 +55,6 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             BinaryValuesByte bv) {
         super(sbMarker);
-        assert (sbMarker.extent().equals(sbFinalized.extent()));
-        assert (sbMarker.extent().equals(sbMask.extent()));
         this.sbFinalized = sbFinalized;
         this.sbMask = sbMask;
         this.queue = queue;

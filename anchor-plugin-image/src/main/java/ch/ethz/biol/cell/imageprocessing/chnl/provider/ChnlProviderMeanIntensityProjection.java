@@ -34,6 +34,6 @@ public class ChnlProviderMeanIntensityProjection extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return channel.meanIntensityProjection();
+        return channel.projectMean();
     }
 }
