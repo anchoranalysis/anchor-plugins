@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -60,7 +60,7 @@ class CalculateMaskInput<T extends FeatureInputNRG>
         Voxels<ByteBuffer> voxels;
         try {
             voxels = mask.channel().voxels().asByte();
-        } catch (IncorrectVoxelDataTypeException e) {
+        } catch (IncorrectVoxelTypeException e) {
             throw new FeatureCalculationException(
                     "mask has incompatible data type, it must be unsigned 8-bit", e);
         }

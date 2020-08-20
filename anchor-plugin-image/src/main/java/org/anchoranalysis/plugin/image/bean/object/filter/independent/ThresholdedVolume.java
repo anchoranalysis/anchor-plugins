@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
@@ -55,7 +55,7 @@ public class ThresholdedVolume extends ObjectFilterRelation {
     private int thresholdResolved;
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
         thresholdResolved = resolveThreshold(dim);
@@ -63,14 +63,14 @@ public class ThresholdedVolume extends ObjectFilterRelation {
 
     @Override
     protected boolean match(
-            ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation) {
+            ObjectMask object, Optional<Dimensions> dim, RelationToValue relation) {
         return relation.isRelationToValueTrue(object.numberVoxelsOn(), thresholdResolved);
     }
 
-    private int resolveThreshold(Optional<ImageDimensions> dim) throws OperationFailedException {
+    private int resolveThreshold(Optional<Dimensions> dim) throws OperationFailedException {
         try {
             return (int)
-                    Math.floor(threshold.resolveToVoxels(dim.map(ImageDimensions::resolution)));
+                    Math.floor(threshold.resolveToVoxels(dim.map(Dimensions::resolution)));
         } catch (UnitValueException e) {
             throw new OperationFailedException(e);
         }

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -116,7 +116,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
         return delegate.dimensionsForSeries(seriesIndex);
     }
 

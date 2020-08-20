@@ -37,7 +37,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
@@ -177,7 +177,7 @@ class FlattenAndScaler {
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
         Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
-        scaled.updateResolution(new ImageResolution());
+        scaled.updateResolution(new Resolution());
         return scaled;
     }
 

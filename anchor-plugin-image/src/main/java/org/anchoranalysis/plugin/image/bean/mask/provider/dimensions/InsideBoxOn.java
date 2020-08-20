@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
 /**
@@ -65,17 +65,17 @@ public class InsideBoxOn extends FromDimensionsBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
+    protected Mask createFromDimensions(Dimensions dimensions) throws CreateException {
         return createMaskWithBoxOn(dimensions, createBox(dimensions));
     }
 
-    private static Mask createMaskWithBoxOn(ImageDimensions dimensions, BoundingBox box) {
+    private static Mask createMaskWithBoxOn(Dimensions dimensions, BoundingBox box) {
         Mask mask = MaskFactory.createMaskOff(dimensions);
         mask.assignOn().toBox(box);
         return mask;
     }
 
-    private BoundingBox createBox(ImageDimensions dimensions) {
+    private BoundingBox createBox(Dimensions dimensions) {
         BoundingBox box =
                 new BoundingBox(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
 

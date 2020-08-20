@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithNrg;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefineFixture {

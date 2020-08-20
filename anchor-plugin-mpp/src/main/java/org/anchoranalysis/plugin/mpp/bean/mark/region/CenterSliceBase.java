@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 @EqualsAndHashCode(callSuper = true)
@@ -40,7 +40,7 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException {
+            VoxelizedMark voxelized, Mark mark, Dimensions dimensions) throws CreateException {
 
         BoundingBox box = boundingBoxForRegion(voxelized);
 
@@ -50,7 +50,7 @@ public abstract class CenterSliceBase extends IndexedRegionBase {
     }
 
     protected abstract VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark mark, ImageDimensions dimensions, BoundingBox box, int zCenter);
+            VoxelizedMark mark, Dimensions dimensions, BoundingBox box, int zCenter);
 
     private static int zCenterFromMark(Mark markUncasted, BoundingBox box) throws CreateException {
         if (!(markUncasted instanceof MarkAbstractPosition)) {

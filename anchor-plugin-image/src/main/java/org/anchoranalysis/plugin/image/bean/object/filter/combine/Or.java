@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -47,7 +47,7 @@ public class Or extends ObjectFilterCombine {
     @Override
     public ObjectCollection filter(
             ObjectCollection objectsToFilter,
-            Optional<ImageDimensions> dim,
+            Optional<Dimensions> dim,
             Optional<ObjectCollection> objectsRejected)
             throws OperationFailedException {
 
@@ -64,7 +64,7 @@ public class Or extends ObjectFilterCombine {
 
     /** Finds the accepted objects (i.e. objects that pass any one of the filters) */
     private Set<ObjectMask> findAcceptedObjects(
-            ObjectCollection objectsToFilter, Optional<ImageDimensions> dim)
+            ObjectCollection objectsToFilter, Optional<Dimensions> dim)
             throws OperationFailedException {
         Set<ObjectMask> setAccepted = new HashSet<>();
 

@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Calculates feature on a 'grouped' set of images
@@ -89,7 +89,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
         HistogramExtracter histogramExtracter = new HistogramExtracter(source, keyMask, maskValue);
 
         try {
-            for (NamedChnl chnl : getSelectChnls().selectChnls(source, true)) {
+            for (NamedChannel chnl : getSelectChnls().selectChannels(source, true)) {
 
                 addHistogramFromChnl(
                         chnl, histogramExtracter, groupName, sharedState.getGroupMap(), context);
@@ -101,14 +101,14 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
     }
 
     private void addHistogramFromChnl(
-            NamedChnl chnl,
+            NamedChannel chnl,
             HistogramExtracter histogramExtracter,
             Optional<String> groupName,
             GroupMapByName<Histogram, Histogram> groupMap,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Histogram hist = histogramExtracter.extractFrom(chnl.getChnl());
+        Histogram hist = histogramExtracter.extractFrom(chnl.getChannel());
 
         if (writeImageHistograms) {
             // We keep histogram as private member variable so it is thread-safe

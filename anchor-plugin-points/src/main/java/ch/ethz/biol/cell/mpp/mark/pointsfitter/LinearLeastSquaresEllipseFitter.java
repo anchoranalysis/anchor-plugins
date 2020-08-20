@@ -44,7 +44,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 /**
@@ -63,7 +63,7 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
     // END BEAN
 
     @Override
-    public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+    public void fit(List<Point3f> points, Mark mark, Dimensions dimensions)
             throws PointsFitterException, InsufficientPointsException {
 
         List<Point2D_F64> pointsConvert =

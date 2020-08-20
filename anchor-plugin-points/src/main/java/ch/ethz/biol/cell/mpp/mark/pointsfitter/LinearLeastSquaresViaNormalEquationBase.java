@@ -32,12 +32,12 @@ import java.util.List;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitterBase {
 
     @Override
-    public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+    public void fit(List<Point3f> points, Mark mark, Dimensions dimensions)
             throws PointsFitterException {
 
         if (points.size() < minNumPoints()) {
@@ -52,7 +52,7 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
     protected abstract int minNumPoints();
 
     protected abstract void applyCoefficientsToMark(
-            DoubleMatrix2D matrixV, Mark mark, ImageDimensions dimensions)
+            DoubleMatrix2D matrixV, Mark mark, Dimensions dimensions)
             throws PointsFitterException;
 
     protected abstract DoubleMatrix2D createDesignMatrix(List<Point3f> points);

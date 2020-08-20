@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
@@ -55,7 +55,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
             throws OperationFailedException {
 
         if (!dim.isPresent()) {

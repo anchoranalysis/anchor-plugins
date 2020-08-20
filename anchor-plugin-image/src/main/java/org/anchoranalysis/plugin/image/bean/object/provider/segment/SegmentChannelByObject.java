@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderUnaryWithChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.UnaryWithChannelBase;
 
 /**
  * Performs segmentation of a channel using each object in the upstream collection as a mask.
@@ -49,7 +49,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class SegmentChannelByObject extends ObjectCollectionProviderUnaryWithChannel {
+public class SegmentChannelByObject extends UnaryWithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;

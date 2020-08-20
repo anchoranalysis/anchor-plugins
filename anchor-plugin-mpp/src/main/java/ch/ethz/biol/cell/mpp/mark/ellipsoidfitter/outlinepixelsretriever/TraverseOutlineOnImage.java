@@ -41,8 +41,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 
@@ -101,7 +101,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void checkDimensions(ImageDimensions dimOutline, ImageDimensions dimFilled)
+    private void checkDimensions(Dimensions dimOutline, Dimensions dimFilled)
             throws TraverseOutlineException {
         if (!dimOutline.equals(dimFilled)) {
             throw new TraverseOutlineException(
@@ -109,7 +109,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void callBefore(ImageResolution res, RandomNumberGenerator randomNumberGenerator)
+    private void callBefore(Resolution res, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, res);
@@ -125,7 +125,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     }
 
     private void callAfter(
-            Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Resolution res, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());

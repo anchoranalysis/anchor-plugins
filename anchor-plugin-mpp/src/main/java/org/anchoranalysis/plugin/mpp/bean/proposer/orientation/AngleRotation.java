@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
@@ -46,7 +46,7 @@ public class AngleRotation extends OrientationProposer {
 
     @Override
     public Optional<Orientation> propose(
-            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
+            Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
         MarkEllipse markC = (MarkEllipse) mark;
 
         Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();

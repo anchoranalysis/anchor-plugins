@@ -43,7 +43,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
@@ -62,7 +62,7 @@ class NaiveGreedyMerge {
     private final boolean replaceWithMidpoint;
     private final BeforeCondition beforeCondition;
     private final AfterCondition afterCondition;
-    private final Optional<ImageResolution> res;
+    private final Optional<Resolution> res;
     private final Logger logger;
 
     @Value

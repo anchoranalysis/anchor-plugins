@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -63,7 +63,7 @@ public class Filter extends SegmentChannelIntoObjectsUnary {
                 upstreamSegmentation.segment(channel, object, seeds), channel.dimensions());
     }
 
-    private ObjectCollection filterObjects(ObjectCollection objects, ImageDimensions dim)
+    private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dim)
             throws SegmentationFailedException {
         try {
             return filter.filter(objects, Optional.of(dim), Optional.empty());

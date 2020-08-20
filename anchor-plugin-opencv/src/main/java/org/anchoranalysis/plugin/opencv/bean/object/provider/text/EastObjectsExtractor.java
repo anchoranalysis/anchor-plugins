@@ -36,8 +36,8 @@ import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
@@ -54,7 +54,7 @@ import org.opencv.core.Mat;
 class EastObjectsExtractor {
 
     public static List<WithConfidence<ObjectMask>> apply(
-            Mat image, ImageResolution res, double minConfidence, Path pathToEastModel) {
+            Mat image, Resolution res, double minConfidence, Path pathToEastModel) {
         List<WithConfidence<Mark>> listMarks =
                 EastMarkExtractor.extractBoundingBoxes(image, minConfidence, pathToEastModel);
 
@@ -63,20 +63,20 @@ class EastObjectsExtractor {
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
-            List<WithConfidence<Mark>> listMarks, ImageDimensions dim) {
+            List<WithConfidence<Mark>> listMarks, Dimensions dim) {
         return FunctionalList.mapToList(listMarks, wc -> convertToObject(wc, dim));
     }
 
-    private static ImageDimensions dimensionsForMatrix(Mat matrix, ImageResolution res) {
+    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution res) {
 
         int width = (int) matrix.size().width;
         int height = (int) matrix.size().height;
 
-        return new ImageDimensions(new Extent(width, height), res);
+        return new Dimensions(new Extent(width, height), res);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(
-            WithConfidence<Mark> mark, ImageDimensions dimensions) {
+            WithConfidence<Mark> mark, Dimensions dimensions) {
 
         ObjectWithProperties om =
                 mark.getObject()

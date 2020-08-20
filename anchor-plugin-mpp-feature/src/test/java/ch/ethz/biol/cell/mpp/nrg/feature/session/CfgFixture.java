@@ -27,13 +27,13 @@
 package ch.ethz.biol.cell.mpp.nrg.feature.session;
 
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class CfgFixture {
 
     private final MarkFixture markFixture;
 
-    public CfgFixture(ImageDimensions dimensions) {
+    public CfgFixture(Dimensions dimensions) {
         this.markFixture = new MarkFixture(dimensions);
     }
 

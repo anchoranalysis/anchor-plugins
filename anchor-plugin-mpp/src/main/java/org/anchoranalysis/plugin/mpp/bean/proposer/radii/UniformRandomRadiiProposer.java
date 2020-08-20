@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 
 @NoArgsConstructor
@@ -57,7 +57,7 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
     public Optional<Point3d> propose(
             Point3d pos,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Orientation orientation)
             throws ProposalAbnormalFailureException {
         return Optional.of(

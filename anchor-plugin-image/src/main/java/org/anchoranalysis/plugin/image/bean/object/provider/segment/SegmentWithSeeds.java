@@ -45,7 +45,7 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithChannelBase;
 
 /**
  * Takes each object one-by-one from {@code objectsSource}, and finds matching seeds from {@code
@@ -53,7 +53,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
+public class SegmentWithSeeds extends WithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSource;

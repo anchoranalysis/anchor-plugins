@@ -26,20 +26,20 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
 public abstract class FromDimensionsBase extends MaskProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
+    @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES
 
     @Override
@@ -47,5 +47,5 @@ public abstract class FromDimensionsBase extends MaskProvider {
         return createFromDimensions(dimensions.create());
     }
 
-    protected abstract Mask createFromDimensions(ImageDimensions dimensions) throws CreateException;
+    protected abstract Mask createFromDimensions(Dimensions dimensions) throws CreateException;
 }

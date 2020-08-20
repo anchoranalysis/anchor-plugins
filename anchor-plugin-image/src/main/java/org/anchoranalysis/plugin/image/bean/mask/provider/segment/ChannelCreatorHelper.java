@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.DimChecker;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -36,7 +35,8 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
 /**
  * Like {@link OptionalFactory} but with specific methods for {@link Channel} and {@link Mask}
@@ -48,21 +48,21 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 class ChannelCreatorHelper {
 
     public static Optional<Channel> createOptionalCheckSize(
-            ChannelProvider provider, String providerName, ImageDimensions dim)
+            ChannelProvider provider, String providerName, Dimensions dim)
             throws CreateException {
         Optional<Channel> channel = OptionalFactory.create(provider);
         if (channel.isPresent()) {
-            DimChecker.check(channel.get(), providerName, dim);
+            DimensionsChecker.check(channel.get(), providerName, dim);
         }
         return channel;
     }
 
     public static Optional<Mask> createOptionalCheckSize(
-            MaskProvider provider, String providerName, ImageDimensions dim)
+            MaskProvider provider, String providerName, Dimensions dim)
             throws CreateException {
         Optional<Mask> mask = OptionalFactory.create(provider);
         if (mask.isPresent()) {
-            DimChecker.check(mask.get(), providerName, dim);
+            DimensionsChecker.check(mask.get(), providerName, dim);
         }
         return mask;
     }

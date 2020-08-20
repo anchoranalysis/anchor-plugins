@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -106,7 +106,7 @@ class CalculatePairIntersection
     protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
             throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.dimensionsRequired();
+        Dimensions dimensions = input.dimensionsRequired();
 
         ObjectMask object1Dilated = first.getOrCalculate(input);
         ObjectMask object2Dilated = second.getOrCalculate(input);
@@ -132,7 +132,7 @@ class CalculatePairIntersection
     }
 
     private Optional<ObjectMask> erode(
-            FeatureInputPairObjects input, ObjectMask intersection, ImageDimensions dimensions)
+            FeatureInputPairObjects input, ObjectMask intersection, Dimensions dimensions)
             throws CreateException {
 
         // We erode it, and use this as a mask on the input object

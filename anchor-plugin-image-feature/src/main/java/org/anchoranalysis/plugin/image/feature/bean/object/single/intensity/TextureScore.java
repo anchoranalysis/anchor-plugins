@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
  *
  * @author Owen Feehan
  */
-public class TextureScore extends FeatureNrgChnl {
+public class TextureScore extends FeatureNrgChannel {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int nrgIndexGradient = 1;

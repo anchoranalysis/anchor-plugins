@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +46,7 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacksSet;
@@ -55,7 +54,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY;
+import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
  * Scales many rasters
@@ -83,7 +82,7 @@ public class ScaleTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException {
 
         // Input
@@ -169,10 +168,11 @@ public class ScaleTask extends RasterTask {
                 Channel chnlOut;
                 if (forceBinary) {
                     Mask mask = new Mask(chnlIn);
-                    chnlOut = ScaleXY.scale(mask, scaleCalculator).channel();
+                    Mask maskScaled = org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(mask, scaleCalculator);
+                    chnlOut = maskScaled.channel();
                 } else {
                     chnlOut =
-                            ChnlProviderScale.scale(
+                            ScaleXY.scale(
                                     chnlIn,
                                     scaleCalculator,
                                     InterpolatorFactory.getInstance().rasterResizing(),

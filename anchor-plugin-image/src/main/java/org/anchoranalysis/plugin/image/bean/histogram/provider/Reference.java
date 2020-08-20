@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.histogram.provider;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
@@ -35,6 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 
+@NoArgsConstructor
 public class Reference extends HistogramProvider {
 
     // START BEAN PROPERTIES
@@ -42,6 +44,11 @@ public class Reference extends HistogramProvider {
     // END BEAN PROPERTIES
 
     private Histogram histogram;
+    
+    public Reference(String id) {
+        super();
+        this.id = id;
+    }
 
     @Override
     public void onInit(ImageInitParams so) throws InitException {

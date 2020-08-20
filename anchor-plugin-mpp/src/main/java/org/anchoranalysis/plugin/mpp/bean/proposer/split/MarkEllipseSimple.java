@@ -42,7 +42,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -173,7 +173,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             Orientation2D orientation,
             MarkEllipse markExst,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double minRadScaleStart,
             double minRadScaleEnd,
             boolean wigglePos) {
@@ -215,7 +215,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
     }
 
     private static Optional<Point3d[]> ifBothPointsInside(
-            ImageDimensions dimensions, Point3d point1, Point3d point2) {
+            Dimensions dimensions, Point3d point1, Point3d point2) {
         if (!dimensions.contains(point1)) {
             return Optional.empty();
         }

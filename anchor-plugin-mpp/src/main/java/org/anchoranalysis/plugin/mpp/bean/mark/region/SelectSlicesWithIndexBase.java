@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 @EqualsAndHashCode(callSuper = false)
@@ -45,7 +45,7 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark voxelized, Mark mark, ImageDimensions dimensions) throws CreateException {
+            VoxelizedMark voxelized, Mark mark, Dimensions dimensions) throws CreateException {
         return extractFromVoxelized(voxelized);
     }
 

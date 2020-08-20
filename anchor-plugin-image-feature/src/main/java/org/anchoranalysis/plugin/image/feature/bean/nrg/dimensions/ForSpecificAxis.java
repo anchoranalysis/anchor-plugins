@@ -34,7 +34,7 @@ import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Dimensions-calculation for one specific axis only.
@@ -49,7 +49,7 @@ public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDim
     // END BEAN PARAMETERS
 
     @Override
-    protected double calculateFromDimensions(ImageDimensions dim) throws FeatureCalculationException {
+    protected double calculateFromDimensions(Dimensions dim) throws FeatureCalculationException {
         try {
             return calculateForAxis(dim, AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
@@ -57,7 +57,7 @@ public abstract class ForSpecificAxis<T extends FeatureInputNRG> extends FromDim
         }
     }
 
-    protected abstract double calculateForAxis(ImageDimensions dimensions, AxisType axis);
+    protected abstract double calculateForAxis(Dimensions dimensions, AxisType axis);
 
     @Override
     public String describeParams() {

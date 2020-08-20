@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -60,7 +60,7 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
             int existingSize,
             int proposalSize,
             double poissonIntens,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio) {
 
         if (existingSize <= 1) {

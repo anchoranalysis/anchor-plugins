@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 
 /**
  * Extends an object (2D/3D) as much as it can within the z-slices of a containing object
@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class ExtendInZWithinContainer extends ObjectCollectionProviderWithContainer {
+public class ExtendInZWithinContainer extends WithContainerBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)

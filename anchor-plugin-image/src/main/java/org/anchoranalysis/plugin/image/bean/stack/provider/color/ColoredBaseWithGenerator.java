@@ -4,7 +4,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
@@ -26,7 +26,7 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
     // END BEAN PROPERTIES
     
     @Override
-    protected ColoredObjectCollection coloredObjectsToDraw(ImageDimensions backgroundDimensions) throws CreateException {
+    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException {
         return addColors(objectsToDraw(backgroundDimensions));
     }
     
@@ -36,7 +36,7 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
      * @param backgroundDimensions the dimensions of the background
      * @return the objects to be drawn on the background
      * */
-    protected abstract ObjectCollection objectsToDraw(ImageDimensions backgroundDimensions) throws CreateException;
+    protected abstract ObjectCollection objectsToDraw(Dimensions backgroundDimensions) throws CreateException;
 
     private ColoredObjectCollection addColors(ObjectCollection objectsCreated) throws CreateException {
         try {

@@ -44,7 +44,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -142,7 +142,7 @@ public class KernelSplit extends KernelPosNeg<CfgNRGPixelized> {
             int existingSize,
             int proposalSize,
             double poissonIntensity,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio) {
         return densityRatio;
     }

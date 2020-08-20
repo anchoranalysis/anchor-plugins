@@ -59,7 +59,6 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
@@ -67,7 +66,9 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TriggerTermination
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
 import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.mpp.sgmn.cfg.SgmnMPPState;
+
 
 // Segments a channel with marked pointed processes
 public class SgmnMPP extends CfgSgmn {

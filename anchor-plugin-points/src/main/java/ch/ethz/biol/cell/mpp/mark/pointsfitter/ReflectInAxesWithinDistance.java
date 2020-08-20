@@ -39,7 +39,7 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Reflects points in each axes if all points are within a certain distance from it
@@ -67,7 +67,7 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
     }
 
     @Override
-    public void fit(List<Point3f> points, Mark mark, ImageDimensions dimensions)
+    public void fit(List<Point3f> points, Mark mark, Dimensions dimensions)
             throws PointsFitterException, InsufficientPointsException {
 
         if (points.isEmpty()) {

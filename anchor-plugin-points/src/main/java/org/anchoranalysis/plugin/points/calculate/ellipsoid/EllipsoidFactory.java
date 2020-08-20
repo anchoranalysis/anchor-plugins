@@ -38,7 +38,7 @@ import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
 
@@ -59,7 +59,7 @@ public class EllipsoidFactory {
      */
     public static MarkEllipsoid createMarkEllipsoidLeastSquares(
             ObjectMask object,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean suppressZCovariance,
             double shellRad)
             throws CreateException {
@@ -72,7 +72,7 @@ public class EllipsoidFactory {
 
     public static MarkEllipsoid createMarkEllipsoidLeastSquares(
             CheckedSupplier<List<Point3i>, CreateException> opPoints,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean suppressZCovariance,
             double shellRad)
             throws CreateException {

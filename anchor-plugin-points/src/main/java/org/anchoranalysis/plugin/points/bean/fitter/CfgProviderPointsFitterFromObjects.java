@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
 
@@ -64,14 +64,14 @@ public class CfgProviderPointsFitterFromObjects extends CfgProvider {
     @Override
     public Cfg create() throws CreateException {
 
-        ImageDimensions dimensions = pointsFitter.createDim();
+        Dimensions dimensions = pointsFitter.createDim();
 
         return new Cfg(
                 pointsFitter.createObjects().stream()
                         .mapToListOptional(object -> createMarkFromObject(object, dimensions)));
     }
 
-    private Optional<Mark> createMarkFromObject(ObjectMask object, ImageDimensions dimensions)
+    private Optional<Mark> createMarkFromObject(ObjectMask object, Dimensions dimensions)
             throws CreateException {
         try {
             List<Point2i> points = maybeApplyConvexHull(object);
@@ -99,7 +99,7 @@ public class CfgProviderPointsFitterFromObjects extends CfgProvider {
         }
     }
 
-    private Optional<Mark> fitToMark(List<Point3f> pointsToFit, ImageDimensions dimensions)
+    private Optional<Mark> fitToMark(List<Point3f> pointsToFit, Dimensions dimensions)
             throws CreateException {
 
         Mark markOut = markFactory.create();

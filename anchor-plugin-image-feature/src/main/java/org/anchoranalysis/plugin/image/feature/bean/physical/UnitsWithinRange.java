@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.input.FeatureInputWithRes;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
 
 /**
@@ -71,11 +71,11 @@ public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSing
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateWithResolution(double value, ImageResolution resolution)
+    protected double calculateWithResolution(double value, Resolution resolution)
             throws FeatureCalculationException {
 
         try {
-            Optional<ImageResolution> resolutionOptional = Optional.of(resolution);
+            Optional<Resolution> resolutionOptional = Optional.of(resolution);
             double minVoxels = min.resolveToVoxels(resolutionOptional);
             double maxVoxels = max.resolveToVoxels(resolutionOptional);
 

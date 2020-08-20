@@ -35,7 +35,7 @@ import javax.xml.transform.TransformerException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.XmlUtilities;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.io.xml.XmlOutputter;
 import org.w3c.dom.Document;
@@ -48,7 +48,7 @@ import org.xml.sax.SAXException;
 public class AnchorMetadataXml {
 
     // Opens the meta data, setting resolutions on the dimensions
-    public static ImageResolution readResolutionXml(File fileMeta) throws RasterIOException {
+    public static Resolution readResolutionXml(File fileMeta) throws RasterIOException {
 
         try {
             DocumentBuilder db = XmlUtilities.createDocumentBuilder();
@@ -68,7 +68,7 @@ public class AnchorMetadataXml {
         }
     }
 
-    public static void writeResolutionXml(Path filePath, ImageResolution res)
+    public static void writeResolutionXml(Path filePath, Resolution res)
             throws RasterIOException {
 
         try {
@@ -101,10 +101,10 @@ public class AnchorMetadataXml {
         }
     }
 
-    private static ImageResolution resFromNodeList(NodeList nodeList) {
+    private static Resolution resFromNodeList(NodeList nodeList) {
 
         // Initialize to defaults
-        ImageResolution res = new ImageResolution();
+        Resolution res = new Resolution();
         double x = res.x();
         double y = res.y();
         double z = res.z();
@@ -125,7 +125,7 @@ public class AnchorMetadataXml {
             }
         }
 
-        return new ImageResolution(x, y, z);
+        return new Resolution(x, y, z);
     }
 
     private static double doubleFromNode(Node n) {

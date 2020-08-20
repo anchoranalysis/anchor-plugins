@@ -75,7 +75,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
 
             CreateVisualizatonHelper creator = new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
             
-            // Now we add visualizations for the BinaryChnlProvider and object-collection providers
+            // Now we add visualizations for the mask and object-collection providers
             addVisualizationFor(def, define, MaskProvider.class, creator::mask);
             addVisualizationFor(def, define, ObjectCollectionProvider.class, creator::objects);
             addVisualizationFor(def, define, CfgProvider.class, creator::marks);

@@ -1,13 +1,12 @@
 package org.anchoranalysis.plugin.mpp.bean.define;
 
-import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
-import org.anchoranalysis.image.bean.provider.stack.Reference;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.provider.ProviderAsStack;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBase;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredMask;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredObjects;
+import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 import org.anchoranalysis.plugin.mpp.bean.stack.provider.ColoredMarks;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderReference;
 import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 import lombok.RequiredArgsConstructor;
 
@@ -23,14 +22,14 @@ class CreateVisualizatonHelper {
     
     public StackProvider mask(String maskProviderID) {
         ColoredMask provider = new ColoredMask();
-        provider.setMask(new org.anchoranalysis.plugin.image.bean.mask.provider.Reference(maskProviderID));
+        provider.setMask(ReferenceFactory.mask(maskProviderID));
         configureProvider(provider);
         return provider;
     }
 
     public StackProvider objects(String objectsProviderID) {
         ColoredObjects provider = new ColoredObjects();
-        provider.setObjects(new org.anchoranalysis.plugin.image.bean.object.provider.Reference(objectsProviderID));
+        provider.setObjects(ReferenceFactory.objects(objectsProviderID));
         configureProvider(provider);
         return provider;
     }
@@ -47,11 +46,11 @@ class CreateVisualizatonHelper {
         provider.setBackground( backgroundStack() );        
     }
 
-    private BeanProviderAsStackBase<?,?> backgroundStack() {
+    private ProviderAsStack backgroundStack() {
         if (stackBackground) {
-            return new Reference(backgroundID);
+            return ReferenceFactory.stack(backgroundID);
         } else {
-            return new ChnlProviderReference(backgroundID);
+            return ReferenceFactory.channel(backgroundID);
         }
     }
 }

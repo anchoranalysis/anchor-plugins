@@ -32,7 +32,7 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
@@ -75,7 +75,7 @@ class BuildGeneratorHelper {
     private final int outlineWidth;
 
     public IterableGenerator<ObjectsWithBoundingBox> forStacks(
-            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
+            Dimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
 
         // First generator generates object-masks and bounding-boxes for each object

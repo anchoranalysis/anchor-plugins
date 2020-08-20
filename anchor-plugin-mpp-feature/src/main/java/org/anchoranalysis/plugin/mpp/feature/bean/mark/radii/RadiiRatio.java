@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 public class RadiiRatio extends FeatureMark {
 
@@ -44,14 +44,14 @@ public class RadiiRatio extends FeatureMark {
     @BeanField @Getter @Setter private boolean suppressRes = false;
     // END BEAN PROPERTIES
 
-    private ImageResolution uniformRes = new ImageResolution();
+    private Resolution uniformRes = new Resolution();
 
     @Override
     public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
         MarkConic markCast = (MarkConic) input.get().getMark();
 
-        ImageResolution resolution = suppressRes ? uniformRes : input.get().getResRequired();
+        Resolution resolution = suppressRes ? uniformRes : input.get().getResRequired();
         double[] radiiOrdered = markCast.radiiOrderedResolved(resolution);
 
         int len = radiiOrdered.length;

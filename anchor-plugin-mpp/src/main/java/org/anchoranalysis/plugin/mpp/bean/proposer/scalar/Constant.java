@@ -32,7 +32,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 public class Constant extends ScalarProposer {
 
@@ -41,7 +41,7 @@ public class Constant extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
             throws OperationFailedException {
         return value;
     }

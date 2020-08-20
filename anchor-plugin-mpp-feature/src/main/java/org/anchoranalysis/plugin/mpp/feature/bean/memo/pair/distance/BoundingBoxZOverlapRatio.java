@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
 /**
@@ -69,7 +69,7 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
         return overlap(box1, box2, inputSessionless.dimensionsRequired());
     }
 
-    private double overlap(BoundingBox box1, BoundingBox box2, ImageDimensions dim) {
+    private double overlap(BoundingBox box1, BoundingBox box2, Dimensions dim) {
 
         Optional<BoundingBox> boxOverlap = box1.intersection().withInside(box2, dim.extent());
         if (!boxOverlap.isPresent()) {

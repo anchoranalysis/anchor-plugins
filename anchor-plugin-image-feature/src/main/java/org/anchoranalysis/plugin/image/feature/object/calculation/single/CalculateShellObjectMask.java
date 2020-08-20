@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
@@ -73,7 +73,7 @@ public class CalculateShellObjectMask
     protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.dimensionsRequired();
+        Dimensions dimensions = input.dimensionsRequired();
 
         ObjectMask shell = createShellObject(input);
 

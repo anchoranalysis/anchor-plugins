@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
@@ -57,7 +57,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
         try {
@@ -68,7 +68,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask objectToIntersectWith, Optional<ImageDimensions> dim)
+    protected boolean match(ObjectMask objectToIntersectWith, Optional<Dimensions> dim)
             throws OperationFailedException {
         return intersectWithAnyOneObject.stream()
                 .anyMatch(objectMask -> objectMask.hasIntersectingVoxels(objectToIntersectWith));

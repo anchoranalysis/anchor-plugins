@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.outline.FindOutline;
 
 /**
- * Always creates a new BinaryChnl for the result (no need to duplicate input)
+ * Always creates a new mask for the result (no need to duplicate input)
  *
  * @author feehano
  */

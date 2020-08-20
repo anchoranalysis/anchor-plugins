@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorMinXYRes extends ScaleCalculator {
@@ -43,12 +43,12 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calculate(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
             throws OperationFailedException {
 
-        ImageResolution resolution =
+        Resolution resolution =
                 sourceDimensions
-                        .map(ImageDimensions::resolution)
+                        .map(Dimensions::resolution)
                         .orElseThrow(
                                 () -> new OperationFailedException("No source dimensions exist"));
 

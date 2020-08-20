@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelDataTypeException;
+import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NeighborMatchValue;
 
@@ -72,7 +72,7 @@ public class NumberNeighboringVoxels extends SpecificNRGChannelBase {
         try {
             return BinaryVoxelsFactory.reuseByte(chnl.voxels().asByte());
 
-        } catch (IncorrectVoxelDataTypeException e) {
+        } catch (IncorrectVoxelTypeException e) {
             throw new FeatureCalculationException(
                     String.format("nrgStack channel %d has incorrect data type", getNrgIndex()), e);
         }

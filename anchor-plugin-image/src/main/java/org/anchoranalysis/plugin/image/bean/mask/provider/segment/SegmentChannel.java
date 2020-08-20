@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
@@ -89,12 +89,12 @@ public class SegmentChannel extends FromChannelBase {
         }
     }
 
-    private BinarySegmentationParameters createParams(ImageDimensions dim) throws CreateException {
+    private BinarySegmentationParameters createParams(Dimensions dim) throws CreateException {
         return new BinarySegmentationParameters(
                 dim.resolution(), OptionalFactory.create(histogram));
     }
 
-    private Optional<ObjectMask> objectFromMask(ImageDimensions dim) throws CreateException {
+    private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {
         Optional<Mask> maskChannel =
                 ChannelCreatorHelper.createOptionalCheckSize(mask, "mask", dim);
         return maskChannel.map(channel -> new ObjectMask(channel.binaryVoxels()));

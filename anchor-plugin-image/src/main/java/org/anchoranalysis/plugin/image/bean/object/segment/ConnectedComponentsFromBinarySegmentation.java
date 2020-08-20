@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -75,7 +75,7 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 
     private ObjectCollection createFromVoxels(
             BinaryVoxels<ByteBuffer> bvb,
-            ImageResolution resolution,
+            Resolution resolution,
             Optional<ReadableTuple3i> maskShiftBy) {
         Mask mask = new Mask(bvb, resolution);
 

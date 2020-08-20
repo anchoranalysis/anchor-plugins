@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
 public class Thresholded extends MarkRegion {
@@ -45,7 +45,7 @@ public class Thresholded extends MarkRegion {
     // END BEAN PROPERTIES
 
     @Override
-    public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo memo, ImageDimensions dimensions)
+    public VoxelStatistics createStatisticsFor(VoxelizedMarkMemo memo, Dimensions dimensions)
             throws CreateException {
         return region.createStatisticsFor(memo, dimensions).threshold(threshold);
     }

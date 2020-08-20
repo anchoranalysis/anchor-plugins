@@ -42,7 +42,7 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -99,7 +99,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
                 return Optional.empty();
             }
 
-            ImageDimensions dimensions = maskCreated.dimensions();
+            Dimensions dimensions = maskCreated.dimensions();
             if (!dimensions.contains(point)) {
                 return Optional.empty();
             }
@@ -150,7 +150,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     }
 
     private boolean pointIsOutlineVal(
-            Point3i point, ImageDimensions dimensions, BinaryValuesByte bvb) {
+            Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
 
         if (!dimensions.contains(point)) {
             return false;

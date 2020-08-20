@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 import org.anchoranalysis.plugin.image.object.ObjectIntersectionRemover;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.plugin.image.object.ObjectIntersectionRemover;
  *
  * @author Owen Feehan
  */
-public class RemoveIntersectingVoxels extends ObjectCollectionProviderWithDimensions {
+public class RemoveIntersectingVoxels extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
     /** If TRUE, throws an error if there is a disconnected object after the erosion */

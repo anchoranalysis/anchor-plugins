@@ -54,8 +54,8 @@ import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
@@ -89,7 +89,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
     public Optional<List<Point3i>> propose(
             Point3d point,
             Mark mark,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode)
             throws ProposalAbnormalFailureException {
@@ -131,7 +131,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
     private Optional<List<Point3i>> proposeFromOrientation(
             Orientation orientation,
             Point3d point,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode) {
         try {
@@ -162,7 +162,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
     }
 
     private int maxZDistance(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException {
         int maxZDistance =
                 (int) Math.round(maxDistanceZ.propose(randomNumberGenerator, resolution));
@@ -170,7 +170,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return maxZDistance;
     }
 
-    private int skipZDistance(ImageResolution res) throws OperationFailedException {
+    private int skipZDistance(Resolution res) throws OperationFailedException {
         return (int) Math.round(distanceZEndIfEmpty.resolveForAxis(Optional.of(res), AxisType.Z));
     }
 

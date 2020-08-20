@@ -26,7 +26,6 @@
 
 package ch.ethz.biol.cell.mpp.mark.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,8 +44,9 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
 public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
 
@@ -60,7 +60,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
     @BeanField @Getter @Setter private RelationBean relation;
 
     @BeanField @OptionalBean @Getter @Setter
-    private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
+    private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES
 
     @Override
@@ -86,7 +86,7 @@ public class MarkProviderRequireFeatureRelationThreshold extends MarkProvider {
         return relation.create().isRelationToValueTrue(featureVal, threshold);
     }
 
-    private Optional<ImageDimensions> dimensions() throws CreateException {
+    private Optional<Dimensions> dimensions() throws CreateException {
         if (dimensions != null) {
             return Optional.of(dimensions.create());
         } else {

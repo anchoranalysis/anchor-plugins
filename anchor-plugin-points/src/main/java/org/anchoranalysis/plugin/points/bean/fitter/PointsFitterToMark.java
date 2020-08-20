@@ -39,9 +39,9 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
@@ -49,7 +49,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private PointsFitter pointsFitter;
 
-    @BeanField @Getter @Setter private ImageDimProvider dimensions;
+    @BeanField @Getter @Setter private DimensionsProvider dimensions;
 
     /** If an object has fewer points than before being fitted, we ignore */
     @BeanField @Positive @Getter @Setter private int minNumPoints = 1;
@@ -57,7 +57,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
 
-    public void fitPointsToMark(List<Point3f> pointsForFitter, Mark mark, ImageDimensions dim)
+    public void fitPointsToMark(List<Point3f> pointsForFitter, Mark mark, Dimensions dim)
             throws OperationFailedException {
         try {
             pointsFitter.fit(pointsForFitter, mark, dim);
@@ -70,7 +70,7 @@ public class PointsFitterToMark extends PointsBean<PointsFitterToMark> {
         return objects.create();
     }
 
-    public ImageDimensions createDim() throws CreateException {
+    public Dimensions createDim() throws CreateException {
         return dimensions.create();
     }
 }

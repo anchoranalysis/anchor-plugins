@@ -32,14 +32,14 @@ import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EllipticityCalculatorHelper {
 
-    public static double calc(ObjectMask object, Mark mark, ImageDimensions dimensions) {
+    public static double calc(ObjectMask object, Mark mark, Dimensions dimensions) {
         return calc(object, objectMaskCompare(mark, dimensions));
     }
 
@@ -58,7 +58,7 @@ class EllipticityCalculatorHelper {
         return intDiv(numPixelsCompare, numUnion - numIntersection + numPixelsCompare);
     }
 
-    private static ObjectMask objectMaskCompare(Mark mark, ImageDimensions dim) {
+    private static ObjectMask objectMaskCompare(Mark mark, Dimensions dim) {
         RegionMembershipWithFlags rm = RegionMapSingleton.instance().membershipWithFlagsForIndex(0);
         assert (rm.getRegionID() == 0);
         return mark.deriveObject(dim, rm, BinaryValuesByte.getDefault()).withoutProperties();

@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -79,7 +79,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
 
@@ -100,7 +100,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
             throws OperationFailedException {
 
         double featureVal = featureMap.get(object);

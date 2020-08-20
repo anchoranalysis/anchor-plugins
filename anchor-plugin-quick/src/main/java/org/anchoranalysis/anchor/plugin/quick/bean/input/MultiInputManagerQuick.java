@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapEntry;
+import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
@@ -85,7 +85,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
      * <p>If this list has at least one, then we treat the main raster file not as a stack, but
      * break it into separate channels that are each presented as a separate stack to the MultiInput
      */
-    @BeanField @Getter @Setter private List<ImgChnlMapEntry> additionalChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelEntry> additionalChnls = new ArrayList<>();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
@@ -151,7 +151,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
             //
             // Channel 0 always takes the inputName
             // The other channels are defined by the contents of the ImgChnlMapEntry
-            return NamedChnlsCreator.create(
+            return NamedChannelsCreator.create(
                     files, inputName, chnlIndex, additionalChnls, rasterReader);
 
         } else {
