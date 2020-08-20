@@ -90,7 +90,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
             if (makeRGB && stack.getNumberChannels() == 3) {
                 writeRGB(writer, stack);
             } else {
-                writeSeperateChnl(writer, stack);
+                writeSeperateChannel(writer, stack);
             }
 
         } catch (IOException | FormatException | ServiceException | DependencyException e) {
@@ -103,13 +103,13 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
     protected abstract void writeRGB(IFormatWriter writer, Stack stack)
             throws FormatException, IOException, RasterIOException;
 
-    private static void writeSeperateChnl(IFormatWriter writer, Stack stack)
+    private static void writeSeperateChannel(IFormatWriter writer, Stack stack)
             throws FormatException, IOException {
 
         int cnt = 0;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
-            Channel chnl = stack.getChannel(c);
-            Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+            Channel channel = stack.getChannel(c);
+            Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
             for (int z = 0; z < stack.dimensions().z(); z++) {
                 writer.saveBytes(cnt++, voxels.sliceBuffer(z).array());

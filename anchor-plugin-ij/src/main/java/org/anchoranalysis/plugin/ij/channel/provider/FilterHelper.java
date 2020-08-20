@@ -38,19 +38,19 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public class FilterHelper {
 
     /** Applies a 2D rank-filter independently to each z-slice */
-    public static Channel applyEachSlice(Channel chnl, int radius, int filterType) {
+    public static Channel applyEachSlice(Channel channel, int radius, int filterType) {
 
         RankFilters rankFilters = new RankFilters();
 
-        VoxelsWrapper voxels = chnl.voxels();
+        VoxelsWrapper voxels = channel.voxels();
 
         // Are we missing a Z slice?
-        for (int z = 0; z < chnl.dimensions().z(); z++) {
+        for (int z = 0; z < channel.dimensions().z(); z++) {
 
             ImageProcessor processor = IJWrap.imageProcessor(voxels, z);
             rankFilters.rank(processor, radius, filterType);
         }
 
-        return chnl;
+        return channel;
     }
 }

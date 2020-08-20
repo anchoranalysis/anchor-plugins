@@ -46,7 +46,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class FromStack extends ChannelProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int channelIndex = 0;
 
     /** Specifies the ID of an existing stack. Either this must be specified or else {@code stack} must be specified. */
     @BeanField @AllowEmpty @Getter @Setter private String stackProviderID;
@@ -77,9 +77,9 @@ public class FromStack extends ChannelProvider {
     public Channel create() throws CreateException {
 
         if (channel == null) {
-            channel = stackFromSource().getChannel(chnlIndex);
+            channel = stackFromSource().getChannel(channelIndex);
             if (channel == null) {
-                throw new CreateException(String.format("channel %d cannot be found in stack", chnlIndex));
+                throw new CreateException(String.format("channel %d cannot be found in stack", channelIndex));
             }
         }
 

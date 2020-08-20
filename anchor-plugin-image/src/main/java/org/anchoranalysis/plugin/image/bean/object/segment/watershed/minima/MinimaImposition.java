@@ -36,6 +36,6 @@ import org.anchoranalysis.image.seed.SeedCollection;
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 
     public abstract Channel imposeMinima(
-            Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask)
+            Channel channel, SeedCollection seeds, Optional<ObjectMask> containingMask)
             throws OperationFailedException;
 }

@@ -84,7 +84,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
 
     @BeanField @Getter @Setter private boolean requireAllFilesMatch = false;
 
-    @BeanField @Getter @Setter private ChannelMap imgChnlMapCreator;
+    @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
     @BeanField @Getter @Setter
     private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
@@ -114,7 +114,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
                 FileDetails fd =
                         new FileDetails(
                                 Paths.get(path),
-                                filePathParser.getChnlNum(),
+                                filePathParser.getChannelNum(),
                                 filePathParser.getZSliceNum(),
                                 filePathParser.getTimeIndex());
                 map.add(filePathParser.getKey(), fd);
@@ -162,7 +162,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
         List<NamedChannelsInput> result = new ArrayList<>();
         while (it1.hasNext() && it2.hasNext()) {
             DescriptiveFile d = it1.next();
-            result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChnlMapCreator));
+            result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChannelMapCreator));
         }
         return result;
     }

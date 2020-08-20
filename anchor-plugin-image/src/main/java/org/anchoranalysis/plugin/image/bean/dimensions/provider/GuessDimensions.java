@@ -83,13 +83,13 @@ public class GuessDimensions extends DimensionsProvider {
             throw new CreateException(e);
         }
 
-        Channel chnl = stack.getChannel(0);
-        if (chnl == null) {
+        Channel channel = stack.getChannel(0);
+        if (channel == null) {
             throw new CreateException(
                     String.format(
                             "Stack %s has no channels, so dimensions cannot be inferred.",
                             keyThatExists));
         }
-        return chnl.dimensions();
+        return channel.dimensions();
     }
 }

@@ -51,12 +51,12 @@ public abstract class TwoVoxelMappingBase extends ChannelProviderBinary {
     @Override
     protected Channel process(Channel channel1, Channel channel2) throws CreateException {
 
-        Channel chnlOut =
+        Channel channelOut =
                 ChannelFactory.instance()
                         .create(channel1.dimensions(), UnsignedByteVoxelType.INSTANCE);
 
-        IterateVoxelsByte.callEachPointWithBinaryOperation(channel1.voxels().asByte(), channel2.voxels().asByte(), chnlOut.voxels().asByte(), operation);
+        IterateVoxelsByte.callEachPointWithBinaryOperation(channel1.voxels().asByte(), channel2.voxels().asByte(), channelOut.voxels().asByte(), operation);
 
-        return chnlOut;
+        return channelOut;
     }
 }

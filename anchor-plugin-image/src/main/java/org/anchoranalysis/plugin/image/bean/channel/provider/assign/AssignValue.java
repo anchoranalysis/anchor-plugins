@@ -47,7 +47,7 @@ public class AssignValue extends UnaryWithMaskBase {
         return channel;
     }
 
-    private void assignScalar(Channel chnlSrc, Mask mask, int value) {
-        chnlSrc.assignValue(value).toObject(new ObjectMask(mask));
+    private void assignScalar(Channel channelSrc, Mask mask, int value) {
+        channelSrc.assignValue(value).toObject(new ObjectMask(mask));
     }
 }

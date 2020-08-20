@@ -97,11 +97,11 @@ public class BackgroundSubtractShortTask extends RasterTask {
             }
 
             ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();
-            Channel chnlOut = converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+            Channel channelOut = converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 
             context.getOutputManager()
                     .getWriterCheckIfAllowed()
-                    .write("bgsub", () -> new ChannelGenerator(chnlOut, "imgChnl"));
+                    .write("bgsub", () -> new ChannelGenerator(channelOut, "imgChannel"));
 
         } catch (RasterIOException | GetOperationFailedException e) {
             throw new JobExecutionException(e);

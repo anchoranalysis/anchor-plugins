@@ -49,7 +49,7 @@ public class SizeExtents {
     // Assumes numbering starts from 0
     public SizeExtents(ParsedFilePathBag fileBag) {
         this.rangeZ = fileBag.rangeSliceNum();
-        this.rangeC = fileBag.rangeChnlNum();
+        this.rangeC = fileBag.rangeChannelNum();
         this.rangeT = fileBag.rangeTimeIndex();
     }
 

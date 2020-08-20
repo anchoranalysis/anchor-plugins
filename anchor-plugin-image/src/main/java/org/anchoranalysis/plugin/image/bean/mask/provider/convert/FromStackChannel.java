@@ -40,7 +40,7 @@ import org.anchoranalysis.image.channel.Channel;
 public class FromStackChannel extends MaskProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int channelIndex = 0;
 
     @BeanField @Getter @Setter private String stackProviderID;
     // END BEAN PROPERTIES
@@ -51,7 +51,7 @@ public class FromStackChannel extends MaskProvider {
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
         try {
-            channel = so.stacks().getException(stackProviderID).getChannel(chnlIndex);
+            channel = so.stacks().getException(stackProviderID).getChannel(channelIndex);
         } catch (NamedProviderGetException e) {
             throw InitException.createOrReuse(e.summarize());
         }

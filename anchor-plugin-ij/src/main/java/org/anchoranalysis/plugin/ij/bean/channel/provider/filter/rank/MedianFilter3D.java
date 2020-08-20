@@ -43,6 +43,6 @@ public class MedianFilter3D extends ChannelProviderUnary {
 
         ImagePlus impOut = plugin.Hybrid3dMedianizer(imp);
 
-        return IJWrap.chnlFromImagePlus(impOut, channel.dimensions().resolution());
+        return IJWrap.channelFromImagePlus(impOut, channel.dimensions().resolution());
     }
 }

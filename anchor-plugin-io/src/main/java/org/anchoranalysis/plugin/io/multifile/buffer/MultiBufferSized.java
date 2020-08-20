@@ -47,7 +47,7 @@ public class MultiBufferSized {
 
     public void populateFrom(
             Stack stackForFile,
-            Optional<Integer> chnlNum,
+            Optional<Integer> channelNum,
             Optional<Integer> sliceNum,
             Optional<Integer> timeIndex) {
 
@@ -55,8 +55,8 @@ public class MultiBufferSized {
         int time = timeIndex.orElse(0);
 
         // If we specify a channel, then we only care about slices
-        if (chnlNum.isPresent()) {
-            buffers.populateWithSpecifiedChnl(stackForFile, chnlNum.get(), sliceNum, time);
+        if (channelNum.isPresent()) {
+            buffers.populateWithSpecifiedChannel(stackForFile, channelNum.get(), sliceNum, time);
         } else {
 
             if (sliceNum.isPresent()) {

@@ -61,7 +61,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> feature;
 
     @BeanField @Getter @Setter
-    private List<ChannelProvider> listAdditionalChnlProviders = new ArrayList<>();
+    private List<ChannelProvider> listAdditionalChannelProviders = new ArrayList<>();
 
     @BeanField @Getter @Setter private double factor = 1.0;
     // END BEAN PROPERTIES
@@ -77,7 +77,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
 
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(featureCreated);
 
-            return createOutputChnl(
+            return createOutputChannel(
                     channel.dimensions(),
                     objects,
                     object -> valueToAssignForObject(object, calculator, nrgStack));
@@ -87,20 +87,20 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         }
     }
 
-    private NRGStack createNrgStack(Channel chnl) throws CreateException {
-        NRGStack nrgStack = new NRGStack(chnl);
+    private NRGStack createNrgStack(Channel channel) throws CreateException {
+        NRGStack nrgStack = new NRGStack(channel);
 
         // add other channels
-        for (ChannelProvider cp : listAdditionalChnlProviders) {
-            Channel chnlAdditional = cp.create();
+        for (ChannelProvider cp : listAdditionalChannelProviders) {
+            Channel channelAdditional = cp.create();
 
-            if (!chnlAdditional.dimensions().equals(chnl.dimensions())) {
+            if (!channelAdditional.dimensions().equals(channel.dimensions())) {
                 throw new CreateException(
                         "Dimensions of additional channel are not equal to main channel");
             }
 
             try {
-                nrgStack.asStack().addChannel(chnlAdditional);
+                nrgStack.asStack().addChannel(channelAdditional);
             } catch (IncorrectImageSizeException e) {
                 throw new CreateException(e);
             }
@@ -118,7 +118,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
                 getLogger());
     }
 
-    private Channel createOutputChnl(
+    private Channel createOutputChannel(
             Dimensions dimensions,
             ObjectCollection objectsSource,
             CheckedToIntFunction<ObjectMask, FeatureCalculationException> valueToAssign)

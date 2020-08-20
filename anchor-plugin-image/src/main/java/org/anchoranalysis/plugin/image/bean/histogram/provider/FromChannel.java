@@ -41,7 +41,7 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 public class FromChannel extends HistogramProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
 
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
@@ -49,12 +49,12 @@ public class FromChannel extends HistogramProvider {
     @Override
     public Histogram create() throws CreateException {
 
-        Channel chnlIn = chnl.create();
+        Channel channelIn = channel.create();
 
         if (mask != null) {
-            return HistogramFactory.create(chnlIn, mask.create());
+            return HistogramFactory.create(channelIn, mask.create());
         } else {
-            return HistogramFactory.create(chnlIn);
+            return HistogramFactory.create(channelIn);
         }
     }
 }

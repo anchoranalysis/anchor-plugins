@@ -64,10 +64,10 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     // END BEAN
 
     @Override
-    protected void writeLevelsForObjects(Channel chnlIntensity, ObjectCollection objects, Channel output)
+    protected void writeLevelsForObjects(Channel channelIntensity, ObjectCollection objects, Channel output)
             throws CreateException {
         try {
-            setAgainstNeighbor(chnlIntensity, output, objects, distance);
+            setAgainstNeighbor(channelIntensity, output, objects, distance);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
@@ -129,8 +129,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private void setAgainstNeighbor(
-            Channel chnlIntensity,
-            Channel chnlOutput,
+            Channel channelIntensity,
+            Channel channelOutput,
             ObjectCollection objects,
             int neighborDistance)
             throws OperationFailedException {
@@ -141,13 +141,13 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
 
             GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph =
                     graphCreator.createGraph(
-                            objectsWithHistograms(objects, chnlIntensity),
+                            objectsWithHistograms(objects, channelIntensity),
                             ObjectWithHistogram::getObject,
                             (v1, v2, numberVoxels) -> numberVoxels,
-                            chnlIntensity.extent(),
+                            channelIntensity.extent(),
                             true);
 
-            Voxels<?> voxelsOutput = chnlOutput.voxels().any();
+            Voxels<?> voxelsOutput = channelOutput.voxels().any();
 
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectWithHistogram, Integer> mapLevel = new HashMap<>();
@@ -192,9 +192,9 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private static List<ObjectWithHistogram> objectsWithHistograms(
-            ObjectCollection objects, Channel chnlIntensity) {
+            ObjectCollection objects, Channel channelIntensity) {
         return objects.stream()
-                .mapToList(objectMask -> new ObjectWithHistogram(objectMask, chnlIntensity));
+                .mapToList(objectMask -> new ObjectWithHistogram(objectMask, channelIntensity));
     }
 
     private int calculateLevelCombinedHist(

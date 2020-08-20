@@ -45,7 +45,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.PathSupplier;
 
 /**
- * Appends another channel to an existing NamedChnlInputBase
+ * Appends another channel to an existing NamedChannelInputBase
  *
  * @author Owen Feehan
  * @param <T> voxel data-type buffer
@@ -53,20 +53,20 @@ import org.anchoranalysis.io.input.PathSupplier;
 class AppendPart extends NamedChannelsInputPart {
 
     private NamedChannelsInputPart delegate;
-    private AdditionalChannel additionalChnl;
+    private AdditionalChannel additionalChannel;
     private RasterReader rasterReader;
 
     private OpenedRaster openedRasterMemo;
 
     public AppendPart(
             NamedChannelsInputPart delegate,
-            String chnlName,
-            int chnlIndex,
+            String channelName,
+            int channelIndex,
             PathSupplier filePath,
             RasterReader rasterReader) {
         super();
         this.delegate = delegate;
-        this.additionalChnl = new AdditionalChannel(chnlName, chnlIndex, filePath);
+        this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
         this.rasterReader = rasterReader;
     }
 
@@ -81,12 +81,12 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public boolean hasChnl(String chnlName) throws RasterIOException {
+    public boolean hasChannel(String channelName) throws RasterIOException {
 
-        if (additionalChnl.getName().equals(chnlName)) {
+        if (additionalChannel.getName().equals(channelName)) {
             return true;
         }
-        return delegate.hasChnl(chnlName);
+        return delegate.hasChannel(channelName);
     }
 
     @Override
@@ -101,13 +101,13 @@ class AppendPart extends NamedChannelsInputPart {
         out.add(exst);
         out.add(
                 new NamedChannelsForSeriesMap(
-                        openedRasterMemo, additionalChnl.createChannelMap(), seriesNum));
+                        openedRasterMemo, additionalChannel.createChannelMap(), seriesNum));
         return out;
     }
 
     private void openRasterIfNecessary() throws RasterIOException {
         try {
-            Path filePathAdditional = additionalChnl.getFilePath();
+            Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedRasterMemo == null) {
                 openedRasterMemo = rasterReader.openFile(filePathAdditional);
@@ -127,7 +127,7 @@ class AppendPart extends NamedChannelsInputPart {
     public List<Path> pathForBindingForAllChannels() throws OperationFailedException {
         try {
             List<Path> list = delegate.pathForBindingForAllChannels();
-            list.add(additionalChnl.getFilePath());
+            list.add(additionalChannel.getFilePath());
             return list;
 
         } catch (AnchorIOException e) {

@@ -49,15 +49,15 @@ public class TextureScore extends FeatureNrgChannel {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
-        Channel chnlGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
+        Channel channelGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
 
         return scoreFromMeans(
-                IntensityMeanCalculator.calculateMeanIntensityObject(chnl, object),
-                IntensityMeanCalculator.calculateMeanIntensityObject(chnlGradient, object));
+                IntensityMeanCalculator.calculateMeanIntensityObject(channel, object),
+                IntensityMeanCalculator.calculateMeanIntensityObject(channelGradient, object));
     }
 
     private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {

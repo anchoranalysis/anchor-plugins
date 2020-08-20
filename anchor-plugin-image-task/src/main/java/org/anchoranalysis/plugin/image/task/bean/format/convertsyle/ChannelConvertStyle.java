@@ -37,8 +37,8 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 public abstract class ChannelConvertStyle extends AnchorBean<ChannelConvertStyle> {
 
     public abstract void convert(
-            Set<String> chnlNames,
-            ChannelGetterForTimepoint chnlGetter,
+            Set<String> channelNames,
+            ChannelGetterForTimepoint channelGetter,
             BiConsumer<String, Stack> stacksOut,
             Logger logger)
             throws AnchorIOException;

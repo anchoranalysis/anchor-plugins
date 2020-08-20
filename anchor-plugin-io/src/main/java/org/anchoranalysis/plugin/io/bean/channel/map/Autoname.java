@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.chnl.map;
+package org.anchoranalysis.plugin.io.bean.channel.map;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,14 +43,14 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
  * <ol>
  *   <li>The channel name from the metadata
  *   <li>red, green or blue if it's RGB
- *   <li>chnl-%d where %d is the index of the channel
+ *   <li>channel-%d where %d is the index of the channel
  * </ol>
  *
  * @author Owen Feehan
  */
 public class Autoname extends ChannelMap {
 
-    private static final String[] RGB_CHNL_NAMES = {"red", "green", "blue"};
+    private static final String[] RGB_CHANNEL_NAMES = {"red", "green", "blue"};
 
     public Autoname() {
         super();
@@ -85,13 +85,13 @@ public class Autoname extends ChannelMap {
         } else if (rgb) {
             return rgbNameFor(c);
         } else {
-            return String.format("chnl-%d", c);
+            return String.format("channel-%d", c);
         }
     }
 
     private String rgbNameFor(int c) {
         if (c < 3) {
-            return RGB_CHNL_NAMES[c];
+            return RGB_CHANNEL_NAMES[c];
         } else {
             assert (false);
             return "name-should-never-occur";

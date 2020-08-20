@@ -87,7 +87,7 @@ public class MultiFileReader extends RasterReader {
                 bag.add(
                         new FileDetails(
                                 f.toPath().toAbsolutePath(),
-                                filePathParser.getChnlNum(),
+                                filePathParser.getChannelNum(),
                                 filePathParser.getZSliceNum(),
                                 filePathParser.getTimeIndex()));
             }

@@ -45,7 +45,7 @@ public class Erode extends MorphologicalOperatorBase {
     @BeanField @Getter @Setter private boolean outsideAtThreshold = true;
     // END BEAN PROPERTIES
 
-    // Assumes imgChnlOut has the same ImgChnlRegions
+    // Assumes imgChannelOut has the same ImgChannelRegions
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 

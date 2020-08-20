@@ -38,22 +38,22 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskB
 import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
 /**
- * Copies the pixels from {@code chnlAssignFrom} to {@code chnl} (possibly masking)
+ * Copies the pixels from {@code channelAssignFrom} to {@code channel} (possibly masking)
  *
- * <p>chnl is changed (mutable). chnlAssignFrom is unchanged (immutable).
+ * <p>channel is changed (mutable). channelAssignFrom is unchanged (immutable).
  *
  * @author Owen Feehan
  */
 public class AssignFromChannel extends UnaryWithMaskBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnlAssignFrom;
+    @BeanField @Getter @Setter private ChannelProvider channelAssignFrom;
     // END BEAN PROPERTIES
 
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        assign(channel, DimensionsChecker.createSameSize(chnlAssignFrom, "chnlAssignFrom", channel), mask);
+        assign(channel, DimensionsChecker.createSameSize(channelAssignFrom, "channelAssignFrom", channel), mask);
 
         return channel;
     }

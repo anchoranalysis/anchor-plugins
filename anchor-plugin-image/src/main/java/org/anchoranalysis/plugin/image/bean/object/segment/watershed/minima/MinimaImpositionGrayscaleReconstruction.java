@@ -51,26 +51,26 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
 
     @Override
     public Channel imposeMinima(
-            Channel chnl, SeedCollection seeds, Optional<ObjectMask> containingMask)
+            Channel channel, SeedCollection seeds, Optional<ObjectMask> containingMask)
             throws OperationFailedException {
 
         if (seeds.size() < 1) {
             throw new OperationFailedException("There must be at least one seed");
         }
 
-        seeds.verifySeedsAreInside(chnl.extent());
+        seeds.verifySeedsAreInside(channel.extent());
 
         ObjectCollection objects = seeds.deriveObjects();
 
         // We need 255 for the landini algorithms to work
         Mask markerMask =
                 MaskFromObjects.createFromObjects(
-                        objects, chnl.dimensions(), objects.getFirstBinaryValues());
+                        objects, channel.dimensions(), objects.getFirstBinaryValues());
 
         // We duplicate the channel so we are not manipulating the original
-        chnl = chnl.duplicate();
+        channel = channel.duplicate();
 
-        VoxelsWrapper voxelsIntensity = chnl.voxels();
+        VoxelsWrapper voxelsIntensity = channel.voxels();
 
         VoxelsAssigner zeroAssigner = voxelsIntensity.assignValue(0);
 
@@ -93,7 +93,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                 grayscaleReconstruction.reconstruction(
                         voxelsIntensity, markerForReconstruction, containingMask);
 
-        return ChannelFactory.instance().create(reconBuffer.any(), chnl.dimensions().resolution());
+        return ChannelFactory.instance().create(reconBuffer.any(), channel.dimensions().resolution());
     }
 
     private VoxelsWrapper createMarkerImageFromGradient(Mask marker, VoxelsWrapper gradientImage) {

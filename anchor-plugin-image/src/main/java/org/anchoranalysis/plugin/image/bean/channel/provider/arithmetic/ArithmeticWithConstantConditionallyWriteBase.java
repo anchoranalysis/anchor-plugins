@@ -35,9 +35,9 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 public abstract class ArithmeticWithConstantConditionallyWriteBase extends UnaryWithValueBase {
 
     @Override
-    public Channel createFromChannelWithConstant(Channel chnl, double value) throws CreateException {
-        processVoxels(chnl.voxels().any(), value);
-        return chnl;
+    public Channel createFromChannelWithConstant(Channel channel, double value) throws CreateException {
+        processVoxels(channel.voxels().any(), value);
+        return channel;
     }
 
     /** Whether to overwrite the current voxel-value with the constant? */

@@ -43,46 +43,46 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * Creates image-dimensions by referencing them from a ChnlProvider
+ * Creates image-dimensions by referencing them from a ChannelProvider
  *
- * <p>One of either chnlProvider or id must be set, but not both
+ * <p>One of either channelProvider or id must be set, but not both
  *
- * <p>id will look for a Chnl or a Stack in that order
+ * <p>id will look for a Channel or a Stack in that order
  */
 public class FromChannel extends DimensionsProvider {
 
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter private String id = "";
 
-    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     @Override
     public void onInit(ImageInitParams so) throws InitException {
         super.onInit(so);
-        if (id.isEmpty() && chnl == null) {
-            throw new InitException("One of either chnlProvider or id must be set");
+        if (id.isEmpty() && channel == null) {
+            throw new InitException("One of either channelProvider or id must be set");
         }
-        if (!id.isEmpty() && chnl != null) {
-            throw new InitException("Only one -not both- of chnlProvider and id should be set");
+        if (!id.isEmpty() && channel != null) {
+            throw new InitException("Only one -not both- of channelProvider and id should be set");
         }
     }
 
     @Override
     public Dimensions create() throws CreateException {
-        return selectChnl().dimensions();
+        return selectChannel().dimensions();
     }
 
-    private Channel selectChnl() throws CreateException {
+    private Channel selectChannel() throws CreateException {
 
         if (!id.isEmpty()) {
-            return selectChnlForId(id);
+            return selectChannelForId(id);
         }
 
-        return chnl.create();
+        return channel.create();
     }
 
-    private Channel selectChnlForId(String id) throws CreateException {
+    private Channel selectChannelForId(String id) throws CreateException {
 
         try {
             return OptionalUtilities.orFlat(
@@ -90,7 +90,7 @@ public class FromChannel extends DimensionsProvider {
                             getInitializationParameters()
                                     .stacks()
                                     .getOptional(id)
-                                    .map(FromChannel::firstChnl))
+                                    .map(FromChannel::firstChannel))
                     .orElseThrow(
                             () ->
                                     new CreateException(
@@ -104,7 +104,7 @@ public class FromChannel extends DimensionsProvider {
         }
     }
 
-    private static Channel firstChnl(Stack stack) {
+    private static Channel firstChannel(Stack stack) {
         return stack.getChannel(0);
     }
 }

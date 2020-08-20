@@ -47,7 +47,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
 
-    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndex = 0;
 
     @BeanField @Getter @Setter private double quantile = 0.5;
     // END BEAN PROPERTIES
@@ -56,7 +56,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
     public double calculate(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
 
         ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjects =
-                input.resolver().search(new CalculateConnectedComponents(nrgChnlIndex));
+                input.resolver().search(new CalculateConnectedComponents(nrgChannelIndex));
 
         int size = input.calc(ccObjects).size();
 
@@ -81,6 +81,6 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
 
     private ChildCacheName cacheName(int index) {
         return new ChildCacheName(
-                QuantileAcrossConnectedComponents.class, nrgChnlIndex + "_" + index);
+                QuantileAcrossConnectedComponents.class, nrgChannelIndex + "_" + index);
     }
 }

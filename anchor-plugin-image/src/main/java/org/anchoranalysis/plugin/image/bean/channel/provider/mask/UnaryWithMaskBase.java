@@ -44,9 +44,9 @@ public abstract class UnaryWithMaskBase extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        Mask maskChnl = mask.create();
-        DimensionsChecker.check(channel, maskChnl);
-        return createFromMaskedChannel(channel, maskChnl);
+        Mask maskChannel = mask.create();
+        DimensionsChecker.check(channel, maskChannel);
+        return createFromMaskedChannel(channel, maskChannel);
     }
 
     protected abstract Channel createFromMaskedChannel(Channel channel, Mask mask)

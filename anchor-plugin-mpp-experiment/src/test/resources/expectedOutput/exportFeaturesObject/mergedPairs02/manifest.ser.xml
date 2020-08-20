@@ -76,7 +76,7 @@
           <org.anchoranalysis.io.manifest.file.FileType>
             <manifestDescription>
               <type>raster</type>
-              <function>nrgStackChnl</function>
+              <function>nrgStackChannel</function>
             </manifestDescription>
             <fileExtension>tif</fileExtension>
           </org.anchoranalysis.io.manifest.file.FileType>

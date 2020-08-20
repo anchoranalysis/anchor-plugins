@@ -84,7 +84,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
     }
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
@@ -102,7 +102,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
             }
         }
 
-        return calculateForShell(objectShell, chnl);
+        return calculateForShell(objectShell, channel);
     }
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
@@ -114,7 +114,7 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
         return object.intersect(createNrgMask(nrgStack), nrgStack.dimensions());
     }
 
-    protected abstract double calculateForShell(ObjectMask shell, Channel chnl)
+    protected abstract double calculateForShell(ObjectMask shell, Channel channel)
             throws FeatureCalculationException;
 
     private ObjectMask createNrgMask(NRGStack nrgStack) {

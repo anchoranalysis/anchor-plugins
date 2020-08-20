@@ -51,7 +51,7 @@ class GroupedHistogramMap extends GroupMapByName<Histogram, Histogram> {
     protected void writeGroupOutputInSubdirectory(
             String outputName,
             Histogram agg,
-            ConsistentChannelChecker chnlChecker,
+            ConsistentChannelChecker channelChecker,
             BoundIOContext context)
             throws IOException {
         writer.writeHistogramToFile(agg, outputName, context);

@@ -61,7 +61,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String backgroundChnlName = "Image";
+    @BeanField @Getter @Setter private String backgroundChannelName = "Image";
 
     // If a non-empty string it is used to split the descriptive name into groups
     @BeanField @Getter @Setter private String splitDescriptiveNameRegex = "";
@@ -166,7 +166,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         try {
             NamedStacksSet stackCollection = new NamedStacksSet();
             inputObject.getInputObject().addToStoreInferNames(stackCollection);
-            return DisplayStack.create(stackCollection.getException(backgroundChnlName));
+            return DisplayStack.create(stackCollection.getException(backgroundChannelName));
 
         } catch (CreateException | OperationFailedException e) {
             throw new JobExecutionException(e);

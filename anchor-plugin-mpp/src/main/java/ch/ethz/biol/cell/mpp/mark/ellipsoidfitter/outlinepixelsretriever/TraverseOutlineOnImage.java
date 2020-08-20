@@ -89,7 +89,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         try {
             return maskOutline.create();
         } catch (CreateException e) {
-            throw new TraverseOutlineException("Unable to create binaryImgChnlProviderOutline", e);
+            throw new TraverseOutlineException("Unable to create binaryImgChannelProviderOutline", e);
         }
     }
 
@@ -97,7 +97,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         try {
             return maskFilled.create();
         } catch (CreateException e) {
-            throw new TraverseOutlineException("Unable to create binaryImgChnlProviderFilled", e);
+            throw new TraverseOutlineException("Unable to create binaryImgChannelProviderFilled", e);
         }
     }
 

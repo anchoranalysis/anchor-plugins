@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode
 public class SortedSetChannel implements Comparable<SortedSetChannel>, Iterable<SortedSetSlice> {
 
-    @Getter private int chnlNum;
+    @Getter private int channelNum;
 
     private TreeMap<Integer, SortedSetSlice> slices = new TreeMap<>();
 
@@ -62,9 +62,9 @@ public class SortedSetChannel implements Comparable<SortedSetChannel>, Iterable<
     @Override
     public int compareTo(SortedSetChannel arg0) {
 
-        if (chnlNum == arg0.chnlNum) {
+        if (channelNum == arg0.channelNum) {
             return 0;
-        } else if (chnlNum < arg0.chnlNum) {
+        } else if (channelNum < arg0.channelNum) {
             return -1;
         } else {
             return 1;

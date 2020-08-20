@@ -24,30 +24,32 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.chnl.map;
+package org.anchoranalysis.plugin.io.bean.channel.map;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 
-public class FromEntries extends ChannelMap {
+/** For an image with a single channel */
+@NoArgsConstructor
+@AllArgsConstructor
+public class SingleChannel extends ChannelMap {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<ChannelEntry> list = new ArrayList<>();
+    @BeanField @Getter @Setter private String channelName = "defaultName";
     // END BEAN PROPERTIES
 
     @Override
-    public NamedEntries createMap(OpenedRaster openedRaster) {
-        NamedEntries out = new NamedEntries();
-        for (ChannelEntry entry : list) {
-            out.add(entry);
-        }
-        return out;
+    public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
+        NamedEntries map = new NamedEntries();
+        map.add(new ChannelEntry(channelName, 0));
+        return map;
     }
 }

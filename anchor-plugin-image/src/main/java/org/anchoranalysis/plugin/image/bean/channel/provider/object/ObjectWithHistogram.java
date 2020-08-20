@@ -38,8 +38,8 @@ class ObjectWithHistogram {
 
     @Getter private final Histogram histogram;
 
-    public ObjectWithHistogram(ObjectMask object, Channel chnl) {
+    public ObjectWithHistogram(ObjectMask object, Channel channel) {
         this.object = object;
-        this.histogram = HistogramFactory.create(chnl, object);
+        this.histogram = HistogramFactory.create(channel, object);
     }
 }

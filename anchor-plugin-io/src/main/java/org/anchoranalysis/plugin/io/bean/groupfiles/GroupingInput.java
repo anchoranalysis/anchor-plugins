@@ -49,20 +49,20 @@ class GroupingInput extends NamedChannelsInput {
     // A virtual path uniquely representing this particular file
     private Path virtualPath;
 
-    private ChannelMap chnlMapCreator;
+    private ChannelMap channelMapCreator;
 
-    private NamedEntries chnlMap = null;
+    private NamedEntries channelMap = null;
 
     private String descriptiveName;
 
     // The root object that is used to provide the descriptiveName and pathForBinding
     //
     public GroupingInput(
-            Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap chnlMapCreator) {
+            Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap channelMapCreator) {
         super();
         this.virtualPath = virtualPath;
         this.openedRaster = mfor;
-        this.chnlMapCreator = chnlMapCreator;
+        this.channelMapCreator = channelMapCreator;
     }
 
     @Override
@@ -78,8 +78,8 @@ class GroupingInput extends NamedChannelsInput {
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
-        ensureChnlMapExists();
-        return new NamedChannelsForSeriesMap(openedRaster, chnlMap, seriesNum);
+        ensureChannelMapExists();
+        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesNum);
     }
 
     @Override
@@ -94,8 +94,8 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public int numberChannels() throws RasterIOException {
-        ensureChnlMapExists();
-        return chnlMap.keySet().size();
+        ensureChannelMapExists();
+        return channelMap.keySet().size();
     }
 
     @Override
@@ -107,11 +107,11 @@ class GroupingInput extends NamedChannelsInput {
         }
     }
 
-    private void ensureChnlMapExists() throws RasterIOException {
+    private void ensureChannelMapExists() throws RasterIOException {
         // Lazy creation
-        if (chnlMap == null) {
+        if (channelMap == null) {
             try {
-                chnlMap = chnlMapCreator.createMap(openedRaster);
+                channelMap = channelMapCreator.createMap(openedRaster);
             } catch (CreateException e) {
                 throw new RasterIOException(e);
             }

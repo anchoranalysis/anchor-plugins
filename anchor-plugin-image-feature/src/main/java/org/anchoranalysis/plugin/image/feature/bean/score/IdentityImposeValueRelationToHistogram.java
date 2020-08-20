@@ -42,9 +42,9 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class IdentityImposeValueRelationToHistogram extends VoxelScore {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int nrgChnlIndexCheck = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndexCheck = 0;
 
-    @BeanField @Getter @Setter private int nrgChnlIndexFail = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndexFail = 0;
 
     @BeanField @Getter @Setter private int histIndex = 0;
 
@@ -60,12 +60,12 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
-        double pxlValue = pixelVals[nrgChnlIndexCheck];
+        double pxlValue = pixelVals[nrgChannelIndexCheck];
 
         if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {
             return value;
         } else {
-            return pixelVals[nrgChnlIndexFail];
+            return pixelVals[nrgChannelIndexFail];
         }
     }
 

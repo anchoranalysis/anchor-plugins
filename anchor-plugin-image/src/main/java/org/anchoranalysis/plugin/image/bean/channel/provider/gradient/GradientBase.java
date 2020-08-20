@@ -52,26 +52,26 @@ public abstract class GradientBase extends ChannelProviderUnary {
     // END BEAN
 
     @Override
-    public Channel createFromChannel(Channel chnlIn) throws CreateException {
+    public Channel createFromChannel(Channel channelIn) throws CreateException {
 
         // The gradient is calculated on a float
-        Channel chnlIntermediate =
-                ChannelFactory.instance().create(chnlIn.dimensions(), FloatVoxelType.INSTANCE);
+        Channel channelIntermediate =
+                ChannelFactory.instance().create(channelIn.dimensions(), FloatVoxelType.INSTANCE);
 
         GradientCalculator calculator =
                 new GradientCalculator(createAxisArray(), (float) scaleFactor, addSum);
-        calculator.gradient(chnlIn.voxels(), chnlIntermediate.voxels().asFloat());
+        calculator.gradient(channelIn.voxels(), channelIntermediate.voxels().asFloat());
 
-        return convertToOutputType(chnlIntermediate);
+        return convertToOutputType(channelIntermediate);
     }
 
     protected abstract boolean[] createAxisArray() throws CreateException;
 
-    private Channel convertToOutputType(Channel chnlToConvert) {
+    private Channel convertToOutputType(Channel channelToConvert) {
         ChannelConverter<?> converter =
                 outputShort
                         ? new ChannelConverterToUnsignedShort()
                         : new ChannelConverterToUnsignedByte();
-        return converter.convert(chnlToConvert, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+        return converter.convert(channelToConvert, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 }

@@ -64,7 +64,7 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @OptionalBean @Getter @Setter private ChannelProvider gradient;
 
-    // We don't use {@link ChnlProiderMask} as here it's optional.
+    // We don't use {@link ChannelProiderMask} as here it's optional.
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
     @BeanField @Getter @Setter private VoxelScore score;
@@ -97,17 +97,17 @@ public class ScoreVoxels extends ChannelProvider {
                 .create(voxelsPixelScore, intensityCreated.dimensions().resolution());
     }
     
-    private VoxelsWrapperList createVoxelsList(Channel chnlIntensity) throws CreateException {
+    private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws CreateException {
 
         VoxelsWrapperList out = new VoxelsWrapperList();
 
-        out.add(chnlIntensity.voxels());
+        out.add(channelIntensity.voxels());
 
         OptionalFactory.create(gradient).map(Channel::voxels).ifPresent(out::add);
 
-        for (ChannelProvider chnlProvider : channelsExtra) {
+        for (ChannelProvider channelProvider : channelsExtra) {
             VoxelsWrapper voxelsExtra =
-                    chnlProvider != null ? chnlProvider.create().voxels() : null;
+                    channelProvider != null ? channelProvider.create().voxels() : null;
             out.add(voxelsExtra);
         }
         return out;
@@ -119,12 +119,12 @@ public class ScoreVoxels extends ChannelProvider {
         }
 
         Mask createdMask = mask.create();
-        Channel chnlMask = createdMask.channel();
+        Channel channelMask = createdMask.channel();
 
         return Optional.of(
                 new ObjectMask(
-                        new BoundingBox(chnlMask.dimensions()),
-                        chnlMask.voxels().asByte(),
+                        new BoundingBox(channelMask.dimensions()),
+                        channelMask.voxels().asByte(),
                         createdMask.binaryValues()));
     }
 }

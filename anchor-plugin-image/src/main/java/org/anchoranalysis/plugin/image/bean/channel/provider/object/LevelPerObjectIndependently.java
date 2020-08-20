@@ -51,13 +51,13 @@ public class LevelPerObjectIndependently extends LevelPerObjectBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected void writeLevelsForObjects(Channel chnlIntensity, ObjectCollection objects, Channel output)
+    protected void writeLevelsForObjects(Channel channelIntensity, ObjectCollection objects, Channel output)
             throws CreateException {
 
         try {
             LevelResultCollection results =
                     LevelResultCollectionFactory.createCollection(
-                            chnlIntensity,
+                            channelIntensity,
                             objects,
                             getCalculateLevel(),
                             numberDilations,

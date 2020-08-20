@@ -37,7 +37,7 @@ public class RejectIfIntensityLessThan extends VoxelScore {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private VoxelScore item;
 
-    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndex = 0;
 
     @BeanField @Getter @Setter private int minIntensity = 0;
     // END BEAN PROPERTIES
@@ -45,7 +45,7 @@ public class RejectIfIntensityLessThan extends VoxelScore {
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
-        int intensity = pixelVals[nrgChnlIndex];
+        int intensity = pixelVals[nrgChannelIndex];
 
         if (intensity < minIntensity) {
             return 0;

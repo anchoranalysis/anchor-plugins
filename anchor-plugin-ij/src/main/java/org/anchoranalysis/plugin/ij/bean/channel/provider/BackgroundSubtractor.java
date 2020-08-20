@@ -54,6 +54,6 @@ public class BackgroundSubtractor extends WithRadiusBase {
                     true);
         }
 
-        return IJWrap.chnlFromImagePlus(imp, channel.dimensions().resolution());
+        return IJWrap.channelFromImagePlus(imp, channel.dimensions().resolution());
     }
 }

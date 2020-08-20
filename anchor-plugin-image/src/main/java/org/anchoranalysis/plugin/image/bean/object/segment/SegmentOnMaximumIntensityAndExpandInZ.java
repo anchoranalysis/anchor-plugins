@@ -65,7 +65,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
     @Override
     public ObjectCollection segment(
-            Channel chnl,
+            Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
@@ -81,25 +81,25 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
 
         ObjectCollection objects =
                 upstreamSegmentation.segment(
-                        chnl.projectMax(), Optional.empty(), seeds);
+                        channel.projectMax(), Optional.empty(), seeds);
 
         if (isAny3d(objects)) {
             throw new SegmentationFailedException(
                     "A 3D object was returned from the initial segmentation. This must return only 2D objects");
         }
 
-        return ExtendObjectsInto3DMask.extendObjects(objects, binarySgmn(chnl));
+        return ExtendObjectsInto3DMask.extendObjects(objects, binarySgmn(channel));
     }
 
     private boolean isAny3d(ObjectCollection objects) {
         return objects.stream().anyMatch(objectMask -> objectMask.extent().z() > 1);
     }
 
-    private BinaryVoxels<ByteBuffer> binarySgmn(Channel chnl) throws SegmentationFailedException {
+    private BinaryVoxels<ByteBuffer> binarySgmn(Channel channel) throws SegmentationFailedException {
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(chnl.dimensions().resolution());
+                new BinarySegmentationParameters(channel.dimensions().resolution());
 
-        Voxels<ByteBuffer> voxels = chnl.voxels().asByte();
+        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
         Voxels<ByteBuffer> stackBinary = voxels.duplicate();
         return segmentStack.segment(new VoxelsWrapper(stackBinary), params, Optional.empty());

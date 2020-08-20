@@ -147,7 +147,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
             lastPointsAll =
                     new GeneratePointsHelper(
                                     point,
-                                    chnlFilled(),
+                                    channelFilled(),
                                     maxZDistance(randomNumberGenerator, dimensions.resolution()),
                                     skipZDistance(dimensions.resolution()),
                                     mask.create(),
@@ -174,7 +174,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return (int) Math.round(distanceZEndIfEmpty.resolveForAxis(Optional.of(res), AxisType.Z));
     }
 
-    private Optional<Mask> chnlFilled() throws CreateException {
+    private Optional<Mask> channelFilled() throws CreateException {
         return maskFilled != null ? Optional.of(maskFilled.create()) : Optional.empty();
     }
 }

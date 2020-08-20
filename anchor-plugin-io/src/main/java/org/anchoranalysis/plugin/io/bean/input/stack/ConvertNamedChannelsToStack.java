@@ -52,7 +52,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
- * Manager that converts NamedChnlInput to StackSequenceInput
+ * Manager that converts NamedChannelInput to StackSequenceInput
  *
  * @author Owen Feehan
  */
@@ -61,13 +61,13 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInput> input;
 
-    @BeanField @Getter @Setter private String chnlName;
+    @BeanField @Getter @Setter private String channelName;
 
     @BeanField @Getter @Setter private int timeIndex = 0;
     // END BEAN PROPERTIES
 
     /**
-     * An input object that converts StackNamedChnlInputObject to StackSequenceInputObject
+     * An input object that converts StackNamedChannelInputObject to StackSequenceInputObject
      *
      * @author Owen Feehan
      */
@@ -132,7 +132,7 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
                 prm.incrWorker();
 
                 Channel channel =
-                        ncc.getChannel(chnlName, timeIndex, new ProgressReporterOneOfMany(prm));
+                        ncc.getChannel(channelName, timeIndex, new ProgressReporterOneOfMany(prm));
                 return new TimeSequence(new Stack(channel));
 
             } catch (RasterIOException | GetOperationFailedException e) {

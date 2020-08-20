@@ -50,8 +50,8 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
     private static final String NAME_GAUSSIAN = "Blurred";
 
     // START BEAN PROPERTIES
-    /** The ID of the chnl that provides the input to the filter */
-    @BeanField @Getter @Setter private String chnlID;
+    /** The ID of the channel that provides the input to the filter */
+    @BeanField @Getter @Setter private String channelID;
 
     @BeanField @Positive @Getter @Setter private double medianRadiusMeters = 0;
 
@@ -109,7 +109,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         private ChannelProvider edgeFilter(String unresolvedSrcName) {
             Sobel provider = new Sobel();
             provider.setOutputShort(true);
-            provider.setChnl(createDup(resolveName(unresolvedSrcName)));
+            provider.setChannel(createDup(resolveName(unresolvedSrcName)));
             return provider;
         }
 
@@ -119,7 +119,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
             provider.setOutputShort(true);
             provider.setAddSum(32768);
             provider.setAxis(axis);
-            provider.setChnl(createDup(resolveName(filterName)));
+            provider.setChannel(createDup(resolveName(filterName)));
             return provider;
         }
     }
@@ -128,14 +128,14 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         MedianFilter2D provider = new MedianFilter2D();
         provider.setRadius((int) Math.round(medianRadiusMeters));
         provider.setRadiusInMeters(true);
-        provider.setChnl(createDup(chnlID));
+        provider.setChannel(createDup(channelID));
         return provider;
     }
 
     private ChannelProvider createGaussian() {
         Blur provider = new Blur();
         provider.setStrategy(createBlurStrategy());
-        provider.setChnl(createDup(chnlID));
+        provider.setChannel(createDup(channelID));
         return provider;
     }
 

@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
 
@@ -43,12 +43,12 @@ import org.anchoranalysis.image.channel.converter.ChannelConverter;
 public class Convert extends ConvertBase {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ConvertChannelTo chnlConverter;
+    @BeanField @Getter @Setter private ConvertChannelTo channelConverter;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ChannelConverter<?> converter = chnlConverter.createConverter();
+        ChannelConverter<?> converter = channelConverter.createConverter();
 
         channel = converter.convert(channel, createPolicy());
         return channel;

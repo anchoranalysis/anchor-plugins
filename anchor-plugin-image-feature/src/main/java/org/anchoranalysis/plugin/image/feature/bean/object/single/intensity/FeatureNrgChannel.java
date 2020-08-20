@@ -56,6 +56,6 @@ public abstract class FeatureNrgChannel extends FeatureSingleObject {
     }
 
     protected abstract double calculateForChannel(
-            SessionInput<FeatureInputSingleObject> input, Channel chnl)
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException;
 }

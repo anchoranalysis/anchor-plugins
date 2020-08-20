@@ -39,9 +39,9 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
 
-    public static double calculateMeanIntensityObject(Channel chnl, ObjectMask object)
+    public static double calculateMeanIntensityObject(Channel channel, ObjectMask object)
             throws FeatureCalculationException {
-        return calculateMeanIntensityObject(chnl, object, false);
+        return calculateMeanIntensityObject(channel, object, false);
     }
 
     public static double calculateMeanIntensityObject(

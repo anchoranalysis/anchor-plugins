@@ -59,10 +59,10 @@ public class CreateNew extends FromDimensionsBase {
                         ? UnsignedShortVoxelType.INSTANCE
                         : UnsignedByteVoxelType.INSTANCE;
 
-        Channel chnlNew = ChannelFactory.instance().create(dimensions, typeOut);
+        Channel channelNew = ChannelFactory.instance().create(dimensions, typeOut);
         if (value != 0) {
-            chnlNew.assignValue(value).toAll();
+            channelNew.assignValue(value).toAll();
         }
-        return chnlNew;
+        return channelNew;
     }
 }

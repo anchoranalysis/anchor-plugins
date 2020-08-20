@@ -62,7 +62,7 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, AggregateC
 
     @Override
     protected GroupMapByName<Channel, AggregateChannel> createGroupMap(
-            ConsistentChannelChecker chnlChecker) {
+            ConsistentChannelChecker channelChecker) {
         return new GroupedMeanChannelMap();
     }
 
@@ -76,11 +76,11 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, AggregateC
 
         ChannelSource source =
                 new ChannelSource(
-                        store, sharedState.getChnlChecker(), Optional.ofNullable(resizeTo));
+                        store, sharedState.getChannelChecker(), Optional.ofNullable(resizeTo));
 
         try {
-            for (NamedChannel chnl : getSelectChnls().selectChannels(source, true)) {
-                sharedState.getGroupMap().add(groupName, chnl.getName(), chnl.getChannel());
+            for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
+                sharedState.getGroupMap().add(groupName, channel.getName(), channel.getChannel());
             }
 
         } catch (OperationFailedException e) {

@@ -53,7 +53,7 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
 
     @Override
     public ObjectCollection segment(
-            Channel chnl,
+            Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
@@ -65,20 +65,20 @@ public class ImposeMinima extends SegmentChannelIntoObjectsUnary {
 
         try {
             return upstreamSegmentation.segment(
-                    chnlWithImposedMinima(chnl, seeds.get(), objectMask), objectMask, seeds);
+                    channelWithImposedMinima(channel, seeds.get(), objectMask), objectMask, seeds);
 
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
     }
 
-    private Channel chnlWithImposedMinima(
-            Channel chnl, SeedCollection seeds, Optional<ObjectMask> object)
+    private Channel channelWithImposedMinima(
+            Channel channel, SeedCollection seeds, Optional<ObjectMask> object)
             throws OperationFailedException {
         if (!seeds.isEmpty()) {
-            return minimaImposition.imposeMinima(chnl, seeds, object);
+            return minimaImposition.imposeMinima(channel, seeds, object);
         } else {
-            return chnl;
+            return channel;
         }
     }
 }

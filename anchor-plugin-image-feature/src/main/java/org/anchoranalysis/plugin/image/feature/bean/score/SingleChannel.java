@@ -40,12 +40,12 @@ import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 public abstract class SingleChannel extends VoxelScore {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
-        return deriveScoreFromPixelVal(pixelVals[nrgChnlIndex]);
+        return deriveScoreFromPixelVal(pixelVals[nrgChannelIndex]);
     }
 
     protected abstract double deriveScoreFromPixelVal(int pixelVal);
