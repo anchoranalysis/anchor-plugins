@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.cached.FeatureCalculatorCachedSingle;
 import org.anchoranalysis.image.bean.object.ObjectMatcher;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.MatchedObject;
@@ -74,7 +74,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
     private Map<ObjectMask, ObjectCollection> matches;
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
 
@@ -104,7 +104,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
     @Override
     protected boolean match(
-            ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation)
+            ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
             throws OperationFailedException {
         try {
             double val = evaluatorForSource.calculate(new FeatureInputSingleObject(object));

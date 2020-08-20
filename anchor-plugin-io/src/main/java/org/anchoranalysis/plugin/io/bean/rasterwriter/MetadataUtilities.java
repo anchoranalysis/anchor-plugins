@@ -39,14 +39,14 @@ import ome.units.quantity.Length;
 import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MetadataUtilities {
 
     // NOTE: Tidy up exceptions later
     public static IMetadata createMetadata(
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             int numberChannels,
             PixelType pixelType,
             boolean makeRGB,

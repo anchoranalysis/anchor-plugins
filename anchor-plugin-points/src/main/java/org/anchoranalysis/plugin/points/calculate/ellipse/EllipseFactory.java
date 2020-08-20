@@ -38,7 +38,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
 
@@ -49,7 +49,7 @@ class EllipseFactory {
 
     private final ConicFitterBase pointsFitter;
 
-    public MarkEllipse create(ObjectMask object, ImageDimensions dimensions, double shellRad)
+    public MarkEllipse create(ObjectMask object, Dimensions dimensions, double shellRad)
             throws CreateException, InsufficientPointsException {
 
         pointsFitter.setShellRad(shellRad);
@@ -66,7 +66,7 @@ class EllipseFactory {
         return createEllipse(points, dimensions);
     }
 
-    private MarkEllipse createEllipse(Set<Point3i> points, ImageDimensions dim)
+    private MarkEllipse createEllipse(Set<Point3i> points, Dimensions dim)
             throws InsufficientPointsException, CreateException {
 
         MarkEllipse mark = new MarkEllipse();

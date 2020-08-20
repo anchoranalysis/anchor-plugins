@@ -32,9 +32,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.provider.ProviderAsStack;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -48,7 +48,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class Concatenate extends StackProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<BeanProviderAsStackBase<?, ?>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ProviderAsStack> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -57,7 +57,7 @@ public class Concatenate extends StackProvider {
         try {
             Stack out = new Stack();
 
-            for (BeanProviderAsStackBase<?, ?> provider : list) {
+            for (ProviderAsStack provider : list) {
                 out.addChannelsFrom(provider.createAsStack());
             }
 

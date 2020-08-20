@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.PairNeighbors;
-import org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.NRGStackFixture;

@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.size.Padding;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -50,7 +50,7 @@ class AddPaddingToGenerator {
 
     public static IterableGenerator<ObjectsWithBoundingBox> addPadding(
             IterableGenerator<ObjectsWithBoundingBox> generator,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Padding padding,
             boolean keepEntireImage) {
         // Maybe we need to change the objectMask to a padded version
@@ -66,7 +66,7 @@ class AddPaddingToGenerator {
     }
 
     private static ObjectsWithBoundingBox maybePadObjects(
-            ObjectsWithBoundingBox objects, ImageDimensions dimensions, Padding padding)
+            ObjectsWithBoundingBox objects, Dimensions dimensions, Padding padding)
             throws OperationFailedException {
         if (objects.size() == 1) {
             return new ObjectsWithBoundingBox(maybePadObject(objects.get(0), dimensions, padding));
@@ -84,7 +84,7 @@ class AddPaddingToGenerator {
      * @throws OutputWriteFailedException
      */
     private static ObjectMask maybePadObject(
-            ObjectMask object, ImageDimensions dimensions, Padding padding) {
+            ObjectMask object, Dimensions dimensions, Padding padding) {
 
         if (padding.noPadding()) {
             return object;

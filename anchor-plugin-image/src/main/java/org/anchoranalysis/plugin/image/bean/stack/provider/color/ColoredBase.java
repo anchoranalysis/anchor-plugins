@@ -34,13 +34,13 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.BeanProviderAsStackBase;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.provider.ProviderAsStack;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
@@ -77,7 +77,7 @@ public abstract class ColoredBase extends StackProvider {
     @BeanField @Getter @Setter private boolean suppressOutlineZ = true;
 
     /** The background. Either {@code stackBackground} or this should be defined but not both */
-    @BeanField @Getter @Setter private BeanProviderAsStackBase<?,?> background;
+    @BeanField @Getter @Setter private ProviderAsStack background;
     // END BEAN PROPERTIES
     
     @Override
@@ -92,7 +92,7 @@ public abstract class ColoredBase extends StackProvider {
      * @param backgroundDimensions dimensions of the background on which objects are drawn
      * @return a colored object collection describing the objects to be drawn
      */
-    protected abstract ColoredObjectCollection coloredObjectsToDraw(ImageDimensions backgroundDimensions) throws CreateException;
+    protected abstract ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException;
     
     private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background) throws CreateException {
         return drawOnBackgroundAfterFlattening(

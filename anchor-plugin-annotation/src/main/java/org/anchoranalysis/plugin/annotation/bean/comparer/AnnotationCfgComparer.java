@@ -38,7 +38,7 @@ import org.anchoranalysis.annotation.io.wholeimage.findable.NotFound;
 import org.anchoranalysis.annotation.mark.MarkAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -52,7 +52,7 @@ public class AnnotationCfgComparer extends Comparer {
 
     @Override
     public Findable<ObjectCollection> createObjects(
-            Path filePathSource, ImageDimensions dimensions, boolean debugMode)
+            Path filePathSource, Dimensions dimensions, boolean debugMode)
             throws CreateException {
 
         Path filePath;

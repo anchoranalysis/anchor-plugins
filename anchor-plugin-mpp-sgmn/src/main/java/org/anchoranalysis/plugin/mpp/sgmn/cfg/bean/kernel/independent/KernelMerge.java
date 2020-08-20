@@ -48,7 +48,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -172,7 +172,7 @@ public class KernelMerge extends KernelPosNeg<CfgNRGPixelized> {
             int existingSize,
             int proposalSize,
             double poissonIntensity,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio) {
         return densityRatio;
     }

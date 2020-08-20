@@ -42,7 +42,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -103,7 +103,7 @@ public class KernelInitialCfgNRG extends KernelIndependent<CfgNRGPixelized> {
             int existingSize,
             int proposalSize,
             double poissonIntensity,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio) {
         // We always accept
         return 1;

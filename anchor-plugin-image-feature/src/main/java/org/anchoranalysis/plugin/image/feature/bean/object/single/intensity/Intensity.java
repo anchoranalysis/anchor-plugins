@@ -50,7 +50,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  *
  * @author Owen Feehan
  */
-public class Intensity extends FeatureNrgChnl {
+public class Intensity extends FeatureNrgChannel {
 
     // START BEAN PROPERTIES
     /** Feature to apply to the histogram */

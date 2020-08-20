@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Calculates the volume (x, y and z dimensions) of the scene from the dimensions
@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class Volume<T extends FeatureInputNRG> extends FromDimensionsBase<T> {
 
     @Override
-    protected double calculateFromDimensions(ImageDimensions dim) {
+    protected double calculateFromDimensions(Dimensions dim) {
         return dim.calculateVolume();
     }
 }

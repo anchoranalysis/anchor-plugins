@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -48,7 +48,7 @@ public class BBoxRatio extends FeatureSingleMemo {
     }
     
     /** The extent of the mark in each dimension, with the z-dimension adjusted for image-resolution */
-    private static int[] markExtent(MarkConic markCast, ImageDimensions dimensions) {
+    private static int[] markExtent(MarkConic markCast, Dimensions dimensions) {
 
         BoundingBox bb = markCast.box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
         int[] extent = bb.extent().asOrderedArray();

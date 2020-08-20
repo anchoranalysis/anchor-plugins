@@ -42,7 +42,7 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
@@ -104,7 +104,7 @@ public class MovieFromSlicesTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException {
 
         try {

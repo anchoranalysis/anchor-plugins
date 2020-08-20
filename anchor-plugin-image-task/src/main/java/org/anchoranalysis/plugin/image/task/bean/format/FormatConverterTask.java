@@ -38,15 +38,15 @@ import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.channel.ChnlFilter;
-import org.anchoranalysis.image.io.chnl.ChannelGetter;
+import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
+import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -54,8 +54,8 @@ import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
-import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.bean.format.convertsyle.ChannelConvertStyle;
+import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts the input-image to the default output format, optionally changing the bit depth
@@ -70,11 +70,11 @@ public class FormatConverterTask extends RasterTask {
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
-    @BeanField @Getter @Setter private ChnlConversionStyle chnlConversionStyle = null;
+    @BeanField @Getter @Setter private ChannelConvertStyle chnlConversionStyle = null;
 
     @BeanField @Getter @Setter private boolean suppressSeries = false;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlFilter chnlFilter = null;
+    @BeanField @OptionalBean @Getter @Setter private ChannelFilter chnlFilter = null;
 
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo chnlConverter = null;
     // END BEAN PROPERTIES
@@ -114,14 +114,14 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChannelsForSeries createChnlCollection(NamedChnlsInput inputObject, int seriesIndex)
+    public NamedChannelsForSeries createChnlCollection(NamedChannelsInput inputObject, int seriesIndex)
             throws RasterIOException {
         return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
 
     @Override
     public void doStack(
-            NamedChnlsInput inputObjectUntyped,
+            NamedChannelsInput inputObjectUntyped,
             int seriesIndex,
             int numSeries,
             BoundIOContext context)
@@ -166,7 +166,7 @@ public class FormatConverterTask extends RasterTask {
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
-            ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
+            ChannelGetterForTimepoint getterForTimepoint = new ChannelGetterForTimepoint(chnlGetter, t);
 
             chnlConversionStyle.convert(
                     chnlNames,
@@ -184,7 +184,7 @@ public class FormatConverterTask extends RasterTask {
 
     private ChannelGetter maybeAddConverter(ChannelGetter chnlGetter) throws CreateException {
         if (chnlConverter != null) {
-            return new ConvertingChnlCollection(
+            return new ConvertingChannels(
                     chnlGetter,
                     chnlConverter.createConverter(),
                     ConversionPolicy.CHANGE_EXISTING_CHANNEL);

@@ -39,7 +39,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.mpp.sgmn.kernel.KernelCalcNRGException;
@@ -58,7 +58,7 @@ public class KernelExchange extends KernelIndependent<CfgNRGPixelized> {
             int existingSize,
             int proposalSize,
             double poissonIntensity,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double densityRatio) {
         return Math.min(1.0, densityRatio);
     }

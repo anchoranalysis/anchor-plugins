@@ -50,7 +50,7 @@ public abstract class IntensityGradientBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     protected FeatureCalculation<List<Point3d>, FeatureInputSingleObject> gradientCalculation() {
-        return new CalculateGradientFromMultipleChnls(
+        return new CalculateGradientFromChannels(
                 nrgIndexX, nrgIndexY, nrgIndexZ, subtractConstant);
     }
 }

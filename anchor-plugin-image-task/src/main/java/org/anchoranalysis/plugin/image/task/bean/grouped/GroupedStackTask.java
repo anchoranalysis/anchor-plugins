@@ -48,8 +48,8 @@ import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
-import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
+import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
+import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.FromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
@@ -74,7 +74,7 @@ public abstract class GroupedStackTask<S, T>
      */
     @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
 
-    @BeanField @Getter @Setter private SelectChnlsFromStacks selectChnls = new SelectAll();
+    @BeanField @Getter @Setter private FromStacks selectChnls = new All();
     // END BEAN PROPERTIES
 
     @Override

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
-public class IntensityMeanMaxSlice extends FeatureNrgChnl {
+public class IntensityMeanMaxSlice extends FeatureNrgChannel {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean excludeZero = false;

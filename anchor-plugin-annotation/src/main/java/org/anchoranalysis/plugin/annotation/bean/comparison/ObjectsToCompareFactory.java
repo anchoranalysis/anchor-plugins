@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -49,7 +49,7 @@ class ObjectsToCompareFactory {
     public static Optional<ObjectsToCompare> create(
             AnnotationComparisonInput<ProvidesStackInput> input,
             IAddAnnotation<?> addAnnotation,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BoundIOContext context)
             throws JobExecutionException {
 
@@ -65,7 +65,7 @@ class ObjectsToCompareFactory {
             String objName,
             IAddAnnotation<?> addAnnotation,
             AnnotationComparisonInput<ProvidesStackInput> input,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BoundIOContext context)
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
@@ -88,7 +88,7 @@ class ObjectsToCompareFactory {
     private static Findable<ObjectCollection> createFindable(
             boolean left,
             AnnotationComparisonInput<ProvidesStackInput> input,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean debugMode)
             throws JobExecutionException {
         try {

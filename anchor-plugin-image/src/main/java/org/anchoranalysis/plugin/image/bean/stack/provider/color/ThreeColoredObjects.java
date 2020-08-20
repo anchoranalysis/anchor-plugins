@@ -36,7 +36,7 @@ import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**
@@ -70,7 +70,7 @@ public class ThreeColoredObjects extends ColoredBase {
     }
 
     @Override
-    protected ColoredObjectCollection coloredObjectsToDraw(ImageDimensions backgroundDimensions) throws CreateException {
+    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException {
         ColoredObjectCollection objects = new ColoredObjectCollection();
         
         try {

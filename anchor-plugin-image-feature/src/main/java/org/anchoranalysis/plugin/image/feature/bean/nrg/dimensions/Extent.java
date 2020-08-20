@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Width/height/depth of nrg-stack in pixels depending on axis
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.ImageDimensions;
 public class Extent<T extends FeatureInputNRG> extends ForSpecificAxis<T> {
 
     @Override
-    protected double calculateForAxis(ImageDimensions dimensions, AxisType axis) {
+    protected double calculateForAxis(Dimensions dimensions, AxisType axis) {
         return dimensions.extent().valueByDimension(axis);
     }
 }

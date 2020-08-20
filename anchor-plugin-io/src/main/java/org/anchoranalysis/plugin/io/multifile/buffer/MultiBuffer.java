@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.multifile.buffer;
 import java.util.Optional;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -94,7 +94,7 @@ class MultiBuffer {
         }
     }
 
-    public Stack createStackForIndex(int t, ImageDimensions dimensions, VoxelDataType dataType) {
+    public Stack createStackForIndex(int t, Dimensions dimensions, VoxelDataType dataType) {
 
         Stack stack = new Stack();
 

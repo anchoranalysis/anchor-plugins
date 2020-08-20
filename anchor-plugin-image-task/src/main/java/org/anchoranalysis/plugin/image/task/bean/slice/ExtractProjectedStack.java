@@ -34,10 +34,10 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Takes three RGB channels and projects them into a canvas of width/height in the form of a new RGB
@@ -82,7 +82,7 @@ class ExtractProjectedStack {
         }
     }
 
-    private static Point3i createTarget(ImageDimensions dimensions, Extent extent) {
+    private static Point3i createTarget(Dimensions dimensions, Extent extent) {
         Point3i crnrPos = new Point3i();
         crnrPos.setX((extent.x() - dimensions.x()) / 2);
         crnrPos.setY((extent.y() - dimensions.y()) / 2);
@@ -98,13 +98,13 @@ class ExtractProjectedStack {
                 .orElseThrow(AnchorImpossibleSituationException::new);
     }
 
-    private static BoundingBox boxSrc(BoundingBox boxToProject, ImageDimensions dimensions) {
+    private static BoundingBox boxSrc(BoundingBox boxToProject, Dimensions dimensions) {
         Point3i srcCrnrPos = createSourceCorner(boxToProject, dimensions);
         return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
     private static Point3i createSourceCorner(
-            BoundingBox boxToProject, ImageDimensions dimensions) {
+            BoundingBox boxToProject, Dimensions dimensions) {
         Point3i sourceCorner = new Point3i(0, 0, 0);
 
         if (boxToProject.extent().x() < dimensions.x()) {
@@ -126,9 +126,9 @@ class ExtractProjectedStack {
         Channel chnlOut =
                 ChannelFactory.instance()
                         .create(
-                                new ImageDimensions(
+                                new Dimensions(
                                         extentOut, channelDestination.dimensions().resolution()),
-                                UnsignedByte.INSTANCE);
+                                UnsignedByteVoxelType.INSTANCE);
         channelDestination
                 .voxels()
                 .asByte()

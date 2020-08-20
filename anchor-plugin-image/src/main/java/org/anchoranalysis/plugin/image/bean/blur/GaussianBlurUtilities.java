@@ -34,7 +34,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class GaussianBlurUtilities {
@@ -52,7 +52,7 @@ class GaussianBlurUtilities {
      * @throws IncompatibleTypeException
      */
     public static <T extends NumericType<T>> void applyBlur(
-            Img<? extends RealType<?>> img, ImageResolution sr, double[] sigma) {
+            Img<? extends RealType<?>> img, Resolution sr, double[] sigma) {
 
         assert (sigma.length == 3);
 

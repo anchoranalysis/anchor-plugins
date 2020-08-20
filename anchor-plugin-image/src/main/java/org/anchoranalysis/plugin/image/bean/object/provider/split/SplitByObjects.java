@@ -37,16 +37,16 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 
-public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
+public class SplitByObjects extends WithDimensionsBase {
 
     private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
             new CreateFromConnectedComponentsFactory();
@@ -61,7 +61,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
         ObjectCollection objectsSplitByCollection = objectsSplitBy.create();
 
-        ImageDimensions dimensions = createDimensions();
+        Dimensions dimensions = createDimensions();
 
         return objectCollection.stream()
                 .flatMap(
@@ -75,7 +75,7 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
     }
 
     private ObjectCollection splitObject(
-            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, ImageDimensions dimensions) {
+            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, Dimensions dimensions) {
 
         // We create a voxel buffer of the same size as objectToSplit bounding box, and we write
         //  a number for each object in objectsSplitBy

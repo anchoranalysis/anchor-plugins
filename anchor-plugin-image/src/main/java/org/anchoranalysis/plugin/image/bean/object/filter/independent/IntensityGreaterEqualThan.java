@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -68,7 +68,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
 
         Channel chnlSingleRegion;
@@ -82,7 +82,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<ImageDimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
             throws OperationFailedException {
 
         int thresholdResolved = threshold(dim);
@@ -120,10 +120,10 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
         return false;
     }
 
-    private int threshold(Optional<ImageDimensions> dim) throws OperationFailedException {
+    private int threshold(Optional<Dimensions> dim) throws OperationFailedException {
         return (int)
                 Math.ceil(
-                        threshold.resolveForAxis(dim.map(ImageDimensions::resolution), AxisType.X));
+                        threshold.resolveForAxis(dim.map(Dimensions::resolution), AxisType.X));
     }
 
     @Override

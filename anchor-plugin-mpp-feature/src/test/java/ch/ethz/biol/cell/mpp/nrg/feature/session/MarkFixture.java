@@ -30,13 +30,13 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
 
 @AllArgsConstructor
 public class MarkFixture {
 
-    private final ImageDimensions dimensions;
+    private final Dimensions dimensions;
 
     // Intersects with Ellipsoid2
     public MarkEllipsoid createEllipsoid1() {

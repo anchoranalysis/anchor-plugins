@@ -32,13 +32,13 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithOptionalDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
 public abstract class ObjectCollectionProviderMorphological
-        extends ObjectCollectionProviderWithOptionalDimensions {
+        extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean do3D = false;
@@ -56,6 +56,6 @@ public abstract class ObjectCollectionProviderMorphological
             ObjectMask object, Optional<Extent> extent) throws CreateException;
 
     protected Optional<Extent> deriveExtent() throws CreateException {
-        return createDims().map(ImageDimensions::extent);
+        return createDims().map(Dimensions::extent);
     }
 }

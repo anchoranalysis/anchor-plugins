@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
 
@@ -57,7 +57,7 @@ public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {
     public boolean includeMarks(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws IncludeMarksFailureException {

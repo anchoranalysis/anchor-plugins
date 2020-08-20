@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions.Extent;
-import org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;

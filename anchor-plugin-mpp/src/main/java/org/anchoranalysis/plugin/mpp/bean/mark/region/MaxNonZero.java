@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 
@@ -41,7 +41,7 @@ public class MaxNonZero extends IndexedRegionBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark voxelizedMark, Mark mark, ImageDimensions dimensions)
+            VoxelizedMark voxelizedMark, Mark mark, Dimensions dimensions)
             throws CreateException {
 
         RelationToThreshold nonZero = new RelationToConstant(new GreaterThanBean(), 0);

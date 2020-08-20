@@ -41,13 +41,13 @@ import org.anchoranalysis.image.extent.BoundingBox;
  *
  * @author Owen Feehan
  */
-public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
+public class AnySliceCenterOnMask extends CheckMarkWithMask {
 
     @Override
     public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack)
             throws CheckException {
         Point3d cp = mark.centerPoint();
-        if (isPointOnBinaryChnl(cp, nrgStack, AnySliceCenterOnMask::derivePoint)) {
+        if (isPointOnMask(cp, nrgStack, AnySliceCenterOnMask::derivePoint)) {
             return true;
         }
 
@@ -55,7 +55,7 @@ public class AnySliceCenterOnMask extends CheckMarkBinaryChnl {
         ReadableTuple3i cornerMax = box.calculateCornerMax();
         for (int z = box.cornerMin().z(); z <= cornerMax.z(); z++) {
             Point3d cpSlice = new Point3d(cp.x(), cp.y(), z);
-            if (isPointOnBinaryChnl(cpSlice, nrgStack, AnySliceCenterOnMask::derivePoint)) {
+            if (isPointOnMask(cpSlice, nrgStack, AnySliceCenterOnMask::derivePoint)) {
                 return true;
             }
         }

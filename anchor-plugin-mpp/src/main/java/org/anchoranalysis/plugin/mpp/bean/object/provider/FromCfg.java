@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.object.provider;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
@@ -35,10 +34,11 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
 /**
  * Creates object-masks from a {@link Cfg} where (a particular region of) each mark creates an
@@ -55,7 +55,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();
 
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
+    @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     // END BEAN PROPERTIES
 
     @Override
@@ -63,7 +63,7 @@ public class FromCfg extends ObjectCollectionProvider {
 
         Cfg cfg = cfgProvider.create();
 
-        ImageDimensions dims = dimensions.create();
+        Dimensions dims = dimensions.create();
 
         return cfg.deriveObjects(
                         dims,

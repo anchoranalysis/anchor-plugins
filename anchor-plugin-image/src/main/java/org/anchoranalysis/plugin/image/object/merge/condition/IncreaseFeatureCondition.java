@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -64,7 +64,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
             ObjectMask source,
             ObjectMask destination,
             ObjectMask merged,
-            Optional<ImageResolution> res)
+            Optional<Resolution> res)
             throws OperationFailedException {
 
         if (session != null) {

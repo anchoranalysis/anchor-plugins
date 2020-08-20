@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.mark.region;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
@@ -38,7 +38,7 @@ public class CenterSlice extends CenterSliceBase {
 
     @Override
     protected VoxelStatistics createStatisticsForBBox(
-            VoxelizedMark mark, ImageDimensions dimensions, BoundingBox box, int zCenter) {
+            VoxelizedMark mark, Dimensions dimensions, BoundingBox box, int zCenter) {
 
         if (zCenter < 0 || zCenter >= box.extent().z()) {
             return new VoxelStatisticsCombined();

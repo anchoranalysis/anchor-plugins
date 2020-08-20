@@ -40,7 +40,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
 import org.anchoranalysis.image.binary.mask.combine.MaskOr;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
@@ -92,7 +92,7 @@ public class FillHoles extends MaskProviderUnary {
         return filterObjects(objectCreator.createConnectedComponents(mask), mask.dimensions());
     }
 
-    private ObjectCollection filterObjects(ObjectCollection objects, ImageDimensions dimensions)
+    private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
             throws CreateException {
 
         final double maxVolumeResolved = determineMaxVolume(dimensions);
@@ -101,7 +101,7 @@ public class FillHoles extends MaskProviderUnary {
                 .filter(objectMask -> includeObject(objectMask, dimensions, maxVolumeResolved));
     }
 
-    private double determineMaxVolume(ImageDimensions dim) throws CreateException {
+    private double determineMaxVolume(Dimensions dim) throws CreateException {
         if (maxVolume != null) {
             try {
                 return maxVolume.resolveToVoxels(Optional.of(dim.resolution()));
@@ -114,7 +114,7 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private boolean includeObject(
-            ObjectMask object, ImageDimensions dimensions, double maxVolumeResolved) {
+            ObjectMask object, Dimensions dimensions, double maxVolumeResolved) {
         // It's not allowed touch the border
         if (skipAtBorder && object.boundingBox().atBorderXY(dimensions)) {
             return false;
@@ -125,7 +125,7 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private static Mask fillHoles(
-            ObjectCollection filled, Mask source, ImageDimensions dimensions, BinaryValues bvOut) {
+            ObjectCollection filled, Mask source, Dimensions dimensions, BinaryValues bvOut) {
         Mask maskFromObjects = MaskFromObjects.createFromObjects(filled, dimensions, bvOut);
         MaskOr.apply(maskFromObjects, source);
         return maskFromObjects;

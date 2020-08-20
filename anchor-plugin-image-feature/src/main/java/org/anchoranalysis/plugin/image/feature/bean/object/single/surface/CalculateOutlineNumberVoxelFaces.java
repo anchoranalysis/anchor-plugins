@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -55,7 +55,7 @@ class CalculateOutlineNumberVoxelFaces
     private final boolean suppress3D;
 
     private static int calculateSurfaceSize(
-            ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D)
+            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D)
             throws OperationFailedException {
 
         boolean do3D = (dimensions.z() > 1) && !suppress3D;

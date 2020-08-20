@@ -41,7 +41,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderUnaryWithChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.UnaryWithChannelBase;
 
 /**
  * Performs a binary-segmentation using the upstream objects as masks.
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class BinarySegmentByObject extends ObjectCollectionProviderUnaryWithChannel {
+public class BinarySegmentByObject extends UnaryWithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private BinarySegmentation binarySgmn;

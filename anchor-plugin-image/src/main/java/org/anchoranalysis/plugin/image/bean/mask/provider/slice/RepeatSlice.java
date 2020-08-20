@@ -26,18 +26,18 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 
-import ch.ethz.biol.cell.imageprocessing.dim.provider.GuessDimensionsFromInputImage;
 import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Creates a new mask with specific dimensions that repeatedly duplicates a slice from an existing mask
@@ -51,7 +51,7 @@ public class RepeatSlice extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
     /** Dimensions to create new mask */
-    @BeanField @Getter @Setter private ImageDimProvider dimensions = new GuessDimensionsFromInputImage();
+    @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
     
     /** Which slice to use from {@code mask} */
     @BeanField @Getter @Setter private int sliceIndex = 0;
@@ -60,7 +60,7 @@ public class RepeatSlice extends MaskProviderUnary {
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
 
-        ImageDimensions dimensionsForOutput = dimensions.create();
+        Dimensions dimensionsForOutput = dimensions.create();
         
         Mask out = createEmptyMask(mask, dimensionsForOutput);
 
@@ -72,7 +72,7 @@ public class RepeatSlice extends MaskProviderUnary {
         return out;
     }
     
-    private Mask createEmptyMask(Mask mask, ImageDimensions dimensionsForOutput) throws CreateException {
+    private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput) throws CreateException {
 
         if (!mask.extent().equalsIgnoreZ(dimensionsForOutput.extent())) {
             throw new CreateException("The slice does not have the same XY extent as specified in dimensions");

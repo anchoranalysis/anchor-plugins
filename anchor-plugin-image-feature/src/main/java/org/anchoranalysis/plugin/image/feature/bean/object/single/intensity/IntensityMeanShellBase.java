@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
  *
  * @author Owen Feehan
  */
-public abstract class IntensityMeanShellBase extends FeatureNrgChnl {
+public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
 
     // START BEAN PROPERTIES
     /** The number of dilations and erosions to apply and whether to do in the Z dimension */

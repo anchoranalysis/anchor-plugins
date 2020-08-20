@@ -43,7 +43,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ByteConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -130,7 +130,7 @@ public class LineBoundCalculator extends BoundCalculator {
             Point3i runningInt =
                     PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDbl));
 
-            ImageDimensions dimensions = channel.dimensions();
+            Dimensions dimensions = channel.dimensions();
             if (dimensions.contains(runningInt)) {
                 return -1;
             }

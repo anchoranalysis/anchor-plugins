@@ -49,7 +49,7 @@ import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -65,7 +65,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  *
  * @author Owen Feehan
  */
-public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSelectedSlice> {
+public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
     private static final String OUTPUT_STACK_KEY = "stack";
 
@@ -92,11 +92,11 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
     @Override
     public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(NamedChnlsInput.class);
+        return new InputTypesExpected(NamedChannelsInput.class);
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<NamedChnlsInput, SharedStateSelectedSlice> params)
+    public void doJobOnInputObject(InputBound<NamedChannelsInput, SharedStateSelectedSlice> params)
             throws JobExecutionException {
 
         try {
@@ -156,7 +156,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     }
 
     private void deriveSlicesAndOutput(
-            NamedChnlsInput inputObject,
+            NamedChannelsInput inputObject,
             NRGStackWithParams nrgStack,
             int optimaSliceIndex,
             BoundOutputManagerRouteErrors outputManager)
@@ -176,7 +176,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private static NamedStacksSet collectionFromInput(NamedChnlsInput inputObject)
+    private static NamedStacksSet collectionFromInput(NamedChannelsInput inputObject)
             throws OperationFailedException {
         NamedStacksSet stackCollection = new NamedStacksSet();
         inputObject.addToStoreInferNames(stackCollection);

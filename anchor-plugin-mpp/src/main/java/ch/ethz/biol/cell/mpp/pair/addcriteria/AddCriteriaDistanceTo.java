@@ -40,7 +40,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class AddCriteriaDistanceTo extends AddCriteriaPair {
 
@@ -54,7 +54,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
     public boolean includeMarks(
             VoxelizedMarkMemo mark1,
             VoxelizedMarkMemo mark2,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             Optional<FeatureCalculatorMulti<FeatureInputPairMemo>> session,
             boolean do3D)
             throws IncludeMarksFailureException {

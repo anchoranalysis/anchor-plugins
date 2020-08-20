@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.blur;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public class BlurGaussian3D extends BlurStrategy {
 
     @Override
-    public void blur(VoxelsWrapper voxels, ImageDimensions dimensions, MessageLogger logger)
+    public void blur(VoxelsWrapper voxels, Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException {
 
         double sigma = calculateSigma(dimensions, logger);

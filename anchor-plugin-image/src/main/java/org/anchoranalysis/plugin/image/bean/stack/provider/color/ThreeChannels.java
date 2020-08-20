@@ -37,11 +37,11 @@ import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.UnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 public class ThreeChannels extends StackProvider {
 
@@ -64,7 +64,7 @@ public class ThreeChannels extends StackProvider {
         }
     }
 
-    private static ImageDimensions combineWithExisting(ImageDimensions existing, Channel toCombine)
+    private static Dimensions combineWithExisting(Dimensions existing, Channel toCombine)
             throws IncorrectImageSizeException {
 
         if (toCombine == null) {
@@ -82,7 +82,7 @@ public class ThreeChannels extends StackProvider {
         return existing;
     }
 
-    private static ImageDimensions createDimensions(
+    private static Dimensions createDimensions(
             Channel chnlRed, Channel chnlGreen, Channel chnlBlue)
             throws IncorrectImageSizeException {
 
@@ -90,7 +90,7 @@ public class ThreeChannels extends StackProvider {
             throw new IllegalArgumentException("All chnls are null");
         }
 
-        ImageDimensions dimensions = null;
+        Dimensions dimensions = null;
         dimensions = combineWithExisting(dimensions, chnlRed);
         dimensions = combineWithExisting(dimensions, chnlGreen);
         dimensions = combineWithExisting(dimensions, chnlBlue);
@@ -98,7 +98,7 @@ public class ThreeChannels extends StackProvider {
     }
 
     private static void addToStack(
-            Stack stack, Channel chnl, ImageDimensions dimensions, VoxelDataType outputChnlType)
+            Stack stack, Channel chnl, Dimensions dimensions, VoxelDataType outputChnlType)
             throws IncorrectImageSizeException, CreateException {
 
         if (chnl == null) {
@@ -153,7 +153,7 @@ public class ThreeChannels extends StackProvider {
 
         // If we have no channels, then default to unsigned 8-bit
         if (dataType == null) {
-            dataType = UnsignedByte.INSTANCE;
+            dataType = UnsignedByteVoxelType.INSTANCE;
         }
 
         return dataType;
@@ -175,7 +175,7 @@ public class ThreeChannels extends StackProvider {
             Channel chnlRed, Channel chnlGreen, Channel chnlBlue, VoxelDataType outputType)
             throws CreateException {
         try {
-            ImageDimensions dimensions = createDimensions(chnlRed, chnlGreen, chnlBlue);
+            Dimensions dimensions = createDimensions(chnlRed, chnlGreen, chnlBlue);
 
             Stack out = new Stack();
             addToStack(out, chnlRed, dimensions, outputType);

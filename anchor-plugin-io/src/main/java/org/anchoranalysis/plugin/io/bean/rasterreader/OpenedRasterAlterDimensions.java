@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
@@ -50,7 +50,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
          * @return a new image resolution or empty if no change should occur
          * @throws RasterIOException
          */
-        Optional<ImageResolution> maybeUpdatedResolution(ImageResolution res)
+        Optional<Resolution> maybeUpdatedResolution(Resolution res)
                 throws RasterIOException;
     }
 
@@ -68,7 +68,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 
         for (Stack stack : ts) {
-            Optional<ImageResolution> res =
+            Optional<Resolution> res =
                     processor.maybeUpdatedResolution(stack.dimensions().resolution());
             res.ifPresent(stack::updateResolution);
         }
@@ -86,11 +86,11 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
 
-        ImageDimensions dimensions = delegate.dimensionsForSeries(seriesIndex);
+        Dimensions dimensions = delegate.dimensionsForSeries(seriesIndex);
 
-        Optional<ImageResolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
+        Optional<Resolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
 
         if (res.isPresent()) {
             return dimensions.duplicateChangeRes(res.get());

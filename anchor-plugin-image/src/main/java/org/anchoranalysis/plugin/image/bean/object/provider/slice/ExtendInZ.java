@@ -30,13 +30,13 @@ import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 
 /**
  * Creates a 3D version of an object by replicating each input-object across the z-dimension to meet
@@ -50,17 +50,17 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class ExtendInZ extends ObjectCollectionProviderWithDimensions {
+public class ExtendInZ extends WithDimensionsBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-        ImageDimensions dimensions = createDimensions();
+        Dimensions dimensions = createDimensions();
 
         return objects.stream().map(objectMask -> expandZ(objectMask.flattenZ(), dimensions));
     }
 
-    private static ObjectMask expandZ(ObjectMask object, ImageDimensions dim) {
+    private static ObjectMask expandZ(ObjectMask object, Dimensions dim) {
 
         BoundingBox box = object.boundingBox().changeExtentZ(dim.z());
 

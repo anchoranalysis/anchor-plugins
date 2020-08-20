@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
 public class VisitSchedulerAnd extends VisitScheduler {
@@ -47,7 +47,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(ImageResolution res)
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution res)
             throws OperationFailedException {
 
         Optional<Tuple3i> maxDistance = Optional.empty();
@@ -72,7 +72,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution res)
             throws InitException {
 
         for (VisitScheduler vs : list) {
@@ -82,7 +82,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, ImageResolution res, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Resolution res, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
 
         for (VisitScheduler vs : list) {

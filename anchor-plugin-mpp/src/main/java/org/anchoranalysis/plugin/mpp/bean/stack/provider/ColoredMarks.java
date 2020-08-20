@@ -34,7 +34,7 @@ import org.anchoranalysis.anchor.mpp.cfg.Cfg;
 import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWithGenerator;
 
@@ -53,7 +53,7 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection objectsToDraw(ImageDimensions backgroundDimensions)
+    protected ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
         Cfg cfg = cfgProvider.create();
         RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);

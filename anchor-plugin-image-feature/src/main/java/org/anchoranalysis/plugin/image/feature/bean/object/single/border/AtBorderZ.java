@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 public class AtBorderZ extends AtBorderBase {
 
     @Override
-    protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, ImageDimensions dim) {
+    protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, Dimensions dim) {
         return boundingBox.atBorderZ(dim);
     }
 }

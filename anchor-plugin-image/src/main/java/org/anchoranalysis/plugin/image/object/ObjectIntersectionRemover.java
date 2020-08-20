@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -13,7 +13,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class ObjectIntersectionRemover {
 
     public static ObjectCollection removeIntersectingVoxels(
-            ObjectCollection objects, ImageDimensions dimensions, boolean errorDisconnectedObjects)
+            ObjectCollection objects, Dimensions dimensions, boolean errorDisconnectedObjects)
             throws OperationFailedException {
         ObjectCollection objectsDuplicated = objects.duplicate();
 
@@ -43,7 +43,7 @@ public class ObjectIntersectionRemover {
     }
 
     private static void removeIntersectingVoxelsIfIntersects(
-            ObjectMask objectWrite, ObjectMask objectRead, ImageDimensions dimensions) {
+            ObjectMask objectWrite, ObjectMask objectRead, Dimensions dimensions) {
         Optional<BoundingBox> intersection =
                 objectWrite
                         .boundingBox()

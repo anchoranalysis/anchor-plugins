@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -77,7 +77,7 @@ public class MergeGraph {
     public MergeGraph(
             PayloadCalculator payloadCalculator,
             UpdatableBeforeCondition beforeCondition,
-            Optional<ImageResolution> imageRes,
+            Optional<Resolution> imageRes,
             AssignPriority prioritizer,
             Logger logger,
             boolean logPayload) {

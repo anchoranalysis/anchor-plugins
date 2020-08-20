@@ -46,7 +46,7 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.image.stack.NamedStacksSet;
@@ -168,7 +168,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 return;
             }
 
-            ImageDimensions dimensions = stacks.getArbitraryElement().dimensions();
+            Dimensions dimensions = stacks.getArbitraryElement().dimensions();
 
             outputGeneratorSeq(
                     createGenerator(dimensions, stacks, stacksProjected),
@@ -208,7 +208,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
-            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
+            Dimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
             throws CreateException {
 
         IterableGenerator<ObjectsWithBoundingBox> generator =

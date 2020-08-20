@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
 
 /**
@@ -43,6 +43,6 @@ public abstract class FromDimensionsBase<T extends FeatureInputNRG> extends Feat
         return calculateFromDimensions(input.get().dimensionsRequired());
     }
 
-    protected abstract double calculateFromDimensions(ImageDimensions dimensions)
+    protected abstract double calculateFromDimensions(Dimensions dimensions)
             throws FeatureCalculationException;
 }

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ops.MaskFromObjects;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
@@ -51,13 +51,13 @@ public class FromObjects extends FromDimensionsBase {
     // END BEAN
 
     @Override
-    protected Mask createFromDimensions(ImageDimensions dimensions) throws CreateException {
+    protected Mask createFromDimensions(Dimensions dimensions) throws CreateException {
         return createMaybeInverted(objects.create(), dimensions, BinaryValues.getDefault());
     }
 
     private Mask createMaybeInverted(
             ObjectCollection objects,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             BinaryValues outVal
     ) {
         if (invert) {

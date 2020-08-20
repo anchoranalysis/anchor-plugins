@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentMaskIntersection;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -41,7 +41,7 @@ public class MaskIntersectionAssigner
     @Override
     public AssignmentMaskIntersection createAssignment(
             ObjectsToCompare objectsToCompare,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean useMIP,
             BoundIOContext context)
             throws CreateException {

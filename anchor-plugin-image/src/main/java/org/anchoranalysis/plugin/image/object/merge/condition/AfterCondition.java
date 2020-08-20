@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
 public interface AfterCondition {
@@ -41,6 +41,6 @@ public interface AfterCondition {
             ObjectMask source,
             ObjectMask destination,
             ObjectMask merged,
-            Optional<ImageResolution> res)
+            Optional<Resolution> res)
             throws OperationFailedException;
 }

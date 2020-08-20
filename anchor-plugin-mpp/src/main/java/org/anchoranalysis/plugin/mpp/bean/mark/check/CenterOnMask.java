@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 
-public class CenterOnMask extends CheckMarkBinaryChnl {
+public class CenterOnMask extends CheckMarkWithMask {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean suppressZ = false;
@@ -46,7 +46,7 @@ public class CenterOnMask extends CheckMarkBinaryChnl {
     @Override
     public boolean check(Mark mark, RegionMap regionMap, NRGStackWithParams nrgStack)
             throws CheckException {
-        return isPointOnBinaryChnl(mark.centerPoint(), nrgStack, this::derivePoint);
+        return isPointOnMask(mark.centerPoint(), nrgStack, this::derivePoint);
     }
 
     private Point3i derivePoint(Point3d center) {

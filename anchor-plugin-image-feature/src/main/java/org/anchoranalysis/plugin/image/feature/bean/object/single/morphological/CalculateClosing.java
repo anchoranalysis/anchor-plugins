@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morph.MorphologicalErosion;
@@ -67,7 +67,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
 
             return MorphologicalErosion.createErodedObject(
                     dilated,
-                    params.dimensionsOptional().map(ImageDimensions::extent),
+                    params.dimensionsOptional().map(Dimensions::extent),
                     do3D,
                     iterations,
                     false,

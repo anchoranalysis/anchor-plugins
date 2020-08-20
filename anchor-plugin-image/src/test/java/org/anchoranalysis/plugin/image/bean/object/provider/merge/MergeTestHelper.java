@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.test.ProviderFixture;
+import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
