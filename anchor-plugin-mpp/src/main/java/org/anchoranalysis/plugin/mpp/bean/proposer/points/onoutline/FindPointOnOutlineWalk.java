@@ -56,7 +56,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
     // END BEANS
 
     private Mask maskCreated;
-    private Channel chnl;
+    private Channel channel;
 
     @Override
     public Optional<Point3i> pointOnOutline(Point3d centerPoint, Orientation orientation)
@@ -76,7 +76,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         if (maskCreated == null) {
             try {
                 maskCreated = mask.create();
-                chnl = maskCreated.channel();
+                channel = maskCreated.channel();
             } catch (CreateException e) {
                 throw new OperationFailedException(e);
             }
@@ -156,7 +156,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = chnl.voxels().asByte().sliceBuffer(point.z());
+        ByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 

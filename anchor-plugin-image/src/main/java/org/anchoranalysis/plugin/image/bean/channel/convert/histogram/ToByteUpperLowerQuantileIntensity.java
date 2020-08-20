@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.convert.histogram;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelToWithHistogram;
+import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.channel.converter.attached.histogram.ChannelConverterHistogramUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.histogram.Histogram;

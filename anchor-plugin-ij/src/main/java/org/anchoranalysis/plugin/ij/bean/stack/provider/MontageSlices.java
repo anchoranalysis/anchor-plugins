@@ -74,7 +74,7 @@ public class MontageSlices extends StackProviderUnary {
         try {
             return source.mapChannel(
                     channel ->
-                            montageChnl(
+                            montageChannel(
                                     channel,
                                     fffectiveColumns(numberSlices, numberColumns),
                                     rowsForColumns(numberSlices, numberColumns),
@@ -85,7 +85,7 @@ public class MontageSlices extends StackProviderUnary {
         }
     }
 
-    private Channel montageChnl(
+    private Channel montageChannel(
             Channel in, int cols, int rows, int firstSlice, int lastSlice) {
 
         ImagePlus imp = IJWrap.createImagePlus(in);
@@ -102,7 +102,7 @@ public class MontageSlices extends StackProviderUnary {
                         1,
                         borderWidth,
                         label);
-        return IJWrap.chnlFromImagePlus(res, in.dimensions().resolution());
+        return IJWrap.channelFromImagePlus(res, in.dimensions().resolution());
     }
 
     private int numberColumns(int totalNumSlices) {

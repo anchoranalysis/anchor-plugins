@@ -85,22 +85,22 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
      * <p>If this list has at least one, then we treat the main raster file not as a stack, but
      * break it into separate channels that are each presented as a separate stack to the MultiInput
      */
-    @BeanField @Getter @Setter private List<ChannelEntry> additionalChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelEntry> additionalChannels = new ArrayList<>();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
 
     /**
      * If true, a raster-stack is treated as a single-channel, even if multiple exist (and no
-     * additionalChnl is set)
+     * additionalChannel is set)
      */
-    @BeanField @Getter @Setter private boolean stackAsChnl = false;
+    @BeanField @Getter @Setter private boolean stackAsChannel = false;
 
     /**
-     * If either stackAsChnl==TRUE or we have specified additionalChnls this indicated which channel
+     * If either stackAsChannel==TRUE or we have specified additionalChannels this indicated which channel
      * to use from the stack
      */
-    @BeanField @Getter @Setter private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int channelIndex = 0;
 
     /** The raster-reader for reading the main file */
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
@@ -119,9 +119,9 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
         this.inputManager = createMulti();
         inputManager.checkMisconfigured(defaultInstances);
 
-        if (!additionalChnls.isEmpty() && regex == null) {
+        if (!additionalChannels.isEmpty() && regex == null) {
             throw new BeanMisconfiguredException(
-                    "If there is at least one additionalChnl then regex must be set");
+                    "If there is at least one additionalChannel then regex must be set");
         }
     }
 
@@ -145,14 +145,14 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
                 InputManagerFactory.createFiles(
                         rootName, fileProvider, descriptiveNameFromFile, regex, filterFilesCsv);
 
-        if (stackAsChnl || !additionalChnls.isEmpty()) {
+        if (stackAsChannel || !additionalChannels.isEmpty()) {
             // Then we treat the main raster as comprising of multiple independent channels
             //  and each are presented separately to the MultiInput as stacks
             //
             // Channel 0 always takes the inputName
-            // The other channels are defined by the contents of the ImgChnlMapEntry
+            // The other channels are defined by the contents of the ImgChannelMapEntry
             return NamedChannelsCreator.create(
-                    files, inputName, chnlIndex, additionalChnls, rasterReader);
+                    files, inputName, channelIndex, additionalChannels, rasterReader);
 
         } else {
             // Normal mode, where we simply wrap the FileProvider in a Stacks

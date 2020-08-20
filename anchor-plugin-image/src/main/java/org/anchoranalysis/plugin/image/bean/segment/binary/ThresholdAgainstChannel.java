@@ -61,7 +61,7 @@ import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholde
 public class ThresholdAgainstChannel extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnlThreshold;
+    @BeanField @Getter @Setter private ChannelProvider channelThreshold;
 
     @BeanField @Getter @Setter private boolean clearOutsideMask = true;
     // END BEAN PROPERTIES
@@ -98,7 +98,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
 
         Channel threshold;
         try {
-            threshold = chnlThreshold.create();
+            threshold = channelThreshold.create();
         } catch (CreateException e) {
             throw new SegmentationFailedException(e);
         }
@@ -107,7 +107,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
 
         if (!voxelsThresholded.extent().equals(voxelsExtent)) {
             throw new SegmentationFailedException(
-                    "chnlProviderThrshld is of different size to voxels");
+                    "channelProviderThrshld is of different size to voxels");
         }
 
         return voxelsThresholded;

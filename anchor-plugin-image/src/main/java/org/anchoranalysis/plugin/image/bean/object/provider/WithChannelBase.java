@@ -38,13 +38,13 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public abstract class WithChannelBase extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection create() throws CreateException {
-        return createFromChnl(chnl.create());
+        return createFromChannel(channel.create());
     }
 
-    protected abstract ObjectCollection createFromChnl(Channel chnlSrc) throws CreateException;
+    protected abstract ObjectCollection createFromChannel(Channel channelSrc) throws CreateException;
 }

@@ -43,11 +43,11 @@ public class IntensityMeanMaxSlice extends FeatureNrgChannel {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ValueAndIndex vai =
-                StatsHelper.calculateMaxSliceMean(chnl, input.get().getObject(), excludeZero);
+                StatsHelper.calculateMaxSliceMean(channel, input.get().getObject(), excludeZero);
 
         if (vai.getIndex() == -1) {
             return emptyValue;

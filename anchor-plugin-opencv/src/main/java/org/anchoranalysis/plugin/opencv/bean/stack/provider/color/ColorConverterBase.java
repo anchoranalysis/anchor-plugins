@@ -57,7 +57,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
     @Override
     public Stack createFromStack(Stack stackRGB) throws CreateException {
 
-        checkNumChnls(stackRGB);
+        checkNumChannels(stackRGB);
 
         Mat matBGR = MatConverter.makeRGBStack(stackRGB);
 
@@ -79,7 +79,7 @@ public abstract class ColorConverterBase extends StackProviderUnary {
         return matHSV;
     }
 
-    private void checkNumChnls(Stack stack) throws CreateException {
+    private void checkNumChannels(Stack stack) throws CreateException {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException(
                     "Input stack must have exactly 3 channels representing a RGB image");

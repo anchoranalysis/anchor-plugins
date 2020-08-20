@@ -38,19 +38,19 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 public class ConsistentChannelChecker {
 
     private long maxValue = 0; // Unset
-    private VoxelDataType chnlType;
+    private VoxelDataType channelType;
 
     /** Checks that a channel has the same type (max value) as the others */
-    public void checkChannelType(VoxelDataType chnlType) throws SetOperationFailedException {
-        long maxValueChnl = chnlType.maxValue();
+    public void checkChannelType(VoxelDataType channelType) throws SetOperationFailedException {
+        long maxValueChannel = channelType.maxValue();
         if (!isMaxValueSet()) {
-            setMaxValue(maxValueChnl);
-            this.chnlType = chnlType;
+            setMaxValue(maxValueChannel);
+            this.channelType = channelType;
         } else {
-            if (getMaxValue() != maxValueChnl) {
+            if (getMaxValue() != maxValueChannel) {
                 throw new SetOperationFailedException(
                         "All images must have data-types of the same histogram size");
-            } else if (!getChnlType().equals(chnlType)) {
+            } else if (!getChannelType().equals(channelType)) {
                 throw new SetOperationFailedException("All images must have the same data type");
             }
         }
@@ -76,7 +76,7 @@ public class ConsistentChannelChecker {
         this.maxValue = histogramMaxValue;
     }
 
-    public VoxelDataType getChnlType() {
-        return chnlType;
+    public VoxelDataType getChannelType() {
+        return channelType;
     }
 }

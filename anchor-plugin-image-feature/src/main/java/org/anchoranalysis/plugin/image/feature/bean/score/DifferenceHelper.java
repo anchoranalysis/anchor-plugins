@@ -31,12 +31,12 @@ class DifferenceHelper {
 
     public static double differenceFromParams(
             int[] pixelVals,
-            int nrgChnlIndexFirst,
-            int nrgChnlIndexSecond,
+            int nrgChannelIndexFirst,
+            int nrgChannelIndexSecond,
             double width,
             int minDifference) {
         return differenceFromValue(
-                pixelVals[nrgChnlIndexFirst], pixelVals[nrgChnlIndexSecond], width, minDifference);
+                pixelVals[nrgChannelIndexFirst], pixelVals[nrgChannelIndexSecond], width, minDifference);
     }
     
     private static double differenceFromValue(

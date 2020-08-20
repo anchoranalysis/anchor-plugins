@@ -35,7 +35,7 @@ import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 public class Identity extends VoxelScore {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int nrgChnlIndex = 0;
+    @BeanField @Getter @Setter private int nrgChannelIndex = 0;
 
     @BeanField @Getter @Setter private boolean normalize = true;
 
@@ -49,7 +49,7 @@ public class Identity extends VoxelScore {
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
-        double pxlValue = pixelVals[nrgChnlIndex];
+        double pxlValue = pixelVals[nrgChannelIndex];
 
         if (normalize) {
             double val = pxlValue / 255;

@@ -43,7 +43,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
 
     // START PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ChannelProvider backgroundChnlProvider;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider backgroundChannelProvider;
 
     @BeanField @Positive @Getter @Setter private int iterations = 1;
 
@@ -66,7 +66,7 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
     protected Optional<Voxels<ByteBuffer>> background() throws CreateException {
 
         if (minIntensityValue > 0) {
-            return Optional.of(backgroundChnlProvider.create().voxels().asByte());
+            return Optional.of(backgroundChannelProvider.create().voxels().asByte());
         } else {
             return Optional.empty();
         }

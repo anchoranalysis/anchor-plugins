@@ -55,20 +55,20 @@ class MultiBuffer {
                         [size.getRangeZ().getSize()];
     }
 
-    public void populateWithSpecifiedChnl(
-            Stack stackForFile, int chnlNum, Optional<Integer> sliceNum, int timeIndex) {
+    public void populateWithSpecifiedChannel(
+            Stack stackForFile, int channelNum, Optional<Integer> sliceNum, int timeIndex) {
         // Specific Channel Number, but no specific Slice Number
-        Channel chnl = stackForFile.getChannel(0);
-        Voxels<?> voxels = chnl.voxels().any();
+        Channel channel = stackForFile.getChannel(0);
+        Voxels<?> voxels = channel.voxels().any();
 
-        int chnlIndexResolved = size.getRangeC().index(chnlNum);
+        int channelIndexResolved = size.getRangeC().index(channelNum);
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
         if (sliceNum.isPresent()) {
-            copyFirstSliceForChnl(timeIndexResolved, chnlIndexResolved, voxels, sliceNum.get());
+            copyFirstSliceForChannel(timeIndexResolved, channelIndexResolved, voxels, sliceNum.get());
 
         } else {
-            copyAllSlicesForChnl(timeIndexResolved, chnlIndexResolved, voxels);
+            copyAllSlicesForChannel(timeIndexResolved, channelIndexResolved, voxels);
         }
     }
 
@@ -77,8 +77,8 @@ class MultiBuffer {
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
-            Channel chnl = stackForFile.getChannel(c);
-            copyFirstSliceForChnl(timeIndexResolved, c, chnl.voxels().any(), sliceNum);
+            Channel channel = stackForFile.getChannel(c);
+            copyFirstSliceForChannel(timeIndexResolved, c, channel.voxels().any(), sliceNum);
         }
     }
 
@@ -89,8 +89,8 @@ class MultiBuffer {
         // No specific Channel Number, and no specific Slice Number
         // Then we have to guess the channel
         for (int c = 0; c < stackForFile.getNumberChannels(); c++) {
-            Channel chnl = stackForFile.getChannel(c);
-            copyAllSlicesForChnl(timeIndexResolved, c, chnl.voxels().any());
+            Channel channel = stackForFile.getChannel(c);
+            copyAllSlicesForChannel(timeIndexResolved, c, channel.voxels().any());
         }
     }
 
@@ -100,11 +100,11 @@ class MultiBuffer {
 
         for (int c = 0; c < size.getRangeC().getSize(); c++) {
 
-            Channel chnl = ChannelFactory.instance().createUninitialised(dimensions, dataType);
-            copyAllBuffersTo(t, c, chnl.voxels());
+            Channel channel = ChannelFactory.instance().createUninitialised(dimensions, dataType);
+            copyAllBuffersTo(t, c, channel.voxels());
 
             try {
-                stack.addChannel(chnl);
+                stack.addChannel(channel);
             } catch (IncorrectImageSizeException e) {
                 assert false;
             }
@@ -119,11 +119,11 @@ class MultiBuffer {
         }
     }
 
-    private void copyFirstSliceForChnl(int t, int c, Voxels<?> voxels, int sliceNum) {
+    private void copyFirstSliceForChannel(int t, int c, Voxels<?> voxels, int sliceNum) {
         buffers[t][c][size.getRangeZ().index(sliceNum)] = voxels.slice(0);
     }
 
-    private void copyAllSlicesForChnl(int t, int c, Voxels<?> voxels) {
+    private void copyAllSlicesForChannel(int t, int c, Voxels<?> voxels) {
         for (int z = 0; z < voxels.extent().z(); z++) {
             buffers[t][c][z] = voxels.slice(z);
         }

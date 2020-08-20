@@ -64,7 +64,7 @@ public class SegmentWithSeeds extends WithChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChnl(Channel channel) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channel) throws CreateException {
 
         ObjectCollection seeds = objectsSeeds.create();
 
@@ -77,7 +77,7 @@ public class SegmentWithSeeds extends WithChannelBase {
     }
 
     private static ObjectCollection createWithSourceObjects(
-            Channel chnl,
+            Channel channel,
             ObjectCollection seeds,
             ObjectCollection sourceObjects,
             SegmentChannelIntoObjects segment)
@@ -92,7 +92,7 @@ public class SegmentWithSeeds extends WithChannelBase {
         return ObjectCollectionFactory.flatMapFrom(
                 matchList.stream(),
                 CreateException.class,
-                ows -> segmentIfMoreThanOne(ows, chnl, segment));
+                ows -> segmentIfMoreThanOne(ows, channel, segment));
     }
 
     private static ObjectCollection segmentIfMoreThanOne(
@@ -110,12 +110,12 @@ public class SegmentWithSeeds extends WithChannelBase {
     }
 
     private static ObjectCollection createWithoutSourceObjects(
-            Channel chnl, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
+            Channel channel, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
             throws CreateException {
 
         try {
             return sgmn.segment(
-                    chnl,
+                    channel,
                     Optional.empty(),
                     Optional.of(SeedsFactory.createSeedsWithoutMask(seedsAsObjects)));
         } catch (SegmentationFailedException e) {

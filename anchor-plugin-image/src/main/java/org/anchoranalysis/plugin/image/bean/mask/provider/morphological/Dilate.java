@@ -60,7 +60,7 @@ public class Dilate extends MorphologicalOperatorBase {
         }
     }
 
-    // Assumes imgChnlOut has the same ImgChnlRegions
+    // Assumes imgChannelOut has the same ImgChannelRegions
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 

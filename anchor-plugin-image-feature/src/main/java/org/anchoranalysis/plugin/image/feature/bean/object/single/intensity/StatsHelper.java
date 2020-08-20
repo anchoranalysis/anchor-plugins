@@ -45,14 +45,14 @@ class StatsHelper {
      * Calculates the mean-intensity of a masked-part of each slice, and returns the maximum value
      * across all sices
      *
-     * @param chnl
+     * @param channel
      * @param object
      * @param excludeZero
      * @return
      * @throws FeatureCalculationException
      */
     public static ValueAndIndex calculateMaxSliceMean(
-            Channel chnl, ObjectMask object, boolean excludeZero)
+            Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
 
         double max = Double.NEGATIVE_INFINITY;
@@ -67,7 +67,7 @@ class StatsHelper {
 
             if (slice.voxelsOn().anyExists()) {
                 double mean =
-                        IntensityMeanCalculator.calculateMeanIntensityObject(chnl, slice, excludeZero);
+                        IntensityMeanCalculator.calculateMeanIntensityObject(channel, slice, excludeZero);
 
                 if (mean > max) {
                     index = z;

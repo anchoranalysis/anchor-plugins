@@ -49,6 +49,6 @@ public abstract class UnaryWithValueBase extends ChannelProviderUnary {
         return createFromChannelWithConstant(channel, value);
     }
 
-    protected abstract Channel createFromChannelWithConstant(Channel chnl, double value)
+    protected abstract Channel createFromChannelWithConstant(Channel channel, double value)
             throws CreateException;
 }

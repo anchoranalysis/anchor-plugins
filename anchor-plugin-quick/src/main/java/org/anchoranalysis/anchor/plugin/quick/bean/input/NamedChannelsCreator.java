@@ -36,57 +36,57 @@ import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.chnl.map.FromEntries;
+import org.anchoranalysis.plugin.io.bean.channel.map.FromEntries;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannels;
 
-/** Helps in creating NamedChnls */
+/** Helps in creating NamedChannels */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamedChannelsCreator {
 
     public static NamedChannels create(
             InputManager<FileInput> files,
-            String mainChnlName,
-            int mainChnlIndex,
-            List<ChannelEntry> additionalChnls,
+            String mainChannelName,
+            int mainChannelIndex,
+            List<ChannelEntry> additionalChannels,
             RasterReader rasterReader)
             throws BeanMisconfiguredException {
-        NamedChannels namedChnls = new NamedChannels();
-        namedChnls.setChannelMap(
-                createChannelMap(mainChnlName, mainChnlIndex, additionalChnls));
-        namedChnls.setFileInput(files);
-        namedChnls.setRasterReader(rasterReader);
-        return namedChnls;
+        NamedChannels namedChannels = new NamedChannels();
+        namedChannels.setChannelMap(
+                createChannelMap(mainChannelName, mainChannelIndex, additionalChannels));
+        namedChannels.setFileInput(files);
+        namedChannels.setRasterReader(rasterReader);
+        return namedChannels;
     }
 
     private static ChannelMap createChannelMap(
-            String mainChnlName, int mainChnlIndex, List<ChannelEntry> additionalChnls)
+            String mainChannelName, int mainChannelIndex, List<ChannelEntry> additionalChannels)
             throws BeanMisconfiguredException {
         FromEntries define = new FromEntries();
-        define.setList(listEntries(mainChnlName, mainChnlIndex, additionalChnls));
+        define.setList(listEntries(mainChannelName, mainChannelIndex, additionalChannels));
         return define;
     }
 
     private static List<ChannelEntry> listEntries(
-            String mainChnlName, int mainChnlIndex, List<ChannelEntry> additionalChnls)
+            String mainChannelName, int mainChannelIndex, List<ChannelEntry> additionalChannels)
             throws BeanMisconfiguredException {
         List<ChannelEntry> out = new ArrayList<>();
-        addChnlEntry(out, mainChnlName, mainChnlIndex);
+        addChannelEntry(out, mainChannelName, mainChannelIndex);
 
-        for (ChannelEntry entry : additionalChnls) {
+        for (ChannelEntry entry : additionalChannels) {
 
-            if (entry.getIndex() == mainChnlIndex) {
+            if (entry.getIndex() == mainChannelIndex) {
                 throw new BeanMisconfiguredException(
                         String.format(
                                 "Channel '%s' for index %d is already defined as the main channel. There cannot be an additional channel.",
-                                mainChnlName, mainChnlIndex));
+                                mainChannelName, mainChannelIndex));
             }
 
-            addChnlEntry(out, entry.getName(), entry.getIndex());
+            addChannelEntry(out, entry.getName(), entry.getIndex());
         }
         return out;
     }
 
-    private static void addChnlEntry(List<ChannelEntry> list, String name, int index) {
+    private static void addChannelEntry(List<ChannelEntry> list, String name, int index) {
         list.add(new ChannelEntry(name, index));
     }
 }

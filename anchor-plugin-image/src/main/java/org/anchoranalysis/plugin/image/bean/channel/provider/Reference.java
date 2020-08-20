@@ -43,7 +43,7 @@ public class Reference extends ChannelProvider {
 
     /**
      * If true the channel is duplicated after it is retrieved, to prevent overwriting existing data
-     * This is a shortcut to avoid embedding beans in a ChnlProviderDuplicate
+     * This is a shortcut to avoid embedding beans in a ChannelProviderDuplicate
      */
     @BeanField @Getter @Setter private boolean duplicate = false;
     // END BEAN PROPERTIES

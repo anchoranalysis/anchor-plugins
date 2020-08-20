@@ -50,16 +50,16 @@ public class One extends FromStacks {
      */
     @BeanField @Getter @Setter private String stackName;
 
-    @BeanField @Getter @Setter private int chnlIndex = 0;
+    @BeanField @Getter @Setter private int channelIndex = 0;
     // END BEAN FIELDS
 
     @Override
     public List<NamedChannel> selectChannels(ChannelSource source, boolean checkType)
             throws OperationFailedException {
-        Channel chnl = source.extractChannel(stackName, checkType, chnlIndex);
+        Channel channel = source.extractChannel(stackName, checkType, channelIndex);
 
         List<NamedChannel> out = new ArrayList<>();
-        out.add(new NamedChannel(stackName, chnl));
+        out.add(new NamedChannel(stackName, channel));
         return out;
     }
 }

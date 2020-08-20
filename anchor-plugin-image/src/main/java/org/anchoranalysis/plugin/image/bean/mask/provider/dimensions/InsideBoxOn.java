@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
 /**
- * Creates a binary img-chnl where all pixels are 'on' within a certain x, y, z coordinate range
+ * Creates a binary img-channel where all pixels are 'on' within a certain x, y, z coordinate range
  *
  * <p>This effectively creates a mask that is a box
  */

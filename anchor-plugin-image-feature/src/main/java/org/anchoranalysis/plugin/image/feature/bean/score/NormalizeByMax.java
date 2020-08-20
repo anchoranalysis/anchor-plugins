@@ -46,7 +46,7 @@ public class NormalizeByMax extends SingleChannel {
     public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
             throws InitException {
         try {
-            maxEdge = histograms.get(getNrgChnlIndex()).calculateMaximum();
+            maxEdge = histograms.get(getNrgChannelIndex()).calculateMaximum();
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

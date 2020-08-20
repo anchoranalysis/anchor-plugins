@@ -60,7 +60,7 @@ class MapPart extends NamedChannelsInputPart {
     // START REQUIRED ARGUMENTS
     private final FileInput delegate;
     private final RasterReader rasterReader;
-    private final ChannelMap chnlMapCreator;
+    private final ChannelMap channelMapCreator;
 
     /**
      * This is to correct for a problem with formats such as czi where the seriesIndex doesn't
@@ -72,7 +72,7 @@ class MapPart extends NamedChannelsInputPart {
 
     // We cache a certain amount of stacks read for particular series
     private OpenedRaster openedRasterMemo = null;
-    private NamedEntries chnlMap = null;
+    private NamedEntries channelMap = null;
 
     @Override
     public Dimensions dimensions(int seriesIndex) throws RasterIOException {
@@ -89,8 +89,8 @@ class MapPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public boolean hasChnl(String chnlName) throws RasterIOException {
-        return chnlMap().keySet().contains(chnlName);
+    public boolean hasChannel(String channelName) throws RasterIOException {
+        return channelMap().keySet().contains(channelName);
     }
 
     // Where most of our time is being taken up when opening a raster
@@ -104,7 +104,7 @@ class MapPart extends NamedChannelsInputPart {
         }
 
         NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(new NamedChannelsForSeriesMap(openedRaster(), chnlMap(), seriesNum));
+        out.add(new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesNum));
         return out;
     }
 
@@ -140,9 +140,9 @@ class MapPart extends NamedChannelsInputPart {
         return openedRaster().bitDepth();
     }
 
-    private NamedEntries chnlMap() throws RasterIOException {
+    private NamedEntries channelMap() throws RasterIOException {
         openedRaster();
-        return chnlMap;
+        return channelMap;
     }
 
     private OpenedRaster openedRaster() throws RasterIOException {
@@ -155,7 +155,7 @@ class MapPart extends NamedChannelsInputPart {
                                                     new RasterIOException(
                                                             "A binding-path is needed in the delegate.")));
             try {
-                chnlMap = chnlMapCreator.createMap(openedRasterMemo);
+                channelMap = channelMapCreator.createMap(openedRasterMemo);
             } catch (CreateException e) {
                 throw new RasterIOException(e);
             }

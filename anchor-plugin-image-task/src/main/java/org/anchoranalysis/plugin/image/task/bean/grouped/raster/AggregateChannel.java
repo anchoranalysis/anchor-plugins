@@ -75,11 +75,11 @@ class AggregateChannel {
                     "No channels have been added, so cannot create mean");
         }
 
-        Channel chnlOut = ChannelFactory.instance().create(raster.dimensions(), outputType);
+        Channel channelOut = ChannelFactory.instance().create(raster.dimensions(), outputType);
 
-        VoxelsArithmetic.divide(raster.voxels().asInt(), count, chnlOut.voxels(), outputType);
+        VoxelsArithmetic.divide(raster.voxels().asInt(), count, channelOut.voxels(), outputType);
 
-        return chnlOut;
+        return channelOut;
     }
 
     private void createRasterIfNecessary(Dimensions dim) {

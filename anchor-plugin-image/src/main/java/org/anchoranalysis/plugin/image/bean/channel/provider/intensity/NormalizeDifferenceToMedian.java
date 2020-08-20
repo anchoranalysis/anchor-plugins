@@ -82,9 +82,9 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
     }
 
     private void adjustObject(
-            ObjectMask object, Channel chnl, Channel chnlLookup, int medianFromObject) {
+            ObjectMask object, Channel channel, Channel channelLookup, int medianFromObject) {
 
-        IterateVoxels.callEachPointTwo(chnl.voxels().asByte(), chnlLookup.voxels().asByte(), object, (point, buffer, bufferLookup, offset) -> {
+        IterateVoxels.callEachPointTwo(channel.voxels().asByte(), channelLookup.voxels().asByte(), object, (point, buffer, bufferLookup, offset) -> {
             int lookupVal = ByteConverter.unsignedByteToInt(bufferLookup.get(offset));
 
             int valueExisting = ByteConverter.unsignedByteToInt(buffer.get(offset));

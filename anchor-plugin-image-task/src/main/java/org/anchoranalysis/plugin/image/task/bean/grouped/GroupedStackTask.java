@@ -74,7 +74,7 @@ public abstract class GroupedStackTask<S, T>
      */
     @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
 
-    @BeanField @Getter @Setter private FromStacks selectChnls = new All();
+    @BeanField @Getter @Setter private FromStacks selectChannels = new All();
     // END BEAN PROPERTIES
 
     @Override
@@ -119,7 +119,7 @@ public abstract class GroupedStackTask<S, T>
             sharedState
                     .getGroupMap()
                     .outputGroupedData(
-                            sharedState.getChnlChecker(),
+                            sharedState.getChannelChecker(),
                             context.maybeSubdirectory(
                                     subdirectoryForGroupOutputs(),
                                     MANIFEST_DESCRIPTION_GROUP_FOLDER));
@@ -135,7 +135,7 @@ public abstract class GroupedStackTask<S, T>
      */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
-    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker chnlChecker);
+    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker);
 
     protected abstract void processKeys(
             NamedStacksSet store,

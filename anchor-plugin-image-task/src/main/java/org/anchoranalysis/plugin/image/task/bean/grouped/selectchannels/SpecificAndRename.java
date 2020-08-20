@@ -58,20 +58,20 @@ public class SpecificAndRename extends FromStacks {
 
         for (NamedBean<FromStack> nb : list) {
 
-            out.add(chnlFromRef(nb, source, checkType));
+            out.add(channelFromRef(nb, source, checkType));
         }
 
         return out;
     }
 
-    private static NamedChannel chnlFromRef(
+    private static NamedChannel channelFromRef(
             NamedBean<FromStack> nb, ChannelSource source, boolean checkType)
             throws OperationFailedException {
 
         FromStack ref = nb.getItem();
 
-        Channel chnl = source.extractChannel(ref.getStackProviderID(), checkType, ref.getChnlIndex());
+        Channel channel = source.extractChannel(ref.getStackProviderID(), checkType, ref.getChannelIndex());
 
-        return new NamedChannel(nb.getName(), chnl);
+        return new NamedChannel(nb.getName(), channel);
     }
 }

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.chnl.map;
+package org.anchoranalysis.plugin.io.bean.channel.map;
 
 import java.util.List;
 import java.util.Optional;

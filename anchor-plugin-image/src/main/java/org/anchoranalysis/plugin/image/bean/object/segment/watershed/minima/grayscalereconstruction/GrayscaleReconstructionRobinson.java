@@ -64,7 +64,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
     // we now have a markerForReconstruction in the same condition as the 'strong' condition in the
     // Robison paper
-    // all pixels are either 0 or their final value (from chnl)
+    // all pixels are either 0 or their final value (from channel)
     private VoxelsWrapper reconstructionByDilation(
             VoxelsWrapper maskVb, VoxelsWrapper markerVb, Optional<ObjectMask> containingMask) {
 

@@ -52,13 +52,13 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, AggregateChannel> {
     protected void writeGroupOutputInSubdirectory(
             String outputName,
             AggregateChannel agg,
-            ConsistentChannelChecker chnlChecker,
+            ConsistentChannelChecker channelChecker,
             BoundIOContext context)
             throws IOException {
 
         ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION);
 
-        VoxelDataType outputType = chnlChecker.getChnlType();
+        VoxelDataType outputType = channelChecker.getChannelType();
 
         try {
             Channel mean = agg.createMeanChannel(outputType);

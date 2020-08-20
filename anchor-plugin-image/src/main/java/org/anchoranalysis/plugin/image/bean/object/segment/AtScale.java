@@ -64,7 +64,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
     @Override
     public ObjectCollection segment(
-            Channel chnl,
+            Channel channel,
             Optional<ObjectMask> objectMask,
             Optional<SeedCollection> seeds,
             SegmentChannelIntoObjects upstreamSegmentation)
@@ -72,29 +72,29 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
 
         Interpolator interpolator = createInterpolator();
 
-        ScaleFactor scaleFactor = determineScaleFactor(chnl.dimensions());
+        ScaleFactor scaleFactor = determineScaleFactor(channel.dimensions());
 
-        Extent extent = chnl.extent();
+        Extent extent = channel.extent();
 
         // Perform segmentation on scaled versions of the channel, mask and seeds
         ObjectCollection scaledSegmentationResult =
                 upstreamSegmentation.segment(
-                        scaleChannel(chnl, scaleFactor, interpolator),
+                        scaleChannel(channel, scaleFactor, interpolator),
                         scaleMask(objectMask, scaleFactor, extent),
                         scaleSeeds(seeds, scaleFactor, extent));
 
         // Segment and scale results back up to original-scale
         try {
             return scaleResultToOriginalScale(
-                            scaledSegmentationResult, scaleFactor, chnl.dimensions().extent())
+                            scaledSegmentationResult, scaleFactor, channel.dimensions().extent())
                     .asCollectionOrderNotPreserved();
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
     }
 
-    private Channel scaleChannel(Channel chnl, ScaleFactor scaleFactor, Interpolator interpolator) {
-        return chnl.scaleXY(scaleFactor, interpolator);
+    private Channel scaleChannel(Channel channel, ScaleFactor scaleFactor, Interpolator interpolator) {
+        return channel.scaleXY(scaleFactor, interpolator);
     }
 
     private Optional<ObjectMask> scaleMask(

@@ -53,32 +53,32 @@ class ExtractProjectedStack {
     public Stack extractAndProjectStack(Channel red, Channel green, Channel blue, int z)
             throws IncorrectImageSizeException {
         Stack stack = new Stack();
-        extractAndProjectChnl(red, z, stack);
-        extractAndProjectChnl(green, z, stack);
-        extractAndProjectChnl(blue, z, stack);
+        extractAndProjectChannel(red, z, stack);
+        extractAndProjectChannel(green, z, stack);
+        extractAndProjectChannel(blue, z, stack);
         return stack;
     }
 
-    private void extractAndProjectChnl(Channel chnl, int z, Stack stack)
+    private void extractAndProjectChannel(Channel channel, int z, Stack stack)
             throws IncorrectImageSizeException {
-        Channel chnlProjected = createProjectedChannel(chnl.extractSlice(z).duplicate());
-        stack.addChannel(chnlProjected);
+        Channel channelProjected = createProjectedChannel(channel.extractSlice(z).duplicate());
+        stack.addChannel(channelProjected);
     }
 
-    private Channel createProjectedChannel(Channel chnlIn) {
+    private Channel createProjectedChannel(Channel channelIn) {
 
         // Then the mode is off
-        if (!extent.isPresent() || chnlIn.extent().equals(extent.get())) {
-            return chnlIn;
+        if (!extent.isPresent() || channelIn.extent().equals(extent.get())) {
+            return channelIn;
         } else {
-            Point3i crnrPos = createTarget(chnlIn.dimensions(), extent.get());
+            Point3i crnrPos = createTarget(channelIn.dimensions(), extent.get());
 
             BoundingBox boxToProject =
-                    boxToProject(crnrPos, chnlIn.extent(), extent.get());
+                    boxToProject(crnrPos, channelIn.extent(), extent.get());
 
-            BoundingBox boxSrc = boxSrc(boxToProject, chnlIn.dimensions());
+            BoundingBox boxSrc = boxSrc(boxToProject, channelIn.dimensions());
 
-            return copyPixels(boxSrc, boxToProject, chnlIn, extent.get());
+            return copyPixels(boxSrc, boxToProject, channelIn, extent.get());
         }
     }
 
@@ -123,7 +123,7 @@ class ExtractProjectedStack {
             Channel channelDestination,
             Extent extentOut) {
 
-        Channel chnlOut =
+        Channel channelOut =
                 ChannelFactory.instance()
                         .create(
                                 new Dimensions(
@@ -133,7 +133,7 @@ class ExtractProjectedStack {
                 .voxels()
                 .asByte()
                 .extract()
-                .boxCopyTo(boxSource, chnlOut.voxels().asByte(), boxToProject);
-        return chnlOut;
+                .boxCopyTo(boxSource, channelOut.voxels().asByte(), boxToProject);
+        return channelOut;
     }
 }

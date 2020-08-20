@@ -44,21 +44,21 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 public class MeanThreeChannels extends ChannelProviderTernary {
 
     @Override
-    protected Channel process(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
+    protected Channel process(Channel channel1, Channel channel2, Channel channel3) throws CreateException {
 
-        checkDims(chnl1, chnl2, chnl3);
+        checkDims(channel1, channel2, channel3);
 
-        Channel chnlOut =
+        Channel channelOut =
                 ChannelFactory.instance()
-                        .create(chnl1.dimensions(), UnsignedByteVoxelType.INSTANCE);
+                        .create(channel1.dimensions(), UnsignedByteVoxelType.INSTANCE);
 
         processVoxels(
-                chnlOut.voxels().asByte(),
-                chnl1.voxels().asByte(),
-                chnl2.voxels().asByte(),
-                chnl3.voxels().asByte());
+                channelOut.voxels().asByte(),
+                channel1.voxels().asByte(),
+                channel2.voxels().asByte(),
+                channel3.voxels().asByte());
 
-        return chnlOut;
+        return channelOut;
     }
 
     private void processVoxels(
@@ -95,13 +95,13 @@ public class MeanThreeChannels extends ChannelProviderTernary {
         }
     }
 
-    private void checkDims(Channel chnl1, Channel chnl2, Channel chnl3) throws CreateException {
+    private void checkDims(Channel channel1, Channel channel2, Channel channel3) throws CreateException {
 
-        if (!chnl1.dimensions().equals(chnl2.dimensions())) {
+        if (!channel1.dimensions().equals(channel2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
 
-        if (!chnl2.dimensions().equals(chnl3.dimensions())) {
+        if (!channel2.dimensions().equals(channel3.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");
         }
     }

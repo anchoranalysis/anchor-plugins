@@ -71,8 +71,8 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
 
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
-            ConsistentChannelChecker chnlChecker) {
-        return new GroupedHistogramMap(createWriter(), (int) chnlChecker.getMaxValue());
+            ConsistentChannelChecker channelChecker) {
+        return new GroupedHistogramMap(createWriter(), (int) channelChecker.getMaxValue());
     }
 
     @Override
@@ -84,15 +84,15 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
             throws JobExecutionException {
 
         ChannelSource source =
-                new ChannelSource(store, sharedState.getChnlChecker(), Optional.empty());
+                new ChannelSource(store, sharedState.getChannelChecker(), Optional.empty());
 
         HistogramExtracter histogramExtracter = new HistogramExtracter(source, keyMask, maskValue);
 
         try {
-            for (NamedChannel chnl : getSelectChnls().selectChannels(source, true)) {
+            for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
 
-                addHistogramFromChnl(
-                        chnl, histogramExtracter, groupName, sharedState.getGroupMap(), context);
+                addHistogramFromChannel(
+                        channel, histogramExtracter, groupName, sharedState.getGroupMap(), context);
             }
 
         } catch (OperationFailedException e) {
@@ -100,22 +100,22 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
         }
     }
 
-    private void addHistogramFromChnl(
-            NamedChannel chnl,
+    private void addHistogramFromChannel(
+            NamedChannel channel,
             HistogramExtracter histogramExtracter,
             Optional<String> groupName,
             GroupMapByName<Histogram, Histogram> groupMap,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Histogram hist = histogramExtracter.extractFrom(chnl.getChannel());
+        Histogram hist = histogramExtracter.extractFrom(channel.getChannel());
 
         if (writeImageHistograms) {
             // We keep histogram as private member variable so it is thread-safe
-            createWriter().writeHistogramToFile(hist, chnl.getName(), context);
+            createWriter().writeHistogramToFile(hist, channel.getName(), context);
         }
 
-        groupMap.add(groupName, chnl.getName(), hist);
+        groupMap.add(groupName, channel.getName(), hist);
     }
 
     private GroupedHistogramWriter createWriter() {

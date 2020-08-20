@@ -42,7 +42,7 @@ import org.junit.Test;
 
 public class WatershedYeongTest {
 
-    private static final String PATH_CHANNEL_BLURRED = "chnlInBlurred.tif";
+    private static final String PATH_CHANNEL_BLURRED = "channelInBlurred.tif";
     private static final String PATH_MASK = "mask.tif";
 
     private static final String PATH_EXPECTED_NO_MASKS_NO_SEEDS =

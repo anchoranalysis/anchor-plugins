@@ -44,12 +44,12 @@ import org.anchoranalysis.image.channel.Channel;
 public abstract class FromChannelBase extends MaskProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     @Override
     public Mask create() throws CreateException {
-        return createFromSource(chnl.create());
+        return createFromSource(channel.create());
     }
 
     protected abstract Mask createFromSource(Channel source) throws CreateException;

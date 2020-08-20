@@ -44,14 +44,14 @@ public class ZeroOutsideMask extends UnaryWithMaskBase {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Channel chnlOut =
+        Channel channelOut =
                 ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
 
         // Create an object-mask from the mask
         ObjectMask object = new ObjectMask(mask.binaryVoxels());
 
-        channel.voxels().copyVoxelsTo(object, chnlOut.voxels(), object.boundingBox());
+        channel.voxels().copyVoxelsTo(object, channelOut.voxels(), object.boundingBox());
 
-        return chnlOut;
+        return channelOut;
     }
 }

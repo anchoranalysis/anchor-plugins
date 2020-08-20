@@ -95,13 +95,13 @@ class MetadataUtilities {
     }
 
     private static int calculateSamplesPerPixel(boolean makeRGB) {
-        // We do the opposite of calculateNumChnls
+        // We do the opposite of calculateNumChannels
         return calculateNumberChannels(!makeRGB);
     }
 
     private static void addNumberChannels(
-            IMetadata meta, int numChnl, int samplesPerPixel, int seriesNum) {
-        for (int i = 0; i < numChnl; i++) {
+            IMetadata meta, int numChannel, int samplesPerPixel, int seriesNum) {
+        for (int i = 0; i < numChannel; i++) {
             meta.setChannelID(String.format("Channel:%d:%d", seriesNum, i), seriesNum, i);
             meta.setChannelSamplesPerPixel(new PositiveInteger(samplesPerPixel), seriesNum, i);
         }

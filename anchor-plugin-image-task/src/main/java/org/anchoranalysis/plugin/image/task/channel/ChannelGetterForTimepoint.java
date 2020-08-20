@@ -38,11 +38,11 @@ public class ChannelGetterForTimepoint {
     private ChannelGetter getter;
     private int t;
 
-    public boolean hasChnl(String chnlName) {
-        return getter.hasChannel(chnlName);
+    public boolean hasChannel(String channelName) {
+        return getter.hasChannel(channelName);
     }
 
-    public Channel getChnl(String chnlName) throws GetOperationFailedException {
-        return getter.getChannel(chnlName, t, ProgressReporterNull.get());
+    public Channel getChannel(String channelName) throws GetOperationFailedException {
+        return getter.getChannel(channelName, t, ProgressReporterNull.get());
     }
 }

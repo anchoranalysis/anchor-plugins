@@ -42,7 +42,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
 
-    @BeanField @Getter @Setter private int histChnlIndex = 0;
+    @BeanField @Getter @Setter private int histChannelIndex = 0;
     // END BEAN PROPERTIES
 
     private int level;
@@ -52,7 +52,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
             throws InitException {
 
         try {
-            Histogram histogram = histograms.get(histChnlIndex);
+            Histogram histogram = histograms.get(histChannelIndex);
             level = calculateLevel.calculateLevel(histogram);
 
             beforeCalcSetup(histogram, level);

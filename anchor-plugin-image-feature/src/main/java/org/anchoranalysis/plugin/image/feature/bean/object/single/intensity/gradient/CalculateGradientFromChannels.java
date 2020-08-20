@@ -95,10 +95,10 @@ class CalculateGradientFromChannels
 
     // Always iterates over the list in the same-order
     private void putGradientValue(
-            ObjectMask object, List<Point3d> points, int axisIndex, Channel chnl) {
+            ObjectMask object, List<Point3d> points, int axisIndex, Channel channel) {
 
         BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
-        Voxels<?> voxels = chnl.voxels().any();
+        Voxels<?> voxels = channel.voxels().any();
         BoundingBox box = object.boundingBox();
 
         Extent e = voxels.extent();

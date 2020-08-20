@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
 import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
 
@@ -65,7 +65,7 @@ public class ScaleByParams extends ConvertChannelTo {
 
         getLogger()
                 .messageLogger()
-                .logFormatted("ChnlConverter: scale with min=%d max=%d%n", min, max);
+                .logFormatted("ChannelConverter: scale with min=%d max=%d%n", min, max);
 
         return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
     }

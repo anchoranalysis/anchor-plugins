@@ -60,14 +60,14 @@ public class LineBoundCalculator extends BoundCalculator {
             throws OperationFailedException {
 
         try {
-            Channel outlineChnl = outlineProvider.create().channel();
-            assert (outlineChnl != null);
+            Channel outlineChannel = outlineProvider.create().channel();
+            assert (outlineChannel != null);
 
             ResolvedBound minMax =
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChnl.dimensions().resolution(),
+                                    outlineChannel.dimensions().resolution(),
                                     rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
@@ -80,9 +80,9 @@ public class LineBoundCalculator extends BoundCalculator {
             Point3d margInverse = Point3d.immutableScale(marg, -1);
 
             // This is 2D Type of code
-            double maxReachedFwd = maxReachablePoint(outlineChnl, point, marg, maxPossiblePoint);
+            double maxReachedFwd = maxReachablePoint(outlineChannel, point, marg, maxPossiblePoint);
             double maxReachedRvrs =
-                    maxReachablePoint(outlineChnl, point, margInverse, maxPossiblePoint);
+                    maxReachablePoint(outlineChannel, point, margInverse, maxPossiblePoint);
 
             double min = minMax.getMin();
 

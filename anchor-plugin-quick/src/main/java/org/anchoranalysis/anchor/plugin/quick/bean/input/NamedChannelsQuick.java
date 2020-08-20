@@ -56,7 +56,7 @@ import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsBase;
 
 /**
- * A particular type of NamedChnls which allows easier input of data, making several assumptions.
+ * A particular type of NamedChannels which allows easier input of data, making several assumptions.
  *
  * <p>This is a convenient helper class to avoid a more complicated structure
  */
@@ -70,10 +70,10 @@ public class NamedChannelsQuick extends NamedChannelsBase {
     private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
 
     /**
-     * This needs to be set if there is at least one adjacentChnl
+     * This needs to be set if there is at least one adjacentChannel
      *
      * <p>This should be a regex (with a single group that is replaced) that is searched for in the
-     * path returned by fileProvider This only needs to be set if at least one adjacentChnl is
+     * path returned by fileProvider This only needs to be set if at least one adjacentChannel is
      * specified
      */
     @BeanField @AllowEmpty @Getter @Setter private String regexAdjacent = "";
@@ -84,7 +84,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
      */
 
     /**
-     * This needs to be set if there is at least one appendChnl
+     * This needs to be set if there is at least one appendChannel
      *
      * <p>A regular-expression applied to the image file-path that matches three groups. The first
      * group should correspond to top-level folder for the project The second group should
@@ -94,21 +94,21 @@ public class NamedChannelsQuick extends NamedChannelsBase {
     @BeanField @AllowEmpty @Getter @Setter private String regexAppend = "";
 
     /** The name of the channel provided by the rasters in file Provider */
-    @BeanField @Getter @Setter private String mainChnlName;
+    @BeanField @Getter @Setter private String mainChannelName;
 
-    /** Index of the mainChnl */
-    @BeanField @Getter @Setter private int mainChnlIndex = 0;
+    /** Index of the mainChannel */
+    @BeanField @Getter @Setter private int mainChannelIndex = 0;
 
     /** Additional channels other than the main one, which are located in the main raster file */
-    @BeanField @Getter @Setter private List<ChannelEntry> additionalChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelEntry> additionalChannels = new ArrayList<>();
 
     /** Channels that are located in a separate raster file adjacent to the main raster file */
-    @BeanField @Getter @Setter private List<AdjacentFile> adjacentChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AdjacentFile> adjacentChannels = new ArrayList<>();
 
     /**
      * Channels that are located in a separate raster file somewhere else in the project's structure
      */
-    @BeanField @Getter @Setter private List<AppendStack> appendChnls = new ArrayList<>();
+    @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
 
     /** If non-empty then a rooted file-system is used with this root */
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
@@ -136,8 +136,8 @@ public class NamedChannelsQuick extends NamedChannelsBase {
         super.checkMisconfigured(defaultInstances);
         this.defaultInstances = defaultInstances;
 
-        checkChnls(adjacentChnls, regexAdjacent, "adjacentChnl");
-        checkChnls(appendChnls, regexAppend, "appendChnl");
+        checkChannels(adjacentChannels, regexAdjacent, "adjacentChannel");
+        checkChannels(appendChannels, regexAppend, "appendChannel");
     }
 
     /**
@@ -148,7 +148,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
      * @param errorText
      * @throws BeanMisconfiguredException
      */
-    private static void checkChnls(List<?> list, String mustBeNonEmpty, String errorText)
+    private static void checkChannels(List<?> list, String mustBeNonEmpty, String errorText)
             throws BeanMisconfiguredException {
         if (!list.isEmpty() && mustBeNonEmpty.isEmpty()) {
             throw new BeanMisconfiguredException(
@@ -160,14 +160,14 @@ public class NamedChannelsQuick extends NamedChannelsBase {
     @Override
     public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
             throws AnchorIOException {
-        createAppendedChnlsIfNecessary();
+        createAppendedChannelsIfNecessary();
         return append.inputObjects(params);
     }
 
-    private void createAppendedChnlsIfNecessary() throws AnchorIOException {
+    private void createAppendedChannelsIfNecessary() throws AnchorIOException {
         if (this.append == null) {
             try {
-                this.append = createAppendedChnls();
+                this.append = createAppendedChannels();
                 append.checkMisconfigured(defaultInstances);
             } catch (BeanMisconfiguredException e) {
                 throw new AnchorIOException("defaultInstances bean is misconfigured", e);
@@ -175,7 +175,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
         }
     }
 
-    private InputManager<NamedChannelsInputPart> createAppendedChnls()
+    private InputManager<NamedChannelsInputPart> createAppendedChannels()
             throws BeanMisconfiguredException {
 
         InputManager<FileInput> files =
@@ -186,18 +186,18 @@ public class NamedChannelsQuick extends NamedChannelsBase {
                         regexAppend,
                         filterFilesCsv);
 
-        InputManager<NamedChannelsInputPart> chnls =
+        InputManager<NamedChannelsInputPart> channels =
                 NamedChannelsCreator.create(
-                        files, mainChnlName, mainChnlIndex, additionalChnls, rasterReader);
+                        files, mainChannelName, mainChannelIndex, additionalChannels, rasterReader);
 
-        chnls = appendChnls(chnls, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
+        channels = appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
 
-        chnls = appendChnls(chnls, createFilePathGeneratorsAppend(), rasterReaderAppend);
+        channels = appendChannels(channels, createFilePathGeneratorsAppend(), rasterReaderAppend);
 
-        return chnls;
+        return channels;
     }
 
-    private static NamedChannelsAppend appendChnls(
+    private static NamedChannelsAppend appendChannels(
             InputManager<NamedChannelsInputPart> input,
             List<NamedBean<FilePathGenerator>> filePathGenerators,
             RasterReader rasterReader) {
@@ -211,7 +211,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
     }
 
     private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAdjacent() {
-        return FunctionalList.mapToList(adjacentChnls, this::convertAdjacentFile);
+        return FunctionalList.mapToList(adjacentChannels, this::convertAdjacentFile);
     }
 
     private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAppend()
@@ -219,7 +219,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
 
         List<NamedBean<FilePathGenerator>> out = new ArrayList<>();
 
-        for (AppendStack stack : appendChnls) {
+        for (AppendStack stack : appendChannels) {
             try {
                 out.add(convertAppendStack(stack));
             } catch (BeanMisconfiguredException e) {

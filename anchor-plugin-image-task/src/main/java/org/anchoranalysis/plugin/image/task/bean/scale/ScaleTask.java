@@ -117,9 +117,9 @@ public class ScaleTask extends RasterTask {
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
 
-        outputStackCollection(stackCollection, KEY_OUTPUT_STACK, "chnlScaledCollection", context);
+        outputStackCollection(stackCollection, KEY_OUTPUT_STACK, "channelScaledCollection", context);
         outputStackCollection(
-                stackCollectionMIP, KEY_OUTPUT_STACK, "chnlScaledCollectionMIP", context);
+                stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
     }
 
     @Override
@@ -152,36 +152,36 @@ public class ScaleTask extends RasterTask {
             BoundIOContext context)
             throws JobExecutionException {
 
-        Set<String> chnlNames = params.stacks().keys();
-        for (String chnlName : chnlNames) {
+        Set<String> channelNames = params.stacks().keys();
+        for (String channelName : channelNames) {
 
             // If this output is not allowed we simply skip
             if (!context.getOutputManager()
                     .outputAllowedSecondLevel(KEY_OUTPUT_STACK)
-                    .isOutputAllowed(chnlName)) {
+                    .isOutputAllowed(channelName)) {
                 continue;
             }
 
             try {
-                Channel chnlIn = params.stacks().getException(chnlName).getChannel(0);
+                Channel channelIn = params.stacks().getException(channelName).getChannel(0);
 
-                Channel chnlOut;
+                Channel channelOut;
                 if (forceBinary) {
-                    Mask mask = new Mask(chnlIn);
+                    Mask mask = new Mask(channelIn);
                     Mask maskScaled = org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(mask, scaleCalculator);
-                    chnlOut = maskScaled.channel();
+                    channelOut = maskScaled.channel();
                 } else {
-                    chnlOut =
+                    channelOut =
                             ScaleXY.scale(
-                                    chnlIn,
+                                    channelIn,
                                     scaleCalculator,
                                     InterpolatorFactory.getInstance().rasterResizing(),
                                     context.getLogger().messageLogger());
                 }
 
-                stackCollection.addImageStack(chnlName, new Stack(chnlOut));
+                stackCollection.addImageStack(channelName, new Stack(channelOut));
                 stackCollectionMIP.addImageStack(
-                        chnlName, new Stack(chnlOut.projectMax()));
+                        channelName, new Stack(channelOut.projectMax()));
 
             } catch (CreateException e) {
                 throw new JobExecutionException(e);

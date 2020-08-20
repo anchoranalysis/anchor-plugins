@@ -58,14 +58,14 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
         try {
             NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
 
-            return HistogramFactory.create(extractChnl(nrgStack), extractMask(nrgStack));
+            return HistogramFactory.create(extractChannel(nrgStack), extractMask(nrgStack));
 
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    private Channel extractChnl(NRGStack nrgStack) {
+    private Channel extractChannel(NRGStack nrgStack) {
         return nrgStack.getChannel(nrgIndexSignal);
     }
 

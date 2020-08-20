@@ -42,7 +42,7 @@ public class DimensionsChecker {
         if (!channel.dimensions().equals(mask.dimensions())) {
             throw new CreateException(
                     String.format(
-                            "chnl (%s) and mask (%s) must have the same dimensions",
+                            "channel (%s) and mask (%s) must have the same dimensions",
                             channel.dimensions().toString(), mask.dimensions().toString()));
         }
     }
@@ -50,26 +50,26 @@ public class DimensionsChecker {
     /**
      * Checks a channel to make sure it's the same size as an an existing channel
      *
-     * @param chnlToCheck the channel whose size will be compared
-     * @param chnlToCheckName a user-meaningful string to identify the chnlToCheck in error messages
-     * @param dimFromChnl the dimensions it must equal from chnl (identified as chnl in error
+     * @param channelToCheck the channel whose size will be compared
+     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error messages
+     * @param dimFromChannel the dimensions it must equal from channel (identified as channel in error
      *     messages)
      * @return the newly created channel
      * @throws CreateException
      */
     public static void check(
-            Channel chnlToCheck, String chnlToCheckName, Dimensions dimFromChnl)
+            Channel channelToCheck, String channelToCheckName, Dimensions dimFromChannel)
             throws CreateException {
-        check(chnlToCheck.dimensions(), chnlToCheckName, dimFromChnl);
+        check(channelToCheck.dimensions(), channelToCheckName, dimFromChannel);
     }
 
     /**
      * Checks a channel to make sure it's the same size as an an existing channel
      *
      * @param maskToCheck the channel whose size will be compared
-     * @param channelToCheckName a user-meaningful string to identify the chnlToCheck in error
+     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
      *     messages
-     * @param dimensionsFromChannel the dimensions it must equal from chnl (identified as chnl in
+     * @param dimensionsFromChannel the dimensions it must equal from channel (identified as channel in
      *     error messages)
      * @return the newly created channel
      * @throws CreateException
@@ -87,7 +87,7 @@ public class DimensionsChecker {
      * @param provider the provider to to create the channel
      * @param providerName a user-meaningful string to identify the provider in error messages
      * @param channelSameSize the channel which it must be the same size as (referred to in error
-     *     messages as "chnl")
+     *     messages as "channel")
      * @return the newly created channel
      * @throws CreateException
      */
@@ -106,17 +106,17 @@ public class DimensionsChecker {
      *
      * @param provider the provider to to create the channel
      * @param providerName a user-meaningful string to identify the provider in error messages
-     * @param chnlSameSize the channel which it must be the same size as (referred to in error
-     *     messages as "chnl")
+     * @param channelSameSize the channel which it must be the same size as (referred to in error
+     *     messages as "channel")
      * @return the newly created channel
      * @throws CreateException
      */
     public static Mask createSameSize(
-            MaskProvider provider, String providerName, Channel chnlSameSize)
+            MaskProvider provider, String providerName, Channel channelSameSize)
             throws CreateException {
 
         Mask mask = provider.create();
-        check(mask, providerName, chnlSameSize.dimensions());
+        check(mask, providerName, channelSameSize.dimensions());
         return mask;
     }
 
@@ -128,7 +128,7 @@ public class DimensionsChecker {
         if (!dimensionsFromChannel.equals(dimensionsToCheck)) {
             throw new CreateException(
                     String.format(
-                            "chnl (%s) and %s (%s) must have the same dimensions",
+                            "channel (%s) and %s (%s) must have the same dimensions",
                             dimensionsFromChannel.toString(),
                             channelToCheckName,
                             dimensionsToCheck.toString()));

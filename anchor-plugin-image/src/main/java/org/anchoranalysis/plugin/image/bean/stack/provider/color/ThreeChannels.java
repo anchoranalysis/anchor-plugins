@@ -60,7 +60,7 @@ public class ThreeChannels extends StackProvider {
 
         if (red == null && green == null && blue == null) {
             throw new BeanMisconfiguredException(
-                    "At least one of the chnlProviderRed, chnlProviderGreen or chnlProviderBlue must be set");
+                    "At least one of the channelProviderRed, channelProviderGreen or channelProviderBlue must be set");
         }
     }
 
@@ -83,41 +83,41 @@ public class ThreeChannels extends StackProvider {
     }
 
     private static Dimensions createDimensions(
-            Channel chnlRed, Channel chnlGreen, Channel chnlBlue)
+            Channel channelRed, Channel channelGreen, Channel channelBlue)
             throws IncorrectImageSizeException {
 
-        if (chnlRed == null && chnlGreen == null && chnlBlue == null) {
-            throw new IllegalArgumentException("All chnls are null");
+        if (channelRed == null && channelGreen == null && channelBlue == null) {
+            throw new IllegalArgumentException("All channels are null");
         }
 
         Dimensions dimensions = null;
-        dimensions = combineWithExisting(dimensions, chnlRed);
-        dimensions = combineWithExisting(dimensions, chnlGreen);
-        dimensions = combineWithExisting(dimensions, chnlBlue);
+        dimensions = combineWithExisting(dimensions, channelRed);
+        dimensions = combineWithExisting(dimensions, channelGreen);
+        dimensions = combineWithExisting(dimensions, channelBlue);
         return dimensions;
     }
 
     private static void addToStack(
-            Stack stack, Channel chnl, Dimensions dimensions, VoxelDataType outputChnlType)
+            Stack stack, Channel channel, Dimensions dimensions, VoxelDataType outputChannelType)
             throws IncorrectImageSizeException, CreateException {
 
-        if (chnl == null) {
-            chnl = ChannelFactory.instance().create(dimensions, outputChnlType);
+        if (channel == null) {
+            channel = ChannelFactory.instance().create(dimensions, outputChannelType);
         }
 
-        if (!outputChnlType.equals(chnl.getVoxelDataType())) {
+        if (!outputChannelType.equals(channel.getVoxelDataType())) {
             throw new CreateException(
                     String.format(
                             "Channel has a different type (%s) that the expected output-type (%s)",
-                            chnl.getVoxelDataType(), outputChnlType));
+                            channel.getVoxelDataType(), outputChannelType));
         }
 
-        stack.addChannel(chnl);
+        stack.addChannel(channel);
     }
 
-    private static String voxelDataTypeString(Channel chnl) {
-        if (chnl != null) {
-            return chnl.getVoxelDataType().toString();
+    private static String voxelDataTypeString(Channel channel) {
+        if (channel != null) {
+            return channel.getVoxelDataType().toString();
         } else {
             return ("empty");
         }
@@ -125,11 +125,11 @@ public class ThreeChannels extends StackProvider {
 
     // Chooses the output type of the data
     private static VoxelDataType chooseOutputDataType(
-            Channel chnlRed, Channel chnlGreen, Channel chnlBlue) throws CreateException {
+            Channel channelRed, Channel channelGreen, Channel channelBlue) throws CreateException {
 
         VoxelDataType dataType = null;
 
-        Channel[] all = new Channel[] {chnlRed, chnlGreen, chnlBlue};
+        Channel[] all = new Channel[] {channelRed, channelGreen, channelBlue};
 
         for (Channel c : all) {
             if (c == null) {
@@ -143,9 +143,9 @@ public class ThreeChannels extends StackProvider {
                     String s =
                             String.format(
                                     "Input channels have different voxel data types. Red=%s; Green=%s; Blue=%s",
-                                    voxelDataTypeString(chnlRed),
-                                    voxelDataTypeString(chnlGreen),
-                                    voxelDataTypeString(chnlBlue));
+                                    voxelDataTypeString(channelRed),
+                                    voxelDataTypeString(channelGreen),
+                                    voxelDataTypeString(channelBlue));
                     throw new CreateException(s);
                 }
             }
@@ -162,25 +162,25 @@ public class ThreeChannels extends StackProvider {
     @Override
     public Stack create() throws CreateException {
 
-        Channel chnlRed = red != null ? red.create() : null;
-        Channel chnlGreen = green != null ? green.create() : null;
-        Channel chnlBlue = blue != null ? blue.create() : null;
+        Channel channelRed = red != null ? red.create() : null;
+        Channel channelGreen = green != null ? green.create() : null;
+        Channel channelBlue = blue != null ? blue.create() : null;
 
-        VoxelDataType outputType = chooseOutputDataType(chnlRed, chnlGreen, chnlBlue);
+        VoxelDataType outputType = chooseOutputDataType(channelRed, channelGreen, channelBlue);
 
-        return createRGBStack(chnlRed, chnlGreen, chnlBlue, outputType);
+        return createRGBStack(channelRed, channelGreen, channelBlue, outputType);
     }
 
     public static Stack createRGBStack(
-            Channel chnlRed, Channel chnlGreen, Channel chnlBlue, VoxelDataType outputType)
+            Channel channelRed, Channel channelGreen, Channel channelBlue, VoxelDataType outputType)
             throws CreateException {
         try {
-            Dimensions dimensions = createDimensions(chnlRed, chnlGreen, chnlBlue);
+            Dimensions dimensions = createDimensions(channelRed, channelGreen, channelBlue);
 
             Stack out = new Stack();
-            addToStack(out, chnlRed, dimensions, outputType);
-            addToStack(out, chnlGreen, dimensions, outputType);
-            addToStack(out, chnlBlue, dimensions, outputType);
+            addToStack(out, channelRed, dimensions, outputType);
+            addToStack(out, channelGreen, dimensions, outputType);
+            addToStack(out, channelBlue, dimensions, outputType);
             return out;
         } catch (IncorrectImageSizeException e) {
             throw new CreateException(e);

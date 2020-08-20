@@ -67,21 +67,21 @@ public class Sobel extends ChannelProviderUnary {
     // END BEAN
 
     @Override
-    public Channel createFromChannel(Channel chnlIn) throws CreateException {
+    public Channel createFromChannel(Channel channelIn) throws CreateException {
 
-        Channel chnlIntermediate =
-                ChannelFactory.instance().create(chnlIn.dimensions(), FloatVoxelType.INSTANCE);
-        Voxels<FloatBuffer> voxels = chnlIntermediate.voxels().asFloat();
+        Channel channelIntermediate =
+                ChannelFactory.instance().create(channelIn.dimensions(), FloatVoxelType.INSTANCE);
+        Voxels<FloatBuffer> voxels = channelIntermediate.voxels().asFloat();
 
         NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);
 
-        if (chnlIn.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
+        if (channelIn.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             NativeImg<UnsignedByteType, ByteArray> natIn =
-                    ImgLib2Wrap.wrapByte(chnlIn.voxels().asByte());
+                    ImgLib2Wrap.wrapByte(channelIn.voxels().asByte());
             process(natIn, natOut, (float) scaleFactor);
-        } else if (chnlIn.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
+        } else if (channelIn.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
             NativeImg<UnsignedShortType, ShortArray> natIn =
-                    ImgLib2Wrap.wrapShort(chnlIn.voxels().asShort());
+                    ImgLib2Wrap.wrapShort(channelIn.voxels().asShort());
             process(natIn, natOut, (float) scaleFactor);
         } else {
             throw new CreateException("Input type must be unsigned byte or short");
@@ -92,7 +92,7 @@ public class Sobel extends ChannelProviderUnary {
                 outputShort
                         ? new ChannelConverterToUnsignedShort()
                         : new ChannelConverterToUnsignedByte();
-        return converter.convert(chnlIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+        return converter.convert(channelIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
     // From netlib

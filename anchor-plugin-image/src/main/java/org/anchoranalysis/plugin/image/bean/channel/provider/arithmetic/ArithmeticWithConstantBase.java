@@ -44,13 +44,13 @@ public abstract class ArithmeticWithConstantBase extends UnaryWithValueBase {
     private static final ChannelFactorySingleType FACTORY = new ChannelFactoryByte();
 
     @Override
-    public Channel createFromChannelWithConstant(Channel chnl, double value) throws CreateException {
+    public Channel createFromChannelWithConstant(Channel channel, double value) throws CreateException {
 
         int constant = (int) value;
 
-        Channel chnlOut = FACTORY.createEmptyInitialised(chnl.dimensions());
+        Channel channelOut = FACTORY.createEmptyInitialised(channel.dimensions());
 
-        IterateVoxelsVoxelBoxAsInt.callEachPointTwo(chnl.voxels().any(), chnlOut.voxels().any(), (buffer1, buffer2, offset) -> {
+        IterateVoxelsVoxelBoxAsInt.callEachPointTwo(channel.voxels().any(), channelOut.voxels().any(), (buffer1, buffer2, offset) -> {
             int voxelVal = buffer1.getInt(offset);
 
             int result = performBinaryOperation(voxelVal, constant);
@@ -58,7 +58,7 @@ public abstract class ArithmeticWithConstantBase extends UnaryWithValueBase {
             buffer2.putInt(offset, cropValueToByteRange(result));            
         });
         
-        return chnlOut;
+        return channelOut;
     }
 
     /** The binary arithmetic operation that combines the voxel-value and the constant-value */

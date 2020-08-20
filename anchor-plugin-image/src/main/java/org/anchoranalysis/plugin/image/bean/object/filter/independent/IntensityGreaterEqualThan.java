@@ -54,7 +54,7 @@ import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
 public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
 
     // The threshold we use, the distance is always calculated in the direction of the XY plane.
     @BeanField @Getter @Setter private UnitValueDistance threshold;
@@ -71,14 +71,14 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
 
-        Channel chnlSingleRegion;
+        Channel channelSingleRegion;
         try {
-            chnlSingleRegion = chnl.create();
+            channelSingleRegion = channel.create();
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
-        assert (chnlSingleRegion != null);
-        voxels = chnlSingleRegion.voxels().any();
+        assert (channelSingleRegion != null);
+        voxels = channelSingleRegion.voxels().any();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
             ByteBuffer bb = object.sliceBufferLocal(z);
 
-            VoxelBuffer<?> bbChnl = voxels.slice(z + object.boundingBox().cornerMin().z());
+            VoxelBuffer<?> bbChannel = voxels.slice(z + object.boundingBox().cornerMin().z());
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
@@ -108,7 +108,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
                         int offsetGlobal = voxels.extent().offset(x1, y1);
 
                         // Now we get a value from the voxels
-                        int val = bbChnl.getInt(offsetGlobal);
+                        int val = bbChannel.getInt(offsetGlobal);
                         if (val >= thresholdResolved) {
                             return true;
                         }

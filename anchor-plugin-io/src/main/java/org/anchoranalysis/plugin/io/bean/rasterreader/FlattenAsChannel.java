@@ -39,7 +39,7 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
  * the same image
  *
  * <p>It assumes that the underlying rasterReader will only return images with: 1. a constant number
- * of chnls 2. a constant number of frames
+ * of channels 2. a constant number of frames
  *
  * @author Owen Feehan
  */

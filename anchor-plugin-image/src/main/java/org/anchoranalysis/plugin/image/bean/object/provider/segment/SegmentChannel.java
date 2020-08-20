@@ -57,13 +57,13 @@ public class SegmentChannel extends WithChannelBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChnl(Channel chnlSource) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channelSource) throws CreateException {
 
         Optional<ObjectMask> maskAsObject = createObjectMask();
 
         try {
             return sgmn.segment(
-                    chnlSource, maskAsObject, createSeeds(chnlSource.dimensions(), maskAsObject));
+                    channelSource, maskAsObject, createSeeds(channelSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }

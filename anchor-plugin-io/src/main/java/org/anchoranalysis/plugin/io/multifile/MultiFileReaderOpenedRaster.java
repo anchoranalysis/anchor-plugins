@@ -77,11 +77,11 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     public int numberChannels() throws RasterIOException {
         MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
 
-        if (!memo.numChnlDefined()) {
-            throw new RasterIOException("Number of chnl is not defined");
+        if (!memo.numChannelDefined()) {
+            throw new RasterIOException("Number of channel is not defined");
         }
 
-        return memo.numChnl();
+        return memo.numChannel();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
                 TimeSequence ts = or.open(seriesIndex, progressReporter);
                 multiFile.add(
                         ts.get(0),
-                        fd.getChnlNum(),
+                        fd.getChannelNum(),
                         fd.getSliceNum(),
                         fd.getTimeIndex(),
                         fd.getFilePath());

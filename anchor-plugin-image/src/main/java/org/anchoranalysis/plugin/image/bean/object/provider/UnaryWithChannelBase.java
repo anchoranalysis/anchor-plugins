@@ -39,14 +39,14 @@ public abstract class UnaryWithChannelBase
         extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ChannelProvider chnl;
+    @BeanField @Getter @Setter private ChannelProvider channel;
     // END BEAN PROPERTIES
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectsSource)
             throws CreateException {
 
-        return createFromObjects(objectsSource, chnl.create());
+        return createFromObjects(objectsSource, channel.create());
     }
 
     protected abstract ObjectCollection createFromObjects(

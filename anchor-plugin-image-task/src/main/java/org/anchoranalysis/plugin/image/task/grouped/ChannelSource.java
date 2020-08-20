@@ -39,14 +39,14 @@ import lombok.RequiredArgsConstructor;
 /**
  * Source of channels for aggregating.
  *
- * <p>Checks may be applied to make sure all chnls have the same-type
+ * <p>Checks may be applied to make sure all channels have the same-type
  */
 @RequiredArgsConstructor
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS 
     private final NamedStacksSet stackStore;
-    private final ConsistentChannelChecker chnlChecker;
+    private final ConsistentChannelChecker channelChecker;
     // END REQUIRED ARGUMENTS
     
     /** Optionally resizes all extracted channels in XY */
@@ -91,7 +91,7 @@ public class ChannelSource {
             Channel channel = stack.getChannel(index);
 
             if (checkType) {
-                chnlChecker.checkChannelType(channel.getVoxelDataType());
+                channelChecker.checkChannelType(channel.getVoxelDataType());
             }
 
             return maybeResize(channel);

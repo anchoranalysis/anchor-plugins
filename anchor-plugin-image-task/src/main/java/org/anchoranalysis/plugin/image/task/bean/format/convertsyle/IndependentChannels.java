@@ -42,23 +42,23 @@ public class IndependentChannels extends ChannelConvertStyle {
 
     // START BEAN PROPERTIES
     /** Iff TRUE and we cannot find a channel in the file, we ignore it and carry on */
-    @BeanField @Getter @Setter private boolean ignoreMissingChnl = true;
+    @BeanField @Getter @Setter private boolean ignoreMissingChannel = true;
     // END BEAN PROPERTIES
 
     public void convert(
-            Set<String> chnlNames,
-            ChannelGetterForTimepoint chnlGetter,
+            Set<String> channelNames,
+            ChannelGetterForTimepoint channelGetter,
             BiConsumer<String, Stack> stacksOut,
             Logger logger)
             throws AnchorIOException {
 
-        for (String key : chnlNames) {
+        for (String key : channelNames) {
 
             try {
-                Channel chnl = chnlGetter.getChnl(key);
-                stacksOut.accept(key, new Stack(chnl));
+                Channel channel = channelGetter.getChannel(key);
+                stacksOut.accept(key, new Stack(channel));
             } catch (GetOperationFailedException e) {
-                if (ignoreMissingChnl) {
+                if (ignoreMissingChannel) {
                     logger.messageLogger().logFormatted("Cannot open channel '%s'. Ignoring.", key);
                 } else {
                     throw new AnchorIOException(String.format("Cannot open channel '%s'.", key), e);

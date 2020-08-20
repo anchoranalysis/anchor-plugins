@@ -52,13 +52,13 @@ public class All extends FromStacks {
 
         for (String key : source.getStackStore().keys()) {
 
-            out.addAll(extractAllChnls(source, key, checkType));
+            out.addAll(extractAllChannels(source, key, checkType));
         }
 
         return out;
     }
 
-    private List<NamedChannel> extractAllChnls(
+    private List<NamedChannel> extractAllChannels(
             ChannelSource source, String stackName, boolean checkType)
             throws OperationFailedException {
 
@@ -80,8 +80,8 @@ public class All extends FromStacks {
         }
     }
 
-    private static String createSuffix(int index, boolean hasMultipleChnls) {
-        if (hasMultipleChnls) {
+    private static String createSuffix(int index, boolean hasMultipleChannels) {
+        if (hasMultipleChannels) {
             return String.format("%02d", index);
         } else {
             return "";

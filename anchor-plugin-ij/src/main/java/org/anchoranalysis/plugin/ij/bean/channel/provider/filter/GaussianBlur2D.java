@@ -45,19 +45,19 @@ public class GaussianBlur2D extends ChannelProviderUnary {
     // END BEAN PROPERTIES
 
     @SuppressWarnings("deprecation")
-    private Channel blur(Channel chnl) {
+    private Channel blur(Channel channel) {
 
         GaussianBlur gb = new GaussianBlur();
 
-        VoxelsWrapper voxels = chnl.voxels();
+        VoxelsWrapper voxels = channel.voxels();
 
         // Are we missing a Z slice?
-        for (int z = 0; z < chnl.dimensions().z(); z++) {
+        for (int z = 0; z < channel.dimensions().z(); z++) {
             ImageProcessor processor = IJWrap.imageProcessor(voxels, z);
             gb.blur(processor, sigma); // NOSONAR
         }
 
-        return chnl;
+        return channel;
     }
 
     @Override

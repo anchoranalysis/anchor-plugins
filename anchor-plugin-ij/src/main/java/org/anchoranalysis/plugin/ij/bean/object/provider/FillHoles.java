@@ -62,7 +62,7 @@ public class FillHoles extends ObjectCollectionProviderUnary {
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-        Optional<Mask> maskChnl = OptionalFactory.create(mask);
+        Optional<Mask> maskChannel = OptionalFactory.create(mask);
 
         for (ObjectMask objectMask : objects) {
 
@@ -75,9 +75,9 @@ public class FillHoles extends ObjectCollectionProviderUnary {
                 throw new CreateException(e);
             }
 
-            if (maskChnl.isPresent()) {
+            if (maskChannel.isPresent()) {
                 // Let's make an object for our mask
-                ObjectMask objectRegion = maskChnl.get().region(objectMask.boundingBox(), true);
+                ObjectMask objectRegion = maskChannel.get().region(objectMask.boundingBox(), true);
 
                 ObjectMask objectRegionAtOrigin = objectRegion.shiftToOrigin();
 

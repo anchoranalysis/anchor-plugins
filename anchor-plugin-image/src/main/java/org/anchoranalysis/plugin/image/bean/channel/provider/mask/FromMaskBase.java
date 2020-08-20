@@ -52,8 +52,8 @@ public abstract class FromMaskBase extends ChannelProvider {
 
     @Override
     public Channel create() throws CreateException {
-        Mask maskChnl = mask.create();
-        return createFromMask(maskChnl);
+        Mask maskChannel = mask.create();
+        return createFromMask(maskChannel);
     }
 
     protected abstract Channel createFromMask(Mask mask) throws CreateException;

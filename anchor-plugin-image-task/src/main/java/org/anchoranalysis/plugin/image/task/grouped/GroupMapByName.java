@@ -98,12 +98,12 @@ public abstract class GroupMapByName<S, T> {
     /**
      * Outputs the "grouped" data to the file-system
      *
-     * @param chnlChecker channel checker
+     * @param channelChecker channel checker
      * @param context
      * @throws IOException if something goes wrong, or if includeGroupName is FALSE, but more than
      *     one group-names exist
      */
-    public void outputGroupedData(ConsistentChannelChecker chnlChecker, BoundIOContext context)
+    public void outputGroupedData(ConsistentChannelChecker channelChecker, BoundIOContext context)
             throws IOException {
 
         // We wish to create a new output-manager only once for each primary key, so we store them
@@ -122,7 +122,7 @@ public abstract class GroupMapByName<S, T> {
             writeGroupOutputInSubdirectory(
                     name.filePart(),
                     entry.getValue(),
-                    chnlChecker,
+                    channelChecker,
                     subdirectoryCache.get(name.directoryPart()));
         }
     }
@@ -130,6 +130,6 @@ public abstract class GroupMapByName<S, T> {
     protected abstract void addTo(S ind, T agg) throws OperationFailedException;
 
     protected abstract void writeGroupOutputInSubdirectory(
-            String outputName, T agg, ConsistentChannelChecker chnlChecker, BoundIOContext context)
+            String outputName, T agg, ConsistentChannelChecker channelChecker, BoundIOContext context)
             throws IOException;
 }

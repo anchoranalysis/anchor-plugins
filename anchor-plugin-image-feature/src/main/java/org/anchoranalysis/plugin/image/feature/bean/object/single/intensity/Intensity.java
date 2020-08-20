@@ -61,12 +61,12 @@ public class Intensity extends FeatureNrgChannel {
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(
                         item,
-                        new CalculateHistogramForNrgChannel(excludeZero, getNrgIndex(), chnl),
+                        new CalculateHistogramForNrgChannel(excludeZero, getNrgIndex(), channel),
                         cacheName());
     }
 

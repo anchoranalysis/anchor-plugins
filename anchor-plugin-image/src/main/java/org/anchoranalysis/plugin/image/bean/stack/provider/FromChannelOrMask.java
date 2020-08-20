@@ -54,9 +54,9 @@ public class FromChannelOrMask extends StackProvider {
 
     // START BEAN PROPERTIES
     /** A channel that is provided to the stack. Either this or {@code mask} must be set. */
-    @BeanField @OptionalBean @Getter @Setter private ChannelProvider chnl;
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider channel;
 
-    /** A mask that is provided to the stack. Either this or {@code chnl} must be set. */
+    /** A mask that is provided to the stack. Either this or {@code channel} must be set. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
     
     /** If true, the output contains three channels (the input and two duplicates) instead of one */
@@ -64,7 +64,7 @@ public class FromChannelOrMask extends StackProvider {
     // END BEAN PROPERTIES
 
     public FromChannelOrMask(ChannelProvider channel) {
-        this.chnl = channel;
+        this.channel = channel;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class FromChannelOrMask extends StackProvider {
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
 
-        if (!(chnl != null ^ mask != null)) {
+        if (!(channel != null ^ mask != null)) {
             throw new BeanMisconfiguredException("Either channel or mask must be set");
         }
     }
@@ -97,8 +97,8 @@ public class FromChannelOrMask extends StackProvider {
     
     /** Identifies a channel from one of two sources */
     private Channel channelFromSource() throws CreateException {
-        if (chnl != null) {
-            return chnl.create();
+        if (channel != null) {
+            return channel.create();
         } else {
             return mask.create().channel();
         }

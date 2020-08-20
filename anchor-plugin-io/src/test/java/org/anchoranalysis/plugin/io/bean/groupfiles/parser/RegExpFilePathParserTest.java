@@ -39,15 +39,15 @@ public class RegExpFilePathParserTest {
 
         // Always do expression first
         parser.setZSliceGroupID(1);
-        parser.setChnlGroupID(2);
+        parser.setChannelGroupID(2);
         parser.setExpression(".*hello_(\\d*)_(\\d*)_.*");
 
         parser.setPath("hello_4_2_world");
 
-        assertTrue(parser.getChnlNum().get() == 2);
+        assertTrue(parser.getChannelNum().get() == 2);
         assertTrue(parser.getZSliceNum().get() == 4);
 
-        parser.setChnlGroupID(0);
+        parser.setChannelGroupID(0);
 
         parser.setPath("hello_5_7_world");
 
