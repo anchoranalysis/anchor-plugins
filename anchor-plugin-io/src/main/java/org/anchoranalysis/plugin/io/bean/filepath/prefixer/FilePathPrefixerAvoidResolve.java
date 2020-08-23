@@ -103,7 +103,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * Provides a prefix which can be prepended to all output files. It avoids resolving
      * relative-paths.
      *
-     * @param pathIn an input-path to match against
+     * @param input an input-path to match against
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
      * @throws FilePathPrefixerException

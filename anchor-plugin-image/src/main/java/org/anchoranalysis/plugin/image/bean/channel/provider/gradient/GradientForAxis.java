@@ -39,7 +39,7 @@ import org.anchoranalysis.core.error.CreateException;
  *
  * @author Owen Feehan
  */
-public class GradientForAxis extends GradientBase {
+public class GradientForAxis extends GradientBaseAddSum {
 
     // START BEAN
     /** Which axis? X=0, Y=1, Z=2 */

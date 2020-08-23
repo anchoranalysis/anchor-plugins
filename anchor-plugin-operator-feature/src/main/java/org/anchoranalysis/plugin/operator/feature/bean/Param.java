@@ -43,10 +43,6 @@ import org.anchoranalysis.feature.input.FeatureInputParams;
 /**
  * Extracts a key-value-param as a double
  *
- * <p>This differs from {@link
- * org.anchoranalysis.plugin.image.feature.bean.stack.ParamFromCollection} which reads the parameter
- * from a collection in the shared-objects, rather than from the energy-stack.
- *
  * <p>Note the key has an optional prefix and suffix, so that the actual key used is <code>
  * ${keyPrefix}${key}${keySuffix}</code>
  *

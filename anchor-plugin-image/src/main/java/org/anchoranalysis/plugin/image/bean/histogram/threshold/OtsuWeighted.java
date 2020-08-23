@@ -47,7 +47,7 @@ import org.anchoranalysis.math.statistics.VarianceCalculator;
  * <p>This algorithm allows the foreground and background variance to be non-equally weighted to a
  * priori account for low-variance backgrounds.
  *
- * @see {#link org.anchoranalysis.image.bean.threshold.calculatelevel.Otsu}
+ * @see Otsu
  * @author Owen Feehan
  */
 @NoArgsConstructor

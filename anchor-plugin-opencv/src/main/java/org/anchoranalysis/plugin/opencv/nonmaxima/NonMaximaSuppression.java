@@ -43,7 +43,7 @@ import java.util.function.Predicate;
  *   <li>If there are remaining proposals in the queue, goto Step 1
  * </ol>
  *
- * @param T the type-of-object to which the algorithm applies
+ * @param <T> the type-of-object to which the algorithm applies
  * @author Owen Feehan
  */
 public abstract class NonMaximaSuppression<T> {

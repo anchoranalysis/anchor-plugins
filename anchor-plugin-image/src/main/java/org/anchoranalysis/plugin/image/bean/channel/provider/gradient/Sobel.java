@@ -26,73 +26,49 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 
-import java.nio.FloatBuffer;
-import lombok.Getter;
-import lombok.Setter;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.NativeImg;
-import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.basictypeaccess.array.FloatArray;
-import net.imglib2.img.basictypeaccess.array.ShortArray;
 import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.numeric.RealType;
-import net.imglib2.type.numeric.integer.UnsignedByteType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
-import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 // 3x3 Sobel Filter
-public class Sobel extends ChannelProviderUnary {
-
-    // START BEAN
-    @BeanField @Getter @Setter private double scaleFactor = 1.0;
-
-    @BeanField @Getter @Setter
-    private boolean outputShort = false; // If true, outputs a short. Otherwise a byte
-    // END BEAN
+public class Sobel extends GradientBase {
 
     @Override
     public Channel createFromChannel(Channel channelIn) throws CreateException {
 
-        Channel channelIntermediate =
-                ChannelFactory.instance().create(channelIn.dimensions(), FloatVoxelType.INSTANCE);
-        Voxels<FloatBuffer> voxels = channelIntermediate.voxels().asFloat();
+        Channel intermediate = createNewFloat(channelIn.dimensions());
+        
+        processMultiplexInputType(channelIn, ImgLib2Wrap.wrapFloat(intermediate.voxels().asFloat()));
 
-        NativeImg<FloatType, FloatArray> natOut = ImgLib2Wrap.wrapFloat(voxels);
-
+        // convert to our output from the float
+        return convertToOutputType(intermediate);
+    }
+    
+    private static Channel createNewFloat(Dimensions dimensions) {
+        return ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
+    }
+    
+    private void processMultiplexInputType(Channel channelIn, NativeImg<FloatType, FloatArray> out) throws CreateException {
         if (channelIn.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            NativeImg<UnsignedByteType, ByteArray> natIn =
-                    ImgLib2Wrap.wrapByte(channelIn.voxels().asByte());
-            process(natIn, natOut, (float) scaleFactor);
+            process(ImgLib2Wrap.wrapByte(channelIn.voxels().asByte()), out, (float) getScaleFactor());
         } else if (channelIn.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-            NativeImg<UnsignedShortType, ShortArray> natIn =
-                    ImgLib2Wrap.wrapShort(channelIn.voxels().asShort());
-            process(natIn, natOut, (float) scaleFactor);
+            process(ImgLib2Wrap.wrapShort(channelIn.voxels().asShort()), out, (float) getScaleFactor());
         } else {
             throw new CreateException("Input type must be unsigned byte or short");
         }
-
-        // convert to our output from the float
-        ChannelConverter<?> converter =
-                outputShort
-                        ? new ChannelConverterToUnsignedShort()
-                        : new ChannelConverterToUnsignedByte();
-        return converter.convert(channelIntermediate, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 
     // From netlib

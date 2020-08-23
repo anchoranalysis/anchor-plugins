@@ -35,7 +35,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
  *
  * @author Owen Feehan
  */
-public class GradientXY extends GradientBase {
+public class GradientXY extends GradientBaseAddSum {
 
     @Override
     protected boolean[] createAxisArray() {

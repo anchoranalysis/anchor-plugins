@@ -70,9 +70,9 @@ class SimulatedAnnealingHelper {
      * @param kernelProposer
      * @param termConditionAll
      * @param context
-     * @param S type reported back
-     * @param T optimization state
-     * @param U kernel-proposer type
+     * @param <S> type reported back
+     * @param <T> optimization state
+     * @param <U> kernel-proposer type
      * @return
      * @throws OptTerminatedEarlyException
      */

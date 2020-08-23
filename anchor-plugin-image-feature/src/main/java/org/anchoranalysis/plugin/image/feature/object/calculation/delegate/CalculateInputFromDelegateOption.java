@@ -32,14 +32,13 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.CacheableCalculation;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation)} except assumes optional return value and no parameters
+ * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters
  *
  * @author Owen Feehan
  *

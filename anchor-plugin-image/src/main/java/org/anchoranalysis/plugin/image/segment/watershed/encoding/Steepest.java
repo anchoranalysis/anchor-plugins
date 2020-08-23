@@ -95,7 +95,7 @@ public final class Steepest {
      * @param do3D
      * @param bigNeighborhood iff true we use 8-Connectivity instead of 4, and 26-connectivity
      *     instead of 6 in 3D
-     * @param mask
+     * @param objectMask
      */
     public Steepest(
             SlidingBuffer<?> rbb,

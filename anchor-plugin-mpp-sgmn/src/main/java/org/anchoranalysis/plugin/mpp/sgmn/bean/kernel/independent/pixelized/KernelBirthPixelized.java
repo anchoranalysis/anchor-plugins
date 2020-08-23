@@ -96,7 +96,7 @@ public class KernelBirthPixelized extends KernelBirth<VoxelizedMarksWithEnergy> 
             VoxelizedMarksWithEnergy accepted)
             throws UpdateMarkSetException {
 
-        for (Mark mark : marksNew().get()) {
+        for (Mark mark : marksNew().get()) {    // NOSONAR
             VoxelizedMarkMemo memo = accepted.getMemoForMark(mark);
             exst.addToUpdatablePairList(updatableMarkSetCollection, memo);
         }

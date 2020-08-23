@@ -58,7 +58,6 @@ class EastMarkExtractor {
      * @param image an RGB image to extract boxes from
      * @param minConfidence filters boxes to have confidence >= minConfidence
      * @param pathToModel path to the model-weights
-     * @param res the resolution of the scene
      * @return a list of bounding-boxes, each with a confidence value
      */
     public static List<WithConfidence<Mark>> extractBoundingBoxes(

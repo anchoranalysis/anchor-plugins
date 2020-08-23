@@ -212,7 +212,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             memoList.remove(rmvIndex2);
         }
 
-        VoxelizedMarkMemo memoAdded = accpted.getMemoForMark(markAdded.get());
+        VoxelizedMarkMemo memoAdded = accpted.getMemoForMark(markAdded.get());  // NOSONAR
 
         // Should always find one
         assert memoAdded != null;

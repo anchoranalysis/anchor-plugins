@@ -117,7 +117,6 @@ public class SharedStateExportFeatures<S> {
     /**
      * Writes all the results that have been collected as a CSV file
      *
-     * @param <T> feature input-type
      * @param featuresAggregate features that can be used for generating additional "aggregated"
      *     exports
      * @param includeGroups iff TRUE a group-column is included in the CSV file and the group

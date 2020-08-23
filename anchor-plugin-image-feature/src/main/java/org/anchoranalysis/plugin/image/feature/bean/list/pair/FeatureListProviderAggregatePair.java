@@ -51,7 +51,6 @@ import org.anchoranalysis.plugin.operator.feature.bean.list.Mean;
  * "reduced" into a single feature-value.
  *
  * @author Owen Feehan
- * @param T feature-input
  */
 public abstract class FeatureListProviderAggregatePair
         extends FeatureListProvider<FeatureInputPairObjects> {

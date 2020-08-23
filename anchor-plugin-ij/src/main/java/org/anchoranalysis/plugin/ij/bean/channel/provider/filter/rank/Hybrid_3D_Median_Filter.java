@@ -65,19 +65,19 @@ class Hybrid_3D_Median_Filter implements PlugInFilter {
     private ImagePlus imp;
     private ImagePlus imp2;
     private ImageStack stack;
-    private ImageStack stack2;
+    private ImageStack stack2;  // NOSONAR
 
     @SuppressWarnings("unused")
     private ImageProcessor ip;
 
-    private ImageProcessor ip2;
+    private ImageProcessor ip2;  // NOSONAR
     private boolean atebit = false;
     private boolean include = false;
     private NumberFormat nf = NumberFormat.getInstance();
-    private double prognum;
-    private String progstr;
+    private double prognum;  // NOSONAR
+    private String progstr;  // NOSONAR
     private String otitle;
-    private String titlestring;
+    private String titlestring;  // NOSONAR
     private ImageWindow win;
     private boolean quit = false;
 
@@ -107,7 +107,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter {
 
     public ImagePlus Hybrid3dMedianizer(ImagePlus imp) { // NOSONAR
         @SuppressWarnings("unused")
-        ImagePlus imp3;
+        ImagePlus imp3;  // NOSONAR
         int m = stack.getWidth();
         int n = stack.getHeight();
         imp2 = new ImagePlus("3d Hybrid Median Filter", imp.getStack());
@@ -141,15 +141,15 @@ class Hybrid_3D_Median_Filter implements PlugInFilter {
         double dubafterslice[] = new double[dimension]; // NOSONAR
         double filteredslice[] = new double[dimension]; // NOSONAR
 
-        double marraythisP[] = new double[5];
-        double marraythisX[] = new double[5];
-        double marray3P[] = new double[7];
-        double marray3Xa[] = new double[5];
-        double marray3Xb[] = new double[5];
-        double marray3Xc[] = new double[5];
-        double marray3Xd[] = new double[5];
-        double medianarray[] = new double[7];
-        if (include) medianarray = new double[8];
+        double marraythisP[] = new double[5]; // NOSONAR
+        double marraythisX[] = new double[5]; // NOSONAR
+        double marray3P[] = new double[7]; // NOSONAR
+        double marray3Xa[] = new double[5]; // NOSONAR
+        double marray3Xb[] = new double[5]; // NOSONAR
+        double marray3Xc[] = new double[5]; // NOSONAR
+        double marray3Xd[] = new double[5]; // NOSONAR
+        double medianarray[] = new double[7]; // NOSONAR
+        if (include) medianarray = new double[8]; // NOSONAR
 
         for (int i = 1; i <= stacksize; ++i) {
             if (atebit) {

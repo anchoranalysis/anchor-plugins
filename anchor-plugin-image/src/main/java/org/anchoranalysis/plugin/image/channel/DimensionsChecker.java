@@ -54,7 +54,6 @@ public class DimensionsChecker {
      * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error messages
      * @param dimFromChannel the dimensions it must equal from channel (identified as channel in error
      *     messages)
-     * @return the newly created channel
      * @throws CreateException
      */
     public static void check(
@@ -71,7 +70,6 @@ public class DimensionsChecker {
      *     messages
      * @param dimensionsFromChannel the dimensions it must equal from channel (identified as channel in
      *     error messages)
-     * @return the newly created channel
      * @throws CreateException
      */
     public static void check(

@@ -55,8 +55,8 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * NamedFeatureStore
  *
  * @author Owen Feehan
- * @param T input-manager type
- * @param S feature-input type
+ * @param <T> input-manager type
+ * @param <S> feature-input type
  */
 @AllArgsConstructor
 public abstract class SingleRowPerInput<T extends InputFromManager, S extends FeatureInput>

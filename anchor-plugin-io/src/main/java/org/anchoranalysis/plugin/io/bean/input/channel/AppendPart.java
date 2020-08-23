@@ -48,7 +48,6 @@ import org.anchoranalysis.io.input.PathSupplier;
  * Appends another channel to an existing NamedChannelInputBase
  *
  * @author Owen Feehan
- * @param <T> voxel data-type buffer
  */
 class AppendPart extends NamedChannelsInputPart {
 

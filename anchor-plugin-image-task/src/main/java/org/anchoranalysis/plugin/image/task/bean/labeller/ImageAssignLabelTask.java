@@ -55,7 +55,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  * image-label correspondence
  *
  * @author Owen Feehan
- * @param T type of init-params associated with the filter
+ * @param <T> type of init-params associated with the filter
  */
 public class ImageAssignLabelTask<T>
         extends Task<ProvidesStackInput, SharedStateFilteredImageOutput<T>> {

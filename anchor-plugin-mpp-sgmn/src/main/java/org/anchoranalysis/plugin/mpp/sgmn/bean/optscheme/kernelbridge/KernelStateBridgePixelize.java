@@ -42,7 +42,6 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
  * State takes the form of ToPixelized<T> derived from the Kernel
  *
  * @author Owen Feehan
- * @param <U>
  * @param <T>
  */
 public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixelized<T>> {

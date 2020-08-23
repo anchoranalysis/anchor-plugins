@@ -92,11 +92,6 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
  * <p>For <code>First</code> and <code>Second</code>, we use a cache, to avoid repeated
  * calculations.
  *
- * <p>TODO This latter caching-step, could also be avoided in {@link
- * org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask} due to knowledge of the topology of
- * the repeated features in the resulting output but for now, it's done by putting a cache on each
- * feature.
- *
  * @author Owen Feehan
  */
 public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObjects> {
