@@ -49,7 +49,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
 
     @BeanField @Getter @Setter private ObjectCollectionProvider whenNotEqual;
 
-    @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private KeyValueParamsProvider params;
 
     @BeanField @Getter @Setter private String key;
 
@@ -59,7 +59,7 @@ public class IfParamEqual extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        String valFromProp = keyValueParamsProvider.create().getProperty(key);
+        String valFromProp = params.create().getProperty(key);
 
         if (valFromProp == null) {
             throw new CreateException(String.format("property-value for (%s) is null", key));

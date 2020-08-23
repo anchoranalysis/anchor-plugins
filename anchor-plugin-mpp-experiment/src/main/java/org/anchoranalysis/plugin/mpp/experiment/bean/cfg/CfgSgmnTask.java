@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.cfg;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -82,7 +82,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
 
             Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject);
 
-            Cfg cfg =
+            MarkCollection cfg =
                     sgmn.duplicateBean()
                             .sgmn(stackCollection, objects, keyValueParams, params.context());
             writeVisualization(cfg, params.getOutputManager(), stackCollection, params.getLogger());
@@ -139,7 +139,7 @@ public class CfgSgmnTask extends Task<MultiInput, ExperimentState> {
     }
 
     private void writeVisualization(
-            Cfg cfg,
+            MarkCollection cfg,
             BoundOutputManagerRouteErrors outputManager,
             NamedStacksSet stackCollection,
             Logger logger) {

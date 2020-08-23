@@ -35,7 +35,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -72,7 +72,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkEllipsoid;
+        return testMark instanceof Ellipsoid;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class LinearLeastSquaresEllipsoidFitter extends ConicFitterBase {
         DoubleMatrix2D matS = matD.viewDice().zMult(matD, null);
 
         createFitResultFromMatS(matS, matCInverse)
-                .applyFitResultToMark((MarkEllipsoid) mark, dimensions, getShellRad());
+                .applyFitResultToMark((Ellipsoid) mark, dimensions, getShellRad());
     }
 
     private FitResult createFitResultFromMatS(DoubleMatrix2D matS, DoubleMatrix2D matCInverse)

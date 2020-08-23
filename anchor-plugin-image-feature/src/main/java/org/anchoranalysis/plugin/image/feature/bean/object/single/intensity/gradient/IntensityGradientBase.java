@@ -40,17 +40,17 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 public abstract class IntensityGradientBase extends FeatureSingleObject {
 
     // START BEAN PROPERTIES
-    @BeanField @NonNegative @Getter @Setter private int nrgIndexX = -1;
+    @BeanField @NonNegative @Getter @Setter private int energyIndexX = -1;
 
-    @BeanField @NonNegative @Getter @Setter private int nrgIndexY = -1;
+    @BeanField @NonNegative @Getter @Setter private int energyIndexY = -1;
 
-    @BeanField @OptionalBean @Getter @Setter private int nrgIndexZ = -1;
+    @BeanField @OptionalBean @Getter @Setter private int energyIndexZ = -1;
 
     @BeanField @Getter @Setter private int subtractConstant = 0;
     // END BEAN PROPERTIES
 
     protected FeatureCalculation<List<Point3d>, FeatureInputSingleObject> gradientCalculation() {
         return new CalculateGradientFromChannels(
-                nrgIndexX, nrgIndexY, nrgIndexZ, subtractConstant);
+                energyIndexX, energyIndexY, energyIndexZ, subtractConstant);
     }
 }

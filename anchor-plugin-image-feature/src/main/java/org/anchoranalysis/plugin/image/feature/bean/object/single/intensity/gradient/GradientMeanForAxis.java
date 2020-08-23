@@ -39,12 +39,12 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates the mean of the intensity-gradient defined by multiple NRG channels in a particular
+ * Calculates the mean of the intensity-gradient defined by multiple Energy channels in a particular
  * direction
  *
- * <p>An NRG channel is present for X, Y and optionally Z intensity-gradients.
+ * <p>An Energy channel is present for X, Y and optionally Z intensity-gradients.
  *
- * <p>A constant is subtracted from the NRG channel (all positive) to center around 0
+ * <p>A constant is subtracted from the Energy channel (all positive) to center around 0
  *
  * @author Owen Feehan
  */

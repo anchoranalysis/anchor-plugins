@@ -40,18 +40,18 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class CalculateDeriveObjectInput
         extends FeatureCalculation<FeatureInputSingleObject, FeatureInputStack> {
 
-    private final int nrgIndex;
+    private final int energyIndex;
 
     @Override
     protected FeatureInputSingleObject execute(FeatureInputStack input)
             throws FeatureCalculationException {
-        return new FeatureInputSingleObject(extractObjectMask(input), input.getNrgStackOptional());
+        return new FeatureInputSingleObject(extractObjectMask(input), input.getEnergyStackOptional());
     }
 
     private ObjectMask extractObjectMask(FeatureInputStack input)
             throws FeatureCalculationException {
 
-        Mask mask = new Mask(input.getNrgStackRequired().getChannel(nrgIndex));
+        Mask mask = new Mask(input.getEnergyStackRequired().getChannel(energyIndex));
         return new ObjectMask(mask.binaryVoxels());
     }
 }

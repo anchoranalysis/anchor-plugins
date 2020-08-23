@@ -105,7 +105,7 @@ public class MergeToIncreaseObjectFeatureTest {
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluator(
-                FeatureEvaluatorFixture.createNrg(
+                FeatureEvaluatorFixture.createEnergy(
                         MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(
                                 calculationFunction),
                         logger,

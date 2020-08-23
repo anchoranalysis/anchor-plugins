@@ -37,7 +37,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
@@ -102,14 +102,14 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
             EllipseStandardFormConverter converter = new EllipseStandardFormConverter(coefficients);
 
             // Put values onto the Mark Ellipse
-            applyToMark((MarkEllipse) mark, converter);
+            applyToMark((Ellipse) mark, converter);
 
         } catch (CreateException e) {
             throw new PointsFitterException(e);
         }
     }
 
-    private void applyToMark(MarkEllipse markE, EllipseStandardFormConverter converter)
+    private void applyToMark(Ellipse markE, EllipseStandardFormConverter converter)
             throws PointsFitterException {
         assert (!Double.isNaN(converter.getMajorAxisAngle()));
 
@@ -129,6 +129,6 @@ public class LinearLeastSquaresEllipseFitter extends ConicFitterBase {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkEllipse;
+        return testMark instanceof Ellipse;
     }
 }

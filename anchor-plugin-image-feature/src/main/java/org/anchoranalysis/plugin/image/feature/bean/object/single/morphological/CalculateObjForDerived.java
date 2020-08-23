@@ -50,6 +50,6 @@ class CalculateObjForDerived
             return Optional.empty();
         }
 
-        return Optional.of(new FeatureInputSingleObject(delegate, input.getNrgStackOptional()));
+        return Optional.of(new FeatureInputSingleObject(delegate, input.getEnergyStackOptional()));
     }
 }

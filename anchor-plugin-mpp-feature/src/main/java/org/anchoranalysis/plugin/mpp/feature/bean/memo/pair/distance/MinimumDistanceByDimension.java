@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;

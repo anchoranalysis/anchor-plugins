@@ -32,7 +32,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -49,7 +49,7 @@ class EllipseFactory {
 
     private final ConicFitterBase pointsFitter;
 
-    public MarkEllipse create(ObjectMask object, Dimensions dimensions, double shellRad)
+    public Ellipse create(ObjectMask object, Dimensions dimensions, double shellRad)
             throws CreateException, InsufficientPointsException {
 
         pointsFitter.setShellRad(shellRad);
@@ -66,10 +66,10 @@ class EllipseFactory {
         return createEllipse(points, dimensions);
     }
 
-    private MarkEllipse createEllipse(Set<Point3i> points, Dimensions dim)
+    private Ellipse createEllipse(Set<Point3i> points, Dimensions dim)
             throws InsufficientPointsException, CreateException {
 
-        MarkEllipse mark = new MarkEllipse();
+        Ellipse mark = new Ellipse();
 
         List<Point3f> pointsAsFloat =
                 FunctionalList.mapToList(points, PointConverter::floatFromIntDropZ);

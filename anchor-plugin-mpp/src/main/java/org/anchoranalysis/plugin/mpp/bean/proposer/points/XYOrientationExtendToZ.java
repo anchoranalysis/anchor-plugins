@@ -36,7 +36,7 @@ import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
+import org.anchoranalysis.anchor.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
@@ -115,7 +115,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
                 cfg -> {
                     if (lastPointsAll != null && !lastPointsAll.isEmpty()) {
                         cfg.addChangeID(
-                                MarkPointListFactory.createMarkFromPoints3i(lastPointsAll),
+                                PointListFactory.createMarkFromPoints3i(lastPointsAll),
                                 new RGBColor(Color.ORANGE));
                     }
                 });

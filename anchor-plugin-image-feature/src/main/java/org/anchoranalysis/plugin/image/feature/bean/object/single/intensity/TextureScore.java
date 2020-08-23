@@ -42,10 +42,10 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
  *
  * @author Owen Feehan
  */
-public class TextureScore extends FeatureNrgChannel {
+public class TextureScore extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int nrgIndexGradient = 1;
+    @BeanField @Getter @Setter private int energyIndexGradient = 1;
     // END BEAN PROPERTIES
 
     @Override
@@ -53,7 +53,7 @@ public class TextureScore extends FeatureNrgChannel {
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
-        Channel channelGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
+        Channel channelGradient = input.get().getEnergyStackRequired().getChannel(energyIndexGradient);
 
         return scoreFromMeans(
                 IntensityMeanCalculator.calculateMeanIntensityObject(channel, object),

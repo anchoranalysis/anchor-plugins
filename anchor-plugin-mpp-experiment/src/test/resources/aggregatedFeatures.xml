@@ -3,7 +3,7 @@
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="size">
 		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
-			<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.resultsvectorcollection.Size"/>
+			<item config-class="org.anchoranalysis.feature.bean.results.Size"/>
 		</item>
 	</item>
 	

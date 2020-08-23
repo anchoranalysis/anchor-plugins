@@ -27,7 +27,7 @@
 package org.anchoranalysis.io.manifest.reportfeature;
 
 import java.io.IOException;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.Logger;
@@ -42,7 +42,7 @@ public class CfgSizeFromManifest extends ReportFeatureForManifest {
     public String featureDescription(ManifestRecorderFile object, Logger logger)
             throws OperationFailedException {
 
-        FinderSerializedObject<Cfg> finder =
+        FinderSerializedObject<MarkCollection> finder =
                 new FinderSerializedObject<>(
                         "cfg", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 

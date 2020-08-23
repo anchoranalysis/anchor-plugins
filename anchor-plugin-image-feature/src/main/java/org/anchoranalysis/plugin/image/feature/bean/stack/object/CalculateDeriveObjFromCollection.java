@@ -49,6 +49,6 @@ class CalculateDeriveObjFromCollection
     @Override
     protected FeatureInputSingleObject deriveFromDelegate(
             FeatureInputStack input, ObjectCollection delegate) {
-        return new FeatureInputSingleObject(delegate.get(index), input.getNrgStackOptional());
+        return new FeatureInputSingleObject(delegate.get(index), input.getEnergyStackOptional());
     }
 }

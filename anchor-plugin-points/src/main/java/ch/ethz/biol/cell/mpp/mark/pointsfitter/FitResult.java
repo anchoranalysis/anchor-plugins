@@ -29,7 +29,7 @@ package ch.ethz.biol.cell.mpp.mark.pointsfitter;
 import cern.colt.matrix.DoubleMatrix2D;
 import lombok.Data;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -46,7 +46,7 @@ public class FitResult {
     private double radiusZ;
     private DoubleMatrix2D rotMatrix;
 
-    public void applyFitResultToMark(MarkEllipsoid mark, Dimensions sceneDim, double shellRad)
+    public void applyFitResultToMark(Ellipsoid mark, Dimensions sceneDim, double shellRad)
             throws PointsFitterException {
 
         Orientation orientation = new OrientationRotationMatrix(new RotationMatrix(rotMatrix));

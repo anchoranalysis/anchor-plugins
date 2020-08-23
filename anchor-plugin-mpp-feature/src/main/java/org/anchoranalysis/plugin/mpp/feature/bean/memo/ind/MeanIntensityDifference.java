@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;

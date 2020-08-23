@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.CalculateDeriveSingleMemoFromPair;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.CalculateDeriveSingleMemoFromPair;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;

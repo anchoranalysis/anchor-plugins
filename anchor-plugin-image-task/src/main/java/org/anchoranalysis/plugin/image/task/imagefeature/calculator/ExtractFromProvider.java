@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -45,16 +45,16 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
 
-    public static NRGStackWithParams extractStack(
-            StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger)
+    public static EnergyStack extractStack(
+            StackProvider stackEnergy, ImageInitParams initParams, Logger logger)
             throws OperationFailedException {
 
         try {
-            // Extract the NRG stack
-            StackProvider providerDuplicated = nrgStackProvider.duplicateBean();
+            // Extract the energy stack
+            StackProvider providerDuplicated = stackEnergy.duplicateBean();
             providerDuplicated.initRecursive(initParams, logger);
 
-            return new NRGStackWithParams(providerDuplicated.create());
+            return new EnergyStack(providerDuplicated.create());
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }

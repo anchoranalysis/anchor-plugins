@@ -57,8 +57,8 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     @BeanField @Getter @Setter
     private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
 
-    /** If non-empty, A keyValueParams is treated as part of the nrgStack */
-    @BeanField @AllowEmpty @Getter @Setter private String nrgParamsName = "";
+    /** If non-empty, A keyValueParams is treated as part of the energyStack */
+    @BeanField @AllowEmpty @Getter @Setter private String energyParamsName = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -96,8 +96,8 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
             throw new OperationFailedException(e);
         }
 
-        NRGStackHelper.writeNRGStackParams(
-                imageInitParams, OptionalUtilities.create(nrgParamsName), context);
+        EnergyStackHelper.writeEnergyStackParams(
+                imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
 
     @Override

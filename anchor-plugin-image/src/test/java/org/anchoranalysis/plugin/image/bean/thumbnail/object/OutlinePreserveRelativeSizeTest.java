@@ -21,7 +21,7 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
-import org.anchoranalysis.test.image.NRGStackFixture;
+import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class OutlinePreserveRelativeSizeTest {
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
                     NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
 
-    private static final Stack BACKGROUND = NRGStackFixture.create(true, false).asStack();
+    private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
     @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
 

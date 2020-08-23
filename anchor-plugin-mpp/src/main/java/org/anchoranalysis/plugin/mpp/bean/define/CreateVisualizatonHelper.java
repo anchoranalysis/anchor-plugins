@@ -6,8 +6,8 @@ import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBase;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredMask;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredObjects;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
+import org.anchoranalysis.plugin.mpp.bean.provider.collection.Reference;
 import org.anchoranalysis.plugin.mpp.bean.stack.provider.ColoredMarks;
-import ch.ethz.biol.cell.mpp.cfg.provider.CfgProviderReference;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ class CreateVisualizatonHelper {
 
     public StackProvider marks(String cfgProviderID) {
         ColoredMarks provider = new ColoredMarks();
-        provider.setCfgProvider(new CfgProviderReference(cfgProviderID));
+        provider.setCfgProvider(new Reference(cfgProviderID));
         configureProvider(provider);
         return provider;
     }

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.Resolution;
 public class GaussianSamplerFromParams extends ScalarProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private KeyValueParamsProvider params;
 
     @BeanField @Getter @Setter private String paramMean = "";
 
@@ -55,22 +55,22 @@ public class GaussianSamplerFromParams extends ScalarProposer {
             throws OperationFailedException {
 
         try {
-            KeyValueParams kvp = keyValueParamsProvider.create();
-            assert (kvp != null);
+            KeyValueParams paramsCreated = params.create();
+            assert (paramsCreated != null);
 
-            if (!kvp.containsKey(getParamMean())) {
+            if (!paramsCreated.containsKey(getParamMean())) {
                 throw new OperationFailedException(
                         String.format("Params are missing key '%s' for paramMean", getParamMean()));
             }
 
-            if (!kvp.containsKey(getParamStdDev())) {
+            if (!paramsCreated.containsKey(getParamStdDev())) {
                 throw new OperationFailedException(
                         String.format(
                                 "Params are missing key '%s' for paramStdDev", getParamStdDev()));
             }
 
-            double mean = Double.parseDouble(kvp.getProperty(getParamMean()));
-            double sd = Double.valueOf(kvp.getProperty(getParamStdDev())) * factorStdDev;
+            double mean = Double.parseDouble(paramsCreated.getProperty(getParamMean()));
+            double sd = Double.valueOf(paramsCreated.getProperty(getParamStdDev())) * factorStdDev;
 
             return randomNumberGenerator.generateNormal(mean, sd).nextDouble();
         } catch (CreateException e) {

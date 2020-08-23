@@ -26,11 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlap;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeaturePairMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeaturePairMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -39,6 +38,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.plugin.mpp.feature.overlap.CalculateOverlap;
 
 public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 

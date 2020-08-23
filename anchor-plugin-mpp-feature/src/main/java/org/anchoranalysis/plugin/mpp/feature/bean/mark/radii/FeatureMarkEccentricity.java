@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
@@ -42,21 +42,21 @@ public abstract class FeatureMarkEccentricity extends FeatureMark {
 
         Mark mark = input.get().getMark();
 
-        if (!(mark instanceof MarkConic)) {
+        if (!(mark instanceof ConicBase)) {
             throw new FeatureCalculationException("mark must be of type MarkAbstractRadii");
         }
 
-        double[] radii = ((MarkConic) mark).radiiOrdered();
+        double[] radii = ((ConicBase) mark).radiiOrdered();
 
         if (radii.length == 2) {
             return eccentricityForEllipse(radii);
         } else {
 
-            if (!(mark instanceof MarkEllipsoid)) {
+            if (!(mark instanceof Ellipsoid)) {
                 throw new FeatureCalculationException("mark must be of type MarkEllipsoid");
             }
 
-            return eccentricityForEllipsoid(radii, ((MarkEllipsoid) mark).getOrientation());
+            return eccentricityForEllipsoid(radii, ((Ellipsoid) mark).getOrientation());
         }
     }
 

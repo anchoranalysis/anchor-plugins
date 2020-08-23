@@ -49,6 +49,6 @@ class CalculatePairInput
         ObjectMask objFromBinary = new ObjectMask(mask.binaryVoxels());
 
         return new FeatureInputPairObjects(
-                input.getObject(), objFromBinary, input.getNrgStackOptional());
+                input.getObject(), objFromBinary, input.getEnergyStackOptional());
     }
 }

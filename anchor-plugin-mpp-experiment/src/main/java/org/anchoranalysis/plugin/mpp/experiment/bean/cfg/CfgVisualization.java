@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.cfg;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
+import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -41,8 +41,8 @@ import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
-import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
-import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
+import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
+import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 
 /**
  * Maybe writes two raster visualizations of the cfg, one solid, and one with an outline
@@ -53,15 +53,15 @@ import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
 class CfgVisualization {
 
     public static void write(
-            Cfg cfg, BoundOutputManagerRouteErrors outputManager, DisplayStack backgroundStack)
+            MarkCollection cfg, BoundOutputManagerRouteErrors outputManager, DisplayStack backgroundStack)
             throws OperationFailedException {
         ColorIndex colorIndex =
                 outputManager.getOutputWriteSettings().defaultColorIndexFor(cfg.size());
 
         WriterRouterErrors writeIfAllowed = outputManager.getWriterCheckIfAllowed();
-        ColoredCfgWithDisplayStack cfgWithStack =
-                new ColoredCfgWithDisplayStack(
-                        new ColoredCfg(cfg, colorIndex, new IDGetterIter<Mark>()), backgroundStack);
+        ColoredMarksWithDisplayStack cfgWithStack =
+                new ColoredMarksWithDisplayStack(
+                        new ColoredMarks(cfg, colorIndex, new IDGetterIter<Mark>()), backgroundStack);
 
         writeCfgGenerator(writeIfAllowed, "solid", new Filled(), cfgWithStack);
         writeCfgGenerator(writeIfAllowed, "outline", new Outline(), cfgWithStack);
@@ -71,9 +71,9 @@ class CfgVisualization {
             WriterRouterErrors writeIfAllowed,
             String outputName,
             DrawObject drawObject,
-            ColoredCfgWithDisplayStack cfgWithStack) {
+            ColoredMarksWithDisplayStack cfgWithStack) {
         writeIfAllowed.write(
                 outputName,
-                () -> new CfgGenerator(drawObject, cfgWithStack, new IDGetterIter<Overlay>()));
+                () -> new MarksGenerator(drawObject, cfgWithStack, new IDGetterIter<Overlay>()));
     }
 }

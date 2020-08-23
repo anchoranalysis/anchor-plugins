@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
  * Retrieves a parameter from a collection in shared-objects.
  *
  * <p>This differs from {@link org.anchoranalysis.plugin.operator.feature.bean.Param} which reads
- * the parameter from the nrg-stack, whereas this from a specific parameters collection.
+ * the parameter from the energy-stack, whereas this from a specific parameters collection.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

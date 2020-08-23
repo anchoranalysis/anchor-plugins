@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -46,30 +46,30 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 @EqualsAndHashCode(callSuper = false)
 public class CalculateHistogramMasked extends FeatureCalculation<Histogram, FeatureInputStack> {
 
-    /** the index in the nrg-stack of the channel part of whose signal will form a histogram */
-    private final int nrgIndexSignal;
+    /** the index in the energy-stack of the channel part of whose signal will form a histogram */
+    private final int energyIndexSignal;
 
-    /** the index in the nrg-stack of a channel which is a binary mask (0=off, 255=on) */
-    private final int nrgIndexMask;
+    /** the index in the energy-stack of a channel which is a binary mask (0=off, 255=on) */
+    private final int energyIndexMask;
 
     @Override
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
 
         try {
-            NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
 
-            return HistogramFactory.create(extractChannel(nrgStack), extractMask(nrgStack));
+            return HistogramFactory.create(extractChannel(energyStack), extractMask(energyStack));
 
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }
     }
 
-    private Channel extractChannel(NRGStack nrgStack) {
-        return nrgStack.getChannel(nrgIndexSignal);
+    private Channel extractChannel(EnergyStackWithoutParams energyStack) {
+        return energyStack.getChannel(energyIndexSignal);
     }
 
-    private Mask extractMask(NRGStack nrgStack) {
-        return new Mask(nrgStack.getChannel(nrgIndexMask));
+    private Mask extractMask(EnergyStackWithoutParams energyStack) {
+        return new Mask(energyStack.getChannel(energyIndexMask));
     }
 }

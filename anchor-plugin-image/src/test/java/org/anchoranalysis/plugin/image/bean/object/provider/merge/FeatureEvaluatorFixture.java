@@ -35,15 +35,15 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorWithEnergy;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeatureEvaluatorFixture {
 
-    public static <T extends FeatureInput> FeatureEvaluatorNrgStack<T> createNrg(
+    public static <T extends FeatureInput> FeatureEvaluatorWithEnergy<T> createEnergy(
             Feature<T> feature, Logger logger, Path modelDirectory) throws CreateException {
-        FeatureEvaluatorNrgStack<T> eval = new FeatureEvaluatorNrgStack<>();
+        FeatureEvaluatorWithEnergy<T> eval = new FeatureEvaluatorWithEnergy<>();
         eval.setFeature(ProviderFixture.providerFor(feature));
         try {
             eval.init(SharedFeaturesInitParams.create(logger, modelDirectory), logger);

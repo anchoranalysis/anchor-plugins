@@ -31,8 +31,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -66,15 +66,15 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
 
     @Override
     public List<FeatureInputSingleObject> startBatchDeriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException {
         return objects.stream()
                 .mapToList(
                         object ->
                                 new FeatureInputSingleObject(
                                         checkObjectInsideScene(
-                                                object, nrgStack.extent()),
-                                        nrgStack));
+                                                object, energyStack.extent()),
+                                        energyStack));
     }
 
     private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)

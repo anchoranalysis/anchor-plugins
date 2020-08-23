@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Vector3d;
@@ -58,18 +58,18 @@ public abstract class FeatureMarkDirection extends FeatureMark {
     @Override
     public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
-        if (!(input.get().getMark() instanceof MarkEllipsoid)) {
+        if (!(input.get().getMark() instanceof Ellipsoid)) {
             throw new FeatureCalculationException("Only supports MarkEllipsoids");
         }
 
-        MarkEllipsoid mark = (MarkEllipsoid) input.get().getMark();
+        Ellipsoid mark = (Ellipsoid) input.get().getMark();
 
         Orientation orientation = mark.getOrientation();
         return calculateForEllipsoid(mark, orientation, orientation.createRotationMatrix(), vectorInDirection);
     }
 
     protected abstract double calculateForEllipsoid(
-            MarkEllipsoid mark,
+            Ellipsoid mark,
             Orientation orientation,
             RotationMatrix rotMatrix,
             Vector3d directionVector)

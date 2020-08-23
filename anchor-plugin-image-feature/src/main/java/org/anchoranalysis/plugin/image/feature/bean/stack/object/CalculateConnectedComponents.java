@@ -39,12 +39,12 @@ import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFact
 @EqualsAndHashCode(callSuper = false)
 class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, FeatureInputStack> {
 
-    private final int nrgChannelIndex;
+    private final int energyChannelIndex;
 
     @Override
     protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalculationException {
 
-        Mask mask = new Mask(input.getNrgStackRequired().getChannel(nrgChannelIndex));
+        Mask mask = new Mask(input.getEnergyStackRequired().getChannel(energyChannelIndex));
 
         CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
         return creator.createConnectedComponents(mask);

@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.mpp.bean.object.provider;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
@@ -41,7 +41,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
 /**
- * Creates object-masks from a {@link Cfg} where (a particular region of) each mark creates an
+ * Creates object-masks from a {@link MarkCollection} where (a particular region of) each mark creates an
  * object.
  *
  * @author Owen Feehan
@@ -49,7 +49,7 @@ import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 public class FromCfg extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
 
     @BeanField @Getter @Setter private int regionID = 0;
 
@@ -61,7 +61,7 @@ public class FromCfg extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Cfg cfg = cfgProvider.create();
+        MarkCollection cfg = cfgProvider.create();
 
         Dimensions dims = dimensions.create();
 

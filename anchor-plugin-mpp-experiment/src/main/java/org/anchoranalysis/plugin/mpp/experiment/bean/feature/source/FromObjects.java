@@ -61,8 +61,8 @@ import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
-import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithNrg;
-import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 /**
  * Extracts features for each object in a collection.
@@ -100,7 +100,7 @@ public class FromObjects<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
+    private DefineOutputterMPPWithEnergy define = new DefineOutputterMPPWithEnergy();
 
     @BeanField @Getter @Setter
     private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
@@ -141,10 +141,10 @@ public class FromObjects<T extends FeatureInput>
         define.processInput(
                 input,
                 context.getContext(),
-                (initParams, nrgStack) ->
+                (initParams, energyStack) ->
                         calculateFeaturesForImage(
                                 input.descriptiveName(),
-                                new InitParamsWithNrgStack(initParams, nrgStack),
+                                new InitParamsWithEnergyStack(initParams, energyStack),
                                 context));
     }
 
@@ -170,7 +170,7 @@ public class FromObjects<T extends FeatureInput>
 
     private int calculateFeaturesForImage(
             String descriptiveName,
-            InitParamsWithNrgStack initParams,
+            InitParamsWithEnergyStack initParams,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
@@ -195,12 +195,12 @@ public class FromObjects<T extends FeatureInput>
     }
 
     private FeatureCalculatorMulti<T> startCalculator(
-            FeatureTableCalculator<T> calculator, InitParamsWithNrgStack initParams, Logger logger)
+            FeatureTableCalculator<T> calculator, InitParamsWithEnergyStack initParams, Logger logger)
             throws OperationFailedException {
 
         try {
             calculator.start(
-                    initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
+                    initParams.getImageInit(), Optional.of(initParams.getEnergyStack()), logger);
         } catch (InitException e) {
             throw new OperationFailedException(e);
         }

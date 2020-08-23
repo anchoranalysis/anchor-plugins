@@ -67,7 +67,7 @@ public class ParamsOverlappingCircleFixture {
                 CircleObjectFixture.circleAt(
                         position(shiftPositionX, shiftPositionY),
                         radiusMaybeExtra(sameSize, extraRadius)),
-                Optional.of(CircleObjectFixture.nrgStack()));
+                Optional.of(CircleObjectFixture.energyStack()));
     }
 
     private static Point2i position(int shiftPositionX, int shiftPositionY) {

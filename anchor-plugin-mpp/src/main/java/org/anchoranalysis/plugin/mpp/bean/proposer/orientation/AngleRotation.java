@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -47,7 +47,7 @@ public class AngleRotation extends OrientationProposer {
     @Override
     public Optional<Orientation> propose(
             Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
-        MarkEllipse markC = (MarkEllipse) mark;
+        Ellipse markC = (Ellipse) mark;
 
         Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();
 
@@ -57,6 +57,6 @@ public class AngleRotation extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkEllipse;
+        return testMark instanceof Ellipse;
     }
 }

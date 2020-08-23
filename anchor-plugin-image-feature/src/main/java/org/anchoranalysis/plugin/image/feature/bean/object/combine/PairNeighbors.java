@@ -42,8 +42,8 @@ import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -160,7 +160,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
 
     @Override
     public List<FeatureInputPairObjects> startBatchDeriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException {
 
         List<FeatureInputPairObjects> out = new ArrayList<>();
@@ -173,14 +173,14 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                         objects.asList(),
                         Function.identity(),
                         (vector1, vector2, numberVoxels) -> numberVoxels,
-                        nrgStack.getNrgStack().extent(),
+                        energyStack.getEnergyStack().extent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
         for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
             out.add(
                     new FeatureInputPairObjects(
-                            edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
+                            edge.getNode1(), edge.getNode2(), Optional.of(energyStack)));
         }
 
         return out;

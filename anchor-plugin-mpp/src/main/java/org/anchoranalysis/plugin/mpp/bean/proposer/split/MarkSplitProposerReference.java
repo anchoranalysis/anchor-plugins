@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
+import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -66,8 +66,8 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 
     @Override
     public Optional<PairPxlMarkMemo> propose(
-            VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen)
+            VoxelizedMarkMemo mark, ProposerContext context, MarkWithIdentifierFactory markFactory)
             throws ProposalAbnormalFailureException {
-        return delegate.propose(mark, context, cfgGen);
+        return delegate.propose(mark, context, markFactory);
     }
 }

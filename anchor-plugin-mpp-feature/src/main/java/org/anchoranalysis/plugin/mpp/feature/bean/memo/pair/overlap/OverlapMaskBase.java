@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMask;
 import java.util.function.LongBinaryOperator;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,25 +38,26 @@ import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
+import org.anchoranalysis.plugin.mpp.feature.overlap.CalculateOverlapMask;
 
 public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int maskValue = 255;
 
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
 
     protected double overlapWithGlobalMask(SessionInput<FeatureInputPairMemo> params)
             throws FeatureCalculationException {
         return params.calc(
-                new CalculateOverlapMask(getRegionID(), getNrgIndex(), (byte) getMaskValue()));
+                new CalculateOverlapMask(getRegionID(), getEnergyIndex(), (byte) getMaskValue()));
     }
 
     @Override
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
-        return input.calc(new CalculateOverlapMask(getRegionID(), nrgIndex, (byte) maskValue));
+        return input.calc(new CalculateOverlapMask(getRegionID(), energyIndex, (byte) maskValue));
     }
 
     protected double volumeAgg(
@@ -82,7 +82,7 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
     }
 
     private long sizeForObject(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
-        VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(nrgIndex, regionID);
+        VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(energyIndex, regionID);
         return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
     }
 }

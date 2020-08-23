@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -44,10 +44,10 @@ public class OrderedRadius extends FeatureMark {
     @Override
     public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
 
-        if (input.get().getMark() instanceof MarkConic) {
+        if (input.get().getMark() instanceof ConicBase) {
 
-            MarkConic markCast = (MarkConic) input.get().getMark();
-            double[] radii = markCast.createRadiiArrayResolved(input.get().getResRequired());
+            ConicBase markCast = (ConicBase) input.get().getMark();
+            double[] radii = markCast.createRadiiArrayResolved(input.get().getResolutionRequired());
 
             if (index >= radii.length) {
                 throw new FeatureCalculationException(

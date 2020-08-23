@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.Calcula
  *
  * @author Owen Feehan
  */
-public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
+public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
     /** The number of dilations and erosions to apply and whether to do in the Z dimension */
@@ -62,10 +62,10 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
     @BeanField @Getter @Setter private boolean inverse = false;
 
     /**
-     * A channel of the nrgStack that is used as an additional mask using default byte values for ON
+     * A channel of the energyStack that is used as an additional mask using default byte values for ON
      * and OFF
      */
-    @BeanField @Getter @Setter private int nrgIndexMask = -1;
+    @BeanField @Getter @Setter private int energyIndexMask = -1;
 
     @BeanField @Getter @Setter
     private boolean inverseMask = false; // Uses the inverse of the passed mask
@@ -89,11 +89,11 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
 
         ObjectMask objectShell = createShell(input);
 
-        if (nrgIndexMask != -1) {
-            // If an NRG mask is defined...
+        if (energyIndexMask != -1) {
+            // If an Energy mask is defined...
             Optional<ObjectMask> omIntersected =
-                    intersectWithNRGMask(
-                            objectShell, input.get().getNrgStackRequired().getNrgStack());
+                    intersectWithEnergyMask(
+                            objectShell, input.get().getEnergyStackRequired().getEnergyStack());
 
             if (omIntersected.isPresent()) {
                 objectShell = omIntersected.get();
@@ -110,17 +110,17 @@ public abstract class IntensityMeanShellBase extends FeatureNrgChannel {
         return input.calc(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
-    private Optional<ObjectMask> intersectWithNRGMask(ObjectMask object, NRGStack nrgStack) {
-        return object.intersect(createNrgMask(nrgStack), nrgStack.dimensions());
+    private Optional<ObjectMask> intersectWithEnergyMask(ObjectMask object, EnergyStackWithoutParams energyStack) {
+        return object.intersect(createEnergyMask(energyStack), energyStack.dimensions());
     }
 
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
             throws FeatureCalculationException;
 
-    private ObjectMask createNrgMask(NRGStack nrgStack) {
+    private ObjectMask createEnergyMask(EnergyStackWithoutParams energyStack) {
         return new ObjectMask(
-                new BoundingBox(nrgStack.dimensions()),
-                nrgStack.getChannel(nrgIndexMask).voxels().asByte(),
+                new BoundingBox(energyStack.dimensions()),
+                energyStack.getChannel(energyIndexMask).voxels().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()
                         : BinaryValues.getDefault());
