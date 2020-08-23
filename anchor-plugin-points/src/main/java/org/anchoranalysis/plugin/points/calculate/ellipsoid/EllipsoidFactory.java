@@ -31,7 +31,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
@@ -57,7 +57,7 @@ public class EllipsoidFactory {
      * @return
      * @throws CreateException
      */
-    public static MarkEllipsoid createMarkEllipsoidLeastSquares(
+    public static Ellipsoid createMarkEllipsoidLeastSquares(
             ObjectMask object,
             Dimensions dimensions,
             boolean suppressZCovariance,
@@ -70,7 +70,7 @@ public class EllipsoidFactory {
                 shellRad);
     }
 
-    public static MarkEllipsoid createMarkEllipsoidLeastSquares(
+    public static Ellipsoid createMarkEllipsoidLeastSquares(
             CheckedSupplier<List<Point3i>, CreateException> opPoints,
             Dimensions dimensions,
             boolean suppressZCovariance,
@@ -82,7 +82,7 @@ public class EllipsoidFactory {
         pointsFitter.setSuppressZCovariance(suppressZCovariance);
 
         // Now get all the points on the outline
-        MarkEllipsoid mark = new MarkEllipsoid();
+        Ellipsoid mark = new Ellipsoid();
 
         List<Point3f> pointsFloat =
                 FunctionalList.mapToList(opPoints.get(), PointConverter::floatFromInt);

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
@@ -46,11 +46,11 @@ public class MarkEllipseCircumEstimate extends FeatureMarkRegion {
 
         Mark mark = input.get().getMark();
 
-        if (!(mark instanceof MarkEllipse)) {
+        if (!(mark instanceof Ellipse)) {
             throw new FeatureCalculationException("Only MarkEllipses are supported");
         }
 
-        MarkEllipse markCast = (MarkEllipse) mark;
+        Ellipse markCast = (Ellipse) mark;
 
         return markCast.circumference(getRegionID());
     }

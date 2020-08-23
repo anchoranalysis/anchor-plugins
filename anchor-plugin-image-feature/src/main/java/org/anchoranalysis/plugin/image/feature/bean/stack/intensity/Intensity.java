@@ -56,10 +56,10 @@ public class Intensity extends FeatureStack {
     @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
     /** The channel that that forms the histogram */
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
 
     /** Optionally, index of another channel that masks the histogram. -1 disables */
-    @BeanField @Getter @Setter private int nrgIndexMask = -1;
+    @BeanField @Getter @Setter private int energyIndexMask = -1;
     // END BEAN PROEPRTIES
 
     @Override
@@ -69,14 +69,14 @@ public class Intensity extends FeatureStack {
                 .calculate(
                         item,
                         new CalculateDeriveHistogramInput(histogramCalculator(), input.resolver()),
-                        new ChildCacheName(Intensity.class, nrgIndex + "_" + nrgIndexMask));
+                        new ChildCacheName(Intensity.class, energyIndex + "_" + energyIndexMask));
     }
 
     private FeatureCalculation<Histogram, FeatureInputStack> histogramCalculator() {
-        if (nrgIndexMask != -1) {
-            return new CalculateHistogramMasked(nrgIndex, nrgIndexMask);
+        if (energyIndexMask != -1) {
+            return new CalculateHistogramMasked(energyIndex, energyIndexMask);
         } else {
-            return new CalculateHistogram(nrgIndex);
+            return new CalculateHistogram(energyIndex);
         }
     }
 }

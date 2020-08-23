@@ -30,7 +30,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -43,26 +43,26 @@ import org.anchoranalysis.plugin.points.calculate.CalculatePointsFromOutline;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipsoidLeastSquares
-        extends FeatureCalculation<MarkEllipsoid, FeatureInputSingleObject> {
+        extends FeatureCalculation<Ellipsoid, FeatureInputSingleObject> {
 
     private final boolean suppressZCovariance;
     private final ResolvedCalculation<List<Point3i>, FeatureInputSingleObject> ccPoints;
 
-    public static MarkEllipsoid of(
+    public static Ellipsoid of(
             SessionInput<FeatureInputSingleObject> input, boolean suppressZCovariance)
             throws FeatureCalculationException {
 
         ResolvedCalculation<List<Point3i>, FeatureInputSingleObject> ccPoints =
                 input.resolver().search(new CalculatePointsFromOutline());
 
-        ResolvedCalculation<MarkEllipsoid, FeatureInputSingleObject> ccEllipsoid =
+        ResolvedCalculation<Ellipsoid, FeatureInputSingleObject> ccEllipsoid =
                 input.resolver()
                         .search(new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPoints));
         return input.calc(ccEllipsoid);
     }
 
     @Override
-    protected MarkEllipsoid execute(FeatureInputSingleObject input)
+    protected Ellipsoid execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
         try {

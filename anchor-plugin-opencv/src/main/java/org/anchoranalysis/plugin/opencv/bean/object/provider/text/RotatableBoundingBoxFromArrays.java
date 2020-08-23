@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.mark.MarkRotatableBoundingBox;
+import org.anchoranalysis.anchor.mpp.mark.points.RotatableBoundingBox;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point2f;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -60,7 +60,7 @@ class RotatableBoundingBoxFromArrays {
      * @param bndScene the dimensions of the image to which the bounding-box belongs
      * @return a mark encapsulating a rotatable bounding-box
      */
-    public static MarkRotatableBoundingBox markFor(
+    public static RotatableBoundingBox markFor(
             float[][] geometryArrs, int index, Point2i offset) {
 
         Point2f startUnrotated =
@@ -81,7 +81,7 @@ class RotatableBoundingBoxFromArrays {
         return markFor(startUnrotated, endUnrotated, angle, offset);
     }
 
-    private static MarkRotatableBoundingBox markFor(
+    private static RotatableBoundingBox markFor(
             Point2f startUnrotated, Point2f endUnrotated, float angle, Point2i offset) {
 
         // Make it counter-clockwise by multiplying by -1
@@ -97,9 +97,9 @@ class RotatableBoundingBoxFromArrays {
         return createMarkFor(midpoint, width, height, orientation);
     }
 
-    private static MarkRotatableBoundingBox createMarkFor(
+    private static RotatableBoundingBox createMarkFor(
             Point3d midpoint, float width, float height, Orientation2D orientation) {
-        MarkRotatableBoundingBox mark = new MarkRotatableBoundingBox();
+        RotatableBoundingBox mark = new RotatableBoundingBox();
         mark.setPos(midpoint);
         mark.update(
                 new Point2d(-width / 2, -height / 2),

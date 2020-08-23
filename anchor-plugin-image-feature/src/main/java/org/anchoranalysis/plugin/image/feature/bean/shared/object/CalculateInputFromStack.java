@@ -29,19 +29,19 @@ package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
- * Calculates an input for a single-object with an optional NRG-stack from the feature-input
+ * Calculates an input for a single-object with an optional energy-stack from the feature-input
  *
  * @author Owen Feehan
  * @param <T> feature-input
  */
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-class CalculateInputFromStack<T extends FeatureInputNRG>
+class CalculateInputFromStack<T extends FeatureInputEnergy>
         extends FeatureCalculation<FeatureInputSingleObject, T> {
 
     /**
@@ -55,6 +55,6 @@ class CalculateInputFromStack<T extends FeatureInputNRG>
 
     @Override
     protected FeatureInputSingleObject execute(T input) {
-        return new FeatureInputSingleObject(objects.get(index), input.getNrgStackOptional());
+        return new FeatureInputSingleObject(objects.get(index), input.getEnergyStackOptional());
     }
 }

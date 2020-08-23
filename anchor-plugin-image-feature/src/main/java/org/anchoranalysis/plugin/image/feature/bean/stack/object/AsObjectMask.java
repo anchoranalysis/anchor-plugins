@@ -52,7 +52,7 @@ public class AsObjectMask extends FeatureStack {
      * The channel that that forms an object-mask with the bounding-box set to entire channel's
      * dimensions
      */
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
@@ -61,7 +61,7 @@ public class AsObjectMask extends FeatureStack {
         return input.forChild()
                 .calculate(
                         item,
-                        new CalculateDeriveObjectInput(nrgIndex),
-                        new ChildCacheName(AsObjectMask.class, nrgIndex));
+                        new CalculateDeriveObjectInput(energyIndex),
+                        new ChildCacheName(AsObjectMask.class, energyIndex));
     }
 }

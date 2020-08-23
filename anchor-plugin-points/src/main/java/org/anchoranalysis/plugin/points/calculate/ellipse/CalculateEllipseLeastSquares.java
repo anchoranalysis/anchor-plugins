@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
 import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -52,12 +52,12 @@ public class CalculateEllipseLeastSquares
             throws FeatureCalculationException {
 
         try {
-            NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
 
             ObjectMask object = extractEllipseSlice(input.getObject());
 
             // Shell Rad is arbitrary here for now
-            MarkEllipse mark = factory.create(object, nrgStack.dimensions(), 0.2);
+            Ellipse mark = factory.create(object, energyStack.dimensions(), 0.2);
 
             return new ObjectWithEllipse(object, mark);
         } catch (CreateException | InsufficientPointsException e) {

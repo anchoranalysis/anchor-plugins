@@ -37,14 +37,14 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.input.FeatureInputNull;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorNrgStack;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorWithEnergy;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
@@ -72,7 +72,7 @@ public class MergePairs extends MergeWithFeature {
     @BeanField @Getter @Setter private RelationBean relation = new GreaterThanEqualToBean();
 
     @BeanField @Getter @Setter
-    private FeatureEvaluatorNrgStack<FeatureInputPairObjects> featureEvaluatorMerge;
+    private FeatureEvaluatorWithEnergy<FeatureInputPairObjects> featureEvaluatorMerge;
     // END BEAN PROPERTIES
 
     @Override
@@ -105,27 +105,27 @@ public class MergePairs extends MergeWithFeature {
     private FeatureCalculatorSingle<FeatureInputPairObjects> createCalculatorForPairs()
             throws CreateException {
         try {
-            Optional<NRGStackWithParams> nrgStack = featureEvaluatorMerge.nrgStack();
+            Optional<EnergyStack> energyStack = featureEvaluatorMerge.energyStack();
 
             PairsTableCalculator session =
                     new PairsTableCalculator(
                             new MergedPairsFeatures(
                                     FeatureListFactory.fromProvider(
                                             featureEvaluatorMerge.getFeature())));
-            session.start(getInitializationParameters(), nrgStack, getLogger());
+            session.start(getInitializationParameters(), energyStack, getLogger());
 
-            return maybeWrapWithNRGStack(new FeatureCalculatorSingleFromMulti<>(session), nrgStack);
+            return maybeWrapWithEnergyStack(new FeatureCalculatorSingleFromMulti<>(session), energyStack);
 
         } catch (OperationFailedException | InitException e) {
             throw new CreateException(e);
         }
     }
 
-    private static <T extends FeatureInputNRG> FeatureCalculatorSingle<T> maybeWrapWithNRGStack(
-            FeatureCalculatorSingle<T> calculator, Optional<NRGStackWithParams> nrgStack) {
-        if (nrgStack.isPresent()) {
+    private static <T extends FeatureInputEnergy> FeatureCalculatorSingle<T> maybeWrapWithEnergyStack(
+            FeatureCalculatorSingle<T> calculator, Optional<EnergyStack> energyStack) {
+        if (energyStack.isPresent()) {
             return new FeatureCalculatorSingleChangeInput<>(
-                    calculator, input -> input.setNrgStack(nrgStack));
+                    calculator, input -> input.setEnergyStack(energyStack));
         } else {
             return calculator;
         }

@@ -39,10 +39,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -100,7 +100,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * createThumbailFor}
      *
      * @param objects the objects from which inputs are derived
-     * @param nrgStack nrg-stack used during feature calculation
+     * @param energyStack energy-stack used during feature calculation
      * @param thumbnailsEnabled whether thumbnail-generation is enabled
      * @param logger logger
      * @return the list of inputs
@@ -108,16 +108,16 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      */
     public List<T> deriveInputsStartBatch(
             ObjectCollection objects,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             boolean thumbnailsEnabled,
             Logger logger)
             throws CreateException {
 
-        List<T> inputs = startBatchDeriveInputs(objects, nrgStack, logger);
+        List<T> inputs = startBatchDeriveInputs(objects, energyStack, logger);
         if (thumbnailsEnabled) {
             try {
                 thumbnail.start(
-                        objects, scaledBoundingBoxes(inputs), Optional.of(nrgStack.asStack()));
+                        objects, scaledBoundingBoxes(inputs), Optional.of(energyStack.asStack()));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -147,13 +147,13 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * #createThumbailFor(FeatureInput)}.
      *
      * @param objects the object-collection
-     * @param nrgStack nrg-stack used during feature calculation
+     * @param energyStack energy-stack used during feature calculation
      * @param logger logger
      * @return the list of inputs
      * @throws CreateException
      */
     protected abstract List<T> startBatchDeriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException;
 
     /**

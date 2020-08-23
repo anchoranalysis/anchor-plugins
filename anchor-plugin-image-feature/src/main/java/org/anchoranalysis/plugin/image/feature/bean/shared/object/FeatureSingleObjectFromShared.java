@@ -36,19 +36,19 @@ import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
+import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates as object-masks from entities in shared, using the feature-input only for a nrg-stack.
+ * Calculates as object-masks from entities in shared, using the feature-input only for a energy-stack.
  *
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
-        extends FeatureNRGStack<T> {
+public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy>
+        extends FeatureEnergy<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
@@ -74,6 +74,6 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
 
     @Override
     public Class<? extends FeatureInput> inputType() {
-        return FeatureInputNRG.class;
+        return FeatureInputEnergy.class;
     }
 }

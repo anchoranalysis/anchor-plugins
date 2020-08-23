@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * When the image-gradient is supplied as multiple channels in an NRG stack, this converts it into a
+ * When the image-gradient is supplied as multiple channels in an energy stack, this converts it into a
  * list of points
  *
  * <p>A constant is subtracted from the (all positive) image-channels, to make positive or negative
@@ -60,12 +60,12 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 class CalculateGradientFromChannels
         extends FeatureCalculation<List<Point3d>, FeatureInputSingleObject> {
 
-    private int nrgIndexX;
+    private int energyIndexX;
 
-    private int nrgIndexY;
+    private int energyIndexY;
 
     // If -1, then no z-gradient is considered, and all z-values are 0
-    private int nrgIndexZ;
+    private int energyIndexZ;
 
     private int subtractConstant = 0;
 
@@ -73,21 +73,21 @@ class CalculateGradientFromChannels
     protected List<Point3d> execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        if (nrgIndexX == -1 || nrgIndexY == -1) {
+        if (energyIndexX == -1 || energyIndexY == -1) {
             throw new FeatureCalculationException(
-                    new InitException("nrgIndexX and nrgIndexY must both be nonZero"));
+                    new InitException("energyIndexX and energyIndexY must both be nonZero"));
         }
 
         // create a list of points
         List<Point3d> out = new ArrayList<>();
 
-        NRGStack nrgStack = input.getNrgStackRequired().getNrgStack();
+        EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
 
-        putGradientValue(input.getObject(), out, 0, nrgStack.getChannel(nrgIndexX));
-        putGradientValue(input.getObject(), out, 1, nrgStack.getChannel(nrgIndexY));
+        putGradientValue(input.getObject(), out, 0, energyStack.getChannel(energyIndexX));
+        putGradientValue(input.getObject(), out, 1, energyStack.getChannel(energyIndexY));
 
-        if (nrgIndexZ != -1) {
-            putGradientValue(input.getObject(), out, 2, nrgStack.getChannel(nrgIndexZ));
+        if (energyIndexZ != -1) {
+            putGradientValue(input.getObject(), out, 2, energyStack.getChannel(energyIndexZ));
         }
 
         return out;

@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputWithRes;
+import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class UnitsWithinRange<T extends FeatureInputWithRes> extends FeatureSingleElemWithRes<T> {
+public class UnitsWithinRange<T extends FeatureInputWithResolution> extends FeatureSingleElemWithRes<T> {
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */

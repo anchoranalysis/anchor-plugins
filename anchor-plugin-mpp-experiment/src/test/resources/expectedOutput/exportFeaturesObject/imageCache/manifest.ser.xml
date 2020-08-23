@@ -59,7 +59,7 @@
         <manifestFolderDescription>
           <fileDescription>
             <type>raster</type>
-            <function>nrgStack</function>
+            <function>energyStack</function>
           </fileDescription>
           <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType">
             <end>2</end>
@@ -67,16 +67,16 @@
             <incrementSize>1</incrementSize>
           </sequenceType>
         </manifestFolderDescription>
-        <path>nrgStack</path>
+        <path>energyStack</path>
         <outputName class="org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle">
-          <outputName>nrgStack</outputName>
+          <outputName>energyStack</outputName>
           <numDigits>2</numDigits>
         </outputName>
         <template>
           <org.anchoranalysis.io.manifest.file.FileType>
             <manifestDescription>
               <type>raster</type>
-              <function>nrgStackChannel</function>
+              <function>energyStackChannel</function>
             </manifestDescription>
             <fileExtension>tif</fileExtension>
           </org.anchoranalysis.io.manifest.file.FileType>
@@ -88,11 +88,11 @@
       <files>
         <org.anchoranalysis.io.manifest.file.FileWrite>
           <parentFolder class="org.anchoranalysis.io.manifest.folder.RootFolder" reference="../../../.."/>
-          <fileName>nrgStackParams.xml</fileName>
-          <outputName>nrgStackParams</outputName>
+          <fileName>energyStackParams.xml</fileName>
+          <outputName>energyStackParams</outputName>
           <manifestDescription>
             <type>keyvalueparams</type>
-            <function>nrgStackParams</function>
+            <function>energyStackParams</function>
           </manifestDescription>
           <index></index>
         </org.anchoranalysis.io.manifest.file.FileWrite>

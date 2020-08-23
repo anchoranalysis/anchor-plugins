@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;

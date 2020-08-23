@@ -134,7 +134,7 @@ class InteresectingObjectsTestHelper {
         FeatureTestCalculator.assertIntResult(
                 message,
                 addId(feature),
-                new FeatureInputSingleObject(objectMask, CircleObjectFixture.nrgStack()),
+                new FeatureInputSingleObject(objectMask, CircleObjectFixture.energyStack()),
                 Optional.of(createInitParams(others).getSharedObjects()),
                 expectedResult);
     }

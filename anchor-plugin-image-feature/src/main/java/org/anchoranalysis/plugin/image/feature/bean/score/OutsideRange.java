@@ -39,13 +39,13 @@ public class OutsideRange extends VoxelScore {
 
     @BeanField @Getter @Setter private int max = 256;
 
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
 
-        double val = pixelVals[nrgIndex];
+        double val = pixelVals[energyIndex];
         if (val < min) {
             return 0;
         }

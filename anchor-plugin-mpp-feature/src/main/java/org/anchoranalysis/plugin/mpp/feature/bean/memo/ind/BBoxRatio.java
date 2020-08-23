@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
+import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
@@ -41,14 +41,14 @@ public class BBoxRatio extends FeatureSingleMemo {
     public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
-        MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
+        ConicBase markCast = (ConicBase) input.get().getPxlPartMemo().getMark();
 
         int[] extent = markExtent(markCast, input.get().dimensionsRequired());
         return calculateRatio(extent);
     }
     
     /** The extent of the mark in each dimension, with the z-dimension adjusted for image-resolution */
-    private static int[] markExtent(MarkConic markCast, Dimensions dimensions) {
+    private static int[] markExtent(ConicBase markCast, Dimensions dimensions) {
 
         BoundingBox bb = markCast.box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
         int[] extent = bb.extent().asOrderedArray();

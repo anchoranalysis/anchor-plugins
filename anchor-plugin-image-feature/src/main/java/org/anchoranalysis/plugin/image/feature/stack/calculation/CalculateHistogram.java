@@ -39,12 +39,12 @@ import org.anchoranalysis.image.histogram.HistogramFactory;
 @EqualsAndHashCode(callSuper = false)
 public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInputStack> {
 
-    private final int nrgIndex;
+    private final int energyIndex;
 
     @Override
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-            return HistogramFactory.create(input.getNrgStackRequired().getChannel(nrgIndex));
+            return HistogramFactory.create(input.getEnergyStackRequired().getChannel(energyIndex));
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }

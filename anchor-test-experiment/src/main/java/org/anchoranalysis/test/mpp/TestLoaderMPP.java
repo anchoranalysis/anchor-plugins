@@ -27,9 +27,9 @@
 package org.anchoranalysis.test.mpp;
 
 import java.nio.file.Path;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.mpp.io.cfg.CfgDeserializer;
+import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 
@@ -41,14 +41,14 @@ public class TestLoaderMPP {
         this.delegate = testLoader;
     }
 
-    public Cfg openCfgFromTestPath(String testPath) {
+    public MarkCollection openCfgFromTestPath(String testPath) {
         Path filePath = delegate.resolveTestPath(testPath);
         return openCfgFromFilePath(filePath);
     }
 
-    public static Cfg openCfgFromFilePath(Path filePath) {
+    public static MarkCollection openCfgFromFilePath(Path filePath) {
 
-        CfgDeserializer deserializer = new CfgDeserializer();
+        MarkCollectionDeserializer deserializer = new MarkCollectionDeserializer();
         try {
             return deserializer.deserialize(filePath);
         } catch (DeserializationFailedException e) {

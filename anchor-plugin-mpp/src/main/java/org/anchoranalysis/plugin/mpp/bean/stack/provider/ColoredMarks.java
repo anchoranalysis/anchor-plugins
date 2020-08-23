@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.mpp.bean.stack.provider;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
+import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWithGenerator;
 
 /**
- * Draws a colored representation (outline or filled) of an {@link Cfg} on a background
+ * Draws a colored representation (outline or filled) of an {@link MarkCollection} on a background
  * 
  * @author Owen Feehan
  *
@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWith
 public class ColoredMarks extends ColoredBaseWithGenerator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private CfgProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
     
     @BeanField @Getter @Setter private int regionID = 0;
     // END BEAN PROPERTIES
@@ -55,7 +55,7 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
     @Override
     protected ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        Cfg cfg = cfgProvider.create();
+        MarkCollection cfg = cfgProvider.create();
         RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
         return cfg.deriveObjects(backgroundDimensions, regionMembership).withoutProperties();
     }

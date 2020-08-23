@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+import org.anchoranalysis.anchor.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -55,7 +55,7 @@ public class LongestExtent extends OrientationProposer {
             Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator)
             throws ProposalAbnormalFailureException {
 
-        MarkAbstractPosition markC = (MarkAbstractPosition) mark;
+        MarkWithPosition markC = (MarkWithPosition) mark;
 
         double incrementRadians = (incrementDegrees / 180) * Math.PI;
 
@@ -88,6 +88,6 @@ public class LongestExtent extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkAbstractPosition;
+        return testMark instanceof MarkWithPosition;
     }
 }

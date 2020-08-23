@@ -38,8 +38,8 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
-import org.anchoranalysis.feature.nrg.NRGStack;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
@@ -73,22 +73,22 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         Feature<FeatureInputSingleObject> featureCreated = feature.create();
 
         try {
-            NRGStackWithParams nrgStack = new NRGStackWithParams(createNrgStack(channel));
+            EnergyStack energyStack = new EnergyStack(createEnergyStack(channel));
 
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(featureCreated);
 
             return createOutputChannel(
                     channel.dimensions(),
                     objects,
-                    object -> valueToAssignForObject(object, calculator, nrgStack));
+                    object -> valueToAssignForObject(object, calculator, energyStack));
 
         } catch (FeatureCalculationException | InitException e) {
             throw new CreateException(e);
         }
     }
 
-    private NRGStack createNrgStack(Channel channel) throws CreateException {
-        NRGStack nrgStack = new NRGStack(channel);
+    private EnergyStackWithoutParams createEnergyStack(Channel channel) throws CreateException {
+        EnergyStackWithoutParams energyStack = new EnergyStackWithoutParams(channel);
 
         // add other channels
         for (ChannelProvider cp : listAdditionalChannelProviders) {
@@ -100,13 +100,13 @@ public class ScoreObjects extends UnaryWithObjectsBase {
             }
 
             try {
-                nrgStack.asStack().addChannel(channelAdditional);
+                energyStack.asStack().addChannel(channelAdditional);
             } catch (IncorrectImageSizeException e) {
                 throw new CreateException(e);
             }
         }
 
-        return nrgStack;
+        return energyStack;
     }
 
     private FeatureCalculatorSingle<FeatureInputSingleObject> createSession(
@@ -136,9 +136,9 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     private int valueToAssignForObject(
             ObjectMask object,
             FeatureCalculatorSingle<FeatureInputSingleObject> calculator,
-            NRGStackWithParams nrgStack)
+            EnergyStack energyStack)
             throws FeatureCalculationException {
-        double featVal = calculator.calculate(new FeatureInputSingleObject(object, nrgStack));
+        double featVal = calculator.calculate(new FeatureInputSingleObject(object, energyStack));
         return (int) (factor * featVal);
     }
 }

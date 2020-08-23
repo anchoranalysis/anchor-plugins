@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.intensity;
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
+import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
 /**
  * The maximum-intensity allowed by the data-type of the stack (e.g. 255 for unsigned 8-bit).
@@ -40,11 +40,11 @@ import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
-public class DataTypeMaxIntensity<T extends FeatureInputNRG> extends FeatureNRGStack<T> {
+public class DataTypeMaxIntensity<T extends FeatureInputEnergy> extends FeatureEnergy<T> {
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return (double)
-                input.get().getNrgStackRequired().getChannel(0).getVoxelDataType().maxValue();
+                input.get().getEnergyStackRequired().getChannel(0).getVoxelDataType().maxValue();
     }
 }

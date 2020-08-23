@@ -51,6 +51,6 @@ public class CalculateIntersecting
     protected FeatureInputPairObjects deriveFromDelegate(
             FeatureInputSingleObject input, ObjectCollection delegate) {
         return new FeatureInputPairObjects(
-                input.getObject(), delegate.get(index), input.getNrgStackOptional());
+                input.getObject(), delegate.get(index), input.getEnergyStackOptional());
     }
 }

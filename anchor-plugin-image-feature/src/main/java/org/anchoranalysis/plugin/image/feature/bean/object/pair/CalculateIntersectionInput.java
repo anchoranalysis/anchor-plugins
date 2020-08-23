@@ -54,6 +54,6 @@ class CalculateIntersectionInput
         assert (delegate.get() != null);
 
         return Optional.of(
-                new FeatureInputSingleObject(delegate.get(), input.getNrgStackOptional()));
+                new FeatureInputSingleObject(delegate.get(), input.getEnergyStackOptional()));
     }
 }

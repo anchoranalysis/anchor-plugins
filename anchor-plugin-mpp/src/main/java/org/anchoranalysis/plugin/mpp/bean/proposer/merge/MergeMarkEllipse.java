@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkMergeProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.anchor.mpp.points.PointClipper;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -40,7 +40,7 @@ import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.orientation.Orientation2D;
 
 public class MergeMarkEllipse extends MarkMergeProposer {
@@ -59,7 +59,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
             throws ProposalAbnormalFailureException {
 
         VoxelizedMarkMemo targetPmm = mark1.duplicateFresh();
-        MarkConic target = (MarkConic) targetPmm.getMark();
+        ConicBase target = (ConicBase) targetPmm.getMark();
 
         // We calculate a position for the mark
         Point3d pos =
@@ -68,7 +68,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
                         mark2.getMark(),
                         mergedPosTolerance,
                         context.getRandomNumberGenerator(),
-                        context.getNrgStack());
+                        context.getEnergyStack());
 
         target.setMarksExplicit(pos);
 
@@ -88,7 +88,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
             Mark mark2,
             double posTolerance,
             RandomNumberGenerator randomNumberGenerator,
-            NRGStackWithParams nrgStack) {
+            EnergyStack energyStack) {
 
         Point3d pointNew = new Point3d(mark1.centerPoint());
         pointNew.subtract(mark2.centerPoint());
@@ -107,7 +107,7 @@ public class MergeMarkEllipse extends MarkMergeProposer {
                         randomNumberGenerator.sampleDoubleFromZeroCenteredRange(
                                 JITTER_HALF_WIDTH)));
 
-        return PointClipper.clip(pointNew, nrgStack.dimensions());
+        return PointClipper.clip(pointNew, energyStack.dimensions());
     }
 
     @SuppressWarnings("unused")
@@ -123,6 +123,6 @@ public class MergeMarkEllipse extends MarkMergeProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkConic && markProposer.isCompatibleWith(testMark);
+        return testMark instanceof ConicBase && markProposer.isCompatibleWith(testMark);
     }
 }

@@ -37,19 +37,19 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
- * Calculates a feature for a set of objects using this stack as a NRG-stack, and aggregates.
+ * Calculates a feature for a set of objects using this stack as a energy-stack, and aggregates.
  *
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public abstract class ObjectAggregationBase<T extends FeatureInputNRG>
+public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
         extends FeatureSingleObjectFromShared<T> {
 
     // START BEAN PROPERTIES

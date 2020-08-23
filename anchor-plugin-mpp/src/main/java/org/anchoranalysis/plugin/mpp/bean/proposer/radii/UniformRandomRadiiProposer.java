@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
+import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
 import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -67,6 +67,6 @@ public class UniformRandomRadiiProposer extends RadiiProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkConic;
+        return testMark instanceof ConicBase;
     }
 }

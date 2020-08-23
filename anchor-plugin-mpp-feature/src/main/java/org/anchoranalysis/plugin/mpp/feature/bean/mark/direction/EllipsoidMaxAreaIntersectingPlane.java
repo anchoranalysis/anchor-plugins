@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
+import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -44,7 +44,7 @@ public class EllipsoidMaxAreaIntersectingPlane extends FeatureMarkDirection {
 
     @Override
     protected double calculateForEllipsoid(
-            MarkEllipsoid mark,
+            Ellipsoid mark,
             Orientation orientation,
             RotationMatrix rotMatrix,
             Vector3d normalToPlane)

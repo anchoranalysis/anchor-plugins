@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.plugin.image.feature.bean.nrg.dimensions.Extent;
+import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
 import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
@@ -51,9 +51,9 @@ import org.junit.rules.TemporaryFolder;
 /**
  * Tests running {#link ExportFeaturesTask} on objects (both single and pairs)
  *
- * <p>Two types of NRG stack are supported: big and small
+ * <p>Two types of energy stack are supported: big and small
  *
- * <p>For the small NRG stack, some of the object-masks are outside the scene size
+ * <p>For the small energy stack, some of the object-masks are outside the scene size
  *
  * @author Owen Feehan
  */
@@ -81,7 +81,7 @@ public class ExportFeaturesTaskTest {
     @Test(expected = OperationFailedException.class)
     public void testSimpleSmall() throws OperationFailedException {
         // The saved directory is irrelevant because an exception is thrown
-        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallNRGInstead);
+        testOnTask(OUTPUT_DIR_IRRELEVANT, TaskFixture::useSmallEnergyInstead);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ExportFeaturesTaskTest {
         testOnTask(
                 OUTPUT_DIR_IRRELEVANT,
                 fixture -> {
-                    fixture.useSmallNRGInstead();
+                    fixture.useSmallEnergyInstead();
                     fixture.changeToMergedPairs(false, false);
                 });
     }
@@ -240,7 +240,7 @@ public class ExportFeaturesTaskTest {
 
         try {
             TaskSingleInputHelper.runTaskAndCompareOutputs(
-                    MultiInputFixture.createInput(taskFixture.nrgStack()),
+                    MultiInputFixture.createInput(taskFixture.energyStack()),
                     taskFixture.createTask(),
                     folder.getRoot().toPath(),
                     RELATIVE_PATH_SAVED_RESULTS + suffixPathDirSaved,

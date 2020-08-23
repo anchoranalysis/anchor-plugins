@@ -102,10 +102,10 @@ public class MergePairsTest {
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluatorThreshold(
-                FeatureEvaluatorFixture.createNrg(
+                FeatureEvaluatorFixture.createEnergy(
                         new Constant<>(threshold), logger, Mockito.mock(Path.class)));
         provider.setFeatureEvaluatorMerge(
-                FeatureEvaluatorFixture.createNrg(feature, logger, Mockito.mock(Path.class)));
+                FeatureEvaluatorFixture.createEnergy(feature, logger, Mockito.mock(Path.class)));
         provider.setRelation(new GreaterThanBean());
         return provider;
     }

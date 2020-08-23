@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
@@ -49,7 +49,7 @@ import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
-import org.anchoranalysis.test.image.NRGStackFixture;
+import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.obj.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class FeatureListImageTest {
 
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
-    private static NRGStackWithParams NRG_STACK = NRGStackFixture.create(true, true);
+    private static EnergyStack ENERGY_STACK = EnergyStackFixture.create(true, true);
 
     @Before
     public void setUp() {
@@ -121,7 +121,7 @@ public class FeatureListImageTest {
         FeatureCalculatorMulti<FeatureInputSingleObject> session =
                 createAndStart(objectFeatures(loader));
 
-        ObjectMaskFixture objectFixture = new ObjectMaskFixture(NRG_STACK.dimensions());
+        ObjectMaskFixture objectFixture = new ObjectMaskFixture(ENERGY_STACK.dimensions());
 
         assertCalc(
                 session.calculate(createInput(objectFixture.create1())),
@@ -181,10 +181,10 @@ public class FeatureListImageTest {
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(
-                histogram, Optional.of(NRG_STACK.dimensions().resolution()));
+                histogram, Optional.of(ENERGY_STACK.dimensions().resolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {
-        return new FeatureInputSingleObject(object, NRG_STACK);
+        return new FeatureInputSingleObject(object, ENERGY_STACK);
     }
 }

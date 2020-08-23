@@ -55,7 +55,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
     private List<NamedBean<FeatureListProvider<FeatureInputStack>>> listFeatures =
             new ArrayList<>();
 
-    @BeanField @Getter @Setter private StackProvider nrgStackProvider;
+    @BeanField @Getter @Setter private StackProvider stackEnergy;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,18 +66,18 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
         try {
             FeatureCalculatorFromProvider<FeatureInputStack> featureCalculator =
                     new FeatureCalculatorFromProvider<>(
-                            input, Optional.of(getNrgStackProvider()), context);
+                            input, Optional.of(getStackEnergy()), context);
 
-            double classificationVal =
+            double classificationValue =
                     featureCalculator
                             .calculatorSingleFromProvider(classifierProvider, "classifierProvider")
                             .calculate(new FeatureInputStack());
 
-            context.getLogReporter().logFormatted("Classification value = %f", classificationVal);
+            context.getLogReporter().logFormatted("Classification value = %f", classificationValue);
 
             // If classification val is >= 0, then it is POSITIVE
             // If classification val is < 0, then it is NEGATIVE
-            return classificationString(classificationVal >= 0);
+            return classificationString(classificationValue >= 0);
 
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);

@@ -36,18 +36,18 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculate a feature, treating a mask as a single-object on the nrg-stack
+ * Calculate a feature, treating a mask as a single-object on the energy-stack
  *
  * @author Owen Feehan
  */
-public class MaskAsSingleObject<T extends FeatureInputNRG>
+public class MaskAsSingleObject<T extends FeatureInputEnergy>
         extends FeatureSingleObjectFromShared<T> {
 
     // START BEAN PROPERTIES

@@ -30,7 +30,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgProvider;
+import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
@@ -78,7 +78,7 @@ public class VisualizeOnBackground extends DefineAdderBean {
             // Now we add visualizations for the mask and object-collection providers
             addVisualizationFor(def, define, MaskProvider.class, creator::mask);
             addVisualizationFor(def, define, ObjectCollectionProvider.class, creator::objects);
-            addVisualizationFor(def, define, CfgProvider.class, creator::marks);
+            addVisualizationFor(def, define, MarkCollectionProvider.class, creator::marks);
 
         } catch (OperationFailedException e) {
             throw new BeanXmlException(e);

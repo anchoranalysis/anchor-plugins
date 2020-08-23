@@ -29,10 +29,10 @@ package ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.cfg.Cfg;
-import org.anchoranalysis.anchor.mpp.cfg.ColoredCfg;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointList;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
+import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
+import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
+import org.anchoranalysis.anchor.mpp.mark.points.PointList;
+import org.anchoranalysis.anchor.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.anchor.overlay.Overlay;
 import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorIndex;
@@ -51,13 +51,13 @@ import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.mpp.io.cfg.ColoredCfgWithDisplayStack;
-import org.anchoranalysis.mpp.io.cfg.generator.CfgGenerator;
+import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
+import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 
 class ContourListGenerator extends RasterGenerator
         implements IterableObjectGenerator<List<Contour>, Stack> {
 
-    private CfgGenerator delegate;
+    private MarksGenerator delegate;
 
     private List<Contour> contourList;
     private DisplayStack stack;
@@ -78,7 +78,7 @@ class ContourListGenerator extends RasterGenerator
 
     public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack) {
         this.stack = stack;
-        delegate = new CfgGenerator(drawObject, new IDGetterIter<Overlay>());
+        delegate = new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
         delegate.setManifestDescriptionFunction("contourRepresentationRGB");
         this.colorIndex = colorIndex;
     }
@@ -98,9 +98,9 @@ class ContourListGenerator extends RasterGenerator
         return delegate.createManifestDescription();
     }
 
-    private static Cfg createCfgFromContourList(List<Contour> contourList) {
+    private static MarkCollection createCfgFromContourList(List<Contour> contourList) {
 
-        Cfg cfg = new Cfg();
+        MarkCollection cfg = new MarkCollection();
 
         for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext(); ) {
             Contour contour = itr.next();
@@ -131,12 +131,12 @@ class ContourListGenerator extends RasterGenerator
         this.contourList = element;
 
         try {
-            ColoredCfg cfg =
-                    new ColoredCfg(
+            ColoredMarks cfg =
+                    new ColoredMarks(
                             createCfgFromContourList(contourList),
                             generateColors(contourList.size()),
                             new IDGetterIter<>());
-            delegate.setIterableElement(new ColoredCfgWithDisplayStack(cfg, stack));
+            delegate.setIterableElement(new ColoredMarksWithDisplayStack(cfg, stack));
 
         } catch (OperationFailedException e) {
             throw new SetOperationFailedException(e);
@@ -156,7 +156,7 @@ class ContourListGenerator extends RasterGenerator
         }
     }
 
-    private static MarkPointList createMarkForContour(Contour c, boolean round) {
-        return MarkPointListFactory.createMarkFromPoints3f(c.getPoints());
+    private static PointList createMarkForContour(Contour c, boolean round) {
+        return PointListFactory.createMarkFromPoints3f(c.getPoints());
     }
 }

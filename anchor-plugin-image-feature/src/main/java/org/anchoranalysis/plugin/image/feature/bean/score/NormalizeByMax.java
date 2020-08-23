@@ -34,7 +34,7 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * This assumes the histograms correspond to the nrg channels exactly (in terms of indexing)
+ * This assumes the histograms correspond to the energy channels exactly (in terms of indexing)
  *
  * @author Owen Feehan
  */
@@ -46,7 +46,7 @@ public class NormalizeByMax extends SingleChannel {
     public void init(List<Histogram> histograms, Optional<KeyValueParams> keyValueParams)
             throws InitException {
         try {
-            maxEdge = histograms.get(getNrgChannelIndex()).calculateMaximum();
+            maxEdge = histograms.get(getEnergyChannelIndex()).calculateMaximum();
         } catch (OperationFailedException e) {
             throw new InitException(e);
         }

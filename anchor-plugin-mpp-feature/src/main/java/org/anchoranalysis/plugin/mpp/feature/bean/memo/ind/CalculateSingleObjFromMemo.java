@@ -48,7 +48,7 @@ class CalculateSingleObjFromMemo
     @Override
     protected FeatureInputSingleObject execute(FeatureInputSingleMemo input)
             throws FeatureCalculationException {
-        return new FeatureInputSingleObject(deriveMask(input), input.getNrgStackOptional());
+        return new FeatureInputSingleObject(deriveMask(input), input.getEnergyStackOptional());
     }
 
     private ObjectMask deriveMask(FeatureInputSingleMemo params) throws FeatureCalculationException {

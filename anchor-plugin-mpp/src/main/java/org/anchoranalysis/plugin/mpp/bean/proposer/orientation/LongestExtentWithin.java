@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
+import org.anchoranalysis.anchor.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -76,7 +76,7 @@ public class LongestExtentWithin extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkAbstractPosition;
+        return testMark instanceof MarkWithPosition;
     }
 
     private OrientationList findAllOrientations2D(Mark mark, ResolvedBound minMaxBound)

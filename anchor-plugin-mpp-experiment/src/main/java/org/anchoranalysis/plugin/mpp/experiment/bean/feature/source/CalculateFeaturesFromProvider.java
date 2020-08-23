@@ -37,9 +37,9 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
@@ -49,14 +49,14 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
-import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 @AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
-    private final InitParamsWithNrgStack initParams;
+    private final InitParamsWithEnergyStack initParams;
 
     /**
      * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
@@ -76,19 +76,19 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
             throws OperationFailedException {
         calculateFeaturesForProvider(
                 objectsFromProvider(provider, initParams.getImageInit(), context.getLogger()),
-                initParams.getNrgStack(),
+                initParams.getEnergyStack(),
                 identifierFromInput);
     }
 
     private void calculateFeaturesForProvider(
             ObjectCollection objects,
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
         try {
             List<T> inputs =
                     table.deriveInputsStartBatch(
-                            objects, nrgStack, thumbnailForInput.isPresent(), context.getLogger());
+                            objects, energyStack, thumbnailForInput.isPresent(), context.getLogger());
 
             calculateManyFeaturesInto(inputs, identifierFromInput);
 
