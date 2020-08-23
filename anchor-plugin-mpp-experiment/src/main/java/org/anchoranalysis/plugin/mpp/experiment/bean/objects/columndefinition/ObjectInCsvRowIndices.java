@@ -72,7 +72,7 @@ class ObjectInCsvRowIndices {
      * @param csvRow the csv-row describing the object
      * @return the first object (if found) that contains the point and has the exact number of
      *     voxels required
-     * @throws SetOperationFailedException if no matching object can be found
+     * @throws OperationFailedException if no matching object can be found
      */
     public ObjectMask findObjectFromCSVRow(ObjectCollectionRTree allObjects, CSVRow csvRow)
             throws OperationFailedException {

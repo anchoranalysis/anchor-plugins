@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 
 /**
- * The score is {@code 
+ * 
  * @author Owen Feehan
  *
  */

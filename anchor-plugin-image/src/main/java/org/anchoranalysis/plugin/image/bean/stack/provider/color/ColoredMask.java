@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**
- * Draws a colored representation (outline or filled) of a {@link Mask} on a background
+ * Draws a colored representation (outline or filled) of a {@link ObjectMask} on a background
  * 
  * @author Owen Feehan
  *

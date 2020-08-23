@@ -52,7 +52,6 @@ class KernelProposerFixture {
      * Creates a proposer with a Birth and Death kernel (equal probability) for a MarkProposer
      *
      * @param markProposer mark-proposer to use when making births
-     * @param context
      * @return
      * @throws CreateException
      * @throws InitException

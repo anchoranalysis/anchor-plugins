@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation) except assumes optional return value and no parameters
+ * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation)} except assumes optional return value and no parameters
  *
  * @author Owen Feehan
  *

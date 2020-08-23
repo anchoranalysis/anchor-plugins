@@ -61,7 +61,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * <p>All thumbnails are created with identical size. An error will occur if the background is ever
  * smaller than the thumbnail size.
  *
- * <p>If no specific background-channel is set with {@link backgroundChannelIndex} then the
+ * <p>If no specific background-channel is set with {@link #setBackgroundChannelIndex} then the
  * following scheme applies:
  *
  * <ul>

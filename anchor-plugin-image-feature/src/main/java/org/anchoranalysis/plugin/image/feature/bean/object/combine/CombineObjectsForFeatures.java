@@ -134,7 +134,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public abstract DisplayStack createThumbailFor(T input) throws CreateException;
 
     /**
-     * Performs cleanup when calls to {@link createThumbailFor} are finished for the current batch
+     * Performs cleanup when calls to {@link #createThumbailFor} are finished for the current batch
      */
     public void endBatchAndCleanup() {
         thumbnail.end();
