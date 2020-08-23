@@ -27,9 +27,6 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
 import static org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.VisualizationUtilities.*;
-
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.OutlinePixelsRetriever;
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +41,8 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.plugin.mpp.bean.outline.OutlinePixelsRetriever;
+import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline.FindPointOnOutline;
 
 public class TraversePointsOnContour extends PointsFromOrientationProposer {
@@ -143,14 +142,14 @@ public class TraversePointsOnContour extends PointsFromOrientationProposer {
     }
 
     public CreateProposalVisualization proposalVisualization(boolean detailed) {
-        return cfg -> {
-            maybeAddPoints(cfg, lastPointsForward, Color.CYAN);
-            maybeAddPoints(cfg, lastPointsReverse, Color.YELLOW);
+        return marks -> {
+            maybeAddPoints(marks, lastPointsForward, Color.CYAN);
+            maybeAddPoints(marks, lastPointsReverse, Color.YELLOW);
 
             if (detailed) {
-                maybeAddConic(cfg, forwardCenterPoint, Color.MAGENTA, do3D);
-                maybeAddConic(cfg, reverseCenterPoint, Color.MAGENTA, do3D);
-                maybeAddLineSegment(cfg, forwardCenterPoint, reverseCenterPoint, Color.ORANGE);
+                maybeAddConic(marks, forwardCenterPoint, Color.MAGENTA, do3D);
+                maybeAddConic(marks, reverseCenterPoint, Color.MAGENTA, do3D);
+                maybeAddLineSegment(marks, forwardCenterPoint, reverseCenterPoint, Color.ORANGE);
             }
         };
     }

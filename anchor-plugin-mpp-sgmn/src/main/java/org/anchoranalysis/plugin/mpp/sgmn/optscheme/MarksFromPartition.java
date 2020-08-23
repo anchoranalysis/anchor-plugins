@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * A subset of a cfg (as extracted during a partition)
+ * A subset of a marks (as extracted during a partition)
  *
  * @author Owen Feehan
  */

@@ -48,7 +48,7 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
 
     @BeanField @Getter @Setter private String markEvaluatorName;
 
-    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator defaultCfgFilePathGenerator;
+    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator defaultMarksFilePathGenerator;
 
     @BeanField @OptionalBean @Getter @Setter
     private FilePathGenerator keyValueParamsFilePathGenerator;
@@ -66,8 +66,8 @@ public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
         return Optional.ofNullable(keyValueParamsFilePathGenerator);
     }
 
-    public Optional<FilePathGenerator> cfgFilePathGenerator() {
-        return Optional.ofNullable(defaultCfgFilePathGenerator);
+    public Optional<FilePathGenerator> marksFilePathGenerator() {
+        return Optional.ofNullable(defaultMarksFilePathGenerator);
     }
 
     @Override

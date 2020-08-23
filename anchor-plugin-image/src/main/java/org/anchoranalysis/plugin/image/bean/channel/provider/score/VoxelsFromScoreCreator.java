@@ -100,18 +100,18 @@ class VoxelsFromScoreCreator {
     private void setVoxelsWithoutMask(Voxels<ByteBuffer> voxelsOut, VoxelScore pixelScore)
             throws FeatureCalculationException {
 
-        Extent e = voxelsOut.extent();
+        Extent extent = voxelsOut.extent();
 
-        for (int z = 0; z < e.z(); z++) {
+        for (int z = 0; z < extent.z(); z++) {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
             ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
-            for (int y = 0; y <= e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
-                    int offset = e.offset(x, y);
+                    int offset = extent.offset(x, y);
                     BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
                 }
             }

@@ -50,14 +50,14 @@ public class PointsFitter extends StateTransformerBean<MarkCollection, Voxelized
     public VoxelizedMarksWithEnergy transform(MarkCollection in, TransformationContext context)
             throws OperationFailedException {
 
-        Optional<Mark> mark = createMark.fitMarkToPointsFromCfg(in, context.dimensions());
+        Optional<Mark> mark = createMark.fitMarkToPointsFromMarks(in, context.dimensions());
 
         // If we cannot create a mark, there is no proposal
-        MarkCollection cfg = wrapMark(mark);
+        MarkCollection marks = wrapMark(mark);
 
         try {
             return VoxelizedMarksWithEnergyFactory.createFromMarks(
-                    cfg, context.getKernelCalcContext(), context.getLogger());
+                    marks, context.getKernelCalcContext(), context.getLogger());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

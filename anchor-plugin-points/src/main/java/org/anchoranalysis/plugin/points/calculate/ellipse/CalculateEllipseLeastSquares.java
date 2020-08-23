@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipseFitter;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
@@ -36,6 +35,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipseFitter;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateEllipseLeastSquares

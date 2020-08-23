@@ -89,7 +89,7 @@ public class Check extends MarkProposerUnary {
     @Override
     public Optional<CreateProposalVisualization> proposalVisualization(boolean detailed) {
         if (lastFailedMark != null) {
-            return Optional.of(cfg -> cfg.addChangeID(lastFailedMark, new RGBColor(Color.ORANGE)));
+            return Optional.of(marks -> marks.addChangeID(lastFailedMark, new RGBColor(Color.ORANGE)));
         } else {
             return super.proposalVisualization(detailed);
         }

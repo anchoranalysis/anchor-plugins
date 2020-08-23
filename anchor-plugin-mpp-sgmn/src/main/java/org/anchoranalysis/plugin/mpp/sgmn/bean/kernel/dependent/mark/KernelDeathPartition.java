@@ -49,9 +49,9 @@ public class KernelDeathPartition extends KernelDeath<MarksFromPartition> {
             return Optional.empty();
         }
 
-        MarkCollection cfgNew = existing.getMarks().shallowCopy();
-        cfgNew.remove(index);
-        return Optional.of(new MarkAnd<>(existing.getMarks().get(index), existing.copyChange(cfgNew)));
+        MarkCollection marksNew = existing.getMarks().shallowCopy();
+        marksNew.remove(index);
+        return Optional.of(new MarkAnd<>(existing.getMarks().get(index), existing.copyChange(marksNew)));
     }
 
     @Override

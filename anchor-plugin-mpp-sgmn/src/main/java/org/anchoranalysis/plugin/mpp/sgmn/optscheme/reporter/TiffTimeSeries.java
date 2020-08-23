@@ -107,9 +107,9 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
     }
 
     private ColoredMarksWithDisplayStack addColor(
-            MarkCollection cfg, OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams) {
+            MarkCollection marks, OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBgStack();
-        ColoredMarks coloredCfg = new ColoredMarks(cfg, colorIndex, new IDGetterIter<Mark>());
-        return new ColoredMarksWithDisplayStack(coloredCfg, stack);
+        ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>());
+        return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }
 }

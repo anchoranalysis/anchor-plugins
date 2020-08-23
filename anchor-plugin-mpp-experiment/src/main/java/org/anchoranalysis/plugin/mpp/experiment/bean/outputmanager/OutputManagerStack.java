@@ -43,29 +43,29 @@ public class OutputManagerStack extends OutputManagerWithPrefixer {
 
     /** What's allowed or not when outputting stacks */
     @BeanField @Getter @Setter
-    private OutputAllowed stackCollectionOutputEnabled = new AllOutputAllowed();
+    private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
 
     /** What's allowed or not when outputting configurations */
     @BeanField @Getter @Setter
-    private OutputAllowed cfgCollectionOutputEnabled = new AllOutputAllowed();
+    private OutputAllowed marksOutputEnabled = new AllOutputAllowed();
 
     /** What's allowed or not when outputting object-collections */
     @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();
 
     /** What's allowed or not when outputting histograms */
     @BeanField @Getter @Setter
-    private OutputAllowed histogramCollectionOutputEnabled = new AllOutputAllowed();
+    private OutputAllowed histogramsOutputEnabled = new AllOutputAllowed();
     // END BEAN PROPERTIES
 
     @Override
     public OutputAllowed outputAllowedSecondLevel(String key) {
         switch (key) {
             case StackOutputKeys.STACK:
-                return getStackCollectionOutputEnabled();
-            case StackOutputKeys.CFG:
-                return getCfgCollectionOutputEnabled();
+                return getStacksOutputEnabled();
+            case StackOutputKeys.MARKS:
+                return getMarksOutputEnabled();
             case StackOutputKeys.HISTOGRAM:
-                return getHistogramCollectionOutputEnabled();
+                return getHistogramsOutputEnabled();
             case StackOutputKeys.OBJECTS:
                 return getObjects();
             default:

@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.plugin.points.bean.provider.object;
 
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.ContourList;
-import ch.ethz.biol.cell.imageprocessing.objmask.provider.smoothspline.SplitContourSmoothingSpline;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -40,6 +38,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.CreateFromPointsFactory;
+import org.anchoranalysis.plugin.points.bean.contour.SplitContourSmoothingSpline;
+import org.anchoranalysis.plugin.points.contour.ContourList;
 
 /**
  * Splits a 2D contour represented by an object-mask into several contours, splitting at "turn"

@@ -61,7 +61,7 @@ public class UnchangingNumberMarks extends TerminationCondition {
         if (rep < numRep) {
             return true;
         } else {
-            logger.log("ConstantCfgSize returned false");
+            logger.log("ConstantMarksSize returned false");
             return false;
         }
     }

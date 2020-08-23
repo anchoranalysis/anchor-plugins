@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
@@ -40,24 +40,24 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class InitMarksHelper {
 
-    public static Optional<MarkCollection> propose(MarkCollectionProposer cfgProposer, KernelCalculationContext context)
+    public static Optional<MarkCollection> propose(MarkCollectionProposer marksProposer, KernelCalculationContext context)
             throws KernelCalculateEnergyException {
         ProposerContext propContext = context.proposer();
 
         // We don't expect an existing exsting energy, but rather null (or whatever)
 
-        // Initial cfg
-        return proposeCfg(context.getMarkFactory(), cfgProposer, propContext);
+        // Initial marks
+        return proposeMarks(context.getMarkFactory(), marksProposer, propContext);
     }
 
-    private static Optional<MarkCollection> proposeCfg(
-            MarkWithIdentifierFactory markFactory, MarkCollectionProposer cfgProposer, ProposerContext propContext)
+    private static Optional<MarkCollection> proposeMarks(
+            MarkWithIdentifierFactory markFactory, MarkCollectionProposer marksProposer, ProposerContext propContext)
             throws KernelCalculateEnergyException {
         try {
-            return cfgProposer.propose(markFactory, propContext);
+            return marksProposer.propose(markFactory, propContext);
         } catch (ProposalAbnormalFailureException e) {
             throw new KernelCalculateEnergyException(
-                    "Failed to propose an initial-cfg due to an abnormal error", e);
+                    "Failed to propose an initial-marks due to an abnormal error", e);
         }
     }
 }

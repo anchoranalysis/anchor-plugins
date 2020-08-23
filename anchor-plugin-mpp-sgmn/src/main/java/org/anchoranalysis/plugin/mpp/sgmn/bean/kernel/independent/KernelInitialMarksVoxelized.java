@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
@@ -52,18 +52,18 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy> {
 
     // START BEAN LIST
-    @BeanField @Getter @Setter private MarkCollectionProposer cfgProposer;
+    @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
     // END BEAN LIST
 
     private Optional<MarkCollection> lastMarks = Optional.empty();
 
-    public KernelInitialMarksVoxelized(MarkCollectionProposer cfgProposer) {
-        this.cfgProposer = cfgProposer;
+    public KernelInitialMarksVoxelized(MarkCollectionProposer marksProposer) {
+        this.marksProposer = marksProposer;
     }
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return cfgProposer.isCompatibleWith(testMark);
+        return marksProposer.isCompatibleWith(testMark);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
         // We don't expect an existing exsting marks, but rather null (or whatever)
 
         // Initial marks
-        Optional<MarkCollection> marksOptional = proposeCfg(context.getMarkFactory(), propContext);
+        Optional<MarkCollection> marksOptional = proposeMarks(context.getMarkFactory(), propContext);
 
         this.lastMarks = marksOptional;
 
@@ -88,13 +88,13 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
         }
     }
 
-    private Optional<MarkCollection> proposeCfg(MarkWithIdentifierFactory markFactory, ProposerContext propContext)
+    private Optional<MarkCollection> proposeMarks(MarkWithIdentifierFactory markFactory, ProposerContext propContext)
             throws KernelCalculateEnergyException {
         try {
-            return cfgProposer.propose(markFactory, propContext);
+            return marksProposer.propose(markFactory, propContext);
         } catch (ProposalAbnormalFailureException e) {
             throw new KernelCalculateEnergyException(
-                    "Failed to propose an initial-cfg due to an abnormal error", e);
+                    "Failed to propose an initial-marks due to an abnormal error", e);
         }
     }
 
@@ -111,7 +111,7 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
 
     @Override
     public String describeLast() {
-        return String.format("initialCfg(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
+        return String.format("initialMarks(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
     }
 
     @Override

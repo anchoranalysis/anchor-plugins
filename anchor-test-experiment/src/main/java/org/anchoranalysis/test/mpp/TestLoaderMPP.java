@@ -41,12 +41,12 @@ public class TestLoaderMPP {
         this.delegate = testLoader;
     }
 
-    public MarkCollection openCfgFromTestPath(String testPath) {
+    public MarkCollection openMarksFromTestPath(String testPath) {
         Path filePath = delegate.resolveTestPath(testPath);
-        return openCfgFromFilePath(filePath);
+        return openMarksFromFilePath(filePath);
     }
 
-    public static MarkCollection openCfgFromFilePath(Path filePath) {
+    public static MarkCollection openMarksFromFilePath(Path filePath) {
 
         MarkCollectionDeserializer deserializer = new MarkCollectionDeserializer();
         try {

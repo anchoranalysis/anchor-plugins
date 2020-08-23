@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWith
 public class ColoredMarks extends ColoredBaseWithGenerator {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider marks;
     
     @BeanField @Getter @Setter private int regionID = 0;
     // END BEAN PROPERTIES
@@ -55,8 +55,7 @@ public class ColoredMarks extends ColoredBaseWithGenerator {
     @Override
     protected ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        MarkCollection cfg = cfgProvider.create();
         RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
-        return cfg.deriveObjects(backgroundDimensions, regionMembership).withoutProperties();
+        return marks.create().deriveObjects(backgroundDimensions, regionMembership).withoutProperties();
     }
 }

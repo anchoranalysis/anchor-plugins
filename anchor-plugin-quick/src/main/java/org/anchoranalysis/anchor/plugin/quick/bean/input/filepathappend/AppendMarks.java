@@ -37,11 +37,11 @@ public class AppendMarks extends FilePathBaseAppendToManagerWithFileID {
     @Override
     protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
-        return inputManager.getListAppendCfg();
+        return inputManager.getListAppendMarks();
     }
 
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
-        return String.format("%s/cfgCollection/%s.ser.xml", firstPartWithFilename(), getFileId());
+        return String.format("%s/marks/%s.ser.xml", firstPartWithFilename(), getFileId());
     }
 }

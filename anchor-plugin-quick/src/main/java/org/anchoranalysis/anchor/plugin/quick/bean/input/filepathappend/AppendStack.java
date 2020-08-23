@@ -55,6 +55,6 @@ public class AppendStack extends FilePathBaseAppendToManagerWithFileID {
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
         return String.format(
-                "%s/stackCollection/%s.%s", firstPartWithFilename(), getFileId(), extension);
+                "%s/stacks/%s.%s", firstPartWithFilename(), getFileId(), extension);
     }
 }

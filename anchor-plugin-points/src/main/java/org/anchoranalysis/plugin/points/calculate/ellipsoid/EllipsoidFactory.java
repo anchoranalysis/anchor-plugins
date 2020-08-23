@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipsoidFitter;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -41,6 +40,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipsoidFitter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidFactory {

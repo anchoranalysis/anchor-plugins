@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.marks;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergyScheme;
@@ -66,7 +66,7 @@ class SgmnMPPHelper {
                         CreateCombinedStack.apply(so),
                         outputManager.outputAllowedSecondLevel(StackOutputKeys.STACK)),
                 outputManager.getDelegate(),
-                "stackCollection",
+                "stacks",
                 "stack_",
                 context.getErrorReporter(),
                 false);

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.ConicFitterBase;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -41,6 +40,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.plugin.points.bean.fitter.ConicFitterBase;
 
 @AllArgsConstructor
 class EllipseFactory {

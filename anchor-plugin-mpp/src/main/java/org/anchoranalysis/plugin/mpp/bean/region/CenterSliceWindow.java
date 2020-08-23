@@ -37,7 +37,7 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 
 /**
- * Like {#link ch.ethz.biol.cell.mpp.mark.pixelstatisticsfrommark.CenterSlice} but considers more
+ * Like {#link org.anchoranalysis.plugin.mpp.bean.region.CenterSlice} but considers more
  * than one slice, specifically centerSlice+- windowSize
  *
  * <p>So total size = 2*windowSize + 1 (clipped to the bounding box)

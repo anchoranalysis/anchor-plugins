@@ -31,7 +31,7 @@ import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEner
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.mpp.sgmn.bean.cfg.ExperimentState;
+import org.anchoranalysis.mpp.sgmn.bean.ExperimentState;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
