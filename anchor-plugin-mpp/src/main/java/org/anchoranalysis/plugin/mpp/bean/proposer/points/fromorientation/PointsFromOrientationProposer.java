@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import java.util.List;
 import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.NullParamsBean;
@@ -34,6 +33,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 
 public abstract class PointsFromOrientationProposer
         extends NullParamsBean<PointsFromOrientationProposer> {

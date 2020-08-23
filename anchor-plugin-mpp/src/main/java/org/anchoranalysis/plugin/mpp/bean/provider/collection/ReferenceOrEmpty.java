@@ -49,13 +49,13 @@ public class ReferenceOrEmpty extends MarkCollectionProvider {
     public MarkCollection create() throws CreateException {
 
         try {
-            MarkCollection cfg = getInitializationParameters().getCfgCollection().getException(id);
+            MarkCollection marks = getInitializationParameters().getMarksCollection().getException(id);
 
-            if (cfg == null) {
+            if (marks == null) {
                 return new MarkCollection();
             }
 
-            return cfg;
+            return marks;
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }

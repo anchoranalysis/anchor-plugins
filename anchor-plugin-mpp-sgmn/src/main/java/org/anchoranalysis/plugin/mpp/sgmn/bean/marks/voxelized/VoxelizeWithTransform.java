@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 /**
- * Converts a Cfg to a CfgToPixelized using a transformer
+ * Converts a Marks to a MarksToPixelized using a transformer
  *
  * @author Owen Feehan
  */

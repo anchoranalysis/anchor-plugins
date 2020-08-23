@@ -50,7 +50,7 @@ class ExportOutputter {
         "featuresAggregated.csv",
         "features.csv",
         "grouped/arbitraryGroup/featuresGroup.csv",
-        "stackCollection/input.tif",
+        "stacks/input.tif",
         "energyStack/energyStack_00.tif",
         "energyStack/energyStack_01.tif",
         "energyStack/energyStack_02.tif",

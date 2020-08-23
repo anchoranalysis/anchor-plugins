@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +56,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
 public class XYOrientationExtendToZ extends PointsProposer {
@@ -112,9 +112,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
         list.add(pointsFromOrientationXYProposer.proposalVisualization(detailed));
 
         list.add(
-                cfg -> {
+                marks -> {
                     if (lastPointsAll != null && !lastPointsAll.isEmpty()) {
-                        cfg.addChangeID(
+                        marks.addChangeID(
                                 PointListFactory.createMarkFromPoints3i(lastPointsAll),
                                 new RGBColor(Color.ORANGE));
                     }

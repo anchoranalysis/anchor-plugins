@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;

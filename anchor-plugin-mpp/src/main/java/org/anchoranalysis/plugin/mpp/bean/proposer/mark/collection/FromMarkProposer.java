@@ -30,7 +30,7 @@ import cern.jet.random.Poisson;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -55,7 +55,7 @@ public class FromMarkProposer extends MarkCollectionProposer {
     @Override
     public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
-        return genInitRndCfgForNumPts(generateNumberPoints(markFactory, context), markFactory, context);
+        return genInitRndMarksForNumPts(generateNumberPoints(markFactory, context), markFactory, context);
     }
 
     private int generateNumberPoints(MarkWithIdentifierFactory markFactory, ProposerContext context) {
@@ -73,11 +73,11 @@ public class FromMarkProposer extends MarkCollectionProposer {
 
     // Generates a random configuration for a given number of points
     //	 * The location and attributes of marks are uniformly distributed
-    private Optional<MarkCollection> genInitRndCfgForNumPts(
+    private Optional<MarkCollection> genInitRndMarksForNumPts(
             int numPoints, MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
 
-        MarkCollection cfg = new MarkCollection();
+        MarkCollection marks = new MarkCollection();
 
         for (int i = 0; i < numPoints; i++) {
             Mark mark = markFactory.newTemplateMark();
@@ -86,11 +86,11 @@ public class FromMarkProposer extends MarkCollectionProposer {
 
             // If the proposal fails, we don't bother trying another
             if (markProposer.propose(pmm, context)) {
-                cfg.add(mark);
+                marks.add(mark);
             }
         }
 
-        return Optional.of(cfg);
+        return Optional.of(marks);
     }
 
     @Override

@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.visitscheduler.VisitSchedulerConvexAboutRoot;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitSchedulerConvexAboutRoot;
 
 class PointListForConvex {
 

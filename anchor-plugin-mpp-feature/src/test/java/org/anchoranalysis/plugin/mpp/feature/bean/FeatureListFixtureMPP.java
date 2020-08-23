@@ -41,7 +41,7 @@ public class FeatureListFixtureMPP {
         return FeaturesFromXmlFixture.createFeatureList("markFeatureList.xml", loader);
     }
 
-    public static FeatureList<FeatureInputMarkCollection> cfg() throws CreateException {
-        return FeaturesFromXmlFixture.createFeatureList("cfgFeatureList.xml", loader);
+    public static FeatureList<FeatureInputMarkCollection> marks() throws CreateException {
+        return FeaturesFromXmlFixture.createFeatureList("marksFeatureList.xml", loader);
     }
 }

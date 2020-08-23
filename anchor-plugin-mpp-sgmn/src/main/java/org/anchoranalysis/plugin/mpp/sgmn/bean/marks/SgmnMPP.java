@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.marks;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithTotalEnergy;
@@ -58,7 +58,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
-import org.anchoranalysis.mpp.sgmn.bean.cfg.CfgSgmn;
+import org.anchoranalysis.mpp.sgmn.bean.SegmentIntoMarks;
 import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
@@ -71,7 +71,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.SgmnMPPState;
 
 
 // Segments a channel with marked pointed processes
-public class SgmnMPP extends CfgSgmn {
+public class SgmnMPP extends SegmentIntoMarks {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private OptScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optScheme;
@@ -105,7 +105,7 @@ public class SgmnMPP extends CfgSgmn {
 
     // Do segmentation
     @Override
-    public MarkCollection sgmn(
+    public MarkCollection segment(
             NamedStacksSet stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,

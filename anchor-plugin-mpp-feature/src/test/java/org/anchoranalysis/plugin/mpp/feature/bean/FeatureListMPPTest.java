@@ -111,26 +111,26 @@ public class FeatureListMPPTest {
     }
 
     @Test
-    public void testCfg()
+    public void testMarks()
             throws InitException, CreateException, FeatureCalculationException,
                     NamedFeatureCalculateException {
 
         FeatureCalculatorMulti<FeatureInputMarkCollection> session =
-                createAndStart(FeatureListFixtureMPP.cfg());
+                createAndStart(FeatureListFixtureMPP.marks());
 
-        MarkCollectionFixture cfgFixture = new MarkCollectionFixture(DIM);
+        MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIM);
 
-        assertCfg(session, cfgFixture.createMarks1(), 2.0);
-        assertCfg(session, cfgFixture.createMarks2(), 3.0);
-        assertCfg(session, cfgFixture.createMarks3(), 2.0);
-        assertCfg(session, cfgFixture.createMarkSingle(), 1.0);
-        assertCfg(session, new MarkCollection(), 0.0);
+        assertMarks(session, marksFixture.createMarks1(), 2.0);
+        assertMarks(session, marksFixture.createMarks2(), 3.0);
+        assertMarks(session, marksFixture.createMarks3(), 2.0);
+        assertMarks(session, marksFixture.createMarkSingle(), 1.0);
+        assertMarks(session, new MarkCollection(), 0.0);
     }
 
-    private static void assertCfg(
-            FeatureCalculatorMulti<FeatureInputMarkCollection> session, MarkCollection cfg, double expected)
+    private static void assertMarks(
+            FeatureCalculatorMulti<FeatureInputMarkCollection> session, MarkCollection marks, double expected)
             throws CreateException, FeatureCalculationException, NamedFeatureCalculateException {
-        assertCalc(session.calculate(new FeatureInputMarkCollection(cfg, Optional.of(DIM))), expected);
+        assertCalc(session.calculate(new FeatureInputMarkCollection(marks, Optional.of(DIM))), expected);
     }
 
     private static void assertMark(

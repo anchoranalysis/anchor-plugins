@@ -63,48 +63,48 @@ class SgmnMPPOutputter {
             BoundOutputManagerRouteErrors outputManager)
             throws OperationFailedException {
 
-        ColoredMarks coloredCfg =
+        ColoredMarks coloredMarks =
                 new ColoredMarks(
                         marks.getMarks(),
                         outputManager.getOutputWriteSettings().defaultColorIndexFor(20),
                         new IDGetterIter<Mark>());
 
-        ColoredMarksWithDisplayStack coloredCfgDisplayStack =
-                new ColoredMarksWithDisplayStack(coloredCfg, dualStack.getBgStack());
+        ColoredMarksWithDisplayStack coloredMarksDisplayStack =
+                new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBgStack());
 
         WriterRouterErrors writer = outputManager.getWriterCheckIfAllowed();
 
         writeMarks(marks, writer);
 
-        writeOutline("finalOutline", coloredCfgDisplayStack, regionMembership, writer, 1);
-        writeOutline("finalOutlineVisual", coloredCfgDisplayStack, regionMembership, writer, 3);
+        writeOutline("finalOutline", coloredMarksDisplayStack, regionMembership, writer, 1);
+        writeOutline("finalOutlineVisual", coloredMarksDisplayStack, regionMembership, writer, 3);
 
-        writeCfgMaskCollection(coloredCfgDisplayStack, writer, regionMembership);
+        writeMarksMaskCollection(coloredMarksDisplayStack, writer, regionMembership);
 
-        writeFinalCfg(marks.getMarks(), writer);
-        outputCfgSize(marks.getMarksWithTotalEnergy(), writer, logger);
+        writeFinalMarks(marks.getMarks(), writer);
+        outputMarksSize(marks.getMarksWithTotalEnergy(), writer, logger);
     }
 
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
         writer.write("finalMarks", () -> new XStreamGenerator<>(marks, Optional.of("marks")));
     }
 
-    private static void writeCfgMaskCollection(
-            ColoredMarksWithDisplayStack coloredCfgDisplayStack,
+    private static void writeMarksMaskCollection(
+            ColoredMarksWithDisplayStack coloredMarksDisplayStack,
             WriterRouterErrors writer,
             RegionMembershipWithFlags rm) {
         writer.write(
                 "finalMarksRaster",
                 () ->
                         new MarksAsUniqueValueGenerator(
-                                coloredCfgDisplayStack.getStack().dimensions(),
+                                coloredMarksDisplayStack.getStack().dimensions(),
                                 rm,
-                                coloredCfgDisplayStack.getMarksColored().getMarks()));
+                                coloredMarksDisplayStack.getMarksColored().getMarks()));
     }
 
     private static void writeOutline(
             String outputNamePrefix,
-            ColoredMarksWithDisplayStack coloredCfgDisplayStack,
+            ColoredMarksWithDisplayStack coloredMarksDisplayStack,
             RegionMembershipWithFlags rm,
             WriterRouterErrors writer,
             int outlineWidth) {
@@ -115,7 +115,7 @@ class SgmnMPPOutputter {
                 () ->
                         new MarksGenerator(
                                 outlineWriter,
-                                coloredCfgDisplayStack,
+                                coloredMarksDisplayStack,
                                 new IDGetterIter<Overlay>(),
                                 rm));
         writer.write(
@@ -123,21 +123,21 @@ class SgmnMPPOutputter {
                 () ->
                         new MarksFlattenedGenerator(
                                 outlineWriter,
-                                coloredCfgDisplayStack,
+                                coloredMarksDisplayStack,
                                 new IDGetterIter<Overlay>(),
                                 rm));
     }
 
-    private static void writeFinalCfg(MarkCollection marks, WriterRouterErrors writer) {
-        writer.write("finalCfg", () -> new XStreamGenerator<>(marks, Optional.of("cfg")));
+    private static void writeFinalMarks(MarkCollection marks, WriterRouterErrors writer) {
+        writer.write("finalMarks", () -> new XStreamGenerator<>(marks, Optional.of("marks")));
         writer.write(
-                "finalCfgBinary", () -> new ObjectOutputStreamGenerator<>(marks, Optional.of("cfg")));
+                "finalMarksBinary", () -> new ObjectOutputStreamGenerator<>(marks, Optional.of("marks")));
     }
 
-    private static void outputCfgSize(
+    private static void outputMarksSize(
             MarksWithTotalEnergy marks, WriterRouterErrors writer, Logger logger) {
         writer.write(
-                "cfgSize", () -> new StringGenerator(String.format("%d", marks.size())));
-        logger.messageLogger().log("Cfg size = " + marks.size());
+                "marksSize", () -> new StringGenerator(String.format("%d", marks.size())));
+        logger.messageLogger().log("Marks size = " + marks.size());
     }
 }

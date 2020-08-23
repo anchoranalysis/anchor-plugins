@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.mark.collection;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkCollection;

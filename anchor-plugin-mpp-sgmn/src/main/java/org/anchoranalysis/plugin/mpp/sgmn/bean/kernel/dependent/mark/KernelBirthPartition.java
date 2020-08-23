@@ -65,7 +65,7 @@ public class KernelBirthPartition extends KernelBirth<MarksFromPartition> {
 
         MarkCollection marks = exst.getMarks();
         for (Mark mark : listMarksNew) {
-            marks = calculateUpdatedCfg(marks, mark);
+            marks = calculateUpdatedMarks(marks, mark);
         }
 
         return Optional.of(exst.copyChange(marks));
@@ -87,9 +87,9 @@ public class KernelBirthPartition extends KernelBirth<MarksFromPartition> {
         return true;
     }
 
-    private static MarkCollection calculateUpdatedCfg(MarkCollection exst, Mark mark) {
-        MarkCollection newCfg = exst.shallowCopy();
-        newCfg.add(mark);
-        return newCfg;
+    private static MarkCollection calculateUpdatedMarks(MarkCollection exst, Mark mark) {
+        MarkCollection newMarks = exst.shallowCopy();
+        newMarks.add(mark);
+        return newMarks;
     }
 }

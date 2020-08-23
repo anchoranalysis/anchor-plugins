@@ -15,9 +15,9 @@
             </set>
           </sequenceType>
         </manifestFolderDescription>
-        <path>stackCollection</path>
+        <path>stacks</path>
         <outputName class="org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle">
-          <outputName>stackCollection</outputName>
+          <outputName>stacks</outputName>
           <outputFormatString>%s</outputFormatString>
         </outputName>
         <template>

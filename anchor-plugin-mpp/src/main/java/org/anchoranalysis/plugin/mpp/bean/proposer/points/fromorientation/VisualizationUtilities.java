@@ -41,22 +41,22 @@ import org.anchoranalysis.core.geometry.Point3i;
 class VisualizationUtilities {
 
     public static void maybeAddLineSegment(
-            ColoredMarks cfg, Optional<Point3i> point1, Optional<Point3i> point2, Color color) {
+            ColoredMarks marks, Optional<Point3i> point1, Optional<Point3i> point2, Color color) {
         if (point1.isPresent() && point2.isPresent()) {
-            cfg.addChangeID(new LineSegment(point1.get(), point2.get()), color);
+            marks.addChangeID(new LineSegment(point1.get(), point2.get()), color);
         }
     }
 
-    public static void maybeAddPoints(ColoredMarks cfg, List<Point3i> pointsList, Color color) {
+    public static void maybeAddPoints(ColoredMarks marks, List<Point3i> pointsList, Color color) {
         if (!pointsList.isEmpty()) {
-            cfg.addChangeID(PointListFactory.createMarkFromPoints3i(pointsList), color);
+            marks.addChangeID(PointListFactory.createMarkFromPoints3i(pointsList), color);
         }
     }
 
     public static void maybeAddConic(
-            ColoredMarks cfg, Optional<Point3i> centerPoint, Color color, boolean do3D) {
+            ColoredMarks marks, Optional<Point3i> centerPoint, Color color, boolean do3D) {
         if (centerPoint.isPresent()) {
-            cfg.addChangeID(
+            marks.addChangeID(
                     MarkConicFactory.createMarkFromPoint(centerPoint.get(), 1, do3D), color);
         }
     }

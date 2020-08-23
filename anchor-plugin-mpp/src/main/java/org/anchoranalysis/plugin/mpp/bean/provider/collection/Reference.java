@@ -46,7 +46,7 @@ public class Reference extends MarkCollectionProvider {
     @Override
     public MarkCollection create() throws CreateException {
         try {
-            return getInitializationParameters().getCfgCollection().getException(id);
+            return getInitializationParameters().getMarksCollection().getException(id);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);
         }

@@ -34,9 +34,9 @@ class CreateVisualizatonHelper {
         return provider;
     }
 
-    public StackProvider marks(String cfgProviderID) {
+    public StackProvider marks(String marksProviderID) {
         ColoredMarks provider = new ColoredMarks();
-        provider.setCfgProvider(new Reference(cfgProviderID));
+        provider.setMarks(new Reference(marksProviderID));
         configureProvider(provider);
         return provider;
     }

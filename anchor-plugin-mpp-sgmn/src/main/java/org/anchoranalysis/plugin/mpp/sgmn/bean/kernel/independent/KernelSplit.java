@@ -54,7 +54,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     // START BEAN
     @BeanField @Getter @Setter private MarkSplitProposer splitProposer = null;
 
-    @BeanField @Getter @Setter private MarkFromCollectionProposer markFromCfgProposer = null;
+    @BeanField @Getter @Setter private MarkFromCollectionProposer markFromMarksProposer = null;
     // END BEAN
 
     private Optional<Mark> markExst;
@@ -72,7 +72,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         ProposerContext propContext = context.proposer();
 
         try {
-            this.markExst = markFromCfgProposer.selectMarkFrom(existing.get().getMarks().getMarks(), propContext);
+            this.markExst = markFromMarksProposer.selectMarkFrom(existing.get().getMarks().getMarks(), propContext);
         } catch (ProposalAbnormalFailureException e) {
             throw new KernelCalculateEnergyException(
                     "Could not propose a mark due to an abnormal exception", e);
@@ -111,7 +111,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     @Override
     public boolean isCompatibleWith(Mark testMark) {
         return splitProposer.isCompatibleWith(testMark)
-                && markFromCfgProposer.isCompatibleWith(testMark);
+                && markFromMarksProposer.isCompatibleWith(testMark);
     }
 
     private static VoxelizedMarksWithEnergy createMarks(

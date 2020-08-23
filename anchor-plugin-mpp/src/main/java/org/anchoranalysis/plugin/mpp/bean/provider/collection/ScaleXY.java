@@ -41,7 +41,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 public class ScaleXY extends MarkCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider marks;
 
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
     // END BEAN PROPERTIES
@@ -63,14 +63,12 @@ public class ScaleXY extends MarkCollectionProvider {
                             scaleFactor.x(), scaleFactor.y()));
         }
 
-        MarkCollection cfg = cfgProvider.create();
-
-        MarkCollection cfgCopy = cfg.deepCopy();
+        MarkCollection marksCreated = marks.create().deepCopy();
         try {
-            cfgCopy.scaleXY(scaleFactor.x());
+            marksCreated.scaleXY(scaleFactor.x());
         } catch (OptionalOperationUnsupportedException e) {
             throw new CreateException(e);
         }
-        return cfgCopy;
+        return marksCreated;
     }
 }

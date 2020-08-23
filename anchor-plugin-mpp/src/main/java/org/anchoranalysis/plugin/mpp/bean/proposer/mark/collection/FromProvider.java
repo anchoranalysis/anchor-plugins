@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.collection;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.MarkWithIdentifierFactory;
+import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
@@ -42,7 +42,7 @@ import org.anchoranalysis.core.error.CreateException;
 public class FromProvider extends MarkCollectionProposer {
 
     // START BEAN FIELDS
-    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider provider;
     // END BEAN FIELDS
 
     @Override
@@ -54,7 +54,7 @@ public class FromProvider extends MarkCollectionProposer {
     public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
         try {
-            return Optional.of(cfgProvider.create());
+            return Optional.of(provider.create());
         } catch (CreateException e) {
             throw new ProposalAbnormalFailureException(e);
         }

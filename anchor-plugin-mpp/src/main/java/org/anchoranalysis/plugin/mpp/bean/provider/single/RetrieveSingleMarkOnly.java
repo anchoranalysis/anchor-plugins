@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 
 /**
- * Retrieves a mark from a cfg, assuming there is only one mark in a cfg, otherwise throwing an
+ * Retrieves a mark from a marks, assuming there is only one mark in a marks, otherwise throwing an
  * exception
  * 
  * @author Owen Feehan
@@ -46,21 +46,21 @@ import org.anchoranalysis.core.error.CreateException;
 public class RetrieveSingleMarkOnly extends SingleMarkProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MarkCollectionProvider cfgProvider;
+    @BeanField @Getter @Setter private MarkCollectionProvider marks;
     // END BEAN PROPERTIES
 
     @Override
     public Optional<Mark> create() throws CreateException {
-        MarkCollection cfg = cfgProvider.create();
+        MarkCollection marksCreated = marks.create();
 
-        if (cfg.size() == 0) {
-            throw new CreateException("Cfg is empty. It must have exactly one item");
+        if (marksCreated.size() == 0) {
+            throw new CreateException("Mark-collection is empty. It must have exactly one item");
         }
 
-        if (cfg.size() > 1) {
-            throw new CreateException("Cfg has multiple marks. It must have exactly one item");
+        if (marksCreated.size() > 1) {
+            throw new CreateException("Mark-collection has multiple marks. It must have exactly one item");
         }
 
-        return Optional.of(cfg.get(0));
+        return Optional.of(marksCreated.get(0));
     }
 }

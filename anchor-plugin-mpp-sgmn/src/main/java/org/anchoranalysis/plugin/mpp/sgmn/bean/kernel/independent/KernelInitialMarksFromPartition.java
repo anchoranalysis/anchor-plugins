@@ -47,25 +47,25 @@ import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFromPartition> {
 
     // START BEAN LIST
-    @BeanField @Getter @Setter private MarkCollectionProposer cfgProposer;
+    @BeanField @Getter @Setter private MarkCollectionProposer marksProposer;
 
     @BeanField @Getter @Setter private ExtractWeightFromMark extractWeight = new ConstantWeight();
     // END BEAN LIST
 
-    private MarkCollection lastCfg;
+    private MarkCollection lastMarks;
 
     @Override
     public Optional<MarksFromPartition> makeProposal(
             Optional<MarksFromPartition> existing, KernelCalculationContext context)
             throws KernelCalculateEnergyException {
 
-        Optional<MarkCollection> marks = InitMarksHelper.propose(cfgProposer, context);
+        Optional<MarkCollection> marks = InitMarksHelper.propose(marksProposer, context);
 
         if (!marks.isPresent()) {
             return Optional.empty();
         }
 
-        this.lastCfg = marks.get();
+        this.lastMarks = marks.get();
 
         return Optional.of(new MarksFromPartition(new MarkCollection(), createPartition(marks.get())));
     }
@@ -83,7 +83,7 @@ public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFrom
 
     @Override
     public String describeLast() {
-        return String.format("initialCfgWithPartition(size=%d)", this.lastCfg.size());
+        return String.format("initialMarksWithPartition(size=%d)", this.lastMarks.size());
     }
 
     @Override
@@ -97,15 +97,15 @@ public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFrom
 
     @Override
     public int[] changedMarkIDArray() {
-        return this.lastCfg.createIdArr();
+        return this.lastMarks.createIdArr();
     }
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return cfgProposer.isCompatibleWith(testMark);
+        return marksProposer.isCompatibleWith(testMark);
     }
 
-    private PartitionedMarks createPartition(MarkCollection cfg) {
-        return new PartitionedMarks(cfg, mark -> extractWeight.weightFor(mark));
+    private PartitionedMarks createPartition(MarkCollection marks) {
+        return new PartitionedMarks(marks, mark -> extractWeight.weightFor(mark));
     }
 }

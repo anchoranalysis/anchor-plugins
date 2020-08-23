@@ -44,7 +44,7 @@ public class Repeat extends MarkFromCollectionProposerUnary {
 
     @Override
     protected Optional<Mark> selectMarkFrom(MarkCollection marks, MarkFromCollectionProposer proposer, ProposerContext context) throws ProposalAbnormalFailureException {
-        context.addErrorLevel("MarkFromCfgProposerRepeat");
+        context.addErrorLevel("MarkFromMarksProposerRepeat");
 
         for (int i = 0; i < maxIter; i++) {
             Optional<Mark> mark = proposer.selectMarkFrom(marks, context);
