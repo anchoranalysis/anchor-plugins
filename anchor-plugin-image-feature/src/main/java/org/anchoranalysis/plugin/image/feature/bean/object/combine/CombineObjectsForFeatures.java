@@ -60,7 +60,7 @@ import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObject
  * object-collection, depending on the implementation of the sub-class.
  *
  * @author Owen Feehan
- * @param T type of feature used in the table
+ * @param <T> type of feature used in the table
  */
 public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         extends AnchorBean<CombineObjectsForFeatures<T>> {

@@ -53,10 +53,10 @@ public class AssignPriorityFromImprovement extends AssignPriority {
 
     @Override
     public PrioritisedVertex assignPriorityToEdge(
-            ObjectVertex src, ObjectVertex dest, ObjectMask merged, ErrorReporter errorReporter)
+            ObjectVertex source, ObjectVertex destination, ObjectMask merged, ErrorReporter errorReporter)
             throws OperationFailedException {
         double payloadMerge = calculatePayload(payloadCalculator, merged);
-        double payloadExisting = weightedAverageFeatureVal(src, dest);
+        double payloadExisting = weightedAverageFeatureVal(source, destination);
         double improvement = payloadMerge - payloadExisting;
 
         if (payloadMerge <= payloadExisting) {

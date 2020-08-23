@@ -59,8 +59,8 @@ public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, 
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
      * cached-result from previously.
      *
-     * @param If there is no cached-value, and the calculation occurs, these parameters are used.
-     *     Otherwise ignored.
+     * @param input if there is no cached-value, and the calculation occurs, these parameters are used.
+     *     Otherwise ignored..
      * @return the result of the calculation
      * @throws E if the calculation cannot finish, for whatever reason
      */

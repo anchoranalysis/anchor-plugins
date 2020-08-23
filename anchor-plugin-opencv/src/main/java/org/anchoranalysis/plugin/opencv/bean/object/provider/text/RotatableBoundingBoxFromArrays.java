@@ -57,7 +57,6 @@ class RotatableBoundingBoxFromArrays {
      * @param geometryArrs an array of 5 arrays
      * @param index the current index to look in each of the 5 arrays
      * @param offset an offset in the scene to add to each generated bounding-box
-     * @param bndScene the dimensions of the image to which the bounding-box belongs
      * @return a mark encapsulating a rotatable bounding-box
      */
     public static RotatableBoundingBox markFor(

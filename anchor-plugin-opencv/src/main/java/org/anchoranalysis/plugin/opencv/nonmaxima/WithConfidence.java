@@ -33,7 +33,7 @@ import lombok.Getter;
 /**
  * Wraps an object with a confidence-score and imposes an ordering (highest confidence first)
  *
- * @param T object to be associated with a confidence score
+ * @param <T> object to be associated with a confidence score
  */
 @AllArgsConstructor
 @EqualsAndHashCode

@@ -169,7 +169,6 @@ public class ExperimentLauncherFromShell {
      * @param temporaryFolder the destination temporary-folder to copy files to
      * @param subdirectories if non-null, specific subdirectories to copy. if null, everything is
      *     copied.
-     * @return the temporary folder that has been created
      */
     private void copyToTemporaryFolder(TemporaryFolder temporaryFolder, String[] subdirectories) {
         try {

@@ -76,7 +76,6 @@ class TaskSingleInputHelper {
      *     saved-results to compare with
      * @param pathsFileToCompare paths (relative to the src/test/resources) to check that are
      *     identical
-     * @return true if successful, false otherwise
      * @throws OperationFailedException if anything goes wrong
      */
     public static <T extends InputFromManager, S, V extends Task<T, S>>

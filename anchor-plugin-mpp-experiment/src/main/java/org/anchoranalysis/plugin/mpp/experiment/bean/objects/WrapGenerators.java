@@ -62,7 +62,6 @@ class WrapGenerators {
      * ObjectsWithBoundingBox}
      *
      * @param generator existing generator to wrap
-     * @param flatten whether the bounding-box should be flattened in the z dimension
      * @return the wrapped generator
      */
     public static IterableGenerator<ObjectsWithBoundingBox> wrapObjectMask(

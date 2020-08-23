@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;
  * Similar to FeatureListProviderPermute but embeds the feature in a GaussianScore
  *
  * @author Owen Feehan
- * @param T feature-input
+ * @param <T> feature-input
  */
 public class PermuteDivideByParam<T extends FeatureInputParams>
         extends PermuteFeatureSequenceInteger<T> {

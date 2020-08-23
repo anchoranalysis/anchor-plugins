@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.AccptProbCalculator;
 /**
  * Directly assigns a state for every optimisation step
  *
- * @param S state-type for optimization
+ * @param <S> state-type for optimization
  */
 @NoArgsConstructor
 @AllArgsConstructor

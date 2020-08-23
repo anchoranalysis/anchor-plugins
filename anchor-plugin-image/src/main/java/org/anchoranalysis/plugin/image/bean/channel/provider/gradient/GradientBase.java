@@ -29,15 +29,12 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
 import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 
 public abstract class GradientBase extends ChannelProviderUnary {
 
@@ -46,28 +43,9 @@ public abstract class GradientBase extends ChannelProviderUnary {
 
     /** Iff true, outputs a short channel, otherwise byte channel */
     @BeanField @Getter @Setter private boolean outputShort = false;
-
-    /** Added to all gradients (so we can store negative gradients) */
-    @BeanField @Getter @Setter private int addSum = 0;
     // END BEAN
-
-    @Override
-    public Channel createFromChannel(Channel channelIn) throws CreateException {
-
-        // The gradient is calculated on a float
-        Channel channelIntermediate =
-                ChannelFactory.instance().create(channelIn.dimensions(), FloatVoxelType.INSTANCE);
-
-        GradientCalculator calculator =
-                new GradientCalculator(createAxisArray(), (float) scaleFactor, addSum);
-        calculator.gradient(channelIn.voxels(), channelIntermediate.voxels().asFloat());
-
-        return convertToOutputType(channelIntermediate);
-    }
-
-    protected abstract boolean[] createAxisArray() throws CreateException;
-
-    private Channel convertToOutputType(Channel channelToConvert) {
+    
+    protected Channel convertToOutputType(Channel channelToConvert) {
         ChannelConverter<?> converter =
                 outputShort
                         ? new ChannelConverterToUnsignedShort()

@@ -52,7 +52,7 @@ class DrawOutlineHelper {
      * colorUnselectedObjects}
      *
      * @param backgroundScaled the scaled background
-     * @param objectsUnscaled the unscaled objects to draw
+     * @param objects the unscaled objects to draw
      * @return the background-stack with the outline of all objects drawn on it
      * @throws OperationFailedException
      */

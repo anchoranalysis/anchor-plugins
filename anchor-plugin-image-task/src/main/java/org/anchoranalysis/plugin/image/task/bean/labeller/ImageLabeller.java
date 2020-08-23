@@ -59,7 +59,6 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      * Determines a particular group-identifier for an input
      *
      * @param sharedState TODO
-     * @param modelDir TODO
      */
     public abstract String labelFor(T sharedState, ProvidesStackInput input, BoundIOContext context)
             throws OperationFailedException;

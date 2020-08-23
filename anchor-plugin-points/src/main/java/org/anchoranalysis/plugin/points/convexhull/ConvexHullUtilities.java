@@ -55,7 +55,7 @@ public class ConvexHullUtilities {
      * <p>Note the algorithm will return the input-points if there are too few points.
      *
      * @param points points to filter
-     * @param minNumPoints a minimum of number of points (before any convex hull filtering) that
+     * @param minNumberPoints a minimum of number of points (before any convex hull filtering) that
      *     must be found.
      * @return the filtered points on convex-hull iff the minimum number of points exists, otherwise
      *     the input points unchanged.

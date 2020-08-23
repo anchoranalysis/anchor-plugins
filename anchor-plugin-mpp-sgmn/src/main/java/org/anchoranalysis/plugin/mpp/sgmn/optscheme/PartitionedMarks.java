@@ -44,7 +44,6 @@ import org.apache.commons.math3.util.Pair;
  * <p>Items in the "available" partition can be sampled (with varying weights for items).
  *
  * @author Owen Feehan
- * @param <T> type of item
  */
 public class PartitionedMarks {
 
@@ -71,7 +70,6 @@ public class PartitionedMarks {
      *
      * @param idealNumItems number of items to be sampled (if they are available, otherwise as many
      *     as available are returned)
-     * @param sampleArr an array to put the samples into (should be of size k)
      * @return if marks were sampled
      */
     public Optional<Set<Mark>> sampleFromAvailable(int idealNumItems) {

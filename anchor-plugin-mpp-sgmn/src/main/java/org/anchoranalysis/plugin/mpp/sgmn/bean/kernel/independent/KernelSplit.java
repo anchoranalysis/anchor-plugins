@@ -153,9 +153,9 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             return String.format(
                     "%s %d into %d into %d",
                     getBeanName(),
-                    markExst.get().getId(),
-                    pairNew.get().getSource().getMark().getId(),
-                    pairNew.get().getDestination().getMark().getId());
+                    markExst.get().getId(),         // NOSONAR
+                    pairNew.get().getSource().getMark().getId(),    // NOSONAR
+                    pairNew.get().getDestination().getMark().getId());  // NOSONAR
         } else {
             return getBeanName();
         }
@@ -175,7 +175,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         updatableMarkSetCollection.remove(memoList, memoExst);
         memoList.remove(memoExst);
 
-        VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource();
+        VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource();   // NOSONAR
 
         // Should always find one
         assert memoAdded1 != null;
