@@ -35,6 +35,7 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -107,11 +108,12 @@ public class MergePairs extends MergeWithFeature {
         try {
             Optional<EnergyStack> energyStack = featureEvaluatorMerge.energyStack();
 
+            FeatureList<FeatureInputPairObjects> features = FeatureListFactory.from(
+                    featureEvaluatorMerge.getFeature());
+            
             PairsTableCalculator session =
                     new PairsTableCalculator(
-                            new MergedPairsFeatures(
-                                    FeatureListFactory.fromProvider(
-                                            featureEvaluatorMerge.getFeature())));
+                            new MergedPairsFeatures(features));
             session.start(getInitializationParameters(), energyStack, getLogger());
 
             return maybeWrapWithEnergyStack(new FeatureCalculatorSingleFromMulti<>(session), energyStack);
