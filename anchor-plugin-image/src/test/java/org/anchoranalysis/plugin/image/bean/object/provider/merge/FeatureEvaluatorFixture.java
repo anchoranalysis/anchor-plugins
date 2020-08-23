@@ -36,20 +36,19 @@ import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorWithEnergy;
-import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeatureEvaluatorFixture {
 
     public static <T extends FeatureInput> FeatureEvaluatorWithEnergy<T> createEnergy(
             Feature<T> feature, Logger logger, Path modelDirectory) throws CreateException {
-        FeatureEvaluatorWithEnergy<T> eval = new FeatureEvaluatorWithEnergy<>();
-        eval.setFeature(ProviderFixture.providerFor(feature));
+        FeatureEvaluatorWithEnergy<T> evaluator = new FeatureEvaluatorWithEnergy<>();
+        evaluator.setFeature(feature);
         try {
-            eval.init(SharedFeaturesInitParams.create(logger, modelDirectory), logger);
+            evaluator.init(SharedFeaturesInitParams.create(logger, modelDirectory), logger);
         } catch (InitException e) {
             throw new CreateException(e);
         }
-        return eval;
+        return evaluator;
     }
 }
