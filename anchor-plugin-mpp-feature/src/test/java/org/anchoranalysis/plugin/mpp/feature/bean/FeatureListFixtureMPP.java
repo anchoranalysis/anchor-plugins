@@ -38,10 +38,10 @@ public class FeatureListFixtureMPP {
     private static TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
     public static FeatureList<FeatureInputMark> mark() throws CreateException {
-        return FeaturesFromXmlFixture.createFeatureList("markFeatureList.xml", loader);
+        return FeaturesFromXmlFixture.createFeatureList("markSingleFeatures.xml", loader);
     }
 
     public static FeatureList<FeatureInputMarkCollection> marks() throws CreateException {
-        return FeaturesFromXmlFixture.createFeatureList("marksFeatureList.xml", loader);
+        return FeaturesFromXmlFixture.createFeatureList("markCollectionFeatures.xml", loader);
     }
 }

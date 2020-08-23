@@ -89,7 +89,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
      * Calculates a single-feature that comes from a provider (but can reference the other features
      * from the store)
      *
-     * @throws FeatureCalculationException
+     * @throws OperationFailedException
      */
     public FeatureCalculatorSingle<T> calculatorSingleFromProvider(
             FeatureListProvider<T> provider, String providerName) throws OperationFailedException {

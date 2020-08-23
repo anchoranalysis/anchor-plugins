@@ -75,7 +75,6 @@ class GradientCalculator {
      *
      * @param signalIn where to calculate gradient from
      * @param gradientOut where to output the gradient to
-     * @throws CreateException
      */
     public void gradient(VoxelsWrapper signalIn, Voxels<FloatBuffer> gradientOut) {
         gradientImgLib2(

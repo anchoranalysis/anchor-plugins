@@ -39,7 +39,7 @@ class MultiInputFixture {
 
     /**
      * A number of unique pairs of intersecting objects (known from the output of {@link
-     * IntersectingCircleObjectsFixture.generateIntersectingObjects} with the parameterization
+     * IntersectingCircleObjectsFixture#generateIntersectingObjects} with the parameterization
      * above.
      */
     public static final int NUMBER_PAIRS_INTERSECTING = 3;

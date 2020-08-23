@@ -55,16 +55,16 @@ public class WatershedYeongTest {
     @Test
     public void test_noMasks_noSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
-        sgmn(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
+        segment(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
     }
 
     @Test
     public void test_masks_noSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
-        sgmn(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
+        segment(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
     }
 
-    private void sgmn(String pathObjectsExpected, Optional<String> pathMask)
+    private void segment(String pathObjectsExpected, Optional<String> pathMask)
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         WatershedYeong sgmn = new WatershedYeong();
 

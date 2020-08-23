@@ -34,27 +34,27 @@ import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OverlapRatioUtilities {
 
-    /** Returns {@link Math::max} or {@link Math::min} depending on a flag */
+    /** Returns {@link Math#max} or {@link Math#min} depending on a flag */
     public static LongBinaryOperator maxOrMin(boolean useMax) {
         return useMax ? Math::max : Math::min;
     }
 
     public static double overlapRatio(
-            VoxelizedMarkMemo obj1,
-            VoxelizedMarkMemo obj2,
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
             double overlap,
             int regionID,
-            boolean mip,
+            boolean flattenZ,
             LongBinaryOperator funcAgg) {
 
         if (overlap == 0.0) {
             return 0.0;
         }
 
-        if (mip) {
+        if (flattenZ) {
             return overlap;
         } else {
-            double volume = volumeAgg(obj1, obj2, regionID, funcAgg);
+            double volume = volumeAgg(mark1, mark2, regionID, funcAgg);
             return overlap / volume;
         }
     }
