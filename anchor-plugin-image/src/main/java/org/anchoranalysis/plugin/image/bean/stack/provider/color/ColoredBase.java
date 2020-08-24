@@ -115,9 +115,6 @@ public abstract class ColoredBase extends StackProvider {
     
     /**
      * @param objects
-     * @param outline
-     * @param outlineWidth
-     * @param flatten
      * @param background
      * @param colors list of colors. If null, it is automatically generated.
      * @return

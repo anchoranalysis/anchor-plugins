@@ -41,7 +41,7 @@ public class ObjectCollectionTest {
      * objects is as expected after scaling
      *
      * @param numberCircles how many circles to use in the test
-     * @param increaseRadius how much to increase the radius by for successive circles
+     * @param radiusIncrease how much to increase the radius by for successive circles
      */
     private void testNumberCircles(int numberCircles, double radiusIncrease)
             throws OperationFailedException {

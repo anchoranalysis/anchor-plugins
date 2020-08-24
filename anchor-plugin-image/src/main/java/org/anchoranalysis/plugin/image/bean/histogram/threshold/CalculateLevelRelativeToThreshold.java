@@ -55,6 +55,6 @@ public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelOn
         }
     }
 
-    /** Uses the {@link calculateLevelElse} instead of {@link calculateLevel} */
+    /** Uses {@code calculateLevelElse} instead of the standard calculation-level approach */
     protected abstract boolean useElseInstead(int level, int threshold);
 }

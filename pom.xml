@@ -73,14 +73,6 @@
 	
 	
     <build>
-		
-        <pluginManagement>
-            <plugins>
-           
-
-								
-            </plugins>
-        </pluginManagement>
 	
 				
 		<!-- Adds license information in each jar -->
@@ -114,5 +106,12 @@
 		  
 		</resources>	
     </build>
+	
+	<dependencies>
+			<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
 	
 </project>

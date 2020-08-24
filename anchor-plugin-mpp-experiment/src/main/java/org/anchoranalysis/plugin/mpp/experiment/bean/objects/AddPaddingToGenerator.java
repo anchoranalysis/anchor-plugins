@@ -35,7 +35,6 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Adds optional padding to objects before being passed into another generator
@@ -81,7 +80,6 @@ class AddPaddingToGenerator {
      * @param object object-mask to be padded
      * @param dimensions size of image
      * @return either the exist object-mask (if no padding is to be added) or a padded object-mask
-     * @throws OutputWriteFailedException
      */
     private static ObjectMask maybePadObject(
             ObjectMask object, Dimensions dimensions, Padding padding) {

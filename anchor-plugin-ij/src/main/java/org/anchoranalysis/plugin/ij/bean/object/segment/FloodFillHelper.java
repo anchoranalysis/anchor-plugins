@@ -79,7 +79,6 @@ class FloodFillHelper {
      * @param x x-value of point
      * @param y y-value of point
      * @param color color to use
-     * @param floodFiller
      * @return the last color used for filling
      * @throws OperationFailedException
      */
