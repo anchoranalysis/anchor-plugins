@@ -234,7 +234,6 @@ public class ExportFeaturesTaskTest {
      * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare
      *     against
      * @throws OperationFailedException
-     * @throws CreateException
      */
     private void testOnTask(String suffixPathDirSaved) throws OperationFailedException {
 

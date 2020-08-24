@@ -96,7 +96,6 @@ class NaiveGreedyMerge {
      *
      * @param objects the entire set of objects
      * @param range parameters that determine which objects are considered for merge
-     * @param stack the entire list of future parameters to also be considered
      * @throws OperationFailedException
      */
     private void tryMergeWithinRange(

@@ -132,8 +132,6 @@ public class CalculateShellObjectMask
     /**
      * Assigns off pixels to an object-mask based on another object-mask specified in
      * global-cordinates
-     *
-     * @param
      */
     private static void assignOffTo(ObjectMask toAssignTo, ObjectMask objectMask) {
         toAssignTo.assignOff().toObject(objectMask);

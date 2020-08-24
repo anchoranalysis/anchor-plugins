@@ -82,7 +82,6 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     /**
      * Extracts a stack (that is maybe resized)
      *
-     * @throws FeatureCalculationException
      * @throws OperationFailedException
      */
     private Stack extractStack(FeatureInputStack input) throws OperationFailedException {

@@ -105,7 +105,6 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
      *
      * <p>The stored-results also have an additional first-column with the ID.
      *
-     * @param session for calculating features
      * @param listInputs a list of parameters. Each parameters creates a new result (e.g. a new row
      *     in a feature-table)
      * @throws OperationFailedException

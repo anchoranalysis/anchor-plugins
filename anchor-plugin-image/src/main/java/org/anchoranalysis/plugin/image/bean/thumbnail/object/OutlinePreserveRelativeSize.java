@@ -188,7 +188,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
      * Sets up the generator and the related {@code sceneExtentScaled} variable
      *
      * @param objectsUnscaled unscaled objects
-     * @param backgroundUnscaled unscaled background if it exists
+     * @param backgroundScaled scaled background if it exists
      */
     private void setupGenerator(
             ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {

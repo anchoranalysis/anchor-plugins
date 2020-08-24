@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -123,8 +122,6 @@ class ExportObjectsFeatureLoader {
 
     /**
      * Additionally include a shell feature in the "single" features
-     *
-     * @throws CreateException
      */
     private void changeSingleTo(String alternativeFileName) {
         single.useAlternativeXMLList(alternativeFileName);

@@ -49,7 +49,7 @@ public class GenerateLabelHeadersForCSV {
     private final String[] nonGroupHeaders;
 
     /**
-     * Additional group-header used after the {@link GROUP_HEADER_STANDARD} if groups are enabled
+     * Additional group-header used after the {@link #GROUP_HEADER_STANDARD} if groups are enabled
      */
     private final Optional<String> additionalGroupHeader;
     // END REQUIRED ARGUMENTS
