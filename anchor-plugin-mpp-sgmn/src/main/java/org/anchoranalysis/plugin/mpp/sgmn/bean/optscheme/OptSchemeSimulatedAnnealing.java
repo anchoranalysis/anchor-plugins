@@ -62,7 +62,7 @@ public class OptSchemeSimulatedAnnealing<S, T, U> extends OptScheme<S, U> {
     // END BEAN PARAMTERS
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return String.format("%s", getBeanName());
     }
 

@@ -61,7 +61,7 @@ public class Intensity extends FeatureSingleMemo {
 
     @Override
     public String describeParams() {
-        return region.descriptionBean();
+        return region.describeBean();
     }
 
     private ChildCacheName cacheName() {

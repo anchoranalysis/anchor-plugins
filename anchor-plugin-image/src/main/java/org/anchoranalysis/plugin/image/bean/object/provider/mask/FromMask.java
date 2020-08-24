@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.mask;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.bean.Provider;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.mask.Mask;

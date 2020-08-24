@@ -60,7 +60,7 @@ public class FromSerializedMarks extends MarkCollectionProposer {
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return toString();
     }
 
