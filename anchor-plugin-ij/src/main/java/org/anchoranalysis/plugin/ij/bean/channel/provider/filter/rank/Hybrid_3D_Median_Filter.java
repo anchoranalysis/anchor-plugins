@@ -61,7 +61,7 @@ PARTICULAR PURPOSE.
 					Christopher Philip Mauer  &  Vytas Bindokas
 					cpmauer@northwestern.edu     vytas@drugs.bsd.uchicago.edu
 */
-class Hybrid_3D_Median_Filter implements PlugInFilter {
+class Hybrid_3D_Median_Filter implements PlugInFilter { // NOSONAR
     private ImagePlus imp;
     private ImagePlus imp2;
     private ImageStack stack;

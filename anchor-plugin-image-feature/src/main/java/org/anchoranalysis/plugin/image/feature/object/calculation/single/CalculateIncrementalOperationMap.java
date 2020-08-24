@@ -83,12 +83,7 @@ public abstract class CalculateIncrementalOperationMap
         }
     }
 
-    /**
-     * Lowest existing key. 0 if no key exists.
-     *
-     * @param max
-     * @return
-     */
+    /** Lowest existing key. 0 if no key exists. */
     private int findHighestExistingKey(int max) {
         for (int i = max; i >= 1; i--) {
             if (this.hasKey(i)) {

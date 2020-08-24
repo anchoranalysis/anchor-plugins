@@ -26,43 +26,31 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
+import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
-public class NumberVoxelsAtBorder extends FeatureSingleObject {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean outsideAtThreshold = false;
-
-    @BeanField @Getter @Setter private boolean ignoreAtThreshold = false;
-
-    @BeanField @Getter @Setter private boolean do3D = false;
-    // END BEAN PROPERTIES
+public class NumberVoxelsAtBorder extends OutlineKernelBase {
 
     @Override
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return (double)
                 numberBorderPixels(
-                        input.get().getObject(), ignoreAtThreshold, outsideAtThreshold, do3D);
+                        input.get().getObject(), createParameters());
     }
 
     public static int numberBorderPixels(
             ObjectMask object,
-            boolean ignoreAtThreshold,
-            boolean outsideAtThreshold,
-            boolean do3D) {
+            OutlineKernelParameters parameters) {
         OutlineKernel3 kernel =
                 new OutlineKernel3(
-                        object.binaryValuesByte(), outsideAtThreshold, do3D, ignoreAtThreshold);
+                        object.binaryValuesByte(), parameters);
         return ApplyKernel.applyForCount(kernel, object.voxels());
     }
 }
