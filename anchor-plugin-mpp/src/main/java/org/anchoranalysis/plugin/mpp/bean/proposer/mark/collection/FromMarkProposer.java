@@ -99,7 +99,7 @@ public class FromMarkProposer extends MarkCollectionProposer {
     }
 
     @Override
-    public String descriptionBean() {
+    public String describeBean() {
         return getBeanName();
     }
 }
