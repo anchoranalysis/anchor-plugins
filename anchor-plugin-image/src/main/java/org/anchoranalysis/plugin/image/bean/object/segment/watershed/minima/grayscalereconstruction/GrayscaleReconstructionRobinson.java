@@ -49,33 +49,32 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
     @Override
     public VoxelsWrapper reconstruction(
-            VoxelsWrapper maskVb, VoxelsWrapper markerVb, Optional<ObjectMask> containingMask) {
+            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
 
         // We flip everything because what occurs is erosion by Dilation, whereas we want
         // reconstruction by Erosion
-        markerVb.subtractFromMaxValue();
-        maskVb.subtractFromMaxValue();
+        marker.subtractFromMaxValue();
+        mask.subtractFromMaxValue();
 
-        VoxelsWrapper ret = reconstructionByDilation(maskVb, markerVb, containingMask);
-        ret.subtractFromMaxValue();
-
-        return ret;
+        VoxelsWrapper reconstructed = reconstructionByDilation(mask, marker, containingMask);
+        reconstructed.subtractFromMaxValue();
+        return reconstructed;
     }
 
     // we now have a markerForReconstruction in the same condition as the 'strong' condition in the
     // Robison paper
     // all pixels are either 0 or their final value (from channel)
     private VoxelsWrapper reconstructionByDilation(
-            VoxelsWrapper maskVb, VoxelsWrapper markerVb, Optional<ObjectMask> containingMask) {
+            VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
         Voxels<ByteBuffer> voxelsFinalized =
-                VoxelsFactory.getByte().createInitialized(markerVb.any().extent());
+                VoxelsFactory.getByte().createInitialized(marker.any().extent());
 
         // TODO make more efficient
-        // Find maximum value of makerVb.... we can probably get this elsewhere without having to
+        // Find maximum value of markerVb.... we can probably get this elsewhere without having to
         // iterate the image again
-        int maxValue = markerVb.extract().voxelWithMaxIntensity();
+        int maxValue = marker.extract().voxelWithMaxIntensity();
 
         PriorityQueueIndexRangeDownhill<Point3i> queue =
                 new PriorityQueueIndexRangeDownhill<>(maxValue);
@@ -86,15 +85,15 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         //  for sake of keeping modularity
         if (containingMask.isPresent()) {
             populateQueueFromNonZeroPixelsMask(
-                    queue, markerVb.any(), voxelsFinalized, containingMask.get());
+                    queue, marker.any(), voxelsFinalized, containingMask.get());
         } else {
-            populateQueueFromNonZeroPixels(queue, markerVb.any(), voxelsFinalized);
+            populateQueueFromNonZeroPixels(queue, marker.any(), voxelsFinalized);
         }
 
         readFromQueueUntilEmpty(
-                queue, markerVb.any(), maskVb.any(), voxelsFinalized, containingMask);
+                queue, marker.any(), mask.any(), voxelsFinalized, containingMask);
 
-        return markerVb;
+        return marker;
     }
 
     private void readFromQueueUntilEmpty(

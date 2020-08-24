@@ -43,7 +43,12 @@ import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
-// 3x3 Sobel Filter
+/**
+ * 3x3 Sobel Filter
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class Sobel extends GradientBase {
 
     @Override

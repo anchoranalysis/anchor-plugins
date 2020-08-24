@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 
 /**
- * Associates a {@link ColorList} with a {@ObjectCollection}
+ * Associates a {@link ColorList} with a {@link ObjectCollection}
  * 
  * <p>Operations ensure both maintain an identical number of objects
  * 

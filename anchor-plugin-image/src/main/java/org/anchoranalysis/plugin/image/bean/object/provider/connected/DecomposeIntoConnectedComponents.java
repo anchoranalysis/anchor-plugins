@@ -59,8 +59,7 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
     }
 
     private ObjectCollection createObjects3D(
-            ObjectMask unconnected, CreateFromConnectedComponentsFactory createObjectMasks)
-            throws CreateException {
+            ObjectMask unconnected, CreateFromConnectedComponentsFactory createObjectMasks) {
 
         ObjectCollection objects =
                 createObjectMasks.createConnectedComponents(unconnected.binaryVoxels());
