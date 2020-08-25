@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
-import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
+import org.anchoranalysis.mpp.segment.optscheme.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.optscheme.OptSchemeContext;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.FeedbackReceiver;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeedbackHelper {

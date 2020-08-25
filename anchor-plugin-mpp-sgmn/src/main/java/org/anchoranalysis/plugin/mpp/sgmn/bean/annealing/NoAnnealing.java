@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.annealing;
 
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
 
 public class NoAnnealing extends AnnealScheme {
 

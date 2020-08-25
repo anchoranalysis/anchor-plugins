@@ -30,23 +30,23 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.mark.MarkWithIdentifierFactory;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkCollectionProposer;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelIndependent;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.proposer.MarkCollectionProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.VoxelizedMarksWithEnergyFactory;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 
 @NoArgsConstructor
 public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy> {

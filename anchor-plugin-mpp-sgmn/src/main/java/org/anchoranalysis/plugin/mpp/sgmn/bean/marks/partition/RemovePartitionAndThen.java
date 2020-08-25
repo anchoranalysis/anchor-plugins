@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.partition;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.transformer.Compose;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.transformer.Compose;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.MarksFromPartition;
 
 public class RemovePartitionAndThen<T> extends StateTransformerBean<MarksFromPartition, T> {

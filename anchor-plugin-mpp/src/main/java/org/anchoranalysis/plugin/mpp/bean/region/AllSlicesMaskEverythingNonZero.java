@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.CreateException;
@@ -35,6 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsFromHistogram;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /**
  * Only takes pixels where indexNonZero has a nonzero pixel

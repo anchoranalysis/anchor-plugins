@@ -29,8 +29,6 @@ package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
@@ -40,6 +38,8 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipsoidFitter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

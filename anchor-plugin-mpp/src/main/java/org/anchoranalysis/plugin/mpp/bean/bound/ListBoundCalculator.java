@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.mpp.bean.bound;
 
 import java.util.ArrayList;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 
 public class ListBoundCalculator extends ArrayList<BoundCalculator> {
 

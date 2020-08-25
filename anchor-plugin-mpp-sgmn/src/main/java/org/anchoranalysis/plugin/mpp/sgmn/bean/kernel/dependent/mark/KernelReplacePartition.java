@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelReplace;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.MarksFromPartition;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 public class KernelReplacePartition extends KernelReplace<MarksFromPartition> {
 

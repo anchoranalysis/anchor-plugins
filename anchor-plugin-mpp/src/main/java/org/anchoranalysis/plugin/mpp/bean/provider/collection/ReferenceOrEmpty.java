@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.bean.provider.collection;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * Returns an existing marks-collection or an empty set if it doesn't exist

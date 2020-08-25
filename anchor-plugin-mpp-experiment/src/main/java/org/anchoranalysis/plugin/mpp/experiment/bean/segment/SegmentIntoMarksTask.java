@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
@@ -56,8 +55,9 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
-import org.anchoranalysis.mpp.sgmn.bean.ExperimentState;
-import org.anchoranalysis.mpp.sgmn.bean.SegmentIntoMarks;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.bean.ExperimentState;
+import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 
 public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
 

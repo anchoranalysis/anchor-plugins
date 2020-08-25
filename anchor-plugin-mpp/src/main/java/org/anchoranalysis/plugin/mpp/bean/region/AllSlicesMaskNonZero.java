@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /** Gets all slices where indexNonZero has at least one non-zero pixel in that slice */
 @EqualsAndHashCode(callSuper = true)

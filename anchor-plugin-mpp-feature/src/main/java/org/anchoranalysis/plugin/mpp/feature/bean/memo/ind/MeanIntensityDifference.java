@@ -32,11 +32,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 @NoArgsConstructor
 @AllArgsConstructor

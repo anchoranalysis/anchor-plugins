@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.mpp.sgmn.kernel.assigner;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelAssigner;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
+import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.kernelbridge.KernelStateBridge;
 import lombok.AllArgsConstructor;
 

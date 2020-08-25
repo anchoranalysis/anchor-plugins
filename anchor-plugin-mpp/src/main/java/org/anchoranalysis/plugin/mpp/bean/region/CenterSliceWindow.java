@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.mpp.bean.region;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /**
  * Like {#link org.anchoranalysis.plugin.mpp.bean.region.CenterSlice} but considers more

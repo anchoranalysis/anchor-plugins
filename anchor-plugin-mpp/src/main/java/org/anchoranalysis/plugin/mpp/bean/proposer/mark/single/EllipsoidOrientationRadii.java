@@ -29,18 +29,18 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds3D;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
-import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.mpp.bean.bound.Bound;
+import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds3D;
+import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.mpp.mark.conic.RadiiRandomizer;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
 
 public class EllipsoidOrientationRadii extends MarkProposer {
 

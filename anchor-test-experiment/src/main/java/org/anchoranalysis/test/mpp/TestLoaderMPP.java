@@ -27,9 +27,9 @@
 package org.anchoranalysis.test.mpp;
 
 import java.nio.file.Path;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 

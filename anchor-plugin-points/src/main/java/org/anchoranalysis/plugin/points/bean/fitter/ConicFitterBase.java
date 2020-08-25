@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 
 public abstract class ConicFitterBase extends PointsFitter {
 

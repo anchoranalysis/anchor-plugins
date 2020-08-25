@@ -31,8 +31,8 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.core.geometry.Point3d;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidFitHelper {

@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipseFitter;
 
 @EqualsAndHashCode(callSuper = false)

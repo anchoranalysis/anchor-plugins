@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public class MarkCollectionFixture {
 

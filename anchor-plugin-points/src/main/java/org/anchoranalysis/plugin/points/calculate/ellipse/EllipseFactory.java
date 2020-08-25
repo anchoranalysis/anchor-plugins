@@ -29,9 +29,6 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
@@ -40,6 +37,9 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.plugin.points.bean.fitter.ConicFitterBase;
 
 @AllArgsConstructor

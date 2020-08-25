@@ -30,7 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
@@ -41,6 +40,7 @@ import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 
 /**
  * Adds a visualization for all binary-masks and object-collections that are added using a

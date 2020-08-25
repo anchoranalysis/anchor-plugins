@@ -30,9 +30,6 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
-import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,6 +43,9 @@ import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
+import org.anchoranalysis.mpp.bound.BidirectionalBound;
 
 public class LineBoundCalculator extends BoundCalculator {
 

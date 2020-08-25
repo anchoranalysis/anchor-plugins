@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.feature.overlap;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.overlap.OverlapUtilities;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.mpp.overlap.OverlapUtilities;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

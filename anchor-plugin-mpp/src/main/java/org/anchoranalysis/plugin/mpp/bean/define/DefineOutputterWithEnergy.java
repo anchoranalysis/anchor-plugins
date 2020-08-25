@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputter;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.plugin.image.provider.ReferenceFactory;
 
 public abstract class DefineOutputterWithEnergy extends DefineOutputter {

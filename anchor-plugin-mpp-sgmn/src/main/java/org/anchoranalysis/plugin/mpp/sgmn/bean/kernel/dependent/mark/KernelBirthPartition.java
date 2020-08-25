@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.dependent.mark;
 import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelBirth;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.MarksFromPartition;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 /**
  * Proposes new marks ONLY if they haven't already been proposed and accepted.

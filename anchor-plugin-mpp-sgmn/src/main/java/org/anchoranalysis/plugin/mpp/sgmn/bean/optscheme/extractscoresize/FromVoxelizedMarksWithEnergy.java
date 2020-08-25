@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.extractscoresize;
 
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.optscheme.ExtractScoreSize;
 
 public class FromVoxelizedMarksWithEnergy extends ExtractScoreSize<VoxelizedMarksWithEnergy> {
 

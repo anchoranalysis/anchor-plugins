@@ -30,9 +30,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
 
 @NoArgsConstructor
 @AllArgsConstructor

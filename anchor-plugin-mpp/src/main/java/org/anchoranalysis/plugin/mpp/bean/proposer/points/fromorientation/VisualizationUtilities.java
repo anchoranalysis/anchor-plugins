@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkConicFactory;
-import org.anchoranalysis.anchor.mpp.mark.points.LineSegment;
-import org.anchoranalysis.anchor.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.mpp.mark.ColoredMarks;
+import org.anchoranalysis.mpp.mark.conic.MarkConicFactory;
+import org.anchoranalysis.mpp.mark.points.LineSegment;
+import org.anchoranalysis.mpp.mark.points.PointListFactory;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VisualizationUtilities {

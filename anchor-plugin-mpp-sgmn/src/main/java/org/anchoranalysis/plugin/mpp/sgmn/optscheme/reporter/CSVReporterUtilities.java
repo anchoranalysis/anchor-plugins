@@ -33,7 +33,7 @@ import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEner
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CSVReporterUtilities {

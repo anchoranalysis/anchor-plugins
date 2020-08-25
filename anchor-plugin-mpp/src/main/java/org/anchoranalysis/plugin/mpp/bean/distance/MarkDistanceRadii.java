@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.bean.distance;
 
-import org.anchoranalysis.anchor.mpp.bean.mark.MarkDistance;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
-import org.anchoranalysis.anchor.mpp.mark.conic.Circle;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
-import org.anchoranalysis.anchor.mpp.mark.conic.Sphere;
+import org.anchoranalysis.mpp.bean.mark.MarkDistance;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.UnsupportedMarkTypeException;
+import org.anchoranalysis.mpp.mark.conic.Circle;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.mpp.mark.conic.Sphere;
 
 public class MarkDistanceRadii extends MarkDistance {
 

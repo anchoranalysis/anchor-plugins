@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.dual;
 
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.DualVoxelizedMarks;
 
 public class RetrieveDestinationFromDual

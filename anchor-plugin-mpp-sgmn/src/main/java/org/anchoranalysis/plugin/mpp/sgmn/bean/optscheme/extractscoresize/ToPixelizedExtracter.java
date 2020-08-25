@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.extractscoresize;
 
-import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.optscheme.ExtractScoreSize;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 public class ToPixelizedExtracter<T> extends ExtractScoreSize<ToPixelized<T>> {

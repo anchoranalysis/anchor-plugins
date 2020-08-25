@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernelList;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
+import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

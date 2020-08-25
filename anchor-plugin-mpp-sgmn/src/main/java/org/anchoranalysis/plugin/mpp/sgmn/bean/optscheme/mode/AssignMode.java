@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.mode;
 
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelAssigner;
-import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
-import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
+import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
+import org.anchoranalysis.mpp.segment.optscheme.ExtractScoreSize;
+import org.anchoranalysis.mpp.segment.optscheme.StateReporter;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.kernelbridge.KernelStateBridge;
 import org.anchoranalysis.plugin.mpp.sgmn.kernel.assigner.KernelAssignerCalculateEnergyFromKernel;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.AccptProbCalculator;

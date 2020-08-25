@@ -27,7 +27,6 @@
 package org.anchoranalysis.io.manifest.reportfeature;
 
 import java.io.IOException;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.Logger;
@@ -35,6 +34,7 @@ import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 public class NumberMarksFromManifest extends ReportFeatureForManifest {
 

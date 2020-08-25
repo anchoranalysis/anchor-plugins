@@ -32,9 +32,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposerOption;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.WeightedKernel;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposerOption;
+import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 
 @NoArgsConstructor
 @AllArgsConstructor

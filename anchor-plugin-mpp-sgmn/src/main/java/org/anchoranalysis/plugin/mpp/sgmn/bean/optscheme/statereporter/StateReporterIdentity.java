@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.statereporter;
 
 import java.util.Optional;
-import org.anchoranalysis.mpp.sgmn.optscheme.StateReporter;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
+import org.anchoranalysis.mpp.segment.optscheme.StateReporter;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 
 /**
  * Assumes the state is reported without any transformation

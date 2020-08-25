@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.bean.check;
 
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /**
  * The center ps of at least one slice should be on the stack Tries overall center point first, and
