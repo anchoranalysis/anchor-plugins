@@ -30,16 +30,17 @@ import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3NeighborMatchValue;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
 /**
@@ -57,18 +58,15 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
     /** Index of which channel in the energy-stack to select */
     @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
-
+    
     @Override
-    protected double calculate(SessionInput<FeatureInputSingleObject> input)
-            throws FeatureCalculationException {
-        
-        ObjectMask object = input.get().getObject();
-        
-        Channel channel = input.get().getEnergyStackRequired().getChannel(energyIndex);
+    protected double calculateWithParameters(ObjectMask object,
+            OutlineKernelParameters parameters, CheckedSupplier<EnergyStack,FeatureCalculationException> energyStack) throws FeatureCalculationException {
+        Channel channel = energyStack.get().getChannel(energyIndex);
         
         OutlineKernel3NeighborMatchValue kernelMatch =
                 new OutlineKernel3NeighborMatchValue(
-                        object, binaryVoxels(channel), createParameters());
+                        object, binaryVoxels(channel), parameters);
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 
@@ -81,6 +79,4 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
                     String.format("energyStack channel %d has incorrect data type", getEnergyIndex()), e);
         }
     }
-
-
 }

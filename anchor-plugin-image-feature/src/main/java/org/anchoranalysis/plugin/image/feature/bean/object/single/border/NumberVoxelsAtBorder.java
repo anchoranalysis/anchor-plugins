@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
@@ -36,13 +36,11 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
 public class NumberVoxelsAtBorder extends OutlineKernelBase {
-
+    
     @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
+    protected double calculateWithParameters(ObjectMask object, OutlineKernelParameters parameters, CheckedSupplier<EnergyStack,FeatureCalculationException> energyStack)
             throws FeatureCalculationException {
-        return (double)
-                numberBorderPixels(
-                        input.get().getObject(), createParameters());
+        return (double) numberBorderPixels(object, parameters);
     }
 
     public static int numberBorderPixels(
@@ -53,4 +51,5 @@ public class NumberVoxelsAtBorder extends OutlineKernelBase {
                         object.binaryValuesByte(), parameters);
         return ApplyKernel.applyForCount(kernel, object.voxels());
     }
+  
 }
