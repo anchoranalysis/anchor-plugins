@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
+import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
