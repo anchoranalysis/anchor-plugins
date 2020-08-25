@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 
-import org.anchoranalysis.mpp.mark.MarkCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * A subset of a marks (as extracted during a partition)

@@ -34,12 +34,11 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.plugin.image.bean.params.KeyValueCondition;
 
 /**
-* The current {@code mask} is returned if a condition on key-values is satisfied otherwise
-* {@code maskElse} is returned.
-* 
-* @author Owen Feehan
-*
-*/
+ * The current {@code mask} is returned if a condition on key-values is satisfied otherwise {@code
+ * maskElse} is returned.
+ *
+ * @author Owen Feehan
+ */
 public class IfKeyValueCondition extends IfPredicateBase {
 
     // START BEAN PROPERTIES

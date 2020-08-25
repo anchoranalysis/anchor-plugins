@@ -51,8 +51,8 @@ public class TextFileMarksReporter extends PeriodicSubfolderReporter<MarkCollect
     }
 
     @Override
-    protected Optional<MarkCollection> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
-            throws ReporterException {
+    protected Optional<MarkCollection> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
         return Optional.of(reporting.getMarksAfter().getMarks().getMarks());
     }
 

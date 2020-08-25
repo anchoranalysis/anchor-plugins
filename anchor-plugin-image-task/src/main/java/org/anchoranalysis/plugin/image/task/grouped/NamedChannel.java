@@ -26,11 +26,12 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
-import org.anchoranalysis.image.channel.Channel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.anchoranalysis.image.channel.Channel;
 
-@Value @AllArgsConstructor
+@Value
+@AllArgsConstructor
 public class NamedChannel {
 
     private String name;

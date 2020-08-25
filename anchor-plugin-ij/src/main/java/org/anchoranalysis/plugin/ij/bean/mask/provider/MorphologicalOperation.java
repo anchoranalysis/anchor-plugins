@@ -40,12 +40,11 @@ import org.anchoranalysis.plugin.ij.mask.ApplyImageJMorphologicalOperation;
 
 /**
  * Applies an ImageJ (2D) morphological operation to each slice
- * 
- * <p>Note that the slices are processed independently of each other, as the procedure
- * only supports 2D morphological operations.
- * 
- * @author Owen Feehan
  *
+ * <p>Note that the slices are processed independently of each other, as the procedure only supports
+ * 2D morphological operations.
+ *
+ * @author Owen Feehan
  */
 public class MorphologicalOperation extends MaskProviderUnary {
 
@@ -60,7 +59,9 @@ public class MorphologicalOperation extends MaskProviderUnary {
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
         try {
-            BinaryVoxels<ByteBuffer> processed = ApplyImageJMorphologicalOperation.applyOperation(mask.binaryVoxels(), command, iterations);
+            BinaryVoxels<ByteBuffer> processed =
+                    ApplyImageJMorphologicalOperation.applyOperation(
+                            mask.binaryVoxels(), command, iterations);
             return new Mask(processed, mask.dimensions().resolution());
         } catch (OperationFailedException e) {
             throw new CreateException(e);

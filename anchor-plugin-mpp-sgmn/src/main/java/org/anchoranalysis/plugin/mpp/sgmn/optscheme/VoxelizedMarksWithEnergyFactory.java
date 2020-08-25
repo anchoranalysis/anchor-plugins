@@ -40,11 +40,13 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoxelizedMarksWithEnergyFactory {
 
-    public static VoxelizedMarksWithEnergy createFromMarks(MarkCollection marks, KernelCalculationContext context, Logger logger)
+    public static VoxelizedMarksWithEnergy createFromMarks(
+            MarkCollection marks, KernelCalculationContext context, Logger logger)
             throws CreateException {
         try {
             return new VoxelizedMarksWithEnergy(
-                    new MarksWithEnergyBreakdown(new MarksWithTotalEnergy(marks, context.getEnergyScheme())),
+                    new MarksWithEnergyBreakdown(
+                            new MarksWithTotalEnergy(marks, context.getEnergyScheme())),
                     context.proposer().getEnergyStack(),
                     context.getEnergyScheme().getSharedFeatures(),
                     logger);

@@ -43,8 +43,7 @@ class ProviderBeanHelper {
      * @return a newly-created list containing the newly created items
      * @throws CreateException if a provider fails to create
      */
-    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in)
-            throws CreateException {
+    public static <T> List<T> listFromBeans(List<? extends Provider<T>> in) throws CreateException {
         List<T> out = new ArrayList<>();
         addFromBeanList(in, out);
         return out;

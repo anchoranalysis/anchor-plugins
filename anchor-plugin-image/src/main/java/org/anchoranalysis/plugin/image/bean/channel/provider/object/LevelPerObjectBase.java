@@ -39,9 +39,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * Creates a channel with a level calculated for each object variously
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class LevelPerObjectBase extends ChannelProviderUnary {
 
@@ -49,30 +48,31 @@ public abstract class LevelPerObjectBase extends ChannelProviderUnary {
     /** The objects for whom a level is calculated */
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
 
-    /** Method to calculate the level for a particular object. It is passed a histogram (calculated in different ways) for each object */
+    /**
+     * Method to calculate the level for a particular object. It is passed a histogram (calculated
+     * in different ways) for each object
+     */
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
     // END BEAN PROPERTIES
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel output = ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
-        writeLevelsForObjects(
-                channel,
-                objects.create(),
-                output);
+        Channel output =
+                ChannelFactory.instance().create(channel.dimensions(), channel.getVoxelDataType());
+        writeLevelsForObjects(channel, objects.create(), output);
         return output;
     }
 
     /**
      * Creates a channel with the levels for a set of objects
-     * 
-     * @param input the channel whose intensity is passed to {@code calculateLevel} as a histogram variously for particular objects
+     *
+     * @param input the channel whose intensity is passed to {@code calculateLevel} as a histogram
+     *     variously for particular objects
      * @param objects the objects
      * @param output the channel where the calculated-levels are written (for each object)
      * @throws CreateException
      */
     protected abstract void writeLevelsForObjects(
-            Channel input, ObjectCollection objects, Channel output)
-            throws CreateException;
+            Channel input, ObjectCollection objects, Channel output) throws CreateException;
 }

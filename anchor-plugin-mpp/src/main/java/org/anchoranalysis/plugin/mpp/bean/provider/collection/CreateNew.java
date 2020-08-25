@@ -32,9 +32,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * Creates a new empty collection of marks
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class CreateNew extends MarkCollectionProvider {
 

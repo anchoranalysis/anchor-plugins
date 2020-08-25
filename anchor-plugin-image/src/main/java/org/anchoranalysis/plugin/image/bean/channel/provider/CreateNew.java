@@ -32,15 +32,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * Creates a new channel with all values initialized to a constant (by default zero)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class CreateNew extends FromDimensionsBase {
 
@@ -55,9 +54,7 @@ public class CreateNew extends FromDimensionsBase {
     protected Channel createFromDimensions(Dimensions dimensions) {
 
         VoxelDataType typeOut =
-                createShort
-                        ? UnsignedShortVoxelType.INSTANCE
-                        : UnsignedByteVoxelType.INSTANCE;
+                createShort ? UnsignedShortVoxelType.INSTANCE : UnsignedByteVoxelType.INSTANCE;
 
         Channel channelNew = ChannelFactory.instance().create(dimensions, typeOut);
         if (value != 0) {

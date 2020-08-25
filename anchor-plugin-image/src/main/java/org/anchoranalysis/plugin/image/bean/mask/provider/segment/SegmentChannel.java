@@ -48,15 +48,14 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
  * Applies a {@link BinarySegmentation} algorithm to derive a mask from a channel
- * 
- * <p>Optionally, a mask restricts which part of the channel the algorithm is applied to.
- * In this case, the remainder of the channel is unaltered in the output-mask, and no check occurs
- * to ensure it containlys only the valid binary-values for OFF and ON.
- * 
- * <p>Optionally a histogram of voxel intensity values is passed to the segmentation algorithm.
- * 
- * @author Owen Feehan
  *
+ * <p>Optionally, a mask restricts which part of the channel the algorithm is applied to. In this
+ * case, the remainder of the channel is unaltered in the output-mask, and no check occurs to ensure
+ * it containlys only the valid binary-values for OFF and ON.
+ *
+ * <p>Optionally a histogram of voxel intensity values is passed to the segmentation algorithm.
+ *
+ * @author Owen Feehan
  */
 public class SegmentChannel extends FromChannelBase {
 
@@ -67,7 +66,10 @@ public class SegmentChannel extends FromChannelBase {
     /** An optional histogram of voxel intensity values which can be used by {@code segment} */
     @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
 
-    /** An optional mask which restricts the algorithm to only parts of the channel where the mask has an ON voxel */
+    /**
+     * An optional mask which restricts the algorithm to only parts of the channel where the mask
+     * has an ON voxel
+     */
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
     // END BEAN PROPERTIES
 

@@ -47,7 +47,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 public class VoxelizeWithTransform<T> extends StateTransformerBean<T, ToPixelized<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StateTransformerBean<T, VoxelizedMarksWithEnergy> transformer;
+    @BeanField @Getter @Setter
+    private StateTransformerBean<T, VoxelizedMarksWithEnergy> transformer;
     // END BEAN PROPERTIES
 
     @Override

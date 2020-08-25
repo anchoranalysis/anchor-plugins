@@ -54,7 +54,8 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateFromAllMoments(ImageMoments moments) throws FeatureCalculationException {
+    protected double calculateFromAllMoments(ImageMoments moments)
+            throws FeatureCalculationException {
         return calculateFromSpecificMoment(moments.get(index));
     }
 

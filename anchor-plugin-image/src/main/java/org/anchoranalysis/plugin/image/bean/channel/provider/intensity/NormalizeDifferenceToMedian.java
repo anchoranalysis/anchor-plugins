@@ -45,14 +45,15 @@ import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
 /**
  * Corrects a channel in the following way
- * 
+ *
  * <p>For each object:
+ *
  * <ol>
- * <li>Identify the median value from {@code channelLookup} <i>(Value 1)</i>
- * <li>Calculate the difference of each pixel value in {@code channelLookup} <i>(Value 2)</i>
- * <li>Adjust each pixel value by <i>Value 2</i>.
+ *   <li>Identify the median value from {@code channelLookup} <i>(Value 1)</i>
+ *   <li>Calculate the difference of each pixel value in {@code channelLookup} <i>(Value 2)</i>
+ *   <li>Adjust each pixel value by <i>Value 2</i>.
  * </ol>
- * 
+ *
  * @author Owen Feehan
  */
 public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
@@ -84,16 +85,20 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
     private void adjustObject(
             ObjectMask object, Channel channel, Channel channelLookup, int medianFromObject) {
 
-        IterateVoxels.callEachPointTwo(channel.voxels().asByte(), channelLookup.voxels().asByte(), object, (point, buffer, bufferLookup, offset) -> {
-            int lookupVal = ByteConverter.unsignedByteToInt(bufferLookup.get(offset));
+        IterateVoxels.callEachPointTwo(
+                channel.voxels().asByte(),
+                channelLookup.voxels().asByte(),
+                object,
+                (point, buffer, bufferLookup, offset) -> {
+                    int lookupVal = ByteConverter.unsignedByteToInt(bufferLookup.get(offset));
 
-            int valueExisting = ByteConverter.unsignedByteToInt(buffer.get(offset));
-            int valueToAssign = clipValue(valueExisting - medianFromObject + lookupVal);
+                    int valueExisting = ByteConverter.unsignedByteToInt(buffer.get(offset));
+                    int valueToAssign = clipValue(valueExisting - medianFromObject + lookupVal);
 
-            buffer.put(offset, (byte) valueToAssign);
-        });
+                    buffer.put(offset, (byte) valueToAssign);
+                });
     }
-    
+
     private static int clipValue(int value) {
         if (value < 0) {
             return 0;

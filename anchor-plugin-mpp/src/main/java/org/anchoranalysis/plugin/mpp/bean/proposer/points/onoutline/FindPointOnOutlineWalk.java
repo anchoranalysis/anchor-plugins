@@ -70,7 +70,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
         return pointOnOutline(centerPoint, marginalStepFrom(rotationMatrix, is3D), is3D);
     }
-    
+
     private void createMaskIfNecessary() throws OperationFailedException {
         // The first time, we establish the binaryImage
         if (maskCreated == null) {
@@ -149,8 +149,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         }
     }
 
-    private boolean pointIsOutlineVal(
-            Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
+    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
 
         if (!dimensions.contains(point)) {
             return false;
@@ -172,10 +171,15 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         // We do check
         if (maxDistance != null) {
             double distance =
-                    maskCreated.dimensions().resolution().distanceZRelative(centerPoint, pointDouble);
+                    maskCreated
+                            .dimensions()
+                            .resolution()
+                            .distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(maskCreated.dimensions().resolution()), centerPoint, pointDouble);
+                            Optional.of(maskCreated.dimensions().resolution()),
+                            centerPoint,
+                            pointDouble);
             return distance > maxDistanceResolved;
         } else {
             return false;

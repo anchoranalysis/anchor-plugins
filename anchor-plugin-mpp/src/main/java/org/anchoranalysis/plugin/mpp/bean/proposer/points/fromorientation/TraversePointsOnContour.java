@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation;
 
 import static org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.VisualizationUtilities.*;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;

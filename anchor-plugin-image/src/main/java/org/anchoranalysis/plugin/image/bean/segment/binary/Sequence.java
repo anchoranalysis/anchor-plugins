@@ -46,14 +46,16 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * Performs a sequence of succesive segmentations
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Sequence extends BinarySegmentation {
 
     // START BEAN PROPERTIES
-    /** A list of binary-segmentations that are applied successively (the output of the predecessor becomes the input of the sucecssor) */
+    /**
+     * A list of binary-segmentations that are applied successively (the output of the predecessor
+     * becomes the input of the sucecssor)
+     */
     @BeanField @OptionalBean @Getter @Setter
     private List<BinarySegmentation> list = new ArrayList<>();
     // END BEAN PROPERTIES

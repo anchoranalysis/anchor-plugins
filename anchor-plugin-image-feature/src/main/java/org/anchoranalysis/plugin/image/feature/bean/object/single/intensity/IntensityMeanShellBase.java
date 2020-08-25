@@ -62,8 +62,8 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     @BeanField @Getter @Setter private boolean inverse = false;
 
     /**
-     * A channel of the energyStack that is used as an additional mask using default byte values for ON
-     * and OFF
+     * A channel of the energyStack that is used as an additional mask using default byte values for
+     * ON and OFF
      */
     @BeanField @Getter @Setter private int energyIndexMask = -1;
 
@@ -84,7 +84,8 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     }
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask objectShell = createShell(input);
@@ -110,7 +111,8 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
         return input.calc(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
-    private Optional<ObjectMask> intersectWithEnergyMask(ObjectMask object, EnergyStackWithoutParams energyStack) {
+    private Optional<ObjectMask> intersectWithEnergyMask(
+            ObjectMask object, EnergyStackWithoutParams energyStack) {
         return object.intersect(createEnergyMask(energyStack), energyStack.dimensions());
     }
 

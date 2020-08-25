@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -34,7 +35,6 @@ import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedStacksSet;
 import org.anchoranalysis.image.stack.Stack;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Source of channels for aggregating.
@@ -44,15 +44,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChannelSource {
 
-    // START REQUIRED ARGUMENTS 
+    // START REQUIRED ARGUMENTS
     private final NamedStacksSet stackStore;
     private final ConsistentChannelChecker channelChecker;
     // END REQUIRED ARGUMENTS
-    
+
     /** Optionally resizes all extracted channels in XY */
     private final Optional<SizeXY> resizeTo;
-    
-    public Channel extractChannel(String stackName, boolean checkType) throws OperationFailedException {
+
+    public Channel extractChannel(String stackName, boolean checkType)
+            throws OperationFailedException {
 
         try {
             // We make a single histogram

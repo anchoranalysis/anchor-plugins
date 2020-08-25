@@ -36,9 +36,8 @@ import org.anchoranalysis.image.channel.converter.ChannelConverter;
 
 /**
  * Converts a channel by applying a converter (no histogram is involved in the conversion).
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Convert extends ConvertBase {
 

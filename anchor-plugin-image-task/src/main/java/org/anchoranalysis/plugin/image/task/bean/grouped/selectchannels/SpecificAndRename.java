@@ -46,8 +46,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 public class SpecificAndRename extends FromStacks {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private List<NamedBean<FromStack>> list = new ArrayList<>();
+    @BeanField @Getter @Setter private List<NamedBean<FromStack>> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -70,7 +69,8 @@ public class SpecificAndRename extends FromStacks {
 
         FromStack ref = nb.getItem();
 
-        Channel channel = source.extractChannel(ref.getStackProviderID(), checkType, ref.getChannelIndex());
+        Channel channel =
+                source.extractChannel(ref.getStackProviderID(), checkType, ref.getChannelIndex());
 
         return new NamedChannel(nb.getName(), channel);
     }

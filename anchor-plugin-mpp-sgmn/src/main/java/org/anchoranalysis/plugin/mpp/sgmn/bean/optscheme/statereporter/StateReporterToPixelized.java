@@ -41,13 +41,14 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.marks.voxelized.RetrieveSourceFro
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 /**
- * Assumes we are interested in {@link VoxelizedMarksWithEnergy} as reporting type, and our optimization-state is in
- * the form ToPixelized<T>
+ * Assumes we are interested in {@link VoxelizedMarksWithEnergy} as reporting type, and our
+ * optimization-state is in the form ToPixelized<T>
  *
  * @author Owen Feehan
  * @param <T>
  */
-public class StateReporterToPixelized<T> extends StateReporter<ToPixelized<T>, VoxelizedMarksWithEnergy> {
+public class StateReporterToPixelized<T>
+        extends StateReporter<ToPixelized<T>, VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter

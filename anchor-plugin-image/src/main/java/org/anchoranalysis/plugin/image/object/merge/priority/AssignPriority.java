@@ -44,7 +44,8 @@ public abstract class AssignPriority {
      * @return the object with a priority afforded
      * @throws OperationFailedException
      */
-    public PrioritisedVertex assignPriority(ObjectVertex source, ObjectVertex destination, GraphLogger logger)
+    public PrioritisedVertex assignPriority(
+            ObjectVertex source, ObjectVertex destination, GraphLogger logger)
             throws OperationFailedException {
 
         // Do merge
@@ -64,6 +65,9 @@ public abstract class AssignPriority {
     }
 
     protected abstract PrioritisedVertex assignPriorityToEdge(
-            ObjectVertex source, ObjectVertex destination, ObjectMask merge, ErrorReporter errorReporter)
+            ObjectVertex source,
+            ObjectVertex destination,
+            ObjectMask merge,
+            ErrorReporter errorReporter)
             throws OperationFailedException;
 }

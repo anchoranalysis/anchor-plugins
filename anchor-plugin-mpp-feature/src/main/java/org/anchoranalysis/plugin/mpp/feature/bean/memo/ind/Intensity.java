@@ -56,7 +56,10 @@ public class Intensity extends FeatureSingleMemo {
             throws FeatureCalculationException {
 
         return input.forChild()
-                .calculate(item, new CalculateHistogramInputFromMemo(region, excludeZero), cacheName());
+                .calculate(
+                        item,
+                        new CalculateHistogramInputFromMemo(region, excludeZero),
+                        cacheName());
     }
 
     @Override

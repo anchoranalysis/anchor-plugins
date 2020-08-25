@@ -33,12 +33,15 @@ import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
-public class AsCollection extends FeatureSingleElem<FeatureInputAllMemo, FeatureInputMarkCollection> {
+public class AsCollection
+        extends FeatureSingleElem<FeatureInputAllMemo, FeatureInputMarkCollection> {
 
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCollection.class);
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
-        return input.forChild().calculate(getItem(), new CalculateDeriveMarkCollectionInput(), CACHE_NAME);
+    public double calculate(SessionInput<FeatureInputAllMemo> input)
+            throws FeatureCalculationException {
+        return input.forChild()
+                .calculate(getItem(), new CalculateDeriveMarkCollectionInput(), CACHE_NAME);
     }
 }

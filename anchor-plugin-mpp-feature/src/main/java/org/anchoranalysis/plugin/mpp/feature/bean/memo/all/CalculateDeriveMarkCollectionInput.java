@@ -39,6 +39,7 @@ public class CalculateDeriveMarkCollectionInput
     @Override
     protected FeatureInputMarkCollection execute(FeatureInputAllMemo input)
             throws FeatureCalculationException {
-        return new FeatureInputMarkCollection(input.getPxlPartMemo().asMarks(), input.dimensionsOptional());
+        return new FeatureInputMarkCollection(
+                input.getPxlPartMemo().asMarks(), input.dimensionsOptional());
     }
 }

@@ -108,7 +108,8 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     }
 
     private Optional<VoxelizedMarkMemo> maybeMakeAdditionalBirth(
-            Mark markNew, MarkWithIdentifierFactory markFactory, KernelCalculationContext context) throws KernelCalculateEnergyException {
+            Mark markNew, MarkWithIdentifierFactory markFactory, KernelCalculationContext context)
+            throws KernelCalculateEnergyException {
         if (markProposerAdditionalBirth != null) {
             VoxelizedMarkMemo pmmAdditional =
                     KernelBirthAndKillHelper.makeAdditionalBirth(

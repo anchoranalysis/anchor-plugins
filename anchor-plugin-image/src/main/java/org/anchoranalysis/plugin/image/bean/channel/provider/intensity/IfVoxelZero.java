@@ -73,7 +73,8 @@ public class IfVoxelZero extends ChannelProviderUnary {
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Channel ifZero = DimensionsChecker.createSameSize(channelIfVoxelZero, "channelIfVoxelZero", channel);
+        Channel ifZero =
+                DimensionsChecker.createSameSize(channelIfVoxelZero, "channelIfVoxelZero", channel);
 
         VoxelDataType combinedType =
                 CombineTypes.combineTypes(channel.getVoxelDataType(), ifZero.getVoxelDataType());
@@ -86,8 +87,8 @@ public class IfVoxelZero extends ChannelProviderUnary {
      * Creates a new channel which is a merged version of two input channels according to rules.
      *
      * <ul>
-     *   <li>If the pixel in {@code channel} is non-zero, then the corresponding output is {@code channel
-     *       * multFactorIfNonZero}
+     *   <li>If the pixel in {@code channel} is non-zero, then the corresponding output is {@code
+     *       channel * multFactorIfNonZero}
      *   <li>If the pixel in {@code channel} is zero, then the corresponding output is {@code
      *       channelIfPixelZero}
      * </ul>

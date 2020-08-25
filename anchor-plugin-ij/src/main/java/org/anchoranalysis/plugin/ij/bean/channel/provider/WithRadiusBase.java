@@ -51,7 +51,8 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
         return createFromChannel(channel, radiusInVoxels(channel.dimensions()));
     }
 
-    protected abstract Channel createFromChannel(Channel channel, int radius) throws CreateException;
+    protected abstract Channel createFromChannel(Channel channel, int radius)
+            throws CreateException;
 
     private int radiusInVoxels(Dimensions dim) {
         if (radiusInMeters) {

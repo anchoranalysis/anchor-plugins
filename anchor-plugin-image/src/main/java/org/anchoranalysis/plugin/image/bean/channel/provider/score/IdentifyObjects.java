@@ -35,12 +35,11 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBas
 
 /**
  * Assigns a unique id number to each object
- * 
+ *
  * <p>The behaviour is undefined when objects overlap with each other. An ID of either object
  * arbitrarily will be assigned.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class IdentifyObjects extends UnaryWithObjectsBase {
 

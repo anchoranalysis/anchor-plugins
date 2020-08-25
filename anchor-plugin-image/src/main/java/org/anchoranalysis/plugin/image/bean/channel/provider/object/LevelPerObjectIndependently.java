@@ -38,11 +38,10 @@ import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollection;
 import org.anchoranalysis.plugin.image.intensity.level.LevelResultCollectionFactory;
 
 /**
- * Creates a channel with different threshold-levels for each object, calculating the level
- * only from the histogram of the particular object.
- * 
- * @author Owen Feehan
+ * Creates a channel with different threshold-levels for each object, calculating the level only
+ * from the histogram of the particular object.
  *
+ * @author Owen Feehan
  */
 public class LevelPerObjectIndependently extends LevelPerObjectBase {
 
@@ -51,7 +50,8 @@ public class LevelPerObjectIndependently extends LevelPerObjectBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected void writeLevelsForObjects(Channel channelIntensity, ObjectCollection objects, Channel output)
+    protected void writeLevelsForObjects(
+            Channel channelIntensity, ObjectCollection objects, Channel output)
             throws CreateException {
 
         try {

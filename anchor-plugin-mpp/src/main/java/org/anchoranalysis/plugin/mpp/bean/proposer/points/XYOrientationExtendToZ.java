@@ -161,8 +161,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         }
     }
 
-    private int maxZDistance(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException {
         int maxZDistance =
                 (int) Math.round(maxDistanceZ.propose(randomNumberGenerator, resolution));

@@ -45,7 +45,8 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputAllMemo> input)
+            throws FeatureCalculationException {
 
         MemoCollection memoMarks = input.get().getPxlPartMemo();
 
@@ -56,7 +57,8 @@ public class CoefficientOfVarianceFromAll extends FeatureAllMemo {
         return calculateStatistic(input, memoMarks);
     }
 
-    private double calculateStatistic(SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
+    private double calculateStatistic(
+            SessionInput<FeatureInputAllMemo> input, MemoCollection memoMarks)
             throws FeatureCalculationException {
 
         double[] vals = new double[memoMarks.size()];

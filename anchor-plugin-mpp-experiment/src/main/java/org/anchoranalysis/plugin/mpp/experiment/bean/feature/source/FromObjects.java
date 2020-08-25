@@ -195,7 +195,9 @@ public class FromObjects<T extends FeatureInput>
     }
 
     private FeatureCalculatorMulti<T> startCalculator(
-            FeatureTableCalculator<T> calculator, InitParamsWithEnergyStack initParams, Logger logger)
+            FeatureTableCalculator<T> calculator,
+            InitParamsWithEnergyStack initParams,
+            Logger logger)
             throws OperationFailedException {
 
         try {

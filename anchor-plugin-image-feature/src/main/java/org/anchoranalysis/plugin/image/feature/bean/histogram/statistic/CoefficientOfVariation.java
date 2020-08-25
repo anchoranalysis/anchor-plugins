@@ -35,7 +35,8 @@ import org.anchoranalysis.image.histogram.HistogramStatistics;
 public class CoefficientOfVariation extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return HistogramStatistics.coefficientOfVariation(histogram);
         } catch (OperationFailedException e) {

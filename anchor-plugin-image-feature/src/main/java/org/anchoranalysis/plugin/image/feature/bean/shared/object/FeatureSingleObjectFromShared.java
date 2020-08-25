@@ -42,7 +42,8 @@ import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates as object-masks from entities in shared, using the feature-input only for a energy-stack.
+ * Calculates as object-masks from entities in shared, using the feature-input only for a
+ * energy-stack.
  *
  * @author Owen Feehan
  * @param <T> feature-input
@@ -69,7 +70,8 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy
     }
 
     protected abstract double calc(
-            CalculateForChild<T> calculateForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild,
+            Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException;
 
     @Override

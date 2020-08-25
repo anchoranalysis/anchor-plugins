@@ -44,9 +44,8 @@ import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
 /**
  * An image viewed as a named set of channels
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class NamedChannels extends NamedChannelsBase {
 
@@ -55,8 +54,7 @@ public class NamedChannels extends NamedChannelsBase {
 
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField @Getter @Setter
-    private ChannelMap channelMap = new Autoname();
+    @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly = false;
     // END BEANS

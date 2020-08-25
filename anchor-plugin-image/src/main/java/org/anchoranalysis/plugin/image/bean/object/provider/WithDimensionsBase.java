@@ -39,8 +39,7 @@ import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
  * Base class for {@link ObjectCollectionProviderUnary} classes that require dimensions to be
  * specified.
  *
- * @see WithOptionalDimensionsBase for a similar class with optional dimension
- *     specification.
+ * @see WithOptionalDimensionsBase for a similar class with optional dimension specification.
  * @author Owen Feehan
  */
 public abstract class WithDimensionsBase extends ObjectCollectionProviderUnary {

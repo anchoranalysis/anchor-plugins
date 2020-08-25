@@ -40,7 +40,8 @@ public class FeatureValueIndividualEnergyGreaterThan
     @Override
     protected FeatureInputSingleMemo createFeatureCalcParams(
             Mark mark, RegionMap regionMap, EnergyStack energyStack) {
-        VoxelizedMarkMemo pmm = PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
+        VoxelizedMarkMemo pmm =
+                PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
         return new FeatureInputSingleMemo(pmm, Optional.of(energyStack));
     }
 }

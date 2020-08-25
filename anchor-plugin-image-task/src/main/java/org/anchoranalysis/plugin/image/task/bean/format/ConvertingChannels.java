@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 class ConvertingChannels implements ChannelGetter {

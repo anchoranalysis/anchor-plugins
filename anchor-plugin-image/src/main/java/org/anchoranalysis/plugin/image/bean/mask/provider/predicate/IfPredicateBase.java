@@ -30,16 +30,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 /**
- * Base class which multiplexes between the current mask and an alternative
- * depending if a condition is met.
- * 
- * @author Owen Feehan
+ * Base class which multiplexes between the current mask and an alternative depending if a condition
+ * is met.
  *
+ * @author Owen Feehan
  */
 public abstract class IfPredicateBase extends MaskProviderUnary {
 
@@ -58,8 +57,8 @@ public abstract class IfPredicateBase extends MaskProviderUnary {
     }
 
     /**
-     * If this evaluates true, the mask will be returned as-is, otherwise {@code
-     * maskElse} is returned
+     * If this evaluates true, the mask will be returned as-is, otherwise {@code maskElse} is
+     * returned
      */
     protected abstract boolean predicate(Mask mask) throws CreateException;
 }

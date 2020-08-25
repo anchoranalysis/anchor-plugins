@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import static org.junit.Assert.assertTrue;
+
 import org.anchoranalysis.bean.provider.ProviderHolder;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;

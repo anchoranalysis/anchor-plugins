@@ -32,11 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 
-/**
- * 
- * @author Owen Feehan
- *
- */
+/** @author Owen Feehan */
 public class Difference extends VoxelScore {
 
     // START BEAN PROPERTIES
@@ -52,7 +48,7 @@ public class Difference extends VoxelScore {
     /** A minimum difference, below which 0.0 is returned */
     @BeanField @Getter @Setter private int minDifference = 0;
     // END BEAN PROPERTIES
-    
+
     @Override
     public double calculate(int[] pixelVals) throws FeatureCalculationException {
         return DifferenceHelper.differenceFromParams(

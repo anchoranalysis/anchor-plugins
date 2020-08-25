@@ -38,7 +38,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *     <p>TODO integrate into CacheableCalculationMap
  * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, E extends Exception>    // NOSONAR
+public abstract class CacheableCalculationMapHash<
+                S, T extends FeatureInput, U, E extends Exception> // NOSONAR
         extends CacheableCalculationMap<S, T, U, E> {
 
     /** Caches our results for different Keys */
@@ -57,8 +58,8 @@ public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, 
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
      * cached-result from previously.
      *
-     * @param input if there is no cached-value, and the calculation occurs, these parameters are used.
-     *     Otherwise ignored..
+     * @param input if there is no cached-value, and the calculation occurs, these parameters are
+     *     used. Otherwise ignored..
      * @return the result of the calculation
      * @throws E if the calculation cannot finish, for whatever reason
      */

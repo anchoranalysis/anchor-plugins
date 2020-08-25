@@ -38,10 +38,7 @@ import org.anchoranalysis.image.object.MaskFromObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
-/** 
- * Creates a {@link Mask} from a collection of object-masks
- * 
- **/
+/** Creates a {@link Mask} from a collection of object-masks */
 public class FromObjects extends FromDimensionsBase {
 
     // START BEAN
@@ -56,10 +53,7 @@ public class FromObjects extends FromDimensionsBase {
     }
 
     private Mask createMaybeInverted(
-            ObjectCollection objects,
-            Dimensions dimensions,
-            BinaryValues outVal
-    ) {
+            ObjectCollection objects, Dimensions dimensions, BinaryValues outVal) {
         if (invert) {
             return MaskFromObjects.createFromNotObjects(objects, dimensions, outVal);
         } else {

@@ -37,8 +37,8 @@ import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 /**
- * Like {#link org.anchoranalysis.plugin.mpp.bean.region.CenterSlice} but considers more
- * than one slice, specifically centerSlice+- windowSize
+ * Like {#link org.anchoranalysis.plugin.mpp.bean.region.CenterSlice} but considers more than one
+ * slice, specifically centerSlice+- windowSize
  *
  * <p>So total size = 2*windowSize + 1 (clipped to the bounding box)
  *

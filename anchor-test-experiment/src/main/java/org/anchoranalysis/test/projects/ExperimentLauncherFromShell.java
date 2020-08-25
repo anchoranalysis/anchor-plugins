@@ -81,7 +81,7 @@ public class ExperimentLauncherFromShell {
         } else {
             String pathCombined =
                     Paths.get(pathProperty).resolve("bin/" + anchorCommand).toString();
-            System.out.printf(  // NOSONAR
+            System.out.printf( // NOSONAR
                     "Testing with path: %s (%s)%n", pathCombined, pathProperty); // NOSONAR
             return pathCombined;
         }

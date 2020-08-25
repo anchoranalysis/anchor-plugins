@@ -61,10 +61,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 
     @Override
     public boolean accept(
-            ObjectMask source,
-            ObjectMask destination,
-            ObjectMask merged,
-            Optional<Resolution> res)
+            ObjectMask source, ObjectMask destination, ObjectMask merged, Optional<Resolution> res)
             throws OperationFailedException {
 
         if (session != null) {

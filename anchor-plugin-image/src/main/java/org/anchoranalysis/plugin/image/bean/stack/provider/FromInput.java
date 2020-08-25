@@ -35,9 +35,8 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Finds the input-stack using a conventional name of {@code input_image}
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class FromInput extends StackProvider {
 

@@ -58,7 +58,8 @@ class MultiInputFixture {
      */
     public static MultiInput createInput(EnergyStackWithoutParams energyStack) {
         MultiInput input =
-                new MultiInput("input", new StackAsProviderFixture(energyStack.asStack(), "someName"));
+                new MultiInput(
+                        "input", new StackAsProviderFixture(energyStack.asStack(), "someName"));
         input.objects()
                 .add(
                         OBJECTS_NAME,

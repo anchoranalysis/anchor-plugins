@@ -67,7 +67,8 @@ public class OptSchemeUnifPerm<S> extends OptScheme<S, S> {
 
         S best = null;
 
-        KernelCalculationContext context = initContext.calculateContext(initContext.markFactoryContext());
+        KernelCalculationContext context =
+                initContext.calculateContext(initContext.markFactoryContext());
 
         try {
             kernelProposer.initBeforeCalc(context);

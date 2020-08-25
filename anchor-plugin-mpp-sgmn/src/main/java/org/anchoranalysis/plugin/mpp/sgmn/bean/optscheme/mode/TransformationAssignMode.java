@@ -39,8 +39,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.AccptProbCalculator;
  * Applies a transformation to the kernel-type U to calculate the Energy used as the primary readout
  * during optimization
  *
- * <p>However, the kernel manipulation layer will always function in terms of the untransformed Energy
- * (U) as the optimization continues
+ * <p>However, the kernel manipulation layer will always function in terms of the untransformed
+ * Energy (U) as the optimization continues
  *
  * <p>The final transformation, as well as what's "reported" out use the TRANSFORMED (S) version
  *

@@ -47,7 +47,8 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     @Override
-    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting)
+            throws ReporterException {
         if (csvOutput.isPresent() && csvOutput.get().isEnabled()) {
 
             this.csvOutput

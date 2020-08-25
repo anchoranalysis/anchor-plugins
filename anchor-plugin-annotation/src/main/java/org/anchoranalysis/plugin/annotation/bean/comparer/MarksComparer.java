@@ -58,8 +58,7 @@ public class MarksComparer extends Comparer {
 
     @Override
     public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode)
-            throws CreateException {
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         Path path = path(filePathSource);
 
@@ -67,10 +66,10 @@ public class MarksComparer extends Comparer {
             // There's nothing to annotate against
             return new NotFound<>(path, "No marks exist at path");
         }
-                
-        return new Found<>( createObjects(path, dimensions) );
+
+        return new Found<>(createObjects(path, dimensions));
     }
-    
+
     private Path path(Path filePathSource) throws CreateException {
         try {
             return filePathGenerator.outFilePath(filePathSource, false);
@@ -78,8 +77,9 @@ public class MarksComparer extends Comparer {
             throw new CreateException(e1);
         }
     }
-    
-    private ObjectCollection createObjects(Path filePath, Dimensions dimensions) throws CreateException {
+
+    private ObjectCollection createObjects(Path filePath, Dimensions dimensions)
+            throws CreateException {
         MarkCollectionDeserializer deserialized = new MarkCollectionDeserializer();
         MarkCollection marks;
         try {

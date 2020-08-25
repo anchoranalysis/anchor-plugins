@@ -40,9 +40,8 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 /**
  * Uses a probability field defined over the voxels to make some positions more likely than others
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ProbabilityMap extends PositionProposer {
 

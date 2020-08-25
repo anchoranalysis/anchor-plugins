@@ -59,7 +59,7 @@ public class GradientForAxis extends GradientBaseAddSum {
                 throw new CreateException("Axis must be: x or y or z");
         }
     }
-    
+
     private AxisType axisType() throws CreateException {
         try {
             return AxisTypeConverter.createFromString(axis);

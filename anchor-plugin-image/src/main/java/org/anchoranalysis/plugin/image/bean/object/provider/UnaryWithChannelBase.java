@@ -35,8 +35,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 
-public abstract class UnaryWithChannelBase
-        extends ObjectCollectionProviderUnary {
+public abstract class UnaryWithChannelBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ChannelProvider channel;

@@ -41,8 +41,8 @@ public class FlexFormatTest {
 
     /**
      * Tests the numChannels and numFrames from a known file, as it sometimes incorrectly reports as
-     * numChannel==1 and numFrame==1, as opposed to numFrames==2 and numChannels==1 (which is what we
-     * expect... but is itself incorrect
+     * numChannel==1 and numFrame==1, as opposed to numFrames==2 and numChannels==1 (which is what
+     * we expect... but is itself incorrect
      *
      * <p>Note that this test MIGHT only work correctly when NOT run with the GPL bioformats
      * libraries on the class-path.

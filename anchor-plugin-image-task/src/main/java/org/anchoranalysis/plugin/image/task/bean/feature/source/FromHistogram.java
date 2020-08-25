@@ -140,8 +140,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
             return providerDuplicated.create();
         } catch (CreateException | InitException | OperationFailedException e) {
-            throw new OperationFailedException(
-                    "Cannot retrieve a histogram from the provider", e);
+            throw new OperationFailedException("Cannot retrieve a histogram from the provider", e);
         }
     }
 
@@ -149,9 +148,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
-        paramsInit
-                .histograms()
-                .add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
+        paramsInit.histograms().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);
         return paramsInit;
     }
 

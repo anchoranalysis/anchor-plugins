@@ -32,6 +32,6 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase
 public class SubtractTwoChannels extends TwoVoxelMappingBase {
 
     public SubtractTwoChannels(IntBinaryOperation operation) {
-        super( (a,b) -> a - b );
+        super((a, b) -> a - b);
     }
 }

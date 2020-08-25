@@ -40,7 +40,8 @@ public class UniformRandom extends MarkFromCollectionProposerUnary {
     }
 
     @Override
-    public Optional<Mark> selectMarkFrom(MarkCollection marks, MarkFromCollectionProposer proposer, ProposerContext context) {
+    public Optional<Mark> selectMarkFrom(
+            MarkCollection marks, MarkFromCollectionProposer proposer, ProposerContext context) {
         // Let's take a mark at random
         int index = marks.randomIndex(context.getRandomNumberGenerator());
         return Optional.of(marks.get(index));

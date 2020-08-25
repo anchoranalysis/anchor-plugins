@@ -94,13 +94,16 @@ public abstract class KernelReplace<T> extends KernelPosNeg<T> {
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection, T energyExisting, T energyNew)
+            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            T energyExisting,
+            T energyNew)
             throws UpdateMarkSetException {
 
         OptionalUtilities.ifPresent(
                 afterDeathProp,
                 prop -> {
-                    kernelDeath.updateAfterAcceptance(updatableMarkSetCollection, energyExisting, prop);
+                    kernelDeath.updateAfterAcceptance(
+                            updatableMarkSetCollection, energyExisting, prop);
                     kernelBirth.updateAfterAcceptance(updatableMarkSetCollection, prop, energyNew);
                 });
     }

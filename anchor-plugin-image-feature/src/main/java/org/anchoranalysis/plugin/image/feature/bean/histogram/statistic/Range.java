@@ -48,7 +48,8 @@ public class Range extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             double high = histogram.quantile(quantileHigh);
             double low = histogram.quantile(quantileLow);

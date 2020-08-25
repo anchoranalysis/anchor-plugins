@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
+import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -50,57 +51,61 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
-import io.vavr.control.Either;
 
 /**
  * Base class for providers that draw entities (an outline or filled) on a background
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class ColoredBase extends StackProvider {
 
     protected static final ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR =
             new ShuffleColorSetGenerator(new HSBColorSetGenerator());
-    
+
     // START BEAN PROPERTIES
-    /** If true, objects and the background are flattened in the z dimension (via maximum intensity projection), so that a 2D image is produced */
+    /**
+     * If true, objects and the background are flattened in the z dimension (via maximum intensity
+     * projection), so that a 2D image is produced
+     */
     @BeanField @Getter @Setter private boolean flatten = false;
-    
+
     /** If true, an outline is drawn around the entries. If false, a filled-in shape is drawn */
     @BeanField @Getter @Setter private boolean outline = true;
-    
+
     /** The width of the outline (only relevant if {@code outline==true} */
     @BeanField @Getter @Setter @Positive private int outlineWidth = 1;
-    
-    /** if true, the outline is suppressed in the z-dimension i.e. a boundary only in z-dimension is not outlined (only relevant if {@code outline==true} */
+
+    /**
+     * if true, the outline is suppressed in the z-dimension i.e. a boundary only in z-dimension is
+     * not outlined (only relevant if {@code outline==true}
+     */
     @BeanField @Getter @Setter private boolean suppressOutlineZ = true;
 
     /** The background. Either {@code stackBackground} or this should be defined but not both */
     @BeanField @Getter @Setter private ProviderAsStack background;
     // END BEAN PROPERTIES
-    
+
     @Override
     public Stack create() throws CreateException {
         DisplayStack unflattened = createUnflattenedBackground();
-        return drawOnBackground( coloredObjectsToDraw(unflattened.dimensions()), unflattened );
+        return drawOnBackground(coloredObjectsToDraw(unflattened.dimensions()), unflattened);
     }
-    
+
     /**
      * Creates colored-objects to be drawn
-     * 
+     *
      * @param backgroundDimensions dimensions of the background on which objects are drawn
      * @return a colored object collection describing the objects to be drawn
      */
-    protected abstract ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException;
-    
-    private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background) throws CreateException {
+    protected abstract ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
+            throws CreateException;
+
+    private Stack drawOnBackground(ColoredObjectCollection objects, DisplayStack background)
+            throws CreateException {
         return drawOnBackgroundAfterFlattening(
-                maybeFlatten(objects.getObjects()),
-                maybeFlatten(background),
-                objects.getColors());
+                maybeFlatten(objects.getObjects()), maybeFlatten(background), objects.getColors());
     }
-    
+
     private DrawObject createDrawer() {
         if (outline) {
             return new Outline(getOutlineWidth(), !flatten && !suppressOutlineZ);
@@ -112,7 +117,7 @@ public abstract class ColoredBase extends StackProvider {
     private DisplayStack createUnflattenedBackground() throws CreateException {
         return DisplayStack.create(background.createAsStack());
     }
-    
+
     /**
      * @param objects
      * @param background
@@ -121,9 +126,7 @@ public abstract class ColoredBase extends StackProvider {
      * @throws CreateException
      */
     private Stack drawOnBackgroundAfterFlattening(
-            ObjectCollection objects,
-            DisplayStack background,
-            ColorList colors)
+            ObjectCollection objects, DisplayStack background, ColorList colors)
             throws CreateException {
 
         try {
@@ -144,8 +147,7 @@ public abstract class ColoredBase extends StackProvider {
             throw new CreateException(e);
         }
     }
-    
-    
+
     private DisplayStack maybeFlatten(DisplayStack stack) {
         if (flatten) {
             return stack.maximumIntensityProjection();
@@ -153,7 +155,7 @@ public abstract class ColoredBase extends StackProvider {
             return stack;
         }
     }
-    
+
     private ObjectCollection maybeFlatten(ObjectCollection objects) {
         if (flatten) {
             return objects.stream().map(ObjectMask::flattenZ);

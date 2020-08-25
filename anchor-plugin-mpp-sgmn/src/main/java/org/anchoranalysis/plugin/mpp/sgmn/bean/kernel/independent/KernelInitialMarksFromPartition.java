@@ -67,7 +67,8 @@ public class KernelInitialMarksFromPartition extends KernelIndependent<MarksFrom
 
         this.lastMarks = marks.get();
 
-        return Optional.of(new MarksFromPartition(new MarkCollection(), createPartition(marks.get())));
+        return Optional.of(
+                new MarksFromPartition(new MarkCollection(), createPartition(marks.get())));
     }
 
     @Override

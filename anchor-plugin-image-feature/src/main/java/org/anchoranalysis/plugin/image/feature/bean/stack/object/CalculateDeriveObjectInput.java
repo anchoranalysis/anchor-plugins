@@ -45,7 +45,8 @@ public class CalculateDeriveObjectInput
     @Override
     protected FeatureInputSingleObject execute(FeatureInputStack input)
             throws FeatureCalculationException {
-        return new FeatureInputSingleObject(extractObjectMask(input), input.getEnergyStackOptional());
+        return new FeatureInputSingleObject(
+                extractObjectMask(input), input.getEnergyStackOptional());
     }
 
     private ObjectMask extractObjectMask(FeatureInputStack input)

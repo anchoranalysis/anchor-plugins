@@ -85,7 +85,11 @@ class MetadataUtilities {
         meta.setPixelsPhysicalSizeY(createLength(dimensions.resolution().y() * dimensions.y()), 0);
         meta.setPixelsPhysicalSizeZ(createLength(dimensions.resolution().z() * dimensions.z()), 0);
 
-        addNumberChannels(meta, calculateNumberChannels(makeRGB), calculateSamplesPerPixel(makeRGB), seriesNum);
+        addNumberChannels(
+                meta,
+                calculateNumberChannels(makeRGB),
+                calculateSamplesPerPixel(makeRGB),
+                seriesNum);
 
         return meta;
     }

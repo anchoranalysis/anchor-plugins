@@ -65,19 +65,19 @@ class Hybrid_3D_Median_Filter implements PlugInFilter { // NOSONAR
     private ImagePlus imp;
     private ImagePlus imp2;
     private ImageStack stack;
-    private ImageStack stack2;  // NOSONAR
+    private ImageStack stack2; // NOSONAR
 
     @SuppressWarnings("unused")
     private ImageProcessor ip;
 
-    private ImageProcessor ip2;  // NOSONAR
+    private ImageProcessor ip2; // NOSONAR
     private boolean atebit = false;
     private boolean include = false;
     private NumberFormat nf = NumberFormat.getInstance();
-    private double prognum;  // NOSONAR
-    private String progstr;  // NOSONAR
+    private double prognum; // NOSONAR
+    private String progstr; // NOSONAR
     private String otitle;
-    private String titlestring;  // NOSONAR
+    private String titlestring; // NOSONAR
     private ImageWindow win;
     private boolean quit = false;
 
@@ -107,7 +107,7 @@ class Hybrid_3D_Median_Filter implements PlugInFilter { // NOSONAR
 
     public ImagePlus Hybrid3dMedianizer(ImagePlus imp) { // NOSONAR
         @SuppressWarnings("unused")
-        ImagePlus imp3;  // NOSONAR
+        ImagePlus imp3; // NOSONAR
         int m = stack.getWidth();
         int n = stack.getHeight();
         imp2 = new ImagePlus("3d Hybrid Median Filter", imp.getStack());

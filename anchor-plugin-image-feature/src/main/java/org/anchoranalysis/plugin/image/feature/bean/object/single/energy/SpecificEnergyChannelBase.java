@@ -47,7 +47,8 @@ public abstract class SpecificEnergyChannelBase extends FeatureSingleObject {
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
         return calculateWithChannel(
-                input.get().getObject(), input.get().getEnergyStackRequired().getChannel(energyIndex));
+                input.get().getObject(),
+                input.get().getEnergyStackRequired().getChannel(energyIndex));
     }
 
     protected abstract double calculateWithChannel(ObjectMask object, Channel channel)

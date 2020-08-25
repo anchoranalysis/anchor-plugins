@@ -41,7 +41,8 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         if (histogram.size() == 0) {
             return 0.0;
         }

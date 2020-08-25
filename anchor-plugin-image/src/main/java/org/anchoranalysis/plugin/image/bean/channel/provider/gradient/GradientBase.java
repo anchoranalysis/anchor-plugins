@@ -44,7 +44,7 @@ public abstract class GradientBase extends ChannelProviderUnary {
     /** Iff true, outputs a short channel, otherwise byte channel */
     @BeanField @Getter @Setter private boolean outputShort = false;
     // END BEAN
-    
+
     protected Channel convertToOutputType(Channel channelToConvert) {
         ChannelConverter<?> converter =
                 outputShort

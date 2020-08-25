@@ -33,10 +33,10 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 /**
- * Subtracts each voxel from the maximum value for the channel's data type (e.g. 255 for unsigned 8-bit)
- * 
- * @author Owen Feehan
+ * Subtracts each voxel from the maximum value for the channel's data type (e.g. 255 for unsigned
+ * 8-bit)
  *
+ * @author Owen Feehan
  */
 public class Invert extends ChannelProviderUnary {
 

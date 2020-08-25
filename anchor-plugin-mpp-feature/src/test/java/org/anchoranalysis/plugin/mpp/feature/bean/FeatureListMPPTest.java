@@ -128,9 +128,13 @@ public class FeatureListMPPTest {
     }
 
     private static void assertMarks(
-            FeatureCalculatorMulti<FeatureInputMarkCollection> session, MarkCollection marks, double expected)
+            FeatureCalculatorMulti<FeatureInputMarkCollection> session,
+            MarkCollection marks,
+            double expected)
             throws CreateException, FeatureCalculationException, NamedFeatureCalculateException {
-        assertCalc(session.calculate(new FeatureInputMarkCollection(marks, Optional.of(DIM))), expected);
+        assertCalc(
+                session.calculate(new FeatureInputMarkCollection(marks, Optional.of(DIM))),
+                expected);
     }
 
     private static void assertMark(

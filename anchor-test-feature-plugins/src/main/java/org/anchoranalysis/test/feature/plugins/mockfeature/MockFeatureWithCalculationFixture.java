@@ -38,15 +38,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Creates a mock-feature which used a mock {@link org.anchoranalysis.feature.cache.calculate.FeatureCalculation} under the hood
+ * Creates a mock-feature which used a mock {@link
+ * org.anchoranalysis.feature.cache.calculate.FeatureCalculation} under the hood
  *
- * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link MockFeatureWithCalculation#calculate} method are called.</p>
+ * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link
+ * MockFeatureWithCalculation#calculate} method are called.
  *
- * <p>This is implemented using (ugly) static methods and some reflection, as Feature's must remain valid Anchor-bean's
- * and thus cannot be inner-classes or rely on parameterization in the constructor.</p>
+ * <p>This is implemented using (ugly) static methods and some reflection, as Feature's must remain
+ * valid Anchor-bean's and thus cannot be inner-classes or rely on parameterization in the
+ * constructor.
  *
  * @author Owen Feehan
- *
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockFeatureWithCalculationFixture {

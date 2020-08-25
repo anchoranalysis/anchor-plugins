@@ -38,7 +38,8 @@ import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 public abstract class FeatureMarkEccentricity extends FeatureMark {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         Mark mark = input.get().getMark();
 

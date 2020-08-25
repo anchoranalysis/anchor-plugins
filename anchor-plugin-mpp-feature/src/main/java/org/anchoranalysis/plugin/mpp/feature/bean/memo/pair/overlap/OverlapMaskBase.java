@@ -81,7 +81,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
         return statFunc.applyAsLong(size1, size2);
     }
 
-    private long sizeForObject(VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
+    private long sizeForObject(
+            VoxelizedMarkMemo obj, int regionID, RelationBean relationToThreshold) {
         VoxelStatistics pxlStats = obj.voxelized().statisticsForAllSlices(energyIndex, regionID);
         return pxlStats.countThreshold(new RelationToConstant(relationToThreshold, maskValue));
     }

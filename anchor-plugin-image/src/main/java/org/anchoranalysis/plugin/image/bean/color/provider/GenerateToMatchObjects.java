@@ -39,9 +39,8 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 
 /**
  * Generates colors to match the size of an object-collection
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class GenerateToMatchObjects extends ColorProvider {
 

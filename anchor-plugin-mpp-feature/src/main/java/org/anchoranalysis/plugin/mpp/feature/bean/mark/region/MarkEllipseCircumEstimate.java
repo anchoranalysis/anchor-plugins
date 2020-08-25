@@ -34,15 +34,15 @@ import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 /**
  * Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
-//  by the ShellRad
- * 
- * @author Owen Feehan
+ * // by the ShellRad
  *
+ * @author Owen Feehan
  */
 public class MarkEllipseCircumEstimate extends FeatureMarkRegion {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         Mark mark = input.get().getMark();
 

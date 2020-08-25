@@ -26,15 +26,14 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.plot;
 
-import org.anchoranalysis.core.index.IndexGetter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.core.index.IndexGetter;
 
 /**
  * One particular bin in a histogram
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @AllArgsConstructor
 class HistogramBin implements IndexGetter {

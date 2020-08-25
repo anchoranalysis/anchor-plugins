@@ -53,7 +53,8 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
 
         ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjects =
                 input.resolver().search(new CalculateConnectedComponents(energyChannelIndex));

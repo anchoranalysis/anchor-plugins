@@ -56,7 +56,8 @@ public class AsObjectMask extends FeatureStack {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
 
         return input.forChild()
                 .calculate(

@@ -67,7 +67,8 @@ class StatsHelper {
 
             if (slice.voxelsOn().anyExists()) {
                 double mean =
-                        IntensityMeanCalculator.calculateMeanIntensityObject(channel, slice, excludeZero);
+                        IntensityMeanCalculator.calculateMeanIntensityObject(
+                                channel, slice, excludeZero);
 
                 if (mean > max) {
                     index = z;
@@ -87,8 +88,8 @@ class StatsHelper {
      *
      * @param channel
      * @param object
-     * @param numberVoxels the number of voxels to be considered (either the highest-intensity pixels,
-     *     or lowest-intensity pixel)
+     * @param numberVoxels the number of voxels to be considered (either the highest-intensity
+     *     pixels, or lowest-intensity pixel)
      * @param highest iff TRUE the highest-intensity voxels are used in the mask, otherwise the
      *     lowest-intensity pixels are used
      * @return

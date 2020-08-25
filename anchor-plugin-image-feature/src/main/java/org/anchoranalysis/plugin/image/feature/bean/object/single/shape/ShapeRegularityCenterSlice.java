@@ -37,7 +37,8 @@ public class ShapeRegularityCenterSlice extends FeatureSingleObject {
     @Override
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return ShapeRegularityCalculator.calculateShapeRegularity(centerSlice(input.get().getObject()));
+        return ShapeRegularityCalculator.calculateShapeRegularity(
+                centerSlice(input.get().getObject()));
     }
 
     private ObjectMask centerSlice(ObjectMask object) {

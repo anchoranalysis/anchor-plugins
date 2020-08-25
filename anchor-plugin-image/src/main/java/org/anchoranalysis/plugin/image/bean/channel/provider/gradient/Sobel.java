@@ -45,9 +45,8 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 
 /**
  * 3x3 Sobel Filter
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Sobel extends GradientBase {
 
@@ -55,22 +54,30 @@ public class Sobel extends GradientBase {
     public Channel createFromChannel(Channel channelIn) throws CreateException {
 
         Channel intermediate = createNewFloat(channelIn.dimensions());
-        
-        processMultiplexInputType(channelIn, ImgLib2Wrap.wrapFloat(intermediate.voxels().asFloat()));
+
+        processMultiplexInputType(
+                channelIn, ImgLib2Wrap.wrapFloat(intermediate.voxels().asFloat()));
 
         // convert to our output from the float
         return convertToOutputType(intermediate);
     }
-    
+
     private static Channel createNewFloat(Dimensions dimensions) {
         return ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
     }
-    
-    private void processMultiplexInputType(Channel channelIn, NativeImg<FloatType, FloatArray> out) throws CreateException {
+
+    private void processMultiplexInputType(Channel channelIn, NativeImg<FloatType, FloatArray> out)
+            throws CreateException {
         if (channelIn.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            process(ImgLib2Wrap.wrapByte(channelIn.voxels().asByte()), out, (float) getScaleFactor());
+            process(
+                    ImgLib2Wrap.wrapByte(channelIn.voxels().asByte()),
+                    out,
+                    (float) getScaleFactor());
         } else if (channelIn.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-            process(ImgLib2Wrap.wrapShort(channelIn.voxels().asShort()), out, (float) getScaleFactor());
+            process(
+                    ImgLib2Wrap.wrapShort(channelIn.voxels().asShort()),
+                    out,
+                    (float) getScaleFactor());
         } else {
             throw new CreateException("Input type must be unsigned byte or short");
         }

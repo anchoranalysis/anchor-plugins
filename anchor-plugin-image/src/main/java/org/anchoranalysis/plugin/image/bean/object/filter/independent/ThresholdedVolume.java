@@ -62,15 +62,13 @@ public class ThresholdedVolume extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(
-            ObjectMask object, Optional<Dimensions> dim, RelationToValue relation) {
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation) {
         return relation.isRelationToValueTrue(object.numberVoxelsOn(), thresholdResolved);
     }
 
     private int resolveThreshold(Optional<Dimensions> dim) throws OperationFailedException {
         try {
-            return (int)
-                    Math.floor(threshold.resolveToVoxels(dim.map(Dimensions::resolution)));
+            return (int) Math.floor(threshold.resolveToVoxels(dim.map(Dimensions::resolution)));
         } catch (UnitValueException e) {
             throw new OperationFailedException(e);
         }

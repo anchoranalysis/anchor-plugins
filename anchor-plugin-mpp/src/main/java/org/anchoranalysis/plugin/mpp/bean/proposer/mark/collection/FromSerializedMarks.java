@@ -48,9 +48,11 @@ public class FromSerializedMarks extends MarkCollectionProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context) {
+    public Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context) {
 
-        ObjectInputStreamDeserializer<MarkCollection> deserializer = new ObjectInputStreamDeserializer<>();
+        ObjectInputStreamDeserializer<MarkCollection> deserializer =
+                new ObjectInputStreamDeserializer<>();
         try {
             Path path = Paths.get(filePath);
             return Optional.of(deserializer.deserialize(path));

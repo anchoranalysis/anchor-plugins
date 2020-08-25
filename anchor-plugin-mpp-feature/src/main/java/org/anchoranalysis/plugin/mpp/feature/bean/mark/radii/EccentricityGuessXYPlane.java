@@ -59,10 +59,7 @@ public class EccentricityGuessXYPlane extends FeatureMarkEccentricity {
         Vector3d unitVectorZRev = new Vector3d(0, 0, -1.0);
 
         return IntStream.range(0, 3)
-                .mapToObj(
-                        index ->
-                                angleForDimension(
-                                        index, rotMatrix, unitVectorZ, unitVectorZRev))
+                .mapToObj(index -> angleForDimension(index, rotMatrix, unitVectorZ, unitVectorZRev))
                 .toArray(Double[]::new);
     }
 

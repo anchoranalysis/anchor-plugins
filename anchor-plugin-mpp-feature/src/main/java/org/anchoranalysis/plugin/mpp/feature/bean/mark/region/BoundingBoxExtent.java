@@ -51,7 +51,8 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     // END BEAN PARAMETERS
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         Dimensions dimensions = input.get().getDimensionsRequired();
 
@@ -72,8 +73,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         return String.format("%s", axis);
     }
 
-    private double resolveDistance(
-            BoundingBox box, Optional<Resolution> res, AxisType axisType)
+    private double resolveDistance(BoundingBox box, Optional<Resolution> res, AxisType axisType)
             throws FeatureCalculationException {
         try {
             return unit.resolveDistance(

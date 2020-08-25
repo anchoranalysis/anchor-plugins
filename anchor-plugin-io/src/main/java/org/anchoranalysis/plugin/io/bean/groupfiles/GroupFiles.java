@@ -97,7 +97,8 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInput> inputObjects(InputManagerParams params)
+            throws AnchorIOException {
 
         GroupFilesMap map = new GroupFilesMap();
 

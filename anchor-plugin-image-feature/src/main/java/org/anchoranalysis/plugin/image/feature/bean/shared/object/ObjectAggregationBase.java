@@ -66,7 +66,8 @@ public abstract class ObjectAggregationBase<T extends FeatureInputEnergy>
 
     @Override
     protected double calc(
-            CalculateForChild<T> calculateForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild,
+            Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException {
 
         if (createdObjects == null) {

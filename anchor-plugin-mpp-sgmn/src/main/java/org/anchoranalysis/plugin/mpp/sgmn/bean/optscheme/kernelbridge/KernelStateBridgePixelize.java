@@ -47,7 +47,8 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 public class KernelStateBridgePixelize<T> extends KernelStateBridge<T, ToPixelized<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StateTransformerBean<T, VoxelizedMarksWithEnergy> transformer;
+    @BeanField @Getter @Setter
+    private StateTransformerBean<T, VoxelizedMarksWithEnergy> transformer;
     // END BEAN PROPERTIES
 
     @Override

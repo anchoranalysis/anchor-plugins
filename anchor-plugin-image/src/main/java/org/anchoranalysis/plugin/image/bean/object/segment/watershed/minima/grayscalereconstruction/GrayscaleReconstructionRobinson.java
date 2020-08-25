@@ -90,8 +90,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             populateQueueFromNonZeroPixels(queue, marker.any(), voxelsFinalized);
         }
 
-        readFromQueueUntilEmpty(
-                queue, marker.any(), mask.any(), voxelsFinalized, containingMask);
+        readFromQueueUntilEmpty(queue, marker.any(), mask.any(), voxelsFinalized, containingMask);
 
         return marker;
     }

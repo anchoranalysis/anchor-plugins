@@ -41,7 +41,8 @@ public class KernelDeathPartition extends KernelDeath<MarksFromPartition> {
 
     @Override
     protected Optional<MarkAnd<Mark, MarksFromPartition>> removeAndUpdateEnergy(
-            MarksFromPartition existing, ProposerContext context) throws KernelCalculateEnergyException {
+            MarksFromPartition existing, ProposerContext context)
+            throws KernelCalculateEnergyException {
 
         int index = selectIndexToRmv(existing.getMarks(), context);
 
@@ -51,7 +52,8 @@ public class KernelDeathPartition extends KernelDeath<MarksFromPartition> {
 
         MarkCollection marksNew = existing.getMarks().shallowCopy();
         marksNew.remove(index);
-        return Optional.of(new MarkAnd<>(existing.getMarks().get(index), existing.copyChange(marksNew)));
+        return Optional.of(
+                new MarkAnd<>(existing.getMarks().get(index), existing.copyChange(marksNew)));
     }
 
     @Override
@@ -60,6 +62,7 @@ public class KernelDeathPartition extends KernelDeath<MarksFromPartition> {
             MarksFromPartition energyExisting,
             MarksFromPartition energyNew)
             throws UpdateMarkSetException {
-        OptionalUtilities.ifPresent(getMarkRmv(), energyNew.getPartition()::moveAcceptedToAvailable);
+        OptionalUtilities.ifPresent(
+                getMarkRmv(), energyNew.getPartition()::moveAcceptedToAvailable);
     }
 }

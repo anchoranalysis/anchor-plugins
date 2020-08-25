@@ -31,28 +31,28 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
-import org.anchoranalysis.image.extent.Dimensions;
 
 /**
- * Creates a new mask with specific dimensions that repeatedly duplicates a slice from an existing mask
- * 
- * <p>The incoming {@code mask} must have the same extent in XY as specified in {@code dimension}.
- * 
- * @author Owen Feehan
+ * Creates a new mask with specific dimensions that repeatedly duplicates a slice from an existing
+ * mask
  *
+ * <p>The incoming {@code mask} must have the same extent in XY as specified in {@code dimension}.
+ *
+ * @author Owen Feehan
  */
 public class RepeatSlice extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
     /** Dimensions to create new mask */
     @BeanField @Getter @Setter private DimensionsProvider dimensions = new GuessDimensions();
-    
+
     /** Which slice to use from {@code mask} */
     @BeanField @Getter @Setter private int sliceIndex = 0;
     // END BEAN PROPERTIES
@@ -61,30 +61,33 @@ public class RepeatSlice extends MaskProviderUnary {
     public Mask createFromMask(Mask mask) throws CreateException {
 
         Dimensions dimensionsForOutput = dimensions.create();
-        
+
         Mask out = createEmptyMask(mask, dimensionsForOutput);
 
         // Always takes the same slice as input buffer
         ByteBuffer bufferSliceToRepeat = mask.sliceBuffer(sliceIndex);
-        
+
         Extent extent = dimensionsForOutput.extent();
-        extent.iterateOverZ( z-> copySliceInto(bufferSliceToRepeat, z, extent, out) );
+        extent.iterateOverZ(z -> copySliceInto(bufferSliceToRepeat, z, extent, out));
         return out;
     }
-    
+
     private Mask createEmptyMask(Mask mask, Dimensions dimensionsForOutput) throws CreateException {
 
         if (!mask.extent().equalsIgnoreZ(dimensionsForOutput.extent())) {
-            throw new CreateException("The slice does not have the same XY extent as specified in dimensions");
+            throw new CreateException(
+                    "The slice does not have the same XY extent as specified in dimensions");
         }
-        
+
         return MaskFactory.createMaskOff(dimensionsForOutput);
     }
-    
-    private static void copySliceInto(ByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
+
+    private static void copySliceInto(
+            ByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
         // Variously takes different z slices
         ByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
-        
-        extent.iterateOverXYOffset(offset-> bufferOut.put(offset, bufferSliceToRepeat.get(offset)));  
+
+        extent.iterateOverXYOffset(
+                offset -> bufferOut.put(offset, bufferSliceToRepeat.get(offset)));
     }
 }

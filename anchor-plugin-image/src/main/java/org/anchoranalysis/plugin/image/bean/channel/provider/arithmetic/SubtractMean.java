@@ -41,9 +41,8 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskB
 
 /**
  * Subtract the mean (of the entire channel or a masked portion thereof) from every voxel
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SubtractMean extends UnaryWithMaskBase {
 
@@ -55,7 +54,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
         Voxels<ByteBuffer> voxelsIntensity = channel.voxels().asByte();
-        
+
         double mean = calculateMean(voxelsIntensity, mask);
 
         int meanRounded = (int) Math.round(mean);
@@ -74,16 +73,20 @@ public class SubtractMean extends UnaryWithMaskBase {
     }
 
     private void subtractMeanMask(Voxels<ByteBuffer> voxelsIntensity, Mask mask, int mean) {
-        IterateVoxels.callEachPoint(voxelsIntensity, mask, (point, buffer, offset) -> processPoint(buffer, offset, mean)); 
+        IterateVoxels.callEachPoint(
+                voxelsIntensity,
+                mask,
+                (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
     private void subtractMeanAll(Voxels<ByteBuffer> voxelsIntensity, int mean) {
-        IterateVoxels.callEachPoint(voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean) );
+        IterateVoxels.callEachPoint(
+                voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
-    
+
     private static void processPoint(ByteBuffer buffer, int offset, int mean) {
         int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
-        
+
         int intensitySubtracted = intensity - mean;
 
         // Clip so it never falls below 0

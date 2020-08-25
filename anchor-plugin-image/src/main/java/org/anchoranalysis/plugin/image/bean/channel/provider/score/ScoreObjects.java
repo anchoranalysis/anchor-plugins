@@ -75,7 +75,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
         try {
             EnergyStack energyStack = new EnergyStack(createEnergyStack(channel));
 
-            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(featureCreated);
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator =
+                    createSession(featureCreated);
 
             return createOutputChannel(
                     channel.dimensions(),
@@ -123,8 +124,7 @@ public class ScoreObjects extends UnaryWithObjectsBase {
             ObjectCollection objectsSource,
             CheckedToIntFunction<ObjectMask, FeatureCalculationException> valueToAssign)
             throws FeatureCalculationException {
-        Channel out =
-                ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
+        Channel out = ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE);
         out.assignValue(valueNoObject).toAll();
         for (ObjectMask object : objectsSource) {
             out.assignValue(valueToAssign.applyAsInt(object)).toObject(object);

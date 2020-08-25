@@ -80,6 +80,6 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
     }
 
     @Override
-    protected abstract Optional<T> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
-            throws ReporterException;
+    protected abstract Optional<T> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException;
 }

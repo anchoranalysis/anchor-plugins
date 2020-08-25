@@ -45,7 +45,8 @@ public class MeanFromAll extends FeatureAllMemo {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputAllMemo> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputAllMemo> input)
+            throws FeatureCalculationException {
 
         MemoCollection memo = input.get().getPxlPartMemo();
 

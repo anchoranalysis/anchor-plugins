@@ -51,7 +51,8 @@ class CalculateSingleObjFromMemo
         return new FeatureInputSingleObject(deriveMask(input), input.getEnergyStackOptional());
     }
 
-    private ObjectMask deriveMask(FeatureInputSingleMemo params) throws FeatureCalculationException {
+    private ObjectMask deriveMask(FeatureInputSingleMemo params)
+            throws FeatureCalculationException {
         ObjectWithProperties om =
                 params.getPxlPartMemo()
                         .getMark()

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.watershed.yeong;
 
+import com.google.common.base.Preconditions;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -42,7 +43,6 @@ import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import com.google.common.base.Preconditions;
 
 @AllArgsConstructor
 final class FindEqualVoxels {
@@ -154,7 +154,7 @@ final class FindEqualVoxels {
 
         return plateau;
     }
-    
+
     private int valueToFind(Point3i point) {
         return bufferValuesToFindEqual.extract().voxel(point);
     }

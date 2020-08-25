@@ -36,9 +36,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 
 /**
  * Draws a colored representation (outline or filled) of an {@link ObjectCollection} on a background
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ColoredObjects extends ColoredBaseWithGenerator {
 
@@ -52,5 +51,4 @@ public class ColoredObjects extends ColoredBaseWithGenerator {
             throws CreateException {
         return objects.create();
     }
-
 }

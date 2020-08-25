@@ -69,8 +69,8 @@ public class SplitByObjects extends WithDimensionsBase {
                         object ->
                                 splitObject(
                                         object,
-                                        objectsSplitByCollection
-                                                .findObjectsWithIntersectingBBox(object),
+                                        objectsSplitByCollection.findObjectsWithIntersectingBBox(
+                                                object),
                                         dimensions));
     }
 
@@ -82,7 +82,8 @@ public class SplitByObjects extends WithDimensionsBase {
         // Then we find connected components
 
         // An Integer buffer with 0 by default and the same bounds as the object to be split
-        BoundedVoxels<IntBuffer> voxelsWithIdentifiers = BoundedVoxelsFactory.createInt(objectToSplit.boundingBox());
+        BoundedVoxels<IntBuffer> voxelsWithIdentifiers =
+                BoundedVoxelsFactory.createInt(objectToSplit.boundingBox());
 
         // Populate boundedVbId with id values
         int count = 1;
@@ -98,13 +99,14 @@ public class SplitByObjects extends WithDimensionsBase {
 
         return floodFillEachIdentifier(count, voxelsWithIdentifiers);
     }
-    
+
     /**
      * Perform a flood fill for each number, pretending it's a binary image of 0 and i
-     *  
-     * The code will not change pixels that don't match ON
+     *
+     * <p>The code will not change pixels that don't match ON
      */
-    private ObjectCollection floodFillEachIdentifier(int count, BoundedVoxels<IntBuffer> voxelsWithIdentifiers) {
+    private ObjectCollection floodFillEachIdentifier(
+            int count, BoundedVoxels<IntBuffer> voxelsWithIdentifiers) {
         return ObjectCollectionFactory.flatMapFromRange(
                 1, count, index -> createObjectForIndex(index, voxelsWithIdentifiers));
     }

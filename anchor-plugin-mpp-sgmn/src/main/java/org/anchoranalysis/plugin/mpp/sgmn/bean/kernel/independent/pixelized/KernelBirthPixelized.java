@@ -38,7 +38,6 @@ import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelBirth;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
@@ -47,6 +46,7 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelBirth;
 
 /**
  * As an example, this is like sampling WITH replacement.
@@ -96,7 +96,7 @@ public class KernelBirthPixelized extends KernelBirth<VoxelizedMarksWithEnergy> 
             VoxelizedMarksWithEnergy accepted)
             throws UpdateMarkSetException {
 
-        for (Mark mark : marksNew().get()) {    // NOSONAR
+        for (Mark mark : marksNew().get()) { // NOSONAR
             VoxelizedMarkMemo memo = accepted.getMemoForMark(mark);
             exst.addToUpdatablePairList(updatableMarkSetCollection, memo);
         }

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * Checks that the histograms created from channels all have the same data type, res, max-value etc.

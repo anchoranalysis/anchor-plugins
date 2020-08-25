@@ -43,14 +43,15 @@ import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Applies a median-filter with square kernel
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Median extends ChannelProviderUnary {
 
     // START BEAN PROPERTIES
-    /** Kernel will be a square kernel of size {@code (2*kernelHalfWidth+1)x(2*kernelHalfWidth+1)} */ 
+    /**
+     * Kernel will be a square kernel of size {@code (2*kernelHalfWidth+1)x(2*kernelHalfWidth+1)}
+     */
     @BeanField @Getter @Setter private int kernelHalfWidth;
     // END BEAN PROPERTIES
 
@@ -60,7 +61,7 @@ public class Median extends ChannelProviderUnary {
         // START REQUIRED ARGUMENTS
         private final int kernelHalfWidth;
         // END REQUIRED ARGUMENTS
-        
+
         private TreeMultiset<Integer> set = TreeMultiset.create();
 
         public void clear() {

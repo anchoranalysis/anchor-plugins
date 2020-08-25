@@ -41,7 +41,8 @@ public class Quantile extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.quantile(quantile);
         } catch (OperationFailedException e) {

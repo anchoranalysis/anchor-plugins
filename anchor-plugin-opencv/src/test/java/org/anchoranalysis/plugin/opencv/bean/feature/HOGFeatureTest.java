@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.feature;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
@@ -42,7 +43,8 @@ public class HOGFeatureTest {
     private TestLoaderImageIO testLoader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
-    private EnergyStackWithoutParams stack = new EnergyStackWithoutParams(testLoader.openStackFromTestPath("car.jpg"));
+    private EnergyStackWithoutParams stack =
+            new EnergyStackWithoutParams(testLoader.openStackFromTestPath("car.jpg"));
 
     @Test
     public void testWithinBounds() throws FeatureCalculationException {

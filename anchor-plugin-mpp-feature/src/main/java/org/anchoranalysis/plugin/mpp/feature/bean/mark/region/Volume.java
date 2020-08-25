@@ -33,7 +33,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 public class Volume extends FeatureMarkRegion {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
         return input.get().getMark().volume(getRegionID());
     }
 }

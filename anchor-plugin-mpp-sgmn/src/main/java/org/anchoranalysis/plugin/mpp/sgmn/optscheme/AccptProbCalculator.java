@@ -43,7 +43,11 @@ public class AccptProbCalculator<T> {
     // END REQUIRED ARGUMENTS
 
     public double calculateAcceptanceProb(
-            Kernel<?> kernel, Optional<T> crnt, T proposal, int iter, KernelCalculationContext context) {
+            Kernel<?> kernel,
+            Optional<T> crnt,
+            T proposal,
+            int iter,
+            KernelCalculationContext context) {
         return kernel.calculateAcceptanceProbability(
                 sizeOrZero(crnt),
                 sizeOrZero(Optional.of(proposal)),

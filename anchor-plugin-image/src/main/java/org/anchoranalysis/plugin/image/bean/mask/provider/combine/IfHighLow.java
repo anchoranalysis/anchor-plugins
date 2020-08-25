@@ -31,20 +31,19 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.combine.MaskIfHighLow;
 
 /**
-* Outputs the logical operation {@code iff first==HIGH and second==LOW then LOW} voxelwise on both masks, modifying {mask} with the result.
-* 
-* <p>See {@link IfHighLow} for truth-tables of the operation.
-* 
-* @author Owen Feehan
-*
-*/
+ * Outputs the logical operation {@code iff first==HIGH and second==LOW then LOW} voxelwise on both
+ * masks, modifying {mask} with the result.
+ *
+ * <p>See {@link IfHighLow} for truth-tables of the operation.
+ *
+ * @author Owen Feehan
+ */
 public class IfHighLow extends CombineBase {
 
     // ASSUMES REGIONS ARE IDENTICAL
     @Override
-    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskReceiver)
-            throws CreateException {
-        
+    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskReceiver) throws CreateException {
+
         MaskIfHighLow.apply(maskToModify, maskReceiver);
         return maskToModify;
     }

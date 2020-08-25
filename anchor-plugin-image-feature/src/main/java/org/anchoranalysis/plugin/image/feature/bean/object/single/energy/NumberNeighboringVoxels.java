@@ -58,25 +58,30 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
     /** Index of which channel in the energy-stack to select */
     @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
-    
+
     @Override
-    protected double calculateWithParameters(ObjectMask object,
-            OutlineKernelParameters parameters, CheckedSupplier<EnergyStack,FeatureCalculationException> energyStack) throws FeatureCalculationException {
+    protected double calculateWithParameters(
+            ObjectMask object,
+            OutlineKernelParameters parameters,
+            CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
+            throws FeatureCalculationException {
         Channel channel = energyStack.get().getChannel(energyIndex);
-        
+
         OutlineKernel3NeighborMatchValue kernelMatch =
-                new OutlineKernel3NeighborMatchValue(
-                        object, binaryVoxels(channel), parameters);
+                new OutlineKernel3NeighborMatchValue(object, binaryVoxels(channel), parameters);
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 
-    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel channel) throws FeatureCalculationException {
+    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel channel)
+            throws FeatureCalculationException {
         try {
             return BinaryVoxelsFactory.reuseByte(channel.voxels().asByte());
 
         } catch (IncorrectVoxelTypeException e) {
             throw new FeatureCalculationException(
-                    String.format("energyStack channel %d has incorrect data type", getEnergyIndex()), e);
+                    String.format(
+                            "energyStack channel %d has incorrect data type", getEnergyIndex()),
+                    e);
         }
     }
 }

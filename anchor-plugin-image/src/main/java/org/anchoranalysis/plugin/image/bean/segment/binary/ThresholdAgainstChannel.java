@@ -52,11 +52,11 @@ import org.anchoranalysis.plugin.image.segment.thresholder.slice.SliceThresholde
 
 /**
  * Thresholds each voxels by comparing against another channel that has per-voxel thresholds
- * 
- * <p>It sets an output voxel as high, if it is greater than or equal to the pixel in the threshold channel
- * 
- * @author Owen Feehan
  *
+ * <p>It sets an output voxel as high, if it is greater than or equal to the pixel in the threshold
+ * channel
+ *
+ * @author Owen Feehan
  */
 public class ThresholdAgainstChannel extends BinarySegmentation {
 

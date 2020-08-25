@@ -103,9 +103,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
         }
     }
 
-    /**
-     * Creates a feature-list associated with object-mask.
-     */
+    /** Creates a feature-list associated with object-mask. */
     private static <S extends FeatureInput> List<NamedBean<FeatureListProvider<S>>> loadFeatures(
             TestLoader loader, String pathFeatureList) {
         try {

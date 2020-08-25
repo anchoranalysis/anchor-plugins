@@ -79,8 +79,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         seeds.ifPresent(SegmentOnMaximumIntensityAndExpandInZ::flattenSeedsInZ);
 
         ObjectCollection objects =
-                upstreamSegmentation.segment(
-                        channel.projectMax(), Optional.empty(), seeds);
+                upstreamSegmentation.segment(channel.projectMax(), Optional.empty(), seeds);
 
         if (isAny3d(objects)) {
             throw new SegmentationFailedException(
@@ -94,7 +93,8 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         return objects.stream().anyMatch(objectMask -> objectMask.extent().z() > 1);
     }
 
-    private BinaryVoxels<ByteBuffer> binarySgmn(Channel channel) throws SegmentationFailedException {
+    private BinaryVoxels<ByteBuffer> binarySgmn(Channel channel)
+            throws SegmentationFailedException {
         BinarySegmentationParameters params =
                 new BinarySegmentationParameters(channel.dimensions().resolution());
 

@@ -40,10 +40,10 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 /**
- * Changes the voxel values to map the range of 0th quantile to xth quantile across the entire voxel data range
- * 
- * @author Owen Feehan
+ * Changes the voxel values to map the range of 0th quantile to xth quantile across the entire voxel
+ * data range
  *
+ * @author Owen Feehan
  */
 public class QuantileStretch extends ChannelProviderUnary {
 

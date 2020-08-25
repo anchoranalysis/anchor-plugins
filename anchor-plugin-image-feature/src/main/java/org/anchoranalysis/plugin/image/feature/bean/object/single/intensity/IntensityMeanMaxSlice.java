@@ -43,7 +43,8 @@ public class IntensityMeanMaxSlice extends FeatureEnergyChannel {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ValueAndIndex vai =

@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.image.extent.Dimensions;
 
 /**
  * Reflects points in each axes if all points are within a certain distance from it
@@ -86,7 +86,8 @@ public class ReflectInAxesWithinDistance extends PointsFitter {
             for (int side = 0; side < 1; side++) {
 
                 // Are all points within
-                if (arePointsWithinDistanceOfBorder(points, extent, dimension, side == 0, arrDistances)) {
+                if (arePointsWithinDistanceOfBorder(
+                        points, extent, dimension, side == 0, arrDistances)) {
                     pointsCurrent = reflectInDimension(pointsCurrent, extent, dimension, side == 0);
 
                     // It's not allowed be on both sides of the same dimensions

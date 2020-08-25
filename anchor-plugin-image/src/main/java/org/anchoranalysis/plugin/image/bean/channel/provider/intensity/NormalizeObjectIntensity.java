@@ -37,9 +37,8 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
 
 /**
  * Rewrites the intensity for each object-mask (assume no overlap) so that its mean is 128
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class NormalizeObjectIntensity extends UnaryWithObjectsBase {
 

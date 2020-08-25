@@ -39,11 +39,10 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Combines all the channels from one or more sources (stacks, channels etc.)
- * 
- * <p>All sources must provide images with the same dimensions, otherwise an exception is thrown.
- * 
- * @author Owen Feehan
  *
+ * <p>All sources must provide images with the same dimensions, otherwise an exception is thrown.
+ *
+ * @author Owen Feehan
  */
 public class Concatenate extends StackProvider {
 

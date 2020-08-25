@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskInverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -44,12 +44,11 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 
 /**
  * Switches <i>on</i> voxels to <i>off</i> and vice-versa.
- * 
- * <p>By default, this occurs by modifying the associated binary-values (an index) rather
- * than modifying the voxel buffers.</p>
- * 
- * @author Owen Feehan
  *
+ * <p>By default, this occurs by modifying the associated binary-values (an index) rather than
+ * modifying the voxel buffers.
+ *
+ * @author Owen Feehan
  */
 public class Invert extends MaskProviderUnary {
 
@@ -62,7 +61,7 @@ public class Invert extends MaskProviderUnary {
 
     /**
      * If true, rather than modifying the binary-values (an index) bytes are modified in the buffer
-     * to reflect the existing binary-values. 
+     * to reflect the existing binary-values.
      */
     @BeanField @Getter @Setter private boolean forceChangeBytes = false;
     // END BEAN FIELDS
@@ -92,7 +91,7 @@ public class Invert extends MaskProviderUnary {
         BinaryValuesByte invertedIndex = maskToInvert.binaryValues().createByte();
         final byte byteOn = invertedIndex.getOnByte();
         final byte byteOff = invertedIndex.getOffByte();
-        
+
         IterateVoxels.callEachPoint(
                 maskToInvert.binaryVoxels().voxels(),
                 restricted,

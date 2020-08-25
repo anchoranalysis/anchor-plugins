@@ -113,7 +113,10 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInputObject(), energyStack, optimaSliceIndex, params.getOutputManager());
+                    params.getInputObject(),
+                    energyStack,
+                    optimaSliceIndex,
+                    params.getOutputManager());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

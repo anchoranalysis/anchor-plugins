@@ -56,8 +56,8 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
- * Calculates feature or feature values, adding a energyStack (optionally) from either provider or the
- * input-stack
+ * Calculates feature or feature values, adding a energyStack (optionally) from either provider or
+ * the input-stack
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

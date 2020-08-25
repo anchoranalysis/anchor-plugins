@@ -48,16 +48,19 @@ public class IntensityMeanCalculator {
             Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
         checkContained(object.boundingBox(), channel.extent());
-        
+
         RunningSum running = new RunningSum();
 
-        IterateVoxelsVoxelBoxAsInt.callEachPoint(channel.voxels().any(), object, (buffer, offset) -> {
-            int value = buffer.getInt(offset);
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(
+                channel.voxels().any(),
+                object,
+                (buffer, offset) -> {
+                    int value = buffer.getInt(offset);
 
-            if (!excludeZero || value != 0) {
-                running.increment(value, 1);
-            }            
-        });
+                    if (!excludeZero || value != 0) {
+                        running.increment(value, 1);
+                    }
+                });
 
         if (running.getCount() == 0) {
             throw new FeatureCalculationException("There are 0 pixels in the object-mask");

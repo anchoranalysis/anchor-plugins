@@ -49,7 +49,8 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
     }
 
     @Override
-    public void aggStart(OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+    public void aggStart(
+            OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
             throws AggregatorException {
         // NOTHING TO DO
     }
@@ -73,7 +74,8 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
     }
 
     @Override
-    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting)
+            throws ReporterException {
         System.out.printf( // NOSONAR
                 "*** itr=%d  size=%d  best_energy=%e  kernel=%s%n",
                 reporting.getIter(),
@@ -96,7 +98,7 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
     public void reportEnd(OptimizationFeedbackEndParams<VoxelizedMarksWithEnergy> optStep) {
         super.reportEnd(optStep);
         timer.stop();
-        System.out.printf(  // NOSONAR
+        System.out.printf( // NOSONAR
                 "Optimization time took %e s%n", ((double) timer.getTime()) / 1000);
     }
 }

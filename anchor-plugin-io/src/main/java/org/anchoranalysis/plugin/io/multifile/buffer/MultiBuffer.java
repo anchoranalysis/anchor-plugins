@@ -65,7 +65,8 @@ class MultiBuffer {
         int timeIndexResolved = size.getRangeT().index(timeIndex);
 
         if (sliceNum.isPresent()) {
-            copyFirstSliceForChannel(timeIndexResolved, channelIndexResolved, voxels, sliceNum.get());
+            copyFirstSliceForChannel(
+                    timeIndexResolved, channelIndexResolved, voxels, sliceNum.get());
 
         } else {
             copyAllSlicesForChannel(timeIndexResolved, channelIndexResolved, voxels);

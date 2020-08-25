@@ -41,7 +41,8 @@ class MultiFile {
 
     private DataTypeChecker dataTypeChecker = new DataTypeChecker();
 
-    // What we populate before creating the final stack, buffers is sorted by channel and then by slice
+    // What we populate before creating the final stack, buffers is sorted by channel and then by
+    // slice
     private MultiBufferSized buffers;
 
     public MultiFile(ParsedFilePathBag fileBag) {

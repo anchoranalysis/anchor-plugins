@@ -107,8 +107,10 @@ class OptSchemeFixture {
             BoundIOContext context)
             throws CreateException {
 
-        MarkWithIdentifierFactory factoryWithidentifier = new MarkWithIdentifierFactory(markFactory);
-        BeanTestChecker.checkAndInit(factoryWithidentifier, NullInitParams.instance(), context.getLogger());
+        MarkWithIdentifierFactory factoryWithidentifier =
+                new MarkWithIdentifierFactory(markFactory);
+        BeanTestChecker.checkAndInit(
+                factoryWithidentifier, NullInitParams.instance(), context.getLogger());
 
         // Uses a fixed random-seed so tests always generate the same result
         return new OptSchemeContext(

@@ -83,7 +83,8 @@ class DefineFixture {
         return define;
     }
 
-    private static StackProvider stackEnergy(EnergyStackWithoutParams energyStack) throws CreateException {
+    private static StackProvider stackEnergy(EnergyStackWithoutParams energyStack)
+            throws CreateException {
 
         // Create energy stack
         Stack stack = energyStack.asStack();

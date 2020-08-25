@@ -46,7 +46,8 @@ public class Check extends MarkFromCollectionProposerUnary {
     // END BEANS
 
     @Override
-    public Optional<Mark> selectMarkFrom(MarkCollection marks, MarkFromCollectionProposer proposer, ProposerContext context)
+    public Optional<Mark> selectMarkFrom(
+            MarkCollection marks, MarkFromCollectionProposer proposer, ProposerContext context)
             throws ProposalAbnormalFailureException {
 
         Optional<Mark> mark = proposer.selectMarkFrom(marks, context);
@@ -83,7 +84,6 @@ public class Check extends MarkFromCollectionProposerUnary {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return checkMark.isCompatibleWith(testMark)
-                && super.isCompatibleWith(testMark);
+        return checkMark.isCompatibleWith(testMark) && super.isCompatibleWith(testMark);
     }
 }

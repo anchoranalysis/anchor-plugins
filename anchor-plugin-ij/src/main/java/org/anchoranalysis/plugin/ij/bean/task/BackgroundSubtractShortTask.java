@@ -82,9 +82,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 
             Channel inputImage = ncc.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 
-            Channel bgSubOut =
-                    BackgroundSubtractor.subtractBackground(
-                            inputImage, radius, false);
+            Channel bgSubOut = BackgroundSubtractor.subtractBackground(inputImage, radius, false);
             Voxels<?> voxelsSubOut = bgSubOut.voxels().any();
 
             double maxPixel = voxelsSubOut.extract().voxelWithMaxIntensity();
@@ -97,7 +95,8 @@ public class BackgroundSubtractShortTask extends RasterTask {
             }
 
             ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();
-            Channel channelOut = converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+            Channel channelOut =
+                    converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 
             context.getOutputManager()
                     .getWriterCheckIfAllowed()

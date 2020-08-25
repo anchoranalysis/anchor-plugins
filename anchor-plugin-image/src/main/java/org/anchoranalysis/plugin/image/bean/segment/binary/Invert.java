@@ -39,9 +39,8 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**
  * Performs a segmentation and inverts and ON and OFF bytes
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class Invert extends BinarySegmentationOne {
 

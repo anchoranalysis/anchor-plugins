@@ -72,7 +72,9 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         ProposerContext propContext = context.proposer();
 
         try {
-            this.markExst = markFromMarksProposer.selectMarkFrom(existing.get().getMarks().getMarks(), propContext);
+            this.markExst =
+                    markFromMarksProposer.selectMarkFrom(
+                            existing.get().getMarks().getMarks(), propContext);
         } catch (ProposalAbnormalFailureException e) {
             throw new KernelCalculateEnergyException(
                     "Could not propose a mark due to an abnormal exception", e);
@@ -115,7 +117,10 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     }
 
     private static VoxelizedMarksWithEnergy createMarks(
-            VoxelizedMarksWithEnergy existing, EnergyStackWithoutParams energyStack, PairPxlMarkMemo pair, int markExistingIndex)
+            VoxelizedMarksWithEnergy existing,
+            EnergyStackWithoutParams energyStack,
+            PairPxlMarkMemo pair,
+            int markExistingIndex)
             throws KernelCalculateEnergyException {
 
         // We calculate a new Energy by exchanging our marks
@@ -153,9 +158,9 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             return String.format(
                     "%s %d into %d into %d",
                     getBeanName(),
-                    markExst.get().getId(),         // NOSONAR
-                    pairNew.get().getSource().getMark().getId(),    // NOSONAR
-                    pairNew.get().getDestination().getMark().getId());  // NOSONAR
+                    markExst.get().getId(), // NOSONAR
+                    pairNew.get().getSource().getMark().getId(), // NOSONAR
+                    pairNew.get().getDestination().getMark().getId()); // NOSONAR
         } else {
             return getBeanName();
         }
@@ -175,7 +180,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         updatableMarkSetCollection.remove(memoList, memoExst);
         memoList.remove(memoExst);
 
-        VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource();   // NOSONAR
+        VoxelizedMarkMemo memoAdded1 = pairNew.get().getSource(); // NOSONAR
 
         // Should always find one
         assert memoAdded1 != null;

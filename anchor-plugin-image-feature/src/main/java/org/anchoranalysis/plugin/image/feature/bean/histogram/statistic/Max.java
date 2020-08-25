@@ -34,7 +34,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Max extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.calculateMaximum();
         } catch (OperationFailedException e) {
