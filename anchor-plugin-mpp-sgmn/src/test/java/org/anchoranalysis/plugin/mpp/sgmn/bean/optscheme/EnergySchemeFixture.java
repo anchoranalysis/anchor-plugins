@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.BoundingBoxIntersection;
-import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergyScheme;
-import org.anchoranalysis.anchor.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.shared.SharedFeatureMulti;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.feature.addcriteria.BoundingBoxIntersection;
+import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
+import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.ind.Size;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap.OverlapNumVoxels;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;

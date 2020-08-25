@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.voxelized;
 
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;

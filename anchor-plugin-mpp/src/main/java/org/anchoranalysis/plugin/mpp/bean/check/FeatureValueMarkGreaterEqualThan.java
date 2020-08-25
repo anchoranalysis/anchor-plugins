@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.check;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.mark.Mark;
 
 public class FeatureValueMarkGreaterEqualThan extends FeatureValueCheckMark<FeatureInputMark> {

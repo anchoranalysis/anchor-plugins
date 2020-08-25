@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.check;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.PxlMarkMemoFactory;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;

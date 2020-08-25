@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.bean.check;
 
-import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.error.CheckException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 /**

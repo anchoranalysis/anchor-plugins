@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelDescision;
 import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 

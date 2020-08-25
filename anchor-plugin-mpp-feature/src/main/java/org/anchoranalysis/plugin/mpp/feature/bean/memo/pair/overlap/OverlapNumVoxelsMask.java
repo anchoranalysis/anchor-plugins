@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 
 public class OverlapNumVoxelsMask extends OverlapMaskBase {
 

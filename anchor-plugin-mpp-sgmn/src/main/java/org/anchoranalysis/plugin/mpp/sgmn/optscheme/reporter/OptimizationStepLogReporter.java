@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;

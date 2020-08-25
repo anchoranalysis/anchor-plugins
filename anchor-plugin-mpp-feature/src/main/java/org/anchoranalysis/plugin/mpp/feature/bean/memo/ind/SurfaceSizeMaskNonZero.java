@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
@@ -44,6 +43,7 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernel3;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {

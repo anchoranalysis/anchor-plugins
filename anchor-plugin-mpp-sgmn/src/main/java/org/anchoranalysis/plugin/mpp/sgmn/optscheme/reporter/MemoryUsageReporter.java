@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.AggregateReceiver;

@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeaturePairMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.mpp.feature.bean.energy.element.FeaturePairMemo;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 public abstract class FeaturePairMemoOne extends FeaturePairMemo {
 

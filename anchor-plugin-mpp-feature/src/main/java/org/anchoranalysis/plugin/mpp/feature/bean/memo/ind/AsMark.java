@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 public class AsMark extends FeatureSingleElem<FeatureInputSingleMemo, FeatureInputMark> {
 

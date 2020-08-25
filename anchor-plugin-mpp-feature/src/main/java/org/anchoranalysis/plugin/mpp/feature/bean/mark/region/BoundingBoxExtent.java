@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {

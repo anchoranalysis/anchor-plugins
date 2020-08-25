@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
@@ -36,6 +35,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)

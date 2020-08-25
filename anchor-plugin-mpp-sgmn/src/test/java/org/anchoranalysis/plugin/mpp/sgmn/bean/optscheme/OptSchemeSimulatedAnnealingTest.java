@@ -27,8 +27,6 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -39,6 +37,7 @@ import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipseFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipsoidFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optscheme.OptScheme;
 import org.anchoranalysis.mpp.segment.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.mark.single.OrientationAndRadiiProposer;

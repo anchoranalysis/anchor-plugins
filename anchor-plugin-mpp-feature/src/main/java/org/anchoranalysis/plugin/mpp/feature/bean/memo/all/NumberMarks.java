@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureAllMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureAllMemo;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 
 public class NumberMarks extends FeatureAllMemo {
 
