@@ -63,7 +63,7 @@ public class MinimalExecutionTimeStatsReporter
     @Override
     public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) {
 
-        int kernelID = reporting.getKernel().getIdentifier();
+        int kernelID = reporting.kernelIdentifier();
         double executionTime = reporting.getExecutionTime();
 
         if (reporting.getProposal().isPresent()) {

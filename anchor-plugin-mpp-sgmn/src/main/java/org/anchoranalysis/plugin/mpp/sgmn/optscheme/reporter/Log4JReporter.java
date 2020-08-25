@@ -61,7 +61,7 @@ public class Log4JReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
                         reporting.getIter(),
                         reporting.getMarksAfter().size(),
                         reporting.getMarksAfter().getEnergyTotal(),
-                        reporting.getKernel().getDescription());
+                        reporting.kernelDescription());
         log.info(out);
     }
 

@@ -81,7 +81,7 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
                 reporting.getIter(),
                 reporting.getMarksAfter().size(),
                 reporting.getMarksAfter().getEnergyTotal(),
-                reporting.getKernel().getDescription());
+                reporting.kernelDescription());
     }
 
     @Override

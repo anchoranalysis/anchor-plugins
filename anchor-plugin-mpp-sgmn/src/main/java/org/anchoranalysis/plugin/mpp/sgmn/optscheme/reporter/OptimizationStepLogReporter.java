@@ -70,7 +70,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<VoxelizedMark
                 reporting.getIter(),
                 reporting.getMarksAfter().size(),
                 reporting.getMarksAfter().getEnergyTotal(),
-                reporting.getKernel().getDescription());
+                reporting.kernelDescription());
     }
 
     @Override
