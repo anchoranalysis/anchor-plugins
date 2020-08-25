@@ -49,9 +49,11 @@ public abstract class SelectSlicesWithIndexBase extends SelectSlicesBase {
         return extractFromVoxelized(voxelized);
     }
 
-    protected abstract VoxelStatistics extractFromVoxelized(VoxelizedMark voxelized) throws CreateException;
+    protected abstract VoxelStatistics extractFromVoxelized(VoxelizedMark voxelized)
+            throws CreateException;
 
-    protected VoxelStatistics statisticsForAllSlices(VoxelizedMark voxelized, boolean useNonZeroIndex) {
+    protected VoxelStatistics statisticsForAllSlices(
+            VoxelizedMark voxelized, boolean useNonZeroIndex) {
         return voxelized.statisticsForAllSlicesMaskSlice(
                 useNonZeroIndex ? indexNonZero : getIndex(), getRegionID(), indexNonZero);
     }

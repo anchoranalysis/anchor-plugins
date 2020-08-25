@@ -47,7 +47,8 @@ public class RadiiRatio extends FeatureMark {
     private Resolution uniformRes = new Resolution();
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         ConicBase markCast = (ConicBase) input.get().getMark();
 

@@ -35,8 +35,9 @@ import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberV
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
 
-    private static final OutlineKernelParameters OUTLINE_KERNEL_PARAMETERS = new OutlineKernelParameters(false, false, false);
-    
+    private static final OutlineKernelParameters OUTLINE_KERNEL_PARAMETERS =
+            new OutlineKernelParameters(false, false, false);
+
     public static double calculateShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();
         int perimeter = NumberVoxelsAtBorder.numberBorderPixels(object, OUTLINE_KERNEL_PARAMETERS);

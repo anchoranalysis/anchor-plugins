@@ -32,6 +32,6 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.TwoVoxelMappingBase
 public class MultiplyTwoChannels extends TwoVoxelMappingBase {
 
     public MultiplyTwoChannels(IntBinaryOperation operation) {
-        super( (a,b) -> a * b );
+        super((a, b) -> a * b);
     }
 }

@@ -34,7 +34,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Median extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.quantile(0.5);
         } catch (OperationFailedException e) {

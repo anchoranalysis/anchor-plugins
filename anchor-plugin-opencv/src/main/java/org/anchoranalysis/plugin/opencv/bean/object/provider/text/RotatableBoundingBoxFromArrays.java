@@ -59,8 +59,7 @@ class RotatableBoundingBoxFromArrays {
      * @param offset an offset in the scene to add to each generated bounding-box
      * @return a mark encapsulating a rotatable bounding-box
      */
-    public static RotatableBoundingBox markFor(
-            float[][] geometryArrs, int index, Point2i offset) {
+    public static RotatableBoundingBox markFor(float[][] geometryArrs, int index, Point2i offset) {
 
         Point2f startUnrotated =
                 new Point2f(

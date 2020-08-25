@@ -43,7 +43,10 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public class Repeat extends BinarySegmentationOne {
 
     // START BEAN PROPERTIES
-    /** The maximum number of iterations. If the mask no longer has ON voxels after fewer iterations, it will terminate earlier */
+    /**
+     * The maximum number of iterations. If the mask no longer has ON voxels after fewer iterations,
+     * it will terminate earlier
+     */
     @BeanField @Positive @Getter @Setter private int iterations = 10;
     // END BEAN PROPERTIES
 

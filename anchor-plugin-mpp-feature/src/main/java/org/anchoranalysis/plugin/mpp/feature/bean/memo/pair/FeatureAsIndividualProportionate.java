@@ -85,7 +85,8 @@ public class FeatureAsIndividualProportionate extends FeaturePairMemoOne {
         CalculateHelper first =
                 new CalculateHelper(new CalculateDeriveSingleMemoFromPair(true), CACHE_NAME_FIRST);
         CalculateHelper second =
-                new CalculateHelper(new CalculateDeriveSingleMemoFromPair(false), CACHE_NAME_SECOND);
+                new CalculateHelper(
+                        new CalculateDeriveSingleMemoFromPair(false), CACHE_NAME_SECOND);
 
         return weightedSum(
                 first.valueFor(input),

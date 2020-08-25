@@ -65,8 +65,7 @@ class CreateScaledInput {
     }
 
     private static ScaleFactor relativeScale(Mat original, Mat resized) {
-        return ScaleFactorUtilities.relativeScale(
-                extentFromMat(resized), extentFromMat(original));
+        return ScaleFactorUtilities.relativeScale(extentFromMat(resized), extentFromMat(original));
     }
 
     private static Extent extentFromMat(Mat mat) {

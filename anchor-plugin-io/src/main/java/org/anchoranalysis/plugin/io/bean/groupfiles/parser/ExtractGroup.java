@@ -34,8 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractGroup {
 
-    public static Optional<String> extractString(
-            int groupID, Matcher matcher) {
+    public static Optional<String> extractString(int groupID, Matcher matcher) {
 
         if (groupID > matcher.groupCount()) {
             return Optional.empty();

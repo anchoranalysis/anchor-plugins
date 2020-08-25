@@ -33,11 +33,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 /**
- * The current {@code mask} is a particular stack exists (at least one ON voxel) otherwise
- * {@code maskElse} is returned.
- * 
- * @author Owen Feehan
+ * The current {@code mask} is a particular stack exists (at least one ON voxel) otherwise {@code
+ * maskElse} is returned.
  *
+ * @author Owen Feehan
  */
 public class IfStackExists extends IfPredicateBase {
 

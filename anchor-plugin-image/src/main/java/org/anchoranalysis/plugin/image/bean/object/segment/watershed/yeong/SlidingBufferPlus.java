@@ -61,8 +61,7 @@ final class SlidingBufferPlus {
         boolean do3D = voxelsImg.extent().z() > 1;
         this.findEqualVoxels = new FindEqualVoxels(voxelsImg, matS, do3D, objectMask);
         this.steepest =
-                new Steepest(
-                        slidingBufferSteepest, EncodedVoxels.ENCODING, do3D, true, objectMask);
+                new Steepest(slidingBufferSteepest, EncodedVoxels.ENCODING, do3D, true, objectMask);
     }
 
     public SlidingBuffer<?> getSlidingBuffer() { // NOSONAR

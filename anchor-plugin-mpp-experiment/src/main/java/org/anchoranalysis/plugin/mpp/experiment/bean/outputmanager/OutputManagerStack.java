@@ -42,12 +42,10 @@ public class OutputManagerStack extends OutputManagerWithPrefixer {
     @BeanField @Getter @Setter private OutputAllowed outputEnabled = new AllOutputAllowed();
 
     /** What's allowed or not when outputting stacks */
-    @BeanField @Getter @Setter
-    private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
 
     /** What's allowed or not when outputting configurations */
-    @BeanField @Getter @Setter
-    private OutputAllowed marksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed marksOutputEnabled = new AllOutputAllowed();
 
     /** What's allowed or not when outputting object-collections */
     @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();

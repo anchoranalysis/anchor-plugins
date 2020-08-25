@@ -27,6 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -34,8 +36,6 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 
@@ -49,7 +49,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
             return Optional.empty();
         }
 
-        Optional<MarkAnd<Mark, T>> markEnergy = removeAndUpdateEnergy(existing.get(), context.proposer());
+        Optional<MarkAnd<Mark, T>> markEnergy =
+                removeAndUpdateEnergy(existing.get(), context.proposer());
         markRmv = markEnergy.map(MarkAnd::getMark);
         return markEnergy.map(MarkAnd::getCollection);
     }
@@ -116,7 +117,8 @@ public abstract class KernelDeath<T> extends KernelPosNeg<T> {
         return exst.randomIndex(propContext.getRandomNumberGenerator());
     }
 
-    @AllArgsConstructor @Value
+    @AllArgsConstructor
+    @Value
     protected static class MarkAnd<S, T> {
         private S mark;
         private T collection;

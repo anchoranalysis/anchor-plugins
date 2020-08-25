@@ -3,7 +3,7 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DifferenceHelper {
 
     public static double differenceFromValue(
@@ -36,9 +36,12 @@ class DifferenceHelper {
             double width,
             int minDifference) {
         return differenceFromValue(
-                pixelVals[energyChannelIndexFirst], pixelVals[energyChannelIndexSecond], width, minDifference);
+                pixelVals[energyChannelIndexFirst],
+                pixelVals[energyChannelIndexSecond],
+                width,
+                minDifference);
     }
-    
+
     private static double differenceFromValue(
             int valFirst, int valSecond, double width, int minDifference) {
         return differenceFromValue(valFirst, valSecond, width, width, minDifference);

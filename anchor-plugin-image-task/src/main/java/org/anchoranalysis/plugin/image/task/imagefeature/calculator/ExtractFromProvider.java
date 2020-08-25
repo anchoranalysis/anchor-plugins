@@ -60,7 +60,9 @@ class ExtractFromProvider {
         }
     }
 
-    /** Creates and initializes a single-feature that is provided via a {@link FeatureListProvider} */
+    /**
+     * Creates and initializes a single-feature that is provided via a {@link FeatureListProvider}
+     */
     public static <T extends FeatureInput> Feature<T> extractFeature(
             FeatureListProvider<T> featureListProvider,
             String featureProviderName,

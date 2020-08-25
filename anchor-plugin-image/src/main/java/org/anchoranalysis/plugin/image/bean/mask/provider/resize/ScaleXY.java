@@ -39,9 +39,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Scales the mask in XY dimensions, but not in Z dimension.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ScaleXY extends MaskProviderUnary {
 

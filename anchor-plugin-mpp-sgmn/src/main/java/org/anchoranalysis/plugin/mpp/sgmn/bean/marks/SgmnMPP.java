@@ -69,12 +69,12 @@ import org.anchoranalysis.mpp.segment.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 import org.anchoranalysis.plugin.mpp.sgmn.SgmnMPPState;
 
-
 // Segments a channel with marked pointed processes
 public class SgmnMPP extends SegmentIntoMarks {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private OptScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optScheme;
+    @BeanField @Getter @Setter
+    private OptScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optScheme;
 
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
 
@@ -82,7 +82,8 @@ public class SgmnMPP extends SegmentIntoMarks {
 
     @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
 
-    @BeanField @Getter @Setter private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
+    @BeanField @Getter @Setter
+    private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
 
     @BeanField @Getter @Setter private DefineOutputterMPPWithEnergy define;
 
@@ -158,8 +159,7 @@ public class SgmnMPP extends SegmentIntoMarks {
             new UpdateMarkSet(mppInit, energyStack, updatableMarkSetCollection, context.getLogger())
                     .apply();
 
-            DualStack dualStack =
-                    wrapWithBackground(energyStack, mppInit.getImage().stacks());
+            DualStack dualStack = wrapWithBackground(energyStack, mppInit.getImage().stacks());
 
             if (exitBeforeOpt) {
                 return new MarkCollection();
@@ -188,7 +188,8 @@ public class SgmnMPP extends SegmentIntoMarks {
     private void init(MPPInitParams soMPP, Logger logger) throws InitException {
         markFactory.initRecursive(logger);
 
-        energySchemeShared = SgmnMPPHelper.initEnergy(energySchemeCreator, soMPP.getFeature(), logger);
+        energySchemeShared =
+                SgmnMPPHelper.initEnergy(energySchemeCreator, soMPP.getFeature(), logger);
 
         // The kernelProposers can change proposerSharedObjects
         SgmnMPPHelper.initKernelProposers(kernelProposer, markFactory, soMPP, logger);
@@ -226,8 +227,8 @@ public class SgmnMPP extends SegmentIntoMarks {
         }
     }
 
-    private DualStack wrapWithBackground(
-            EnergyStack energyStack, NamedProviderStore<Stack> store) throws CreateException {
+    private DualStack wrapWithBackground(EnergyStack energyStack, NamedProviderStore<Stack> store)
+            throws CreateException {
         DisplayStack background =
                 BackgroundCreator.createBackground(store, getBackgroundStackName());
         return new DualStack(energyStack, background);

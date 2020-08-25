@@ -51,7 +51,10 @@ public abstract class CalculateOverlapMIPBase
         VoxelizedMark voxelized1 = mark1.voxelized();
         VoxelizedMark voxelized2 = mark2.voxelized();
 
-        if (!voxelized1.boundingBoxFlattened().intersection().existsWith(voxelized2.boundingBoxFlattened())) {
+        if (!voxelized1
+                .boundingBoxFlattened()
+                .intersection()
+                .existsWith(voxelized2.boundingBoxFlattened())) {
             return 0.0;
         }
 

@@ -40,9 +40,9 @@ import org.anchoranalysis.plugin.ij.bean.channel.provider.filter.rank.MedianFilt
 import org.anchoranalysis.plugin.image.bean.blur.BlurGaussian3D;
 import org.anchoranalysis.plugin.image.bean.blur.BlurStrategy;
 import org.anchoranalysis.plugin.image.bean.channel.provider.Reference;
+import org.anchoranalysis.plugin.image.bean.channel.provider.gradient.GradientForAxis;
 import org.anchoranalysis.plugin.image.bean.channel.provider.gradient.Sobel;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.Blur;
-import org.anchoranalysis.plugin.image.bean.channel.provider.gradient.GradientForAxis;
 
 public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
@@ -114,8 +114,7 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
         }
 
         private ChannelProvider gradientSingleDimension(String axis) {
-            GradientForAxis provider =
-                    new GradientForAxis();
+            GradientForAxis provider = new GradientForAxis();
             provider.setOutputShort(true);
             provider.setAddSum(32768);
             provider.setAxis(axis);

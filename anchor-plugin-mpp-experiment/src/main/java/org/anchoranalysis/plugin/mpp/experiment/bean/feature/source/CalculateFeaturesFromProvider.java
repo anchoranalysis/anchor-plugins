@@ -88,7 +88,10 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
         try {
             List<T> inputs =
                     table.deriveInputsStartBatch(
-                            objects, energyStack, thumbnailForInput.isPresent(), context.getLogger());
+                            objects,
+                            energyStack,
+                            thumbnailForInput.isPresent(),
+                            context.getLogger());
 
             calculateManyFeaturesInto(inputs, identifierFromInput);
 

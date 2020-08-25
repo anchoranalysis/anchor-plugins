@@ -36,7 +36,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class NumberDistinctValues extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         int numUniqueValues = 0;
 
         for (int v = 0; v < 255; v++) {

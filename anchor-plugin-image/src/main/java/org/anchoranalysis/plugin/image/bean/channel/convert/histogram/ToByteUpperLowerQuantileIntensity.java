@@ -34,8 +34,7 @@ import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttac
 import org.anchoranalysis.image.channel.converter.attached.histogram.ChannelConverterHistogramUpperLowerQuantileIntensity;
 import org.anchoranalysis.image.histogram.Histogram;
 
-public class ToByteUpperLowerQuantileIntensity
-        extends ConvertChannelToWithHistogram {
+public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double quantileLower = 0.0;

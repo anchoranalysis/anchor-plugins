@@ -137,17 +137,20 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     }
 
     private VoxelizedMarksWithEnergy createMarks(
-            Mark mark, VoxelizedMarksWithEnergy existing, EnergyStack energyStack, RegionMap regionMap)
+            Mark mark,
+            VoxelizedMarksWithEnergy existing,
+            EnergyStack energyStack,
+            RegionMap regionMap)
             throws KernelCalculateEnergyException {
 
         // we need to get indexes for each mark (well make this tidier)
         int sourceIndex = existing.indexOf(pair.getSource());
         int destinationIndex = existing.indexOf(pair.getDestination());
-        
-        if (sourceIndex==-1) {
+
+        if (sourceIndex == -1) {
             throw new KernelCalculateEnergyException("Cannot find source mark in pair");
         }
-        if (destinationIndex==-1) {
+        if (destinationIndex == -1) {
             throw new KernelCalculateEnergyException("Cannot find destination mark in pair");
         }
 
@@ -158,10 +161,12 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             voxelizedMarks.removeTwo(sourceIndex, destinationIndex, energyStack.getEnergyStack());
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException(
-                    String.format("Cannot remove indexes %d and %d", sourceIndex, destinationIndex), e);
+                    String.format("Cannot remove indexes %d and %d", sourceIndex, destinationIndex),
+                    e);
         }
 
-        VoxelizedMarkMemo pmm = PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
+        VoxelizedMarkMemo pmm =
+                PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
 
         try {
             voxelizedMarks.add(pmm, energyStack.getEnergyStack());
@@ -212,7 +217,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
             memoList.remove(rmvIndex2);
         }
 
-        VoxelizedMarkMemo memoAdded = accpted.getMemoForMark(markAdded.get());  // NOSONAR
+        VoxelizedMarkMemo memoAdded = accpted.getMemoForMark(markAdded.get()); // NOSONAR
 
         // Should always find one
         assert memoAdded != null;

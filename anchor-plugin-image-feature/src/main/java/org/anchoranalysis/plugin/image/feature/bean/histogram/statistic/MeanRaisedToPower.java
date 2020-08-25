@@ -39,7 +39,8 @@ public class MeanRaisedToPower extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.mean(power);
         } catch (OperationFailedException e) {

@@ -42,7 +42,8 @@ public class CreateNew extends MarkCollectionProposer {
     }
 
     @Override
-    public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
+    public Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
         return Optional.of(new MarkCollection());
     }

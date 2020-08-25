@@ -46,5 +46,6 @@ public abstract class WithChannelBase extends ObjectCollectionProvider {
         return createFromChannel(channel.create());
     }
 
-    protected abstract ObjectCollection createFromChannel(Channel channelSrc) throws CreateException;
+    protected abstract ObjectCollection createFromChannel(Channel channelSrc)
+            throws CreateException;
 }

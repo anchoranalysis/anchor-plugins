@@ -55,8 +55,7 @@ public class ObjectComparer extends Comparer {
 
     @Override
     public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode)
-            throws CreateException {
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         try {
             Path objectsPath = filePathGenerator.outFilePath(filePathSource, debugMode);

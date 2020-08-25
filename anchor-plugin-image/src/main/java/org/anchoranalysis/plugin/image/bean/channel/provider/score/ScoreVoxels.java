@@ -54,8 +54,8 @@ import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 
 /**
  * Assigns a <i>score</i> (a value indicating how probable something is) to each voxel
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ScoreVoxels extends ChannelProvider {
 
@@ -69,11 +69,9 @@ public class ScoreVoxels extends ChannelProvider {
 
     @BeanField @Getter @Setter private VoxelScore score;
 
-    @BeanField @Getter @Setter
-    private List<ChannelProvider> channelsExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<ChannelProvider> channelsExtra = new ArrayList<>();
 
-    @BeanField @Getter @Setter
-    private List<HistogramProvider> histogramsExtra = new ArrayList<>();
+    @BeanField @Getter @Setter private List<HistogramProvider> histogramsExtra = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter private KeyValueParamsProvider params;
     // END BEAN PROPERTIES
@@ -89,14 +87,15 @@ public class ScoreVoxels extends ChannelProvider {
         Optional<KeyValueParams> paramsCreated = OptionalFactory.create(params);
 
         Optional<ObjectMask> object = createObject();
-        
-        VoxelsFromScoreCreator creator =  new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
+
+        VoxelsFromScoreCreator creator =
+                new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
         Voxels<ByteBuffer> voxelsPixelScore = creator.createVoxelsFromPixelScore(score, object);
-                
+
         return new ChannelFactoryByte()
                 .create(voxelsPixelScore, intensityCreated.dimensions().resolution());
     }
-    
+
     private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws CreateException {
 
         VoxelsWrapperList out = new VoxelsWrapperList();

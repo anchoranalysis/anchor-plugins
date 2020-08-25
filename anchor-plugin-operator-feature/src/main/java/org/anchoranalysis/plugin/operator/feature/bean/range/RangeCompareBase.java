@@ -57,7 +57,8 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
     protected abstract double boundaryMax(SessionInput<T> input) throws FeatureCalculationException;
 
     /**
-     * Which feature to calculate the input-value? The result is then passed to {@link #calculateForValue}
+     * Which feature to calculate the input-value? The result is then passed to {@link
+     * #calculateForValue}
      */
     protected abstract Feature<T> featureToCalcInputVal();
 

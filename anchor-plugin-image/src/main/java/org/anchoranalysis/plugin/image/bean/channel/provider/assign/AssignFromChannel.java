@@ -53,7 +53,10 @@ public class AssignFromChannel extends UnaryWithMaskBase {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        assign(channel, DimensionsChecker.createSameSize(channelAssignFrom, "channelAssignFrom", channel), mask);
+        assign(
+                channel,
+                DimensionsChecker.createSameSize(channelAssignFrom, "channelAssignFrom", channel),
+                mask);
 
         return channel;
     }

@@ -65,8 +65,8 @@ public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
         }
     }
 
-    private Optional<Dimensions> maybeReplaceSourceDimensions(
-            Optional<Dimensions> sourceDimensions) throws OperationFailedException {
+    private Optional<Dimensions> maybeReplaceSourceDimensions(Optional<Dimensions> sourceDimensions)
+            throws OperationFailedException {
         if (dimensionsSource != null) {
             try {
                 return Optional.of(dimensionsSource.create());

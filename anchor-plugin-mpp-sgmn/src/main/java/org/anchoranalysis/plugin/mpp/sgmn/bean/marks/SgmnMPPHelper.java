@@ -75,7 +75,9 @@ class SgmnMPPHelper {
     }
 
     public static EnergySchemeWithSharedFeatures initEnergy(
-            EnergySchemeCreator energySchemeCreator, SharedFeaturesInitParams featureInit, Logger logger)
+            EnergySchemeCreator energySchemeCreator,
+            SharedFeaturesInitParams featureInit,
+            Logger logger)
             throws InitException {
 
         energySchemeCreator.initRecursive(featureInit, logger);
@@ -94,7 +96,8 @@ class SgmnMPPHelper {
             NamedProvider<Stack> stackCollection, KeyValueParams params) throws CreateException {
         try {
             EnergyStackWithoutParams energyStack =
-                    new EnergyStackWithoutParams(stackCollection.getException(StackIdentifiers.ENERGY_STACK));
+                    new EnergyStackWithoutParams(
+                            stackCollection.getException(StackIdentifiers.ENERGY_STACK));
             return new EnergyStack(energyStack, params);
         } catch (NamedProviderGetException e) {
             throw new CreateException(e);

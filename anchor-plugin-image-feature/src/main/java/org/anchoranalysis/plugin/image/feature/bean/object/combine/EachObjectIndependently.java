@@ -72,8 +72,7 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                 .mapToList(
                         object ->
                                 new FeatureInputSingleObject(
-                                        checkObjectInsideScene(
-                                                object, energyStack.extent()),
+                                        checkObjectInsideScene(object, energyStack.extent()),
                                         energyStack));
     }
 

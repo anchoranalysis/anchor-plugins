@@ -44,7 +44,7 @@ public class Reference extends HistogramProvider {
     // END BEAN PROPERTIES
 
     private Histogram histogram;
-    
+
     public Reference(String id) {
         super();
         this.id = id;

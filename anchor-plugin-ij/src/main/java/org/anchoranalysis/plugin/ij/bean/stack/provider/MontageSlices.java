@@ -85,23 +85,14 @@ public class MontageSlices extends StackProviderUnary {
         }
     }
 
-    private Channel montageChannel(
-            Channel in, int cols, int rows, int firstSlice, int lastSlice) {
+    private Channel montageChannel(Channel in, int cols, int rows, int firstSlice, int lastSlice) {
 
         ImagePlus imp = IJWrap.createImagePlus(in);
 
         MontageMaker mm = new MontageMaker();
         ImagePlus res =
                 mm.makeMontage2(
-                        imp,
-                        cols,
-                        rows,
-                        scale,
-                        firstSlice,
-                        lastSlice,
-                        1,
-                        borderWidth,
-                        label);
+                        imp, cols, rows, scale, firstSlice, lastSlice, 1, borderWidth, label);
         return IJWrap.channelFromImagePlus(res, in.dimensions().resolution());
     }
 

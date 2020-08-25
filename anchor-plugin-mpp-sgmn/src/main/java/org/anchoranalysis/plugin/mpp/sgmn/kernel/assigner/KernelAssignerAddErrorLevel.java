@@ -47,7 +47,9 @@ public class KernelAssignerAddErrorLevel<S, T> implements KernelAssigner<S, T> {
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T> optStep, TransformationContext context, KernelWithIdentifier<S> kernel)
+            OptimizationStep<S, T> optStep,
+            TransformationContext context,
+            KernelWithIdentifier<S> kernel)
             throws KernelCalculateEnergyException {
 
         // Add a sub-level with the Kernel name in the proposer-failure-description

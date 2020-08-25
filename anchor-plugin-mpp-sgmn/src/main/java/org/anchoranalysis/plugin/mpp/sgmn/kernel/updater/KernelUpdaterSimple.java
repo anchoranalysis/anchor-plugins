@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -36,7 +37,6 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernel;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class KernelUpdaterSimple<S, T> implements KernelUpdater<S, T> {
@@ -51,8 +51,7 @@ public class KernelUpdaterSimple<S, T> implements KernelUpdater<S, T> {
             throws UpdateMarkSetException {
         try {
             Optional<S> crntConv =
-                    OptionalUtilities.flatMap(
-                            crnt, c -> funcExtractMarks.transform(crnt, context));
+                    OptionalUtilities.flatMap(crnt, c -> funcExtractMarks.transform(crnt, context));
             S proposedConv =
                     funcExtractMarks
                             .transform(Optional.of(proposed), context)

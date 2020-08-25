@@ -54,7 +54,8 @@ public class MemoryUsageReporter extends ReporterAgg<VoxelizedMarksWithEnergy> {
 
             @Override
             public void aggStart(
-                    OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg) {
+                    OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams,
+                    Aggregator agg) {
                 logger = initParams.getInitContext().getLogger().messageLogger();
                 MemoryUtilities.logMemoryUsage("MemoryUsageReporter step=start", logger);
             }

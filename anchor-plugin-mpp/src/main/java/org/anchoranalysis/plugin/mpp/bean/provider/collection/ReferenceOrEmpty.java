@@ -36,8 +36,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 
 /**
  * Returns an existing marks-collection or an empty set if it doesn't exist
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ReferenceOrEmpty extends MarkCollectionProvider {
 
@@ -49,7 +49,8 @@ public class ReferenceOrEmpty extends MarkCollectionProvider {
     public MarkCollection create() throws CreateException {
 
         try {
-            MarkCollection marks = getInitializationParameters().getMarksCollection().getException(id);
+            MarkCollection marks =
+                    getInitializationParameters().getMarksCollection().getException(id);
 
             if (marks == null) {
                 return new MarkCollection();

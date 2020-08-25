@@ -101,13 +101,14 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
     }
 
     @Override
-    protected Optional<MarksWithEnergyBreakdown> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
-            throws ReporterException {
+    protected Optional<MarksWithEnergyBreakdown> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
         return Optional.of(reporting.getMarksAfter().getMarks());
     }
 
     private ColoredMarksWithDisplayStack addColor(
-            MarkCollection marks, OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams) {
+            MarkCollection marks,
+            OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);

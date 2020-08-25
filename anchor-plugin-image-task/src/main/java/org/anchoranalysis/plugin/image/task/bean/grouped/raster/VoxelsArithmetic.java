@@ -36,9 +36,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelsArithmetic {

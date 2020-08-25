@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
@@ -64,8 +65,8 @@ public class OptSchemeSimulatedAnnealingTest {
     }
 
     /**
-     * Runs a simulated-annealing test with birth-and-death of a kind of marks, using a energy-scheme
-     * that penalizes overlap
+     * Runs a simulated-annealing test with birth-and-death of a kind of marks, using a
+     * energy-scheme that penalizes overlap
      *
      * @param use3D iff TRUE ellipsoids and a 3D scene are used, otherwise ellipses and a 2D scene
      * @param logToConsole if TRUE log messages are printed to the console as the test runs (useful
@@ -74,7 +75,8 @@ public class OptSchemeSimulatedAnnealingTest {
      * @throws CreateException
      * @throws InitException
      */
-    private void runTest(boolean use3D, int expectedSize, double expectedEnergy, boolean logToConsole)
+    private void runTest(
+            boolean use3D, int expectedSize, double expectedEnergy, boolean logToConsole)
             throws OptTerminatedEarlyException, CreateException, InitException {
 
         OptScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optScheme =

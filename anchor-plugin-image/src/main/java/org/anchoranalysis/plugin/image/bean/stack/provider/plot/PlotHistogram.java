@@ -64,7 +64,8 @@ public class PlotHistogram extends StackProvider {
         try {
             List<HistogramBin> histogramItems = binsFromHistogram(histogram.create());
 
-            PlotInstance plot = createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
+            PlotInstance plot =
+                    createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
 
             BufferedImage image =
                     GraphOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
@@ -75,7 +76,7 @@ public class PlotHistogram extends StackProvider {
             throw new CreateException(e);
         }
     }
-    
+
     private static PlotInstance createPlot(
             Iterator<HistogramBin> itr,
             Optional<AxisLimits> domainLimits,
@@ -99,7 +100,7 @@ public class PlotHistogram extends StackProvider {
     private static List<HistogramBin> binsFromHistogram(Histogram histogram) {
         List<HistogramBin> out = new ArrayList<>();
         for (int i = 1; i < histogram.size(); i++) {
-            out.add( new HistogramBin(i, histogram.getCount(i)) );
+            out.add(new HistogramBin(i, histogram.getCount(i)));
         }
         return out;
     }

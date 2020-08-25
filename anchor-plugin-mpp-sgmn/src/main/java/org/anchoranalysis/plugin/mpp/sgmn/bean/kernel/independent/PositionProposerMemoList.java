@@ -92,7 +92,11 @@ class PositionProposerMemoList implements OptionalPointProposer {
                 Point3i.immutableSubtract(
                         PointConverter.intFromDoubleFloor(point), box.cornerMin());
 
-        byte membershipExst = voxelized.voxels().sliceBufferLocal(pointRelative.z()).get(box.extent().offsetSlice(pointRelative));
+        byte membershipExst =
+                voxelized
+                        .voxels()
+                        .sliceBufferLocal(pointRelative.z())
+                        .get(box.extent().offsetSlice(pointRelative));
 
         // If it's not inside our mark, then we don't consider it
         if (!rm.isMemberFlag(membershipExst, flags)) {

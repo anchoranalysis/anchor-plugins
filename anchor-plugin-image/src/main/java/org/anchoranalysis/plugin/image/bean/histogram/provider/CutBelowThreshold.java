@@ -34,8 +34,8 @@ import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * This cuts a Histogram below a threshold BUT TRANSFERS ALL THE COUNT greater than equal to the threshold into the
- * bin just below the threshold value
+ * This cuts a Histogram below a threshold BUT TRANSFERS ALL THE COUNT greater than equal to the
+ * threshold into the bin just below the threshold value
  *
  * <p>Note that this is NOT SYMMETRIC behaviour with HistogramProviderAbove
  *

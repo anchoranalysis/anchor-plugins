@@ -56,8 +56,8 @@ class KernelProposerFixture {
      * @throws CreateException
      * @throws InitException
      */
-    public static KernelProposer<VoxelizedMarksWithEnergy> createBirthAndDeath(MarkProposer markProposer)
-            throws CreateException, InitException {
+    public static KernelProposer<VoxelizedMarksWithEnergy> createBirthAndDeath(
+            MarkProposer markProposer) throws CreateException, InitException {
 
         BoundIOContext context = BoundIOContextFixture.withSuppressedLogger();
 
@@ -85,7 +85,8 @@ class KernelProposerFixture {
         return proposer;
     }
 
-    private static KernelInitialMarksVoxelized createInitialKernel(MPPInitParams params, Logger logger) {
+    private static KernelInitialMarksVoxelized createInitialKernel(
+            MPPInitParams params, Logger logger) {
         return BeanTestChecker.checkAndInit(
                 new KernelInitialMarksVoxelized(new CreateNew()), params, logger);
     }

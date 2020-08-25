@@ -39,10 +39,10 @@ class AdditionalChannel {
 
     /** Name of additional channel */
     @Getter private String name;
-    
+
     /** Index of additional channe; */
     private int index;
-    
+
     /** Supplies a file-path associated with the additional channel */
     private PathSupplier filePath;
 
@@ -54,7 +54,7 @@ class AdditionalChannel {
 
     /**
      * A file-path associated with the additional channel
-     * 
+     *
      * @return the file-path
      * @throws AnchorIOException
      */

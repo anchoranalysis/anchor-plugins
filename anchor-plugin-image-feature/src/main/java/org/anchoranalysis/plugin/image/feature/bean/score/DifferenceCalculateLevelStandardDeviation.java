@@ -35,11 +35,10 @@ import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.histogram.Histogram;
 
-/** 
+/**
  * Similar to {@link Difference} but calculates the width as the standard-deviation of the histogram
- *    
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBase {
 

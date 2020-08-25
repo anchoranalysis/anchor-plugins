@@ -36,11 +36,11 @@ import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
-* Finds the input-stack using a conventional name of {@code input_image} - and extracts the first channel
-* 
-* @author Owen Feehan
-*
-*/
+ * Finds the input-stack using a conventional name of {@code input_image} - and extracts the first
+ * channel
+ *
+ * @author Owen Feehan
+ */
 public class FromInput extends ChannelProvider {
 
     private Stack inputStack;

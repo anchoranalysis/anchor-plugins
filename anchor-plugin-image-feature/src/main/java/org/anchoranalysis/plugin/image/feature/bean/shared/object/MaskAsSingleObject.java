@@ -69,7 +69,8 @@ public class MaskAsSingleObject<T extends FeatureInputEnergy>
 
     @Override
     protected double calc(
-            CalculateForChild<T> calculateForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild,
+            Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException {
         return calculateForChild.calculate(
                 featureForSingleObject,

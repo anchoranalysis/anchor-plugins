@@ -73,8 +73,9 @@ public class VisualizeOnBackground extends DefineAdderBean {
             // We add all the existing definitions
             define.addAll(def);
 
-            CreateVisualizatonHelper creator = new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
-            
+            CreateVisualizatonHelper creator =
+                    new CreateVisualizatonHelper(backgroundID, outlineWidth, stackBackground);
+
             // Now we add visualizations for the mask and object-collection providers
             addVisualizationFor(def, define, MaskProvider.class, creator::mask);
             addVisualizationFor(def, define, ObjectCollectionProvider.class, creator::objects);
@@ -110,9 +111,10 @@ public class VisualizeOnBackground extends DefineAdderBean {
 
         Stream<String> beanNames = in.getList(listType).stream().map(NamedBean::getName);
 
-        CheckedStream.forEach( beanNames, OperationFailedException.class, name->
-            out.add( visualizationBean(createVisualization, name) )
-        ); 
+        CheckedStream.forEach(
+                beanNames,
+                OperationFailedException.class,
+                name -> out.add(visualizationBean(createVisualization, name)));
     }
 
     private NamedBean<StackProvider> visualizationBean(

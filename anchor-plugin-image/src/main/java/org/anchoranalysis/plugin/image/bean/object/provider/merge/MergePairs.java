@@ -108,23 +108,24 @@ public class MergePairs extends MergeWithFeature {
         try {
             Optional<EnergyStack> energyStack = featureEvaluatorMerge.energyStack();
 
-            FeatureList<FeatureInputPairObjects> features = FeatureListFactory.from(
-                    featureEvaluatorMerge.getFeature());
-            
+            FeatureList<FeatureInputPairObjects> features =
+                    FeatureListFactory.from(featureEvaluatorMerge.getFeature());
+
             PairsTableCalculator session =
-                    new PairsTableCalculator(
-                            new MergedPairsFeatures(features));
+                    new PairsTableCalculator(new MergedPairsFeatures(features));
             session.start(getInitializationParameters(), energyStack, getLogger());
 
-            return maybeWrapWithEnergyStack(new FeatureCalculatorSingleFromMulti<>(session), energyStack);
+            return maybeWrapWithEnergyStack(
+                    new FeatureCalculatorSingleFromMulti<>(session), energyStack);
 
         } catch (OperationFailedException | InitException e) {
             throw new CreateException(e);
         }
     }
 
-    private static <T extends FeatureInputEnergy> FeatureCalculatorSingle<T> maybeWrapWithEnergyStack(
-            FeatureCalculatorSingle<T> calculator, Optional<EnergyStack> energyStack) {
+    private static <T extends FeatureInputEnergy>
+            FeatureCalculatorSingle<T> maybeWrapWithEnergyStack(
+                    FeatureCalculatorSingle<T> calculator, Optional<EnergyStack> energyStack) {
         if (energyStack.isPresent()) {
             return new FeatureCalculatorSingleChangeInput<>(
                     calculator, input -> input.setEnergyStack(energyStack));

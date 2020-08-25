@@ -34,7 +34,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Min extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.calculateMinimum();
         } catch (OperationFailedException e) {

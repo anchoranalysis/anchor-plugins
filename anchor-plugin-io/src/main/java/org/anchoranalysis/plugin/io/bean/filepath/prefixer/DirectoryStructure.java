@@ -69,8 +69,7 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
     protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root)
             throws FilePathPrefixerException {
 
-        PathDifferenceFromBase difference =
-                differenceToPrefix(removeExtension(input.getPath()));
+        PathDifferenceFromBase difference = differenceToPrefix(removeExtension(input.getPath()));
 
         return new FilePathPrefix(buildOutPath(root, difference));
     }

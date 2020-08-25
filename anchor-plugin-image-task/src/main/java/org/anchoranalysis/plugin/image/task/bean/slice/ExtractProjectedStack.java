@@ -33,8 +33,8 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -73,8 +73,7 @@ class ExtractProjectedStack {
         } else {
             Point3i crnrPos = createTarget(channelIn.dimensions(), extent.get());
 
-            BoundingBox boxToProject =
-                    boxToProject(crnrPos, channelIn.extent(), extent.get());
+            BoundingBox boxToProject = boxToProject(crnrPos, channelIn.extent(), extent.get());
 
             BoundingBox boxSrc = boxSrc(boxToProject, channelIn.dimensions());
 
@@ -103,8 +102,7 @@ class ExtractProjectedStack {
         return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
-    private static Point3i createSourceCorner(
-            BoundingBox boxToProject, Dimensions dimensions) {
+    private static Point3i createSourceCorner(BoundingBox boxToProject, Dimensions dimensions) {
         Point3i sourceCorner = new Point3i(0, 0, 0);
 
         if (boxToProject.extent().x() < dimensions.x()) {

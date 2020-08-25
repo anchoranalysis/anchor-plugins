@@ -45,9 +45,8 @@ import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Creates a stack from a channel or mask (reusing the voxel buffers)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor
 public class FromChannelOrMask extends StackProvider {
@@ -58,7 +57,7 @@ public class FromChannelOrMask extends StackProvider {
 
     /** A mask that is provided to the stack. Either this or {@code channel} must be set. */
     @BeanField @OptionalBean @Getter @Setter private Provider<Mask> mask;
-    
+
     /** If true, the output contains three channels (the input and two duplicates) instead of one */
     @BeanField @Getter @Setter private boolean rgb = false;
     // END BEAN PROPERTIES
@@ -79,11 +78,11 @@ public class FromChannelOrMask extends StackProvider {
 
     @Override
     public Stack create() throws CreateException {
-        return createStackFromChannel( channelFromSource() );
+        return createStackFromChannel(channelFromSource());
     }
-    
+
     /** Creates either a grayscale or RGB stack from the channel */
-    private Stack createStackFromChannel( Channel channel ) {
+    private Stack createStackFromChannel(Channel channel) {
         if (rgb) {
             try {
                 return new Stack(channel, channel.duplicate(), channel.duplicate());
@@ -94,7 +93,7 @@ public class FromChannelOrMask extends StackProvider {
             return new Stack(channel);
         }
     }
-    
+
     /** Identifies a channel from one of two sources */
     private Channel channelFromSource() throws CreateException {
         if (channel != null) {

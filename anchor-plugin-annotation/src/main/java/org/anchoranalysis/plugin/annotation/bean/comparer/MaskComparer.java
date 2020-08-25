@@ -59,8 +59,7 @@ public class MaskComparer extends Comparer {
 
     @Override
     public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode)
-            throws CreateException {
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         try {
             Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
@@ -70,8 +69,7 @@ public class MaskComparer extends Comparer {
             }
 
             Mask mask =
-                    RasterReaderUtilities.openMask(
-                            rasterReader, maskPath, createBinaryValues());
+                    RasterReaderUtilities.openMask(rasterReader, maskPath, createBinaryValues());
 
             return new Found<>(convertToObjects(mask));
 

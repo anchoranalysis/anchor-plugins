@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.opencv;
 
+import com.google.common.base.Preconditions;
 import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,6 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import com.google.common.base.Preconditions;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatConverter {
@@ -106,7 +106,7 @@ public class MatConverter {
     private static Mat matFromRGB(Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
         Extent extent = channelRed.extent();
-        Preconditions.checkArgument(extent.z()==1);
+        Preconditions.checkArgument(extent.z() == 1);
 
         Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_8UC3);
 
@@ -126,10 +126,11 @@ public class MatConverter {
         return mat;
     }
 
-    private static void matToRGB(Mat mat, Channel channelRed, Channel channelGreen, Channel channelBlue) {
+    private static void matToRGB(
+            Mat mat, Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
         Extent extent = channelRed.extent();
-        Preconditions.checkArgument(extent.z()==1);
+        Preconditions.checkArgument(extent.z() == 1);
 
         ByteBuffer red = bufferFromChannel(channelRed);
         ByteBuffer green = bufferFromChannel(channelGreen);

@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.assigner;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
@@ -35,7 +36,6 @@ import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
 import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.kernelbridge.KernelStateBridge;
-import lombok.AllArgsConstructor;
 
 /**
  * @author Owen Feehan
@@ -49,7 +49,9 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
 
     @Override
     public void assignProposal(
-            OptimizationStep<S, T> optStep, TransformationContext context, KernelWithIdentifier<S> kernel)
+            OptimizationStep<S, T> optStep,
+            TransformationContext context,
+            KernelWithIdentifier<S> kernel)
             throws KernelCalculateEnergyException {
 
         try {
@@ -57,21 +59,25 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
             optStep.assignProposal(
                     OptionalUtilities.flatMap(
                             proposalOptional,
-                            proposal -> kernelStateBridge.kernelToState().transform(proposalOptional, context)
-                    ),
+                            proposal ->
+                                    kernelStateBridge
+                                            .kernelToState()
+                                            .transform(proposalOptional, context)),
                     kernel);
 
         } catch (OperationFailedException e) {
             throw new KernelCalculateEnergyException("Cannot transform function", e);
         }
     }
-    
-    private Optional<S> proposal(OptimizationStep<S, T> optStep, KernelWithIdentifier<S> kernel, TransformationContext context) throws KernelCalculateEnergyException, OperationFailedException {
+
+    private Optional<S> proposal(
+            OptimizationStep<S, T> optStep,
+            KernelWithIdentifier<S> kernel,
+            TransformationContext context)
+            throws KernelCalculateEnergyException, OperationFailedException {
         return kernel.getKernel()
-            .makeProposal(
-                    kernelStateBridge
-                            .stateToKernel()
-                            .transform(optStep.getCrnt(), context),
-                    context.getKernelCalcContext());    
+                .makeProposal(
+                        kernelStateBridge.stateToKernel().transform(optStep.getCrnt(), context),
+                        context.getKernelCalcContext());
     }
 }

@@ -50,7 +50,8 @@ public class SliceThresholderMask extends SliceThresholder {
     }
 
     @Override
-    public void segmentAll(Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+    public void segmentAll(
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             int relZ = z - cornerMin.z();

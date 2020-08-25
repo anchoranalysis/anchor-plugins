@@ -42,7 +42,8 @@ public class OrderedRadius extends FeatureMark {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         if (input.get().getMark() instanceof ConicBase) {
 

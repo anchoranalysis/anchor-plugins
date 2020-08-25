@@ -53,12 +53,15 @@ public class FromMarkProposer extends MarkCollectionProposer {
     //   * Number of objects is decided by a Poisson distribution
     //	 * The location and attributes of marks are uniformly distributed
     @Override
-    public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
+    public Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
-        return genInitRndMarksForNumPts(generateNumberPoints(markFactory, context), markFactory, context);
+        return genInitRndMarksForNumPts(
+                generateNumberPoints(markFactory, context), markFactory, context);
     }
 
-    private int generateNumberPoints(MarkWithIdentifierFactory markFactory, ProposerContext context) {
+    private int generateNumberPoints(
+            MarkWithIdentifierFactory markFactory, ProposerContext context) {
         if (numMarks > 0) {
             return numMarks;
         } else {

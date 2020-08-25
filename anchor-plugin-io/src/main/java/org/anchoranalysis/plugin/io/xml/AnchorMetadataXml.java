@@ -68,8 +68,7 @@ public class AnchorMetadataXml {
         }
     }
 
-    public static void writeResolutionXml(Path filePath, Resolution res)
-            throws RasterIOException {
+    public static void writeResolutionXml(Path filePath, Resolution res) throws RasterIOException {
 
         try {
             DocumentBuilder db = XmlUtilities.createDocumentBuilder();

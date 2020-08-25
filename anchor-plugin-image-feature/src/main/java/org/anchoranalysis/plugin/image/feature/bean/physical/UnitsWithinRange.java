@@ -44,7 +44,8 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class UnitsWithinRange<T extends FeatureInputWithResolution> extends FeatureSingleElemWithRes<T> {
+public class UnitsWithinRange<T extends FeatureInputWithResolution>
+        extends FeatureSingleElemWithRes<T> {
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */

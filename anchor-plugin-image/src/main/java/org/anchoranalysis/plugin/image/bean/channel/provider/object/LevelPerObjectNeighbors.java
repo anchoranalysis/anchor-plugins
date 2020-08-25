@@ -49,9 +49,11 @@ import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
 /**
- *  Calculates a threshold-level for each object collectively based on other objects
+ * Calculates a threshold-level for each object collectively based on other objects
  *
- *  <p>A neighborhood-graph is compiled of objects that touch each other. The threshold for each objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the immediate neighbors
+ * <p>A neighborhood-graph is compiled of objects that touch each other. The threshold for each
+ * objects is determined by the object itself and neigbours e.g. neighborhoodDistance==1 are all the
+ * immediate neighbors
  */
 public class LevelPerObjectNeighbors extends LevelPerObjectBase {
 
@@ -64,7 +66,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     // END BEAN
 
     @Override
-    protected void writeLevelsForObjects(Channel channelIntensity, ObjectCollection objects, Channel output)
+    protected void writeLevelsForObjects(
+            Channel channelIntensity, ObjectCollection objects, Channel output)
             throws CreateException {
         try {
             setAgainstNeighbor(channelIntensity, output, objects, distance);

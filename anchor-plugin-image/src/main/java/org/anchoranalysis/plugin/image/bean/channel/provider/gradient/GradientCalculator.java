@@ -27,6 +27,9 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 
 import java.nio.FloatBuffer;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
@@ -37,9 +40,6 @@ import net.imglib2.view.Views;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * Calculates the gradient in one or more dimensions
@@ -50,13 +50,18 @@ import lombok.Setter;
 class GradientCalculator {
 
     // START REQUIRED ARGUMENTS
-    /** a boolean array indicating whether a dimension (X,Y,Z) should be included in the calculation */
+    /**
+     * a boolean array indicating whether a dimension (X,Y,Z) should be included in the calculation
+     */
     private final boolean[] dimensions;
-    
+
     /** the gradient is multiplied by this constant in the output */
     private final float scaleFactor;
-    
-    /** adds a constant after scale-factor has been applied (useful for shifting negative numbers into a positive range) */
+
+    /**
+     * adds a constant after scale-factor has been applied (useful for shifting negative numbers
+     * into a positive range)
+     */
     private final int addSum;
     // END REQUIRED ARGUMENTS
 

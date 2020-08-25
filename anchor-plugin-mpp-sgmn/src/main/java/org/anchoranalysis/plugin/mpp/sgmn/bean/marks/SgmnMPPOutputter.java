@@ -40,15 +40,15 @@ import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
+import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
+import org.anchoranalysis.mpp.io.marks.generator.MarksAsUniqueValueGenerator;
+import org.anchoranalysis.mpp.io.marks.generator.MarksFlattenedGenerator;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.optscheme.DualStack;
-import org.anchoranalysis.mpp.io.marks.generator.MarksFlattenedGenerator;
-import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
-import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
-import org.anchoranalysis.mpp.io.marks.generator.MarksAsUniqueValueGenerator;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
@@ -131,13 +131,13 @@ class SgmnMPPOutputter {
     private static void writeFinalMarks(MarkCollection marks, WriterRouterErrors writer) {
         writer.write("finalMarks", () -> new XStreamGenerator<>(marks, Optional.of("marks")));
         writer.write(
-                "finalMarksBinary", () -> new ObjectOutputStreamGenerator<>(marks, Optional.of("marks")));
+                "finalMarksBinary",
+                () -> new ObjectOutputStreamGenerator<>(marks, Optional.of("marks")));
     }
 
     private static void outputMarksSize(
             MarksWithTotalEnergy marks, WriterRouterErrors writer, Logger logger) {
-        writer.write(
-                "marksSize", () -> new StringGenerator(String.format("%d", marks.size())));
+        writer.write("marksSize", () -> new StringGenerator(String.format("%d", marks.size())));
         logger.messageLogger().log("Marks size = " + marks.size());
     }
 }

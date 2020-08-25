@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
  * Sets particular voxels to high only if they exist on the convex-hull of the outline of a mask.
  *
  * <p>All other voxels are low.
- * 
+ *
  * <p>Uses the Gift wrap algorithm taken from FIJI's PolygonRoi.java
  *
  * @author Owen Feehan

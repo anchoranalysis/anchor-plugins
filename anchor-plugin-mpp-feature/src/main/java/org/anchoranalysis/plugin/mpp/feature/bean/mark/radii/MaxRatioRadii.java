@@ -35,7 +35,8 @@ import org.anchoranalysis.mpp.mark.conic.Ellipse;
 public class MaxRatioRadii extends FeatureMark {
 
     @Override
-    public double calculate(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
         if (!(input.get().getMark() instanceof Ellipse)) {
             throw new FeatureCalculationException(

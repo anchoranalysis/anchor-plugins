@@ -40,8 +40,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
-public abstract class ObjectCollectionProviderFilterBase
-        extends WithOptionalDimensionsBase {
+public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectFilter filter;

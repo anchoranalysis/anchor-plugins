@@ -52,8 +52,7 @@ public abstract class LinearLeastSquaresViaNormalEquationBase extends ConicFitte
     protected abstract int minNumPoints();
 
     protected abstract void applyCoefficientsToMark(
-            DoubleMatrix2D matrixV, Mark mark, Dimensions dimensions)
-            throws PointsFitterException;
+            DoubleMatrix2D matrixV, Mark mark, Dimensions dimensions) throws PointsFitterException;
 
     protected abstract DoubleMatrix2D createDesignMatrix(List<Point3f> points);
 

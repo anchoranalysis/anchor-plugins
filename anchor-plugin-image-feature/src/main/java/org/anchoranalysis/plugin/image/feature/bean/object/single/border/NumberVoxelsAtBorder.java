@@ -36,20 +36,18 @@ import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.OutlineKernelBase;
 
 public class NumberVoxelsAtBorder extends OutlineKernelBase {
-    
+
     @Override
-    protected double calculateWithParameters(ObjectMask object, OutlineKernelParameters parameters, CheckedSupplier<EnergyStack,FeatureCalculationException> energyStack)
+    protected double calculateWithParameters(
+            ObjectMask object,
+            OutlineKernelParameters parameters,
+            CheckedSupplier<EnergyStack, FeatureCalculationException> energyStack)
             throws FeatureCalculationException {
         return (double) numberBorderPixels(object, parameters);
     }
 
-    public static int numberBorderPixels(
-            ObjectMask object,
-            OutlineKernelParameters parameters) {
-        OutlineKernel3 kernel =
-                new OutlineKernel3(
-                        object.binaryValuesByte(), parameters);
+    public static int numberBorderPixels(ObjectMask object, OutlineKernelParameters parameters) {
+        OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), parameters);
         return ApplyKernel.applyForCount(kernel, object.voxels());
     }
-  
 }

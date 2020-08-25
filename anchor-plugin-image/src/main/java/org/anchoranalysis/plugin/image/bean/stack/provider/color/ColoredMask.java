@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
+import java.awt.Color;
 import lombok.Getter;
 import lombok.Setter;
-import java.awt.Color;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
@@ -39,20 +39,20 @@ import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**
  * Draws a colored representation (outline or filled) of a {@link ObjectMask} on a background
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ColoredMask extends ColoredBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MaskProvider mask;
-    
+
     @BeanField @Getter @Setter private RGBColorBean color = new RGBColorBean(Color.green);
     // END BEAN PROPERTIES
 
     @Override
-    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException {
+    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
+            throws CreateException {
         ObjectMask maskAsObject = new ObjectMask(mask.create());
         return new ColoredObjectCollection(maskAsObject, color.rgbColor());
     }

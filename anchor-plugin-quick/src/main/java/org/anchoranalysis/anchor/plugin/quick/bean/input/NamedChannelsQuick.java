@@ -190,7 +190,8 @@ public class NamedChannelsQuick extends NamedChannelsBase {
                 NamedChannelsCreator.create(
                         files, mainChannelName, mainChannelIndex, additionalChannels, rasterReader);
 
-        channels = appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
+        channels =
+                appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
 
         channels = appendChannels(channels, createFilePathGeneratorsAppend(), rasterReaderAppend);
 

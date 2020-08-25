@@ -32,9 +32,8 @@ import org.anchoranalysis.image.channel.Channel;
 
 /**
  * Extracts the slice at the center (rounding down) of the range of z-stacks.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ExtractCenterSlice extends ChannelProviderUnary {
 

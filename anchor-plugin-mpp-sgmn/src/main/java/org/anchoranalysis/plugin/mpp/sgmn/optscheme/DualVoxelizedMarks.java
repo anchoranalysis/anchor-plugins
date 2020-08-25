@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 
 /**
  * A transformation of one {@link VoxelizedMarksWithEnergy} into another

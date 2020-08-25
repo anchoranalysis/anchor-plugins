@@ -37,14 +37,14 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Creates a new channel that is the mean of three input channels
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class MeanThreeChannels extends ChannelProviderTernary {
 
     @Override
-    protected Channel process(Channel channel1, Channel channel2, Channel channel3) throws CreateException {
+    protected Channel process(Channel channel1, Channel channel2, Channel channel3)
+            throws CreateException {
 
         checkDims(channel1, channel2, channel3);
 
@@ -95,7 +95,8 @@ public class MeanThreeChannels extends ChannelProviderTernary {
         }
     }
 
-    private void checkDims(Channel channel1, Channel channel2, Channel channel3) throws CreateException {
+    private void checkDims(Channel channel1, Channel channel2, Channel channel3)
+            throws CreateException {
 
         if (!channel1.dimensions().equals(channel2.dimensions())) {
             throw new CreateException("Dimensions of channels do not match");

@@ -34,9 +34,8 @@ import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
 /**
  * Creates a new mask of particular dimensionality where all values are ON
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class AllValuesOn extends FromDimensionsBase {
 

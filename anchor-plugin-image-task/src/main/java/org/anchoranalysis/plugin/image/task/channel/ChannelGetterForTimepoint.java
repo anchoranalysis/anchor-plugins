@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.task.channel;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ChannelGetterForTimepoint {

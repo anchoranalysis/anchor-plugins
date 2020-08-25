@@ -31,16 +31,15 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.combine.MaskXor;
 
 /**
- * Outputs the logical operation <b>xor</b> (exclusive or) voxelwise on both masks, modifying {mask} with the result.
- * 
- * @author Owen Feehan
+ * Outputs the logical operation <b>xor</b> (exclusive or) voxelwise on both masks, modifying {mask}
+ * with the result.
  *
+ * @author Owen Feehan
  */
 public class Xor extends CombineBase {
 
     @Override
-    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskOther)
-            throws CreateException {
+    protected Mask createFromTwoMasks(Mask maskToModify, Mask maskOther) throws CreateException {
         MaskXor.apply(maskToModify, maskOther);
         return maskToModify;
     }

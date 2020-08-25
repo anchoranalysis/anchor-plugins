@@ -36,15 +36,18 @@ import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.DualVoxelizedMarks;
 
-public class AddDualTransformer extends StateTransformerBean<VoxelizedMarksWithEnergy, DualVoxelizedMarks> {
+public class AddDualTransformer
+        extends StateTransformerBean<VoxelizedMarksWithEnergy, DualVoxelizedMarks> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StateTransformerBean<MarkCollection, VoxelizedMarksWithEnergy> transformerMarks;
+    @BeanField @Getter @Setter
+    private StateTransformerBean<MarkCollection, VoxelizedMarksWithEnergy> transformerMarks;
     // END BEAN PROPERTIES
 
     @Override
     public DualVoxelizedMarks transform(VoxelizedMarksWithEnergy in, TransformationContext context)
             throws OperationFailedException {
-        return new DualVoxelizedMarks(in, transformerMarks.transform(in.getMarks().getMarks(), context));
+        return new DualVoxelizedMarks(
+                in, transformerMarks.transform(in.getMarks().getMarks(), context));
     }
 }

@@ -30,7 +30,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
  * Gradient in x and y axes
  *
  * <p>Out-of-bounds strategy = mirror
- * 
+ *
  * <p>Note the z-dimension is not considered..
  *
  * @author Owen Feehan

@@ -198,7 +198,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
         }
     }
 
-    /*** 
+    /***
      * Decides which datasets to run the experiment on
      */
     private Collection<String> selectDatasets(boolean isDebugEnabled) {

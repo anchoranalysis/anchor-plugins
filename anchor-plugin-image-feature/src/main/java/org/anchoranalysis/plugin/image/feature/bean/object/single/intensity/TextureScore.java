@@ -49,11 +49,13 @@ public class TextureScore extends FeatureEnergyChannel {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
-        Channel channelGradient = input.get().getEnergyStackRequired().getChannel(energyIndexGradient);
+        Channel channelGradient =
+                input.get().getEnergyStackRequired().getChannel(energyIndexGradient);
 
         return scoreFromMeans(
                 IntensityMeanCalculator.calculateMeanIntensityObject(channel, object),

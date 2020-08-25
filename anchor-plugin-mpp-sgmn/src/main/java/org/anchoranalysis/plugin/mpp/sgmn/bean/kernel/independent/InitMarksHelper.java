@@ -40,7 +40,8 @@ import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class InitMarksHelper {
 
-    public static Optional<MarkCollection> propose(MarkCollectionProposer marksProposer, KernelCalculationContext context)
+    public static Optional<MarkCollection> propose(
+            MarkCollectionProposer marksProposer, KernelCalculationContext context)
             throws KernelCalculateEnergyException {
         ProposerContext propContext = context.proposer();
 
@@ -51,7 +52,9 @@ class InitMarksHelper {
     }
 
     private static Optional<MarkCollection> proposeMarks(
-            MarkWithIdentifierFactory markFactory, MarkCollectionProposer marksProposer, ProposerContext propContext)
+            MarkWithIdentifierFactory markFactory,
+            MarkCollectionProposer marksProposer,
+            ProposerContext propContext)
             throws KernelCalculateEnergyException {
         try {
             return marksProposer.propose(markFactory, propContext);

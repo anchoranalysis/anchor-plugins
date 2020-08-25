@@ -58,10 +58,13 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
     public Mask createFromMask(Mask mask) throws CreateException {
 
         if (slicesSeperately) {
-            mask.extent().iterateOverZ( z-> {
-                BoundingBox box = minimalBoxAroundMask(mask.extractSlice(z).binaryVoxels());
-                mask.assignOn().toBox(box.shiftToZ(z));
-            });
+            mask.extent()
+                    .iterateOverZ(
+                            z -> {
+                                BoundingBox box =
+                                        minimalBoxAroundMask(mask.extractSlice(z).binaryVoxels());
+                                mask.assignOn().toBox(box.shiftToZ(z));
+                            });
         } else {
             BoundingBox box = minimalBoxAroundMask(mask.binaryVoxels());
             mask.binaryVoxels().assignOn().toBox(box);
@@ -76,7 +79,8 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         PointRange pointRange = new PointRange();
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesReusePoint(voxels.voxels(), bvb.getOnByte(), pointRange::add);
+        IterateVoxelsByte.iterateEqualValuesReusePoint(
+                voxels.voxels(), bvb.getOnByte(), pointRange::add);
 
         try {
             return pointRange.deriveBoundingBox();

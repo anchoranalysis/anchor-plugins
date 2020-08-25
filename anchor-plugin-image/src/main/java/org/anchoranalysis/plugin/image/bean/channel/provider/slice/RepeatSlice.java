@@ -39,14 +39,13 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromDimensionsBase;
 
-
 /**
- * Creates a new channel with specific dimensions that repeatedly duplicates a slice from an existing channel
- * 
- * <p>The incoming {@code slice} must have the same extent in XY as specified in {@code dimension}.
- * 
- * @author Owen Feehan
+ * Creates a new channel with specific dimensions that repeatedly duplicates a slice from an
+ * existing channel
  *
+ * <p>The incoming {@code slice} must have the same extent in XY as specified in {@code dimension}.
+ *
+ * @author Owen Feehan
  */
 public class RepeatSlice extends FromDimensionsBase {
 
@@ -75,9 +74,9 @@ public class RepeatSlice extends FromDimensionsBase {
         Voxels<ByteBuffer> voxelsSlice = sliceCreated.voxels().asByte();
         Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
-        voxelsOut.extent().iterateOverZ( z->
-            voxelsOut.replaceSlice(z, voxelsSlice.duplicate().slice(0))
-        );
+        voxelsOut
+                .extent()
+                .iterateOverZ(z -> voxelsOut.replaceSlice(z, voxelsSlice.duplicate().slice(0)));
 
         return channelOut;
     }

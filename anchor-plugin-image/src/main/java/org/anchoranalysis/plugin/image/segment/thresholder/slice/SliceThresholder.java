@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.segment.thresholder.slice;
 
 import java.nio.ByteBuffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class SliceThresholder {

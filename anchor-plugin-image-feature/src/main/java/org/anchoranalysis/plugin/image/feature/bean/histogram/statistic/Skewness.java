@@ -35,7 +35,8 @@ import org.anchoranalysis.image.histogram.HistogramStatistics;
 public class Skewness extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return HistogramStatistics.skewness(histogram);
         } catch (OperationFailedException e) {

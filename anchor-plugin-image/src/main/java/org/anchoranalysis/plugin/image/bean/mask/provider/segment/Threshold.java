@@ -40,10 +40,10 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
- * Thresholds a channel to produce a mask, reusing (and modifying) the input-buffers of the channel if possible.
- * 
- * @author Owen Feehan
+ * Thresholds a channel to produce a mask, reusing (and modifying) the input-buffers of the channel
+ * if possible.
  *
+ * @author Owen Feehan
  */
 public class Threshold extends FromChannelBase {
 
@@ -57,9 +57,9 @@ public class Threshold extends FromChannelBase {
         try {
             BinaryVoxels<ByteBuffer> voxelsThresholded =
                     thresholder.threshold(source.voxels(), BinaryValuesByte.getDefault());
-            
+
             return new Mask(voxelsThresholded, source.dimensions().resolution());
-            
+
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

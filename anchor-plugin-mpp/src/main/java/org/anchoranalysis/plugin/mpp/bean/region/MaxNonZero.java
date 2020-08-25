@@ -41,8 +41,7 @@ public class MaxNonZero extends IndexedRegionBase {
 
     @Override
     protected VoxelStatistics createStatisticsFor(
-            VoxelizedMark voxelizedMark, Mark mark, Dimensions dimensions)
-            throws CreateException {
+            VoxelizedMark voxelizedMark, Mark mark, Dimensions dimensions) throws CreateException {
 
         RelationToThreshold nonZero = new RelationToConstant(new GreaterThanBean(), 0);
 

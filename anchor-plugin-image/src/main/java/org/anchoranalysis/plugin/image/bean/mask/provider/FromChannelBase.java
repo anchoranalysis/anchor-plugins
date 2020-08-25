@@ -37,9 +37,8 @@ import org.anchoranalysis.image.channel.Channel;
 
 /**
  * Base-class for mask-providers that accept a channel as input
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public abstract class FromChannelBase extends MaskProvider {
 

@@ -70,9 +70,10 @@ public class ThreeColoredObjects extends ColoredBase {
     }
 
     @Override
-    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions) throws CreateException {
+    protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
+            throws CreateException {
         ColoredObjectCollection objects = new ColoredObjectCollection();
-        
+
         try {
             objects.addObjectsWithColor(objectsRed, COLOR_RED);
             objects.addObjectsWithColor(objectsGreen, COLOR_GREEN);

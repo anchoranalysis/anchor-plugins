@@ -41,7 +41,6 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters
  *
  * @author Owen Feehan
- *
  * @param <S> optional final-type of CachedCalculation
  * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation

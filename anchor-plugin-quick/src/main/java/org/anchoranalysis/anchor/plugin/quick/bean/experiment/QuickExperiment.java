@@ -87,8 +87,7 @@ public class QuickExperiment<S> extends Experiment {
 
     @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();
 
-    @BeanField @Getter @Setter
-    private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();

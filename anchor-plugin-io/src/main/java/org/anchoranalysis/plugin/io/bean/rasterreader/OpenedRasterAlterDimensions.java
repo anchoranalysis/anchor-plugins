@@ -50,8 +50,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
          * @return a new image resolution or empty if no change should occur
          * @throws RasterIOException
          */
-        Optional<Resolution> maybeUpdatedResolution(Resolution res)
-                throws RasterIOException;
+        Optional<Resolution> maybeUpdatedResolution(Resolution res) throws RasterIOException;
     }
 
     private OpenedRaster delegate;

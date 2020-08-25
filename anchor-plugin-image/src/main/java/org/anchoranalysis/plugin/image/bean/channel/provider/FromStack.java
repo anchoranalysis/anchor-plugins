@@ -48,29 +48,37 @@ public class FromStack extends ChannelProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int channelIndex = 0;
 
-    /** Specifies the ID of an existing stack. Either this must be specified or else {@code stack} must be specified. */
+    /**
+     * Specifies the ID of an existing stack. Either this must be specified or else {@code stack}
+     * must be specified.
+     */
     @BeanField @AllowEmpty @Getter @Setter private String stackProviderID;
 
-    /** Provides a stack. Either this must be specified or else {@code stackProviderID} must be specified. */
+    /**
+     * Provides a stack. Either this must be specified or else {@code stackProviderID} must be
+     * specified.
+     */
     @BeanField @OptionalBean @Getter @Setter private ProviderAsStack stack;
     // END BEAN PROPERTIES
 
     public FromStack(ProviderAsStack stack) {
         this.stack = stack;
     }
-    
+
     @Override
     public void checkMisconfigured(BeanInstanceMap defaultInstances)
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
-        if (stackProviderID.isEmpty() && stack==null) {
-            throw new BeanMisconfiguredException("One of either stackProviderID or stack must be specified");
+        if (stackProviderID.isEmpty() && stack == null) {
+            throw new BeanMisconfiguredException(
+                    "One of either stackProviderID or stack must be specified");
         }
-        if (!stackProviderID.isEmpty() && stack!=null) {
-            throw new BeanMisconfiguredException("Only one of either stackProviderID or stack must be specified, but not both.");
+        if (!stackProviderID.isEmpty() && stack != null) {
+            throw new BeanMisconfiguredException(
+                    "Only one of either stackProviderID or stack must be specified, but not both.");
         }
     }
-    
+
     private Channel channel;
 
     @Override
@@ -79,21 +87,20 @@ public class FromStack extends ChannelProvider {
         if (channel == null) {
             channel = stackFromSource().getChannel(channelIndex);
             if (channel == null) {
-                throw new CreateException(String.format("channel %d cannot be found in stack", channelIndex));
+                throw new CreateException(
+                        String.format("channel %d cannot be found in stack", channelIndex));
             }
         }
 
         return channel;
     }
-    
+
     private Stack stackFromSource() throws CreateException {
-        if (stack!=null) {
+        if (stack != null) {
             return stack.createAsStack();
         } else {
             try {
-                return getInitializationParameters()
-                        .stacks()
-                        .getException(stackProviderID);
+                return getInitializationParameters().stacks().getException(stackProviderID);
             } catch (NamedProviderGetException e) {
                 throw new CreateException(e.summarize());
             }

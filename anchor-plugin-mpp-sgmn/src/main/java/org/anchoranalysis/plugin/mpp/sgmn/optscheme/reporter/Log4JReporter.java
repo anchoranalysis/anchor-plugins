@@ -52,7 +52,8 @@ public class Log4JReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
     }
 
     @Override
-    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting)
+            throws ReporterException {
 
         String out =
                 String.format(

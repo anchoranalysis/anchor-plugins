@@ -80,7 +80,10 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
 
             session =
                     FeatureSession.with(
-                            featureCreated, new FeatureInitParams(paramsCreated), sharedFeatureSet, getLogger());
+                            featureCreated,
+                            new FeatureInitParams(paramsCreated),
+                            sharedFeatureSet,
+                            getLogger());
 
         } catch (CreateException | InitException e) {
             session = null;
@@ -97,7 +100,8 @@ public abstract class FeatureValueCheckMark<T extends FeatureInput> extends Chec
         }
 
         try {
-            double energy = session.calculate(createFeatureCalcParams(mark, regionMap, energyStack));
+            double energy =
+                    session.calculate(createFeatureCalcParams(mark, regionMap, energyStack));
 
             return (energy >= minVal);
 

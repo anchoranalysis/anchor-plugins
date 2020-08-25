@@ -30,11 +30,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 
 /**
- * The current {@code mask} is returned if it's non-empty (at least one ON voxel) otherwise
- * {@code maskElse} is returned.
- * 
- * @author Owen Feehan
+ * The current {@code mask} is returned if it's non-empty (at least one ON voxel) otherwise {@code
+ * maskElse} is returned.
  *
+ * @author Owen Feehan
  */
 public class IfNotEmpty extends IfPredicateBase {
 

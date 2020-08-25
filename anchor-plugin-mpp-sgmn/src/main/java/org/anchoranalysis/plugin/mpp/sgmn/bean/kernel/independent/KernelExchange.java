@@ -100,7 +100,11 @@ public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> 
         ProposerContext propContext = context.proposer();
 
         // Pick an element from the existing configuration
-        int index = existing.get().getMarks().getMarks().randomIndex(propContext.getRandomNumberGenerator());
+        int index =
+                existing.get()
+                        .getMarks()
+                        .getMarks()
+                        .randomIndex(propContext.getRandomNumberGenerator());
 
         markExst = existing.get().getMarks().getMarks().get(index);
 
@@ -127,7 +131,8 @@ public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> 
         try {
             newEnergy.exchange(index, pmmMarkNew, propContext.getEnergyStack());
         } catch (NamedFeatureCalculateException e) {
-            throw new KernelCalculateEnergyException(String.format("Cannot exchange index %d", index), e);
+            throw new KernelCalculateEnergyException(
+                    String.format("Cannot exchange index %d", index), e);
         }
 
         return Optional.of(newEnergy);

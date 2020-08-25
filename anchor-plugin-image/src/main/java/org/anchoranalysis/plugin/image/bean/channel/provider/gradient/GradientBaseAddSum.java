@@ -1,12 +1,12 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class GradientBaseAddSum extends GradientBase {
 
@@ -14,7 +14,7 @@ public abstract class GradientBaseAddSum extends GradientBase {
     /** Added to all gradients (so we can store negative gradients) */
     @BeanField @Getter @Setter private int addSum = 0;
     // END BEAN FIELDS
-    
+
     @Override
     public Channel createFromChannel(Channel channelIn) throws CreateException {
 

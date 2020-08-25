@@ -103,8 +103,7 @@ public class RelationWithMatches extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(
-            ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
             throws OperationFailedException {
         try {
             double val = evaluatorForSource.calculate(new FeatureInputSingleObject(object));

@@ -117,7 +117,8 @@ public class OtsuWeighted extends CalculateLevel {
     }
 
     private static VarianceCalculator varianceCalculatorTotal(Histogram hist) {
-        return new VarianceCalculator(hist.calculateSum(), hist.calculateSumSquares(), hist.getTotalCount());
+        return new VarianceCalculator(
+                hist.calculateSum(), hist.calculateSumSquares(), hist.getTotalCount());
     }
 
     private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {

@@ -40,22 +40,24 @@ import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBaseWith
 
 /**
  * Draws a colored representation (outline or filled) of an {@link MarkCollection} on a background
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ColoredMarks extends ColoredBaseWithGenerator {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MarkCollectionProvider marks;
-    
+
     @BeanField @Getter @Setter private int regionID = 0;
     // END BEAN PROPERTIES
 
     @Override
     protected ObjectCollection objectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        RegionMembershipWithFlags regionMembership = RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
-        return marks.create().deriveObjects(backgroundDimensions, regionMembership).withoutProperties();
+        RegionMembershipWithFlags regionMembership =
+                RegionMapSingleton.instance().membershipWithFlagsForIndex(regionID);
+        return marks.create()
+                .deriveObjects(backgroundDimensions, regionMembership)
+                .withoutProperties();
     }
 }

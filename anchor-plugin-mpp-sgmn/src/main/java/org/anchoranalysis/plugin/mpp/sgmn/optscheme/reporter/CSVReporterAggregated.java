@@ -84,7 +84,8 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
     }
 
     @Override
-    public void aggStart(OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+    public void aggStart(
+            OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
             throws AggregatorException {
 
         try {

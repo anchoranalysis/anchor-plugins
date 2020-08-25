@@ -59,8 +59,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
      * @return distance expressed in desired units
      * @throws FeatureCalculationException
      */
-    public double resolveDistance(
-            double value, Optional<Resolution> res, DirectionVector dirVector)
+    public double resolveDistance(double value, Optional<Resolution> res, DirectionVector dirVector)
             throws FeatureCalculationException {
 
         // If we aren't doing anything physical, we can just return the current value
@@ -129,8 +128,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
      * @throws FeatureCalculationException if physical is set, but the resolution is not
      * @return true iff the target-units for conversion are non-physical
      */
-    private boolean isNonPhysical(Optional<Resolution> res)
-            throws FeatureCalculationException {
+    private boolean isNonPhysical(Optional<Resolution> res) throws FeatureCalculationException {
         if (physical) {
             checkResIsPresent(res);
             return false;
@@ -139,8 +137,7 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
         }
     }
 
-    private void checkResIsPresent(Optional<Resolution> res)
-            throws FeatureCalculationException {
+    private void checkResIsPresent(Optional<Resolution> res) throws FeatureCalculationException {
         if (!res.isPresent()) {
             throw new FeatureCalculationException(
                     "Image-resolution is required for conversions to physical units, but it is not specified");

@@ -51,7 +51,8 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
     private StopWatch timer = null;
 
     @Override
-    public void aggStart(OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
+    public void aggStart(
+            OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
             throws AggregatorException {
         fileOutput =
                 FileOutputFromManager.create(
@@ -96,7 +97,8 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
     }
 
     @Override
-    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting)
+            throws ReporterException {
         if (fileOutput.isPresent() && fileOutput.get().isEnabled()) {
 
             fileOutput

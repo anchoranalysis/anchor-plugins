@@ -98,8 +98,7 @@ public class ScaleTask extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            nccfs.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
+            nccfs.addAsSeparateChannels(new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -117,7 +116,8 @@ public class ScaleTask extends RasterTask {
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
 
-        outputStackCollection(stackCollection, KEY_OUTPUT_STACK, "channelScaledCollection", context);
+        outputStackCollection(
+                stackCollection, KEY_OUTPUT_STACK, "channelScaledCollection", context);
         outputStackCollection(
                 stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
     }
@@ -168,7 +168,9 @@ public class ScaleTask extends RasterTask {
                 Channel channelOut;
                 if (forceBinary) {
                     Mask mask = new Mask(channelIn);
-                    Mask maskScaled = org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(mask, scaleCalculator);
+                    Mask maskScaled =
+                            org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
+                                    mask, scaleCalculator);
                     channelOut = maskScaled.channel();
                 } else {
                     channelOut =
@@ -180,8 +182,7 @@ public class ScaleTask extends RasterTask {
                 }
 
                 stackCollection.addImageStack(channelName, new Stack(channelOut));
-                stackCollectionMIP.addImageStack(
-                        channelName, new Stack(channelOut.projectMax()));
+                stackCollectionMIP.addImageStack(channelName, new Stack(channelOut.projectMax()));
 
             } catch (CreateException e) {
                 throw new JobExecutionException(e);

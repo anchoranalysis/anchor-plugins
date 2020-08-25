@@ -114,8 +114,8 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChannelsForSeries createChannelCollection(NamedChannelsInput inputObject, int seriesIndex)
-            throws RasterIOException {
+    public NamedChannelsForSeries createChannelCollection(
+            NamedChannelsInput inputObject, int seriesIndex) throws RasterIOException {
         return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
 
@@ -166,7 +166,8 @@ public class FormatConverterTask extends RasterTask {
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
-            ChannelGetterForTimepoint getterForTimepoint = new ChannelGetterForTimepoint(channelGetter, t);
+            ChannelGetterForTimepoint getterForTimepoint =
+                    new ChannelGetterForTimepoint(channelGetter, t);
 
             channelConversionStyle.convert(
                     channelNames,
@@ -178,7 +179,8 @@ public class FormatConverterTask extends RasterTask {
         }
     }
 
-    private void addStackToOutput(String name, Stack stack, CalculateOutputName calculateOutputName) {
+    private void addStackToOutput(
+            String name, Stack stack, CalculateOutputName calculateOutputName) {
         generatorSeq.add(stack, calculateOutputName.outputName(name));
     }
 

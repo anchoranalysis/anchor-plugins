@@ -42,20 +42,23 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 
 /**
- * Converts a channel to a different voxel data-type by applying a converter with an associated histogram.
- * 
- * <p>The histogram can be either provided, or it will be derived from the image anew.
- * @author Owen Feehan
+ * Converts a channel to a different voxel data-type by applying a converter with an associated
+ * histogram.
  *
+ * <p>The histogram can be either provided, or it will be derived from the image anew.
+ *
+ * @author Owen Feehan
  */
 public class ConvertWithHistogram extends ConvertBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ConvertChannelToWithHistogram convert;
-    
-    /** If set, a histogram used in conversion to describe input intensities (across perhaps multiple images). If unset, such a histogram is calculated from the current image. */
-    @BeanField @OptionalBean @Getter @Setter
-    private HistogramProvider histogram;
+
+    /**
+     * If set, a histogram used in conversion to describe input intensities (across perhaps multiple
+     * images). If unset, such a histogram is calculated from the current image.
+     */
+    @BeanField @OptionalBean @Getter @Setter private HistogramProvider histogram;
     // END BEAN PROPERTIES
 
     @Override
@@ -71,8 +74,9 @@ public class ConvertWithHistogram extends ConvertBase {
 
         return converter.convert(channel, createPolicy());
     }
-    
+
     private Histogram createHistogram(Channel channel) throws CreateException {
-        return OptionalUtilities.orElseGet( OptionalFactory.create(histogram), ()-> HistogramFactory.create(channel) );
+        return OptionalUtilities.orElseGet(
+                OptionalFactory.create(histogram), () -> HistogramFactory.create(channel));
     }
 }

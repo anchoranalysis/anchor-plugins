@@ -76,19 +76,24 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
         // We don't expect an existing exsting marks, but rather null (or whatever)
 
         // Initial marks
-        Optional<MarkCollection> marksOptional = proposeMarks(context.getMarkFactory(), propContext);
+        Optional<MarkCollection> marksOptional =
+                proposeMarks(context.getMarkFactory(), propContext);
 
         this.lastMarks = marksOptional;
 
         try {
             return OptionalUtilities.map(
-                    marksOptional, marks -> VoxelizedMarksWithEnergyFactory.createFromMarks(marks, context, getLogger()));
+                    marksOptional,
+                    marks ->
+                            VoxelizedMarksWithEnergyFactory.createFromMarks(
+                                    marks, context, getLogger()));
         } catch (CreateException e) {
             throw new KernelCalculateEnergyException("Cannot create voxelixed marks", e);
         }
     }
 
-    private Optional<MarkCollection> proposeMarks(MarkWithIdentifierFactory markFactory, ProposerContext propContext)
+    private Optional<MarkCollection> proposeMarks(
+            MarkWithIdentifierFactory markFactory, ProposerContext propContext)
             throws KernelCalculateEnergyException {
         try {
             return marksProposer.propose(markFactory, propContext);
@@ -111,7 +116,8 @@ public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMark
 
     @Override
     public String describeLast() {
-        return String.format("initialMarks(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
+        return String.format(
+                "initialMarks(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
     }
 
     @Override

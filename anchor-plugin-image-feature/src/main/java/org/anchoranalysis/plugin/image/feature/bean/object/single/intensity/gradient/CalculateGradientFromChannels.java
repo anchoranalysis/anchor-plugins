@@ -47,8 +47,8 @@ import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
 /**
- * When the image-gradient is supplied as multiple channels in an energy stack, this converts it into a
- * list of points
+ * When the image-gradient is supplied as multiple channels in an energy stack, this converts it
+ * into a list of points
  *
  * <p>A constant is subtracted from the (all positive) image-channels, to make positive or negative
  * values

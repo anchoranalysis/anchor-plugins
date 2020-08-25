@@ -52,8 +52,7 @@ public class AnnotationMarksComparer extends Comparer {
 
     @Override
     public Findable<ObjectCollection> createObjects(
-            Path filePathSource, Dimensions dimensions, boolean debugMode)
-            throws CreateException {
+            Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         Path filePath;
         try {
@@ -88,8 +87,7 @@ public class AnnotationMarksComparer extends Comparer {
                                         .get()
                                         .getRegionMap()
                                         .membershipWithFlagsForIndex(
-                                                annotation.get().getRegionID())
-                                );
+                                                annotation.get().getRegionID()));
         return new Found<>(objects.withoutProperties());
     }
 }

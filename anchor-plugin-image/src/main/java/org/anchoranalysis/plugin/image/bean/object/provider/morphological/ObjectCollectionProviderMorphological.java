@@ -31,14 +31,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
-public abstract class ObjectCollectionProviderMorphological
-        extends WithOptionalDimensionsBase {
+public abstract class ObjectCollectionProviderMorphological extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean do3D = false;

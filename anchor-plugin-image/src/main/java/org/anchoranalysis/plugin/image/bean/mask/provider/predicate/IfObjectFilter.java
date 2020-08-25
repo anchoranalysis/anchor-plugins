@@ -39,13 +39,11 @@ import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
-* 
-* The current {@code mask} is returned if the mask (treated as an object) passed an object-filter, otherwise
-* {@code maskElse} is returned.
-* 
-* @author Owen Feehan
-*
-*/
+ * The current {@code mask} is returned if the mask (treated as an object) passed an object-filter,
+ * otherwise {@code maskElse} is returned.
+ *
+ * @author Owen Feehan
+ */
 public class IfObjectFilter extends IfPredicateBase {
 
     // START BEAN PROPERTIES

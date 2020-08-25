@@ -43,9 +43,8 @@ import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
  * Scales the channel in the X and Y dimensions.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ScaleXY extends ChannelProviderUnary {
 
@@ -68,7 +67,8 @@ public class ScaleXY extends ChannelProviderUnary {
             MessageLogger logger)
             throws CreateException {
         try {
-            logger.logFormatted("incoming Image Resolution: %s\n", channel.dimensions().resolution());
+            logger.logFormatted(
+                    "incoming Image Resolution: %s\n", channel.dimensions().resolution());
 
             ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(channel.dimensions()));
 

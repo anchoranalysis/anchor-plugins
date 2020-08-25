@@ -46,8 +46,10 @@ public class BBoxRatio extends FeatureSingleMemo {
         int[] extent = markExtent(markCast, input.get().dimensionsRequired());
         return calculateRatio(extent);
     }
-    
-    /** The extent of the mark in each dimension, with the z-dimension adjusted for image-resolution */
+
+    /**
+     * The extent of the mark in each dimension, with the z-dimension adjusted for image-resolution
+     */
     private static int[] markExtent(ConicBase markCast, Dimensions dimensions) {
 
         BoundingBox bb = markCast.box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
@@ -55,10 +57,10 @@ public class BBoxRatio extends FeatureSingleMemo {
 
         // Let's change the z-dimension to include the relative-resolution
         extent[2] = (int) (bb.extent().z() * dimensions.resolution().getZRelativeResolution());
-        
+
         return extent;
     }
-    
+
     private static double calculateRatio(int[] extent) {
 
         int len = extent.length;
@@ -68,6 +70,6 @@ public class BBoxRatio extends FeatureSingleMemo {
             return ((double) extent[1]) / extent[0];
         } else {
             return ((double) extent[2]) / extent[0];
-        }        
+        }
     }
 }

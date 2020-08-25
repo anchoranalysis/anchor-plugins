@@ -39,7 +39,8 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
     }
 
     @Override
-    public void segmentAll(Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+    public void segmentAll(
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
             sgmnSlice(
                     voxelsIn.extent(),

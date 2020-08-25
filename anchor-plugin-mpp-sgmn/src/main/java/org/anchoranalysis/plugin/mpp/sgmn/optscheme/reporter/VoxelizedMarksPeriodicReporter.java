@@ -35,7 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 
-public class VoxelizedMarksPeriodicReporter extends ObjectSerializerPeriodicReporter<MarksWithEnergyBreakdown> {
+public class VoxelizedMarksPeriodicReporter
+        extends ObjectSerializerPeriodicReporter<MarksWithEnergyBreakdown> {
 
     // BEAN PARAMETERS
     @BeanField @Getter @Setter private boolean proposal = false;
@@ -54,8 +55,8 @@ public class VoxelizedMarksPeriodicReporter extends ObjectSerializerPeriodicRepo
     }
 
     @Override
-    protected Optional<MarksWithEnergyBreakdown> generateIterableElement(Reporting<VoxelizedMarksWithEnergy> reporting)
-            throws ReporterException {
+    protected Optional<MarksWithEnergyBreakdown> generateIterableElement(
+            Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
 
         if (proposal) {
             return marksForProposal(reporting);
@@ -64,7 +65,8 @@ public class VoxelizedMarksPeriodicReporter extends ObjectSerializerPeriodicRepo
         }
     }
 
-    private Optional<MarksWithEnergyBreakdown> marksForProposal(Reporting<VoxelizedMarksWithEnergy> reporting) {
+    private Optional<MarksWithEnergyBreakdown> marksForProposal(
+            Reporting<VoxelizedMarksWithEnergy> reporting) {
 
         Optional<VoxelizedMarksWithEnergy> selected =
                 secondary ? reporting.getProposalSecondary() : reporting.getProposal();

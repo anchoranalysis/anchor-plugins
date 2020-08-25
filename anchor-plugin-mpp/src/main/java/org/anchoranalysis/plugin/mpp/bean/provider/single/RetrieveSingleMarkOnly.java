@@ -39,9 +39,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 /**
  * Retrieves a mark from a marks, assuming there is only one mark in a marks, otherwise throwing an
  * exception
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class RetrieveSingleMarkOnly extends SingleMarkProvider {
 
@@ -58,7 +57,8 @@ public class RetrieveSingleMarkOnly extends SingleMarkProvider {
         }
 
         if (marksCreated.size() > 1) {
-            throw new CreateException("Mark-collection has multiple marks. It must have exactly one item");
+            throw new CreateException(
+                    "Mark-collection has multiple marks. It must have exactly one item");
         }
 
         return Optional.of(marksCreated.get(0));

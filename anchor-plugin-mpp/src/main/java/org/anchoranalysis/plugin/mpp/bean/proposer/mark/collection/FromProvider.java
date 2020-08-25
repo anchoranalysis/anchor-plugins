@@ -51,7 +51,8 @@ public class FromProvider extends MarkCollectionProposer {
     }
 
     @Override
-    public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
+    public Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
         try {
             return Optional.of(provider.create());

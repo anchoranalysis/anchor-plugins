@@ -120,9 +120,7 @@ class ExportObjectsFeatureLoader {
         image.useSingleFeature(feature);
     }
 
-    /**
-     * Additionally include a shell feature in the "single" features
-     */
+    /** Additionally include a shell feature in the "single" features */
     private void changeSingleTo(String alternativeFileName) {
         single.useAlternativeXMLList(alternativeFileName);
     }

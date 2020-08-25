@@ -63,7 +63,9 @@ public class SegmentChannel extends WithChannelBase {
 
         try {
             return sgmn.segment(
-                    channelSource, maskAsObject, createSeeds(channelSource.dimensions(), maskAsObject));
+                    channelSource,
+                    maskAsObject,
+                    createSeeds(channelSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }

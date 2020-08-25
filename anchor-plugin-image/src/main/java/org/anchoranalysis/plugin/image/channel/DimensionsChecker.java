@@ -51,9 +51,10 @@ public class DimensionsChecker {
      * Checks a channel to make sure it's the same size as an an existing channel
      *
      * @param channelToCheck the channel whose size will be compared
-     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error messages
-     * @param dimFromChannel the dimensions it must equal from channel (identified as channel in error
-     *     messages)
+     * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
+     *     messages
+     * @param dimFromChannel the dimensions it must equal from channel (identified as channel in
+     *     error messages)
      * @throws CreateException
      */
     public static void check(
@@ -68,8 +69,8 @@ public class DimensionsChecker {
      * @param maskToCheck the channel whose size will be compared
      * @param channelToCheckName a user-meaningful string to identify the channelToCheck in error
      *     messages
-     * @param dimensionsFromChannel the dimensions it must equal from channel (identified as channel in
-     *     error messages)
+     * @param dimensionsFromChannel the dimensions it must equal from channel (identified as channel
+     *     in error messages)
      * @throws CreateException
      */
     public static void check(

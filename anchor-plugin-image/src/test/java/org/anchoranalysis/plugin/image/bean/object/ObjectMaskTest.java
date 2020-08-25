@@ -13,9 +13,9 @@ import org.junit.Test;
 
 /**
  * Tests methods on {@link ObjectMask}.
- * 
+ *
  * <p>It would better belong in {@code anchor-image} but is kept here instead to reuse a fixture.
- * 
+ *
  * @author Owen Feehan
  */
 public class ObjectMaskTest {

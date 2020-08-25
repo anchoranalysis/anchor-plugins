@@ -40,8 +40,8 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
 
 /**
- * Creates object-masks from a {@link MarkCollection} where (a particular region of) each mark creates an
- * object.
+ * Creates object-masks from a {@link MarkCollection} where (a particular region of) each mark
+ * creates an object.
  *
  * @author Owen Feehan
  */
@@ -62,10 +62,8 @@ public class FromMarks extends ObjectCollectionProvider {
 
         MarkCollection marksCreated = marks.create();
 
-        return marksCreated.deriveObjects(
-                dimensions.create(),
-                        regionMap.membershipWithFlagsForIndex(regionID)
-                        )
+        return marksCreated
+                .deriveObjects(dimensions.create(), regionMap.membershipWithFlagsForIndex(regionID))
                 .withoutProperties();
     }
 }

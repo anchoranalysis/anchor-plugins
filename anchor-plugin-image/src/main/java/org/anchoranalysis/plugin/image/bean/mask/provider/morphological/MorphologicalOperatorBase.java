@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -52,7 +52,8 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
     @BeanField @Getter @Setter private boolean suppress3D = false;
     // END PROPERTIES
 
-    protected abstract void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException;
+    protected abstract void applyMorphologicalOperation(Mask source, boolean do3D)
+            throws CreateException;
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {

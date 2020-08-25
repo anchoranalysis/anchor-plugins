@@ -40,7 +40,8 @@ import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public class MinimalExecutionTimeStatsReporter extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
+public class MinimalExecutionTimeStatsReporter
+        extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String outputName = "minimalExecutionTimeStats";

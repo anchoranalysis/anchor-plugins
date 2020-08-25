@@ -51,8 +51,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
     private boolean sigmaInMeters = false; // Treats sigma if it's microns
     // END BEAN PROPERTIES
 
-    public abstract void blur(
-            VoxelsWrapper voxels, Dimensions dimensions, MessageLogger logger)
+    public abstract void blur(VoxelsWrapper voxels, Dimensions dimensions, MessageLogger logger)
             throws OperationFailedException;
 
     protected double calculateSigma(Dimensions dimensions, MessageLogger logger)

@@ -62,7 +62,8 @@ public final class OptimizationStepLogReporter extends ReporterAgg<VoxelizedMark
     }
 
     @Override
-    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) throws ReporterException {
+    public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting)
+            throws ReporterException {
 
         logger.logFormatted(
                 "*** itr=%d  size=%d  best_energy=%e  kernel=%s",

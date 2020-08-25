@@ -34,7 +34,8 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Mode extends FeatureHistogramStatistic {
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             return histogram.calculateMode();
         } catch (OperationFailedException e) {

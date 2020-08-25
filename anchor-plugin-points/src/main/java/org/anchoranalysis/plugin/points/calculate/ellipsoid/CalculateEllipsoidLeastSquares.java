@@ -62,8 +62,7 @@ public class CalculateEllipsoidLeastSquares
     }
 
     @Override
-    protected Ellipsoid execute(FeatureInputSingleObject input)
-            throws FeatureCalculationException {
+    protected Ellipsoid execute(FeatureInputSingleObject input) throws FeatureCalculationException {
 
         try {
             // Shell Rad is arbitrary here for now

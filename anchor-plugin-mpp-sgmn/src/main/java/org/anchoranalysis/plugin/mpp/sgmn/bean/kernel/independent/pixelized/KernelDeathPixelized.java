@@ -41,7 +41,8 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
 
     @Override
     protected Optional<MarkAnd<Mark, VoxelizedMarksWithEnergy>> removeAndUpdateEnergy(
-            VoxelizedMarksWithEnergy exst, ProposerContext context) throws KernelCalculateEnergyException {
+            VoxelizedMarksWithEnergy exst, ProposerContext context)
+            throws KernelCalculateEnergyException {
         return removeMarkAndUpdateEnergy(exst, context);
     }
 
@@ -57,7 +58,8 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
     }
 
     private static Optional<MarkAnd<Mark, VoxelizedMarksWithEnergy>> removeMarkAndUpdateEnergy(
-            VoxelizedMarksWithEnergy exst, ProposerContext propContext) throws KernelCalculateEnergyException {
+            VoxelizedMarksWithEnergy exst, ProposerContext propContext)
+            throws KernelCalculateEnergyException {
 
         int index = selectIndexToRmv(exst.getMarks().getMarks(), propContext);
 
@@ -80,7 +82,8 @@ public class KernelDeathPixelized extends KernelDeath<VoxelizedMarksWithEnergy> 
         try {
             newEnergy.remove(index, propContext.getEnergyStack().getEnergyStack());
         } catch (NamedFeatureCalculateException e) {
-            throw new KernelCalculateEnergyException(String.format("Cannot remove index %d", index), e);
+            throw new KernelCalculateEnergyException(
+                    String.format("Cannot remove index %d", index), e);
         }
 
         return newEnergy;

@@ -66,7 +66,8 @@ public class FromObjects extends MarkCollectionProposer {
     }
 
     @Override
-    public Optional<MarkCollection> propose(MarkWithIdentifierFactory markFactory, ProposerContext context)
+    public Optional<MarkCollection> propose(
+            MarkWithIdentifierFactory markFactory, ProposerContext context)
             throws ProposalAbnormalFailureException {
 
         ObjectCollection objectsCreated;
@@ -92,7 +93,8 @@ public class FromObjects extends MarkCollectionProposer {
                 mark.setId(markFactory.idAndIncrement());
 
                 if (checkMark == null
-                        || checkMark.check(mark, context.getRegionMap(), context.getEnergyStack())) {
+                        || checkMark.check(
+                                mark, context.getRegionMap(), context.getEnergyStack())) {
                     marks.add(mark);
                 }
             }

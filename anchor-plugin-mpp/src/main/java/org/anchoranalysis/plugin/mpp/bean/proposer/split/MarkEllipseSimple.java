@@ -75,7 +75,8 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
             VoxelizedMarkMemo markCorrected = correctEllipseSoXAxisLongest(mark);
             // We change the orientation
-            return createMarksForOrientation(orientation, markCorrected, context, markFactory, false);
+            return createMarksForOrientation(
+                    orientation, markCorrected, context, markFactory, false);
         }
     }
 
@@ -123,10 +124,24 @@ public class MarkEllipseSimple extends MarkSplitProposer {
                 new Orientation2D(exstOrientation.getAngleRadians() + (Math.PI / 2));
 
         VoxelizedMarkMemo markNew1 =
-                extractMemo(markExst, pointArr.get(), 0, orientationRight, context, markFactory, "pos1");
+                extractMemo(
+                        markExst,
+                        pointArr.get(),
+                        0,
+                        orientationRight,
+                        context,
+                        markFactory,
+                        "pos1");
 
         VoxelizedMarkMemo markNew2 =
-                extractMemo(markExst, pointArr.get(), 1, orientationRight, context, markFactory, "pos2");
+                extractMemo(
+                        markExst,
+                        pointArr.get(),
+                        1,
+                        orientationRight,
+                        context,
+                        markFactory,
+                        "pos2");
 
         return Optional.of(new PairPxlMarkMemo(markNew1, markNew2));
     }

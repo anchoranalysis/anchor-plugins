@@ -40,12 +40,10 @@ import org.anchoranalysis.image.extent.Dimensions;
  * Base class for {@link ObjectCollectionProviderUnary} classes that offer an optional means to
  * specify dimensions.
  *
- * @see WithDimensionsBase for a similar class with mandatory dimension
- *     specification.
+ * @see WithDimensionsBase for a similar class with mandatory dimension specification.
  * @author Owen Feehan
  */
-public abstract class WithOptionalDimensionsBase
-        extends ObjectCollectionProviderUnary {
+public abstract class WithOptionalDimensionsBase extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;

@@ -81,8 +81,8 @@ public class RGB extends ChannelConvertStyle {
         }
     }
 
-    private static Stack createRGBStack(ChannelGetterForTimepoint channelGetter, MessageLogger logger)
-            throws CreateException {
+    private static Stack createRGBStack(
+            ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
 
         Stack stackRearranged = new Stack();
 

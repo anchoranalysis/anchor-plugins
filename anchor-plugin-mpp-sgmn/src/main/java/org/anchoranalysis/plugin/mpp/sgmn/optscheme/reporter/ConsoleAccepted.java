@@ -58,15 +58,20 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
                             "itr=%5d  size=%3d  energy=%e  best_energy=%e   kernel=%s",
                             reporting.getIter(),
                             extractStatisticInt(
-                                    reporting.getMarksAfterOptional(), MarksWithEnergyBreakdown::size),
-                            extractStatisticDouble(reporting.getMarksAfterOptional(), MarksWithEnergyBreakdown::getEnergyTotal),
-                            extractStatisticDouble(reporting.getBest(), MarksWithEnergyBreakdown::getEnergyTotal),
+                                    reporting.getMarksAfterOptional(),
+                                    MarksWithEnergyBreakdown::size),
+                            extractStatisticDouble(
+                                    reporting.getMarksAfterOptional(),
+                                    MarksWithEnergyBreakdown::getEnergyTotal),
+                            extractStatisticDouble(
+                                    reporting.getBest(), MarksWithEnergyBreakdown::getEnergyTotal),
                             reporting.getKernel().getDescription());
         }
     }
 
     private static double extractStatisticDouble(
-            Optional<VoxelizedMarksWithEnergy> marks, ToDoubleFunction<MarksWithEnergyBreakdown> func) {
+            Optional<VoxelizedMarksWithEnergy> marks,
+            ToDoubleFunction<MarksWithEnergyBreakdown> func) {
         if (marks.isPresent()) {
             return func.applyAsDouble(marks.get().getMarks());
         } else {
@@ -75,7 +80,8 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
     }
 
     private static int extractStatisticInt(
-            Optional<VoxelizedMarksWithEnergy> marks, ToIntFunction<MarksWithEnergyBreakdown> func) {
+            Optional<VoxelizedMarksWithEnergy> marks,
+            ToIntFunction<MarksWithEnergyBreakdown> func) {
         if (marks.isPresent()) {
             return func.applyAsInt(marks.get().getMarks());
         } else {

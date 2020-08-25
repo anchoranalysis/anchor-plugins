@@ -46,7 +46,8 @@ public class RatioNonMode extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calculateStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         try {
             int startV = ignoreZero ? 1 : 0;
 

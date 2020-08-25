@@ -54,7 +54,8 @@ public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection
     }
 
     @Override
-    public Optional<MarkCollection> makeProposal(Optional<MarkCollection> existing, KernelCalculationContext context)
+    public Optional<MarkCollection> makeProposal(
+            Optional<MarkCollection> existing, KernelCalculationContext context)
             throws KernelCalculateEnergyException {
         this.lastMarks = InitMarksHelper.propose(marksProposer, context);
         return lastMarks;
@@ -73,12 +74,15 @@ public class KernelInitialMarksProposed extends KernelIndependent<MarkCollection
 
     @Override
     public String describeLast() {
-        return String.format("initialMarks(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
+        return String.format(
+                "initialMarks(size=%d)", this.lastMarks.map(MarkCollection::size).orElse(-1));
     }
 
     @Override
     public void updateAfterAcceptance(
-            ListUpdatableMarkSetCollection updatableMarkSetCollection, MarkCollection exst, MarkCollection accptd)
+            ListUpdatableMarkSetCollection updatableMarkSetCollection,
+            MarkCollection exst,
+            MarkCollection accptd)
             throws UpdateMarkSetException {
         // NOTHING TO DO
     }

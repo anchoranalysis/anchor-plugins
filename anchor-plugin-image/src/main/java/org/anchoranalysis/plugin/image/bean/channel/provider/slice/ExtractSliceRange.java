@@ -37,15 +37,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
  * Extracts slices from {@sliceStart} (inclusive) to {@sliceEnd} (inclusive)
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ExtractSliceRange extends ChannelProviderUnary {
 

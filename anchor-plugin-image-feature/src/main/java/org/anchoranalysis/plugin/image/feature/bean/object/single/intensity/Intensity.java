@@ -61,7 +61,8 @@ public class Intensity extends FeatureEnergyChannel {
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calculateForChannel(SessionInput<FeatureInputSingleObject> input, Channel channel)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
         return input.forChild()
                 .calculate(

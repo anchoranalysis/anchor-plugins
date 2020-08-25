@@ -85,7 +85,8 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
             MarkCollection marks =
                     segment.duplicateBean()
                             .segment(stackCollection, objects, keyValueParams, params.context());
-            writeVisualization(marks, params.getOutputManager(), stackCollection, params.getLogger());
+            writeVisualization(
+                    marks, params.getOutputManager(), stackCollection, params.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
