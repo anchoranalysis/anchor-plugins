@@ -33,12 +33,12 @@ import cern.jet.math.Functions;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
 /**
  * Fits an ellipsoid to points using a linear least squares approach

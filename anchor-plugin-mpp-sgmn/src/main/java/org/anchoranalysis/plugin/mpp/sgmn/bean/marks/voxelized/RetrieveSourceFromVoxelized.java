@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.voxelized;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 public class RetrieveSourceFromVoxelized<T> extends StateTransformerBean<ToPixelized<T>, T> {

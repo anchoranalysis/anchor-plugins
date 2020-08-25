@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.position;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposer;
-import org.anchoranalysis.anchor.mpp.probmap.ProbMap;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.proposer.PositionProposer;
+import org.anchoranalysis.mpp.probmap.ProbMap;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 /**
  * Uses a probability field defined over the voxels to make some positions more likely than others

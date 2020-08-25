@@ -31,9 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -49,10 +46,13 @@ import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.mark.ColoredMarks;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 import org.anchoranalysis.overlay.id.IDGetterOverlayID;
 
 public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBreakdown> {
@@ -108,7 +108,7 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
 
     private ColoredMarksWithDisplayStack addColor(
             MarkCollection marks, OptimizationFeedbackInitParams<VoxelizedMarksWithEnergy> initParams) {
-        DisplayStack stack = initParams.getInitContext().getDualStack().getBgStack();
+        DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }

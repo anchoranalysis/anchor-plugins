@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.weight;
 
-import org.anchoranalysis.anchor.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.Mark;
 
 /** All marks have weight of 1 */
 public class ConstantWeight extends ExtractWeightFromMark {

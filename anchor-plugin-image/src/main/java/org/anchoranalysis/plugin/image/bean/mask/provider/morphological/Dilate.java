@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
 /** Performs an dilation morphological operation on a binary-image */
 public class Dilate extends MorphologicalOperatorBase {

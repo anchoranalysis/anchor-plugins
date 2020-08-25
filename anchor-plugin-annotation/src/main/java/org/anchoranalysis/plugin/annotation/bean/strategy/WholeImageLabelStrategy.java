@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.gui.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.gui.annotation.bean.label.GroupedAnnotationLabels;
@@ -48,7 +48,7 @@ public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
     @Override
     public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
         return ReadAnnotationFromFile.readCheckExists(annotationPathFor(item))
-                .map(WholeImageLabelAnnotation::getLabel);
+                .map(ImageLabelAnnotation::getLabel);
     }
 
     // This is actually called twice during a typically opening of an annotation

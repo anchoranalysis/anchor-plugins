@@ -30,14 +30,14 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 
 /**
  * Adds a new mark (a "birth") to create a proposal

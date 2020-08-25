@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.points.bean.fitter;
 
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ConicFitterUtilities {

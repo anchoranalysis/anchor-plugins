@@ -30,11 +30,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkCollectionProvider;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
 @NoArgsConstructor @AllArgsConstructor
 public class Reference extends MarkCollectionProvider {

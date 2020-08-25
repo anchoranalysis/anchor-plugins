@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipse;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 /**
  * Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing

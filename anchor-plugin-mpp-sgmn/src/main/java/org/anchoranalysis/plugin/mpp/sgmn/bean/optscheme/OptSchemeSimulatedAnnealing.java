@@ -28,19 +28,19 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.proposer.KernelProposer;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationConditionListOr;
-import org.anchoranalysis.mpp.sgmn.kernel.MarkFactoryContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptSchemeContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.FeedbackReceiver;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
+import org.anchoranalysis.mpp.segment.bean.optscheme.OptScheme;
+import org.anchoranalysis.mpp.segment.bean.optscheme.termination.TerminationCondition;
+import org.anchoranalysis.mpp.segment.bean.optscheme.termination.TerminationConditionListOr;
+import org.anchoranalysis.mpp.segment.kernel.MarkFactoryContext;
+import org.anchoranalysis.mpp.segment.optscheme.OptSchemeContext;
+import org.anchoranalysis.mpp.segment.optscheme.OptTerminatedEarlyException;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.FeedbackReceiver;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.mode.AssignMode;
 
 /**

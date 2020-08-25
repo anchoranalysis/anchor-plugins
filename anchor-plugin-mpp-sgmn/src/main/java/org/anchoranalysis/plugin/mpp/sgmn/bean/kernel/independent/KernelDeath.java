@@ -27,15 +27,15 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
 
 public abstract class KernelDeath<T> extends KernelPosNeg<T> {
 

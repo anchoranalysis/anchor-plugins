@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import lombok.Data;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.OrientationRotationMatrix;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
 @Data
 public class FitResult {

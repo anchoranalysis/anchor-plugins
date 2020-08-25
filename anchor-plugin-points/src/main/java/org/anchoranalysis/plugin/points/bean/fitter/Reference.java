@@ -29,16 +29,16 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.init.PointsInitParams;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitter;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.bean.init.PointsInitParams;
+import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.Mark;
 
 public class Reference extends PointsFitter {
 

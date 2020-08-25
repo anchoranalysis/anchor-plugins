@@ -27,20 +27,19 @@
 package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import static org.junit.Assert.*;
-
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundUnitless;
-import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds2D;
-import org.anchoranalysis.anchor.mpp.bean.mark.bounds.RotationBounds3D;
-import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkEllipseFactory;
-import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkEllipsoidFactory;
-import org.anchoranalysis.anchor.mpp.bean.mark.factory.MarkFactory;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.OptScheme;
-import org.anchoranalysis.mpp.sgmn.optscheme.OptTerminatedEarlyException;
+import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
+import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds2D;
+import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds3D;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipseFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkEllipsoidFactory;
+import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
+import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.mpp.segment.bean.optscheme.OptScheme;
+import org.anchoranalysis.mpp.segment.optscheme.OptTerminatedEarlyException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.mark.single.OrientationAndRadiiProposer;
 import org.anchoranalysis.plugin.mpp.bean.proposer.orientation.RandomOrientation;
 import org.anchoranalysis.plugin.mpp.bean.proposer.radii.UniformRandomRadiiProposer;

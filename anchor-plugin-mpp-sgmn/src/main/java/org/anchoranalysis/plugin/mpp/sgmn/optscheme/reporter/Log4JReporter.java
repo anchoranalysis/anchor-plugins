@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.AggregateReceiver;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.Aggregator;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

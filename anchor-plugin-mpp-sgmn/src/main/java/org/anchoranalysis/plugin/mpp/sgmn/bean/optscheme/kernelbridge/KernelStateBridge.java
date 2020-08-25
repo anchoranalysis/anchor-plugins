@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.kernelbridge;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 
 /**
  * Transforms a kernel-to-state and vice versa

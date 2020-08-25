@@ -30,11 +30,11 @@ import java.util.Optional;
 import java.util.function.ToIntFunction;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.proposer.PositionProposer;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.bean.proposer.PositionProposer;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 public class UniformRandom extends PositionProposer {
 

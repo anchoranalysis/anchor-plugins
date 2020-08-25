@@ -30,7 +30,6 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
@@ -43,6 +42,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.mpp.bean.bound.MarkBounds;
 import org.anchoranalysis.plugin.image.bean.histogram.threshold.Constant;
 
 // Performs a thresholding that accepts only channel values with intensities

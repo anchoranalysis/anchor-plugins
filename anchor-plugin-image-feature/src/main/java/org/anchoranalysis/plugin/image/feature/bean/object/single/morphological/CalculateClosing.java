@@ -39,7 +39,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilationMap;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

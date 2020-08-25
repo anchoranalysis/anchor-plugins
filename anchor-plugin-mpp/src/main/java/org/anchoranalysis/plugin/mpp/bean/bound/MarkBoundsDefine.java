@@ -30,10 +30,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.mpp.bean.provider.MarkBoundsProvider;
 
 @NoArgsConstructor
 @AllArgsConstructor

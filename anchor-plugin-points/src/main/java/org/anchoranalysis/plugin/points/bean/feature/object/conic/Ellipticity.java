@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.points.bean.feature.object.conic;
 
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.mpp.bean.points.fitter.InsufficientPointsException;
 import org.anchoranalysis.plugin.points.calculate.ellipse.CalculateEllipseLeastSquares;
 import org.anchoranalysis.plugin.points.calculate.ellipse.ObjectWithEllipse;
 

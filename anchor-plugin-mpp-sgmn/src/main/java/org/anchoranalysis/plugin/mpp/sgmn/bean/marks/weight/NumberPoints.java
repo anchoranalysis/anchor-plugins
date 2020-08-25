@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.weight;
 
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.points.PointList;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.points.PointList;
 
 public class NumberPoints extends ExtractWeightFromMark {
 

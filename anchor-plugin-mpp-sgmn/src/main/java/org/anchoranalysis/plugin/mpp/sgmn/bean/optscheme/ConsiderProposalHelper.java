@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.anchor.mpp.proposer.error.ProposerFailureDescription;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.proposer.error.ProposerFailureDescription;
+import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.kernel.updater.KernelUpdater;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.AccptProbCalculator;
 

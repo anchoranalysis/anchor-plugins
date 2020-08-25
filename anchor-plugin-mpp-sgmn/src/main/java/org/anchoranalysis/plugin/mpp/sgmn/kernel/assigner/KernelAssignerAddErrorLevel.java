@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.assigner;
 
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelAssigner;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
-import org.anchoranalysis.mpp.sgmn.kernel.proposer.KernelWithIdentifier;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.OptimizationStep;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
+import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 public class KernelAssignerAddErrorLevel<S, T> implements KernelAssigner<S, T> {
 

@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
-import org.anchoranalysis.mpp.sgmn.define.OutputterDirectories;
+import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 public class AppendObjects extends FilePathBaseAppendToManagerWithFileID {
 

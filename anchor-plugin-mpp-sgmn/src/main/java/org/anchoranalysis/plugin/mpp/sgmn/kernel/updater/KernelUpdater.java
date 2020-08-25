@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.sgmn.kernel.updater;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 /**
  * @author Owen Feehan

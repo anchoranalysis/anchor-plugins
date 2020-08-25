@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
-import org.anchoranalysis.anchor.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 
 // Considers the 3 directions of an Ellipsoid
 public class DotProductOrientationToVector extends FeatureMarkDirection {

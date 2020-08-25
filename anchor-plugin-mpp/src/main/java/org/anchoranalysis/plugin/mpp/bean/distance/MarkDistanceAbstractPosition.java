@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.bean.distance;
 
-import org.anchoranalysis.anchor.mpp.bean.mark.MarkDistance;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkWithPosition;
-import org.anchoranalysis.anchor.mpp.mark.UnsupportedMarkTypeException;
+import org.anchoranalysis.mpp.bean.mark.MarkDistance;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.mpp.mark.UnsupportedMarkTypeException;
 
 public class MarkDistanceAbstractPosition extends MarkDistance {
 

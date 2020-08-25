@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.bean.bound;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.MarkBounds;
-import org.anchoranalysis.anchor.mpp.bean.provider.MarkBoundsProvider;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.mpp.bean.bound.MarkBounds;
+import org.anchoranalysis.mpp.bean.provider.MarkBoundsProvider;
 
 public class MarkBoundsReference extends MarkBoundsProvider {
 

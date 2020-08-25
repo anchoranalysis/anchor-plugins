@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.anneal.AnnealScheme;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.sgmn.optscheme.ExtractScoreSize;
+import org.anchoranalysis.mpp.bean.anneal.AnnealScheme;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.mpp.segment.optscheme.ExtractScoreSize;
 
 @RequiredArgsConstructor
 public class AccptProbCalculator<T> {

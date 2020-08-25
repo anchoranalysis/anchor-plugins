@@ -33,14 +33,14 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.ReporterAgg;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregateReceiver;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.Aggregator;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.aggregate.AggregatorException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.AggregateReceiver;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.Aggregator;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.aggregate.AggregatorException;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
 public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>

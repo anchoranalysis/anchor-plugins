@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.weight;
 
-import org.anchoranalysis.anchor.mpp.mark.CompatibleWithMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.bean.AnchorBean;
+import org.anchoranalysis.mpp.mark.CompatibleWithMark;
+import org.anchoranalysis.mpp.mark.Mark;
 
 public abstract class ExtractWeightFromMark extends AnchorBean<ExtractWeightFromMark>
         implements CompatibleWithMark {

@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks.partition;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformerBean;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.MarksFromPartition;
 
 public class RemovePartition extends StateTransformerBean<MarksFromPartition, MarkCollection> {

@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.termination.TerminationCondition;
+import org.anchoranalysis.mpp.segment.bean.optscheme.termination.TerminationCondition;
 
 /**
  * TODO consider renaming to ConstantScore

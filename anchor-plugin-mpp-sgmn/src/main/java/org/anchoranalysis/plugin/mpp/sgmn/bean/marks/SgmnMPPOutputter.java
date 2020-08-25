@@ -29,12 +29,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.marks;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithTotalEnergy;
-import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.log.Logger;
@@ -45,10 +41,14 @@ import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
+import org.anchoranalysis.mpp.mark.ColoredMarks;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.optscheme.DualStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksFlattenedGenerator;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksAsUniqueValueGenerator;
-import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
@@ -70,7 +70,7 @@ class SgmnMPPOutputter {
                         new IDGetterIter<Mark>());
 
         ColoredMarksWithDisplayStack coloredMarksDisplayStack =
-                new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBgStack());
+                new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBackground());
 
         WriterRouterErrors writer = outputManager.getWriterCheckIfAllowed();
 

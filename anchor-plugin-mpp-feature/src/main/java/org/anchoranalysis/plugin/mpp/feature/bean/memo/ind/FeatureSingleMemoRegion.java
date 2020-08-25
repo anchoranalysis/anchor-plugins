@@ -30,10 +30,10 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 public abstract class FeatureSingleMemoRegion extends FeatureSingleMemo {

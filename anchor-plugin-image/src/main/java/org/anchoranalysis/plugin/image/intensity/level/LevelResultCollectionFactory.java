@@ -38,7 +38,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelResultCollectionFactory {

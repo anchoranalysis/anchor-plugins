@@ -40,7 +40,6 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ExtendObjectsInto3DMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -88,7 +87,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
                     "A 3D object was returned from the initial segmentation. This must return only 2D objects");
         }
 
-        return ExtendObjectsInto3DMask.extendObjects(objects, binarySgmn(channel));
+        return ExtendInZHelper.extendObjects(objects, binarySgmn(channel));
     }
 
     private boolean isAny3d(ObjectCollection objects) {

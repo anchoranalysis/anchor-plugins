@@ -31,17 +31,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.Bound;
-import org.anchoranalysis.anchor.mpp.bean.proposer.radii.RadiiProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.ConicBase;
-import org.anchoranalysis.anchor.mpp.mark.conic.RadiiRandomizer;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.mpp.bean.bound.Bound;
+import org.anchoranalysis.mpp.bean.proposer.radii.RadiiProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.ConicBase;
+import org.anchoranalysis.mpp.mark.conic.RadiiRandomizer;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 
 @NoArgsConstructor
 @AllArgsConstructor

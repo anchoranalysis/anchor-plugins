@@ -57,7 +57,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRero
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 /**
  * Exports a cropped image for each object-mask showing its context within an image

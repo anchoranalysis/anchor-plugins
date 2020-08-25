@@ -30,14 +30,14 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.Kernel;
-import org.anchoranalysis.mpp.sgmn.bean.kernel.KernelPosNeg;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculationContext;
-import org.anchoranalysis.mpp.sgmn.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
+import org.anchoranalysis.mpp.segment.bean.kernel.Kernel;
+import org.anchoranalysis.mpp.segment.bean.kernel.KernelPosNeg;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
+import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.apache.commons.lang.ArrayUtils;
 
 public abstract class KernelReplace<T> extends KernelPosNeg<T> {

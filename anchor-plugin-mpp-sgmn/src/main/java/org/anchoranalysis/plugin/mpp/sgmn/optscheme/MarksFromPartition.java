@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

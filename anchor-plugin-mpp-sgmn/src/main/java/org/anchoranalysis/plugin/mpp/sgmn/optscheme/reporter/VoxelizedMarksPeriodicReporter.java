@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 
 public class VoxelizedMarksPeriodicReporter extends ObjectSerializerPeriodicReporter<MarksWithEnergyBreakdown> {
 

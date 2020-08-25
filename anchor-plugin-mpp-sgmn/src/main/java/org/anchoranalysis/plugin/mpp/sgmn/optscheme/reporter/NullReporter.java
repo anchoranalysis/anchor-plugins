@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.FeedbackReceiverBean;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackEndParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.FeedbackReceiverBean;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackEndParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 
 /**
  * Dummy reporter that takes no action.

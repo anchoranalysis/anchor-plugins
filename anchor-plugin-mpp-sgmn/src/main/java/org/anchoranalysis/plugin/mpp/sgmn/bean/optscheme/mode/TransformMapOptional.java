@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.mode;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.mpp.sgmn.transformer.StateTransformer;
-import org.anchoranalysis.mpp.sgmn.transformer.TransformationContext;
+import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
+import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
 
 public class TransformMapOptional<W, X> implements StateTransformer<Optional<W>, Optional<X>> {
 

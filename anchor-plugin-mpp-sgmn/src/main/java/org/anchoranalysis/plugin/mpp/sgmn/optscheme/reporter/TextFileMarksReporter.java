@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import java.util.Optional;
 import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderReporter;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
-import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
-import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
+import org.anchoranalysis.mpp.segment.optscheme.feedback.ReporterException;
+import org.anchoranalysis.mpp.segment.optscheme.step.Reporting;
 
 public class TextFileMarksReporter extends PeriodicSubfolderReporter<MarkCollection> {
 
