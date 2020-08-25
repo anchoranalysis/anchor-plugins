@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 
 /**
  * Ensures each object in a collection is a connected-component, decomposing it if necessary into
@@ -51,15 +51,15 @@ public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUn
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-        CreateFromConnectedComponentsFactory creator =
-                new CreateFromConnectedComponentsFactory(bigNeighborhood, 1);
+        ObjectsFromConnectedComponentsFactory creator =
+                new ObjectsFromConnectedComponentsFactory(bigNeighborhood, 1);
 
         return objects.stream()
                 .flatMap(CreateException.class, objectMask -> createObjects3D(objectMask, creator));
     }
 
     private ObjectCollection createObjects3D(
-            ObjectMask unconnected, CreateFromConnectedComponentsFactory createObjectMasks) {
+            ObjectMask unconnected, ObjectsFromConnectedComponentsFactory createObjectMasks) {
 
         ObjectCollection objects =
                 createObjectMasks.createConnectedComponents(unconnected.binaryVoxels());

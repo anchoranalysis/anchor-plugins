@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.bean.init.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;

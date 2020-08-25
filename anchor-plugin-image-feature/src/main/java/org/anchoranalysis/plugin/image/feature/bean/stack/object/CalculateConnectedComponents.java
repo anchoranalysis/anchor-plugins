@@ -33,7 +33,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -46,7 +46,7 @@ class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, 
 
         Mask mask = new Mask(input.getEnergyStackRequired().getChannel(energyChannelIndex));
 
-        CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
+        ObjectsFromConnectedComponentsFactory creator = new ObjectsFromConnectedComponentsFactory();
         return creator.createConnectedComponents(mask);
     }
 }

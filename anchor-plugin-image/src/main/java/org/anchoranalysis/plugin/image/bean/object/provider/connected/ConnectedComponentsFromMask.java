@@ -42,8 +42,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -92,8 +92,8 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         }
     }
 
-    private CreateFromConnectedComponentsFactory createFactory(int minNumberVoxels) {
-        return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
+    private ObjectsFromConnectedComponentsFactory createFactory(int minNumberVoxels) {
+        return new ObjectsFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
     private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
@@ -103,7 +103,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
             throws CreateException {
 
-        CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
+        ObjectsFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
         VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extract();
 
@@ -120,7 +120,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private ObjectCollection createForSlice(
-            CreateFromConnectedComponentsFactory objectCreator,
+            ObjectsFromConnectedComponentsFactory objectCreator,
             BinaryVoxels<ByteBuffer> bvb,
             int z) {
         // respecify the z

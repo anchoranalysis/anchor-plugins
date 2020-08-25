@@ -39,17 +39,17 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 
 public class SplitByObjects extends WithDimensionsBase {
 
-    private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
-            new CreateFromConnectedComponentsFactory();
+    private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
+            new ObjectsFromConnectedComponentsFactory();
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSplitBy;

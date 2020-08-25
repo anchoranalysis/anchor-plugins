@@ -36,7 +36,7 @@ import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
