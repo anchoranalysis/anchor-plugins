@@ -44,7 +44,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.MaskFromObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.ij.mask.ApplyImageJMorphologicalOperation;
 
 public class FillHoles extends MaskProviderUnary {
@@ -86,8 +86,8 @@ public class FillHoles extends MaskProviderUnary {
 
     private ObjectCollection filterObjectsFromMask(Mask mask) throws CreateException {
 
-        CreateFromConnectedComponentsFactory objectCreator =
-                new CreateFromConnectedComponentsFactory();
+        ObjectsFromConnectedComponentsFactory objectCreator =
+                new ObjectsFromConnectedComponentsFactory();
 
         return filterObjects(objectCreator.createConnectedComponents(mask), mask.dimensions());
     }

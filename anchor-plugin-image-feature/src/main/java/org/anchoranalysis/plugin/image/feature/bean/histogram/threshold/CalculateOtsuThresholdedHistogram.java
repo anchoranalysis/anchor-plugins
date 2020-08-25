@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.bean.init.params.NullInitParams;
+import org.anchoranalysis.bean.initializable.params.NullInitParams;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;

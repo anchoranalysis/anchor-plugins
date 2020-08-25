@@ -40,7 +40,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 

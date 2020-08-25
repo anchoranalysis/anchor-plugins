@@ -43,9 +43,9 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.ImgLib2Wrap;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromPointsFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.SingleObjectFromPointsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 /**
@@ -92,7 +92,7 @@ public class Mser extends SegmentChannelIntoObjects {
     private <T extends Type<T>> ObjectCollection convertOutputToObjects(MserTree<T> tree)
             throws CreateException {
         return ObjectCollectionFactory.mapFrom(
-                tree, mser -> CreateFromPointsFactory.create(convertPixelPoints(mser)));
+                tree, mser -> SingleObjectFromPointsFactory.create(convertPixelPoints(mser)));
     }
 
     private static List<Point3i> convertPixelPoints(

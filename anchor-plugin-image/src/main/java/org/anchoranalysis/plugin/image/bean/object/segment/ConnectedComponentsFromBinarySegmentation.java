@@ -42,7 +42,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 /**
@@ -79,8 +79,8 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
             Optional<ReadableTuple3i> maskShiftBy) {
         Mask mask = new Mask(bvb, resolution);
 
-        CreateFromConnectedComponentsFactory creator =
-                new CreateFromConnectedComponentsFactory(minNumberVoxels);
+        ObjectsFromConnectedComponentsFactory creator =
+                new ObjectsFromConnectedComponentsFactory(minNumberVoxels);
         return maybeShiftObjects(creator.createConnectedComponents(mask), maskShiftBy);
     }
 

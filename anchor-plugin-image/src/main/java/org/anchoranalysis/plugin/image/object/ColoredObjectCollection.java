@@ -9,8 +9,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 
 /**
  * Associates a {@link ColorList} with a {@link ObjectCollection}
@@ -33,14 +33,14 @@ public class ColoredObjectCollection {
      */
     @Getter private final ColorList colors;
 
-    /** Constructor - create empty collection */
+    /** Create with an empty collection. */
     public ColoredObjectCollection() {
         this.objects = new ObjectCollection();
         this.colors = new ColorList();
     }
 
     /**
-     * Constructor - create for a single object and color
+     * Create with a single object and color.
      *
      * @param object the object
      * @param color the color
@@ -51,7 +51,7 @@ public class ColoredObjectCollection {
     }
 
     /**
-     * Constructor - create for an existing object and color list
+     * Create with an existing object and color list.
      *
      * <p>Both arguments are reused internally as data-structures.
      *
