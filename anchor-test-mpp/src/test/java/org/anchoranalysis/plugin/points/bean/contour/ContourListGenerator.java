@@ -33,8 +33,6 @@ import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
 import org.anchoranalysis.anchor.mpp.mark.points.PointList;
 import org.anchoranalysis.anchor.mpp.mark.points.PointListFactory;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -53,6 +51,8 @@ import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.bean.DrawObject;
 
 class ContourListGenerator extends RasterGenerator
         implements IterableObjectGenerator<List<Contour>, Stack> {

@@ -34,7 +34,6 @@ import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEner
 import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.overlay.id.IDGetterOverlayID;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -54,6 +53,7 @@ import org.anchoranalysis.mpp.sgmn.bean.optscheme.feedback.PeriodicSubfolderRepo
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.OptimizationFeedbackInitParams;
 import org.anchoranalysis.mpp.sgmn.optscheme.feedback.ReporterException;
 import org.anchoranalysis.mpp.sgmn.optscheme.step.Reporting;
+import org.anchoranalysis.overlay.id.IDGetterOverlayID;
 
 public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBreakdown> {
 

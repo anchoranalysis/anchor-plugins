@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.color.ColorList;
@@ -49,6 +48,7 @@ import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
 import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 import io.vavr.control.Either;
 

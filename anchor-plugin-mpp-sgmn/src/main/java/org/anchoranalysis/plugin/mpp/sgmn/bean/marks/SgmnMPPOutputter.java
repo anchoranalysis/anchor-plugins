@@ -35,8 +35,6 @@ import org.anchoranalysis.anchor.mpp.feature.energy.marks.MarksWithTotalEnergy;
 import org.anchoranalysis.anchor.mpp.mark.ColoredMarks;
 import org.anchoranalysis.anchor.mpp.mark.Mark;
 import org.anchoranalysis.anchor.mpp.mark.MarkCollection;
-import org.anchoranalysis.anchor.overlay.Overlay;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.log.Logger;
@@ -51,6 +49,8 @@ import org.anchoranalysis.mpp.io.marks.generator.MarksFlattenedGenerator;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksAsUniqueValueGenerator;
 import org.anchoranalysis.mpp.sgmn.optscheme.DualStack;
+import org.anchoranalysis.overlay.Overlay;
+import org.anchoranalysis.overlay.bean.DrawObject;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SgmnMPPOutputter {
