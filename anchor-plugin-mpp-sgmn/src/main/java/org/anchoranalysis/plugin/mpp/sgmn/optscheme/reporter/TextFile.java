@@ -109,7 +109,7 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                             reporting.getIter(),
                             reporting.getMarksAfter().size(),
                             reporting.getMarksAfter().getEnergyTotal(),
-                            reporting.getKernel().getDescription());
+                            reporting.kernelDescription());
         }
     }
 

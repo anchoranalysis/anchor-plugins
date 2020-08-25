@@ -77,7 +77,7 @@ public class KernelAssignerCalculateEnergyFromKernel<S, T> implements KernelAssi
             throws KernelCalculateEnergyException, OperationFailedException {
         return kernel.getKernel()
                 .makeProposal(
-                        kernelStateBridge.stateToKernel().transform(optStep.getCrnt(), context),
+                        kernelStateBridge.stateToKernel().transform(optStep.getCurrent(), context),
                         context.getKernelCalcContext());
     }
 }
