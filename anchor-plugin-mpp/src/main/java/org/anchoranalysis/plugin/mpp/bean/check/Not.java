@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.bean.check;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.CheckMark;
-import org.anchoranalysis.anchor.mpp.feature.error.CheckException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
+import org.anchoranalysis.mpp.feature.error.CheckException;
 import org.anchoranalysis.mpp.mark.Mark;
 
 public class Not extends CheckMark {

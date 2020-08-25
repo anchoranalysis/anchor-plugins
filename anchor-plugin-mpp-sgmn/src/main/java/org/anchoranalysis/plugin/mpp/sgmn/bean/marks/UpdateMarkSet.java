@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.bean.marks;
 
-import org.anchoranalysis.anchor.mpp.feature.mark.ListUpdatableMarkSetCollection;
-import org.anchoranalysis.anchor.mpp.feature.mark.MemoList;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
+import org.anchoranalysis.mpp.feature.mark.MemoList;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.pair.IdentifiablePair;
 import org.anchoranalysis.mpp.pair.RandomCollection;

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.collection;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.collection.FeatureMarkCollection;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
+import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureMarkCollection;
 
 public class NumberMarks extends FeatureMarkCollection {
 

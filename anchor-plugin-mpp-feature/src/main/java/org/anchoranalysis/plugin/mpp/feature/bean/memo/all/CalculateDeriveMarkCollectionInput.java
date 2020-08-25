@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputAllMemo;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculateDeriveMarkCollectionInput

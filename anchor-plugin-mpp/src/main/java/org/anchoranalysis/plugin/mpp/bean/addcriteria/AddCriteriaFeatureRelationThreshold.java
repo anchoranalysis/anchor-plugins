@@ -29,9 +29,6 @@ package org.anchoranalysis.plugin.mpp.bean.addcriteria;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.AddCriteriaPair;
-import org.anchoranalysis.anchor.mpp.feature.addcriteria.IncludeMarksFailureException;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.bean.Feature;
@@ -41,6 +38,9 @@ import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
+import org.anchoranalysis.mpp.feature.addcriteria.IncludeMarksFailureException;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class AddCriteriaFeatureRelationThreshold extends AddCriteriaPair {

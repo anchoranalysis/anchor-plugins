@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 
 public class Volume extends FeatureMarkRegion {
 

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.PeriodicSubfolderReporter;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;

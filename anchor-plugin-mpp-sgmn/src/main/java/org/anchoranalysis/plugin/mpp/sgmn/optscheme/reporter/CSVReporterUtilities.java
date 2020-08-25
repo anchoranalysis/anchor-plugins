@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

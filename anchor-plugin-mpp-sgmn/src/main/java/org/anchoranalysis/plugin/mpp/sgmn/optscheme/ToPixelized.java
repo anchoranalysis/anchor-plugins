@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.sgmn.optscheme;
 
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 
 /**
  * Before and after state, when a {@code src} is coverted in a {@link VoxelizedMarksWithEnergy}

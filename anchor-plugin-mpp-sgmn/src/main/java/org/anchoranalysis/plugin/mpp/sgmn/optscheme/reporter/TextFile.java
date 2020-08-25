@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter;
 
 import java.io.PrintWriter;
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.file.FileOutput;
 import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optscheme.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackEndParams;
 import org.anchoranalysis.mpp.segment.optscheme.feedback.OptimizationFeedbackInitParams;

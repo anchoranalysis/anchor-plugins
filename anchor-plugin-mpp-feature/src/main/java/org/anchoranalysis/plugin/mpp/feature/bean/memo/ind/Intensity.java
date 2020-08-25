@@ -28,8 +28,6 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.energy.element.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
@@ -38,6 +36,8 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;
+import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 public class Intensity extends FeatureSingleMemo {
 

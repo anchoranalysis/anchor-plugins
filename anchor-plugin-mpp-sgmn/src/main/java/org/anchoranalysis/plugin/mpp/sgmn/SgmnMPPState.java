@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.mpp.sgmn;
 
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
