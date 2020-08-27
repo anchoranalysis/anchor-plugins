@@ -24,29 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.gui.annotation.bean.label;
+package org.anchoranalysis.plugin.annotation.bean.label;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import java.util.Collection;
+import java.util.Set;
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 
-public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
+/** A set of annotation labels partitoned into their unique groups */
+public class GroupedAnnotationLabels {
 
-    // START BEAN PROPERTIES
-    /** Label that uniquely identifies the ID (for machine purposes) */
-    @BeanField @Getter @Setter private String uniqueLabel;
+    // <String,AnnotationLabel>
+    private MultiMap map = new MultiValueMap();
 
-    /** Descriptive user-friendly label displayed via GUI */
-    @BeanField @Getter @Setter private String userFriendlyLabel;
+    public GroupedAnnotationLabels(Collection<AnnotationLabel> labels) {
 
-    /** An optional color associated with the label when displayed via GUI */
-    @BeanField @OptionalBean @Getter @Setter private RGBColorBean color;
+        for (AnnotationLabel lab : labels) {
+            map.put(lab.getGroup(), lab);
+        }
+    }
 
-    /** Specifies a group for the label (similar labels that are displayed together) */
-    @BeanField @AllowEmpty @Getter @Setter private String group;
-    // END BEAN PROPERTIES
+    public int numGroups() {
+        return map.keySet().size();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Set<String> keySet() {
+        return (Set<String>) map.keySet();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<AnnotationLabel> get(String key) {
+        return (Collection<AnnotationLabel>) map.get(key);
+    }
 }

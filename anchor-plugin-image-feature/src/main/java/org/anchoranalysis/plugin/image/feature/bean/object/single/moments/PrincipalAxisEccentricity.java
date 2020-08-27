@@ -40,7 +40,7 @@ import org.anchoranalysis.math.moment.ImageMoments;
  * eigenvalue2</code> is second-highest etc..
  *
  * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image moment on Wikipedia</a> for the
- * precise calculation.</a>
+ * precise calculation.
  *
  * @author Owen Feehan
  */

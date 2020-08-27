@@ -36,11 +36,11 @@ import org.anchoranalysis.math.moment.ImageMoments;
  * (normalized) eigen-value.
  *
  * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image moment on Wikipedia</a> for the
- * precise calculation.</a>
+ * precise calculation.
  *
  * <p>See <a
  * href="http://stackoverflow.com/questions/1711784/computing-object-statistics-from-the-second-central-moments">
- * Stack overflow post</a> for the normalization procedure.</a>
+ * Stack overflow post</a> for the normalization procedure.
  *
  * @author Owen Feehan
  */

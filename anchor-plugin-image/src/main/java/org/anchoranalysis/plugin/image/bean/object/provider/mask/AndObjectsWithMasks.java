@@ -41,8 +41,9 @@ import org.anchoranalysis.image.object.ObjectMask;
  * Reduce the size of individual objects (if neccessary, and minimally) to fit within a binary-mask.
  *
  * <p>Note the masking overwrites the current objects in situ, so it is often recommended to a
- * duplicate operation beforehand to preserve the existing objects. <p. This is equivalent to
- * applying a logical AND operation on each voxel @code{binary-mask AND object-mask}.
+ * duplicate operation beforehand to preserve the existing objects.
+ * 
+ * <p>This is equivalent to applying a logical AND operation on each voxel for the binary-mask AND object-mask.
  *
  * @author feehano
  */

@@ -223,7 +223,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
         ColorPool colorPool =
                 new ColorPool(
-                        assignment.numPaired(),
+                        assignment.numberPaired(),
                         outputManager.getOutputWriteSettings().getDefaultColorSetGenerator(),
                         colorSetGeneratorUnpaired,
                         replaceMatchesWithSolids);

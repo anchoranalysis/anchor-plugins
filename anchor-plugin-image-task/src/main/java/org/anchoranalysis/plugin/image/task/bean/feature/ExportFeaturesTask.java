@@ -64,7 +64,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 /**
  * Calculates features and exports them as a CSV
  *
- * <p><Aggregated-features (based upon a certain grouping) can also be calculated.
+ * <p>Aggregated-features (based upon a certain grouping) can also be calculated.
  *
  * <p>Types of exports are:
  *
@@ -72,6 +72,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
  * <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
  * <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
+ * <caption>summary of exports</caption>
  * </table>
  *
  * @author Owen Feehan
