@@ -51,7 +51,7 @@ public class Quantile extends CalculateLevel {
     // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram h) throws OperationFailedException {
-        return h.quantile(quantile);
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
+        return histogram.quantile(quantile);
     }
 }

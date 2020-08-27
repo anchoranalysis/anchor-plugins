@@ -50,9 +50,9 @@ public class AnnotationGroupObject extends AnnotationGroup<AssignmentOverlapFrom
     @Override
     public void addAcceptedAnnotation(AssignmentOverlapFromPairs assignment) {
         super.addAcceptedAnnotation(assignment);
-        countMatched += assignment.numPaired();
-        countUnmatchedLeft += assignment.numUnassigned(true);
-        countUnmatchedRight += assignment.numUnassigned(false);
+        countMatched += assignment.numberPaired();
+        countUnmatchedLeft += assignment.numberUnassigned(true);
+        countUnmatchedRight += assignment.numberUnassigned(false);
 
         sumOverlapRatio += assignment.sumOverlapFromPaired();
 

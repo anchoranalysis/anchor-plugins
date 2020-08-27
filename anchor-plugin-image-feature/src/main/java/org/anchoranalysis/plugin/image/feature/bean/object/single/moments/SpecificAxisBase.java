@@ -34,9 +34,7 @@ import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.ImageMoments;
 
 /**
- * A feature based one one-specific principal-axis as identified by Image Moments.
- *
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
+ * A feature based one one-specific principal-axis as identified by image moments.
  *
  * <p>Principal axes are ordered by eigen-value, with 0 being the largest, 1 being the
  * second-largest etc..

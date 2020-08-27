@@ -32,24 +32,21 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
+import lombok.AllArgsConstructor;
 
 /**
  * Allows merges if there is an increase in the payload i.e.
  *
- * <pre>if payload(merged) >= avg( payload(src), payload(dest )</pre>
+ * <p>i.e. if {@code payload(merged) >= avg( payload(src), payload(dest)}
  *
  * <p>Prioritises merges in order of greatest improvement.
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class AssignPriorityFromImprovement extends AssignPriority {
 
-    private PayloadCalculator payloadCalculator;
-
-    public AssignPriorityFromImprovement(PayloadCalculator payloadCalculator) {
-        super();
-        this.payloadCalculator = payloadCalculator;
-    }
+    private final PayloadCalculator payloadCalculator;
 
     @Override
     public PrioritisedVertex assignPriorityToEdge(

@@ -62,7 +62,7 @@ public class OtsuWeighted extends CalculateLevel {
     // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram hist) throws OperationFailedException {
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
         getLogger()
                 .messageLogger()
@@ -71,33 +71,33 @@ public class OtsuWeighted extends CalculateLevel {
                         weightForeground, weightBackground);
 
         // Search for max between-class variance
-        int minIntensity = hist.calculateMinimum() + 1;
-        int maxIntensity = hist.calculateMaximum() - 1;
+        int minIntensity = histogram.calculateMinimum() + 1;
+        int maxIntensity = histogram.calculateMaximum() - 1;
 
         // If there's only zeroes
         if (maxIntensity == -1) {
             return 0;
         }
 
-        int thresholdChosen = findBestThreshold(hist, minIntensity, maxIntensity);
+        int thresholdChosen = findBestThreshold(histogram, minIntensity, maxIntensity);
 
         getLogger().messageLogger().logFormatted("chosen threshold=%d", thresholdChosen);
 
         return thresholdChosen;
     }
 
-    private int findBestThreshold(Histogram hist, int minIntensity, int maxIntensity) {
+    private int findBestThreshold(Histogram histogram, int minIntensity, int maxIntensity) {
 
         int bestThreshold = 0;
 
-        VarianceCalculator total = varianceCalculatorTotal(hist);
-        VarianceCalculator running = varianceCalculatorFirstBin(hist, minIntensity - 1);
+        VarianceCalculator total = varianceCalculatorTotal(histogram);
+        VarianceCalculator running = varianceCalculatorFirstBin(histogram, minIntensity - 1);
 
         double bcvMin = Double.POSITIVE_INFINITY;
 
         for (int k = minIntensity; k <= maxIntensity; k++) { // Avoid min and max
 
-            running.add(hist.getCount(k), k);
+            running.add(histogram.getCount(k), k);
 
             double bcv = weightedSumClassVariances(running, total);
 
@@ -116,9 +116,9 @@ public class OtsuWeighted extends CalculateLevel {
         return running;
     }
 
-    private static VarianceCalculator varianceCalculatorTotal(Histogram hist) {
+    private static VarianceCalculator varianceCalculatorTotal(Histogram histogram) {
         return new VarianceCalculator(
-                hist.calculateSum(), hist.calculateSumSquares(), hist.getTotalCount());
+                histogram.calculateSum(), histogram.calculateSumSquares(), histogram.getTotalCount());
     }
 
     private double weightedSumClassVariances(VarianceCalculator running, VarianceCalculator total) {

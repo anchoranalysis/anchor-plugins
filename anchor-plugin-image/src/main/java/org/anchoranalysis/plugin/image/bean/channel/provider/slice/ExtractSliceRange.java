@@ -42,7 +42,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
- * Extracts slices from {@sliceStart} (inclusive) to {@sliceEnd} (inclusive)
+ * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive)
  *
  * @author Owen Feehan
  */

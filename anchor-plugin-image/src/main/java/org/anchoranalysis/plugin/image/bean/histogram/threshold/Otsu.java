@@ -32,13 +32,14 @@ import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.histogram.Histogram;
 
 /**
- * Performs Otsu auto-thresholding
+ * Performs auto-thresholding using Otsu's method.
  *
  * <p>This performs binary thresholding into foreground and background.
  *
  * <p>This minimizes intra-class intensity variance, or equivalently, maximizes inter-class
- * variance. <@see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method>Otsu's method on
- * wikipedia</a>.
+ * variance.
+ * 
+ * @see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method">Otsu&#39;s method on wikipedia</a>
  *
  * @author Owen Feehan
  */
@@ -46,29 +47,29 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Otsu extends CalculateLevel {
 
     @Override
-    public int calculateLevel(Histogram hist) throws OperationFailedException {
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
-        long totalSum = hist.calculateSum();
-        long totalCount = hist.getTotalCount();
+        long totalSum = histogram.calculateSum();
+        long totalCount = histogram.getTotalCount();
 
         long runningSum = 0;
-        long runningCount = hist.getCount(0);
+        long runningCount = histogram.getCount(0);
 
         double bcvMax = Double.NEGATIVE_INFINITY;
         int thresholdChosen = 0;
 
         // Search for max between-class variance
-        int minIntensity = hist.calculateMinimum() + 1;
-        int maxIntensity = hist.calculateMaximum() - 1;
-        for (int k = minIntensity; k <= maxIntensity; k++) { // Avoid min and max
-            runningSum += k * hist.getCount(k);
-            runningCount += hist.getCount(k);
+        int minIntensity = histogram.calculateMinimum() + 1;
+        int maxIntensity = histogram.calculateMaximum() - 1;
+        for (int intensity = minIntensity; intensity <= maxIntensity; intensity++) { // Avoid min and max
+            runningSum += intensity * histogram.getCount(intensity);
+            runningCount += histogram.getCount(intensity);
 
             double bcv = betweenClassVariance(runningSum, runningCount, totalSum, totalCount);
 
             if (bcv >= bcvMax && !Double.isNaN(bcv)) {
                 bcvMax = bcv;
-                thresholdChosen = k;
+                thresholdChosen = intensity;
             }
         }
 

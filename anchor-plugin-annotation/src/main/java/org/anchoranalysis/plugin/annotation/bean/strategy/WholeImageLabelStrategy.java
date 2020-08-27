@@ -32,10 +32,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.gui.annotation.bean.label.AnnotationLabel;
-import org.anchoranalysis.gui.annotation.bean.label.GroupedAnnotationLabels;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.plugin.annotation.bean.label.AnnotationLabel;
+import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;
 
 public class WholeImageLabelStrategy extends SingleFilePathGeneratorStrategy {
 
