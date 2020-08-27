@@ -48,7 +48,7 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -76,15 +76,15 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
         MultiInput inputObject = params.getInputObject();
 
         try {
-            NamedStacksSet stackCollection = stacksFromInput(inputObject);
+            NamedStacks stackCollection = stacksFromInput(inputObject);
 
             NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject);
 
-            Optional<KeyValueParams> keyValueParams = keyValueParamsFromInput(inputObject);
+            Optional<KeyValueParams> paramsCreated = keyValueParamsFromInput(inputObject);
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(stackCollection, objects, keyValueParams, params.context());
+                            .segment(stackCollection, objects, paramsCreated, params.context());
             writeVisualization(
                     marks, params.getOutputManager(), stackCollection, params.getLogger());
 
@@ -102,8 +102,8 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
         return new InputTypesExpected(MultiInput.class);
     }
 
-    private NamedStacksSet stacksFromInput(MultiInput inputObject) throws OperationFailedException {
-        NamedStacksSet stackCollection = new NamedStacksSet();
+    private NamedStacks stacksFromInput(MultiInput inputObject) throws OperationFailedException {
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
     }
@@ -142,7 +142,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     private void writeVisualization(
             MarkCollection marks,
             BoundOutputManagerRouteErrors outputManager,
-            NamedStacksSet stackCollection,
+            NamedStacks stackCollection,
             Logger logger) {
         outputManager
                 .getWriterCheckIfAllowed()

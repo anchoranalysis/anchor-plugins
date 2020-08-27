@@ -60,7 +60,7 @@ public class SegmentWithSeeds extends WithChannelBase {
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSeeds;
 
-    @BeanField @Getter @Setter private SegmentChannelIntoObjects sgmn;
+    @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
     // END BEAN PROPERTIES
 
     @Override
@@ -70,9 +70,9 @@ public class SegmentWithSeeds extends WithChannelBase {
 
         if (objectsSource != null) {
             ObjectCollection sourceObjects = objectsSource.create();
-            return createWithSourceObjects(channel, seeds, sourceObjects, sgmn);
+            return createWithSourceObjects(channel, seeds, sourceObjects, segment);
         } else {
-            return createWithoutSourceObjects(channel, seeds, sgmn);
+            return createWithoutSourceObjects(channel, seeds, segment);
         }
     }
 

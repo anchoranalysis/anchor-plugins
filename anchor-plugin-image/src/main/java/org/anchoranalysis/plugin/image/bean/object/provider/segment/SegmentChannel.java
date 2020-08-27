@@ -51,7 +51,7 @@ public class SegmentChannel extends WithChannelBase {
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
-    @BeanField @Getter @Setter private SegmentChannelIntoObjects sgmn;
+    @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
 
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSeeds;
     // END BEAN PROPERTIES
@@ -62,7 +62,7 @@ public class SegmentChannel extends WithChannelBase {
         Optional<ObjectMask> maskAsObject = createObjectMask();
 
         try {
-            return sgmn.segment(
+            return segment.segment(
                     channelSource,
                     maskAsObject,
                     createSeeds(channelSource.dimensions(), maskAsObject));

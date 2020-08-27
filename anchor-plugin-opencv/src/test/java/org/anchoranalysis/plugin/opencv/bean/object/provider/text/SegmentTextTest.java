@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import static org.junit.Assert.assertTrue;
 
-import org.anchoranalysis.bean.provider.ProviderHolder;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -40,6 +40,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -60,13 +61,14 @@ public class SegmentTextTest {
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    public void testCar() throws AnchorIOException, CreateException, InitException {
+    public void testCar() throws AnchorIOException, CreateException, InitException, SegmentationFailedException {
 
         Stack stack = createStack("car.jpg");
-
-        SegmentText provider = createAndInitProvider(stack);
-
-        ObjectCollection objects = provider.create();
+        
+        SegmentText segmenter = new SegmentText();
+        initSegmenter(segmenter);
+        
+        ObjectCollection objects = segmenter.segment(stack);
 
         assertTrue(objects.size() == 3);
 
@@ -94,21 +96,9 @@ public class SegmentTextTest {
         return false;
     }
 
-    private SegmentText createAndInitProvider(Stack stack) throws InitException {
-
-        SegmentText provider = new SegmentText();
-
-        provider.setStack(new ProviderHolder<>(stack));
-
-        initProvider(
-                provider,
-                BoundIOContextFixture.withSuppressedLogger(testLoader.getTestLoader().getRoot()));
-
-        return provider;
-    }
-
-    private static void initProvider(SegmentText provider, BoundIOContext context)
+    private void initSegmenter(SegmentText provider)
             throws InitException {
+        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(testLoader.getTestLoader().getRoot()); 
         provider.init(ImageInitParamsFactory.create(context), context.getLogger());
     }
 

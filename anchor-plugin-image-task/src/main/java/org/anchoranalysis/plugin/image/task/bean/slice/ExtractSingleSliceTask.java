@@ -51,7 +51,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -165,10 +165,10 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
             BoundOutputManagerRouteErrors outputManager)
             throws OperationFailedException {
 
-        NamedStacksSet stackCollection = collectionFromInput(inputObject);
+        NamedStacks stackCollection = collectionFromInput(inputObject);
 
         // Extract slices
-        NamedStacksSet sliceCollection =
+        NamedStacks sliceCollection =
                 stackCollection.applyOperation(
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
@@ -179,15 +179,15 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
         }
     }
 
-    private static NamedStacksSet collectionFromInput(NamedChannelsInput inputObject)
+    private static NamedStacks collectionFromInput(NamedChannelsInput inputObject)
             throws OperationFailedException {
-        NamedStacksSet stackCollection = new NamedStacksSet();
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 
     private void outputSlices(
-            BoundOutputManagerRouteErrors outputManager, NamedStacksSet stackCollection)
+            BoundOutputManagerRouteErrors outputManager, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);

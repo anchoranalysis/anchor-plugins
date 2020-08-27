@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
@@ -77,7 +77,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
 
     @Override
     protected void processKeys(
-            NamedStacksSet store,
+            NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<Histogram, Histogram> sharedState,
             BoundIOContext context)

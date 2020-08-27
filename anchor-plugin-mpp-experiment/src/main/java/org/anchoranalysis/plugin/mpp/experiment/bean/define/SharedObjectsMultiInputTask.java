@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
@@ -107,26 +107,26 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
     private void outputFeatureTables(ImageInitParams so, BoundIOContext context) {
 
-        for (OutputFeatureTable oft : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
             try {
-                oft.initRecursive(so, context.getLogger());
-                oft.output(context);
+                outputFeatureTable.initRecursive(so, context.getLogger());
+                outputFeatureTable.output(context);
             } catch (IOException | InitException e) {
-                context.getErrorReporter().recordError(NamedStacksSet.class, e);
+                context.getErrorReporter().recordError(NamedStacks.class, e);
             }
         }
     }
 
     private void outputFeatureTablesWithException(ImageInitParams so, BoundIOContext context)
             throws IOException {
-        for (OutputFeatureTable oft : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
 
             try {
-                oft.initRecursive(so, context.getLogger());
+                outputFeatureTable.initRecursive(so, context.getLogger());
             } catch (InitException e) {
                 throw new IOException(e);
             }
-            oft.output(context);
+            outputFeatureTable.output(context);
         }
     }
 }
