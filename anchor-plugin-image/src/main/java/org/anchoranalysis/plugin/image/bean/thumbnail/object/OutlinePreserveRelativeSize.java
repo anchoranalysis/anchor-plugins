@@ -54,7 +54,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
  * centered in a window of a certain size.
  *
  * <p>Preserves the relative-size between objects (i.e. they are all reduced by the same
- * scale-factor) and all aspect-ratios.
+ * scale-factor) in the same batch (i.e. between successive calls to {@link #start} and {@link #end}) and all aspect-ratios.
  *
  * <p>If it's a z-stack, a maximum intensity projection is first applied.
  *
