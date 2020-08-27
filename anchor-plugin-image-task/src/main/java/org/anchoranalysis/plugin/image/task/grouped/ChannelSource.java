@@ -33,7 +33,7 @@ import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.stack.Stack;
 public class ChannelSource {
 
     // START REQUIRED ARGUMENTS
-    private final NamedStacksSet stackStore;
+    private final NamedStacks stackStore;
     private final ConsistentChannelChecker channelChecker;
     // END REQUIRED ARGUMENTS
 
@@ -110,7 +110,7 @@ public class ChannelSource {
         }
     }
 
-    public NamedStacksSet getStackStore() {
+    public NamedStacks getStackStore() {
         return stackStore;
     }
 }

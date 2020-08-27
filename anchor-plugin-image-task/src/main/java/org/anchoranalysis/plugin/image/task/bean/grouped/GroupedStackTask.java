@@ -41,7 +41,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
@@ -105,7 +105,7 @@ public abstract class GroupedStackTask<S, T>
         Optional<String> groupName =
                 extractGroupName(inputObject.pathForBinding(), context.isDebugEnabled());
 
-        NamedStacksSet store = GroupedStackTask.extractInputStacks(inputObject);
+        NamedStacks store = GroupedStackTask.extractInputStacks(inputObject);
 
         processKeys(store, groupName, params.getSharedState(), context);
     }
@@ -138,7 +138,7 @@ public abstract class GroupedStackTask<S, T>
     protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker);
 
     protected abstract void processKeys(
-            NamedStacksSet store,
+            NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<S, T> sharedState,
             BoundIOContext context)
@@ -161,10 +161,10 @@ public abstract class GroupedStackTask<S, T>
         }
     }
 
-    private static NamedStacksSet extractInputStacks(ProvidesStackInput inputObject)
+    private static NamedStacks extractInputStacks(ProvidesStackInput inputObject)
             throws JobExecutionException {
         try {
-            NamedStacksSet stackCollection = new NamedStacksSet();
+            NamedStacks stackCollection = new NamedStacks();
             inputObject.addToStoreInferNames(stackCollection);
             return stackCollection;
         } catch (OperationFailedException e1) {

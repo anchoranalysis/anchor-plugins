@@ -49,7 +49,7 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -110,8 +110,8 @@ public class ScaleTask extends RasterTask {
     private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
             throws JobExecutionException {
         // Our output collections
-        NamedStacksSet stackCollection = new NamedStacksSet();
-        NamedStacksSet stackCollectionMIP = new NamedStacksSet();
+        NamedStacks stackCollection = new NamedStacks();
+        NamedStacks stackCollectionMIP = new NamedStacks();
 
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
@@ -147,8 +147,8 @@ public class ScaleTask extends RasterTask {
 
     private void populateOutputCollectionsFromSharedObjects(
             ImageInitParams params,
-            NamedStacksSet stackCollection,
-            NamedStacksSet stackCollectionMIP,
+            NamedStacks stackCollection,
+            NamedStacks stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 
@@ -181,8 +181,8 @@ public class ScaleTask extends RasterTask {
                                     context.getLogger().messageLogger());
                 }
 
-                stackCollection.addImageStack(channelName, new Stack(channelOut));
-                stackCollectionMIP.addImageStack(channelName, new Stack(channelOut.projectMax()));
+                stackCollection.add(channelName, new Stack(channelOut));
+                stackCollectionMIP.add(channelName, new Stack(channelOut.projectMax()));
 
             } catch (CreateException e) {
                 throw new JobExecutionException(e);

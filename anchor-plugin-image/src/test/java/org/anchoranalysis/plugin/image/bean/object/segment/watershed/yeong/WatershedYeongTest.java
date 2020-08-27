@@ -35,6 +35,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong.WatershedYeong;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;

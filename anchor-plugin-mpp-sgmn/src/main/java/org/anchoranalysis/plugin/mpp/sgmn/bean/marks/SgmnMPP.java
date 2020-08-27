@@ -43,7 +43,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -107,7 +107,7 @@ public class SgmnMPP extends SegmentIntoMarks {
     // Do segmentation
     @Override
     public MarkCollection segment(
-            NamedStacksSet stacks,
+            NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
             BoundIOContext context)
