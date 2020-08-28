@@ -47,9 +47,9 @@ import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.OutlinePreserveRelativeSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObjects;
+import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.
@@ -93,11 +93,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public abstract String uniqueIdentifierFor(T input);
 
     /**
-     * Derives a list of inputs (i.e. rows in a feature table)
-     *
-     * <p>This should be called only ONCE, and always before {@link
-     * #createThumbailFor(FeatureInput)}. It starts a <i>batch</i> of related calls to {#link
-     * createThumbailFor}
+     * Derives a list of inputs (i.e. rows in a feature table) and starts a batch of related thumbnail generation.
      *
      * @param objects the objects from which inputs are derived
      * @param energyStack energy-stack used during feature calculation
@@ -106,7 +102,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the list of inputs
      * @throws CreateException
      */
-    public List<T> deriveInputsStartBatch(
+    public ListWithThumbnails<T,ObjectCollection> deriveInputsStartBatch(
             ObjectCollection objects,
             EnergyStack energyStack,
             boolean thumbnailsEnabled,
@@ -116,35 +112,28 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         List<T> inputs = startBatchDeriveInputs(objects, energyStack, logger);
         if (thumbnailsEnabled) {
             try {
-                thumbnail.start(
-                        objects, scaledBoundingBoxes(inputs), Optional.of(energyStack.asStack()));
+                return new ListWithThumbnails<>(
+                    inputs,
+                    thumbnail.start(objects, scaledBoundingBoxes(inputs), Optional.of(energyStack.asStack()))
+                );
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
+        } else {
+            return new ListWithThumbnails<>(inputs);
         }
-        return inputs;
     }
 
     /**
-     * Creates a thumbnail for a particular input
+     * Selects objects from an input that will be used for thumbnail generation
      *
      * @param input the input
      * @return the thumbnail
      */
-    public abstract DisplayStack createThumbailFor(T input) throws CreateException;
-
-    /**
-     * Performs cleanup when calls to {@link #createThumbailFor} are finished for the current batch
-     */
-    public void endBatchAndCleanup() {
-        thumbnail.end();
-    }
-
+    public abstract ObjectCollection objectsForThumbnail(T input) throws CreateException;
+    
     /**
      * Derives a list of inputs from an object-collection
-     *
-     * <p>A session for a <i>batch</i> is started where it expects further calls to {@link
-     * #createThumbailFor(FeatureInput)}.
      *
      * @param objects the object-collection
      * @param energyStack energy-stack used during feature calculation
@@ -155,7 +144,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException;
-
+    
     /**
      * Creates a bounding-box that tightly fits the input to a particular table row (could be for
      * one or more objects)

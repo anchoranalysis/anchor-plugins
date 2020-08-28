@@ -48,13 +48,14 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it
  * centered in a window of a certain size.
  *
  * <p>Preserves the relative-size between objects (i.e. they are all reduced by the same
- * scale-factor) in the same batch (i.e. between successive calls to {@link #start} and {@link #end}) and all aspect-ratios.
+ * scale-factor) in the same batch.
  *
  * <p>If it's a z-stack, a maximum intensity projection is first applied.
  *
@@ -104,119 +105,114 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private RGBColorBean colorUnselectedObjects = new RGBColorBean(0, 0, 255);
     // END BEAN PROPERTIES
 
-    private DrawObjectOnStackGenerator generator;
-    private FlattenAndScaler scaler;
-    private Extent sceneExtentScaled;
+
+    private class BatchImplementation implements ThumbnailBatch<ObjectCollection> {
+        
+        private final DrawObjectOnStackGenerator generator;
+        private final FlattenAndScaler scaler;
+        private final Extent sceneExtentScaled;
+       
+        /**
+         * Sets up the generator and the related {@code sceneExtentScaled} variable
+         *
+         * @param objectsUnscaled unscaled objects
+         * @param backgroundScaled scaled background if it exists
+         */
+        public BatchImplementation( FlattenAndScaler scaler, ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {
+            this.scaler = scaler;
+            
+            this.sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
+
+            // Create a generator that draws objects on the background
+            this.generator =
+                    DrawObjectOnStackGenerator.createFromStack(
+                            backgroundScaled, outlineWidth, createColorIndex(false));
+        }
+        
+        @Override
+        public DisplayStack thumbnailFor(ObjectCollection element) throws CreateException {
+         // For now only work with the first object in the collection
+            try {
+                ObjectsWithBoundingBox objectsScaled =
+                        new ObjectsWithBoundingBox(scaler.scaleObjects(element));
+
+                assert (!objectsScaled
+                        .boundingBox()
+                        .extent()
+                        .anyDimensionIsLargerThan(size.asExtent()));
+
+                // Find a bounding-box of target size in which objectScaled is centered
+                BoundingBox centeredBox =
+                        CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
+                                objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
+
+                assert centeredBox.extent().equals(size.asExtent());
+                assert sceneExtentScaled.contains(centeredBox);
+
+                generator.setIterableElement(determineObjectsForGenerator(objectsScaled, centeredBox));
+
+                return DisplayStack.create(generator.generate());
+
+            } catch (OutputWriteFailedException | OperationFailedException e) {
+                throw new CreateException(e);
+            }
+        }
+        
+        private ObjectsWithBoundingBox determineObjectsForGenerator(
+                ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox)
+                throws OperationFailedException {
+            ObjectsWithBoundingBox objectsMapped = objectsScaled.mapBoundingBoxToBigger(centeredBox);
+
+            // Add any other objects which intersect with the scaled-bounding box, excluding
+            //  the object themselves
+            if (colorUnselectedObjects != null) {
+                return objectsMapped.addObjectsNoBoundingBoxChange(
+                        scaler.objectsThatIntersectWith(
+                                objectsMapped.boundingBox(), objectsScaled.objects()));
+            } else {
+                return objectsMapped;
+            }
+        }
+
+        /**
+         * Creates a suitable color index for distinguishing between the different types of objects that
+         * appear
+         *
+         * @param pairs whether pairs are being used or not
+         * @return the color index
+         */
+        private ColorIndex createColorIndex(boolean pairs) {
+            return new ThumbnailColorIndex(pairs, colorUnselectedObjects.toAWTColor());
+        }
+    }
 
     @Override
-    public void start(
+    public ThumbnailBatch<ObjectCollection> start(
             ObjectCollection objects,
             StreamableCollection<BoundingBox> boundingBoxes,
             Optional<Stack> backgroundSource)
             throws OperationFailedException {
 
-        if (objects.isEmpty()) {
-            // Nothing to do, no thumbnails will ever be generated
-            return;
-        }
+        if (!objects.isEmpty()) {
+            Interpolator interpolatorBackground = interpolator.create();
 
-        Interpolator interpolatorBackground = interpolator.create();
+            // Determine what to scale the objects and any background by
+            FlattenAndScaler scaler =
+                    new FlattenAndScaler(
+                            boundingBoxes, objects, interpolatorBackground, size.asExtent());
 
-        // Determine what to scale the objects and any background by
-        scaler =
-                new FlattenAndScaler(
-                        boundingBoxes, objects, interpolatorBackground, size.asExtent());
-
-        setupGenerator(
-                objects,
-                determineBackgroundMaybeOutlined(backgroundSource, interpolatorBackground));
-    }
-
-    @Override
-    public DisplayStack thumbnailFor(ObjectCollection objects) throws CreateException {
-
-        // For now only work with the first object in the collection
-        try {
-            ObjectsWithBoundingBox objectsScaled =
-                    new ObjectsWithBoundingBox(scaler.scaleObjects(objects));
-
-            assert (!objectsScaled
-                    .boundingBox()
-                    .extent()
-                    .anyDimensionIsLargerThan(size.asExtent()));
-
-            // Find a bounding-box of target size in which objectScaled is centered
-            BoundingBox centeredBox =
-                    CenterBoundingBoxHelper.deriveCenteredBoxWithSize(
-                            objectsScaled.boundingBox(), size.asExtent(), sceneExtentScaled);
-
-            assert centeredBox.extent().equals(size.asExtent());
-            assert sceneExtentScaled.contains(centeredBox);
-
-            generator.setIterableElement(determineObjectsForGenerator(objectsScaled, centeredBox));
-
-            return DisplayStack.create(generator.generate());
-
-        } catch (OutputWriteFailedException | OperationFailedException e) {
-            throw new CreateException(e);
-        }
-    }
-
-    @Override
-    public void end() {
-        // Garbage collect the scaler as it contains a cache of scaled-objects
-        scaler = null;
-    }
-
-    private ObjectsWithBoundingBox determineObjectsForGenerator(
-            ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox)
-            throws OperationFailedException {
-        ObjectsWithBoundingBox objectsMapped = objectsScaled.mapBoundingBoxToBigger(centeredBox);
-
-        // Add any other objects which intersect with the scaled-bounding box, excluding
-        //  the object themselves
-        if (colorUnselectedObjects != null) {
-            return objectsMapped.addObjectsNoBoundingBoxChange(
-                    scaler.objectsThatIntersectWith(
-                            objectsMapped.boundingBox(), objectsScaled.objects()));
+            return new BatchImplementation(scaler, objects,
+                    determineBackgroundMaybeOutlined(backgroundSource, scaler, interpolatorBackground));
         } else {
-            return objectsMapped;
+            return objectForBatch -> { throw new CreateException("No objects are expected in this batch"); }; 
         }
     }
-
-    /**
-     * Sets up the generator and the related {@code sceneExtentScaled} variable
-     *
-     * @param objectsUnscaled unscaled objects
-     * @param backgroundScaled scaled background if it exists
-     */
-    private void setupGenerator(
-            ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {
-
-        sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
-
-        // Create a generator that draws objects on the background
-        generator =
-                DrawObjectOnStackGenerator.createFromStack(
-                        backgroundScaled, outlineWidth, createColorIndex(false));
-    }
-
+    
     private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, Interpolator interpolator) {
+            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator) {
         BackgroundSelector backgroundHelper =
                 new BackgroundSelector(
                         backgroundChannelIndex, scaler.getScaleFactor(), interpolator);
         return backgroundHelper.determineBackground(backgroundSource);
-    }
-
-    /**
-     * Creates a suitable color index for distinguishing between the different types of objects that
-     * appear
-     *
-     * @param pairs whether pairs are being used or not
-     * @return the color index
-     */
-    private ColorIndex createColorIndex(boolean pairs) {
-        return new ThumbnailColorIndex(pairs, colorUnselectedObjects.toAWTColor());
     }
 }

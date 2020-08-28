@@ -26,119 +26,33 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.functional.function.CheckedFunction;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
-import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
-import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 @AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
-    private final CombineObjectsForFeatures<T> table;
-    private final FeatureCalculatorMulti<T> calculator;
+    private final CalculateFeaturesForObjects<T> calculator;
     private final InitParamsWithEnergyStack initParams;
-
-    /**
-     * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
-     * the log
-     */
-    private final boolean suppressErrors;
-
-    /** Generates thumbnails (if enabled) */
-    private final Optional<CheckedFunction<T, Optional<DisplayStack>, CreateException>>
-            thumbnailForInput;
-
-    private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public void processProvider(
             ObjectCollectionProvider provider,
             Function<T, StringLabelsForCsvRow> identifierFromInput)
             throws OperationFailedException {
-        calculateFeaturesForProvider(
-                objectsFromProvider(provider, initParams.getImageInit(), context.getLogger()),
+        calculator.calculateFeaturesForObjects(
+                objectsFromProvider(provider, initParams.getImageInit(), calculator.getLogger()),
                 initParams.getEnergyStack(),
                 identifierFromInput);
-    }
-
-    private void calculateFeaturesForProvider(
-            ObjectCollection objects,
-            EnergyStack energyStack,
-            Function<T, StringLabelsForCsvRow> identifierFromInput)
-            throws OperationFailedException {
-        try {
-            List<T> inputs =
-                    table.deriveInputsStartBatch(
-                            objects,
-                            energyStack,
-                            thumbnailForInput.isPresent(),
-                            context.getLogger());
-
-            calculateManyFeaturesInto(inputs, identifierFromInput);
-
-            table.endBatchAndCleanup();
-
-        } catch (CreateException | OperationFailedException e) {
-            throw new OperationFailedException(e);
-        }
-    }
-
-    /**
-     * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the
-     * stored-results
-     *
-     * <p>The stored-results also have an additional first-column with the ID.
-     *
-     * @param listInputs a list of parameters. Each parameters creates a new result (e.g. a new row
-     *     in a feature-table)
-     * @throws OperationFailedException
-     */
-    private void calculateManyFeaturesInto(
-            List<T> listInputs, Function<T, StringLabelsForCsvRow> labelsForInput)
-            throws OperationFailedException {
-
-        try {
-            for (int i = 0; i < listInputs.size(); i++) {
-
-                T input = listInputs.get(i);
-
-                context.getLogger()
-                        .messageLogger()
-                        .logFormatted(
-                                "Calculating input %d of %d: %s",
-                                i + 1, listInputs.size(), input.toString());
-
-                context.addResultsFor(
-                        labelsForInput.apply(input),
-                        new ResultsVectorWithThumbnail(
-                                calculator.calculate(
-                                        input, context.getLogger().errorReporter(), suppressErrors),
-                                OptionalUtilities.flatMap(
-                                        thumbnailForInput, func -> func.apply(input))));
-            }
-
-        } catch (NamedFeatureCalculateException | CreateException e) {
-            throw new OperationFailedException(e);
-        }
     }
 
     private static ObjectCollection objectsFromProvider(
