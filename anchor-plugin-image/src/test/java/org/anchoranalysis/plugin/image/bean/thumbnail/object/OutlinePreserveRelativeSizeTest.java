@@ -43,6 +43,7 @@ import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -93,12 +94,11 @@ public class OutlinePreserveRelativeSizeTest {
      */
     private List<DisplayStack> createAndWriteThumbnails() throws OperationFailedException {
         OutlinePreserveRelativeSize outline = createOutline();
-        outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
+        ThumbnailBatch<ObjectCollection> batch = outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
 
         try {
-            List<DisplayStack> thumbnails = thumbnailsFor(outline, OBJECTS);
+            List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
             writer.writeList("thumbnails", thumbnails);
-            outline.end();
             return thumbnails;
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -106,9 +106,9 @@ public class OutlinePreserveRelativeSizeTest {
     }
 
     private static List<DisplayStack> thumbnailsFor(
-            OutlinePreserveRelativeSize outline, ObjectCollection objects) throws CreateException {
+            ThumbnailBatch<ObjectCollection> batch, ObjectCollection objects) throws CreateException {
         return objects.stream()
-                .mapToList(object -> outline.thumbnailFor(ObjectCollectionFactory.of(object)));
+                .mapToList(object -> batch.thumbnailFor(ObjectCollectionFactory.of(object)));
     }
 
     private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {

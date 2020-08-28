@@ -56,7 +56,6 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
@@ -187,11 +186,10 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public DisplayStack createThumbailFor(FeatureInputPairObjects input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input) throws CreateException {
         // A collection is made with the left-object as first element, and the right-object as the
         // second
-        ObjectCollection objects = ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
-        return getThumbnail().thumbnailFor(objects);
+        return ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
     }
 
     @Override

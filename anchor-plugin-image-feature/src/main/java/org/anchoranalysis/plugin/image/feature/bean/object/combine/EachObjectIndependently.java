@@ -32,6 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
@@ -41,7 +42,6 @@ import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.stack.DisplayStack;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.
@@ -56,9 +56,13 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
             NamedFeatureStoreFactory storeFactory,
             boolean suppressErrors)
             throws CreateException {
-        return new SingleTableCalculator(storeFactory.createNamedFeatureList(list));
+        return createFeatures(storeFactory.createNamedFeatureList(list));
     }
 
+    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(NamedFeatureStore<FeatureInputSingleObject> features) {
+        return new SingleTableCalculator(features);
+    }
+    
     @Override
     public String uniqueIdentifierFor(FeatureInputSingleObject input) {
         return UniqueIdentifierUtilities.forObject(input.getObject());
@@ -76,6 +80,16 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                                         energyStack));
     }
 
+    @Override
+    public ObjectCollection objectsForThumbnail(FeatureInputSingleObject input) throws CreateException {
+        return ObjectCollectionFactory.of(input.getObject());
+    }
+
+    @Override
+    protected BoundingBox boundingBoxThatSpansInput(FeatureInputSingleObject input) {
+        return input.getObject().boundingBox();
+    }
+
     private ObjectMask checkObjectInsideScene(ObjectMask object, Extent extent)
             throws CreateException {
         if (!extent.contains(object.boundingBox())) {
@@ -85,15 +99,5 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
                             object.boundingBox(), extent));
         }
         return object;
-    }
-
-    @Override
-    public DisplayStack createThumbailFor(FeatureInputSingleObject input) throws CreateException {
-        return getThumbnail().thumbnailFor(ObjectCollectionFactory.of(input.getObject()));
-    }
-
-    @Override
-    protected BoundingBox boundingBoxThatSpansInput(FeatureInputSingleObject input) {
-        return input.getObject().boundingBox();
     }
 }

@@ -132,15 +132,9 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                             input.getInputObject().pathForBindingRequired(),
                             input.context().isDebugEnabled());
 
-            InputProcessContext<S> context =
-                    new InputProcessContext<>(
-                            input.getSharedState().addResultsFor(),
-                            input.getSharedState().duplicateForNewThread(),
-                            input.getSharedState().getFeatureNames(),
-                            groupName,
-                            input.context());
+            InputProcessContext<S> inputProcessContext = input.getSharedState().createInputProcessContext(groupName, input.context());
 
-            source.processInput(input.getInputObject(), context);
+            source.processInput(input.getInputObject(), inputProcessContext);
 
         } catch (OperationFailedException | AnchorIOException e) {
             throw new JobExecutionException(e);
