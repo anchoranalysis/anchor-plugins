@@ -26,6 +26,8 @@
 
 package org.anchoranalysis.plugin.opencv;
 
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +39,6 @@ public class CVInit {
      * library
      */
     public static void alwaysExecuteBeforeCallingLibrary() {
-        nu.pattern.OpenCV.loadShared();
+        Loader.load(opencv_java.class);
     }
 }
