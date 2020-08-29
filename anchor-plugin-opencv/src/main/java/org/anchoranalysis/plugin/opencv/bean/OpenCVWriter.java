@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean;
 
 import java.nio.file.Path;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
@@ -35,16 +36,22 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.MatConverter;
 import org.opencv.imgcodecs.Imgcodecs;
+import lombok.Getter;
+import lombok.Setter;
 
-public class OpenCVPngWriter extends RasterWriter {
+public class OpenCVWriter extends RasterWriter {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
+    
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String extension = "png";
+    // END BEAN PROPERTIES
 
     @Override
     public String defaultExtension() {
-        return "png";
+        return extension;
     }
 
     @Override
