@@ -175,6 +175,11 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
     
     private void calculateFeaturesForImage(InputBound<StackSequenceInput, SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>> input, Stack stack, ObjectCollection objects) throws OperationFailedException {
         
+        if (objects.size()==0) {
+            // Exit early, nothing to do
+            return;
+        }
+        
         EnergyStack energyStack = new EnergyStack(stack);
  
         CalculateFeaturesForObjects<FeatureInputSingleObject> calculator = new CalculateFeaturesForObjects<>(

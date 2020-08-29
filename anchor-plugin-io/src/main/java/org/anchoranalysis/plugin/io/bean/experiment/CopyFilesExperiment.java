@@ -53,6 +53,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManager;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.SimpleCopy;
@@ -89,7 +90,13 @@ public class CopyFilesExperiment extends Experiment {
 
         // Determine a destination for the output, and create a corresponding logger
         Path destination = determineDestination(arguments.isDebugModeEnabled());
-        StatefulMessageLogger logger = createLoggerFor(destination, arguments);
+        
+        StatefulMessageLogger logger;
+        try {
+            logger = createLoggerFor(destination, arguments);
+        } catch (BindFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
 
         logger.log("Reading files: ");
 
@@ -115,9 +122,9 @@ public class CopyFilesExperiment extends Experiment {
     }
 
     private StatefulMessageLogger createLoggerFor(
-            Path destination, ExperimentExecutionArguments arguments) {
+            Path destination, ExperimentExecutionArguments arguments) throws BindFailedException {
         return log.createWithConsoleFallback(
-                new BoundOutputManager(destination, silentlyDeleteExisting), arguments, false);
+                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting), arguments, false);
     }
 
     @Override

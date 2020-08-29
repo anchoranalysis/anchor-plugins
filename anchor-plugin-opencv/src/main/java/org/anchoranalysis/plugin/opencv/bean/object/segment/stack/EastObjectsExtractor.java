@@ -64,7 +64,7 @@ class EastObjectsExtractor {
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
             List<WithConfidence<Mark>> listMarks, Dimensions dim) {
-        return FunctionalList.mapToList(listMarks, wc -> convertToObject(wc, dim));
+        return FunctionalList.mapToList(listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
     private static Dimensions dimensionsForMatrix(Mat matrix, Resolution res) {
@@ -78,7 +78,7 @@ class EastObjectsExtractor {
     private static WithConfidence<ObjectMask> convertToObject(
             WithConfidence<Mark> mark, Dimensions dimensions) {
 
-        ObjectWithProperties om =
+        ObjectWithProperties object =
                 mark.getObject()
                         .deriveObject(
                                 dimensions,
@@ -86,6 +86,6 @@ class EastObjectsExtractor {
                                         .membershipWithFlagsForIndex(
                                                 GlobalRegionIdentifiers.SUBMARK_INSIDE),
                                 BinaryValuesByte.getDefault());
-        return new WithConfidence<>(om.withoutProperties(), mark.getConfidence());
+        return new WithConfidence<>(object.withoutProperties(), mark.getConfidence());
     }
 }
