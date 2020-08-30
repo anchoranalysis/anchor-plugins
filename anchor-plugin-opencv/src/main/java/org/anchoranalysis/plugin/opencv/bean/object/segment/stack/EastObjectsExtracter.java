@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import java.nio.file.Path;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -42,6 +42,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
+import org.opencv.dnn.Net;
 
 /**
  * Extracts object-masks representing text regions from an image
@@ -50,13 +51,13 @@ import org.opencv.core.Mat;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class EastObjectsExtractor {
-
-    public static List<WithConfidence<ObjectMask>> apply(
-            Mat image, Resolution res, double minConfidence, Path pathToEastModel) {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class EastObjectsExtracter {
+    
+    public static List<WithConfidence<ObjectMask>> apply(ConcurrentModelPool<Net> modelPool,
+            Mat image, Resolution res, double minConfidence) throws InterruptedException {
         List<WithConfidence<Mark>> listMarks =
-                EastMarkExtractor.extractBoundingBoxes(image, minConfidence, pathToEastModel);
+                EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
         // Convert marks to object-masks
         return convertMarksToObject(listMarks, dimensionsForMatrix(image, res));

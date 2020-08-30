@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image
+ * anchor-plugin-mpp-experiment
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,20 +23,36 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.thumbnail;
+package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
+import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
+import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
+import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * Creates thumbnails for a particular batch of objects that can be calibrated to have similar properties (identical scale etc.)
+ * Creates certain hard-coded features
  * 
  * @author Owen Feehan
- * @param <T> 
+ *
  */
-@FunctionalInterface
-public interface ThumbnailBatch<T> {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class FeaturesCreator {
 
-    /** Creates a thumbnail for an element in the batch */
-    DisplayStack thumbnailFor(T element) throws CreateException;
+    /**
+     * Creates default features for describing the results of instance-segmentation
+     * 
+     * @return
+     */
+    public static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
+        NamedFeatureStore<FeatureInputSingleObject> store = new NamedFeatureStore<>();
+        store.add("centerOfGravity.x", new CenterOfGravity(AxisType.X) );
+        store.add("centerOfGravity.y", new CenterOfGravity(AxisType.Y) );
+        store.add("centerOfGravity.z", new CenterOfGravity(AxisType.Z) );
+        store.add("numberVoxels", new NumberVoxels() );
+        return store;
+    }
 }

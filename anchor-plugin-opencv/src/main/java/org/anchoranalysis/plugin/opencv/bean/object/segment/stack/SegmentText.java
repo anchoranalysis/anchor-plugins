@@ -32,10 +32,12 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.segment.object.SegmentStackIntoObjects;
+import org.anchoranalysis.image.bean.segment.object.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -45,6 +47,8 @@ import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
+import org.opencv.dnn.Dnn;
+import org.opencv.dnn.Net;
 
 /**
  * Extracts text from a RGB image by using the EAST deep neural network model
@@ -55,7 +59,7 @@ import org.opencv.core.Mat;
  *
  * @author Owen Feehan
  */
-public class SegmentText extends SegmentStackIntoObjects {
+public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
@@ -81,11 +85,10 @@ public class SegmentText extends SegmentStackIntoObjects {
     /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
     @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
     // END BEAN PROPERTIES
-
-
+    
     @Override
-    public ObjectCollection segment(Stack stack) throws SegmentationFailedException {
-
+    public ObjectCollection segment(Stack stack, ConcurrentModelPool<Net> modelPool) throws SegmentationFailedException {
+        
         checkInput(stack);
 
         try {
@@ -95,16 +98,20 @@ public class SegmentText extends SegmentStackIntoObjects {
 
             // Convert marks to object-masks
             List<WithConfidence<ObjectMask>> objectsWithConfidence =
-                    EastObjectsExtractor.apply(
+                    EastObjectsExtracter.apply(
+                            modelPool,
                             pair._1(),
                             stack.dimensions().resolution(),
-                            minConfidence,
-                            pathToEastModel());
+                            minConfidence
+                            );
 
             // Scale each object-mask and extract as an object-collection
             return ScaleExtractObjects.apply(
                     maybeFilterList(objectsWithConfidence), pair._2(), stack.extent());
         } catch (OperationFailedException | CreateException e) {
+            throw new SegmentationFailedException(e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
         }
     }
@@ -148,6 +155,24 @@ public class SegmentText extends SegmentStackIntoObjects {
         }
     }
 
+
+    @Override
+    public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
+        Path modelPath = pathToEastModel();
+        return new ConcurrentModelPool<>(plan, useGPU -> createNet(modelPath, useGPU) );
+    }
+    
+    private static Net createNet(Path pathToModel, boolean useGPU) {
+        
+        Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
+        
+        if (useGPU) {
+            net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
+            net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);    
+        }
+        return net;
+    }
+    
     private Path pathToEastModel() {
         return getInitializationParameters()
                 .getModelDirectory()

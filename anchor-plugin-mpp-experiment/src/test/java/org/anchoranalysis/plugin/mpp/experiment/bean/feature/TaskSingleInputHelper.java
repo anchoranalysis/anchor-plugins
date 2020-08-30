@@ -39,6 +39,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
@@ -118,15 +119,16 @@ class TaskSingleInputHelper {
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
-            ParametersExperiment paramsExp =
+            ParametersExperiment paramsExperiment =
                     createParametersExperiment(pathForOutputs, bom.getDelegate(), logger);
 
-            S sharedState = task.beforeAnyJobIsExecuted(bom, paramsExp);
+            ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
+            S sharedState = task.beforeAnyJobIsExecuted(bom, concurrencyPlan, paramsExperiment);
 
             boolean successful =
-                    task.executeJob(new ParametersUnbound<>(paramsExp, input, sharedState, false));
+                    task.executeJob(new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
 
-            task.afterAllJobsAreExecuted(sharedState, paramsExp.getContext());
+            task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 
             return successful;
         } catch (AnchorIOException
