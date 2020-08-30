@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
+package org.anchoranalysis.plugin.mpp.experiment.feature.source;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -44,7 +44,6 @@ import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 public class CalculateFeaturesForObjects<T extends FeatureInput> {
 

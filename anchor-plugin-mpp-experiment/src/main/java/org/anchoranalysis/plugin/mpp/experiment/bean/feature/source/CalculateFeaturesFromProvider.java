@@ -37,6 +37,7 @@ import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 @AllArgsConstructor

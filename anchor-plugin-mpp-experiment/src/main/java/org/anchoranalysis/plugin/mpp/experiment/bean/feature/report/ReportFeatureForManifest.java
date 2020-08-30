@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-io-manifest
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,28 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.reportfeature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.io.bean.report.feature.ReportFeature;
+import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 
-public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForManifest {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String fileName = "";
-
-    @BeanField @Getter @Setter private String title = "";
-    // END BEAN PROPERTIES
-
-    @Override
-    public boolean isNumeric() {
-        return true;
-    }
-
-    @Override
-    public String title() throws OperationFailedException {
-        return title;
-    }
-}
+public abstract class ReportFeatureForManifest extends ReportFeature<ManifestRecorderFile> {}

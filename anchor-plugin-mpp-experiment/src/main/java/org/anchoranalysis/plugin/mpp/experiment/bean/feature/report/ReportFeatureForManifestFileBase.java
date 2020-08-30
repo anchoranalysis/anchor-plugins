@@ -24,40 +24,20 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.reportfeature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
-import java.io.IOException;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
-import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
-import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class NumberMarksFromManifest extends ReportFeatureForManifest {
+public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForManifest {
 
-    @Override
-    public String featureDescription(ManifestRecorderFile object, Logger logger)
-            throws OperationFailedException {
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String fileName = "";
 
-        FinderSerializedObject<MarkCollection> finder =
-                new FinderSerializedObject<>(
-                        "marks", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
-
-        ManifestRecorder manifest = object.get();
-
-        if (!finder.doFind(manifest)) {
-            throw new OperationFailedException("Cannot find marks in manifest");
-        }
-
-        try {
-            return Integer.toString(finder.get().size());
-        } catch (IOException e) {
-            throw new OperationFailedException(e);
-        }
-    }
+    @BeanField @Getter @Setter private String title = "";
+    // END BEAN PROPERTIES
 
     @Override
     public boolean isNumeric() {
@@ -66,6 +46,6 @@ public class NumberMarksFromManifest extends ReportFeatureForManifest {
 
     @Override
     public String title() throws OperationFailedException {
-        return "marksSize";
+        return title;
     }
 }
