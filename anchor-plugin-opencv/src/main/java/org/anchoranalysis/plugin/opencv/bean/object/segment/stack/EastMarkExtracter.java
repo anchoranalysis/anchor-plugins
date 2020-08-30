@@ -28,11 +28,12 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -42,8 +43,8 @@ import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class EastMarkExtractor {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+class EastMarkExtracter {
 
     private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94);
 
@@ -51,32 +52,28 @@ class EastMarkExtractor {
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
 
     private static final ScaleFactorInt SCALE_BY_4 = new ScaleFactorInt(4, 4);
-
+    
     /**
      * Extracts rotatable bounding boxes (as marks) from an image using the EAST model
      *
      * @param image an RGB image to extract boxes from
      * @param minConfidence filters boxes to have confidence >= minConfidence
-     * @param pathToModel path to the model-weights
      * @return a list of bounding-boxes, each with a confidence value
+     * @throws InterruptedException 
      */
-    public static List<WithConfidence<Mark>> extractBoundingBoxes(
-            Mat image, double minConfidence, Path pathToModel) {
-
-        Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
-
-        net.setInput(
+    public static List<WithConfidence<Mark>> extractBoundingBoxes( ConcurrentModelPool<Net> modelPool,
+            Mat image, double minConfidence) throws InterruptedException {
+        return modelPool.excuteOrWait( model->forwardPass(model, image, minConfidence) );
+    }
+    
+    private static List<WithConfidence<Mark>> forwardPass(Net model, Mat image, double minConfidence) {
+        model.setInput(
                 Dnn.blobFromImage(
                         image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false));
 
-        // Calculated separately due to a bug in the OpenCV java library which returns an exception
-        // (know further details)
-        //  when they are calculated together. A similar bug looks to be reported here:
-        // https://answers.opencv.org/question/214676/android-java-dnnforward-multiple-output-layers-segmentation-fault/
-        Mat scores = net.forward(OUTPUT_SCORES);
-        Mat geometry = net.forward(OUTPUT_GEOMETRY);
-
-        return extractFromMatrices(scores, geometry, SCALE_BY_4, minConfidence);
+        List<Mat> output = new ArrayList<>();
+        model.forward(output, Arrays.asList(OUTPUT_SCORES,OUTPUT_GEOMETRY));
+        return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
     }
 
     private static List<WithConfidence<Mark>> extractFromMatrices(

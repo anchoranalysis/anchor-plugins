@@ -31,6 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.task.InputBound;
@@ -61,7 +62,7 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {

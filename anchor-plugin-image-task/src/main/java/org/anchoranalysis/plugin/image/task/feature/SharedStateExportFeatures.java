@@ -144,15 +144,15 @@ public class SharedStateExportFeatures<S> {
      * 
      * @param <T> feature input-type in store
      * @param features a table calculator for features
-     * @param metadataHeaders headers to describe any metadata
+     * @param identifierHeaders headers to describe the identifier metadata before the feature values
      * @param context io context
      * @return a newly created {@link SharedStateExportFeatures}
      * @throws CreateException 
      */
-    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures( FeatureTableCalculator<T> features, LabelHeaders metadataHeaders, BoundIOContext context) throws CreateException {
+    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures( FeatureTableCalculator<T> features, LabelHeaders identifierHeaders, BoundIOContext context) throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    metadataHeaders,
+                    identifierHeaders,
                     features.createFeatureNames(),
                     features::duplicateForNewThread,
                     context);

@@ -62,7 +62,7 @@ public class SegmentTextTest {
 
     @Test
     public void testCar() throws AnchorIOException, CreateException, InitException, SegmentationFailedException {
-
+        
         Stack stack = createStack("car.jpg");
         
         SegmentText segmenter = new SegmentText();

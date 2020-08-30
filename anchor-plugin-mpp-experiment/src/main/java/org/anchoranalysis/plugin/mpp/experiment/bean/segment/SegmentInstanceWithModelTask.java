@@ -1,4 +1,29 @@
-package org.anchoranalysis.plugin.mpp.experiment.bean.define;
+/*-
+ * #%L
+ * anchor-plugin-mpp-experiment
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -7,6 +32,8 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -24,7 +51,7 @@ import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.bean.segment.object.SegmentStackIntoObjects;
+import org.anchoranalysis.image.bean.segment.object.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -42,15 +69,15 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
-import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.mpp.experiment.segment.SharedStateSegmentInstance;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Performs instance segmentation on an image producing zero, one or more objects per image.
+ * Using a model-pool, performs instance segmentation on an image producing zero, one or more objects per image.
  * 
  * <p>Various visualizations and export types are supported.
  * 
@@ -60,9 +87,10 @@ import lombok.Setter;
  * across all inputs. 
  * 
  * @author Owen Feehan
+ * @param <T> model-type in pool
  *
  */
-public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>> {
+public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,SharedStateSegmentInstance<T>> {
 
     private static final EachObjectIndependently COMBINE_OBJECTS = new EachObjectIndependently();
     
@@ -88,7 +116,7 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
     // START BEAN FIELDS
     /** The segmentation algorithm */
     @BeanField @Getter @Setter
-    private SegmentStackIntoObjects segment;
+    private SegmentStackIntoObjectsPooled<T> segment;
     
     /** The width of the outline */
     @BeanField @Getter @Setter
@@ -115,6 +143,8 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
     @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
     // END BEAN FIELDS
 
+    
+    
     @Override
     public InputTypesExpected inputTypesExpected() {
         // A stack is needed, not individual channels
@@ -122,44 +152,47 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
     }
 
     @Override
-    public SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+    public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan plan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
+            initializeBeans(params.getContext());
+            ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
+            
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
-            return SharedStateExportFeatures.createForFeatures(tableCalculator(), headers, params.getContext());
-        } catch (CreateException e) {
+            return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, params.getContext());
+        } catch (CreateException | InitException e) {
             throw new ExperimentExecutionException(e);
         }
     }
 
     @Override
     public void doJobOnInputObject(
-            InputBound<StackSequenceInput, SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>> input)
+            InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
-            initializeBeans(input);
-
+            initializeBeans(input.context());
+            
             Stack stack = inputStack(input);
             
-            ObjectCollection objects = segment.segment(stack);
+            ObjectCollection objects = segment.segment(stack, input.getSharedState().getModelPool());
 
             DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
             
             if (objects.size() > 0 || !ignoreNoObjects) {
-                writeOutputsForImage( stack, objects, background, input.context().getOutputManager() );
+                //writeOutputsForImage( stack, objects, background, input.context().getOutputManager() );
     
                 calculateFeaturesForImage(input, stack, objects);
             }
                         
-        } catch (SegmentationFailedException | OperationFailedException | InitException | CreateException e) {
+        } catch (SegmentationFailedException | OperationFailedException | CreateException | InitException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
     public void afterAllJobsAreExecuted(
-            SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>> sharedState, BoundIOContext context)
+            SharedStateSegmentInstance<T> sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
         try {
             sharedState.closeAnyOpenIO();
@@ -173,7 +206,7 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
         return false;
     }
     
-    private void calculateFeaturesForImage(InputBound<StackSequenceInput, SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>> input, Stack stack, ObjectCollection objects) throws OperationFailedException {
+    private void calculateFeaturesForImage(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input, Stack stack, ObjectCollection objects) throws OperationFailedException {
         
         if (objects.size()==0) {
             // Exit early, nothing to do
@@ -230,9 +263,9 @@ public class SegmentInstanceTask extends Task<StackSequenceInput,SharedStateExpo
         }
     }
     
-    private void initializeBeans(InputBound<?, ?> input) throws InitException {
-        ImageInitParams params = ImageInitParamsFactory.create(input.context());
-        segment.initRecursive(params, input.getLogger());        
+    private void initializeBeans(BoundIOContext context) throws InitException {
+        ImageInitParams params = ImageInitParamsFactory.create(context);
+        segment.initRecursive(params, context.getLogger());        
     }
         
     private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator() throws CreateException {

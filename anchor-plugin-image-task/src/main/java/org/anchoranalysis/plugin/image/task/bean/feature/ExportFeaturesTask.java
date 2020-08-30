@@ -37,6 +37,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonEmpty;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -111,7 +112,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(

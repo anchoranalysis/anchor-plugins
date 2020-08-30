@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
@@ -62,7 +63,7 @@ public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         Optional<CSVWriter> writer;
