@@ -8,6 +8,10 @@
     <artifactId>anchor-plugin-opencv</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     
+    <properties>
+    <opencv-platform.version>4.3.0-1.5.3</opencv-platform.version>
+    </properties>
+    
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -62,41 +66,26 @@
 	<!--  START: OpenCV dependencies -->
 
    <!-- Java bindings for opencv -->
-     <dependency>
-	    <groupId>org.bytedeco</groupId>
-	    <artifactId>javacv-platform</artifactId>
-	    <version>1.5.3</version>
-  	</dependency>
+<!--      <dependency> -->
+<!-- 	    <groupId>org.bytedeco</groupId> -->
+<!-- 	    <artifactId>javacv-platform</artifactId> -->
+<!-- 	    <version>1.5.3</version> -->
+<!--   	</dependency> -->
   	
   	
     <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
-    <!-- <dependency>
+    <dependency>
         <groupId>org.bytedeco</groupId>
         <artifactId>opencv-platform-gpu</artifactId>
         <version>4.3.0-1.5.3</version>
-    </dependency>-->
+    </dependency>
+    
       <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>opencv-platform</artifactId>
-    <version>4.3.0-1.5.3</version>
+    <version>${opencv-platform.version}</version>
   </dependency>
-<!--  <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>caffe-platform-gpu</artifactId>
-        <version>1.0-1.5.3</version>
-    </dependency>
-    <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>mxnet-platform-gpu</artifactId>
-        <version>1.6.0-1.5.3</version>-->
-        <!--  Needed to prevent two bindings to Sl4J logging (alongside the Bioformats binding, which we wish to keep) -->
-        <!-- <exclusions>
-	      <exclusion> 
-	        <groupId>org.slf4j</groupId>
-	        <artifactId>slf4j-simple</artifactId>
-	      </exclusion>
-	    </exclusions> 
-    </dependency>-->
+
     <dependency>
         <groupId>org.bytedeco</groupId>
         <artifactId>tensorflow-platform-gpu</artifactId>
@@ -104,7 +93,7 @@
     </dependency>
     
     
-        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
+    <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
     <dependency>
         <groupId>org.bytedeco</groupId>
         <artifactId>cuda-platform-redist</artifactId>
