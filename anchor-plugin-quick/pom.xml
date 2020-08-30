@@ -35,12 +35,6 @@
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-plugin-io</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-plugin-mpp-experiment</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
