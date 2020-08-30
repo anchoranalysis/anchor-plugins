@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.mode.DirectAssignMode;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.termination.NumberIterations;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter.ConsoleAggregatedReporter;
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.reporter.NullReporter;
-import org.anchoranalysis.test.bean.BeanTestChecker;
+import org.anchoranalysis.test.experiment.BeanTestChecker;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
