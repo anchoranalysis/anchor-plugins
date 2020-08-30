@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.KernelInitialM
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.pixelized.KernelBirthPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.independent.pixelized.KernelDeathPixelized;
 import org.anchoranalysis.plugin.mpp.sgmn.bean.kernel.proposer.KernelProposerOptionSingle;
-import org.anchoranalysis.test.bean.BeanTestChecker;
+import org.anchoranalysis.test.experiment.BeanTestChecker;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 
 class KernelProposerFixture {
