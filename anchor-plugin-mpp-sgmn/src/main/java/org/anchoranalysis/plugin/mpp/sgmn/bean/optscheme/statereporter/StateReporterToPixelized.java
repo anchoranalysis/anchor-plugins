@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 /**
  * Assumes we are interested in {@link VoxelizedMarksWithEnergy} as reporting type, and our
- * optimization-state is in the form ToPixelized<T>
+ * optimization-state is in the form {@code ToPixelized<T>}
  *
  * @author Owen Feehan
  * @param <T>
@@ -62,13 +62,7 @@ public class StateReporterToPixelized<T>
 
     @Override
     public Optional<StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy>> secondaryReport() {
-        return Optional.of(createCompose());
-    }
-
-    private Compose<ToPixelized<T>, VoxelizedMarksWithEnergy, T> createCompose() {
-        Compose<ToPixelized<T>, VoxelizedMarksWithEnergy, T> compose = new Compose<>();
-        compose.setFirst(new RetrieveSourceFromVoxelized<T>());
-        compose.setSecond(secondary);
-        return compose;
+        StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy> compose = new Compose<>(new RetrieveSourceFromVoxelized<>(), secondary);
+        return Optional.of(compose);
     }
 }

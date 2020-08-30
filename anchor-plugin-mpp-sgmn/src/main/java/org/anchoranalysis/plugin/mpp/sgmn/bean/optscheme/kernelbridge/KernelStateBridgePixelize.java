@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.mpp.sgmn.bean.optscheme.mode.TransformMapOption
 import org.anchoranalysis.plugin.mpp.sgmn.optscheme.ToPixelized;
 
 /**
- * State takes the form of ToPixelized<T> derived from the Kernel
+ * State derived from the kernel takes the form of {@code ToPixelized<T>}
  *
  * @author Owen Feehan
  * @param <T>

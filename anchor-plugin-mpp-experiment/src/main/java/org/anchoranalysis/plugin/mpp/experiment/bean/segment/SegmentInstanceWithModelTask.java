@@ -180,7 +180,7 @@ public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,Sha
             DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
             
             if (objects.size() > 0 || !ignoreNoObjects) {
-                //writeOutputsForImage( stack, objects, background, input.context().getOutputManager() );
+                writeOutputsForImage( stack, objects, background, input.context().getOutputManager() );
     
                 calculateFeaturesForImage(input, stack, objects);
             }
