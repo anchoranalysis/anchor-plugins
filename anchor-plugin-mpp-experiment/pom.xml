@@ -81,19 +81,7 @@
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-experiment</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-mpp-segment</artifactId>
-	  <version>0.0.8-SNAPSHOT</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-mpp-io</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
 
@@ -102,7 +90,7 @@
 	  <artifactId>anchor-plugin-mpp</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
+  
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-experiment</artifactId>
