@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,7 +48,7 @@ import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
-public class ReportFeaturesManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
+public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

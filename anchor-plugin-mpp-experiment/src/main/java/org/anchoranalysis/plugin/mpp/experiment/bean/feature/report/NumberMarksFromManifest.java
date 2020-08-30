@@ -24,34 +24,48 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.reportfeature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
+import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
+import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
+import org.anchoranalysis.mpp.mark.MarkCollection;
 
-public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
+public class NumberMarksFromManifest extends ReportFeatureForManifest {
 
     @Override
     public String featureDescription(ManifestRecorderFile object, Logger logger)
             throws OperationFailedException {
 
-        Path executionTimePath = object.getRootPath().resolve(getFileName() + ".txt");
+        FinderSerializedObject<MarkCollection> finder =
+                new FinderSerializedObject<>(
+                        "marks", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 
-        if (executionTimePath.toFile().exists()) {
-            String execTime;
-            try {
-                execTime = FinderFileAsText.readFile(executionTimePath);
-            } catch (IOException e) {
-                throw new OperationFailedException(e);
-            }
-            return execTime.trim().trim();
-        } else {
-            throw new OperationFailedException(
-                    String.format("Cannot find '%s'.txt in same folder as root", getFileName()));
+        ManifestRecorder manifest = object.get();
+
+        if (!finder.doFind(manifest)) {
+            throw new OperationFailedException("Cannot find marks in manifest");
         }
+
+        try {
+            return Integer.toString(finder.get().size());
+        } catch (IOException e) {
+            throw new OperationFailedException(e);
+        }
+    }
+
+    @Override
+    public boolean isNumeric() {
+        return true;
+    }
+
+    @Override
+    public String title() throws OperationFailedException {
+        return "marksSize";
     }
 }

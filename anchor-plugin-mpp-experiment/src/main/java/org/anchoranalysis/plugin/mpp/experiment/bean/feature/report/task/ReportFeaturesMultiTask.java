@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report.task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjec
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
-public class ReportFeaturesMulti extends Task<MultiInput, CSVWriter> {
+public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

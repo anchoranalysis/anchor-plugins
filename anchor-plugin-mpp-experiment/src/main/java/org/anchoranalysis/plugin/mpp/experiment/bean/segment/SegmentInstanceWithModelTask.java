@@ -70,7 +70,7 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
-import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.CalculateFeaturesForObjects;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.mpp.experiment.segment.SharedStateSegmentInstance;
 import lombok.Getter;

@@ -24,29 +24,34 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.reportfeature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
 
-public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileBase {
+public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
 
     @Override
     public String featureDescription(ManifestRecorderFile object, Logger logger)
             throws OperationFailedException {
 
-        FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
+        Path executionTimePath = object.getRootPath().resolve(getFileName() + ".txt");
 
-        ManifestRecorder manifest = object.get();
-
-        if (!finder.doFind(manifest)) {
+        if (executionTimePath.toFile().exists()) {
+            String execTime;
+            try {
+                execTime = FinderFileAsText.readFile(executionTimePath);
+            } catch (IOException e) {
+                throw new OperationFailedException(e);
+            }
+            return execTime.trim().trim();
+        } else {
             throw new OperationFailedException(
-                    String.format("Cannot find '%s' in manifest", getFileName()));
+                    String.format("Cannot find '%s'.txt in same folder as root", getFileName()));
         }
-
-        return finder.get().trim().trim();
     }
 }

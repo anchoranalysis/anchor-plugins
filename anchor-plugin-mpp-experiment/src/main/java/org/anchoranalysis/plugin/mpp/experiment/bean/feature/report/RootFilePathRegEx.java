@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.io.manifest.reportfeature;
+package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import java.io.File;
 import java.nio.file.Path;

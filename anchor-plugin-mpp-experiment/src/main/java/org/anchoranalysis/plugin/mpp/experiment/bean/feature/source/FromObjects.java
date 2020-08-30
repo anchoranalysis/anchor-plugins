@@ -57,6 +57,7 @@ import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
+import org.anchoranalysis.plugin.mpp.experiment.feature.source.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithEnergyStack;
 
 /**
