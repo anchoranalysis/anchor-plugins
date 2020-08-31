@@ -22,11 +22,11 @@
 
         <module>anchor-plugin-image</module>
         <module>anchor-plugin-image-feature</module>
-        <module>anchor-plugin-ij</module>
+        <module>anchor-plugin-imagej</module>
         <module>anchor-plugin-mpp</module>
         <module>anchor-plugin-mpp-experiment</module>
         <module>anchor-plugin-mpp-feature</module>
-	   <module>anchor-plugin-mpp-sgmn</module>
+	   <module>anchor-plugin-mpp-segment</module>
         <module>anchor-plugin-points</module>
         <module>anchor-plugin-io</module>
         <module>anchor-plugin-image-task</module>
