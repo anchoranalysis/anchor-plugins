@@ -7,7 +7,7 @@
     </parent> 
   	<artifactId>anchor-plugin-mpp</artifactId>
 	<version>0.0.8-SNAPSHOT</version>
-  
+	<description>Plugins related to marked-point-processes (particularly proposers and providers).</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

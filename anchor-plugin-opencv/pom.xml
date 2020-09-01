@@ -7,6 +7,7 @@
     </parent> 
     <artifactId>anchor-plugin-opencv</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+	<description>Plugins that call OpenCV.</description>
     
     <properties>
     <opencv-platform.version>4.3.0-1.5.3</opencv-platform.version>
