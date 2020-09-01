@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-plugin-operator-feature</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <description>Generic features working on varying input-types.</description>
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>

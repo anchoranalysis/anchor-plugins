@@ -101,7 +101,7 @@ class KernelExecutionStats implements Serializable {
                 + kernelExecutionTimeRejected[kernelID].getSum();
     }
 
-    public int getProposedTimeForKernelCnt(int kernelID) {
+    public long getProposedTimeForKernelCount(int kernelID) {
         return kernelExecutionTimeAccepted[kernelID].getCount()
                 + kernelExecutionTimeRejected[kernelID].getCount();
     }
@@ -112,8 +112,8 @@ class KernelExecutionStats implements Serializable {
                 + kernelExecutionTimeNotProposed[kernelID].getSum();
     }
 
-    public int getExecutionTimeForKernelCntExclReporting(int kernelID) {
-        return getProposedTimeForKernelCnt(kernelID)
+    public long getExecutionTimeForKernelCntExclReporting(int kernelID) {
+        return getProposedTimeForKernelCount(kernelID)
                 + kernelExecutionTimeNotProposed[kernelID].getCount();
     }
 
