@@ -47,7 +47,7 @@ public class SplitContourSmoothingSplineTest {
     public void test()
             throws CreateException, OperationFailedException, SetOperationFailedException {
 
-        ObjectMask contourIn = LoadUtilities.openLargestObjectBinaryFrom("01", testLoader);
+        ObjectMask contourIn = LoadUtilities.openLargestObjectFrom("01", testLoader);
 
         ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
 

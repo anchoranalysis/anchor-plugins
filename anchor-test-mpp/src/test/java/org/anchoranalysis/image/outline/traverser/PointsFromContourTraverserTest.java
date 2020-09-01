@@ -55,7 +55,7 @@ public class PointsFromContourTraverserTest {
 
     private void testFor(String suffix) throws CreateException, OperationFailedException {
 
-        ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
+        ObjectMask objIn = LoadUtilities.openLargestObjectFrom(suffix, testLoader);
 
         // Checks that first and last points are neighbors
         List<Contour> contours = CVFindContours.contoursForObject(objIn);

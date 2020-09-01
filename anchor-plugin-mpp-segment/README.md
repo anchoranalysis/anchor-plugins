@@ -1,6 +1,6 @@
 # anchor-plugin-mpp-segment
 
-Plugins for feature-extraction with marked-point-processes.
+Plugins for segmentation involving marked-point-processes.
 
 ## What is Anchor?
 

@@ -1,6 +1,6 @@
-# anchor-plugin-annotation
+# anchor-plugin-image
 
-Plugins for annotating images.
+Plugins for image-related operations.
 
 ## What is Anchor?
 
