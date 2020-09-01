@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 
-public class BitDepth extends SummarizerNamedChnlsSimple<Integer> {
+public class BitDepth extends SummarizerNamedChannelsSimple<Integer> {
 
     @Override
-    protected Integer extractKey(NamedChnlsInput element) throws RasterIOException {
+    protected Integer extractKey(NamedChannelsInput element) throws RasterIOException {
         return element.bitDepth();
     }
 

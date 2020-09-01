@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
+import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 public class AngleRotation extends OrientationProposer {
 
@@ -46,8 +46,8 @@ public class AngleRotation extends OrientationProposer {
 
     @Override
     public Optional<Orientation> propose(
-            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
-        MarkEllipse markC = (MarkEllipse) mark;
+            Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator) {
+        Ellipse markC = (Ellipse) mark;
 
         Orientation2D exstOrientation = (Orientation2D) markC.getOrientation();
 
@@ -57,6 +57,6 @@ public class AngleRotation extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkEllipse;
+        return testMark instanceof Ellipse;
     }
 }

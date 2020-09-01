@@ -43,10 +43,10 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
 
@@ -57,8 +57,8 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     @BeanField @Getter @Setter
     private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
 
-    /** If non-empty, A keyValueParams is treated as part of the nrgStack */
-    @BeanField @AllowEmpty @Getter @Setter private String nrgParamsName = "";
+    /** If non-empty, A keyValueParams is treated as part of the energyStack */
+    @BeanField @AllowEmpty @Getter @Setter private String energyParamsName = "";
     // END BEAN PROPERTIES
 
     @Override
@@ -96,8 +96,8 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
             throw new OperationFailedException(e);
         }
 
-        NRGStackHelper.writeNRGStackParams(
-                imageInitParams, OptionalUtilities.create(nrgParamsName), context);
+        EnergyStackHelper.writeEnergyStackParams(
+                imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
 
     @Override
@@ -107,26 +107,26 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
     private void outputFeatureTables(ImageInitParams so, BoundIOContext context) {
 
-        for (OutputFeatureTable oft : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
             try {
-                oft.initRecursive(so, context.getLogger());
-                oft.output(context);
+                outputFeatureTable.initRecursive(so, context.getLogger());
+                outputFeatureTable.output(context);
             } catch (IOException | InitException e) {
-                context.getErrorReporter().recordError(NamedStacksSet.class, e);
+                context.getErrorReporter().recordError(NamedStacks.class, e);
             }
         }
     }
 
     private void outputFeatureTablesWithException(ImageInitParams so, BoundIOContext context)
             throws IOException {
-        for (OutputFeatureTable oft : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
 
             try {
-                oft.initRecursive(so, context.getLogger());
+                outputFeatureTable.initRecursive(so, context.getLogger());
             } catch (InitException e) {
                 throw new IOException(e);
             }
-            oft.output(context);
+            outputFeatureTable.output(context);
         }
     }
 }

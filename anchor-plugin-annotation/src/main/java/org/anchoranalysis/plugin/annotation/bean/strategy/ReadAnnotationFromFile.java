@@ -30,14 +30,14 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.annotation.io.wholeimage.WholeImageLabelAnnotationReader;
-import org.anchoranalysis.annotation.wholeimage.WholeImageLabelAnnotation;
+import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
+import org.anchoranalysis.annotation.io.image.WholeImageLabelAnnotationReader;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {
 
-    public static Optional<WholeImageLabelAnnotation> readCheckExists(Path path) {
+    public static Optional<ImageLabelAnnotation> readCheckExists(Path path) {
 
         if (path.toFile().exists()) {
             return readAssumeExists(path);
@@ -46,7 +46,7 @@ public class ReadAnnotationFromFile {
         }
     }
 
-    public static Optional<WholeImageLabelAnnotation> readAssumeExists(Path path) {
+    public static Optional<ImageLabelAnnotation> readAssumeExists(Path path) {
         try {
             WholeImageLabelAnnotationReader reader = new WholeImageLabelAnnotationReader();
             return reader.read(path);

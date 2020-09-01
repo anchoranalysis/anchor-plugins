@@ -26,22 +26,22 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 // Returns the maximum area of each slice
 public final class MaxSliceArea extends FeatureSingleMemoRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
-        VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
+        VoxelizedMark mark = input.get().getPxlPartMemo().voxelized();
 
-        double maxSliceSizeVoxels = calcMaxSliceSize(pm);
+        double maxSliceSizeVoxels = maxSliceSize(mark);
 
         double retVal = resolveArea(maxSliceSizeVoxels, input.get().getResolutionOptional());
 
@@ -49,12 +49,12 @@ public final class MaxSliceArea extends FeatureSingleMemoRegion {
         return retVal;
     }
 
-    private long calcMaxSliceSize(VoxelizedMark pm) {
+    private long maxSliceSize(VoxelizedMark mark) {
 
         long max = 0;
-        for (int z = 0; z < pm.voxels().extent().z(); z++) {
+        for (int z = 0; z < mark.voxels().extent().z(); z++) {
 
-            VoxelStatistics pxlStats = pm.statisticsFor(0, getRegionID(), z);
+            VoxelStatistics pxlStats = mark.statisticsFor(0, getRegionID(), z);
 
             long size = pxlStats.size();
 

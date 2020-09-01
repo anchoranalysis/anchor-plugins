@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -49,6 +49,6 @@ class CalculateDeriveObjFromCollection
     @Override
     protected FeatureInputSingleObject deriveFromDelegate(
             FeatureInputStack input, ObjectCollection delegate) {
-        return new FeatureInputSingleObject(delegate.get(index), input.getNrgStackOptional());
+        return new FeatureInputSingleObject(delegate.get(index), input.getEnergyStackOptional());
     }
 }

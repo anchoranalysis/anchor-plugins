@@ -37,7 +37,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
-import org.apache.log4j.Logger;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate
@@ -55,14 +54,10 @@ public class Rooted extends FilePathPrefixer {
     @BeanField @Getter @Setter private String rootName;
     // END BEAN PROPERTIES
 
-    private static Logger logger = Logger.getLogger(Rooted.class);
-
     @Override
     public FilePathPrefix outFilePrefix(
             PathWithDescription input, String expName, FilePathPrefixerParams context)
             throws FilePathPrefixerException {
-
-        logger.debug(String.format("pathIn=%s", input));
 
         FilePathPrefix fpp =
                 filePathPrefixer.outFilePrefixAvoidResolve(
@@ -70,9 +65,6 @@ public class Rooted extends FilePathPrefixer {
 
         Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
         fpp.setFolderPath(pathOut);
-
-        logger.debug(String.format("prefix=%s", fpp.getFolderPath()));
-        logger.debug(String.format("multiRoot+Rest()=%s", pathOut));
 
         return fpp;
     }

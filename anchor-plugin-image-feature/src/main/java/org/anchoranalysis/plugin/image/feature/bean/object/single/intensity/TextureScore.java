@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -42,22 +42,24 @@ import org.anchoranalysis.plugin.image.intensity.IntensityMeanCalculator;
  *
  * @author Owen Feehan
  */
-public class TextureScore extends FeatureNrgChnl {
+public class TextureScore extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private int nrgIndexGradient = 1;
+    @BeanField @Getter @Setter private int energyIndexGradient = 1;
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
 
         ObjectMask object = input.get().getObject();
-        Channel chnlGradient = input.get().getNrgStackRequired().getChannel(nrgIndexGradient);
+        Channel channelGradient =
+                input.get().getEnergyStackRequired().getChannel(energyIndexGradient);
 
         return scoreFromMeans(
-                IntensityMeanCalculator.calcMeanIntensityObject(chnl, object),
-                IntensityMeanCalculator.calcMeanIntensityObject(chnlGradient, object));
+                IntensityMeanCalculator.calculateMeanIntensityObject(channel, object),
+                IntensityMeanCalculator.calculateMeanIntensityObject(channelGradient, object));
     }
 
     private static double scoreFromMeans(double meanIntensity, double meanGradientIntensity) {

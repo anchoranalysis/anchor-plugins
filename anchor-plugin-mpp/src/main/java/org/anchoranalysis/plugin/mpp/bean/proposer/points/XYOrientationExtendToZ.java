@@ -26,23 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
-import ch.ethz.biol.cell.mpp.mark.ellipsoidfitter.outlinepixelsretriever.TraverseOutlineException;
 import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.bean.proposer.PointsProposer;
-import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.points.MarkPointListFactory;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-import org.anchoranalysis.anchor.mpp.proposer.error.ErrorNode;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposalVisualization;
-import org.anchoranalysis.anchor.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
@@ -50,13 +41,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.mpp.bean.proposer.PointsProposer;
+import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.points.PointListFactory;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.mpp.proposer.error.ErrorNode;
+import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
+import org.anchoranalysis.mpp.proposer.visualization.CreateProposeVisualizationList;
+import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
 
 public class XYOrientationExtendToZ extends PointsProposer {
@@ -68,9 +68,9 @@ public class XYOrientationExtendToZ extends PointsProposer {
     @BeanField @Getter @Setter
     private PointsFromOrientationProposer pointsFromOrientationXYProposer;
 
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
 
-    @BeanField @OptionalBean @Getter @Setter private MaskProvider binaryChnlFilled;
+    @BeanField @OptionalBean @Getter @Setter private Provider<Mask> maskFilled;
 
     @BeanField @Getter @Setter private ScalarProposer maxDistanceZ;
 
@@ -89,7 +89,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
     public Optional<List<Point3i>> propose(
             Point3d point,
             Mark mark,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode)
             throws ProposalAbnormalFailureException {
@@ -112,10 +112,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
         list.add(pointsFromOrientationXYProposer.proposalVisualization(detailed));
 
         list.add(
-                cfg -> {
+                marks -> {
                     if (lastPointsAll != null && !lastPointsAll.isEmpty()) {
-                        cfg.addChangeID(
-                                MarkPointListFactory.createMarkFromPoints3i(lastPointsAll),
+                        marks.addChangeID(
+                                PointListFactory.createMarkFromPoints3i(lastPointsAll),
                                 new RGBColor(Color.ORANGE));
                     }
                 });
@@ -131,13 +131,13 @@ public class XYOrientationExtendToZ extends PointsProposer {
     private Optional<List<Point3i>> proposeFromOrientation(
             Orientation orientation,
             Point3d point,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             RandomNumberGenerator randomNumberGenerator,
             ErrorNode errorNode) {
         try {
             List<List<Point3i>> pointsXY =
                     getPointsFromOrientationXYProposer()
-                            .calcPoints(
+                            .calculatePoints(
                                     point,
                                     orientation,
                                     dimensions.z() > 1,
@@ -147,10 +147,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
             lastPointsAll =
                     new GeneratePointsHelper(
                                     point,
-                                    chnlFilled(),
+                                    channelFilled(),
                                     maxZDistance(randomNumberGenerator, dimensions.resolution()),
                                     skipZDistance(dimensions.resolution()),
-                                    binaryChnl.create(),
+                                    mask.create(),
                                     dimensions)
                             .generatePoints(pointsXY);
             return Optional.of(lastPointsAll);
@@ -161,8 +161,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         }
     }
 
-    private int maxZDistance(
-            RandomNumberGenerator randomNumberGenerator, ImageResolution resolution)
+    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException {
         int maxZDistance =
                 (int) Math.round(maxDistanceZ.propose(randomNumberGenerator, resolution));
@@ -170,11 +169,11 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return maxZDistance;
     }
 
-    private int skipZDistance(ImageResolution res) throws OperationFailedException {
+    private int skipZDistance(Resolution res) throws OperationFailedException {
         return (int) Math.round(distanceZEndIfEmpty.resolveForAxis(Optional.of(res), AxisType.Z));
     }
 
-    private Optional<Mask> chnlFilled() throws CreateException {
-        return binaryChnlFilled != null ? Optional.of(binaryChnlFilled.create()) : Optional.empty();
+    private Optional<Mask> channelFilled() throws CreateException {
+        return maskFilled != null ? Optional.of(maskFilled.create()) : Optional.empty();
     }
 }

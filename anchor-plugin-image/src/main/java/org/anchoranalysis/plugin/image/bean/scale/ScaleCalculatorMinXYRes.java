@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 public class ScaleCalculatorMinXYRes extends ScaleCalculator {
@@ -43,12 +43,12 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
     // STOP BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
             throws OperationFailedException {
 
-        ImageResolution resolution =
+        Resolution resolution =
                 sourceDimensions
-                        .map(ImageDimensions::resolution)
+                        .map(Dimensions::resolution)
                         .orElseThrow(
                                 () -> new OperationFailedException("No source dimensions exist"));
 
@@ -58,8 +58,8 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
                     "Channel has zero x or y resolution. Cannot scale to min res.");
         }
 
-        int x = calcRatio(resolution.x(), minXYRes);
-        int y = calcRatio(resolution.y(), minXYRes);
+        int x = ratio(resolution.x(), minXYRes);
+        int y = ratio(resolution.y(), minXYRes);
 
         if (x < 0) {
             throw new OperationFailedException(
@@ -88,7 +88,7 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
     }
 
     // Returns x i.e. how much to downside where the factor is 2^x
-    private static int calcRatio(double cnrtRes, double minRes) {
+    private static int ratio(double cnrtRes, double minRes) {
 
         double ratio = minRes / cnrtRes;
 

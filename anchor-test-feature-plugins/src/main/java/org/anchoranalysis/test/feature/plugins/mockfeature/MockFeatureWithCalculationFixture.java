@@ -38,15 +38,17 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Creates a mock-feature which used a mock {@link org.anchoranalysis.feature.cache.calculation.FeatureCalculation} under the hood
+ * Creates a mock-feature which used a mock {@link
+ * org.anchoranalysis.feature.cache.calculate.FeatureCalculation} under the hood
  *
- * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link MockFeatureWithCalculationFixture#calc) method are called.</p>
+ * <p>Tests can be executed so as to count the number of times the calculation and feature's {@link
+ * MockFeatureWithCalculation#calculate} method are called.
  *
- * <p>This is implemented using (ugly) static methods and some reflection, as Feature's must remain valid Anchor-bean's
- * and thus cannot be inner-classes or rely on parameterization in the constructor.</p>
+ * <p>This is implemented using (ugly) static methods and some reflection, as Feature's must remain
+ * valid Anchor-bean's and thus cannot be inner-classes or rely on parameterization in the
+ * constructor.
  *
  * @author Owen Feehan
- *
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockFeatureWithCalculationFixture {
@@ -58,7 +60,7 @@ public class MockFeatureWithCalculationFixture {
      * Executes an operation, and afterwards asserts an expected number of times certain internal
      * methods are called on a mock-calculation.
      *
-     * @param expectedCountCalc the expected number of calls to {@link Feature#calc}
+     * @param expectedCountCalc the expected number of calls to {@link Feature#calculate}
      * @param expectedCountExecute the expected number of calls to {@code execute()} on the
      *     mock-calculation.
      * @param operation an operation, typically involving the mock-calculation.
@@ -72,7 +74,7 @@ public class MockFeatureWithCalculationFixture {
         // We rely on static variables in the class, so no concurrency allowed
         synchronized (MockCalculation.class) {
             long beforeExecute = MockCalculation.countExecuteCalled;
-            long beforeCalc = MockFeatureWithCalculation.countCalcCalled;
+            long beforeCalc = MockFeatureWithCalculation.countCalculateCalled;
 
             operation.run();
 
@@ -82,9 +84,9 @@ public class MockFeatureWithCalculationFixture {
                     MockCalculation.countExecuteCalled - beforeExecute);
 
             assertEquals(
-                    "count of times calc() called on MockFeature",
+                    "count of times calculate() called on MockFeature",
                     expectedCountCalc,
-                    MockFeatureWithCalculation.countCalcCalled - beforeCalc);
+                    MockFeatureWithCalculation.countCalculateCalled - beforeCalc);
         }
     }
 
@@ -104,8 +106,6 @@ public class MockFeatureWithCalculationFixture {
      *
      * @param funcCalculation lambda that provides the result of the mock-calculation (and this
      *     mock-feature)
-     * @param childCache If set, a child-cache is used for the calculation. If not set, the main
-     *     cache is used.
      * @return the feature
      */
     @SuppressWarnings("unchecked")

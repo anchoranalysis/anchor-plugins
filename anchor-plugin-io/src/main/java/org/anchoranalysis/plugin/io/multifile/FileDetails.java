@@ -31,18 +31,18 @@ import java.util.Optional;
 
 public class FileDetails {
     private Path filePath;
-    private Optional<Integer> chnlNum;
+    private Optional<Integer> channelNum;
     private Optional<Integer> sliceNum;
     private Optional<Integer> timeIndex;
 
     public FileDetails(
             Path filePath,
-            Optional<Integer> chnlNum,
+            Optional<Integer> channelNum,
             Optional<Integer> sliceNum,
             Optional<Integer> timeIndex) {
         super();
         this.filePath = filePath;
-        this.chnlNum = chnlNum;
+        this.channelNum = channelNum;
         this.sliceNum = sliceNum;
         this.timeIndex = timeIndex;
     }
@@ -55,12 +55,12 @@ public class FileDetails {
         this.filePath = filePath;
     }
 
-    public Optional<Integer> getChnlNum() {
-        return chnlNum;
+    public Optional<Integer> getChannelNum() {
+        return channelNum;
     }
 
-    public void setChnlNum(Optional<Integer> chnlNum) {
-        this.chnlNum = chnlNum;
+    public void setChannelNum(Optional<Integer> channelNum) {
+        this.channelNum = channelNum;
     }
 
     public Optional<Integer> getSliceNum() {

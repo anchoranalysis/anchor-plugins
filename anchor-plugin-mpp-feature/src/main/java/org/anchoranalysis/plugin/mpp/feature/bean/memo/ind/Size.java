@@ -26,22 +26,22 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 
 // Size = Number of voxels
 public final class Size extends FeatureSingleMemoRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
-        VoxelizedMark pm = input.get().getPxlPartMemo().voxelized();
+        VoxelizedMark mark = input.get().getPxlPartMemo().voxelized();
 
-        VoxelStatistics pxlStats = pm.statisticsForAllSlices(0, getRegionID());
+        VoxelStatistics pxlStats = mark.statisticsForAllSlices(0, getRegionID());
 
         return resolveVolume((double) pxlStats.size(), input.get().getResolutionOptional());
     }

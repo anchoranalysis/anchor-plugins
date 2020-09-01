@@ -76,7 +76,7 @@ class HeaderFinder {
      *
      * @param headers the headers
      * @param columnNames the column-names to find indices for
-     * @return an array of indices, each element corresponding to that in {@link columnNames}
+     * @return an array of indices, each element corresponding to that in {@code columnNames}
      *     respectively
      * @throws InitException if any column-name does not exist in the headers
      */

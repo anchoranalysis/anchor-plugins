@@ -36,9 +36,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedShort;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelsArithmetic {
@@ -47,9 +47,9 @@ class VoxelsArithmetic {
             Voxels<IntBuffer> voxels, int cnt, VoxelsWrapper out, VoxelDataType outputType)
             throws OperationFailedException {
 
-        if (outputType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        if (outputType.equals(UnsignedShortVoxelType.INSTANCE)) {
             divideValueShort(voxels, cnt, out.asShort());
-        } else if (outputType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        } else if (outputType.equals(UnsignedByteVoxelType.INSTANCE)) {
             divideValueByte(voxels, cnt, out.asByte());
         } else {
             throwUnsupportedDataTypeException(outputType);
@@ -61,9 +61,9 @@ class VoxelsArithmetic {
     public static void add(Voxels<IntBuffer> voxels, VoxelsWrapper toAdd, VoxelDataType toAddType)
             throws OperationFailedException {
 
-        if (toAddType.equals(VoxelDataTypeUnsignedShort.INSTANCE)) {
+        if (toAddType.equals(UnsignedShortVoxelType.INSTANCE)) {
             addShort(voxels, toAdd.asShort());
-        } else if (toAddType.equals(VoxelDataTypeUnsignedByte.INSTANCE)) {
+        } else if (toAddType.equals(UnsignedByteVoxelType.INSTANCE)) {
             addByte(voxels, toAdd.asByte());
         } else {
             throwUnsupportedDataTypeException(toAddType);

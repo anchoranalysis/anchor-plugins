@@ -27,16 +27,16 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 public abstract class AtBorderBase extends FeatureSingleObject {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         if (isInputAtBorder(input.get())) {
@@ -52,5 +52,5 @@ public abstract class AtBorderBase extends FeatureSingleObject {
     }
 
     protected abstract boolean isBoundingBoxAtBorder(
-            BoundingBox boundingBox, ImageDimensions dimensions);
+            BoundingBox boundingBox, Dimensions dimensions);
 }

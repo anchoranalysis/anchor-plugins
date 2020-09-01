@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.blur;
 
+import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.imglib2.algorithm.gauss3.Gauss3;
@@ -34,7 +35,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.numeric.NumericType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class GaussianBlurUtilities {
@@ -46,15 +47,15 @@ class GaussianBlurUtilities {
      *
      * @param <T> ImgLib2 data-type
      * @param img the image
-     * @param sr the resolution of the image (assumes X and Y are the same)
+     * @param resolution the resolution of the image (assumes X and Y are the same)
      * @param sigma the sigma parameter for the gaussian blur for each dimension (should be length
      *     3)
      * @throws IncompatibleTypeException
      */
     public static <T extends NumericType<T>> void applyBlur(
-            Img<? extends RealType<?>> img, ImageResolution sr, double[] sigma) {
+            Img<? extends RealType<?>> img, Resolution resolution, double[] sigma) {
 
-        assert (sigma.length == 3);
+        Preconditions.checkArgument(sigma.length == 3);
 
         // This is a safe upcasting operation
         @SuppressWarnings("unchecked")

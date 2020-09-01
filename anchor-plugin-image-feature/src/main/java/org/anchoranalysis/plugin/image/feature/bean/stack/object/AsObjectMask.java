@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -52,16 +52,17 @@ public class AsObjectMask extends FeatureStack {
      * The channel that that forms an object-mask with the bounding-box set to entire channel's
      * dimensions
      */
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputStack> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputStack> input)
+            throws FeatureCalculationException {
 
         return input.forChild()
-                .calc(
+                .calculate(
                         item,
-                        new CalculateDeriveObjectInput(nrgIndex),
-                        new ChildCacheName(AsObjectMask.class, nrgIndex));
+                        new CalculateDeriveObjectInput(energyIndex),
+                        new ChildCacheName(AsObjectMask.class, energyIndex));
     }
 }

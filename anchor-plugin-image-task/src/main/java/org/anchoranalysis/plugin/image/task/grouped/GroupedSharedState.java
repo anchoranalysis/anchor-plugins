@@ -37,7 +37,7 @@ import java.util.function.Function;
  */
 public class GroupedSharedState<S, T> {
 
-    private ConsistentChannelChecker chnlChecker = new ConsistentChannelChecker();
+    private ConsistentChannelChecker channelChecker = new ConsistentChannelChecker();
 
     private GroupMapByName<S, T> groupMap;
 
@@ -48,14 +48,14 @@ public class GroupedSharedState<S, T> {
         this.createGroupMap = createGroupMap;
     }
 
-    public ConsistentChannelChecker getChnlChecker() {
-        return chnlChecker;
+    public ConsistentChannelChecker getChannelChecker() {
+        return channelChecker;
     }
 
     public GroupMapByName<S, T> getGroupMap() {
 
         if (groupMap == null) {
-            this.groupMap = createGroupMap.apply(chnlChecker);
+            this.groupMap = createGroupMap.apply(channelChecker);
         }
 
         return groupMap;

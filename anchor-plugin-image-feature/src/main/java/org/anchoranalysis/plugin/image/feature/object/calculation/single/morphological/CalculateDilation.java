@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;

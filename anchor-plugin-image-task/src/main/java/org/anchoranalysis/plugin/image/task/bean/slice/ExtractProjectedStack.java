@@ -33,11 +33,11 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.voxel.datatype.VoxelDataTypeUnsignedByte;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
 /**
  * Takes three RGB channels and projects them into a canvas of width/height in the form of a new RGB
@@ -53,36 +53,35 @@ class ExtractProjectedStack {
     public Stack extractAndProjectStack(Channel red, Channel green, Channel blue, int z)
             throws IncorrectImageSizeException {
         Stack stack = new Stack();
-        extractAndProjectChnl(red, z, stack);
-        extractAndProjectChnl(green, z, stack);
-        extractAndProjectChnl(blue, z, stack);
+        extractAndProjectChannel(red, z, stack);
+        extractAndProjectChannel(green, z, stack);
+        extractAndProjectChannel(blue, z, stack);
         return stack;
     }
 
-    private void extractAndProjectChnl(Channel chnl, int z, Stack stack)
+    private void extractAndProjectChannel(Channel channel, int z, Stack stack)
             throws IncorrectImageSizeException {
-        Channel chnlProjected = createProjectedChannel(chnl.extractSlice(z).duplicate());
-        stack.addChannel(chnlProjected);
+        Channel channelProjected = createProjectedChannel(channel.extractSlice(z).duplicate());
+        stack.addChannel(channelProjected);
     }
 
-    private Channel createProjectedChannel(Channel chnlIn) {
+    private Channel createProjectedChannel(Channel channelIn) {
 
         // Then the mode is off
-        if (!extent.isPresent() || chnlIn.dimensions().extent().equals(extent.get())) {
-            return chnlIn;
+        if (!extent.isPresent() || channelIn.extent().equals(extent.get())) {
+            return channelIn;
         } else {
-            Point3i crnrPos = createTarget(chnlIn.dimensions(), extent.get());
+            Point3i crnrPos = createTarget(channelIn.dimensions(), extent.get());
 
-            BoundingBox boxToProject =
-                    boxToProject(crnrPos, chnlIn.dimensions().extent(), extent.get());
+            BoundingBox boxToProject = boxToProject(crnrPos, channelIn.extent(), extent.get());
 
-            BoundingBox boxSrc = boxSrc(boxToProject, chnlIn.dimensions());
+            BoundingBox boxSrc = boxSrc(boxToProject, channelIn.dimensions());
 
-            return copyPixels(boxSrc, boxToProject, chnlIn, extent.get());
+            return copyPixels(boxSrc, boxToProject, channelIn, extent.get());
         }
     }
 
-    private static Point3i createTarget(ImageDimensions dimensions, Extent extent) {
+    private static Point3i createTarget(Dimensions dimensions, Extent extent) {
         Point3i crnrPos = new Point3i();
         crnrPos.setX((extent.x() - dimensions.x()) / 2);
         crnrPos.setY((extent.y() - dimensions.y()) / 2);
@@ -98,13 +97,12 @@ class ExtractProjectedStack {
                 .orElseThrow(AnchorImpossibleSituationException::new);
     }
 
-    private static BoundingBox boxSrc(BoundingBox boxToProject, ImageDimensions dimensions) {
+    private static BoundingBox boxSrc(BoundingBox boxToProject, Dimensions dimensions) {
         Point3i srcCrnrPos = createSourceCorner(boxToProject, dimensions);
         return new BoundingBox(srcCrnrPos, boxToProject.extent());
     }
 
-    private static Point3i createSourceCorner(
-            BoundingBox boxToProject, ImageDimensions dimensions) {
+    private static Point3i createSourceCorner(BoundingBox boxToProject, Dimensions dimensions) {
         Point3i sourceCorner = new Point3i(0, 0, 0);
 
         if (boxToProject.extent().x() < dimensions.x()) {
@@ -123,17 +121,17 @@ class ExtractProjectedStack {
             Channel channelDestination,
             Extent extentOut) {
 
-        Channel chnlOut =
+        Channel channelOut =
                 ChannelFactory.instance()
                         .create(
-                                new ImageDimensions(
+                                new Dimensions(
                                         extentOut, channelDestination.dimensions().resolution()),
-                                VoxelDataTypeUnsignedByte.INSTANCE);
+                                UnsignedByteVoxelType.INSTANCE);
         channelDestination
                 .voxels()
                 .asByte()
-                .extracter()
-                .boxCopyTo(boxSource, chnlOut.voxels().asByte(), boxToProject);
-        return chnlOut;
+                .extract()
+                .boxCopyTo(boxSource, channelOut.voxels().asByte(), boxToProject);
+        return channelOut;
     }
 }

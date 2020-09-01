@@ -29,22 +29,22 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkProposer;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
+import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 public class MarkEllipseSimple extends MarkSplitProposer {
 
@@ -61,30 +61,31 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
     @Override
     public Optional<PairPxlMarkMemo> propose(
-            VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen)
+            VoxelizedMarkMemo mark, ProposerContext context, MarkWithIdentifierFactory markFactory)
             throws ProposalAbnormalFailureException {
 
-        MarkEllipse markCast = (MarkEllipse) mark.getMark();
+        Ellipse markCast = (Ellipse) mark.getMark();
 
         Orientation2D orientation = (Orientation2D) markCast.getOrientation();
 
         if (markCast.getRadii().x() > markCast.getRadii().y()) {
             // We do not correct the orientation
-            return createMarksForOrientation(orientation, mark, context, cfgGen, false);
+            return createMarksForOrientation(orientation, mark, context, markFactory, false);
         } else {
 
             VoxelizedMarkMemo markCorrected = correctEllipseSoXAxisLongest(mark);
             // We change the orientation
-            return createMarksForOrientation(orientation, markCorrected, context, cfgGen, false);
+            return createMarksForOrientation(
+                    orientation, markCorrected, context, markFactory, false);
         }
     }
 
     private VoxelizedMarkMemo correctEllipseSoXAxisLongest(VoxelizedMarkMemo pmmExst) {
 
-        MarkEllipse exst = (MarkEllipse) pmmExst.getMark();
+        Ellipse exst = (Ellipse) pmmExst.getMark();
 
         VoxelizedMarkMemo pmmDup = pmmExst.duplicateFresh();
-        MarkEllipse dup = (MarkEllipse) pmmDup.getMark();
+        Ellipse dup = (Ellipse) pmmDup.getMark();
 
         Orientation2D exstOrientation = (Orientation2D) exst.getOrientation();
 
@@ -98,11 +99,11 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             Orientation2D orientation,
             VoxelizedMarkMemo markExst,
             ProposerContext context,
-            CfgGen cfgGen,
+            MarkWithIdentifierFactory markFactory,
             boolean wigglePos)
             throws ProposalAbnormalFailureException {
 
-        MarkEllipse markExstCast = (MarkEllipse) markExst.getMark();
+        Ellipse markExstCast = (Ellipse) markExst.getMark();
 
         Optional<Point3d[]> pointArr =
                 createNewMarkPos(
@@ -123,10 +124,24 @@ public class MarkEllipseSimple extends MarkSplitProposer {
                 new Orientation2D(exstOrientation.getAngleRadians() + (Math.PI / 2));
 
         VoxelizedMarkMemo markNew1 =
-                extractMemo(markExst, pointArr.get(), 0, orientationRight, context, cfgGen, "pos1");
+                extractMemo(
+                        markExst,
+                        pointArr.get(),
+                        0,
+                        orientationRight,
+                        context,
+                        markFactory,
+                        "pos1");
 
         VoxelizedMarkMemo markNew2 =
-                extractMemo(markExst, pointArr.get(), 1, orientationRight, context, cfgGen, "pos2");
+                extractMemo(
+                        markExst,
+                        pointArr.get(),
+                        1,
+                        orientationRight,
+                        context,
+                        markFactory,
+                        "pos2");
 
         return Optional.of(new PairPxlMarkMemo(markNew1, markNew2));
     }
@@ -137,13 +152,13 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             int dimensionIndex,
             Orientation2D orientationRight,
             ProposerContext context,
-            CfgGen cfgGen,
+            MarkWithIdentifierFactory markFactory,
             String positionDescription)
             throws ProposalAbnormalFailureException {
         try {
             VoxelizedMarkMemo pmm =
                     createMarkAtPos(markExst, pointArr[dimensionIndex], orientationRight, context);
-            pmm.getMark().setId(cfgGen.idAndIncrement());
+            pmm.getMark().setId(markFactory.idAndIncrement());
             return pmm;
         } catch (ProposalAbnormalFailureException e) {
             throw new ProposalAbnormalFailureException(
@@ -156,7 +171,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
             throws ProposalAbnormalFailureException {
 
         VoxelizedMarkMemo exstMark = exst.duplicateFresh();
-        MarkEllipse mark = (MarkEllipse) exstMark.getMark();
+        Ellipse mark = (Ellipse) exstMark.getMark();
 
         // THE OLD WAY WAS TO SHIFT 90 from orientation (the existing orientation)
         mark.setMarksExplicit(
@@ -171,9 +186,9 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
     public static Optional<Point3d[]> createNewMarkPos(
             Orientation2D orientation,
-            MarkEllipse markExst,
+            Ellipse markExst,
             RandomNumberGenerator randomNumberGenerator,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             double minRadScaleStart,
             double minRadScaleEnd,
             boolean wigglePos) {
@@ -184,8 +199,8 @@ public class MarkEllipseSimple extends MarkSplitProposer {
                                 minRadScaleStart, minRadScaleEnd);
 
         RotationMatrix rotMat = orientation.createRotationMatrix();
-        double[] pointArr1 = rotMat.calcRotatedPoint(new double[] {-1 * extent, 0});
-        double[] pointArr2 = rotMat.calcRotatedPoint(new double[] {extent, 0});
+        double[] pointArr1 = rotMat.rotatedPoint(new double[] {-1 * extent, 0});
+        double[] pointArr2 = rotMat.rotatedPoint(new double[] {extent, 0});
 
         Point3d point1 =
                 new Point3d(
@@ -215,7 +230,7 @@ public class MarkEllipseSimple extends MarkSplitProposer {
     }
 
     private static Optional<Point3d[]> ifBothPointsInside(
-            ImageDimensions dimensions, Point3d point1, Point3d point2) {
+            Dimensions dimensions, Point3d point1, Point3d point2) {
         if (!dimensions.contains(point1)) {
             return Optional.empty();
         }
@@ -229,6 +244,6 @@ public class MarkEllipseSimple extends MarkSplitProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkEllipse;
+        return testMark instanceof Ellipse;
     }
 }

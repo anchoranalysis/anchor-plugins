@@ -66,7 +66,8 @@ public class CoupledManifests implements InputFromManager {
     private String generateName(Logger logger) throws AnchorIOException {
 
         if (experimentManifest.isPresent()) {
-            Path experimentRootFolder = getExperimentManifest().get().getRootFolder().calcPath();
+            Path experimentRootFolder =
+                    getExperimentManifest().get().getRootFolder().calculatePath();
 
             PathDifferenceFromBase ff =
                     PathDifferenceFromBase.differenceFrom(

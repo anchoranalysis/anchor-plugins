@@ -35,10 +35,10 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalErosion;
-import org.anchoranalysis.image.object.morph.accept.AcceptIterationList;
-import org.anchoranalysis.image.object.morph.accept.RejectIterationIfAllHigh;
-import org.anchoranalysis.image.object.morph.accept.RejectIterationIfLowDisconnected;
+import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
+import org.anchoranalysis.image.object.morphological.accept.AcceptIterationList;
+import org.anchoranalysis.image.object.morphological.accept.RejectIterationIfAllHigh;
+import org.anchoranalysis.image.object.morphological.accept.RejectIterationIfLowDisconnected;
 
 /**
  * Erodes each object in the collection, growing bounding-boxes as necessary in relevant dimensions.

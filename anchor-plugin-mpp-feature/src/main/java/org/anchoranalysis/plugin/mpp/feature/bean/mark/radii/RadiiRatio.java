@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.mpp.mark.conic.ConicBase;
 
 public class RadiiRatio extends FeatureMark {
 
@@ -44,15 +44,16 @@ public class RadiiRatio extends FeatureMark {
     @BeanField @Getter @Setter private boolean suppressRes = false;
     // END BEAN PROPERTIES
 
-    private ImageResolution uniformRes = new ImageResolution();
+    private Resolution uniformRes = new Resolution();
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
-        MarkConic markCast = (MarkConic) input.get().getMark();
+        ConicBase markCast = (ConicBase) input.get().getMark();
 
-        ImageResolution sr = suppressRes ? uniformRes : input.get().getResRequired();
-        double[] radiiOrdered = markCast.radiiOrderedResolved(sr);
+        Resolution resolution = suppressRes ? uniformRes : input.get().getResolutionRequired();
+        double[] radiiOrdered = markCast.radiiOrderedResolved(resolution);
 
         int len = radiiOrdered.length;
         assert (len >= 2);

@@ -48,10 +48,10 @@ public class EmptyHistogramConstant extends CalculateLevelOne {
     // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram h) throws OperationFailedException {
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
-        if (!h.isEmpty()) {
-            return calculateLevelIncoming(h);
+        if (!histogram.isEmpty()) {
+            return calculateLevelIncoming(histogram);
         } else {
             return value;
         }

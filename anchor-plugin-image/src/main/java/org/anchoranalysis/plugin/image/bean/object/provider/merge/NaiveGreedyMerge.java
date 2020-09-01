@@ -43,10 +43,10 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
 
@@ -62,7 +62,7 @@ class NaiveGreedyMerge {
     private final boolean replaceWithMidpoint;
     private final BeforeCondition beforeCondition;
     private final AfterCondition afterCondition;
-    private final Optional<ImageResolution> res;
+    private final Optional<Resolution> res;
     private final Logger logger;
 
     @Value
@@ -96,7 +96,6 @@ class NaiveGreedyMerge {
      *
      * @param objects the entire set of objects
      * @param range parameters that determine which objects are considered for merge
-     * @param stack the entire list of future parameters to also be considered
      * @throws OperationFailedException
      */
     private void tryMergeWithinRange(

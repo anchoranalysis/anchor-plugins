@@ -32,7 +32,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 public class Sum extends FeatureHistogramStatistic {
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) {
-        return histogram.calcSum();
+    protected double calculateStatisticFrom(Histogram histogram) {
+        return histogram.calculateSum();
     }
 }

@@ -1,7 +1,0 @@
-<config>
-<bean config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefine">
-	<list config-class="java.util.List" config-factory="list">
-		<item config-class="ch.ethz.biol.cell.mpp.nrg.feature.cfg.NumMarks"/>
-	</list>
-</bean>
-</config>

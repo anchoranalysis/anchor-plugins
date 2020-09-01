@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -48,13 +48,13 @@ public abstract class FeatureGenericWithValue<T extends FeatureInput>
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return combineValueAndFeature(value, input.calc(getItem()));
     }
 
     @Override
-    public String getDscrLong() {
-        return combineDscr(String.format("%f", value), getItem().getDscrLong());
+    public String descriptionLong() {
+        return combineDscr(String.format("%f", value), getItem().descriptionLong());
     }
 
     protected abstract double combineValueAndFeature(double value, double featureResult);

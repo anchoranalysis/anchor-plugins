@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
 /**
  * Dilates each object in the collection, growing bounding-boxes as necessary in relevant

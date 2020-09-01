@@ -30,10 +30,10 @@ import com.google.common.base.Predicate;
 import java.util.Collection;
 import java.util.Set;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.OverlapCalculator;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 
 public class NonMaximaSuppressionObjects extends NonMaximaSuppression<ObjectMask> {
 
@@ -50,7 +50,7 @@ public class NonMaximaSuppressionObjects extends NonMaximaSuppression<ObjectMask
     @Override
     protected double overlapScoreFor(ObjectMask item1, ObjectMask item2) {
         ObjectMask merged = ObjectMaskMerger.merge(item1, item2);
-        return OverlapCalculator.calcOverlapRatio(item1, item2, merged);
+        return OverlapCalculator.calculateOverlapRatio(item1, item2, merged);
     }
 
     @Override

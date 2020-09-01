@@ -31,8 +31,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -63,7 +63,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     protected float[] execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
             Stack stack = extractStack(input);
-            Extent extent = stack.dimensions().extent();
+            Extent extent = stack.extent();
 
             checkSize(extent);
 
@@ -82,17 +82,16 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     /**
      * Extracts a stack (that is maybe resized)
      *
-     * @throws FeatureCalculationException
      * @throws OperationFailedException
      */
     private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
 
-        // We can rely that an NRG stack always exists
-        Stack stack = input.getNrgStackOptional().get().getNrgStack().asStack();
+        // We can rely that an energy stack always exists
+        Stack stack = input.getEnergyStackOptional().get().getEnergyStack().asStack();
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();
-            return stack.mapChannel(chnl -> chnl.resizeXY(size.getWidth(), size.getHeight()));
+            return stack.mapChannel(channel -> channel.resizeXY(size.getWidth(), size.getHeight()));
         } else {
             return stack;
         }

@@ -30,17 +30,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 
 /**
  * Considers all possible pairs of objects in a provider, and removes those that touch the border.
  *
  * @author Owen Feehan
  */
-public class RemoveTouchingBorder extends ObjectCollectionProviderWithDimensions {
+public class RemoveTouchingBorder extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean useZ = true;
@@ -49,12 +49,12 @@ public class RemoveTouchingBorder extends ObjectCollectionProviderWithDimensions
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-        ImageDimensions dimensions = createDimensions();
+        Dimensions dimensions = createDimensions();
 
         return objects.stream().filter(objectMask -> !atBorder(objectMask, dimensions));
     }
 
-    private boolean atBorder(ObjectMask object, ImageDimensions dim) {
+    private boolean atBorder(ObjectMask object, Dimensions dim) {
         if (useZ) {
             return object.boundingBox().atBorder(dim);
         } else {

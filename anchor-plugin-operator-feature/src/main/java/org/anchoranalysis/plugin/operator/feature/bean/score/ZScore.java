@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.score;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
@@ -38,6 +38,6 @@ public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
     protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)
             throws FeatureCalculationException {
 
-        return FirstSecondOrderStatistic.calcZScore(featureValue, mean, stdDev.get());
+        return FirstSecondOrderStatistic.calculateZScore(featureValue, mean, stdDev.get());
     }
 }

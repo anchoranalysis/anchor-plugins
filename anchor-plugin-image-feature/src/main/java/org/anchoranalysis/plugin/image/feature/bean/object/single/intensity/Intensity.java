@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  * Calculates a statistic from the intensity values covered by a single object-mask in a channel.
  *
  * <p>Specifically, a histogram of intensity-values is constructed for the region covered by the
- * object in one specific channnel in the NRG-stack (specified by <b>nrgIndex</b>).
+ * object in one specific channnel in the energy-stack (specified by <b>energyIndex</b>).
  *
  * <p>Then a customizable {@link org.anchoranalysis.image.feature.bean.FeatureHistogram} (specified
  * by <b>item</b>) extracts a statistic from the histogram. By default, the <i>mean</i> is
@@ -50,7 +50,7 @@ import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
  *
  * @author Owen Feehan
  */
-public class Intensity extends FeatureNrgChnl {
+public class Intensity extends FeatureEnergyChannel {
 
     // START BEAN PROPERTIES
     /** Feature to apply to the histogram */
@@ -61,17 +61,18 @@ public class Intensity extends FeatureNrgChnl {
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calcForChnl(SessionInput<FeatureInputSingleObject> input, Channel chnl)
+    protected double calculateForChannel(
+            SessionInput<FeatureInputSingleObject> input, Channel channel)
             throws FeatureCalculationException {
         return input.forChild()
-                .calc(
+                .calculate(
                         item,
-                        new CalculateHistogramForNrgChannel(excludeZero, getNrgIndex(), chnl),
+                        new CalculateHistogramForChannel(excludeZero, getEnergyIndex(), channel),
                         cacheName());
     }
 
     private ChildCacheName cacheName() {
         return new ChildCacheName(
-                Intensity.class, String.valueOf(excludeZero) + "_" + getNrgIndex());
+                Intensity.class, String.valueOf(excludeZero) + "_" + getEnergyIndex());
     }
 }

@@ -26,19 +26,21 @@
 
 package org.anchoranalysis.plugin.io.multifile;
 
+import lombok.Getter;
+
 public class IntegerRange {
 
-    private int size;
+    @Getter private int size;
     private int deduct = 0;
 
-    public IntegerRange(int maxNum) {
-        this.size = maxNum;
+    public IntegerRange(int maxNumber) {
+        this.size = maxNumber;
     }
 
-    public IntegerRange(int minNum, int maxNum) {
+    public IntegerRange(int minNumber, int maxNumber) {
         // We deduct the min
-        deduct = minNum;
-        this.size = maxNum - deduct + 1;
+        deduct = minNumber;
+        this.size = maxNumber - deduct + 1;
     }
 
     /**
@@ -49,11 +51,7 @@ public class IntegerRange {
      * @param value within range
      * @return the index of the value in the range
      */
-    public int index(int val) {
-        return val - deduct;
-    }
-
-    public int getSize() {
-        return size;
+    public int index(int value) {
+        return value - deduct;
     }
 }

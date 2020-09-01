@@ -26,74 +26,47 @@
 
 package org.anchoranalysis.plugin.image.intensity;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.core.arithmetic.RunningSum;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
 
-    public static double calcMeanIntensityObject(Channel chnl, ObjectMask object)
+    public static double calculateMeanIntensityObject(Channel channel, ObjectMask object)
             throws FeatureCalculationException {
-        return calcMeanIntensityObject(chnl, object, false);
+        return calculateMeanIntensityObject(channel, object, false);
     }
 
-    public static double calcMeanIntensityObject(
-            Channel chnl, ObjectMask object, boolean excludeZero)
+    public static double calculateMeanIntensityObject(
+            Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
-        checkContained(object.boundingBox(), chnl.dimensions().extent());
+        checkContained(object.boundingBox(), channel.extent());
 
-        VoxelsWrapper voxelsIntensity = chnl.voxels();
+        RunningSum running = new RunningSum();
 
-        BoundingBox box = object.boundingBox();
+        IterateVoxelsVoxelBoxAsInt.callEachPoint(
+                channel.voxels().any(),
+                object,
+                (buffer, offset) -> {
+                    int value = buffer.getInt(offset);
 
-        ReadableTuple3i cornerMin = box.cornerMin();
-        ReadableTuple3i cornerMax = box.calculateCornerMax();
-
-        double sum = 0.0;
-        int cnt = 0;
-
-        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
-
-            VoxelBuffer<?> bbIntensity = voxelsIntensity.slice(z);
-            ByteBuffer bbMask = object.sliceBufferGlobal(z);
-
-            int offsetMask = 0;
-            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
-                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
-
-                    if (bbMask.get(offsetMask) == object.binaryValuesByte().getOnByte()) {
-                        int offsetIntens = voxelsIntensity.any().extent().offset(x, y);
-
-                        int val = bbIntensity.getInt(offsetIntens);
-
-                        if (excludeZero && val == 0) {
-                            offsetMask++;
-                            continue;
-                        }
-
-                        sum += val;
-                        cnt++;
+                    if (!excludeZero || value != 0) {
+                        running.increment(value, 1);
                     }
+                });
 
-                    offsetMask++;
-                }
-            }
-        }
-
-        if (cnt == 0) {
+        if (running.getCount() == 0) {
             throw new FeatureCalculationException("There are 0 pixels in the object-mask");
         }
 
-        return sum / cnt;
+        return running.mean();
     }
 
     private static void checkContained(BoundingBox box, Extent extent)

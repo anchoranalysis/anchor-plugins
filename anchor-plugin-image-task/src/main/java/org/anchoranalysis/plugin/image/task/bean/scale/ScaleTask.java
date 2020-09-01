@@ -26,8 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import ch.ethz.biol.cell.imageprocessing.binaryimgchnl.provider.BinaryChnlProviderScaleXY;
-import ch.ethz.biol.cell.imageprocessing.chnl.provider.ChnlProviderScale;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,14 +46,15 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
  * Scales many rasters
@@ -83,7 +82,7 @@ public class ScaleTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChnlsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
             throws JobExecutionException {
 
         // Input
@@ -99,8 +98,7 @@ public class ScaleTask extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            nccfs.addAsSeparateChannels(
-                    new WrapStackAsTimeSequenceStore(soImage.getStackCollection()), 0);
+            nccfs.addAsSeparateChannels(new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -112,15 +110,16 @@ public class ScaleTask extends RasterTask {
     private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
             throws JobExecutionException {
         // Our output collections
-        NamedStacksSet stackCollection = new NamedStacksSet();
-        NamedStacksSet stackCollectionMIP = new NamedStacksSet();
+        NamedStacks stackCollection = new NamedStacks();
+        NamedStacks stackCollectionMIP = new NamedStacks();
 
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
 
-        outputStackCollection(stackCollection, KEY_OUTPUT_STACK, "chnlScaledCollection", context);
         outputStackCollection(
-                stackCollectionMIP, KEY_OUTPUT_STACK, "chnlScaledCollectionMIP", context);
+                stackCollection, KEY_OUTPUT_STACK, "channelScaledCollection", context);
+        outputStackCollection(
+                stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
     }
 
     @Override
@@ -135,8 +134,8 @@ public class ScaleTask extends RasterTask {
             BoundIOContext context) {
         BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
 
-        StackCollectionOutputter.output(
-                StackCollectionOutputter.subset(
+        StacksOutputter.output(
+                StacksOutputter.subset(
                         stackCollection,
                         outputManager.outputAllowedSecondLevel(outputSecondLevelKey)),
                 outputManager.getDelegate(),
@@ -148,40 +147,42 @@ public class ScaleTask extends RasterTask {
 
     private void populateOutputCollectionsFromSharedObjects(
             ImageInitParams params,
-            NamedStacksSet stackCollection,
-            NamedStacksSet stackCollectionMIP,
+            NamedStacks stackCollection,
+            NamedStacks stackCollectionMIP,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Set<String> chnlNames = params.getStackCollection().keys();
-        for (String chnlName : chnlNames) {
+        Set<String> channelNames = params.stacks().keys();
+        for (String channelName : channelNames) {
 
             // If this output is not allowed we simply skip
             if (!context.getOutputManager()
                     .outputAllowedSecondLevel(KEY_OUTPUT_STACK)
-                    .isOutputAllowed(chnlName)) {
+                    .isOutputAllowed(channelName)) {
                 continue;
             }
 
             try {
-                Channel chnlIn = params.getStackCollection().getException(chnlName).getChannel(0);
+                Channel channelIn = params.stacks().getException(channelName).getChannel(0);
 
-                Channel chnlOut;
+                Channel channelOut;
                 if (forceBinary) {
-                    Mask mask = new Mask(chnlIn);
-                    chnlOut = BinaryChnlProviderScaleXY.scale(mask, scaleCalculator).channel();
+                    Mask mask = new Mask(channelIn);
+                    Mask maskScaled =
+                            org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
+                                    mask, scaleCalculator);
+                    channelOut = maskScaled.channel();
                 } else {
-                    chnlOut =
-                            ChnlProviderScale.scale(
-                                    chnlIn,
+                    channelOut =
+                            ScaleXY.scale(
+                                    channelIn,
                                     scaleCalculator,
                                     InterpolatorFactory.getInstance().rasterResizing(),
                                     context.getLogger().messageLogger());
                 }
 
-                stackCollection.addImageStack(chnlName, new Stack(chnlOut));
-                stackCollectionMIP.addImageStack(
-                        chnlName, new Stack(chnlOut.maxIntensityProjection()));
+                stackCollection.add(channelName, new Stack(channelOut));
+                stackCollectionMIP.add(channelName, new Stack(channelOut.projectMax()));
 
             } catch (CreateException e) {
                 throw new JobExecutionException(e);

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.list;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 
@@ -39,7 +39,7 @@ public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
     private GeometricMean meanCalculator = new GeometricMean();
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double[] result = new double[getList().size()];
 
@@ -52,7 +52,7 @@ public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public String getDscrLong() {
+    public String descriptionLong() {
         StringBuilder sb = new StringBuilder();
         sb.append("geo_mean(");
         sb.append(descriptionForList(","));

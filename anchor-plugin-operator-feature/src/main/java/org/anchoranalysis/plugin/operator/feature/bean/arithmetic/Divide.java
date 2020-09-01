@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
@@ -43,7 +43,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         int size = getList().size();
 
@@ -67,7 +67,7 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
     }
 
     @Override
-    public String getDscrLong() {
+    public String descriptionLong() {
         return descriptionForList("/");
     }
 }

@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -52,12 +52,12 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException {
 
-        return aggregateResults(calcResults(params, intersecting));
+        return aggregateResults(calculateResults(params, intersecting));
     }
 
     protected abstract double aggregateResults(List<Double> results);
 
-    private List<Double> calcResults(
+    private List<Double> calculateResults(
             SessionInput<FeatureInputSingleObject> paramsExst,
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> ccIntersecting)
             throws FeatureCalculationException {
@@ -72,7 +72,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
             double res =
                     paramsExst
                             .forChild()
-                            .calc(
+                            .calculate(
                                     item,
                                     new CalculateIntersecting(ccIntersecting, index),
                                     new ChildCacheName(

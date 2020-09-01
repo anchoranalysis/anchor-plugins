@@ -35,14 +35,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.LabelHeaders;
 import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
-import org.anchoranalysis.feature.list.NamedFeatureStore;
-import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
@@ -55,15 +52,12 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * NamedFeatureStore
  *
  * @author Owen Feehan
- * @param T input-manager type
- * @param S feature-input type
+ * @param <T> input-manager type
+ * @param <S> feature-input type
  */
 @AllArgsConstructor
 public abstract class SingleRowPerInput<T extends InputFromManager, S extends FeatureInput>
         extends FeatureSource<T, FeatureList<S>, S> {
-
-    private static final NamedFeatureStoreFactory STORE_FACTORY =
-            NamedFeatureStoreFactory.factoryParamsOnly();
 
     /** The first column-name in the CSV file that is outputted. */
     private String firstResultHeader;
@@ -74,16 +68,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             List<NamedBean<FeatureListProvider<S>>> features,
             BoundIOContext context)
             throws CreateException {
-        try {
-            NamedFeatureStore<S> store = STORE_FACTORY.createNamedFeatureList(features);
-            return new SharedStateExportFeatures<>(
-                    metadataHeaders,
-                    store.createFeatureNames(),
-                    store.deepCopy()::listFeatures,
-                    context);
-        } catch (AnchorIOException e) {
-            throw new CreateException(e);
-        }
+        return SharedStateExportFeatures.createForFeatures(features, metadataHeaders, context);
     }
 
     @Override
@@ -101,14 +86,14 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
                     identifierFor(input.descriptiveName(), context.getGroupGeneratorName()),
                     results);
 
-        } catch (BeanDuplicateException | NamedFeatureCalculationException e) {
+        } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
             throw new OperationFailedException(e);
         }
     }
 
     protected abstract ResultsVectorWithThumbnail calculateResultsForInput(
             T inputObject, InputProcessContext<FeatureList<S>> context)
-            throws NamedFeatureCalculationException;
+            throws NamedFeatureCalculateException;
 
     private static StringLabelsForCsvRow identifierFor(
             String descriptiveName, Optional<String> groupGeneratorName)

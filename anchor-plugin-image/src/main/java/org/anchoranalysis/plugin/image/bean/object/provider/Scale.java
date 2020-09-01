@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ScaledObjectCollection;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.scale.ScaleFactor;
  *
  * @author Owen Feehan
  */
-public class Scale extends ObjectCollectionProviderWithDimensions {
+public class Scale extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
@@ -54,11 +54,11 @@ public class Scale extends ObjectCollectionProviderWithDimensions {
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
 
-        ImageDimensions dimensions = createDimensions();
+        Dimensions dimensions = createDimensions();
 
         ScaleFactor scaleFactor;
         try {
-            scaleFactor = scaleCalculator.calc(Optional.of(dimensions));
+            scaleFactor = scaleCalculator.calculate(Optional.of(dimensions));
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

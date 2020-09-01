@@ -34,6 +34,7 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
@@ -46,7 +47,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -61,7 +62,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String backgroundChnlName = "Image";
+    @BeanField @Getter @Setter private String backgroundChannelName = "Image";
 
     // If a non-empty string it is used to split the descriptive name into groups
     @BeanField @Getter @Setter private String splitDescriptiveNameRegex = "";
@@ -83,7 +84,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
@@ -164,9 +165,9 @@ public class AnnotationComparisonTask<T extends Assignment>
             throws JobExecutionException {
 
         try {
-            NamedStacksSet stackCollection = new NamedStacksSet();
+            NamedStacks stackCollection = new NamedStacks();
             inputObject.getInputObject().addToStoreInferNames(stackCollection);
-            return DisplayStack.create(stackCollection.getException(backgroundChnlName));
+            return DisplayStack.create(stackCollection.getException(backgroundChannelName));
 
         } catch (CreateException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -223,7 +224,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
         ColorPool colorPool =
                 new ColorPool(
-                        assignment.numPaired(),
+                        assignment.numberPaired(),
                         outputManager.getOutputWriteSettings().getDefaultColorSetGenerator(),
                         colorSetGeneratorUnpaired,
                         replaceMatchesWithSolids);

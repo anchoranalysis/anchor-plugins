@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.BoundingBoxDistance;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @AllArgsConstructor
@@ -44,7 +44,7 @@ public class DistanceCondition implements BeforeCondition {
     private final MessageLogger logger;
 
     @Override
-    public boolean accept(ObjectMask source, ObjectMask destination, Optional<ImageResolution> res)
+    public boolean accept(ObjectMask source, ObjectMask destination, Optional<Resolution> res)
             throws OperationFailedException {
 
         // We impose a maximum distance condition if necessary
@@ -56,7 +56,7 @@ public class DistanceCondition implements BeforeCondition {
     }
 
     private boolean isWithinMaxDistance(
-            ObjectMask source, ObjectMask destination, Optional<ImageResolution> res)
+            ObjectMask source, ObjectMask destination, Optional<Resolution> res)
             throws OperationFailedException {
 
         double distance =
@@ -82,7 +82,7 @@ public class DistanceCondition implements BeforeCondition {
         }
     }
 
-    private double resolveDistance(Optional<ImageResolution> res, Point3d point1, Point3d point2)
+    private double resolveDistance(Optional<Resolution> res, Point3d point1, Point3d point2)
             throws OperationFailedException {
         if (suppressZ) {
             return maxDistance // NOSONAR

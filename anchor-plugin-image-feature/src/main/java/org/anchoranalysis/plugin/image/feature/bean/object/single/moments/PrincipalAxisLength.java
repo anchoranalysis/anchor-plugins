@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 
 /**
@@ -37,7 +37,7 @@ import org.anchoranalysis.math.moment.EigenvalueAndVector;
 public class PrincipalAxisLength extends SpecificAxisBase {
 
     @Override
-    protected double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
+    protected double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException {
         return moment.eigenvalueNormalizedAsAxisLength();
     }

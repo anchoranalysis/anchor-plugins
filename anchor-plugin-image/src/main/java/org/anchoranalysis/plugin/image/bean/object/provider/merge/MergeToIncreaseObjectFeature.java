@@ -39,9 +39,9 @@ import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriorityFromI
 
 /**
  * Merges neighboring objects if it results in an increase in the average feature-value calculated
- * on each single object i.e.
- *
- * <pre>if feature(merged) >= avg( feature(src), feature(dest)</pre>
+ * on each single object
+ * 
+ * <p>A merge occurs if {@code feature(merged) >= avg( feature(object1), feature(object2)}
  *
  * <p>These merges occur in order of the maximum increase offered, and the algorithm recursively
  * merge until all possible merges are complete.

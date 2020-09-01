@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;

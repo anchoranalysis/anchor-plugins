@@ -33,40 +33,40 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimensionsSource;
+    @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensionsSource;
 
-    @BeanField @Getter @Setter private ImageDimProvider dimensionsTarget;
+    @BeanField @Getter @Setter private DimensionsProvider dimensionsTarget;
     // END BEAN PROPERTIES
 
     @Override
-    public ScaleFactor calc(Optional<ImageDimensions> sourceDimensions)
+    public ScaleFactor calculate(Optional<Dimensions> sourceDimensions)
             throws OperationFailedException {
 
-        Optional<ImageDimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);
+        Optional<Dimensions> dimensions = maybeReplaceSourceDimensions(sourceDimensions);
 
         if (!dimensions.isPresent()) {
             throw new OperationFailedException("No source dimensions can be found");
         }
 
         try {
-            return ScaleFactorUtilities.calcRelativeScale(
+            return ScaleFactorUtilities.relativeScale(
                     dimensions.get().extent(), dimensionsTarget.create().extent());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private Optional<ImageDimensions> maybeReplaceSourceDimensions(
-            Optional<ImageDimensions> sourceDimensions) throws OperationFailedException {
+    private Optional<Dimensions> maybeReplaceSourceDimensions(Optional<Dimensions> sourceDimensions)
+            throws OperationFailedException {
         if (dimensionsSource != null) {
             try {
                 return Optional.of(dimensionsSource.create());

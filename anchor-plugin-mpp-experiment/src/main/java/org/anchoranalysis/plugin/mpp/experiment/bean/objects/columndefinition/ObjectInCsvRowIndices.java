@@ -30,7 +30,6 @@ import com.google.common.base.Preconditions;
 import lombok.Value;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -72,7 +71,7 @@ class ObjectInCsvRowIndices {
      * @param csvRow the csv-row describing the object
      * @return the first object (if found) that contains the point and has the exact number of
      *     voxels required
-     * @throws SetOperationFailedException if no matching object can be found
+     * @throws OperationFailedException if no matching object can be found
      */
     public ObjectMask findObjectFromCSVRow(ObjectCollectionRTree allObjects, CSVRow csvRow)
             throws OperationFailedException {

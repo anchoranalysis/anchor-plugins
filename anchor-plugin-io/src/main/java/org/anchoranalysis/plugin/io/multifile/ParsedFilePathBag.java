@@ -39,7 +39,7 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
 
     private List<FileDetails> list = new ArrayList<>();
 
-    // chnlNum and sliceNum can be null, indicating that we don't know the values
+    // channelNum and sliceNum can be null, indicating that we don't know the values
     public void add(FileDetails fileDetails) {
         list.add(fileDetails);
     }
@@ -48,8 +48,8 @@ public class ParsedFilePathBag implements Iterable<FileDetails> {
         return list.iterator();
     }
 
-    public Optional<IntegerRange> rangeChnlNum() {
-        return range(FileDetails::getChnlNum);
+    public Optional<IntegerRange> rangeChannelNum() {
+        return range(FileDetails::getChannelNum);
     }
 
     public Optional<IntegerRange> rangeSliceNum() {

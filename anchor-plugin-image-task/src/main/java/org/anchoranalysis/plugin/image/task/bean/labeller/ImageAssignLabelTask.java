@@ -31,6 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -55,7 +56,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  * image-label correspondence
  *
  * @author Owen Feehan
- * @param T type of init-params associated with the filter
+ * @param <T> type of init-params associated with the filter
  */
 public class ImageAssignLabelTask<T>
         extends Task<ProvidesStackInput, SharedStateFilteredImageOutput<T>> {
@@ -73,7 +74,7 @@ public class ImageAssignLabelTask<T>
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateFilteredImageOutput<>(outputManager, imageLabeller);

@@ -28,8 +28,8 @@ package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import java.util.function.ToDoubleFunction;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

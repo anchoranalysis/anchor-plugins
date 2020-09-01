@@ -29,19 +29,19 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
 import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
+import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 
 // Gets the longest extent within a certain ratio between the bounds,
 //   and below the upper maximum
@@ -59,14 +59,14 @@ public class LongestExtentWithin extends OrientationProposer {
 
     @Override
     public Optional<Orientation> propose(
-            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator)
+            Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator)
             throws ProposalAbnormalFailureException {
 
         try {
             ResolvedBound minMaxBound =
                     getInitializationParameters()
                             .getMarkBounds()
-                            .calcMinMax(dimensions.resolution(), dimensions.z() > 1);
+                            .calculateMinMax(dimensions.resolution(), dimensions.z() > 1);
             return findAllOrientations(mark, minMaxBound, dimensions).sample(randomNumberGenerator);
 
         } catch (NamedProviderGetException e) {
@@ -76,7 +76,7 @@ public class LongestExtentWithin extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkAbstractPosition;
+        return testMark instanceof MarkWithPosition;
     }
 
     private OrientationList findAllOrientations2D(Mark mark, ResolvedBound minMaxBound)
@@ -119,7 +119,7 @@ public class LongestExtentWithin extends OrientationProposer {
     }
 
     private OrientationList findAllOrientations(
-            Mark mark, ResolvedBound minMaxBound, ImageDimensions dim)
+            Mark mark, ResolvedBound minMaxBound, Dimensions dim)
             throws ProposalAbnormalFailureException {
 
         if (dim.z() > 1 && !rotateOnlyIn2DPlane) {

@@ -28,16 +28,16 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.regionmap.RegionMap;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureInputSingleObject> {
 
@@ -48,10 +48,10 @@ public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureI
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
         return input.forChild()
-                .calc(
+                .calculate(
                         getItem(),
                         new CalculateSingleObjFromMemo(regionMap, index),
                         new ChildCacheName(AsObject.class, index));
@@ -65,7 +65,7 @@ public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureI
     }
 
     @Override
-    public String getParamDscr() {
-        return getItem().getParamDscr();
+    public String describeParams() {
+        return getItem().describeParams();
     }
 }

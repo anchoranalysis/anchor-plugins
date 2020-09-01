@@ -32,17 +32,15 @@ import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculation;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
- * Like {@link #CalculateParamsFromDelegateOption(CacheableCalculation) except assumes optional return value and no parameters
+ * Like {@link CalculateInputFromDelegate} except assumes optional return value and no parameters
  *
  * @author Owen Feehan
- *
  * @param <S> optional final-type of CachedCalculation
  * @param <T> feature input-type as input to cached-calculations
  * @param <U> delegate-type of CachedCalculation
@@ -97,6 +95,6 @@ public abstract class CalculateInputFromDelegateOption<
 
         // We select an appropriate cache for calculating the feature (should be the same as
         // selected in init())
-        return input.forChild().calc(feature, inputForDelegate.get(), cacheName);
+        return input.forChild().calculate(feature, inputForDelegate.get(), cacheName);
     }
 }

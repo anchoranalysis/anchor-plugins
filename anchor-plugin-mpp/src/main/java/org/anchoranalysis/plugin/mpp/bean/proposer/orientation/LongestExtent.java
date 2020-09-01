@@ -29,18 +29,18 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.proposer.OrientationProposer;
-import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.MarkAbstractPosition;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.Orientation2D;
+import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
+import org.anchoranalysis.mpp.bound.BidirectionalBound;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.MarkWithPosition;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 
 public class LongestExtent extends OrientationProposer {
 
@@ -52,10 +52,10 @@ public class LongestExtent extends OrientationProposer {
 
     @Override
     public Optional<Orientation> propose(
-            Mark mark, ImageDimensions dimensions, RandomNumberGenerator randomNumberGenerator)
+            Mark mark, Dimensions dimensions, RandomNumberGenerator randomNumberGenerator)
             throws ProposalAbnormalFailureException {
 
-        MarkAbstractPosition markC = (MarkAbstractPosition) mark;
+        MarkWithPosition markC = (MarkWithPosition) mark;
 
         double incrementRadians = (incrementDegrees / 180) * Math.PI;
 
@@ -69,7 +69,7 @@ public class LongestExtent extends OrientationProposer {
 
             try {
                 bib =
-                        boundCalculator.calcBound(
+                        boundCalculator.calculateBound(
                                 markC.getPos(), new Orientation2D(angle).createRotationMatrix());
             } catch (OperationFailedException e) {
                 throw new ProposalAbnormalFailureException(e);
@@ -88,6 +88,6 @@ public class LongestExtent extends OrientationProposer {
 
     @Override
     public boolean isCompatibleWith(Mark testMark) {
-        return testMark instanceof MarkAbstractPosition;
+        return testMark instanceof MarkWithPosition;
     }
 }

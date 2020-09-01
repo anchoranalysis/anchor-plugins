@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResultsVectorTestUtilities {

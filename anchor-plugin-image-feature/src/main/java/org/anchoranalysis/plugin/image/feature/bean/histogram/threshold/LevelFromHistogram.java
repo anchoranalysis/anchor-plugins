@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
@@ -48,7 +48,7 @@ public class LevelFromHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input)
+    public double calculate(SessionInput<FeatureInputHistogram> input)
             throws FeatureCalculationException {
         try {
             return calculateLevel.calculateLevel(input.get().getHistogram());

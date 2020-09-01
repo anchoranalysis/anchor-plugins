@@ -27,43 +27,32 @@
 package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Source of channels for aggregating.
  *
- * <p>Checks may be applied to make sure all chnls have the same-type
+ * <p>Checks may be applied to make sure all channels have the same-type
  */
+@RequiredArgsConstructor
 public class ChannelSource {
 
-    private final NamedStacksSet stackStore;
-    private final ConsistentChannelChecker chnlChecker;
+    // START REQUIRED ARGUMENTS
+    private final NamedStacks stackStore;
+    private final ConsistentChannelChecker channelChecker;
+    // END REQUIRED ARGUMENTS
+
+    /** Optionally resizes all extracted channels in XY */
     private final Optional<SizeXY> resizeTo;
 
-    /**
-     * Constructor
-     *
-     * @param stackStore
-     * @param chnlChecker
-     * @param resizeTo optionally resizes all extracted channels in XY
-     */
-    public ChannelSource(
-            NamedStacksSet stackStore,
-            ConsistentChannelChecker chnlChecker,
-            Optional<SizeXY> resizeTo) {
-        super();
-        this.stackStore = stackStore;
-        this.chnlChecker = chnlChecker;
-        this.resizeTo = resizeTo;
-    }
-
-    public Channel extractChnl(String stackName, boolean checkType)
+    public Channel extractChannel(String stackName, boolean checkType)
             throws OperationFailedException {
 
         try {
@@ -74,7 +63,7 @@ public class ChannelSource {
                 throw new OperationFailedException("Each stack may only have a single channel");
             }
 
-            return extractChnl(stack, checkType, 0);
+            return extractChannel(stack, checkType, 0);
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(
                     String.format("Cannot extract a single channel from stack %s", stackName),
@@ -82,13 +71,13 @@ public class ChannelSource {
         }
     }
 
-    public Channel extractChnl(String stackName, boolean checkType, int index)
+    public Channel extractChannel(String stackName, boolean checkType, int index)
             throws OperationFailedException {
 
         try {
             // We make a single histogram
             Stack stack = stackStore.getException(stackName);
-            return extractChnl(stack, checkType, index);
+            return extractChannel(stack, checkType, index);
 
         } catch (NamedProviderGetException e) {
             throw new OperationFailedException(
@@ -97,31 +86,31 @@ public class ChannelSource {
         }
     }
 
-    public Channel extractChnl(Stack stack, boolean checkType, int index)
+    public Channel extractChannel(Stack stack, boolean checkType, int index)
             throws OperationFailedException {
         try {
-            Channel chnl = stack.getChannel(index);
+            Channel channel = stack.getChannel(index);
 
             if (checkType) {
-                chnlChecker.checkChannelType(chnl.getVoxelDataType());
+                channelChecker.checkChannelType(channel.getVoxelDataType());
             }
 
-            return maybeResize(chnl);
+            return maybeResize(channel);
         } catch (SetOperationFailedException e) {
             throw new OperationFailedException(
                     String.format("Cannot extract channel %d from stack", index), e);
         }
     }
 
-    private Channel maybeResize(Channel chnl) {
+    private Channel maybeResize(Channel channel) {
         if (resizeTo.isPresent()) {
-            return chnl.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight());
+            return channel.resizeXY(resizeTo.get().getWidth(), resizeTo.get().getHeight());
         } else {
-            return chnl;
+            return channel;
         }
     }
 
-    public NamedStacksSet getStackStore() {
+    public NamedStacks getStackStore() {
         return stackStore;
     }
 }

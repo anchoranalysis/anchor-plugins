@@ -32,11 +32,11 @@ import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.input.AnnotationInputManager;
-import org.anchoranalysis.annotation.io.bean.strategy.AnnotatorStrategy;
+import org.anchoranalysis.annotation.io.bean.AnnotationInputManager;
+import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.NamedChnlsInputPart;
+import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -46,7 +46,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private AnnotationInputManager<NamedChnlsInputPart, T> annotationInputManager;
+    private AnnotationInputManager<NamedChannelsInputPart, T> annotationInputManager;
     // END BEAN PROPERTIES
 
     @Override

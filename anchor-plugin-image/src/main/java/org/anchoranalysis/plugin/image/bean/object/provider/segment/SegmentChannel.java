@@ -40,30 +40,32 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithChannelBase;
 
-public class SegmentChannel extends ObjectCollectionProviderWithChannel {
+public class SegmentChannel extends WithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private MaskProvider mask;
 
-    @BeanField @Getter @Setter private SegmentChannelIntoObjects sgmn;
+    @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
 
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSeeds;
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChnl(Channel chnlSource) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channelSource) throws CreateException {
 
         Optional<ObjectMask> maskAsObject = createObjectMask();
 
         try {
-            return sgmn.segment(
-                    chnlSource, maskAsObject, createSeeds(chnlSource.dimensions(), maskAsObject));
+            return segment.segment(
+                    channelSource,
+                    maskAsObject,
+                    createSeeds(channelSource.dimensions(), maskAsObject));
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }
@@ -74,14 +76,14 @@ public class SegmentChannel extends ObjectCollectionProviderWithChannel {
     }
 
     private Optional<SeedCollection> createSeeds(
-            ImageDimensions dimensions, Optional<ObjectMask> maskAsObject) throws CreateException {
+            Dimensions dimensions, Optional<ObjectMask> maskAsObject) throws CreateException {
         return OptionalUtilities.map(
                 OptionalFactory.create(objectsSeeds),
                 objects -> createSeeds(objects, maskAsObject, dimensions));
     }
 
     private static SeedCollection createSeeds(
-            ObjectCollection seeds, Optional<ObjectMask> maskAsObject, ImageDimensions dim)
+            ObjectCollection seeds, Optional<ObjectMask> maskAsObject, Dimensions dim)
             throws CreateException {
         return OptionalUtilities.map(
                         maskAsObject,

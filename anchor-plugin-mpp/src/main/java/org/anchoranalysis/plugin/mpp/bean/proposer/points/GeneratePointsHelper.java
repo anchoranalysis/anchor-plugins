@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.points.BoundingBoxFromPoints;
 import org.anchoranalysis.image.points.PointsFromMask;
 
@@ -47,7 +47,7 @@ class GeneratePointsHelper {
     private int maxZDistance;
     private int skipZDistance;
     private Mask mask;
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
 
     public List<Point3i> generatePoints(List<List<Point3i>> pointsXY)
             throws OperationFailedException {

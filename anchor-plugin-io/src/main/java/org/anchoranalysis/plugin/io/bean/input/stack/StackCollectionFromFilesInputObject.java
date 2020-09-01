@@ -44,9 +44,9 @@ import org.anchoranalysis.io.input.FileInput;
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
     /** The root object that is used to provide the descriptiveName and pathForBinding */
-    private FileInput delegate;
+    private final FileInput delegate;
 
-    private RasterReader rasterReader;
+    private final RasterReader rasterReader;
 
     /**
      * Uses the last series (from all series) only, and ignores any other series-numbers
@@ -55,17 +55,10 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
      * indicate the total number of series but rather is incremented with each acquisition, so for
      * our purposes we treat it as if its 0
      */
-    private boolean useLastSeriesIndexOnly;
+    private final boolean useLastSeriesIndexOnly;
 
     // We cache a certain amount of stacks read for particular series
     private OpenedRaster openedRasterMemo = null;
-
-    public StackCollectionFromFilesInputObject(
-            FileInput delegate, RasterReader rasterReader, boolean useLastSeriesIndexOnly) {
-        this.delegate = delegate;
-        this.rasterReader = rasterReader;
-        this.useLastSeriesIndexOnly = useLastSeriesIndexOnly;
-    }
 
     public int numberSeries() throws RasterIOException {
         if (useLastSeriesIndexOnly) {

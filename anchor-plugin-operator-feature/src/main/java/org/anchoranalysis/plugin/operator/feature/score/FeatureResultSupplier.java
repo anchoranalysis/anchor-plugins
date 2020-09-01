@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.operator.feature.score;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 
 /**
  * Supplies the result of a feature-calculation

@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 
 /**
  * Filters objects to keep only those which are NOT in the container.
  *
  * @author Owen Feehan
  */
-public class NotInContainer extends ObjectCollectionProviderWithContainer {
+public class NotInContainer extends WithContainerBase {
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objectCollection)

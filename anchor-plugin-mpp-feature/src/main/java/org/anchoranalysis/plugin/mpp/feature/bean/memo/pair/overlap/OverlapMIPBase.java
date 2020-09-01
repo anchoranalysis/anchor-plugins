@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
-import ch.ethz.biol.cell.mpp.nrg.cachedcalculation.CalculateOverlapMIPRatio;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
+import org.anchoranalysis.plugin.mpp.feature.overlap.CalculateOverlapMIPRatio;
 
 public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
 

@@ -30,11 +30,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
@@ -48,9 +48,9 @@ import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphol
 class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInputPairObjects> {
 
     // Not included in hash-coding as its assumed to be singular
-    @EqualsAndHashCode.Exclude private CalcForChild<FeatureInputPairObjects> resolverForChild;
+    @EqualsAndHashCode.Exclude private CalculateForChild<FeatureInputPairObjects> resolverForChild;
 
-    private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calcInput;
+    private ResolvedCalculation<FeatureInputSingleObject, FeatureInputPairObjects> calculation;
     private Extract extract;
     private ChildCacheName childCacheName;
     private int iterations;
@@ -58,13 +58,13 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
 
     public static FeatureCalculation<ObjectMask, FeatureInputPairObjects> of(
             CalculationResolver<FeatureInputPairObjects> resolver,
-            CalcForChild<FeatureInputPairObjects> calcForChild,
+            CalculateForChild<FeatureInputPairObjects> calculateForChild,
             Extract extract,
             ChildCacheName childCacheName,
             int iterations,
             boolean do3D) {
         return new CalculateDilatedFromPair(
-                calcForChild,
+                calculateForChild,
                 resolver.search(new CalculateInputFromPair(extract)),
                 extract,
                 childCacheName,
@@ -74,9 +74,9 @@ class CalculateDilatedFromPair extends FeatureCalculation<ObjectMask, FeatureInp
 
     @Override
     protected ObjectMask execute(FeatureInputPairObjects input) throws FeatureCalculationException {
-        return resolverForChild.calc(
+        return resolverForChild.calculate(
                 childCacheName,
-                calcInput.getOrCalculate(input),
+                calculation.getOrCalculate(input),
                 resolver -> CalculateDilation.of(resolver, iterations, do3D));
     }
 }

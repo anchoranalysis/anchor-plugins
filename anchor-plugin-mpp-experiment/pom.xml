@@ -18,6 +18,11 @@
 	  <artifactId>anchor-core</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
+    <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-experiment</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-beans-shared</artifactId>
@@ -76,16 +81,16 @@
 	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-experiment</artifactId>
+	  <artifactId>anchor-mpp-segment</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
+
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-mpp-sgmn</artifactId>
+	  <artifactId>anchor-plugin-mpp</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-	
+  
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-image-experiment</artifactId>

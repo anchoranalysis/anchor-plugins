@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -39,11 +39,11 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureCalculatorRepeated {
 
-    public static NRGStackWithParams extractStack(
-            ProvidesStackInput inputObject, StackProvider nrgStackProvider, BoundIOContext context)
+    public static EnergyStack extractStack(
+            ProvidesStackInput inputObject, StackProvider stackEnergy, BoundIOContext context)
             throws OperationFailedException {
         ImageInitParams paramsInit =
                 StackInputInitParamsCreator.createInitParams(inputObject, context);
-        return ExtractFromProvider.extractStack(nrgStackProvider, paramsInit, context.getLogger());
+        return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
     }
 }

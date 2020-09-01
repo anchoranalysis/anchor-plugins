@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -51,6 +51,6 @@ public class CalculateIntersecting
     protected FeatureInputPairObjects deriveFromDelegate(
             FeatureInputSingleObject input, ObjectCollection delegate) {
         return new FeatureInputPairObjects(
-                input.getObject(), delegate.get(index), input.getNrgStackOptional());
+                input.getObject(), delegate.get(index), input.getEnergyStackOptional());
     }
 }

@@ -38,11 +38,11 @@ import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.nrg.NRGStack;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DefineFixture {
@@ -50,17 +50,17 @@ class DefineFixture {
     /**
      * Creates a DefineOutputter
      *
-     * @param nrgStack the nrg-stack associated with the define
+     * @param energyStack the energy-stack associated with the define
      * @param sharedFeatures any shared to be added to the define
      * @return
      * @throws CreateException
      */
-    public static DefineOutputterMPPWithNrg create(
-            NRGStack nrgStack,
+    public static DefineOutputterMPPWithEnergy create(
+            EnergyStackWithoutParams energyStack,
             Optional<List<NamedBean<FeatureListProvider<FeatureInput>>>> sharedFeatures)
             throws CreateException {
-        DefineOutputterMPPWithNrg out = new DefineOutputterMPPWithNrg();
-        out.setNrgStackProvider(nrgStackProvider(nrgStack));
+        DefineOutputterMPPWithEnergy out = new DefineOutputterMPPWithEnergy();
+        out.setStackEnergy(stackEnergy(energyStack));
         out.setDefine(createDefine(sharedFeatures));
         return out;
     }
@@ -71,9 +71,9 @@ class DefineFixture {
         Define define = new Define();
 
         if (sharedFeatures.isPresent()) {
-            for (NamedBean<FeatureListProvider<FeatureInput>> nb : sharedFeatures.get()) {
+            for (NamedBean<FeatureListProvider<FeatureInput>> namedBean : sharedFeatures.get()) {
                 try {
-                    define.add(nb);
+                    define.add(namedBean);
                 } catch (OperationFailedException e) {
                     throw new CreateException(e);
                 }
@@ -83,15 +83,16 @@ class DefineFixture {
         return define;
     }
 
-    private static StackProvider nrgStackProvider(NRGStack nrgStack) throws CreateException {
+    private static StackProvider stackEnergy(EnergyStackWithoutParams energyStack)
+            throws CreateException {
 
-        // Create NRG stack
-        Stack stack = nrgStack.asStack();
+        // Create energy stack
+        Stack stack = energyStack.asStack();
 
         // Encapsulate in a mock
-        StackProvider stackProvider = mock(StackProvider.class);
-        when(stackProvider.create()).thenReturn(stack);
-        when(stackProvider.duplicateBean()).thenReturn(stackProvider);
-        return stackProvider;
+        StackProvider provider = mock(StackProvider.class);
+        when(provider.create()).thenReturn(stack);
+        when(provider.duplicateBean()).thenReturn(provider);
+        return provider;
     }
 }

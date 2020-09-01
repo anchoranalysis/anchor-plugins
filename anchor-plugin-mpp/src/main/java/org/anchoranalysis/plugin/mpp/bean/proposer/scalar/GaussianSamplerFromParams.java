@@ -28,19 +28,19 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
 public class GaussianSamplerFromParams extends ScalarProposer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private KeyValueParamsProvider keyValueParamsProvider;
+    @BeanField @Getter @Setter private KeyValueParamsProvider params;
 
     @BeanField @Getter @Setter private String paramMean = "";
 
@@ -51,26 +51,26 @@ public class GaussianSamplerFromParams extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
             throws OperationFailedException {
 
         try {
-            KeyValueParams kvp = keyValueParamsProvider.create();
-            assert (kvp != null);
+            KeyValueParams paramsCreated = params.create();
+            assert (paramsCreated != null);
 
-            if (!kvp.containsKey(getParamMean())) {
+            if (!paramsCreated.containsKey(getParamMean())) {
                 throw new OperationFailedException(
                         String.format("Params are missing key '%s' for paramMean", getParamMean()));
             }
 
-            if (!kvp.containsKey(getParamStdDev())) {
+            if (!paramsCreated.containsKey(getParamStdDev())) {
                 throw new OperationFailedException(
                         String.format(
                                 "Params are missing key '%s' for paramStdDev", getParamStdDev()));
             }
 
-            double mean = Double.parseDouble(kvp.getProperty(getParamMean()));
-            double sd = Double.valueOf(kvp.getProperty(getParamStdDev())) * factorStdDev;
+            double mean = Double.parseDouble(paramsCreated.getProperty(getParamMean()));
+            double sd = Double.valueOf(paramsCreated.getProperty(getParamStdDev())) * factorStdDev;
 
             return randomNumberGenerator.generateNormal(mean, sd).nextDouble();
         } catch (CreateException e) {

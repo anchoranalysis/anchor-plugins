@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.image.stack.DisplayStack;
 
 /**

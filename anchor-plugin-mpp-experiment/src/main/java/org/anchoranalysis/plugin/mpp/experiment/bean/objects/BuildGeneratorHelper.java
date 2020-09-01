@@ -32,13 +32,13 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
 
@@ -75,7 +75,7 @@ class BuildGeneratorHelper {
     private final int outlineWidth;
 
     public IterableGenerator<ObjectsWithBoundingBox> forStacks(
-            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
+            Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
         // First generator generates object-masks and bounding-boxes for each object
@@ -97,7 +97,7 @@ class BuildGeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStacksSet stacks,
+            NamedStacks stacks,
             IterableCombinedListGenerator<ObjectsWithBoundingBox> out,
             boolean flatten)
             throws NamedProviderGetException {

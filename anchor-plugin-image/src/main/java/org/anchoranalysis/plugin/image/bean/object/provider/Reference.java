@@ -52,7 +52,7 @@ public class Reference extends ObjectCollectionProvider {
     public ObjectCollection create() throws CreateException {
         if (objects == null) {
             try {
-                objects = getInitializationParameters().getObjectCollection().getException(id);
+                objects = getInitializationParameters().objects().getException(id);
             } catch (NamedProviderGetException e) {
                 throw new CreateException(e);
             }

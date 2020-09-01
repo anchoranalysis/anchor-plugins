@@ -29,7 +29,6 @@ package org.anchoranalysis.test.feature.plugins;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramArray;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFixture {
@@ -37,7 +36,7 @@ public class HistogramFixture {
     private static final int MAX_VAL = 255;
 
     private static Histogram createEmpty() {
-        return new HistogramArray(MAX_VAL + 1);
+        return new Histogram(MAX_VAL + 1);
     }
 
     /**
@@ -48,7 +47,7 @@ public class HistogramFixture {
 
         Histogram h = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrValueBy(i, i);
+            h.incrementValueBy(i, i);
         }
         return h;
     }
@@ -57,7 +56,7 @@ public class HistogramFixture {
 
         Histogram h = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrValueBy(i, MAX_VAL - i);
+            h.incrementValueBy(i, MAX_VAL - i);
         }
         return h;
     }

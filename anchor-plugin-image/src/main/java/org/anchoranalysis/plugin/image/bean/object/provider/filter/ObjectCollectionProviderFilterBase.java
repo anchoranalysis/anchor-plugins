@@ -36,12 +36,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithOptionalDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
-public abstract class ObjectCollectionProviderFilterBase
-        extends ObjectCollectionProviderWithOptionalDimensions {
+public abstract class ObjectCollectionProviderFilterBase extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectFilter filter;
@@ -58,7 +57,7 @@ public abstract class ObjectCollectionProviderFilterBase
 
     protected ObjectCollection filter(
             ObjectCollection objects,
-            Optional<ImageDimensions> dim,
+            Optional<Dimensions> dim,
             Optional<ObjectCollection> objectsRejected)
             throws CreateException {
         try {
@@ -71,6 +70,6 @@ public abstract class ObjectCollectionProviderFilterBase
     protected abstract ObjectCollection createFromObjects(
             ObjectCollection objects,
             Optional<ObjectCollection> objectsRejected,
-            Optional<ImageDimensions> dim)
+            Optional<Dimensions> dim)
             throws CreateException;
 }

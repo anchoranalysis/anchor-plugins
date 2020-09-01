@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
@@ -56,27 +56,27 @@ public class Intensity extends FeatureStack {
     @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
     /** The channel that that forms the histogram */
-    @BeanField @Getter @Setter private int nrgIndex = 0;
+    @BeanField @Getter @Setter private int energyIndex = 0;
 
     /** Optionally, index of another channel that masks the histogram. -1 disables */
-    @BeanField @Getter @Setter private int nrgIndexMask = -1;
+    @BeanField @Getter @Setter private int energyIndexMask = -1;
     // END BEAN PROEPRTIES
 
     @Override
-    protected double calc(SessionInput<FeatureInputStack> input)
+    protected double calculate(SessionInput<FeatureInputStack> input)
             throws FeatureCalculationException {
         return input.forChild()
-                .calc(
+                .calculate(
                         item,
                         new CalculateDeriveHistogramInput(histogramCalculator(), input.resolver()),
-                        new ChildCacheName(Intensity.class, nrgIndex + "_" + nrgIndexMask));
+                        new ChildCacheName(Intensity.class, energyIndex + "_" + energyIndexMask));
     }
 
     private FeatureCalculation<Histogram, FeatureInputStack> histogramCalculator() {
-        if (nrgIndexMask != -1) {
-            return new CalculateHistogramMasked(nrgIndex, nrgIndexMask);
+        if (energyIndexMask != -1) {
+            return new CalculateHistogramMasked(energyIndex, energyIndexMask);
         } else {
-            return new CalculateHistogram(nrgIndex);
+            return new CalculateHistogram(energyIndex);
         }
     }
 }

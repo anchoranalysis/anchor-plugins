@@ -29,18 +29,22 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.border.NumberVoxelsAtBorder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ShapeRegularityCalculator {
 
-    public static double calcShapeRegularity(ObjectMask object) {
+    private static final OutlineKernelParameters OUTLINE_KERNEL_PARAMETERS =
+            new OutlineKernelParameters(false, false, false);
+
+    public static double calculateShapeRegularity(ObjectMask object) {
         double area = object.numberVoxelsOn();
-        int perimeter = NumberVoxelsAtBorder.numberBorderPixels(object, false, false, false);
-        return calcValues(area, perimeter);
+        int perimeter = NumberVoxelsAtBorder.numberBorderPixels(object, OUTLINE_KERNEL_PARAMETERS);
+        return calculateValues(area, perimeter);
     }
 
-    private static double calcValues(double area, int perimeter) {
+    private static double calculateValues(double area, int perimeter) {
 
         if (perimeter == 0) {
             return 0.0;

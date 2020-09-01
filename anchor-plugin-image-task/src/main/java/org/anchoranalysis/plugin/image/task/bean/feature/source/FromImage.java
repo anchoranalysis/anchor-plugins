@@ -36,9 +36,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
-import org.anchoranalysis.feature.calc.NamedFeatureCalculationException;
-import org.anchoranalysis.feature.calc.results.ResultsVector;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
+import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
@@ -59,10 +59,10 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     // START BEAN PROPERTIES
     /**
-     * Optionally defines a nrg-stack for feature calculation (if not set, the nrg-stack is
+     * Optionally defines a energy-stack for feature calculation (if not set, the energy-stack is
      * considered to be the input stacks)
      */
-    @BeanField @OptionalBean @Getter @Setter private StackProvider nrgStackProvider;
+    @BeanField @OptionalBean @Getter @Setter private StackProvider stackEnergy;
 
     /** Method to generate a thumbnail for images */
     @BeanField @Getter @Setter private ThumbnailFromStack thumbnail = new ScaleToSize();
@@ -86,40 +86,40 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     protected ResultsVectorWithThumbnail calculateResultsForInput(
             ProvidesStackInput inputObject,
             InputProcessContext<FeatureList<FeatureInputStack>> context)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
 
-        FeatureCalculatorFromProvider<FeatureInputStack> factory =
+        FeatureCalculatorFromProvider<FeatureInputStack> calculator =
                 createCalculator(inputObject, context.getContext());
 
         // Calculate the results for the current stack
-        ResultsVector results = calculateResults(factory, context.getRowSource());
+        ResultsVector results = calculateResults(calculator, context.getRowSource());
 
         thumbnail.start();
 
         try {
             return new ResultsVectorWithThumbnail(
                     results,
-                    extractThumbnail(factory.getNrgStack(), context.isThumbnailsEnabled()));
+                    extractThumbnail(calculator.getEnergyStack(), context.isThumbnailsEnabled()));
         } catch (CreateException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
     private ResultsVector calculateResults(
             FeatureCalculatorFromProvider<FeatureInputStack> factory,
             FeatureList<FeatureInputStack> features)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         try {
             return factory.calculatorForAll(features).calculate(new FeatureInputStack());
         } catch (InitException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 
-    private Optional<DisplayStack> extractThumbnail(NRGStackWithParams nrgStack, boolean thumbnails)
+    private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
             throws CreateException {
         if (thumbnails) {
-            return Optional.of(thumbnail.thumbnailFor(nrgStack.getNrgStack().asStack()));
+            return Optional.of(thumbnail.thumbnailFor(energyStack.getEnergyStack().asStack()));
         } else {
             return Optional.empty();
         }
@@ -127,12 +127,12 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
             ProvidesStackInput inputObject, BoundIOContext context)
-            throws NamedFeatureCalculationException {
+            throws NamedFeatureCalculateException {
         try {
             return new FeatureCalculatorFromProvider<>(
-                    inputObject, Optional.ofNullable(getNrgStackProvider()), context);
+                    inputObject, Optional.ofNullable(getStackEnergy()), context);
         } catch (OperationFailedException e) {
-            throw new NamedFeatureCalculationException(e);
+            throw new NamedFeatureCalculateException(e);
         }
     }
 }

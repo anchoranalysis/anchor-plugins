@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.bean.operator.Constant;
 import org.anchoranalysis.image.feature.bean.object.pair.Minimum;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.test.ProviderFixture;
+import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
@@ -102,10 +102,10 @@ public class MergePairsTest {
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluatorThreshold(
-                FeatureEvaluatorFixture.createNrg(
+                FeatureEvaluatorFixture.createEnergy(
                         new Constant<>(threshold), logger, Mockito.mock(Path.class)));
         provider.setFeatureEvaluatorMerge(
-                FeatureEvaluatorFixture.createNrg(feature, logger, Mockito.mock(Path.class)));
+                FeatureEvaluatorFixture.createEnergy(feature, logger, Mockito.mock(Path.class)));
         provider.setRelation(new GreaterThanBean());
         return provider;
     }

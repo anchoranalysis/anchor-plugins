@@ -25,20 +25,14 @@
  */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
-import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.color.ColorIndexModulo;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor
@@ -52,7 +46,7 @@ class DrawOutlineHelper {
      * colorUnselectedObjects}
      *
      * @param backgroundScaled the scaled background
-     * @param objectsUnscaled the unscaled objects to draw
+     * @param objects the unscaled objects to draw
      * @return the background-stack with the outline of all objects drawn on it
      * @throws OperationFailedException
      */
@@ -61,19 +55,12 @@ class DrawOutlineHelper {
         try {
             DisplayStack displayStack = DisplayStack.create(backgroundScaled);
 
-            DrawObjectsGenerator drawOthers =
-                    new DrawObjectsGenerator(
-                            new Outline(outlineWidth),
-                            new ObjectCollectionWithProperties(objects),
-                            Either.right(displayStack),
-                            colorsForUnselected());
+            DrawObjectsGenerator drawOthers = DrawObjectsGenerator.outlineSingleColor(objects, outlineWidth, displayStack, color.rgbColor());
+
             return drawOthers.generate();
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    private ColorIndex colorsForUnselected() {
-        return new ColorIndexModulo(new ColorList(color.rgbColor()));
-    }
 }

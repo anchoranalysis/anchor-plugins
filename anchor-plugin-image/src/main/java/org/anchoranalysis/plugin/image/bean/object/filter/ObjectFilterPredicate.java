@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.filter;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -43,7 +43,7 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     @Override
     public ObjectCollection filter(
             ObjectCollection objectsToFilter,
-            Optional<ImageDimensions> dim,
+            Optional<Dimensions> dim,
             Optional<ObjectCollection> objectsRejected)
             throws OperationFailedException {
 
@@ -64,13 +64,13 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     /** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
     protected abstract boolean precondition(ObjectCollection objectsToFilter);
 
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         // Default implementation, nothing to do
     }
 
     /** A predicate condition for an object to be kept in the collection */
-    protected abstract boolean match(ObjectMask object, Optional<ImageDimensions> dim)
+    protected abstract boolean match(ObjectMask object, Optional<Dimensions> dim)
             throws OperationFailedException;
 
     protected abstract void end() throws OperationFailedException;

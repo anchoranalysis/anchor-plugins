@@ -37,7 +37,7 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
@@ -70,7 +70,6 @@ class FlattenAndScaler {
      * @param boundingBoxes supplies a stream of bounding-boxes that specify each unscaled regions
      *     that we will generate thumbnails for
      * @param allObjects all the objects that can appear in the thumbnails
-     * @param numberBoundingBoxes the total number of bounding-boxes in the stream
      * @param interpolator interpolator for scaling stack
      * @param targetSize the target size which objects will be scaled-down to fit inside
      * @throws OperationFailedException if there are too many objects
@@ -126,12 +125,11 @@ class FlattenAndScaler {
     }
 
     /**
-     * Flattens and scales an object if it exists
+     * Flattens and scales objects
      *
-     * @param object unscaled object
+     * @param objects unscaled objects
      * @return a scaled object
-     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link
-     *     #scaleObject}
+     * @throws OperationFailedException
      */
     public ObjectCollection scaleObjects(ObjectCollection objects) throws OperationFailedException {
         try {
@@ -150,8 +148,7 @@ class FlattenAndScaler {
      *     found that has the same bounding-box and number of pixels)
      * @return the objects that intersect with the bounding-box except any in {@code
      *     excludeFromAdding}
-     * @throws OperationFailedException if one is thrown scaling an individual-object as per {@link
-     *     #scaleObject}
+     * @throws OperationFailedException
      */
     public ObjectCollection objectsThatIntersectWith(
             BoundingBox box, ObjectCollection excludeFromAdding) throws OperationFailedException {
@@ -176,8 +173,8 @@ class FlattenAndScaler {
      * longer physically valid)
      */
     private Channel flattenScaleAndRemoveResolutionFromChannel(Channel channel) {
-        Channel scaled = channel.maxIntensityProjection().scaleXY(scaleFactor, interpolator);
-        scaled.updateResolution(new ImageResolution());
+        Channel scaled = channel.projectMax().scaleXY(scaleFactor, interpolator);
+        scaled.updateResolution(new Resolution());
         return scaled;
     }
 

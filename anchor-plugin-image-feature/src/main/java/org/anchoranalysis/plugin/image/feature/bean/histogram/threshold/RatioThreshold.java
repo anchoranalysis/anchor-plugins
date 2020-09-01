@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.image.histogram.Histogram;
 
@@ -41,7 +41,8 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcStatisticFrom(Histogram histogram) throws FeatureCalculationException {
+    protected double calculateStatisticFrom(Histogram histogram)
+            throws FeatureCalculationException {
         if (histogram.size() == 0) {
             return 0.0;
         }
@@ -53,7 +54,7 @@ public class RatioThreshold extends FeatureHistogramStatistic {
     }
 
     @Override
-    public String getParamDscr() {
-        return String.format("%s,threshold=%s", super.getParamDscr(), threshold.toString());
+    public String describeParams() {
+        return String.format("%s,threshold=%s", super.describeParams(), threshold.toString());
     }
 }
