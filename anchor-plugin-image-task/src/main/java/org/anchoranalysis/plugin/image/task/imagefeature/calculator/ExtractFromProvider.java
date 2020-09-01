@@ -35,9 +35,9 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
@@ -45,40 +45,42 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractFromProvider {
 
-    public static NRGStackWithParams extractStack(
-            StackProvider nrgStackProvider, ImageInitParams initParams, Logger logger)
+    public static EnergyStack extractStack(
+            StackProvider stackEnergy, ImageInitParams initParams, Logger logger)
             throws OperationFailedException {
 
         try {
-            // Extract the NRG stack
-            StackProvider nrgStackProviderLoc = nrgStackProvider.duplicateBean();
-            nrgStackProviderLoc.initRecursive(initParams, logger);
+            // Extract the energy stack
+            StackProvider providerDuplicated = stackEnergy.duplicateBean();
+            providerDuplicated.initRecursive(initParams, logger);
 
-            return new NRGStackWithParams(nrgStackProviderLoc.create());
+            return new EnergyStack(providerDuplicated.create());
         } catch (InitException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    /** Creates and initializes a single-feature that is provided via a featureProvider */
+    /**
+     * Creates and initializes a single-feature that is provided via a {@link FeatureListProvider}
+     */
     public static <T extends FeatureInput> Feature<T> extractFeature(
-            FeatureListProvider<T> featureProvider,
+            FeatureListProvider<T> featureListProvider,
             String featureProviderName,
             SharedFeaturesInitParams initParams,
             Logger logger)
             throws FeatureCalculationException {
 
         try {
-            featureProvider.initRecursive(initParams, logger);
+            featureListProvider.initRecursive(initParams, logger);
 
-            FeatureList<T> fl = featureProvider.create();
-            if (fl.size() != 1) {
+            FeatureList<T> features = featureListProvider.create();
+            if (features.size() != 1) {
                 throw new FeatureCalculationException(
                         String.format(
                                 "%s must return exactly one feature from its list. It currently returns %d",
-                                featureProviderName, fl.size()));
+                                featureProviderName, features.size()));
             }
-            return fl.get(0);
+            return features.get(0);
         } catch (CreateException | InitException e) {
             throw new FeatureCalculationException(e);
         }

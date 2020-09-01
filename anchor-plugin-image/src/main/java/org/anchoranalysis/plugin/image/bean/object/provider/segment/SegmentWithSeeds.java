@@ -41,11 +41,11 @@ import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithChannel;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithChannelBase;
 
 /**
  * Takes each object one-by-one from {@code objectsSource}, and finds matching seeds from {@code
@@ -53,31 +53,31 @@ import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProv
  *
  * @author Owen Feehan
  */
-public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
+public class SegmentWithSeeds extends WithChannelBase {
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objectsSource;
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSeeds;
 
-    @BeanField @Getter @Setter private SegmentChannelIntoObjects sgmn;
+    @BeanField @Getter @Setter private SegmentChannelIntoObjects segment;
     // END BEAN PROPERTIES
 
     @Override
-    protected ObjectCollection createFromChnl(Channel channel) throws CreateException {
+    protected ObjectCollection createFromChannel(Channel channel) throws CreateException {
 
         ObjectCollection seeds = objectsSeeds.create();
 
         if (objectsSource != null) {
             ObjectCollection sourceObjects = objectsSource.create();
-            return createWithSourceObjects(channel, seeds, sourceObjects, sgmn);
+            return createWithSourceObjects(channel, seeds, sourceObjects, segment);
         } else {
-            return createWithoutSourceObjects(channel, seeds, sgmn);
+            return createWithoutSourceObjects(channel, seeds, segment);
         }
     }
 
     private static ObjectCollection createWithSourceObjects(
-            Channel chnl,
+            Channel channel,
             ObjectCollection seeds,
             ObjectCollection sourceObjects,
             SegmentChannelIntoObjects segment)
@@ -92,7 +92,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
         return ObjectCollectionFactory.flatMapFrom(
                 matchList.stream(),
                 CreateException.class,
-                ows -> segmentIfMoreThanOne(ows, chnl, segment));
+                ows -> segmentIfMoreThanOne(ows, channel, segment));
     }
 
     private static ObjectCollection segmentIfMoreThanOne(
@@ -110,12 +110,12 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
     }
 
     private static ObjectCollection createWithoutSourceObjects(
-            Channel chnl, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
+            Channel channel, ObjectCollection seedsAsObjects, SegmentChannelIntoObjects sgmn)
             throws CreateException {
 
         try {
             return sgmn.segment(
-                    chnl,
+                    channel,
                     Optional.empty(),
                     Optional.of(SeedsFactory.createSeedsWithoutMask(seedsAsObjects)));
         } catch (SegmentationFailedException e) {
@@ -154,7 +154,7 @@ public class SegmentWithSeeds extends ObjectCollectionProviderWithChannel {
         // We make a channel just for the object
         return ChannelFactory.instance()
                 .create(
-                        channel.extracter().region(boundingBox, false),
+                        channel.extract().region(boundingBox, false),
                         channel.dimensions().resolution());
     }
 }

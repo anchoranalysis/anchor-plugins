@@ -30,9 +30,9 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalDilation;
+import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
 /**
  * A condition placed to determine if two objects could be potential neighbors are not (i.e.
@@ -68,7 +68,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
     }
 
     @Override
-    public void updateSourceObject(ObjectMask source, Optional<ImageResolution> res)
+    public void updateSourceObject(ObjectMask source, Optional<Resolution> res)
             throws OperationFailedException {
 
         boxSrcGrown = requireBBoxNeighbors ? boundingBoxGrown(source) : null;

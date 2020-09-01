@@ -45,13 +45,13 @@ class HistogramExtracter {
     private final String keyMask;
     private final int maskValue;
 
-    public Histogram extractFrom(Channel chnl) throws JobExecutionException {
+    public Histogram extractFrom(Channel channel) throws JobExecutionException {
 
         try {
             if (!keyMask.isEmpty()) {
-                return HistogramFactory.create(chnl, extractMask(keyMask));
+                return HistogramFactory.create(channel, extractMask(keyMask));
             } else {
-                return HistogramFactory.create(chnl);
+                return HistogramFactory.create(channel);
             }
 
         } catch (CreateException e) {
@@ -61,8 +61,8 @@ class HistogramExtracter {
 
     private Mask extractMask(String stackName) throws JobExecutionException {
         try {
-            Channel chnl = source.extractChnl(stackName, false);
-            return new Mask(chnl, createMaskBinaryValues());
+            Channel extracted = source.extractChannel(stackName, false);
+            return new Mask(extracted, createMaskBinaryValues());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

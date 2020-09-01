@@ -31,9 +31,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
@@ -42,8 +42,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -55,7 +55,7 @@ import org.apache.commons.lang.time.StopWatch;
 public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
 
     @BeanField @Getter @Setter
     private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
@@ -69,7 +69,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
 
-        Mask mask = binaryChnl.create();
+        Mask maskCreated = mask.create();
 
         StopWatch sw = new StopWatch();
         sw.start();
@@ -79,12 +79,12 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(mask.dimensions().resolution())));
+                                            Optional.of(maskCreated.dimensions().resolution())));
 
             if (bySlices) {
-                return createObjectsBySlice(mask, minNumberVoxels);
+                return createObjectsBySlice(maskCreated, minNumberVoxels);
             } else {
-                return createObjects3D(mask, minNumberVoxels);
+                return createObjects3D(maskCreated, minNumberVoxels);
             }
 
         } catch (UnitValueException e) {
@@ -92,21 +92,20 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
         }
     }
 
-    private CreateFromConnectedComponentsFactory createFactory(int minNumberVoxels) {
-        return new CreateFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
+    private ObjectsFromConnectedComponentsFactory createFactory(int minNumberVoxels) {
+        return new ObjectsFromConnectedComponentsFactory(bigNeighborhood, minNumberVoxels);
     }
 
-    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels)
-            throws CreateException {
+    private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
         return createFactory(minNumberVoxels).createConnectedComponents(mask);
     }
 
     private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
             throws CreateException {
 
-        CreateFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
+        ObjectsFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
-        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extracter();
+        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extract();
 
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
@@ -121,7 +120,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private ObjectCollection createForSlice(
-            CreateFromConnectedComponentsFactory objectCreator,
+            ObjectsFromConnectedComponentsFactory objectCreator,
             BinaryVoxels<ByteBuffer> bvb,
             int z) {
         // respecify the z

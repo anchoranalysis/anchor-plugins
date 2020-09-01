@@ -35,6 +35,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong.WatershedYeong;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -42,7 +43,7 @@ import org.junit.Test;
 
 public class WatershedYeongTest {
 
-    private static final String PATH_CHANNEL_BLURRED = "chnlInBlurred.tif";
+    private static final String PATH_CHANNEL_BLURRED = "channelInBlurred.tif";
     private static final String PATH_MASK = "mask.tif";
 
     private static final String PATH_EXPECTED_NO_MASKS_NO_SEEDS =
@@ -55,16 +56,16 @@ public class WatershedYeongTest {
     @Test
     public void test_noMasks_noSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
-        sgmn(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
+        segment(PATH_EXPECTED_NO_MASKS_NO_SEEDS, Optional.empty());
     }
 
     @Test
     public void test_masks_noSeeds()
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
-        sgmn(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
+        segment(PATH_EXPECTED_MASKS_NO_SEEDS, Optional.of(PATH_MASK));
     }
 
-    private void sgmn(String pathObjectsExpected, Optional<String> pathMask)
+    private void segment(String pathObjectsExpected, Optional<String> pathMask)
             throws SegmentationFailedException, TestDataLoadException, OutputWriteFailedException {
         WatershedYeong sgmn = new WatershedYeong();
 

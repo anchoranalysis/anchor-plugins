@@ -30,9 +30,9 @@ import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -54,8 +54,8 @@ class CalculateOutlineNumberVoxelFaces
      */
     private final boolean suppress3D;
 
-    private static int calcSurfaceSize(
-            ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D)
+    private static int calculateSurfaceSize(
+            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D)
             throws OperationFailedException {
 
         boolean do3D = (dimensions.z() > 1) && !suppress3D;
@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.extent(),
                             object.boundingBox().cornerMin());
 
-            Voxels<ByteBuffer> voxelsProjected = object.extracter().projectionMax();
+            Voxels<ByteBuffer> voxelsProjected = object.extract().projectMax();
             return ApplyKernel.applyForCount(kernel, voxelsProjected);
 
         } else {
@@ -88,7 +88,7 @@ class CalculateOutlineNumberVoxelFaces
     @Override
     protected Integer execute(FeatureInputSingleObject params) throws FeatureCalculationException {
         try {
-            return calcSurfaceSize(
+            return calculateSurfaceSize(
                     params.getObject(), params.dimensionsRequired(), mip, suppress3D);
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);

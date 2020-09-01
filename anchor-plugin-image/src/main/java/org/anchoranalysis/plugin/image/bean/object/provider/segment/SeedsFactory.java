@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -54,7 +54,7 @@ class SeedsFactory {
             ObjectCollection seeds,
             ObjectMask containingMask,
             ReadableTuple3i subtractFromCornerMin,
-            ImageDimensions dim)
+            Dimensions dim)
             throws CreateException {
         // We create a collection of seeds localised appropriately
         // NB: we simply change the object seeds, as it seemingly won't be used again!!!
@@ -75,7 +75,7 @@ class SeedsFactory {
             ObjectMask object,
             BoundingBox containingBBox,
             ReadableTuple3i subtractFromCornerMin,
-            ImageDimensions dim)
+            Dimensions dim)
             throws CreateException {
 
         ObjectMask seed = object.shiftBackBy(subtractFromCornerMin);
@@ -86,7 +86,7 @@ class SeedsFactory {
     }
 
     private static ObjectMask ensureInsideContainer(
-            ObjectMask seed, BoundingBox containingBBox, ImageDimensions dimensions)
+            ObjectMask seed, BoundingBox containingBBox, Dimensions dimensions)
             throws CreateException {
         if (!containingBBox.contains().box(seed.boundingBox())) {
             // We only take the part of the seed object that intersects with our box

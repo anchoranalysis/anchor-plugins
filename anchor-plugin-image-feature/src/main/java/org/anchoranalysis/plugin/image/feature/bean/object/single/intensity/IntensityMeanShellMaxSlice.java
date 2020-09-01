@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -37,10 +37,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 public class IntensityMeanShellMaxSlice extends IntensityMeanShellBase {
 
     @Override
-    protected double calcForShell(ObjectMask object, Channel chnl)
+    protected double calculateForShell(ObjectMask object, Channel channel)
             throws FeatureCalculationException {
 
-        ValueAndIndex vai = StatsHelper.calcMaxSliceMean(chnl, object, false);
+        ValueAndIndex vai = StatsHelper.calculateMaxSliceMean(channel, object, false);
 
         if (vai.getIndex() == -1) {
             return getEmptyValue();

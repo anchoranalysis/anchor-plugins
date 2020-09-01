@@ -33,6 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -41,15 +42,15 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectAll;
-import org.anchoranalysis.plugin.image.task.bean.selectchnls.SelectChnlsFromStacks;
+import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
+import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.FromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
@@ -74,7 +75,7 @@ public abstract class GroupedStackTask<S, T>
      */
     @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
 
-    @BeanField @Getter @Setter private SelectChnlsFromStacks selectChnls = new SelectAll();
+    @BeanField @Getter @Setter private FromStacks selectChannels = new All();
     // END BEAN PROPERTIES
 
     @Override
@@ -89,7 +90,7 @@ public abstract class GroupedStackTask<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }
@@ -105,7 +106,7 @@ public abstract class GroupedStackTask<S, T>
         Optional<String> groupName =
                 extractGroupName(inputObject.pathForBinding(), context.isDebugEnabled());
 
-        NamedStacksSet store = GroupedStackTask.extractInputStacks(inputObject);
+        NamedStacks store = GroupedStackTask.extractInputStacks(inputObject);
 
         processKeys(store, groupName, params.getSharedState(), context);
     }
@@ -119,7 +120,7 @@ public abstract class GroupedStackTask<S, T>
             sharedState
                     .getGroupMap()
                     .outputGroupedData(
-                            sharedState.getChnlChecker(),
+                            sharedState.getChannelChecker(),
                             context.maybeSubdirectory(
                                     subdirectoryForGroupOutputs(),
                                     MANIFEST_DESCRIPTION_GROUP_FOLDER));
@@ -135,10 +136,10 @@ public abstract class GroupedStackTask<S, T>
      */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
-    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker chnlChecker);
+    protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker);
 
     protected abstract void processKeys(
-            NamedStacksSet store,
+            NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<S, T> sharedState,
             BoundIOContext context)
@@ -161,10 +162,10 @@ public abstract class GroupedStackTask<S, T>
         }
     }
 
-    private static NamedStacksSet extractInputStacks(ProvidesStackInput inputObject)
+    private static NamedStacks extractInputStacks(ProvidesStackInput inputObject)
             throws JobExecutionException {
         try {
-            NamedStacksSet stackCollection = new NamedStacksSet();
+            NamedStacks stackCollection = new NamedStacks();
             inputObject.addToStoreInferNames(stackCollection);
             return stackCollection;
         } catch (OperationFailedException e1) {

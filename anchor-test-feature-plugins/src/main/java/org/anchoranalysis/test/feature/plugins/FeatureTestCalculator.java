@@ -34,8 +34,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.store.SharedObjects;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
@@ -92,11 +92,11 @@ public class FeatureTestCalculator {
             double expectedResult,
             double delta)
             throws FeatureCalculationException {
-        double res = FeatureTestCalculator.calcSequentialSession(feature, params, initParams);
+        double res = FeatureTestCalculator.calculateSequentialSession(feature, params, initParams);
         assertEquals(message, expectedResult, res, delta);
     }
 
-    private static <T extends FeatureInput> double calcSequentialSession(
+    private static <T extends FeatureInput> double calculateSequentialSession(
             Feature<T> feature, T params, FeatureInitParams initParams)
             throws FeatureCalculationException {
 

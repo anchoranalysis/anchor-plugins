@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.SkipInit;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -43,15 +44,15 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
-import org.anchoranalysis.image.io.stack.StackCollectionOutputter;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
+import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -65,7 +66,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  *
  * @author Owen Feehan
  */
-public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSelectedSlice> {
+public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
     private static final String OUTPUT_STACK_KEY = "stack";
 
@@ -73,7 +74,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> scoreProvider;
 
-    @BeanField @Getter @Setter private StackProvider nrgStackProvider;
+    @BeanField @Getter @Setter private StackProvider stackEnergy;
 
     /** If true, the maxima of the score is searched for. If false, rather the minima. */
     @BeanField @Getter @Setter private boolean findMaxima = true;
@@ -81,7 +82,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputManager);
@@ -92,28 +93,31 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
     @Override
     public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(NamedChnlsInput.class);
+        return new InputTypesExpected(NamedChannelsInput.class);
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<NamedChnlsInput, SharedStateSelectedSlice> params)
+    public void doJobOnInputObject(InputBound<NamedChannelsInput, SharedStateSelectedSlice> params)
             throws JobExecutionException {
 
         try {
-            // Create an NRG stack
-            NRGStackWithParams nrgStack =
+            // Create an energy stack
+            EnergyStack energyStack =
                     FeatureCalculatorRepeated.extractStack(
-                            params.getInputObject(), nrgStackProvider, params.context());
+                            params.getInputObject(), stackEnergy, params.context());
 
             int optimaSliceIndex =
                     selectSlice(
-                            nrgStack,
+                            energyStack,
                             params.getLogger(),
                             params.getInputObject().descriptiveName(),
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInputObject(), nrgStack, optimaSliceIndex, params.getOutputManager());
+                    params.getInputObject(),
+                    energyStack,
+                    optimaSliceIndex,
+                    params.getOutputManager());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -133,7 +137,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
      * @throws OperationFailedException
      */
     private int selectSlice(
-            NRGStackWithParams nrgStack,
+            EnergyStack energyStack,
             Logger logger,
             String imageName,
             SharedStateSelectedSlice params)
@@ -141,7 +145,7 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
 
         Feature<FeatureInputStack> scoreFeature = extractScoreFeature();
         try {
-            double[] scores = calcScoreForEachSlice(scoreFeature, nrgStack, logger);
+            double[] scores = calculateScoreForEachSlice(scoreFeature, energyStack, logger);
 
             int optimaSliceIndex = findOptimaSlice(scores);
 
@@ -156,18 +160,18 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
     }
 
     private void deriveSlicesAndOutput(
-            NamedChnlsInput inputObject,
-            NRGStackWithParams nrgStack,
+            NamedChannelsInput inputObject,
+            EnergyStack energyStack,
             int optimaSliceIndex,
             BoundOutputManagerRouteErrors outputManager)
             throws OperationFailedException {
 
-        NamedStacksSet stackCollection = collectionFromInput(inputObject);
+        NamedStacks stackCollection = collectionFromInput(inputObject);
 
         // Extract slices
-        NamedStacksSet sliceCollection =
+        NamedStacks sliceCollection =
                 stackCollection.applyOperation(
-                        nrgStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
+                        energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
             outputSlices(outputManager, sliceCollection);
@@ -176,17 +180,17 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private static NamedStacksSet collectionFromInput(NamedChnlsInput inputObject)
+    private static NamedStacks collectionFromInput(NamedChannelsInput inputObject)
             throws OperationFailedException {
-        NamedStacksSet stackCollection = new NamedStacksSet();
+        NamedStacks stackCollection = new NamedStacks();
         inputObject.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 
     private void outputSlices(
-            BoundOutputManagerRouteErrors outputManager, NamedStacksSet stackCollection)
+            BoundOutputManagerRouteErrors outputManager, NamedStacks stackCollection)
             throws OutputWriteFailedException {
-        StackCollectionOutputter.outputSubsetWithException(
+        StacksOutputter.outputSubsetWithException(
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);
     }
 
@@ -198,22 +202,22 @@ public class ExtractSingleSliceTask extends Task<NamedChnlsInput, SharedStateSel
         }
     }
 
-    private double[] calcScoreForEachSlice(
-            Feature<FeatureInputStack> scoreFeature, NRGStackWithParams nrgStack, Logger logger)
+    private double[] calculateScoreForEachSlice(
+            Feature<FeatureInputStack> scoreFeature, EnergyStack energyStack, Logger logger)
             throws FeatureCalculationException {
         try {
             FeatureCalculatorSingle<FeatureInputStack> session =
                     FeatureSession.with(scoreFeature, logger);
 
-            double[] results = new double[nrgStack.dimensions().z()];
+            double[] results = new double[energyStack.dimensions().z()];
 
             // Extract each slice, and calculate feature
-            for (int z = 0; z < nrgStack.dimensions().z(); z++) {
-                NRGStackWithParams nrgStackSlice = nrgStack.extractSlice(z);
+            for (int z = 0; z < energyStack.dimensions().z(); z++) {
+                EnergyStack energyStackSlice = energyStack.extractSlice(z);
 
                 // Calculate feature for this slice
                 double featVal =
-                        session.calculate(new FeatureInputStack(nrgStackSlice.getNrgStack()));
+                        session.calculate(new FeatureInputStack(energyStackSlice.getEnergyStack()));
 
                 logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 

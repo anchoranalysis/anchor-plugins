@@ -31,14 +31,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.ImageDimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithOptionalDimensions;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithOptionalDimensionsBase;
 
-public abstract class ObjectCollectionProviderMorphological
-        extends ObjectCollectionProviderWithOptionalDimensions {
+public abstract class ObjectCollectionProviderMorphological extends WithOptionalDimensionsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean do3D = false;
@@ -48,14 +47,14 @@ public abstract class ObjectCollectionProviderMorphological
 
     @Override
     public ObjectCollection createFromObjects(ObjectCollection objects) throws CreateException {
-        Optional<Extent> extent = calcExtent();
+        Optional<Extent> extent = deriveExtent();
         return objects.stream().map(objectMask -> applyMorphologicalOperation(objectMask, extent));
     }
 
     protected abstract ObjectMask applyMorphologicalOperation(
             ObjectMask object, Optional<Extent> extent) throws CreateException;
 
-    protected Optional<Extent> calcExtent() throws CreateException {
-        return createDims().map(ImageDimensions::extent);
+    protected Optional<Extent> deriveExtent() throws CreateException {
+        return createDims().map(Dimensions::extent);
     }
 }

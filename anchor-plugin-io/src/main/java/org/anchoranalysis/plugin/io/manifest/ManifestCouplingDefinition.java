@@ -116,7 +116,8 @@ public class ManifestCouplingDefinition implements InputFromManager {
 
     private static File fileForFolder(FolderWrite folderWrite) {
         return new File(
-                String.format("%s%s%s", folderWrite.calcPath(), File.separator, "manifest.ser"));
+                String.format(
+                        "%s%s%s", folderWrite.calculatePath(), File.separator, "manifest.ser"));
     }
 
     public Iterator<CoupledManifests> iteratorCoupledManifestsFor(

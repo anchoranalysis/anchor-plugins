@@ -30,7 +30,7 @@ import java.util.function.ToDoubleFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
@@ -45,14 +45,14 @@ class StatsHelper {
      * Calculates the mean-intensity of a masked-part of each slice, and returns the maximum value
      * across all sices
      *
-     * @param chnl
+     * @param channel
      * @param object
      * @param excludeZero
      * @return
      * @throws FeatureCalculationException
      */
-    public static ValueAndIndex calcMaxSliceMean(
-            Channel chnl, ObjectMask object, boolean excludeZero)
+    public static ValueAndIndex calculateMaxSliceMean(
+            Channel channel, ObjectMask object, boolean excludeZero)
             throws FeatureCalculationException {
 
         double max = Double.NEGATIVE_INFINITY;
@@ -67,7 +67,8 @@ class StatsHelper {
 
             if (slice.voxelsOn().anyExists()) {
                 double mean =
-                        IntensityMeanCalculator.calcMeanIntensityObject(chnl, slice, excludeZero);
+                        IntensityMeanCalculator.calculateMeanIntensityObject(
+                                channel, slice, excludeZero);
 
                 if (mean > max) {
                     index = z;
@@ -85,36 +86,36 @@ class StatsHelper {
      *
      * <p>This number of pixels can either taken from the highest or lowest part of the histogram
      *
-     * @param chnl
+     * @param channel
      * @param object
-     * @param numPixels the number of pixels to be considered (either the highest-intensity pixels,
-     *     or lowest-intensity pixel)
-     * @param highest iff TRUE the highest-intensity pixels are used in the mask, otherwise the
+     * @param numberVoxels the number of voxels to be considered (either the highest-intensity
+     *     pixels, or lowest-intensity pixel)
+     * @param highest iff TRUE the highest-intensity voxels are used in the mask, otherwise the
      *     lowest-intensity pixels are used
      * @return
      * @throws OperationFailedException
      */
-    public static double calcMeanNumPixels(
-            Channel chnl, ObjectMask object, int numPixels, boolean highest)
+    public static double calculateMeanNumberVoxels(
+            Channel channel, ObjectMask object, int numberVoxels, boolean highest)
             throws OperationFailedException {
 
-        Histogram histogram = HistogramFactory.create(chnl, object);
+        Histogram histogram = HistogramFactory.create(channel, object);
 
         Histogram hCut =
                 highest
-                        ? histogram.extractPixelsFromRight(numPixels)
-                        : histogram.extractPixelsFromLeft(numPixels);
+                        ? histogram.extractValuesFromRight(numberVoxels)
+                        : histogram.extractValuesFromLeft(numberVoxels);
 
         return hCut.mean();
     }
 
-    public static double calcStatistic(
-            Channel chnl,
+    public static double calculateStatistic(
+            Channel channel,
             ObjectMask object,
             boolean ignoreZero,
             double emptyValue,
             ToDoubleFunction<VoxelStatisticsFromHistogram> funcExtractStatistic) {
-        Histogram hist = HistogramFactory.createHistogramIgnoreZero(chnl, object, ignoreZero);
+        Histogram hist = HistogramFactory.createHistogramIgnoreZero(channel, object, ignoreZero);
 
         if (hist.getTotalCount() == 0) {
             return emptyValue;

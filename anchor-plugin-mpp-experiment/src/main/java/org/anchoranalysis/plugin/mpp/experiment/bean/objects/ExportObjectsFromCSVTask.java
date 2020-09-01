@@ -33,11 +33,11 @@ import java.util.Set;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.color.RGBColor;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -69,6 +69,7 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
+import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVSharedState;
@@ -163,7 +164,7 @@ public class ExportObjectsFromCSVTask
     private FilePathGenerator idGenerator; // Translates an input file name to a unique ID
 
     /** The stack that is the background for our objects */
-    @BeanField @Getter @Setter private StackProvider stackProvider;
+    @BeanField @Getter @Setter private StackProvider stack;
 
     /** Column definition for the CSVfiles */
     @BeanField @Getter @Setter private ColumnDefinition columnDefinition;
@@ -179,7 +180,7 @@ public class ExportObjectsFromCSVTask
 
     @Override
     public FromCSVSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new FromCSVSharedState();
     }
@@ -239,9 +240,9 @@ public class ExportObjectsFromCSVTask
     private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
-        StackProvider stackProviderDup = stackProvider.duplicateBean();
-        stackProviderDup.initRecursive(so, logger);
-        return DisplayStack.create(stackProviderDup.create());
+        StackProvider providerCopy = stack.duplicateBean();
+        providerCopy.initRecursive(so, logger);
+        return DisplayStack.create(providerCopy.create());
     }
 
     private Path idStringForPath(Optional<Path> path, boolean debugMode) throws AnchorIOException {
@@ -318,8 +319,7 @@ public class ExportObjectsFromCSVTask
             ObjectCollectionRTree objects,
             DisplayStack background)
             throws SetOperationFailedException {
-        Outline outlineWriter = new Outline(1);
-        outlineWriter.setForce2D(true);
+        Outline outlineWriter = new Outline(1, false);
 
         IterableCombinedListGenerator<CSVRow> listGenerator =
                 new IterableCombinedListGenerator<>(

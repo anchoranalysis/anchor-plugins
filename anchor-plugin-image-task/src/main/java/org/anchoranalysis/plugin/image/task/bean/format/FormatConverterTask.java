@@ -37,16 +37,16 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.bean.chnl.converter.ConvertChannelTo;
+import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
+import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.channel.ChnlFilter;
-import org.anchoranalysis.image.io.chnl.ChannelGetter;
+import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
+import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.region.chnlconverter.ConversionPolicy;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
@@ -54,8 +54,8 @@ import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.chnl.conversionstyle.ChnlConversionStyle;
-import org.anchoranalysis.plugin.image.task.chnl.convert.ChnlGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.bean.format.convertsyle.ChannelConvertStyle;
+import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts the input-image to the default output format, optionally changing the bit depth
@@ -70,13 +70,13 @@ public class FormatConverterTask extends RasterTask {
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
-    @BeanField @Getter @Setter private ChnlConversionStyle chnlConversionStyle = null;
+    @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = null;
 
     @BeanField @Getter @Setter private boolean suppressSeries = false;
 
-    @BeanField @OptionalBean @Getter @Setter private ChnlFilter chnlFilter = null;
+    @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
-    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo chnlConverter = null;
+    @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
@@ -114,35 +114,35 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChannelsForSeries createChnlCollection(NamedChnlsInput inputObject, int seriesIndex)
-            throws RasterIOException {
+    public NamedChannelsForSeries createChannelCollection(
+            NamedChannelsInput inputObject, int seriesIndex) throws RasterIOException {
         return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
 
     @Override
     public void doStack(
-            NamedChnlsInput inputObjectUntyped,
+            NamedChannelsInput inputObjectUntyped,
             int seriesIndex,
             int numSeries,
             BoundIOContext context)
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries chnlCollection =
-                    createChnlCollection(inputObjectUntyped, seriesIndex);
+            NamedChannelsForSeries channelCollection =
+                    createChannelCollection(inputObjectUntyped, seriesIndex);
 
-            ChannelGetter chnlGetter = maybeAddFilter(chnlCollection, context);
+            ChannelGetter channelGetter = maybeAddFilter(channelCollection, context);
 
-            if (chnlConverter != null) {
-                chnlGetter = maybeAddConverter(chnlGetter);
+            if (channelConverter != null) {
+                channelGetter = maybeAddConverter(channelGetter);
             }
 
             convertEachTimepoint(
                     seriesIndex,
-                    chnlCollection.channelNames(),
+                    channelCollection.channelNames(),
                     numSeries,
-                    chnlCollection.sizeT(ProgressReporterNull.get()),
-                    chnlGetter,
+                    channelCollection.sizeT(ProgressReporterNull.get()),
+                    channelGetter,
                     context.getLogger());
 
         } catch (RasterIOException | CreateException | AnchorIOException e) {
@@ -152,56 +152,58 @@ public class FormatConverterTask extends RasterTask {
 
     private void convertEachTimepoint(
             int seriesIndex,
-            Set<String> chnlNames,
+            Set<String> channelNames,
             int numSeries,
             int sizeT,
-            ChannelGetter chnlGetter,
+            ChannelGetter channelGetter,
             Logger logger)
             throws AnchorIOException {
 
         for (int t = 0; t < sizeT; t++) {
 
-            CalcOutputName calcOutputName =
-                    new CalcOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
+            CalculateOutputName namer =
+                    new CalculateOutputName(seriesIndex, numSeries, t, sizeT, suppressSeries);
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
-            ChnlGetterForTimepoint getterForTimepoint = new ChnlGetterForTimepoint(chnlGetter, t);
+            ChannelGetterForTimepoint getterForTimepoint =
+                    new ChannelGetterForTimepoint(channelGetter, t);
 
-            chnlConversionStyle.convert(
-                    chnlNames,
+            channelConversionStyle.convert(
+                    channelNames,
                     getterForTimepoint,
-                    (name, stack) -> addStackToOutput(name, stack, calcOutputName),
+                    (name, stack) -> addStackToOutput(name, stack, namer),
                     logger);
 
             logger.messageLogger().logFormatted("Ending time-point: %d", t);
         }
     }
 
-    private void addStackToOutput(String name, Stack stack, CalcOutputName calcOutputName) {
-        generatorSeq.add(stack, calcOutputName.calcOutputName(name));
+    private void addStackToOutput(
+            String name, Stack stack, CalculateOutputName calculateOutputName) {
+        generatorSeq.add(stack, calculateOutputName.outputName(name));
     }
 
-    private ChannelGetter maybeAddConverter(ChannelGetter chnlGetter) throws CreateException {
-        if (chnlConverter != null) {
-            return new ConvertingChnlCollection(
-                    chnlGetter,
-                    chnlConverter.createConverter(),
+    private ChannelGetter maybeAddConverter(ChannelGetter channelGetter) throws CreateException {
+        if (channelConverter != null) {
+            return new ConvertingChannels(
+                    channelGetter,
+                    channelConverter.createConverter(),
                     ConversionPolicy.CHANGE_EXISTING_CHANNEL);
         } else {
-            return chnlGetter;
+            return channelGetter;
         }
     }
 
     private ChannelGetter maybeAddFilter(
-            NamedChannelsForSeries chnlCollection, BoundIOContext context) {
+            NamedChannelsForSeries channelCollection, BoundIOContext context) {
 
-        if (chnlFilter != null) {
+        if (channelFilter != null) {
 
-            chnlFilter.init((NamedChannelsForSeries) chnlCollection, context);
-            return chnlFilter;
+            channelFilter.init((NamedChannelsForSeries) channelCollection, context);
+            return channelFilter;
         } else {
-            return chnlCollection;
+            return channelCollection;
         }
     }
 

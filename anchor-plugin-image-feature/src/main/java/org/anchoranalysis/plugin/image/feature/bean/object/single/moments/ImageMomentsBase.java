@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.math.moment.ImageMoments;
@@ -38,9 +38,9 @@ import org.anchoranalysis.math.moment.ImageMoments;
 /**
  * A base class for features that are calculated using image-moments
  *
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
- *
  * <p>If there are too few voxels, then a constant value is returned.
+ * 
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  *
  * @author Owen Feehan
  */
@@ -63,7 +63,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleObject> input)
+    public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         if (input.get().getObject().voxelsOn().lowerCountExistsThan(MIN_NUM_VOXELS)) {
@@ -74,15 +74,15 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
             return valueIfTooFewVoxels;
         }
 
-        return calcFeatureResultFromMoments(calcMoments(input));
+        return calculateFromAllMoments(calculateMoments(input));
     }
 
-    protected abstract double calcFeatureResultFromMoments(ImageMoments moments)
+    protected abstract double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException;
 
     protected abstract String errorMessageIfTooFewPixels() throws FeatureCalculationException;
 
-    private ImageMoments calcMoments(SessionInput<FeatureInputSingleObject> input)
+    private ImageMoments calculateMoments(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
         ImageMoments moments = input.calc(new CalculateSecondMoments(suppressZ));

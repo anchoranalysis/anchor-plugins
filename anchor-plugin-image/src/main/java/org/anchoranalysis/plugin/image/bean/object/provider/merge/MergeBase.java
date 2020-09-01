@@ -35,21 +35,21 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.provider.ImageDimProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.bean.object.match.MatcherIntersectionHelper;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 
 /** A base class for algorithms that merge object-masks */
-public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
+public abstract class MergeBase extends WithContainerBase {
 
     // START BEAN PROPERTIES
     /* Image-resolution */
-    @BeanField @OptionalBean @Getter @Setter private ImageDimProvider dimensions;
+    @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
     @FunctionalInterface
@@ -57,16 +57,16 @@ public abstract class MergeBase extends ObjectCollectionProviderWithContainer {
         ObjectCollection mergeObjects(ObjectCollection objects) throws OperationFailedException;
     }
 
-    protected Optional<ImageResolution> calcResOptional() throws OperationFailedException {
+    protected Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
-            return OptionalFactory.create(dimensions).map(ImageDimensions::resolution);
+            return OptionalFactory.create(dimensions).map(Dimensions::resolution);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    protected ImageResolution calcResRequired() throws OperationFailedException {
-        return calcResOptional()
+    protected Resolution resolutionRequired() throws OperationFailedException {
+        return resolutionOptional()
                 .orElseThrow(
                         () ->
                                 new OperationFailedException(

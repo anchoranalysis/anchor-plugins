@@ -26,27 +26,32 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
-// Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
-//  by the ShellRad
+/**
+ * Estimates the circumference of an ellipse based upon finding the area of the shell, and dividing
+ * // by the ShellRad
+ *
+ * @author Owen Feehan
+ */
 public class MarkEllipseCircumEstimate extends FeatureMarkRegion {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
-        Mark m = input.get().getMark();
+        Mark mark = input.get().getMark();
 
-        if (!(m instanceof MarkEllipse)) {
+        if (!(mark instanceof Ellipse)) {
             throw new FeatureCalculationException("Only MarkEllipses are supported");
         }
 
-        MarkEllipse mark = (MarkEllipse) m;
+        Ellipse markCast = (Ellipse) mark;
 
-        return mark.circumference(getRegionID());
+        return markCast.circumference(getRegionID());
     }
 }

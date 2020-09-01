@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
@@ -79,7 +79,7 @@ public class WriteResolutionXml extends RasterWriter {
         writeResolutionXml(filePath, stackSeries.get(0).dimensions().resolution());
     }
 
-    private void writeResolutionXml(Path filePath, ImageResolution res) throws RasterIOException {
+    private void writeResolutionXml(Path filePath, Resolution res) throws RasterIOException {
         Path pathOut = Paths.get(filePath.toString() + ".xml");
         AnchorMetadataXml.writeResolutionXml(pathOut, res);
     }

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -47,7 +47,7 @@ import org.anchoranalysis.image.voxel.kernel.count.CountKernelNeighborhoodMask;
 public class NumTouchingVoxels extends TouchingVoxels {
 
     @Override
-    protected double calcWithIntersection(
+    protected double calculateWithIntersection(
             ObjectMask object1, ObjectMask object2, BoundingBox boxIntersect)
             throws FeatureCalculationException {
         // As this means of measuring the touching pixels can differ slightly depending on om1->om2
@@ -65,10 +65,10 @@ public class NumTouchingVoxels extends TouchingVoxels {
     private int numTouchingFrom(ObjectMask source, ObjectMask destination, BoundingBox boxIntersect)
             throws OperationFailedException {
         BoundingBox boxIntersectRelative = RelativeUtilities.createRelBBox(boxIntersect, source);
-        return calcNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);
+        return calculateNeighborhoodTouchingPixels(source, destination, boxIntersectRelative);
     }
 
-    private int calcNeighborhoodTouchingPixels(
+    private int calculateNeighborhoodTouchingPixels(
             ObjectMask source, ObjectMask destination, BoundingBox boxIntersectRelative)
             throws OperationFailedException {
 

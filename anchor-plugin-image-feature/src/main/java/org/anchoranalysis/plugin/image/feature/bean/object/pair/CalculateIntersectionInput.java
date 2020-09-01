@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair;
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -54,6 +54,6 @@ class CalculateIntersectionInput
         assert (delegate.get() != null);
 
         return Optional.of(
-                new FeatureInputSingleObject(delegate.get(), input.getNrgStackOptional()));
+                new FeatureInputSingleObject(delegate.get(), input.getEnergyStackOptional()));
     }
 }

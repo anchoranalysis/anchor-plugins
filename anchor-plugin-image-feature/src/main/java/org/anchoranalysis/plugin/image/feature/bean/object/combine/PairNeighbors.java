@@ -42,8 +42,8 @@ import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -53,10 +53,9 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ops.ObjectMaskMerger;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
 import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
 
@@ -91,11 +90,6 @@ import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
  *
  * <p>For <code>First</code> and <code>Second</code>, we use a cache, to avoid repeated
  * calculations.
- *
- * <p>TODO This latter caching-step, could also be avoided in {@link
- * org.anchoranalysis.plugin.image.task.bean.ExportFeaturesTask} due to knowledge of the topology of
- * the repeated features in the resulting output but for now, it's done by putting a cache on each
- * feature.
  *
  * @author Owen Feehan
  */
@@ -160,7 +154,7 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
 
     @Override
     public List<FeatureInputPairObjects> startBatchDeriveInputs(
-            ObjectCollection objects, NRGStackWithParams nrgStack, Logger logger)
+            ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException {
 
         List<FeatureInputPairObjects> out = new ArrayList<>();
@@ -173,14 +167,14 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
                         objects.asList(),
                         Function.identity(),
                         (vector1, vector2, numberVoxels) -> numberVoxels,
-                        nrgStack.getNrgStack().dimensions().extent(),
+                        energyStack.getEnergyStack().extent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
         for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
             out.add(
                     new FeatureInputPairObjects(
-                            edge.getNode1(), edge.getNode2(), Optional.of(nrgStack)));
+                            edge.getNode1(), edge.getNode2(), Optional.of(energyStack)));
         }
 
         return out;
@@ -192,11 +186,10 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public DisplayStack createThumbailFor(FeatureInputPairObjects input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input) throws CreateException {
         // A collection is made with the left-object as first element, and the right-object as the
         // second
-        ObjectCollection objects = ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
-        return getThumbnail().thumbnailFor(objects);
+        return ObjectCollectionFactory.of(input.getFirst(), input.getSecond());
     }
 
     @Override

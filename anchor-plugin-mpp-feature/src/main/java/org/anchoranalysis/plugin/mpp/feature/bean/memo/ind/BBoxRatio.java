@@ -26,31 +26,42 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.MarkConic;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.mpp.mark.conic.ConicBase;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
-        MarkConic markCast = (MarkConic) input.get().getPxlPartMemo().getMark();
+        ConicBase markCast = (ConicBase) input.get().getPxlPartMemo().getMark();
 
-        ImageDimensions dimensions = input.get().dimensionsRequired();
+        int[] extent = markExtent(markCast, input.get().dimensionsRequired());
+        return calculateRatio(extent);
+    }
+
+    /**
+     * The extent of the mark in each dimension, with the z-dimension adjusted for image-resolution
+     */
+    private static int[] markExtent(ConicBase markCast, Dimensions dimensions) {
 
         BoundingBox bb = markCast.box(dimensions, GlobalRegionIdentifiers.SUBMARK_INSIDE);
-
         int[] extent = bb.extent().asOrderedArray();
 
         // Let's change the z-dimension to include the relative-resolution
         extent[2] = (int) (bb.extent().z() * dimensions.resolution().getZRelativeResolution());
+
+        return extent;
+    }
+
+    private static double calculateRatio(int[] extent) {
 
         int len = extent.length;
         assert (len >= 2);

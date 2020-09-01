@@ -26,34 +26,35 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipse;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 public class MaxRatioRadii extends FeatureMark {
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
-        if (!(input.get().getMark() instanceof MarkEllipse)) {
+        if (!(input.get().getMark() instanceof Ellipse)) {
             throw new FeatureCalculationException(
-                    "Mark must be of type " + MarkEllipse.class.getName());
+                    "Mark must be of type " + Ellipse.class.getName());
         }
 
-        MarkEllipse mark = (MarkEllipse) input.get().getMark();
+        Ellipse mark = (Ellipse) input.get().getMark();
 
-        double rad1 = mark.getRadii().x();
-        double rad2 = mark.getRadii().y();
+        double radius1 = mark.getRadii().x();
+        double radius2 = mark.getRadii().y();
 
-        assert (!Double.isNaN(rad1));
-        assert (!Double.isNaN(rad2));
+        assert (!Double.isNaN(radius1));
+        assert (!Double.isNaN(radius2));
 
-        if (rad1 == 0 || rad2 == 0) {
+        if (radius1 == 0 || radius2 == 0) {
             return 0.0;
         }
 
-        return Math.max(rad1 / rad2, rad2 / rad1);
+        return Math.max(radius1 / radius2, radius2 / radius1);
     }
 }

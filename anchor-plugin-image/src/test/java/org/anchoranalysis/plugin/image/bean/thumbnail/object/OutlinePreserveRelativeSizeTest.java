@@ -1,3 +1,28 @@
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import static org.junit.Assert.assertEquals;
@@ -13,15 +38,16 @@ import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.size.SizeXY;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
-import org.anchoranalysis.test.image.NRGStackFixture;
+import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +63,7 @@ public class OutlinePreserveRelativeSizeTest {
             IntersectingCircleObjectsFixture.generateIntersectingObjects(
                     NUMBER_INTERSECTING, NUMBER_NOT_INTERSECTING, false);
 
-    private static final Stack BACKGROUND = NRGStackFixture.create(true, false).asStack();
+    private static final Stack BACKGROUND = EnergyStackFixture.create(true, false).asStack();
 
     @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
 
@@ -51,7 +77,7 @@ public class OutlinePreserveRelativeSizeTest {
                 thumbnails.size(),
                 NUMBER_INTERSECTING + NUMBER_NOT_INTERSECTING);
         for (DisplayStack thumbnail : thumbnails) {
-            assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.dimensions().extent());
+            assertEquals("size of a thumbnail", SIZE.asExtent(), thumbnail.extent());
         }
 
         DualComparer comparer =
@@ -68,12 +94,11 @@ public class OutlinePreserveRelativeSizeTest {
      */
     private List<DisplayStack> createAndWriteThumbnails() throws OperationFailedException {
         OutlinePreserveRelativeSize outline = createOutline();
-        outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
+        ThumbnailBatch<ObjectCollection> batch = outline.start(OBJECTS, boundingBoxes(OBJECTS), Optional.of(BACKGROUND));
 
         try {
-            List<DisplayStack> thumbnails = thumbnailsFor(outline, OBJECTS);
+            List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
             writer.writeList("thumbnails", thumbnails);
-            outline.end();
             return thumbnails;
         } catch (CreateException e) {
             throw new OperationFailedException(e);
@@ -81,9 +106,9 @@ public class OutlinePreserveRelativeSizeTest {
     }
 
     private static List<DisplayStack> thumbnailsFor(
-            OutlinePreserveRelativeSize outline, ObjectCollection objects) throws CreateException {
+            ThumbnailBatch<ObjectCollection> batch, ObjectCollection objects) throws CreateException {
         return objects.stream()
-                .mapToList(object -> outline.thumbnailFor(ObjectCollectionFactory.of(object)));
+                .mapToList(object -> batch.thumbnailFor(ObjectCollectionFactory.of(object)));
     }
 
     private static StreamableCollection<BoundingBox> boundingBoxes(ObjectCollection objects) {

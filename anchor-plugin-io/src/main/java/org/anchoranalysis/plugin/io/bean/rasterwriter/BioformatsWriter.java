@@ -63,18 +63,18 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
     protected void writeRGB(IFormatWriter writer, Stack stack)
             throws FormatException, IOException, RasterIOException {
 
-        Channel chnlRed = stack.getChannel(0);
-        Channel chnlGreen = stack.getChannel(1);
-        Channel chnlBlue = stack.getChannel(2);
+        Channel channelRed = stack.getChannel(0);
+        Channel channelGreen = stack.getChannel(1);
+        Channel channelBlue = stack.getChannel(2);
 
-        int cap = chnlRed.voxels().any().extent().volumeXY();
+        int cap = channelRed.voxels().any().extent().volumeXY();
         int cap3 = cap * 3;
 
         for (int z = 0; z < stack.dimensions().z(); z++) {
 
-            ByteBuffer red = chnlRed.voxels().asByte().sliceBuffer(z);
-            ByteBuffer green = chnlGreen.voxels().asByte().sliceBuffer(z);
-            ByteBuffer blue = chnlBlue.voxels().asByte().sliceBuffer(z);
+            ByteBuffer red = channelRed.voxels().asByte().sliceBuffer(z);
+            ByteBuffer green = channelGreen.voxels().asByte().sliceBuffer(z);
+            ByteBuffer blue = channelBlue.voxels().asByte().sliceBuffer(z);
 
             ByteBuffer merged = ByteBuffer.allocate(cap3);
             merged.put(red);

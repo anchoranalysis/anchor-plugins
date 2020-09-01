@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -52,7 +52,7 @@ public class Range<T extends FeatureInput> extends FeatureDoubleElem<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double val1 = input.calc(getItem1());
         double val2 = input.calc(getItem2());
@@ -67,7 +67,7 @@ public class Range<T extends FeatureInput> extends FeatureDoubleElem<T> {
     }
 
     @Override
-    public String getDscrLong() {
-        return String.format("%s - %s", getItem1().getDscrLong(), getItem2().getDscrLong());
+    public String descriptionLong() {
+        return String.format("%s - %s", getItem1().descriptionLong(), getItem2().descriptionLong());
     }
 }

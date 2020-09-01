@@ -28,23 +28,23 @@ package org.anchoranalysis.test.feature.plugins.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkCircle;
-import org.anchoranalysis.anchor.mpp.mark.conic.RegionMapSingleton;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
+import org.anchoranalysis.mpp.mark.conic.Circle;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CircleObjectFixture {
 
-    private static final ImageDimensions DIMS = new ImageDimensions(800, 600, 1);
+    private static final Dimensions DIMS = new Dimensions(800, 600, 1);
 
     public static ObjectMask circleAt(Point2i center, double radius) {
-        MarkCircle mark = new MarkCircle();
+        Circle mark = new Circle();
         mark.setPos(PointConverter.doubleFromInt(center));
         mark.setRadius(radius);
         return mark.deriveObject(
@@ -56,8 +56,8 @@ public class CircleObjectFixture {
                 .withoutProperties();
     }
 
-    public static NRGStackWithParams nrgStack() {
-        return new NRGStackWithParams(DIMS);
+    public static EnergyStack energyStack() {
+        return new EnergyStack(DIMS);
     }
 
     public static boolean sceneContains(Point2i point) {

@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.anchor.mpp.bean.bound.BoundCalculator;
-import org.anchoranalysis.anchor.mpp.bean.bound.ResolvedBound;
-import org.anchoranalysis.anchor.mpp.bound.BidirectionalBound;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
+import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
+import org.anchoranalysis.mpp.bound.BidirectionalBound;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 
 class OrientationList {
 
@@ -58,7 +58,9 @@ class OrientationList {
 
         BidirectionalBound bib;
         try {
-            bib = boundCalculator.calcBound(mark.centerPoint(), orientation.createRotationMatrix());
+            bib =
+                    boundCalculator.calculateBound(
+                            mark.centerPoint(), orientation.createRotationMatrix());
         } catch (OperationFailedException e) {
             throw new ProposalAbnormalFailureException(e);
         }

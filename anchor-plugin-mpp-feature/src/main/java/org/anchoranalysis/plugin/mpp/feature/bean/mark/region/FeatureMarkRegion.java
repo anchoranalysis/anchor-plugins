@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureMark;
-import org.anchoranalysis.anchor.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureMark;
+import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 
 public abstract class FeatureMarkRegion extends FeatureMark {
 

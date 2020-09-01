@@ -34,6 +34,7 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -46,10 +47,10 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
@@ -57,7 +58,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRero
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 /**
  * Exports a cropped image for each object-mask showing its context within an image
@@ -128,7 +129,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -158,9 +159,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacksSet stacks =
+            NamedStacks stacks =
                     createStacksFromProviders(listStackProvider, paramsInit, logger);
-            NamedStacksSet stacksProjected =
+            NamedStacks stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 
             if (stacks.keys().isEmpty()) {
@@ -168,7 +169,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 return;
             }
 
-            ImageDimensions dimensions = stacks.getArbitraryElement().dimensions();
+            Dimensions dimensions = stacks.getArbitraryElement().dimensions();
 
             outputGeneratorSeq(
                     createGenerator(dimensions, stacks, stacksProjected),
@@ -179,7 +180,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         }
     }
 
-    private static NamedStacksSet createStacksFromProviders(
+    private static NamedStacks createStacksFromProviders(
             List<NamedBean<StackProvider>> stackProviders, ImageInitParams so, Logger logger)
             throws CreateException {
         // Get named image stack collection
@@ -208,7 +209,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
-            ImageDimensions dimensions, NamedStacksSet stacks, NamedStacksSet stacksFlattened)
+            Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
         IterableGenerator<ObjectsWithBoundingBox> generator =

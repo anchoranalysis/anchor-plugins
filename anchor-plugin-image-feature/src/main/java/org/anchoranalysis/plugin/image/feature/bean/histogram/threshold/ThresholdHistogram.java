@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.feature.bean.FeatureHistogram;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
@@ -53,11 +53,11 @@ public class ThresholdHistogram extends FeatureHistogram {
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<FeatureInputHistogram> input)
+    public double calculate(SessionInput<FeatureInputHistogram> input)
             throws FeatureCalculationException {
 
         return input.forChild()
-                .calc(
+                .calculate(
                         item,
                         new CalculateHistogramInput(
                                 new CalculateOtsuThresholdedHistogram(calculateLevel, getLogger()),

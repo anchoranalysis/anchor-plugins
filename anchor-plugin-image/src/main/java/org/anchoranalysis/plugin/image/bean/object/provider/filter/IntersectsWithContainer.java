@@ -32,14 +32,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithContainer;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;
 
 /**
  * Returns only the objects that intersect with at least one object in the container
  *
  * @author feehano
  */
-public class IntersectsWithContainer extends ObjectCollectionProviderWithContainer {
+public class IntersectsWithContainer extends WithContainerBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

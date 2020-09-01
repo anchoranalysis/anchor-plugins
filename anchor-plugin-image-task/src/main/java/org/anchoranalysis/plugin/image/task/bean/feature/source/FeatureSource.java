@@ -74,8 +74,6 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
      *
      * @param input one particular input that will creates one or more "rows" in a feature-table
      * @param context io-context
-     * @param adder
-     * @param rowSource source of rows in the feature-table
      * @throws OperationFailedException
      */
     public abstract void processInput(T input, InputProcessContext<S> context)

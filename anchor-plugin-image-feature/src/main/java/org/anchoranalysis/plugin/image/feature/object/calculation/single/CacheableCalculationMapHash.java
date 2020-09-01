@@ -28,9 +28,7 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.feature.cache.calculation.CacheableCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.CacheableCalculationMap;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -40,7 +38,8 @@ import org.anchoranalysis.feature.input.FeatureInput;
  *     <p>TODO integrate into CacheableCalculationMap
  * @param <E> an exception thrown if something goes wrong during the calculation
  */
-public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, E extends Exception>
+public abstract class CacheableCalculationMapHash<
+                S, T extends FeatureInput, U, E extends Exception> // NOSONAR
         extends CacheableCalculationMap<S, T, U, E> {
 
     /** Caches our results for different Keys */
@@ -59,8 +58,8 @@ public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, 
      * Executes the operation and returns a result, either by doing the calculation, or retrieving a
      * cached-result from previously.
      *
-     * @param If there is no cached-value, and the calculation occurs, these parameters are used.
-     *     Otherwise ignored.
+     * @param input if there is no cached-value, and the calculation occurs, these parameters are
+     *     used. Otherwise ignored..
      * @return the result of the calculation
      * @throws E if the calculation cannot finish, for whatever reason
      */
@@ -91,8 +90,6 @@ public abstract class CacheableCalculationMapHash<S, T extends FeatureInput, U, 
      *
      * @param key
      * @return a cached-result, or NULL if it doesn't exist
-     * @throws FeatureCalculationException
-     * @throws GetOperationFailedException
      */
     protected S getOrNull(U key) {
         return cache.get(key);

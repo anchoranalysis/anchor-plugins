@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.binary.logical.BinaryChnlAnd;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
@@ -41,8 +41,9 @@ import org.anchoranalysis.image.object.ObjectMask;
  * Reduce the size of individual objects (if neccessary, and minimally) to fit within a binary-mask.
  *
  * <p>Note the masking overwrites the current objects in situ, so it is often recommended to a
- * duplicate operation beforehand to preserve the existing objects. <p. This is equivalent to
- * applying a logical AND operation on each voxel @code{binary-mask AND object-mask}.
+ * duplicate operation beforehand to preserve the existing objects.
+ * 
+ * <p>This is equivalent to applying a logical AND operation on each voxel for the binary-mask AND object-mask.
  *
  * @author feehano
  */
@@ -67,7 +68,7 @@ public class AndObjectsWithMasks extends ObjectCollectionProviderUnary {
         // Just the portion of the mask that matches the bounding box of our object
         ObjectMask objectPortion = mask.region(object.boundingBox(), true);
 
-        BinaryChnlAnd.apply(
+        MaskAnd.apply(
                 object.binaryVoxels().voxels(),
                 objectPortion.binaryVoxels().voxels(),
                 object.binaryVoxels().binaryValues().createByte(),

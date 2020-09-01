@@ -29,37 +29,37 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 import java.util.function.LongBinaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OverlapRatioUtilities {
 
-    /** Returns {@link Math::max} or {@link Math::min} depending on a flag */
+    /** Returns {@link Math#max} or {@link Math#min} depending on a flag */
     public static LongBinaryOperator maxOrMin(boolean useMax) {
         return useMax ? Math::max : Math::min;
     }
 
-    public static double calcOverlapRatio(
-            VoxelizedMarkMemo obj1,
-            VoxelizedMarkMemo obj2,
+    public static double overlapRatio(
+            VoxelizedMarkMemo mark1,
+            VoxelizedMarkMemo mark2,
             double overlap,
             int regionID,
-            boolean mip,
+            boolean flattenZ,
             LongBinaryOperator funcAgg) {
 
         if (overlap == 0.0) {
             return 0.0;
         }
 
-        if (mip) {
+        if (flattenZ) {
             return overlap;
         } else {
-            double volume = calcVolumeAgg(obj1, obj2, regionID, funcAgg);
+            double volume = volumeAgg(mark1, mark2, regionID, funcAgg);
             return overlap / volume;
         }
     }
 
-    private static double calcVolumeAgg(
+    private static double volumeAgg(
             VoxelizedMarkMemo obj1,
             VoxelizedMarkMemo obj2,
             int regionID,

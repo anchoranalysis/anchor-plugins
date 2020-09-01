@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -70,7 +70,7 @@ public class RejectIfConditionXYResolution extends RasterReader {
         }
 
         @Override
-        public Optional<ImageResolution> maybeUpdatedResolution(ImageResolution res)
+        public Optional<Resolution> maybeUpdatedResolution(Resolution res)
                 throws RasterIOException {
 
             if (res.x() != res.y()) {
@@ -81,9 +81,9 @@ public class RejectIfConditionXYResolution extends RasterReader {
             if (relation.isRelationToValueTrue(res.x(), value)) {
                 throw new RasterIOException(
                         "XY-resolution fufills condition, and is thus rejected");
+            } else {
+                return Optional.empty();
             }
-
-            return Optional.empty();
         }
     }
 

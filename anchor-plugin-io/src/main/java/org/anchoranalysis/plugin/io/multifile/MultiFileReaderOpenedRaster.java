@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
@@ -77,11 +77,11 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     public int numberChannels() throws RasterIOException {
         MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
 
-        if (!memo.numChnlDefined()) {
-            throw new RasterIOException("Number of chnl is not defined");
+        if (!memo.numChannelDefined()) {
+            throw new RasterIOException("Number of channel is not defined");
         }
 
-        return memo.numChnl();
+        return memo.numChannel();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public ImageDimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
         throw new RasterIOException("MultiFileReader doesn't support this operation");
     }
 
@@ -128,7 +128,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
                 TimeSequence ts = or.open(seriesIndex, progressReporter);
                 multiFile.add(
                         ts.get(0),
-                        fd.getChnlNum(),
+                        fd.getChannelNum(),
                         fd.getSliceNum(),
                         fd.getTimeIndex(),
                         fd.getFilePath());

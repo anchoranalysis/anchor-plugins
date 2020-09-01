@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.bean.init.CheckMisconfigured;
+import org.anchoranalysis.bean.initializable.CheckMisconfigured;
 import org.anchoranalysis.bean.permute.ApplyPermutations;
 import org.anchoranalysis.bean.permute.property.PermuteProperty;
 import org.anchoranalysis.bean.permute.setter.PermutationSetter;
@@ -58,8 +58,8 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
  * whereas multiple permutations can be defined using {@code permutations} list of properties.
  *
  * @author Owen Feehan
- * @param S permutation type
- * @param T feature-input
+ * @param <S> permutation type
+ * @param <T> feature-input
  */
 public class PermuteFeature<S, T extends FeatureInput> extends PermuteFeatureBase<T> {
 

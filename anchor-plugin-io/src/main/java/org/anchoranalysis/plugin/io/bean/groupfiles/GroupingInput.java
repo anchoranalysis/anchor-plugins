@@ -31,17 +31,17 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
-import org.anchoranalysis.image.io.chnl.map.ImgChnlMap;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
+import org.anchoranalysis.image.io.channel.NamedEntries;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.input.series.NamedChnlCollectionForSeriesMap;
+import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
-class GroupingInput extends NamedChnlsInput {
+class GroupingInput extends NamedChannelsInput {
 
     // The opened raster with multiple files
     private OpenedRaster openedRaster = null;
@@ -49,37 +49,37 @@ class GroupingInput extends NamedChnlsInput {
     // A virtual path uniquely representing this particular file
     private Path virtualPath;
 
-    private ImgChnlMapCreator chnlMapCreator;
+    private ChannelMap channelMapCreator;
 
-    private ImgChnlMap chnlMap = null;
+    private NamedEntries channelMap = null;
 
     private String descriptiveName;
 
     // The root object that is used to provide the descriptiveName and pathForBinding
     //
     public GroupingInput(
-            Path virtualPath, MultiFileReaderOpenedRaster mfor, ImgChnlMapCreator chnlMapCreator) {
+            Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap channelMapCreator) {
         super();
         this.virtualPath = virtualPath;
         this.openedRaster = mfor;
-        this.chnlMapCreator = chnlMapCreator;
+        this.channelMapCreator = channelMapCreator;
     }
 
     @Override
-    public int numSeries() throws RasterIOException {
+    public int numberSeries() throws RasterIOException {
         return openedRaster.numberSeries();
     }
 
     @Override
-    public ImageDimensions dim(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensions(int seriesIndex) throws RasterIOException {
         return openedRaster.dimensionsForSeries(seriesIndex);
     }
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
             int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
-        ensureChnlMapExists();
-        return new NamedChnlCollectionForSeriesMap(openedRaster, chnlMap, seriesNum);
+        ensureChannelMapExists();
+        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesNum);
     }
 
     @Override
@@ -93,9 +93,9 @@ class GroupingInput extends NamedChnlsInput {
     }
 
     @Override
-    public int numChnl() throws RasterIOException {
-        ensureChnlMapExists();
-        return chnlMap.keySet().size();
+    public int numberChannels() throws RasterIOException {
+        ensureChannelMapExists();
+        return channelMap.keySet().size();
     }
 
     @Override
@@ -107,11 +107,11 @@ class GroupingInput extends NamedChnlsInput {
         }
     }
 
-    private void ensureChnlMapExists() throws RasterIOException {
+    private void ensureChannelMapExists() throws RasterIOException {
         // Lazy creation
-        if (chnlMap == null) {
+        if (channelMap == null) {
             try {
-                chnlMap = chnlMapCreator.createMap(openedRaster);
+                channelMap = channelMapCreator.createMap(openedRaster);
             } catch (CreateException e) {
                 throw new RasterIOException(e);
             }

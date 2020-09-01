@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.traverser.contiguouspath.PointsListNeighborUtilities;
+import org.anchoranalysis.image.outline.traverser.path.PointsListNeighborUtilities;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;

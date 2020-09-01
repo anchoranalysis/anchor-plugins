@@ -37,10 +37,10 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMultiChangeInput;
@@ -56,31 +56,31 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
 /**
- * Calculates feature or feature values, adding a nrgStack (optionally) from either provider or the
- * input-stack
+ * Calculates feature or feature values, adding a energyStack (optionally) from either provider or
+ * the input-stack
  *
  * @author Owen Feehan
  * @param <T> feature-input-type
  */
-public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
+public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
 
     private final ImageInitParams initParams;
 
-    @Getter private final NRGStackWithParams nrgStack;
+    @Getter private final EnergyStack energyStack;
 
     private final Logger logger;
 
     public FeatureCalculatorFromProvider(
             ProvidesStackInput stackInput,
-            Optional<StackProvider> nrgStackProvider,
+            Optional<StackProvider> stackEnergy,
             BoundIOContext context)
             throws OperationFailedException {
         super();
         this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);
-        this.nrgStack =
-                nrgStackFromProviderOrElse(
-                        nrgStackProvider,
-                        CachedSupplier.cache(() -> allStacksAsOne(initParams.getStackCollection())),
+        this.energyStack =
+                energyStackFromProviderOrElse(
+                        stackEnergy,
+                        CachedSupplier.cache(() -> allStacksAsOne(initParams.stacks())),
                         context.getLogger());
         this.logger = context.getLogger();
     }
@@ -89,7 +89,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
      * Calculates a single-feature that comes from a provider (but can reference the other features
      * from the store)
      *
-     * @throws FeatureCalculationException
+     * @throws OperationFailedException
      */
     public FeatureCalculatorSingle<T> calculatorSingleFromProvider(
             FeatureListProvider<T> provider, String providerName) throws OperationFailedException {
@@ -97,9 +97,9 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
         try {
             Feature<T> feature =
                     ExtractFromProvider.extractFeature(
-                            provider, providerName, initParams.getFeature(), logger);
+                            provider, providerName, initParams.features(), logger);
 
-            return createSingleCalculator(feature, initParams.getFeature().getSharedFeatureSet());
+            return createSingleCalculator(feature, initParams.features().getSharedFeatureSet());
         } catch (InitException | FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -108,19 +108,19 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
     /** Calculates all image-features in the feature-store */
     public FeatureCalculatorMulti<T> calculatorForAll(FeatureList<T> features)
             throws InitException {
-        return createMultiCalculator(features, initParams.getFeature().getSharedFeatureSet());
+        return createMultiCalculator(features, initParams.features().getSharedFeatureSet());
     }
 
-    /** Calculates a NRG-stack from a provider if it's available, or otherwise uses a fallback */
-    private NRGStackWithParams nrgStackFromProviderOrElse(
-            Optional<StackProvider> nrgStackProvider,
+    /** Calculates a energy-stack from a provider if it's available, or otherwise uses a fallback */
+    private EnergyStack energyStackFromProviderOrElse(
+            Optional<StackProvider> stackEnergy,
             CachedSupplier<Stack, OperationFailedException> fallback,
             Logger logger)
             throws OperationFailedException {
-        if (nrgStackProvider.isPresent()) {
-            return ExtractFromProvider.extractStack(nrgStackProvider.get(), initParams, logger);
+        if (stackEnergy.isPresent()) {
+            return ExtractFromProvider.extractStack(stackEnergy.get(), initParams, logger);
         } else {
-            return new NRGStackWithParams(fallback.get());
+            return new EnergyStack(fallback.get());
         }
     }
 
@@ -128,14 +128,14 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputNRG> {
             FeatureList<T> features, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorMultiChangeInput<>(
                 FeatureSession.with(features, new FeatureInitParams(), sharedFeatures, logger),
-                input -> input.setNrgStack(nrgStack));
+                input -> input.setEnergyStack(energyStack));
     }
 
     private FeatureCalculatorSingle<T> createSingleCalculator(
             Feature<T> feature, SharedFeatureMulti sharedFeatures) throws InitException {
         return new FeatureCalculatorSingleChangeInput<>(
                 FeatureSession.with(feature, new FeatureInitParams(), sharedFeatures, logger),
-                input -> input.setNrgStack(nrgStack));
+                input -> input.setEnergyStack(energyStack));
     }
 
     /**

@@ -36,14 +36,14 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.stack.NamedStacksSet;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
-import org.anchoranalysis.plugin.image.task.grouped.NamedChnl;
+import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
  * Calculates feature on a 'grouped' set of images
@@ -71,28 +71,28 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
 
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(
-            ConsistentChannelChecker chnlChecker) {
-        return new GroupedHistogramMap(createWriter(), (int) chnlChecker.getMaxValue());
+            ConsistentChannelChecker channelChecker) {
+        return new GroupedHistogramMap(createWriter(), (int) channelChecker.getMaxValue());
     }
 
     @Override
     protected void processKeys(
-            NamedStacksSet store,
+            NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<Histogram, Histogram> sharedState,
             BoundIOContext context)
             throws JobExecutionException {
 
         ChannelSource source =
-                new ChannelSource(store, sharedState.getChnlChecker(), Optional.empty());
+                new ChannelSource(store, sharedState.getChannelChecker(), Optional.empty());
 
         HistogramExtracter histogramExtracter = new HistogramExtracter(source, keyMask, maskValue);
 
         try {
-            for (NamedChnl chnl : getSelectChnls().selectChnls(source, true)) {
+            for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
 
-                addHistogramFromChnl(
-                        chnl, histogramExtracter, groupName, sharedState.getGroupMap(), context);
+                addHistogramFromChannel(
+                        channel, histogramExtracter, groupName, sharedState.getGroupMap(), context);
             }
 
         } catch (OperationFailedException e) {
@@ -100,22 +100,22 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
         }
     }
 
-    private void addHistogramFromChnl(
-            NamedChnl chnl,
+    private void addHistogramFromChannel(
+            NamedChannel channel,
             HistogramExtracter histogramExtracter,
             Optional<String> groupName,
             GroupMapByName<Histogram, Histogram> groupMap,
             BoundIOContext context)
             throws JobExecutionException {
 
-        Histogram hist = histogramExtracter.extractFrom(chnl.getChnl());
+        Histogram hist = histogramExtracter.extractFrom(channel.getChannel());
 
         if (writeImageHistograms) {
             // We keep histogram as private member variable so it is thread-safe
-            createWriter().writeHistogramToFile(hist, chnl.getName(), context);
+            createWriter().writeHistogramToFile(hist, channel.getName(), context);
         }
 
-        groupMap.add(groupName, chnl.getName(), hist);
+        groupMap.add(groupName, channel.getName(), hist);
     }
 
     private GroupedHistogramWriter createWriter() {

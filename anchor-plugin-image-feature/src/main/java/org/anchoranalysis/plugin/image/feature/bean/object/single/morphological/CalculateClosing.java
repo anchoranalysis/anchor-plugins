@@ -31,15 +31,15 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculationMap;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilationMap;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -67,7 +67,7 @@ class CalculateClosing extends FeatureCalculation<ObjectMask, FeatureInputSingle
 
             return MorphologicalErosion.createErodedObject(
                     dilated,
-                    params.dimensionsOptional().map(ImageDimensions::extent),
+                    params.dimensionsOptional().map(Dimensions::extent),
                     do3D,
                     iterations,
                     false,

@@ -32,17 +32,17 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -50,19 +50,19 @@ import org.anchoranalysis.math.rotation.RotationMatrix;
 public class FindPointOnOutlineWalk extends FindPointOnOutline {
 
     // START BEANS
-    @BeanField @Getter @Setter private MaskProvider binaryChnl;
+    @BeanField @Getter @Setter private Provider<Mask> mask;
 
     @BeanField @OptionalBean @Getter @Setter private UnitValueDistance maxDistance;
     // END BEANS
 
-    private Mask mask;
-    private Channel chnl;
+    private Mask maskCreated;
+    private Channel channel;
 
     @Override
     public Optional<Point3i> pointOnOutline(Point3d centerPoint, Orientation orientation)
             throws OperationFailedException { // NOSONAR
 
-        createBinaryImageIfNecessary();
+        createMaskIfNecessary();
 
         RotationMatrix rotationMatrix = orientation.createRotationMatrix();
 
@@ -71,10 +71,22 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         return pointOnOutline(centerPoint, marginalStepFrom(rotationMatrix, is3D), is3D);
     }
 
+    private void createMaskIfNecessary() throws OperationFailedException {
+        // The first time, we establish the binaryImage
+        if (maskCreated == null) {
+            try {
+                maskCreated = mask.create();
+                channel = maskCreated.channel();
+            } catch (CreateException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+    }
+
     private Optional<Point3i> pointOnOutline( // NOSONAR
             Point3d centerPoint, Point3d step, boolean useZ) throws OperationFailedException {
 
-        BinaryValuesByte bvb = mask.binaryValues().createByte();
+        BinaryValuesByte bvb = maskCreated.binaryValues().createByte();
 
         Point3d pointDouble = new Point3d(centerPoint);
         while (true) {
@@ -87,7 +99,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
                 return Optional.empty();
             }
 
-            ImageDimensions dimensions = mask.dimensions();
+            Dimensions dimensions = maskCreated.dimensions();
             if (!dimensions.contains(point)) {
                 return Optional.empty();
             }
@@ -137,27 +149,14 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         }
     }
 
-    private boolean pointIsOutlineVal(
-            Point3i point, ImageDimensions dimensions, BinaryValuesByte bvb) {
+    private boolean pointIsOutlineVal(Point3i point, Dimensions dimensions, BinaryValuesByte bvb) {
 
         if (!dimensions.contains(point)) {
             return false;
         }
 
-        ByteBuffer buffer = chnl.voxels().asByte().sliceBuffer(point.z());
+        ByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
-    }
-
-    private void createBinaryImageIfNecessary() throws OperationFailedException {
-        // The first time, we establish the binaryImage
-        if (mask == null) {
-            try {
-                mask = binaryChnl.create();
-                chnl = mask.channel();
-            } catch (CreateException e) {
-                throw new OperationFailedException(e);
-            }
-        }
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {
@@ -172,10 +171,15 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         // We do check
         if (maxDistance != null) {
             double distance =
-                    mask.dimensions().resolution().distanceZRelative(centerPoint, pointDouble);
+                    maskCreated
+                            .dimensions()
+                            .resolution()
+                            .distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(mask.dimensions().resolution()), centerPoint, pointDouble);
+                            Optional.of(maskCreated.dimensions().resolution()),
+                            centerPoint,
+                            pointDouble);
             return distance > maxDistanceResolved;
         } else {
             return false;

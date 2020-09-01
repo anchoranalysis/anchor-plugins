@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 
 /**
@@ -47,7 +47,7 @@ public class PrincipalAxisOrientation extends SpecificAxisBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
+    protected double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException {
         try {
             int axisIndex =

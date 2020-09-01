@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -83,12 +83,7 @@ public abstract class CalculateIncrementalOperationMap
         }
     }
 
-    /**
-     * Lowest existing key. 0 if no key exists.
-     *
-     * @param max
-     * @return
-     */
+    /** Lowest existing key. 0 if no key exists. */
     private int findHighestExistingKey(int max) {
         for (int i = max; i >= 1; i--) {
             if (this.hasKey(i)) {

@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.test.ProviderFixture;
+import org.anchoranalysis.plugin.image.provider.ProviderFixture;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Test;
@@ -105,7 +105,7 @@ public class MergeToIncreaseObjectFeatureTest {
 
         provider.setObjects(ProviderFixture.providerFor(objects));
         provider.setFeatureEvaluator(
-                FeatureEvaluatorFixture.createNrg(
+                FeatureEvaluatorFixture.createEnergy(
                         MockFeatureWithCalculationFixture.createMockFeatureWithCalculation(
                                 calculationFunction),
                         logger,

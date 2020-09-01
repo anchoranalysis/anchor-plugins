@@ -1,0 +1,110 @@
+/*-
+ * #%L
+ * anchor-plugin-image
+ * %%
+ * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
+package org.anchoranalysis.plugin.image.bean.dimensions.provider;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.AllowEmpty;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.ChannelProvider;
+import org.anchoranalysis.image.bean.provider.DimensionsProvider;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.stack.Stack;
+
+/**
+ * Creates image-dimensions by referencing them from a ChannelProvider
+ *
+ * <p>One of either channelProvider or id must be set, but not both
+ *
+ * <p>id will look for a Channel or a Stack in that order
+ */
+public class FromChannel extends DimensionsProvider {
+
+    // START BEAN PROPERTIES
+    @BeanField @AllowEmpty @Getter @Setter private String id = "";
+
+    @BeanField @OptionalBean @Getter @Setter private ChannelProvider channel;
+    // END BEAN PROPERTIES
+
+    @Override
+    public void onInit(ImageInitParams so) throws InitException {
+        super.onInit(so);
+        if (id.isEmpty() && channel == null) {
+            throw new InitException("One of either channelProvider or id must be set");
+        }
+        if (!id.isEmpty() && channel != null) {
+            throw new InitException("Only one -not both- of channelProvider and id should be set");
+        }
+    }
+
+    @Override
+    public Dimensions create() throws CreateException {
+        return selectChannel().dimensions();
+    }
+
+    private Channel selectChannel() throws CreateException {
+
+        if (!id.isEmpty()) {
+            return selectChannelForId(id);
+        }
+
+        return channel.create();
+    }
+
+    private Channel selectChannelForId(String id) throws CreateException {
+
+        try {
+            return OptionalUtilities.orFlat(
+                            getInitializationParameters().channels().getOptional(id),
+                            getInitializationParameters()
+                                    .stacks()
+                                    .getOptional(id)
+                                    .map(FromChannel::firstChannel))
+                    .orElseThrow(
+                            () ->
+                                    new CreateException(
+                                            String.format(
+                                                    "Failed to find either a channel or stack with id `%s`",
+                                                    id)));
+
+        } catch (NamedProviderGetException e) {
+            throw new CreateException(
+                    String.format("A error occurred while retrieving channel `%s`", id), e);
+        }
+    }
+
+    private static Channel firstChannel(Stack stack) {
+        return stack.getChannel(0);
+    }
+}

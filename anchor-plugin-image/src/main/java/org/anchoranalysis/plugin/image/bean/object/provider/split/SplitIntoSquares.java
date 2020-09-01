@@ -38,8 +38,8 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /**
@@ -95,7 +95,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     private ObjectMask extractFromObject(ObjectMask objectToSplit, BoundingBox box) {
 
         // Voxels for the new square
-        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extracter().region(box, false);
+        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extract().region(box, false);
 
         return new ObjectMask(
                 box.shiftBy(objectToSplit.boundingBox().cornerMin()),

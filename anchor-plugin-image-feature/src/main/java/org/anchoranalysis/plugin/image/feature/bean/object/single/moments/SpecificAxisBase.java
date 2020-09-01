@@ -29,14 +29,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.EigenvalueAndVector;
 import org.anchoranalysis.math.moment.ImageMoments;
 
 /**
- * A feature based one one-specific principal-axis as identified by Image Moments.
- *
- * <p>See <a href="Image moment">Image Moment on Wikipedia</a>
+ * A feature based one one-specific principal-axis as identified by image moments.
  *
  * <p>Principal axes are ordered by eigen-value, with 0 being the largest, 1 being the
  * second-largest etc..
@@ -54,12 +52,12 @@ public abstract class SpecificAxisBase extends ImageMomentsBase {
     // END BEAN PROPERTIES
 
     @Override
-    protected double calcFeatureResultFromMoments(ImageMoments moments)
+    protected double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException {
-        return calcFeatureResultFromSpecificMoment(moments.get(index));
+        return calculateFromSpecificMoment(moments.get(index));
     }
 
     /** Calculates the result for the specific moment identified by index */
-    protected abstract double calcFeatureResultFromSpecificMoment(EigenvalueAndVector moment)
+    protected abstract double calculateFromSpecificMoment(EigenvalueAndVector moment)
             throws FeatureCalculationException;
 }

@@ -30,14 +30,14 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculation.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculation.ResolvedCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morph.MorphologicalErosion;
+import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
@@ -73,7 +73,7 @@ public class CalculateShellObjectMask
     protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.dimensionsRequired();
+        Dimensions dimensions = input.dimensionsRequired();
 
         ObjectMask shell = createShellObject(input);
 
@@ -132,8 +132,6 @@ public class CalculateShellObjectMask
     /**
      * Assigns off pixels to an object-mask based on another object-mask specified in
      * global-cordinates
-     *
-     * @param
      */
     private static void assignOffTo(ObjectMask toAssignTo, ObjectMask objectMask) {
         toAssignTo.assignOff().toObject(objectMask);

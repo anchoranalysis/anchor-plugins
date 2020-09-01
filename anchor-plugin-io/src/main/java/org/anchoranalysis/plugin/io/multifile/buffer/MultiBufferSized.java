@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.multifile.buffer;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -35,19 +35,19 @@ import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 
 public class MultiBufferSized {
 
-    private ImageDimensions dimensions;
+    private Dimensions dimensions;
     private int sizeT;
     private MultiBuffer buffers;
 
     public MultiBufferSized(Stack stack, SizeExtents size) {
         buffers = new MultiBuffer(stack, size);
-        dimensions = new ImageDimensions(size.toExtent(), stack.dimensions().resolution());
+        dimensions = new Dimensions(size.toExtent(), stack.dimensions().resolution());
         sizeT = size.getRangeT().getSize();
     }
 
     public void populateFrom(
             Stack stackForFile,
-            Optional<Integer> chnlNum,
+            Optional<Integer> channelNum,
             Optional<Integer> sliceNum,
             Optional<Integer> timeIndex) {
 
@@ -55,8 +55,8 @@ public class MultiBufferSized {
         int time = timeIndex.orElse(0);
 
         // If we specify a channel, then we only care about slices
-        if (chnlNum.isPresent()) {
-            buffers.populateWithSpecifiedChnl(stackForFile, chnlNum.get(), sliceNum, time);
+        if (channelNum.isPresent()) {
+            buffers.populateWithSpecifiedChannel(stackForFile, channelNum.get(), sliceNum, time);
         } else {
 
             if (sliceNum.isPresent()) {

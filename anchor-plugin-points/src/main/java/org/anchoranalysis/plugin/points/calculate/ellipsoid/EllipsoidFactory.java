@@ -26,21 +26,21 @@
 
 package org.anchoranalysis.plugin.points.calculate.ellipsoid;
 
-import ch.ethz.biol.cell.mpp.mark.pointsfitter.LinearLeastSquaresEllipsoidFitter;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.anchor.mpp.bean.points.fitter.PointsFitterException;
-import org.anchoranalysis.anchor.mpp.mark.conic.MarkEllipsoid;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.plugin.points.bean.fitter.LinearLeastSquaresEllipsoidFitter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EllipsoidFactory {
@@ -57,11 +57,8 @@ public class EllipsoidFactory {
      * @return
      * @throws CreateException
      */
-    public static MarkEllipsoid createMarkEllipsoidLeastSquares(
-            ObjectMask object,
-            ImageDimensions dimensions,
-            boolean suppressZCovariance,
-            double shellRad)
+    public static Ellipsoid createMarkEllipsoidLeastSquares(
+            ObjectMask object, Dimensions dimensions, boolean suppressZCovariance, double shellRad)
             throws CreateException {
         return createMarkEllipsoidLeastSquares(
                 () -> PointsFromObject.listFromOutline3i(object),
@@ -70,9 +67,9 @@ public class EllipsoidFactory {
                 shellRad);
     }
 
-    public static MarkEllipsoid createMarkEllipsoidLeastSquares(
+    public static Ellipsoid createMarkEllipsoidLeastSquares(
             CheckedSupplier<List<Point3i>, CreateException> opPoints,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean suppressZCovariance,
             double shellRad)
             throws CreateException {
@@ -82,7 +79,7 @@ public class EllipsoidFactory {
         pointsFitter.setSuppressZCovariance(suppressZCovariance);
 
         // Now get all the points on the outline
-        MarkEllipsoid mark = new MarkEllipsoid();
+        Ellipsoid mark = new Ellipsoid();
 
         List<Point3f> pointsFloat =
                 FunctionalList.mapToList(opPoints.get(), PointConverter::floatFromInt);

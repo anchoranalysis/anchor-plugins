@@ -34,20 +34,20 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculate a feature, treating a mask as a single-object on the nrg-stack
+ * Calculate a feature, treating a mask as a single-object on the energy-stack
  *
  * @author Owen Feehan
  */
-public class MaskAsSingleObject<T extends FeatureInputNRG>
+public class MaskAsSingleObject<T extends FeatureInputEnergy>
         extends FeatureSingleObjectFromShared<T> {
 
     // START BEAN PROPERTIES
@@ -69,9 +69,10 @@ public class MaskAsSingleObject<T extends FeatureInputNRG>
 
     @Override
     protected double calc(
-            CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild,
+            Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException {
-        return calcForChild.calc(
+        return calculateForChild.calculate(
                 featureForSingleObject,
                 new CalculateMaskInput<>(createdMask),
                 new ChildCacheName(MaskAsSingleObject.class, createdMask.hashCode()));

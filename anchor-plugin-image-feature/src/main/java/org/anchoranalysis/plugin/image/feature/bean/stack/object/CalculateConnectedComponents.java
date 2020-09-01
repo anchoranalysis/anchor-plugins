@@ -28,25 +28,25 @@ package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 class CalculateConnectedComponents extends FeatureCalculation<ObjectCollection, FeatureInputStack> {
 
-    private final int nrgChnlIndex;
+    private final int energyChannelIndex;
 
     @Override
     protected ObjectCollection execute(FeatureInputStack input) throws FeatureCalculationException {
 
-        Mask mask = new Mask(input.getNrgStackRequired().getChannel(nrgChnlIndex));
+        Mask mask = new Mask(input.getEnergyStackRequired().getChannel(energyChannelIndex));
 
-        CreateFromConnectedComponentsFactory creator = new CreateFromConnectedComponentsFactory();
+        ObjectsFromConnectedComponentsFactory creator = new ObjectsFromConnectedComponentsFactory();
         return creator.createConnectedComponents(mask);
     }
 }

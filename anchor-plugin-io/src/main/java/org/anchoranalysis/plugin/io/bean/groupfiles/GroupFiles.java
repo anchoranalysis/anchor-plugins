@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.io.bean.channel.map.ImgChnlMapCreator;
+import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.input.NamedChnlsInput;
+import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -73,7 +73,7 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
  *
  * @author Owen Feehan
  */
-public class GroupFiles extends InputManager<NamedChnlsInput> {
+public class GroupFiles extends InputManager<NamedChannelsInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Files fileInput;
@@ -84,7 +84,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
 
     @BeanField @Getter @Setter private boolean requireAllFilesMatch = false;
 
-    @BeanField @Getter @Setter private ImgChnlMapCreator imgChnlMapCreator;
+    @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
     @BeanField @Getter @Setter
     private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
@@ -97,7 +97,8 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChnlsInput> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInput> inputObjects(InputManagerParams params)
+            throws AnchorIOException {
 
         GroupFilesMap map = new GroupFilesMap();
 
@@ -114,7 +115,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
                 FileDetails fd =
                         new FileDetails(
                                 Paths.get(path),
-                                filePathParser.getChnlNum(),
+                                filePathParser.getChannelNum(),
                                 filePathParser.getZSliceNum(),
                                 filePathParser.getTimeIndex());
                 map.add(filePathParser.getKey(), fd);
@@ -128,7 +129,7 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
         return listFromMap(map, params.getLogger());
     }
 
-    private List<NamedChnlsInput> listFromMap(GroupFilesMap map, Logger logger)
+    private List<NamedChannelsInput> listFromMap(GroupFilesMap map, Logger logger)
             throws AnchorIOException {
 
         List<File> files = new ArrayList<>();
@@ -153,16 +154,16 @@ public class GroupFiles extends InputManager<NamedChnlsInput> {
                 openedRasters);
     }
 
-    private List<NamedChnlsInput> zipIntoGrouping(
+    private List<NamedChannelsInput> zipIntoGrouping(
             List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
 
         Iterator<DescriptiveFile> it1 = df.iterator();
         Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
 
-        List<NamedChnlsInput> result = new ArrayList<>();
+        List<NamedChannelsInput> result = new ArrayList<>();
         while (it1.hasNext() && it2.hasNext()) {
             DescriptiveFile d = it1.next();
-            result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChnlMapCreator));
+            result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChannelMapCreator));
         }
         return result;
     }

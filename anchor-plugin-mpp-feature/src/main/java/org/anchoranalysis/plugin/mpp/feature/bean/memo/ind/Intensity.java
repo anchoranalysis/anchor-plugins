@@ -28,16 +28,16 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.mark.MarkRegion;
-import org.anchoranalysis.anchor.mpp.feature.bean.nrg.elem.FeatureSingleMemo;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
+import org.anchoranalysis.mpp.bean.mark.MarkRegion;
+import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
 public class Intensity extends FeatureSingleMemo {
 
@@ -52,16 +52,19 @@ public class Intensity extends FeatureSingleMemo {
     // END BEAN
 
     @Override
-    public double calc(SessionInput<FeatureInputSingleMemo> input)
+    public double calculate(SessionInput<FeatureInputSingleMemo> input)
             throws FeatureCalculationException {
 
         return input.forChild()
-                .calc(item, new CalculateHistogramInputFromMemo(region, excludeZero), cacheName());
+                .calculate(
+                        item,
+                        new CalculateHistogramInputFromMemo(region, excludeZero),
+                        cacheName());
     }
 
     @Override
-    public String getParamDscr() {
-        return region.getBeanDscr();
+    public String describeParams() {
+        return region.describeBean();
     }
 
     private ChildCacheName cacheName() {

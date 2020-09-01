@@ -29,17 +29,17 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.region;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.ImageDimensions;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
@@ -51,9 +51,10 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     // END BEAN PARAMETERS
 
     @Override
-    public double calc(SessionInput<FeatureInputMark> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<FeatureInputMark> input)
+            throws FeatureCalculationException {
 
-        ImageDimensions dimensions = input.get().getDimensionsRequired();
+        Dimensions dimensions = input.get().getDimensionsRequired();
 
         BoundingBox box = input.get().getMark().box(dimensions, getRegionID());
 
@@ -68,12 +69,11 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
     }
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format("%s", axis);
     }
 
-    private double resolveDistance(
-            BoundingBox box, Optional<ImageResolution> res, AxisType axisType)
+    private double resolveDistance(BoundingBox box, Optional<Resolution> res, AxisType axisType)
             throws FeatureCalculationException {
         try {
             return unit.resolveDistance(

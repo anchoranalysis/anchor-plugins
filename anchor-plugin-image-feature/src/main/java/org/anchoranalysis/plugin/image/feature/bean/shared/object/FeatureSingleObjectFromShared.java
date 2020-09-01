@@ -32,23 +32,24 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculation.CalcForChild;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.input.FeatureInputNRG;
+import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.feature.bean.FeatureNRGStack;
+import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Calculates as object-masks from entities in shared, using the feature-input only for a nrg-stack.
+ * Calculates as object-masks from entities in shared, using the feature-input only for a
+ * energy-stack.
  *
  * @author Owen Feehan
  * @param <T> feature-input
  */
-public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
-        extends FeatureNRGStack<T> {
+public abstract class FeatureSingleObjectFromShared<T extends FeatureInputEnergy>
+        extends FeatureEnergy<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Feature<FeatureInputSingleObject> item;
@@ -64,16 +65,17 @@ public abstract class FeatureSingleObjectFromShared<T extends FeatureInputNRG>
             throws InitException;
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
         return calc(input.forChild(), item);
     }
 
     protected abstract double calc(
-            CalcForChild<T> calcForChild, Feature<FeatureInputSingleObject> featureForSingleObject)
+            CalculateForChild<T> calculateForChild,
+            Feature<FeatureInputSingleObject> featureForSingleObject)
             throws FeatureCalculationException;
 
     @Override
     public Class<? extends FeatureInput> inputType() {
-        return FeatureInputNRG.class;
+        return FeatureInputEnergy.class;
     }
 }

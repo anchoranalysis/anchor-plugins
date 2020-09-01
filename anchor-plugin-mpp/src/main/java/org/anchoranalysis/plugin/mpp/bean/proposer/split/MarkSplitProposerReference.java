@@ -29,17 +29,17 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.split;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.cfg.CfgGen;
-import org.anchoranalysis.anchor.mpp.bean.init.MPPInitParams;
-import org.anchoranalysis.anchor.mpp.bean.proposer.MarkSplitProposer;
-import org.anchoranalysis.anchor.mpp.mark.Mark;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.anchor.mpp.pair.PairPxlMarkMemo;
-import org.anchoranalysis.anchor.mpp.proposer.ProposalAbnormalFailureException;
-import org.anchoranalysis.anchor.mpp.proposer.ProposerContext;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.mpp.bean.init.MPPInitParams;
+import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
+import org.anchoranalysis.mpp.bean.proposer.MarkSplitProposer;
+import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
+import org.anchoranalysis.mpp.pair.PairPxlMarkMemo;
+import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
+import org.anchoranalysis.mpp.proposer.ProposerContext;
 
 public class MarkSplitProposerReference extends MarkSplitProposer {
 
@@ -66,8 +66,8 @@ public class MarkSplitProposerReference extends MarkSplitProposer {
 
     @Override
     public Optional<PairPxlMarkMemo> propose(
-            VoxelizedMarkMemo mark, ProposerContext context, CfgGen cfgGen)
+            VoxelizedMarkMemo mark, ProposerContext context, MarkWithIdentifierFactory markFactory)
             throws ProposalAbnormalFailureException {
-        return delegate.propose(mark, context, cfgGen);
+        return delegate.propose(mark, context, markFactory);
     }
 }

@@ -35,7 +35,7 @@ import org.anchoranalysis.image.bean.object.ObjectMatcher;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 
 public class Match extends ObjectCollectionProviderUnary {
 

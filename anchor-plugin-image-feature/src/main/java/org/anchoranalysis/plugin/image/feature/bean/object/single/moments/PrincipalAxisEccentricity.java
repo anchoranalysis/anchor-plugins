@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.moments;
 
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.math.moment.ImageMoments;
 
 /**
@@ -40,14 +40,14 @@ import org.anchoranalysis.math.moment.ImageMoments;
  * eigenvalue2</code> is second-highest etc..
  *
  * <p>See <a href="https://en.wikipedia.org/wiki/Image_moment">Image moment on Wikipedia</a> for the
- * precise calculation.</a>
+ * precise calculation.
  *
  * @author Owen Feehan
  */
 public class PrincipalAxisEccentricity extends ImageMomentsBase {
 
     @Override
-    protected double calcFeatureResultFromMoments(ImageMoments moments)
+    protected double calculateFromAllMoments(ImageMoments moments)
             throws FeatureCalculationException {
 
         moments.removeClosestToUnitZ();
@@ -63,12 +63,12 @@ public class PrincipalAxisEccentricity extends ImageMomentsBase {
             throw new FeatureCalculationException("All moments are 0");
         }
 
-        double eccentricity = calcEccentricity(moments1, moments0);
+        double eccentricity = calculateEccentricity(moments1, moments0);
         assert (!Double.isNaN(eccentricity));
         return eccentricity;
     }
 
-    public static double calcEccentricity(double eigenvalSmaller, double eigenvalLarger) {
+    public static double calculateEccentricity(double eigenvalSmaller, double eigenvalLarger) {
         return Math.sqrt(1.0 - eigenvalSmaller / eigenvalLarger);
     }
 

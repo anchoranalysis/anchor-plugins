@@ -34,7 +34,7 @@ import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**
@@ -57,7 +57,7 @@ public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleEle
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         double featureConditionResult = input.calc(featureCondition);
         RelationToValue relation = threshold.relation();

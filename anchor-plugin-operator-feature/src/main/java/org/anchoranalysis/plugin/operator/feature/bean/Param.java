@@ -36,16 +36,12 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.calc.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 
 /**
  * Extracts a key-value-param as a double
- *
- * <p>This differs from {@link
- * org.anchoranalysis.plugin.image.feature.bean.stack.ParamFromCollection} which reads the parameter
- * from a collection in the shared-objects, rather than from the nrg-stack.
  *
  * <p>Note the key has an optional prefix and suffix, so that the actual key used is <code>
  * ${keyPrefix}${key}${keySuffix}</code>
@@ -83,7 +79,7 @@ public class Param<T extends FeatureInputParams> extends FeatureOperator<T> {
     }
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         KeyValueParams kvp = input.get().getParamsRequired();
 

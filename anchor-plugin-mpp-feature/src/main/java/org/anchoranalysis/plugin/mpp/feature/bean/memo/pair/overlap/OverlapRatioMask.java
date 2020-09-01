@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.overlap;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.feature.input.memo.FeatureInputPairMemo;
-import org.anchoranalysis.anchor.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.EqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 
 public class OverlapRatioMask extends OverlapMaskBase {
 
@@ -45,18 +45,18 @@ public class OverlapRatioMask extends OverlapMaskBase {
     private RelationBean relationToThreshold = new EqualToBean();
 
     @Override
-    public double calc(SessionInput<FeatureInputPairMemo> input)
+    public double calculate(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
         double overlap = overlapWithGlobalMask(input);
 
-        return calcOverlapRatioToggle(
+        return overlapRatioToggle(
                 inputSessionless.getObj1(), inputSessionless.getObj2(), overlap, getRegionID());
     }
 
-    private double calcOverlapRatioToggle(
+    private double overlapRatioToggle(
             VoxelizedMarkMemo obj1, VoxelizedMarkMemo obj2, double overlap, int regionID) {
 
         if (overlap == 0.0) {
@@ -64,7 +64,7 @@ public class OverlapRatioMask extends OverlapMaskBase {
         }
 
         double volume =
-                calcVolumeAgg(
+                volumeAgg(
                         obj1,
                         obj2,
                         regionID,

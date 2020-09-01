@@ -22,11 +22,11 @@
 
         <module>anchor-plugin-image</module>
         <module>anchor-plugin-image-feature</module>
-        <module>anchor-plugin-ij</module>
+        <module>anchor-plugin-imagej</module>
         <module>anchor-plugin-mpp</module>
         <module>anchor-plugin-mpp-experiment</module>
         <module>anchor-plugin-mpp-feature</module>
-	   <module>anchor-plugin-mpp-sgmn</module>
+	   <module>anchor-plugin-mpp-segment</module>
         <module>anchor-plugin-points</module>
         <module>anchor-plugin-io</module>
         <module>anchor-plugin-image-task</module>
@@ -73,14 +73,6 @@
 	
 	
     <build>
-		
-        <pluginManagement>
-            <plugins>
-           
-
-								
-            </plugins>
-        </pluginManagement>
 	
 				
 		<!-- Adds license information in each jar -->
@@ -115,21 +107,11 @@
 		</resources>	
     </build>
 	
-    <dependencies>
-        <dependency>
-		  <groupId>junit</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>${junit.version}</version>
-		  <scope>test</scope>
-	      <optional>true</optional>
-		</dependency>
-	
-		<dependency>
+	<dependencies>
+			<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
-			<scope>provided</scope>
-		</dependency>		
-    </dependencies>
+		</dependency>
+	</dependencies>
 	
 </project>

@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 
 // Wrap with a nicer toString() representation
 @AllArgsConstructor
 @EqualsAndHashCode
 class WrappedImageDim implements Comparable<WrappedImageDim> {
 
-    private final ImageDimensions dimensions;
+    private final Dimensions dimensions;
 
     @Override
     public String toString() {

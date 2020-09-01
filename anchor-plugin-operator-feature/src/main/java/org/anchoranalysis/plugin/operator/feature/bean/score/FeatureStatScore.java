@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
 import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
@@ -51,7 +51,7 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
     // END BEAN PROPERTIES
 
     @Override
-    public double calc(SessionInput<T> input) throws FeatureCalculationException {
+    public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         return deriveScore(
                 input.calc(getItem()), input.calc(itemMean), () -> input.calc(itemStdDev));
@@ -71,11 +71,11 @@ public abstract class FeatureStatScore<T extends FeatureInput> extends FeatureGe
             throws FeatureCalculationException;
 
     @Override
-    public String getParamDscr() {
+    public String describeParams() {
         return String.format(
                 "%s,%s,%s",
-                getItem().getDscrLong(),
-                getItemMean().getDscrLong(),
-                getItemStdDev().getDscrLong());
+                getItem().descriptionLong(),
+                getItemMean().descriptionLong(),
+                getItemStdDev().descriptionLong());
     }
 }

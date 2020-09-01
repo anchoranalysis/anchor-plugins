@@ -7,7 +7,11 @@
     </parent> 
     <artifactId>anchor-plugin-opencv</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-  
+    
+    <properties>
+    <opencv-platform.version>4.3.0-1.5.3</opencv-platform.version>
+    </properties>
+    
    <dependencies>
     <dependency>
 	  <groupId>${project.groupId}</groupId>
@@ -44,18 +48,65 @@
 	  <artifactId>anchor-image-io</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-
+	
 	<dependency>
-      <groupId>org.openpnp</groupId>
-      <artifactId>opencv</artifactId>
-      <version>3.4.2-1</version>
-    </dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-plugin-image</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	</dependency>
+	
         	
 	<dependency>
         <groupId>io.vavr</groupId>
         <artifactId>vavr</artifactId>
         <version>${vavr.version}</version>
     </dependency>
+    
+
+	<!--  START: OpenCV dependencies -->
+
+   <!-- Java bindings for opencv -->
+<!--      <dependency> -->
+<!-- 	    <groupId>org.bytedeco</groupId> -->
+<!-- 	    <artifactId>javacv-platform</artifactId> -->
+<!-- 	    <version>1.5.3</version> -->
+<!--   	</dependency> -->
+  	
+  	
+    <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
+    <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>opencv-platform-gpu</artifactId>
+        <version>4.3.0-1.5.3</version>
+    </dependency>
+    
+      <dependency>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>opencv-platform</artifactId>
+    <version>${opencv-platform.version}</version>
+  </dependency>
+
+    <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>tensorflow-platform-gpu</artifactId>
+        <version>1.15.2-1.5.3</version>
+    </dependency>
+    
+    
+    <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
+    <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>cuda-platform-redist</artifactId>
+        <version>10.2-7.6-1.5.3</version>
+    </dependency>
+    <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>tensorrt-platform-redist</artifactId>
+        <version>7.0-1.5.3</version>
+    </dependency>
+    
+    <!--  END: OpenCV dependencies -->
+
 
     <!-- START: Test dependencies -->
     <dependency>

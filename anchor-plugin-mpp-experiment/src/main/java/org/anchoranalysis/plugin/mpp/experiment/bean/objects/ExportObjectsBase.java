@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.overlay.bean.DrawObject;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
@@ -42,6 +41,7 @@ import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObject
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.overlay.bean.DrawObject;
 
 public abstract class ExportObjectsBase<T extends InputFromManager, S> extends Task<T, S> {
 

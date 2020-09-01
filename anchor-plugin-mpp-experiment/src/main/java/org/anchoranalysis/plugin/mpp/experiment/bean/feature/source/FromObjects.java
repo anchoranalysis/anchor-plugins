@@ -36,8 +36,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -47,22 +45,20 @@ import org.anchoranalysis.feature.io.csv.name.CombinedName;
 import org.anchoranalysis.feature.io.csv.name.MultiName;
 import org.anchoranalysis.feature.io.csv.name.SimpleName;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.mpp.sgmn.bean.define.DefineOutputterMPPWithNrg;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
+import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
+import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
-import org.anchoranalysis.plugin.mpp.experiment.feature.source.InitParamsWithNrgStack;
+import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 
 /**
  * Extracts features for each object in a collection.
@@ -100,7 +96,7 @@ public class FromObjects<T extends FeatureInput>
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private DefineOutputterMPPWithNrg define = new DefineOutputterMPPWithNrg();
+    private DefineOutputterMPPWithEnergy define = new DefineOutputterMPPWithEnergy();
 
     @BeanField @Getter @Setter
     private List<NamedBean<ObjectCollectionProvider>> objects = new ArrayList<>();
@@ -124,12 +120,8 @@ public class FromObjects<T extends FeatureInput>
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
-            return new SharedStateExportFeatures<>(
-                    metadataHeaders,
-                    tableCalculator.createFeatureNames(),
-                    tableCalculator::duplicateForNewThread,
-                    context);
-        } catch (InitException | AnchorIOException e) {
+            return SharedStateExportFeatures.createForFeatures(tableCalculator,  metadataHeaders, context);
+        } catch (InitException e) {
             throw new CreateException(e);
         }
     }
@@ -141,10 +133,10 @@ public class FromObjects<T extends FeatureInput>
         define.processInput(
                 input,
                 context.getContext(),
-                (initParams, nrgStack) ->
+                (initParams, energyStack) ->
                         calculateFeaturesForImage(
                                 input.descriptiveName(),
-                                new InitParamsWithNrgStack(initParams, nrgStack),
+                                new InitParamsWithEnergyStack(initParams, energyStack),
                                 context));
     }
 
@@ -170,19 +162,18 @@ public class FromObjects<T extends FeatureInput>
 
     private int calculateFeaturesForImage(
             String descriptiveName,
-            InitParamsWithNrgStack initParams,
+            InitParamsWithEnergyStack initParams,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
-        CalculateFeaturesFromProvider<T> fromProviderCalculator =
-                new CalculateFeaturesFromProvider<>(
-                        combine,
-                        startCalculator(context.getRowSource(), initParams, context.getLogger()),
-                        initParams,
-                        suppressErrors,
-                        OptionalUtilities.createFromFlag(
-                                context.isThumbnailsEnabled(), this::createThumbnailForInput),
-                        context);
+        CalculateFeaturesForObjects<T> objectsCalculator = new CalculateFeaturesForObjects<>(
+                combine,
+                initParams,
+                suppressErrors,
+                context
+        );
+        
+        CalculateFeaturesFromProvider<T> fromProviderCalculator = new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
         processAllProviders(
                 descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
@@ -190,50 +181,32 @@ public class FromObjects<T extends FeatureInput>
         return 0;
     }
 
-    private Optional<DisplayStack> createThumbnailForInput(T input) throws CreateException {
-        return Optional.of(combine.createThumbailFor(input));
-    }
-
-    private FeatureCalculatorMulti<T> startCalculator(
-            FeatureTableCalculator<T> calculator, InitParamsWithNrgStack initParams, Logger logger)
-            throws OperationFailedException {
-
-        try {
-            calculator.start(
-                    initParams.getImageInit(), Optional.of(initParams.getNrgStack()), logger);
-        } catch (InitException e) {
-            throw new OperationFailedException(e);
-        }
-
-        return calculator;
-    }
-
     private void processAllProviders(
-            String descriptiveName,
+            String imageIdentifier,
             Optional<String> groupGeneratorName,
             CalculateFeaturesFromProvider<T> calculator)
             throws OperationFailedException {
 
         // For every object-collection-provider
-        for (NamedBean<ObjectCollectionProvider> ni : objects) {
+        for (NamedBean<ObjectCollectionProvider> namedBean : objects) {
             calculator.processProvider(
-                    ni.getValue(),
+                    namedBean.getValue(),
                     input ->
                             identifierFor(
-                                    descriptiveName,
+                                    imageIdentifier,
                                     combine.uniqueIdentifierFor(input),
                                     groupGeneratorName,
-                                    ni.getName()));
+                                    namedBean.getName()));
         }
     }
 
     private StringLabelsForCsvRow identifierFor(
-            String descriptiveName,
-            String objName,
+            String imageIdentifier,
+            String objectIdentifier,
             Optional<String> groupGeneratorName,
             String providerName) {
         return new StringLabelsForCsvRow(
-                Optional.of(new String[] {descriptiveName, objName}),
+                Optional.of(new String[] {imageIdentifier, objectIdentifier}),
                 createGroupName(groupGeneratorName, providerName));
     }
 

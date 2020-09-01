@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculation.FeatureCalculation;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -49,8 +49,8 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
      */
     private boolean suppress3D;
 
-    private static int calcSurfaceSize(
-            ObjectMask object, ImageDimensions dimensions, boolean mip, boolean suppress3D) {
+    private static int calculateSurfaceSize(
+            ObjectMask object, Dimensions dimensions, boolean mip, boolean suppress3D) {
 
         boolean do3D = (dimensions.z() > 1) && !suppress3D;
 
@@ -59,7 +59,7 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
 
             OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, false);
 
-            return ApplyKernel.applyForCount(kernel, object.extracter().projectionMax());
+            return ApplyKernel.applyForCount(kernel, object.extract().projectMax());
 
         } else {
             return ApplyKernel.applyForCount(
@@ -69,6 +69,6 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
 
     @Override
     protected Integer execute(FeatureInputSingleObject input) throws FeatureCalculationException {
-        return calcSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
+        return calculateSurfaceSize(input.getObject(), input.dimensionsRequired(), mip, suppress3D);
     }
 }

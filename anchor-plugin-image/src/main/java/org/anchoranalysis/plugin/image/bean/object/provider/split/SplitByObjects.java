@@ -37,19 +37,19 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.CreateFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
-import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.plugin.image.bean.object.provider.ObjectCollectionProviderWithDimensions;
+import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
+import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
 
-public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
+public class SplitByObjects extends WithDimensionsBase {
 
-    private static final CreateFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
-            new CreateFromConnectedComponentsFactory();
+    private static final ObjectsFromConnectedComponentsFactory CONNECTED_COMPONENTS_CREATOR =
+            new ObjectsFromConnectedComponentsFactory();
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ObjectCollectionProvider objectsSplitBy;
@@ -61,64 +61,59 @@ public class SplitByObjects extends ObjectCollectionProviderWithDimensions {
 
         ObjectCollection objectsSplitByCollection = objectsSplitBy.create();
 
-        ImageDimensions dimensions = createDimensions();
+        Dimensions dimensions = createDimensions();
 
-        try {
-            return objectCollection.stream()
-                    .flatMap(
-                            OperationFailedException.class,
-                            object ->
-                                    splitObject(
-                                            object,
-                                            objectsSplitByCollection
-                                                    .findObjectsWithIntersectingBBox(object),
-                                            dimensions));
-        } catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }
+        return objectCollection.stream()
+                .flatMap(
+                        OperationFailedException.class,
+                        object ->
+                                splitObject(
+                                        object,
+                                        objectsSplitByCollection.findObjectsWithIntersectingBBox(
+                                                object),
+                                        dimensions));
     }
 
     private ObjectCollection splitObject(
-            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, ImageDimensions dim)
-            throws OperationFailedException {
+            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, Dimensions dimensions) {
 
-        // We create a voxel buffer of the same size as objToSplit bounding box, and we write
+        // We create a voxel buffer of the same size as objectToSplit bounding box, and we write
         //  a number for each object in objectsSplitBy
         // Then we find connected components
 
         // An Integer buffer with 0 by default and the same bounds as the object to be split
-        BoundedVoxels<IntBuffer> voxelsId =
-                new BoundedVoxels<>(
-                        objectToSplit.boundingBox(),
-                        VoxelsFactory.getInt()
-                                .createInitialized(objectToSplit.boundingBox().extent()));
+        BoundedVoxels<IntBuffer> voxelsWithIdentifiers =
+                BoundedVoxelsFactory.createInt(objectToSplit.boundingBox());
 
         // Populate boundedVbId with id values
-        int cnt = 1;
+        int count = 1;
         for (ObjectMask objectLocal : objectsSplitBy) {
 
-            Optional<ObjectMask> intersect = objectToSplit.intersect(objectLocal, dim);
+            Optional<ObjectMask> intersect = objectToSplit.intersect(objectLocal, dimensions);
 
             // If there's no intersection, there's nothing to do
             if (intersect.isPresent()) {
-                voxelsId.assignValue(cnt++).toObject(intersect.get());
+                voxelsWithIdentifiers.assignValue(count++).toObject(intersect.get());
             }
         }
 
-        try {
-            // Now we do a flood fill for each number, pretending it's a binary image of 0 and i
-            // The code will not change pixels that don't match ON
-            return ObjectCollectionFactory.flatMapFromRange(
-                    1, cnt, CreateException.class, i -> createObjectForIndex(i, voxelsId));
+        return floodFillEachIdentifier(count, voxelsWithIdentifiers);
+    }
 
-        } catch (CreateException e) {
-            throw new OperationFailedException(e);
-        }
+    /**
+     * Perform a flood fill for each number, pretending it's a binary image of 0 and i
+     *
+     * <p>The code will not change pixels that don't match ON
+     */
+    private ObjectCollection floodFillEachIdentifier(
+            int count, BoundedVoxels<IntBuffer> voxelsWithIdentifiers) {
+        return ObjectCollectionFactory.flatMapFromRange(
+                1, count, index -> createObjectForIndex(index, voxelsWithIdentifiers));
     }
 
     /** Creates objects from all connected-components in a buffer with particular voxel values */
     private static ObjectCollection createObjectForIndex(
-            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels) throws CreateException {
+            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels) {
         BinaryVoxels<IntBuffer> binaryVoxels =
                 BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValues(0, voxelEqualTo));
 

@@ -45,16 +45,16 @@ public abstract class CalculateLevelRelativeToThreshold extends CalculateLevelOn
     // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram h) throws OperationFailedException {
+    public int calculateLevel(Histogram histogram) throws OperationFailedException {
 
-        int level = calculateLevelIncoming(h);
+        int level = calculateLevelIncoming(histogram);
         if (useElseInstead(level, threshold)) {
-            return calculateLevelElse.calculateLevel(h);
+            return calculateLevelElse.calculateLevel(histogram);
         } else {
             return level;
         }
     }
 
-    /** Uses the {@link calculateLevelElse} instead of {@link calculateLevel} */
+    /** Uses {@code calculateLevelElse} instead of the standard calculation-level approach */
     protected abstract boolean useElseInstead(int level, int threshold);
 }

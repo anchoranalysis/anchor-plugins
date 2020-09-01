@@ -28,35 +28,35 @@ package org.anchoranalysis.plugin.image.object.merge.priority;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
+import lombok.AllArgsConstructor;
 
 /**
  * Allows merges if there is an increase in the payload i.e.
  *
- * <pre>if payload(merged) >= avg( payload(src), payload(dest )</pre>
+ * <p>i.e. if {@code payload(merged) >= avg( payload(src), payload(dest)}
  *
  * <p>Prioritises merges in order of greatest improvement.
  *
  * @author Owen Feehan
  */
+@AllArgsConstructor
 public class AssignPriorityFromImprovement extends AssignPriority {
 
-    private PayloadCalculator payloadCalculator;
-
-    public AssignPriorityFromImprovement(PayloadCalculator payloadCalculator) {
-        super();
-        this.payloadCalculator = payloadCalculator;
-    }
+    private final PayloadCalculator payloadCalculator;
 
     @Override
     public PrioritisedVertex assignPriorityToEdge(
-            ObjectVertex src, ObjectVertex dest, ObjectMask merged, ErrorReporter errorReporter)
+            ObjectVertex source,
+            ObjectVertex destination,
+            ObjectMask merged,
+            ErrorReporter errorReporter)
             throws OperationFailedException {
-        double payloadMerge = calcPayload(payloadCalculator, merged);
-        double payloadExisting = weightedAverageFeatureVal(src, dest);
+        double payloadMerge = calculatePayload(payloadCalculator, merged);
+        double payloadExisting = weightedAverageFeatureVal(source, destination);
         double improvement = payloadMerge - payloadExisting;
 
         if (payloadMerge <= payloadExisting) {
@@ -67,7 +67,7 @@ public class AssignPriorityFromImprovement extends AssignPriority {
         return new PrioritisedVertex(merged, payloadMerge, improvement, true);
     }
 
-    private double calcPayload(PayloadCalculator payloadCalculator, ObjectMask object)
+    private double calculatePayload(PayloadCalculator payloadCalculator, ObjectMask object)
             throws OperationFailedException {
         try {
             return payloadCalculator.calc(object);

@@ -41,7 +41,8 @@ class MultiFile {
 
     private DataTypeChecker dataTypeChecker = new DataTypeChecker();
 
-    // What we populate before creating the final stack, buffers is sorted by chnl and then by slice
+    // What we populate before creating the final stack, buffers is sorted by channel and then by
+    // slice
     private MultiBufferSized buffers;
 
     public MultiFile(ParsedFilePathBag fileBag) {
@@ -51,7 +52,7 @@ class MultiFile {
 
     public void add(
             Stack stackForFile,
-            Optional<Integer> chnlNum,
+            Optional<Integer> channelNum,
             Optional<Integer> sliceNum,
             Optional<Integer> timeIndex,
             Path filePath)
@@ -64,10 +65,10 @@ class MultiFile {
         }
         assert (size.hasNecessaryExtents());
 
-        checkChnlNum(stackForFile, chnlNum, filePath);
+        checkChannelNum(stackForFile, channelNum, filePath);
         checkSliceNum(stackForFile, sliceNum, filePath);
 
-        buffers.populateFrom(stackForFile, chnlNum, sliceNum, timeIndex);
+        buffers.populateFrom(stackForFile, channelNum, sliceNum, timeIndex);
     }
 
     public TimeSequence createSequence() {
@@ -91,14 +92,14 @@ class MultiFile {
         }
     }
 
-    private void checkChnlNum(Stack stackForFile, Optional<Integer> chnlNum, Path filePath)
+    private void checkChannelNum(Stack stackForFile, Optional<Integer> channelNum, Path filePath)
             throws RasterIOException {
-        if (chnlNum.isPresent()) {
+        if (channelNum.isPresent()) {
             if (stackForFile.getNumberChannels() != 1) {
                 throw new RasterIOException(
                         String.format(
-                                "A chnlNum %d is specified, but the file '%s' has more than one channel",
-                                chnlNum.get(), filePath));
+                                "A channelNum %d is specified, but the file '%s' has more than one channel",
+                                channelNum.get(), filePath));
             }
         } else {
             if (stackForFile.getNumberChannels() != size.getRangeC().getSize()) {
@@ -108,7 +109,7 @@ class MultiFile {
         }
     }
 
-    public int numChnl() {
+    public int numChannel() {
         return size.getRangeC().getSize();
     }
 
@@ -120,7 +121,7 @@ class MultiFile {
         return size.rangeTPresent();
     }
 
-    public boolean numChnlDefined() {
+    public boolean numChannelDefined() {
         return size.rangeCPresent();
     }
 

@@ -43,15 +43,15 @@ public class SummarizerSplitMoreThan<T> extends Summarizer<T> {
 
     // START BEAN PROPERTIES
     /**
-     * If there are more than <code>countThreshold</code> elements, use summarizerGreaterThan, else
-     * summarizerElse
+     * If there are more than {@code countThreshold} elements, use {@code summarizerGreaterThan}, else
+     * {@code summarizerElse}.
      */
     @BeanField @Getter @Setter private int countThreshold;
 
-    /** Used for summary if count(elements) > countThreshold */
+    /** Used for summary if {@code count(elements) > countThreshold} */
     @BeanField @Getter @Setter private Summarizer<T> summarizerGreaterThan;
 
-    /** Used for summary if count(elements) <= countThreshold */
+    /** Used for summary if {@code count(elements) <= countThreshold} */
     @BeanField @Getter @Setter private Summarizer<T> summarizerElse;
     // END BEAN PROPERTIES
 

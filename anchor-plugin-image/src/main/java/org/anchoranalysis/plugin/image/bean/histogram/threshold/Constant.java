@@ -51,7 +51,7 @@ public class Constant extends CalculateLevel {
     // END BEAN PROPERTIES
 
     @Override
-    public int calculateLevel(Histogram h) {
+    public int calculateLevel(Histogram histogram) {
         return level;
     }
 }

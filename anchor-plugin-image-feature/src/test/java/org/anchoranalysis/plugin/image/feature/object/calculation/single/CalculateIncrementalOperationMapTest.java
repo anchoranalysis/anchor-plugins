@@ -30,11 +30,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
-import org.anchoranalysis.feature.nrg.NRGStackWithParams;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.test.image.NRGStackFixture;
+import org.anchoranalysis.test.image.EnergyStackFixture;
 import org.anchoranalysis.test.image.obj.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,16 +46,16 @@ public class CalculateIncrementalOperationMapTest {
     private CalculateIncrementalOperationMap mockMap =
             spy(CalculateIncrementalOperationMapFixture.class);
 
-    private NRGStackWithParams nrgStack = NRGStackFixture.create(true, true);
+    private EnergyStack energyStack = EnergyStackFixture.create(true, true);
 
     private FeatureInputSingleObject input =
-            new FeatureInputSingleObject(mock(ObjectMask.class), nrgStack);
+            new FeatureInputSingleObject(mock(ObjectMask.class), energyStack);
 
     @Before
     public void setup() throws OperationFailedException {
         // An arbitrary object
         when(mockMap.applyOperation(any(), any(), anyBoolean()))
-                .thenReturn(new ObjectMaskFixture(nrgStack.dimensions()).create1());
+                .thenReturn(new ObjectMaskFixture(energyStack.dimensions()).create1());
     }
 
     @Test

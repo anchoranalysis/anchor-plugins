@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature;
 
-import org.anchoranalysis.feature.nrg.NRGStack;
+import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 
@@ -39,7 +39,7 @@ class MultiInputFixture {
 
     /**
      * A number of unique pairs of intersecting objects (known from the output of {@link
-     * IntersectingCircleObjectsFixture.generateIntersectingObjects} with the parameterization
+     * IntersectingCircleObjectsFixture#generateIntersectingObjects} with the parameterization
      * above.
      */
     public static final int NUMBER_PAIRS_INTERSECTING = 3;
@@ -53,12 +53,13 @@ class MultiInputFixture {
      *
      * <p>See the constants in the fixture to represent these numbers.
      *
-     * @param nrgStack
+     * @param energyStack
      * @return
      */
-    public static MultiInput createInput(NRGStack nrgStack) {
+    public static MultiInput createInput(EnergyStackWithoutParams energyStack) {
         MultiInput input =
-                new MultiInput("input", new StackAsProviderFixture(nrgStack.asStack(), "someName"));
+                new MultiInput(
+                        "input", new StackAsProviderFixture(energyStack.asStack(), "someName"));
         input.objects()
                 .add(
                         OBJECTS_NAME,

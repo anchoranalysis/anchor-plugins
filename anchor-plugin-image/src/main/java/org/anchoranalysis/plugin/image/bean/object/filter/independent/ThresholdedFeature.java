@@ -32,9 +32,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -61,7 +61,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
     private FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = null;
 
     @Override
-    protected void start(Optional<ImageDimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         super.start(dim, objectsToFilter);
 
@@ -77,36 +77,35 @@ public class ThresholdedFeature extends ObjectFilterRelation {
     }
 
     @Override
-    protected boolean match(
-            ObjectMask object, Optional<ImageDimensions> dim, RelationToValue relation)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dim, RelationToValue relation)
             throws OperationFailedException {
 
-        double val;
+        double value;
         try {
-            val = featureSession.calculate(new FeatureInputSingleObject(object));
+            value = featureSession.calculate(new FeatureInputSingleObject(object));
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
 
-        boolean succ = (relation.isRelationToValueTrue(val, threshold));
+        boolean matched = relation.isRelationToValueTrue(value, threshold);
 
         if (debug) {
-            if (succ) {
+            if (matched) {
                 getLogger()
                         .messageLogger()
                         .logFormatted(
                                 "%s\tVal=%f\tthreshold=%f\t  (Accepted)",
-                                object.centerOfGravity(), val, threshold);
+                                object.centerOfGravity(), value, threshold);
             } else {
                 getLogger()
                         .messageLogger()
                         .logFormatted(
                                 "%s\tVal=%f\tthreshold=%f",
-                                object.centerOfGravity(), val, threshold);
+                                object.centerOfGravity(), value, threshold);
             }
         }
 
-        return succ;
+        return matched;
     }
 
     @Override

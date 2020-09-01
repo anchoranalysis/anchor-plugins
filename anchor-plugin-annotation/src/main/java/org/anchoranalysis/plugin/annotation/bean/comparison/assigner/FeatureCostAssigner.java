@@ -33,9 +33,9 @@ import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.feature.calc.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.extent.ImageDimensions;
+import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -59,7 +59,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
     @Override
     public AssignmentOverlapFromPairs createAssignment(
             ObjectsToCompare objectsToCompare,
-            ImageDimensions dimensions,
+            Dimensions dimensions,
             boolean useMIP,
             BoundIOContext context)
             throws CreateException {

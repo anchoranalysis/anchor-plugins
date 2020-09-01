@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.anchor.mpp.bean.proposer.ScalarProposer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.orientation.VectorInDirection;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.ImageResolution;
+import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
 public class FromUnitValueDistance extends ScalarProposer {
 
@@ -46,7 +46,7 @@ public class FromUnitValueDistance extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, ImageResolution res)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
             throws OperationFailedException {
         // TODO this could be a bit slow, we are creating an object on the heap every time from
         // directionVector

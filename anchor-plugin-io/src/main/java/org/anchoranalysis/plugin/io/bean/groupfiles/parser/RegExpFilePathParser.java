@@ -38,7 +38,7 @@ public class RegExpFilePathParser extends FilePathParser {
     // START BEAN PARAMETERS
     @BeanField @Getter private String expression;
 
-    @BeanField @Getter @Setter private int chnlGroupID = 0; // 0 Disables
+    @BeanField @Getter @Setter private int channelGroupID = 0; // 0 Disables
 
     @BeanField @Getter @Setter private int zSliceGroupID = 0; // 0 Disables
 
@@ -49,7 +49,7 @@ public class RegExpFilePathParser extends FilePathParser {
     @BeanField @Getter @Setter private boolean keyRequired = false;
     // END BEAN PARAMETERS
 
-    private int chnlNum = 0;
+    private int channelNum = 0;
     private int zSliceNum = 0;
     private int timeIndex = 0;
 
@@ -69,16 +69,16 @@ public class RegExpFilePathParser extends FilePathParser {
             return false;
         }
 
-        chnlNum = ExtractGroup.maybeExtractInt(chnlGroupID, "chnl", matcher);
-        zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, "zSlice", matcher);
-        timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, "timeIndex", matcher);
+        channelNum = ExtractGroup.maybeExtractInt(channelGroupID, matcher);
+        zSliceNum = ExtractGroup.maybeExtractInt(zSliceGroupID, matcher);
+        timeIndex = ExtractGroup.maybeExtractInt(timeIndexGroupID, matcher);
 
-        if (chnlNum == -1 || zSliceNum == -1 || timeIndex == -1) {
+        if (channelNum == -1 || zSliceNum == -1 || timeIndex == -1) {
             return false;
         }
 
         if (keyGroupID > 0) {
-            Optional<String> extractedKey = ExtractGroup.extractStr(keyGroupID, matcher, "key");
+            Optional<String> extractedKey = ExtractGroup.extractString(keyGroupID, matcher);
             if (!extractedKey.isPresent() || (extractedKey.get().isEmpty() && keyRequired)) {
                 return false;
             }
@@ -88,8 +88,8 @@ public class RegExpFilePathParser extends FilePathParser {
     }
 
     @Override
-    public Optional<Integer> getChnlNum() {
-        return asOptional(chnlGroupID, chnlNum);
+    public Optional<Integer> getChannelNum() {
+        return asOptional(channelGroupID, channelNum);
     }
 
     @Override
