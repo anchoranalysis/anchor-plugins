@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-plugin-quick</artifactId>
   <version>0.0.3-SNAPSHOT</version>
+  <description>Plugins for quickly specifying experiments with conventional file-paths.</description>
    <dependencies>
 
     <dependency>
