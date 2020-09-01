@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
-import org.anchoranalysis.annotation.mark.MarkAnnotation;
+import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -44,7 +44,13 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-public class AnnotationMarksComparer extends Comparer {
+/**
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T> rejection-reason
+ */
+public class AnnotationMarksComparer<T> extends Comparer {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
@@ -61,33 +67,30 @@ public class AnnotationMarksComparer extends Comparer {
             throw new CreateException(e1);
         }
 
-        MarkAnnotationReader annotationReader = new MarkAnnotationReader(false);
-        Optional<MarkAnnotation> annotation;
+        MarkAnnotationReader<T> annotationReader = new MarkAnnotationReader<>(false);
+        Optional<DualMarksAnnotation<T>> annotation;
         try {
             annotation = annotationReader.read(filePath);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
         }
 
-        if (!annotation.isPresent()) {
+        if (annotation.isPresent()) {
+            return objectsFromAnnotation(annotation.get(), filePath, dimensions);    
+        } else {
             return new NotFound<>(filePath, "No annotation exists");
         }
-
-        if (!annotation.get().isAccepted()) {
+    }
+    
+    private Findable<ObjectCollection> objectsFromAnnotation(DualMarksAnnotation<T> annotation, Path filePath, Dimensions dimensions) {
+        
+        if (!annotation.isAccepted()) {
             return new NotFound<>(filePath, "The annotation is NOT accepted");
         }
 
         ObjectCollectionWithProperties objects =
-                annotation
-                        .get()
-                        .getMarks()
-                        .deriveObjects(
-                                dimensions,
-                                annotation
-                                        .get()
-                                        .getRegionMap()
-                                        .membershipWithFlagsForIndex(
-                                                annotation.get().getRegionID()));
+                annotation.marks().deriveObjects(dimensions,annotation.region());
+        
         return new Found<>(objects.withoutProperties());
     }
 }
