@@ -7,6 +7,7 @@
     </parent>
   <artifactId>anchor-plugin-io</artifactId>
   <version>0.0.8-SNAPSHOT</version>
+  <description>Plugins for input-output operations.</description>
    <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>

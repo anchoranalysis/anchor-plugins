@@ -7,7 +7,7 @@
   </parent>
   <artifactId>anchor-test-feature-plugins</artifactId>
   <version>0.0.4-SNAPSHOT</version>
-  <description>Helper methods for testing pertaining to feature-plugins</description>
+  <description>Helper routines for testing features.</description>
     <dependencies>
    
    		<dependency>
