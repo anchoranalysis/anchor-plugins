@@ -140,17 +140,17 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         // NOTHING TO DO
     }
 
-    private void outputGeneratorSeq(
+    private void outputGeneratorSequence(
             IterableGenerator<ObjectsWithBoundingBox> generator,
             ObjectCollection objects,
             BoundIOContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> generatorSeq =
+        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> sequence =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
-        generatorSeq.start();
+        sequence.start();
         objects.streamStandardJava()
-                .forEach(object -> generatorSeq.add(new ObjectsWithBoundingBox(object)));
-        generatorSeq.end();
+                .forEach(object -> sequence.add(new ObjectsWithBoundingBox(object)));
+        sequence.end();
     }
 
     private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
@@ -171,7 +171,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
             Dimensions dimensions = stacks.getArbitraryElement().dimensions();
 
-            outputGeneratorSeq(
+            outputGeneratorSequence(
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.z()),
                     context);

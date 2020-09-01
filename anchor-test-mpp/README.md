@@ -1,6 +1,6 @@
 # anchor-test-mpp
 
-Helper methods for testing involving image IO and manipulation.
+Tests for other packages involving image IO.
 
 ## What is Anchor?
 
