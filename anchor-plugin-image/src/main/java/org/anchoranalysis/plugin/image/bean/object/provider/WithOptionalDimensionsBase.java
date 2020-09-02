@@ -49,7 +49,7 @@ public abstract class WithOptionalDimensionsBase extends ObjectCollectionProvide
     @BeanField @OptionalBean @Getter @Setter private DimensionsProvider dimensions;
     // END BEAN PROPERTIES
 
-    /** Returns the dimensions or NULL if none are provided */
+    /** Returns the dimensions or null if none are provided */
     protected Optional<Dimensions> createDims() throws CreateException {
         if (dimensions != null) {
             return Optional.of(dimensions.create());

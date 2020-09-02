@@ -49,7 +49,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     private final FeatureCalculatorMulti<T> calculator;
     
     /**
-     * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
+     * iff true no exceptions are thrown when an error occurs, but rather a message is written to
      * the log
      */
     private final boolean suppressErrors;

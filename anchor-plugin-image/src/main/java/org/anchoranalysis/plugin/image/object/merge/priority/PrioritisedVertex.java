@@ -50,7 +50,7 @@ public class PrioritisedVertex {
      * @param payload associated payload with the object in the vertex
      * @param priority a priority to determine the order of merges (higher value implies greater
      *     priority)
-     * @param considerForMerge iff FALSE, these two objects object may not be merged, and priority
+     * @param considerForMerge iff false, these two objects object may not be merged, and priority
      *     is irrelevant.
      */
     public PrioritisedVertex(

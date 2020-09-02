@@ -121,7 +121,7 @@ class ExtendObjectsInZHelper {
 
     /**
      * Does a logical AND between buffer and receive. The result is placed in buffer. receive is
-     * unchanged Returns TRUE if at least one pixel is HIGH, or false otherwise
+     * unchanged Returns true if at least one pixel is HIGH, or false otherwise
      */
     private static boolean bufferLogicalAnd(
             int numVoxels,

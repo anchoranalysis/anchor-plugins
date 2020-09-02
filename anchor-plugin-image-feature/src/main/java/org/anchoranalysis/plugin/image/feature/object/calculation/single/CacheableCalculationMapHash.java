@@ -89,7 +89,7 @@ public abstract class CacheableCalculationMapHash<
      * Gets an existing result for the current params from the cache.
      *
      * @param key
-     * @return a cached-result, or NULL if it doesn't exist
+     * @return a cached-result, or null if it doesn't exist
      */
     protected S getOrNull(U key) {
         return cache.get(key);

@@ -91,7 +91,7 @@ public class SgmnMPP extends SegmentIntoMarks {
     @BeanField @Getter @Setter private boolean exitBeforeOpt = false;
 
     /**
-     * If TRUE uses a constant seed for the random-number-generator (useful for debugging) otherwise
+     * If true uses a constant seed for the random-number-generator (useful for debugging) otherwise
      * seeds with system clock
      */
     @BeanField @Getter @Setter private boolean fixRandomSeed = false;

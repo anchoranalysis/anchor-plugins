@@ -175,7 +175,7 @@ public class SharedStateExportFeatures<S> {
      *
      * @param featuresAggregate features that can be used for generating additional "aggregated"
      *     exports
-     * @param includeGroups iff TRUE a group-column is included in the CSV file and the group
+     * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @param context io-context
      * @throws AnchorIOException

@@ -81,7 +81,7 @@ class CalculateGradientFromChannels
         // create a list of points
         List<Point3d> out = new ArrayList<>();
 
-        EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
+        EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
 
         putGradientValue(input.getObject(), out, 0, energyStack.getChannel(energyIndexX));
         putGradientValue(input.getObject(), out, 1, energyStack.getChannel(energyIndexY));

@@ -67,8 +67,8 @@ public class OptSchemeSimulatedAnnealingTest {
      * Runs a simulated-annealing test with birth-and-death of a kind of marks, using a
      * energy-scheme that penalizes overlap
      *
-     * @param use3D iff TRUE ellipsoids and a 3D scene are used, otherwise ellipses and a 2D scene
-     * @param logToConsole if TRUE log messages are printed to the console as the test runs (useful
+     * @param use3D iff true ellipsoids and a 3D scene are used, otherwise ellipses and a 2D scene
+     * @param logToConsole if true log messages are printed to the console as the test runs (useful
      *     for debugging), otherwise suppressed
      * @throws OptTerminatedEarlyException
      * @throws CreateException

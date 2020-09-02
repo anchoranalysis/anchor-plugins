@@ -87,7 +87,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
 
         // We can rely that an energy stack always exists
-        Stack stack = input.getEnergyStackOptional().get().getEnergyStack().asStack();
+        Stack stack = input.getEnergyStackOptional().get().withoutParams().asStack();
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();

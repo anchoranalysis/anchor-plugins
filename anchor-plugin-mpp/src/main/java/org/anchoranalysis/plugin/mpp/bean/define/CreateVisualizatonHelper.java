@@ -42,7 +42,7 @@ class CreateVisualizatonHelper {
 
     private final int outlineWidth;
 
-    /** If TRUE, backgroundID refers to a Stack, otherwise it's a Channel */
+    /** If true, backgroundID refers to a Stack, otherwise it's a Channel */
     private final boolean stackBackground;
 
     public StackProvider mask(String maskProviderID) {

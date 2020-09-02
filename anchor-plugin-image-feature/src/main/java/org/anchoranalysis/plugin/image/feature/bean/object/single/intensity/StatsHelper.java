@@ -90,7 +90,7 @@ class StatsHelper {
      * @param object
      * @param numberVoxels the number of voxels to be considered (either the highest-intensity
      *     pixels, or lowest-intensity pixel)
-     * @param highest iff TRUE the highest-intensity voxels are used in the mask, otherwise the
+     * @param highest iff true the highest-intensity voxels are used in the mask, otherwise the
      *     lowest-intensity pixels are used
      * @return
      * @throws OperationFailedException

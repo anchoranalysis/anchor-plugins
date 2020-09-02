@@ -56,7 +56,7 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
 
         try {
-            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
+            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
 
             return HistogramFactory.create(extractChannel(energyStack), extractMask(energyStack));
 

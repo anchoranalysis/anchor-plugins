@@ -56,7 +56,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     private MorphologicalIterations iterations = new MorphologicalIterations();
 
     /**
-     * Iff TRUE, calculates instead on the inverse of the object-mask (what's left when the shell is
+     * Iff true, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed)
      */
     @BeanField @Getter @Setter private boolean inverse = false;
@@ -94,7 +94,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
             // If an Energy mask is defined...
             Optional<ObjectMask> omIntersected =
                     intersectWithEnergyMask(
-                            objectShell, input.get().getEnergyStackRequired().getEnergyStack());
+                            objectShell, input.get().getEnergyStackRequired().withoutParams());
 
             if (omIntersected.isPresent()) {
                 objectShell = omIntersected.get();

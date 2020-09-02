@@ -69,7 +69,7 @@ class GradientCalculator {
     @Getter @Setter private boolean centralDifference = false;
 
     /**
-     * iff TRUE, we apply a l2norm to our difference (useful for getting magnitude if working with
+     * iff true, we apply a l2norm to our difference (useful for getting magnitude if working with
      * more than 1 dimension)?
      */
     @Getter @Setter private boolean norm = true;

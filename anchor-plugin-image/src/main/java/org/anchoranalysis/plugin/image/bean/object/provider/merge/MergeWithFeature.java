@@ -106,7 +106,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
     /** Determines the priority (and selection criteria) used to allow merges between neighbors */
     protected abstract AssignPriority createPrioritizer() throws OperationFailedException;
 
-    /** Is the payload considered in making decisions? (iff FALSE, payload of nodes is irrelvant) */
+    /** Is the payload considered in making decisions? (iff false, payload of nodes is irrelvant) */
     protected abstract boolean isPlayloadUsed();
 
     /**

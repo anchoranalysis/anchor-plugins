@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * The result of featureCondition is compared to a threshold, and then either the underlying feature
  * is calculated (positive case), or featureElse is (negative case)
  *
- * <p>The positive case is when relation(featureCondition,value) is TRUE..
+ * <p>The positive case is when relation(featureCondition,value) is true..
  *
  * @author Owen Feehan
  * @param <T> feature input-type

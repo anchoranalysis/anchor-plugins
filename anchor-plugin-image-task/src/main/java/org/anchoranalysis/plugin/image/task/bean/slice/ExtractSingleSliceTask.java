@@ -217,7 +217,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
                 // Calculate feature for this slice
                 double featVal =
-                        session.calculate(new FeatureInputStack(energyStackSlice.getEnergyStack()));
+                        session.calculate(new FeatureInputStack(energyStackSlice.withoutParams()));
 
                 logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 
