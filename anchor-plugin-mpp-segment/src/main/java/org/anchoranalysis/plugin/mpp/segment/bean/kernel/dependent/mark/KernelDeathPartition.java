@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelDeath;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.MarksFromPartition;
+import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 
 public class KernelDeathPartition extends KernelDeath<MarksFromPartition> {
 

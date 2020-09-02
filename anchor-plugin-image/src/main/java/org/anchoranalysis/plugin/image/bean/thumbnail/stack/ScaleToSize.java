@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
