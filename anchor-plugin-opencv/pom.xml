@@ -65,14 +65,7 @@
     
 
 	<!--  START: OpenCV dependencies -->
-
-   <!-- Java bindings for opencv -->
-<!--      <dependency> -->
-<!-- 	    <groupId>org.bytedeco</groupId> -->
-<!-- 	    <artifactId>javacv-platform</artifactId> -->
-<!-- 	    <version>1.5.3</version> -->
-<!--   	</dependency> -->
-  	
+	
   	
     <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
     <dependency>
