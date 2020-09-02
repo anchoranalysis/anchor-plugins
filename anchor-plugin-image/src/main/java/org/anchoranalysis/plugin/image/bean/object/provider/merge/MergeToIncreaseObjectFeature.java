@@ -61,7 +61,7 @@ public class MergeToIncreaseObjectFeature extends MergeWithFeature {
     protected PayloadCalculator createPayloadCalculator() throws OperationFailedException {
 
         FeatureCalculatorSingle<FeatureInputSingleObject> calculator =
-                featureEvaluator.createAndStartSession();
+                featureEvaluator.createFeatureSession();
 
         return object -> calculator.calculate(new FeatureInputSingleObject(object));
     }

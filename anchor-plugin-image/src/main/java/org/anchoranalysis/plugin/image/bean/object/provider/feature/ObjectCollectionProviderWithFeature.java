@@ -45,7 +45,7 @@ public abstract class ObjectCollectionProviderWithFeature extends ObjectCollecti
     protected FeatureCalculatorSingle<FeatureInputSingleObject> createSession()
             throws CreateException {
         try {
-            return featureEvaluator.createAndStartSession();
+            return featureEvaluator.createFeatureSession();
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

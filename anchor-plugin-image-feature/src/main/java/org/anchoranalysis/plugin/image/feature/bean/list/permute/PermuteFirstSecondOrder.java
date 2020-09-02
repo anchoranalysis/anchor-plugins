@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.MultiplyByConstant;
 import org.anchoranalysis.plugin.operator.feature.bean.range.IfOutsideRange;
-import org.anchoranalysis.plugin.operator.feature.bean.score.FeatureStatScore;
+import org.anchoranalysis.plugin.operator.feature.bean.score.StatisticalScoreBase;
 
 public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
         extends PermuteFeatureSequenceInteger<T> {
@@ -53,7 +53,7 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
 
     @FunctionalInterface
     public static interface CreateFirstSecondOrder<T extends FeatureInput> {
-        FeatureStatScore<T> create();
+        StatisticalScoreBase<T> create();
     }
 
     public PermuteFirstSecondOrder(
@@ -97,7 +97,7 @@ public abstract class PermuteFirstSecondOrder<T extends FeatureInputParams>
     }
 
     private Feature<T> wrapInScore(Feature<T> feature) {
-        FeatureStatScore<T> featureScore = factory.create();
+        StatisticalScoreBase<T> featureScore = factory.create();
         featureScore.setItem(feature);
         featureScore.setItemMean(createParam("_fitted_normal_mean", paramPrefixAppendNumber));
         featureScore.setItemStdDev(createParam("_fitted_normal_sd", paramPrefixAppendNumber));

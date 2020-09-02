@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithResolution;
+import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
 
 /**
  * Checks if a value lies within a range defined by units (a minimum and maximum boundary)
@@ -46,7 +46,7 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithResol
  * @param <T> feature input-type
  */
 public class UnitsWithinRange<T extends FeatureInputWithResolution>
-        extends FeatureSingleElemWithResolution<T> {
+        extends WithResolutionBase<T> {
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */

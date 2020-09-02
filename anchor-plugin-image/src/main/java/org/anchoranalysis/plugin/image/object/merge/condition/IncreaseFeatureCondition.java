@@ -48,7 +48,7 @@ public class IncreaseFeatureCondition implements AfterCondition {
 
         if (featureEvaluator != null) {
             try {
-                session = featureEvaluator.createAndStartSession();
+                session = featureEvaluator.createFeatureSession();
             } catch (OperationFailedException e) {
                 throw new InitException(e);
             }
