@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 
 /**

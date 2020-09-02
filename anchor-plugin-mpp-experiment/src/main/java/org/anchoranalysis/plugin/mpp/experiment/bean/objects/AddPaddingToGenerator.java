@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.size.Padding;
+import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;

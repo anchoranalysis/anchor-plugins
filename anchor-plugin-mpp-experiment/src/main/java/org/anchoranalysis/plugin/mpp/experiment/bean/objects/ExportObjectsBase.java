@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.size.Padding;
+import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;

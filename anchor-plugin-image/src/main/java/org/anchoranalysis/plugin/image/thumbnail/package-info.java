@@ -24,6 +24,6 @@
  * #L%
  */
 /**
- * Non-bean classes related to thumbnail creation
+ * Non-bean classes for thumbnail creation.
  */
 package org.anchoranalysis.plugin.image.thumbnail;

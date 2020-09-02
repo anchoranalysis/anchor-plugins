@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.DualVoxelizedMarks;
+import org.anchoranalysis.plugin.mpp.segment.optimization.DualVoxelizedMarks;
 
 public class RetrieveSourceFromDual
         extends StateTransformerBean<DualVoxelizedMarks, VoxelizedMarksWithEnergy> {

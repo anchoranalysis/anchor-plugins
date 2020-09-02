@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.test.LoggingFixture;
 import org.anchoranalysis.test.TestLoader;

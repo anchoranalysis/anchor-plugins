@@ -30,7 +30,7 @@ import java.util.function.ToIntFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class DivideUtilities {

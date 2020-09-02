@@ -147,13 +147,13 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
         try {
             double[] scores = calculateScoreForEachSlice(scoreFeature, energyStack, logger);
 
-            int optimaSliceIndex = findOptimaSlice(scores);
+            int optimalSliceIndex = findOptimalSlice(scores);
 
-            logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
+            logger.messageLogger().logFormatted("Selected optima is slice %d", optimalSliceIndex);
 
-            params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
+            params.writeRow(imageName, optimalSliceIndex, scores[optimalSliceIndex]);
 
-            return optimaSliceIndex;
+            return optimalSliceIndex;
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -194,7 +194,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);
     }
 
-    private int findOptimaSlice(double[] scores) {
+    private int findOptimalSlice(double[] scores) {
         if (findMaxima) {
             return ArraySearchUtilities.findIndexOfMaximum(scores);
         } else {

@@ -24,6 +24,6 @@
  * #L%
  */
 /**
- * Non-bean objects relating to segmentation.
+ * Non-bean classes for segmentation.
  */
 package org.anchoranalysis.plugin.image.task.segment;
