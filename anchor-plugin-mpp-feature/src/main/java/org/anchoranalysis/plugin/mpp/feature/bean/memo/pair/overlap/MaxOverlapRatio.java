@@ -65,8 +65,8 @@ public class MaxOverlapRatio extends FeaturePairMemoSingleRegion {
 
         double ratio =
                 OverlapRatioUtilities.overlapRatio(
-                        params.getObj1(),
-                        params.getObj2(),
+                        params.getObject1(),
+                        params.getObject2(),
                         input.calculate(new CalculateOverlap(getRegionID())),
                         getRegionID(),
                         false,

@@ -42,13 +42,14 @@ import org.anchoranalysis.image.outline.FindOutline;
 public class Outline extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private boolean force2D = false;
+    /** If true, any 3D mask is flattened in the z-dimension (maximum intensity projection) to make it 2D */
+    @BeanField @Getter @Setter private boolean flatten = false;
 
     @BeanField @Getter @Setter private boolean outlineAtBoundary = true;
     // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
-        return FindOutline.outlineGuess3D(mask, 1, force2D, outlineAtBoundary);
+        return FindOutline.outlineGuess3D(mask, 1, flatten, outlineAtBoundary);
     }
 }

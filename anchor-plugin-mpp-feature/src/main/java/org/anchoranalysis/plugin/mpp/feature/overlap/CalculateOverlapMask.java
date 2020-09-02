@@ -46,8 +46,8 @@ public class CalculateOverlapMask extends FeatureCalculation<Double, FeatureInpu
     @Override
     protected Double execute(FeatureInputPairMemo input) throws FeatureCalculationException {
 
-        VoxelizedMarkMemo mark1 = input.getObj1();
-        VoxelizedMarkMemo mark2 = input.getObj2();
+        VoxelizedMarkMemo mark1 = input.getObject1();
+        VoxelizedMarkMemo mark2 = input.getObject2();
 
         Channel channel = input.getEnergyStackRequired().withoutParams().getChannel(energyIndex);
 

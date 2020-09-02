@@ -58,8 +58,8 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
-        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObj1);
-        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObj2);
+        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObject1);
+        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObject2);
 
         // Check the bounding boxes intersect in general (including XY)
         if (!box1.intersection().existsWith(box2)) {
