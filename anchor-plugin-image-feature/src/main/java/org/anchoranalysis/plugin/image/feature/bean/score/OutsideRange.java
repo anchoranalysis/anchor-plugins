@@ -43,9 +43,9 @@ public class OutsideRange extends VoxelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double val = pixelVals[energyIndex];
+        double val = voxelIntensities[energyIndex];
         if (val < min) {
             return 0;
         }

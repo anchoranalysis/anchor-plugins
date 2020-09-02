@@ -37,7 +37,7 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
@@ -94,7 +94,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
                 voxelsSubOut.arithmetic().multiplyBy(scaleRatio);
             }
 
-            ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();
+            ChannelConverter<ByteBuffer> converter = new ToUnsignedByte();
             Channel channelOut =
                     converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 

@@ -34,8 +34,8 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.HSB;
+import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.color.HashedColorSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -70,7 +70,7 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
         try {
             colorIndex =
                     new HashedColorSet(
-                            new ShuffleColorSetGenerator(new HSBColorSetGenerator()), numColors);
+                            new Shuffle(new HSB()), numColors);
         } catch (OperationFailedException e1) {
             throw new ReporterException(e1);
         }

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
 import org.anchoranalysis.io.generator.IterableGenerator;

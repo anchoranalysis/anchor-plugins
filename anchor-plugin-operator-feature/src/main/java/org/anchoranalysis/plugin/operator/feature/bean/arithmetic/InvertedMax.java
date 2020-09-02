@@ -48,7 +48,7 @@ public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleEle
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return Math.min((1 / input.calc(getItem())), max);
+        return Math.min((1 / input.calculate(getItem())), max);
     }
 
     @Override

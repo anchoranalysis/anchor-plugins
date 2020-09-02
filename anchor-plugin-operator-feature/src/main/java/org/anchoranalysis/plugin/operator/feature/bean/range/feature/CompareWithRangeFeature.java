@@ -62,12 +62,12 @@ public class CompareWithRangeFeature<T extends FeatureInput> extends RangeCompar
 
     @Override
     protected double boundaryMin(SessionInput<T> input) throws FeatureCalculationException {
-        return input.calc(min);
+        return input.calculate(min);
     }
 
     @Override
     protected double boundaryMax(SessionInput<T> input) throws FeatureCalculationException {
-        return input.calc(max);
+        return input.calculate(max);
     }
 
     @Override

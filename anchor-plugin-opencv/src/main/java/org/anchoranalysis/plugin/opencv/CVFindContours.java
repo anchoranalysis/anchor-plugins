@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.contour.Contour;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;

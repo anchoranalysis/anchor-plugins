@@ -38,7 +38,7 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -155,6 +155,6 @@ public class SegmentWithSeeds extends WithChannelBase {
         return ChannelFactory.instance()
                 .create(
                         channel.extract().region(boundingBox, false),
-                        channel.dimensions().resolution());
+                        channel.resolution());
     }
 }

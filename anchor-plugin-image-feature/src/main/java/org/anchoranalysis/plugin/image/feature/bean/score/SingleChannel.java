@@ -44,9 +44,9 @@ public abstract class SingleChannel extends VoxelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
-        return deriveScoreFromPixelVal(pixelVals[energyChannelIndex]);
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
+        return deriveScoreFromVoxel(voxelIntensities[energyChannelIndex]);
     }
 
-    protected abstract double deriveScoreFromPixelVal(int pixelVal);
+    protected abstract double deriveScoreFromVoxel(int voxelIntensity);
 }

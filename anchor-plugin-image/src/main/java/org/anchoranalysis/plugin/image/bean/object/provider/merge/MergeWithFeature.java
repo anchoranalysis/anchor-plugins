@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.object.merge.MergeGraph;
@@ -125,7 +125,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
         MergeGraph graph;
         try {
-            graph = createGraph(objects, resolutionOptional());
+            graph = createGraph(objects, unitConvertOptional());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -169,7 +169,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
         return true;
     }
 
-    private MergeGraph createGraph(ObjectCollection objects, Optional<Resolution> res)
+    private MergeGraph createGraph(ObjectCollection objects, Optional<UnitConverter> unitConverter)
             throws CreateException {
 
         try {
@@ -177,7 +177,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
                     new MergeGraph(
                             createPayloadCalculator(),
                             beforeConditions(),
-                            res,
+                            unitConverter,
                             createPrioritizer(),
                             getLogger(),
                             isPlayloadUsed());

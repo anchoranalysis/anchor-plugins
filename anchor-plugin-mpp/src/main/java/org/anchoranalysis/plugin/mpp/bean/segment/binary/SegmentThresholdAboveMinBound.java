@@ -75,8 +75,8 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
         return delegate.segment(voxels, params, objectMask);
     }
 
-    private void setUpDelegate(Extent e, Resolution res) {
-        double minBound = markBounds.getMinResolved(res, e.z() > 1 && !suppress3D);
+    private void setUpDelegate(Extent extent, Resolution resolution) {
+        double minBound = markBounds.getMinResolved(resolution, extent.z() > 1 && !suppress3D);
 
         int threshold = (int) Math.floor(minBound);
 

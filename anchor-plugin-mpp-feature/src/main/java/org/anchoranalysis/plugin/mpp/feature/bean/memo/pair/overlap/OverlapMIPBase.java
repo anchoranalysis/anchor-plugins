@@ -45,7 +45,7 @@ public abstract class OverlapMIPBase extends FeaturePairMemoSingleRegion {
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
         if (mip) {
-            return input.calc(new CalculateOverlapMIPRatio(getRegionID()));
+            return input.calculate(new CalculateOverlapMIPRatio(getRegionID()));
         } else {
             return super.overlappingNumVoxels(input);
         }

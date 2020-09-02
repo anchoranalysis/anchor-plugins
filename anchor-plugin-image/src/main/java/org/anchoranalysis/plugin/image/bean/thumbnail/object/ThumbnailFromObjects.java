@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;

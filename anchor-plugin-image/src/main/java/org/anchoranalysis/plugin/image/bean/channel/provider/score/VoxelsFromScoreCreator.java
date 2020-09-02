@@ -90,8 +90,8 @@ class VoxelsFromScoreCreator {
             out.add(HistogramFactory.create(voxels, object));
         }
 
-        for (Histogram hist : listAdditionalHistograms) {
-            out.add(hist);
+        for (Histogram histogram : listAdditionalHistograms) {
+            out.add(histogram);
         }
 
         return out;

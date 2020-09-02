@@ -55,12 +55,12 @@ import org.opencv.dnn.Net;
 class EastObjectsExtracter {
     
     public static List<WithConfidence<ObjectMask>> apply(ConcurrentModelPool<Net> modelPool,
-            Mat image, Resolution res, double minConfidence) throws InterruptedException {
+            Mat image, Resolution resolution, double minConfidence) throws InterruptedException {
         List<WithConfidence<Mark>> listMarks =
                 EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
         // Convert marks to object-masks
-        return convertMarksToObject(listMarks, dimensionsForMatrix(image, res));
+        return convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution));
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
@@ -68,12 +68,12 @@ class EastObjectsExtracter {
         return FunctionalList.mapToList(listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
-    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution res) {
+    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
 
         int width = (int) matrix.size().width;
         int height = (int) matrix.size().height;
 
-        return new Dimensions(new Extent(width, height), res);
+        return new Dimensions(new Extent(width, height), resolution);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(

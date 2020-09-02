@@ -44,8 +44,8 @@ public class NormalizedRange<T extends FeatureInput> extends FeatureDoubleElem<T
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        double val1 = input.calc(getItem1());
-        double val2 = input.calc(getItem2());
+        double val1 = input.calculate(getItem1());
+        double val2 = input.calculate(getItem2());
 
         double absDiff = Math.abs(val1 - val2);
         double mean = (val1 + val2) / 2;

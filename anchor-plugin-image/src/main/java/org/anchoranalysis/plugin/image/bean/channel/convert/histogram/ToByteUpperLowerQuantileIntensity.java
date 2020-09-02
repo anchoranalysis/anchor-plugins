@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.channel.converter.attached.histogram.ChannelConverterHistogramUpperLowerQuantileIntensity;
+import org.anchoranalysis.image.channel.converter.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {
@@ -41,16 +41,16 @@ public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHisto
 
     @BeanField @Getter @Setter private double quantileUpper = 1.0;
 
-    /** Sets the min by multiplying the quantileLower by this constant */
+    /** Sets the min by multiplying the quantileLower by this constant. */
     @BeanField @Getter @Setter private double scaleLower = 1.0;
 
-    /** Sets the max by multiplying the quantileUpper by this constant */
+    /** Sets the max by multiplying the quantileUpper by this constant. */
     @BeanField @Getter @Setter private double scaleUpper = 1.0;
     // END BEAN PROPERTIES
 
     @Override
     public ChannelConverterAttached<Histogram, ?> createConverter() {
-        return new ChannelConverterHistogramUpperLowerQuantileIntensity(
+        return new UpperLowerQuantileIntensityFromHistogram(
                 quantileLower, quantileUpper, scaleLower, scaleUpper);
     }
 }

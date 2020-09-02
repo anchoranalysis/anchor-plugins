@@ -49,7 +49,7 @@ public abstract class FeatureGenericWithValue<T extends FeatureInput>
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return combineValueAndFeature(value, input.calc(getItem()));
+        return combineValueAndFeature(value, input.calculate(getItem()));
     }
 
     @Override

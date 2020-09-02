@@ -41,7 +41,7 @@ public class Maximum<T extends FeatureInput> extends FeatureListElem<T> {
 
         double maxValue = Double.NaN;
         for (Feature<T> f : getList()) {
-            double val = input.calc(f);
+            double val = input.calculate(f);
             if (Double.isNaN(maxValue) || val > maxValue) {
                 maxValue = val;
             }

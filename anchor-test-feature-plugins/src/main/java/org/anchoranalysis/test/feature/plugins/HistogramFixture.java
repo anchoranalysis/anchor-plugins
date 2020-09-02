@@ -45,19 +45,19 @@ public class HistogramFixture {
      */
     public static Histogram createAscending() {
 
-        Histogram h = createEmpty();
+        Histogram histogram = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrementValueBy(i, i);
+            histogram.incrementValueBy(i, i);
         }
-        return h;
+        return histogram;
     }
 
     public static Histogram createDescending() {
 
-        Histogram h = createEmpty();
+        Histogram histogram = createEmpty();
         for (int i = 0; i <= MAX_VAL; i++) {
-            h.incrementValueBy(i, MAX_VAL - i);
+            histogram.incrementValueBy(i, MAX_VAL - i);
         }
-        return h;
+        return histogram;
     }
 }

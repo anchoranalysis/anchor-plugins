@@ -48,7 +48,7 @@ public class Mean<T extends FeatureInput> extends FeatureListElem<T> {
         ListChecker.checkNonEmpty(getList());
 
         for (Feature<T> elem : getList()) {
-            result += input.calc(elem);
+            result += input.calculate(elem);
         }
 
         assert (!Double.isNaN(result));

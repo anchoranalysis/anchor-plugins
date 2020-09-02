@@ -38,10 +38,10 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.OutlineTraverser;
 import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitScheduler;
@@ -76,7 +76,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
 
         useZ = useZ && (outline.dimensions().z() > 1);
 
-        callBefore(outline.dimensions().resolution(), randomNumberGenerator);
+        callBefore(outline.resolution(), randomNumberGenerator);
 
         objectOutline = createObjectForPoint(root, outline);
 
@@ -111,10 +111,10 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void callBefore(Resolution res, RandomNumberGenerator randomNumberGenerator)
+    private void callBefore(Resolution resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         try {
-            visitScheduler.beforeCreateObject(randomNumberGenerator, res);
+            visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
         } catch (InitException e1) {
             throw new TraverseOutlineException(
                     "Failure to call beforeCreateObject on visitScheduler", e1);
@@ -127,12 +127,12 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     }
 
     private void callAfter(
-            Point3i root, Resolution res, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());
         try {
-            visitScheduler.afterCreateObject(rootRelToMask, res, randomNumberGenerator);
+            visitScheduler.afterCreateObject(rootRelToMask, resolution, randomNumberGenerator);
         } catch (InitException e) {
             throw new TraverseOutlineException(
                     "Cannot call afterCreateObject on visitScheduler", e);
@@ -160,7 +160,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         try {
             Tuple3i maxDistance =
                     visitScheduler
-                            .maxDistanceFromRootPoint(mask.dimensions().resolution())
+                            .maxDistanceFromRootPoint(mask.resolution())
                             .orElseThrow(
                                     () ->
                                             new CreateException(

@@ -61,7 +61,7 @@ public class GradientMeanForAxis extends IntensityGradientBase {
         try {
             AxisType axisType = AxisTypeConverter.createFromString(axis);
 
-            List<Point3d> points = input.calc(gradientCalculation());
+            List<Point3d> points = input.calculate(gradientCalculation());
 
             double sum =
                     points.stream().mapToDouble(point -> point.valueByDimension(axisType)).sum();

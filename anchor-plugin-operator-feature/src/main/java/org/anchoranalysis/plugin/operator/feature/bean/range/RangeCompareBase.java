@@ -47,7 +47,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return calculateForValue(input.calc(featureToCalcInputVal()), input);
+        return calculateForValue(input.calculate(featureToCalcInputVal()), input);
     }
 
     /** Boundary to define the minimum accepted value in the range */

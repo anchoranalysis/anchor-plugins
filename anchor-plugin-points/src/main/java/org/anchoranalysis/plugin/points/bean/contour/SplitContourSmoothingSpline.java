@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.contour.Contour;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
 import org.anchoranalysis.plugin.points.contour.ContourList;

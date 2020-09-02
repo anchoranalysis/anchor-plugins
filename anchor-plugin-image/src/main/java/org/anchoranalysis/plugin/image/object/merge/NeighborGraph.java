@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCondition;
@@ -47,7 +47,7 @@ class NeighborGraph {
 
     // START REQUIRED ARGUMENTS
     private final UpdatableBeforeCondition beforeCondition;
-    private final Optional<Resolution> res;
+    private final Optional<UnitConverter> unitConverter;
     // END REQUIRED ARGUMENTS
 
     private GraphWithEdgeTypes<ObjectVertex, PrioritisedVertex> graph =
@@ -71,7 +71,7 @@ class NeighborGraph {
 
         graph.addVertex(om);
 
-        beforeCondition.updateSourceObject(om.getObject(), res);
+        beforeCondition.updateSourceObject(om.getObject(), unitConverter);
 
         for (ObjectVertex possibleNeighbor : possibleNeighbors) {
             maybeAddEdge(om, possibleNeighbor, prioritizer, logger);

@@ -68,7 +68,7 @@ public class ScaleXY extends ChannelProviderUnary {
             throws CreateException {
         try {
             logger.logFormatted(
-                    "incoming Image Resolution: %s\n", channel.dimensions().resolution());
+                    "incoming Image Resolution: %s\n", channel.resolution());
 
             ScaleFactor scaleFactor = scaleCalculator.calculate(Optional.of(channel.dimensions()));
 
@@ -77,7 +77,7 @@ public class ScaleXY extends ChannelProviderUnary {
             Channel channelOut = channel.scaleXY(scaleFactor, interpolator);
 
             logger.logFormatted(
-                    "outgoing Image Resolution: %s\n", channelOut.dimensions().resolution());
+                    "outgoing Image Resolution: %s\n", channelOut.resolution());
 
             return channelOut;
 

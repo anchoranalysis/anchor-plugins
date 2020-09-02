@@ -49,23 +49,23 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
     private VisitScheduler selected;
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution res)
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution)
             throws OperationFailedException {
-        return selected.maxDistanceFromRootPoint(res);
+        return selected.maxDistanceFromRootPoint(resolution);
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution res)
+    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
         selected = randomNumberGenerator.sampleFromList(list);
-        selected.beforeCreateObject(randomNumberGenerator, res);
+        selected.beforeCreateObject(randomNumberGenerator, resolution);
     }
 
     @Override
     public void afterCreateObject(
-            Point3i root, Resolution res, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
-        selected.afterCreateObject(root, res, randomNumberGenerator);
+        selected.afterCreateObject(root, resolution, randomNumberGenerator);
     }
 
     @Override

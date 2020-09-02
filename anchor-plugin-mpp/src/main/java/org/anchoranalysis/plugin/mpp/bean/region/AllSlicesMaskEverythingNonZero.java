@@ -48,13 +48,13 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
     @Override
     protected VoxelStatistics extractFromVoxelized(VoxelizedMark mark) throws CreateException {
 
-        Histogram histIndex = histogramForAllSlices(mark, false);
-        Histogram histNonZero = histogramForAllSlices(mark, true);
+        Histogram index = histogramForAllSlices(mark, false);
+        Histogram nonZero = histogramForAllSlices(mark, true);
 
         long numNonZero =
-                histNonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
+                nonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
 
-        return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(histIndex, numNonZero));
+        return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(index, numNonZero));
     }
 
     private Histogram histogramForAllSlices(VoxelizedMark mark, boolean useNonZeroIndex)
@@ -66,9 +66,9 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         }
     }
 
-    private static Histogram histogramExtractedFromRight(Histogram histIndex, long numNonZero) {
-        Histogram hOut = histIndex.duplicate();
-        hOut = hOut.extractValuesFromRight(numNonZero);
-        return hOut;
+    private static Histogram histogramExtractedFromRight(Histogram index, long numNonZero) {
+        Histogram out = index.duplicate();
+        out = out.extractValuesFromRight(numNonZero);
+        return out;
     }
 }

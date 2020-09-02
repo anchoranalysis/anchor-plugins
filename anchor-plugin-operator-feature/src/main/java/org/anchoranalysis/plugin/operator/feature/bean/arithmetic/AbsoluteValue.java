@@ -38,7 +38,7 @@ public class AbsoluteValue<T extends FeatureInput> extends FeatureGenericSingleE
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return Math.abs(input.calc(getItem()));
+        return Math.abs(input.calculate(getItem()));
     }
 
     @Override

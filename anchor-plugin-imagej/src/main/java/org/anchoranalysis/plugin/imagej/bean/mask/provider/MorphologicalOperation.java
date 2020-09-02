@@ -62,7 +62,7 @@ public class MorphologicalOperation extends MaskProviderUnary {
             BinaryVoxels<ByteBuffer> processed =
                     ApplyImageJMorphologicalOperation.applyOperation(
                             mask.binaryVoxels(), command, iterations);
-            return new Mask(processed, mask.dimensions().resolution());
+            return new Mask(processed, mask.resolution());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

@@ -55,9 +55,9 @@ class CalculateHistogramInputFromMemo
                     pixelList.createStatisticsFor(
                             input.getPxlPartMemo(), input.dimensionsRequired());
 
-            Histogram hist = maybeExcludeZeros(stats.histogram());
+            Histogram histogram = maybeExcludeZeros(stats.histogram());
 
-            return new FeatureInputHistogram(hist, input.getResolutionOptional());
+            return new FeatureInputHistogram(histogram, input.getResolutionOptional());
         } catch (CreateException | OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }

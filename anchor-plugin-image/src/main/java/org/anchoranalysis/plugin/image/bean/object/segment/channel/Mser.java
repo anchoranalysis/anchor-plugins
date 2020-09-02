@@ -41,7 +41,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ImgLib2Wrap;
+import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -77,7 +77,7 @@ public class Mser extends SegmentChannelIntoObjects {
         checkUnsupportedSeeds(seeds);
 
         @SuppressWarnings("rawtypes")
-        Img img = ImgLib2Wrap.wrap(channel.voxels());
+        Img img = ConvertToImg.from(channel.voxels());
 
         final MserTree<?> treeDarkToBright =
                 MserTree.buildMserTree(img, delta, minSize, maxSize, maxVar, minDiversity, true);

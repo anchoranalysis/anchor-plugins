@@ -85,7 +85,7 @@ public abstract class ImageMomentsBase extends FeatureSingleObject {
     private ImageMoments calculateMoments(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        ImageMoments moments = input.calc(new CalculateSecondMoments(suppressZ));
+        ImageMoments moments = input.calculate(new CalculateSecondMoments(suppressZ));
 
         moments = moments.duplicate();
 

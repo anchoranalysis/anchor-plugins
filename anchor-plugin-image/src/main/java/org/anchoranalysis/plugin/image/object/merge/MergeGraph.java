@@ -37,7 +37,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -70,14 +70,14 @@ public class MergeGraph {
      *
      * @param payloadCalculator means to calculate a payload for any object
      * @param beforeCondition
-     * @param imageRes image-resolution
+     * @param unitConverter converts units from voxels to physical measurements and vice-versa
      * @param prioritizer means to assign priority to the merge of any two objects
      * @param logPayload whether to include the payload in logging messages
      */
     public MergeGraph(
             PayloadCalculator payloadCalculator,
             UpdatableBeforeCondition beforeCondition,
-            Optional<Resolution> imageRes,
+            Optional<UnitConverter> unitConverter,
             AssignPriority prioritizer,
             Logger logger,
             boolean logPayload) {
@@ -85,7 +85,7 @@ public class MergeGraph {
         this.payloadCalculator = payloadCalculator;
         this.prioritizer = prioritizer;
 
-        graph = new NeighborGraph(beforeCondition, imageRes);
+        graph = new NeighborGraph(beforeCondition, unitConverter);
         this.logger = new GraphLogger(new DescribeGraph(graph, logPayload), logger);
     }
 

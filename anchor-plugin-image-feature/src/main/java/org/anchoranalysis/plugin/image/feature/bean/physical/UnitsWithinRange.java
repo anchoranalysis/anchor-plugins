@@ -35,8 +35,9 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
+import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithResolution;
 
 /**
  * Checks if a value lies within a range defined by units (a minimum and maximum boundary)
@@ -45,7 +46,7 @@ import org.anchoranalysis.image.feature.bean.physical.FeatureSingleElemWithRes;
  * @param <T> feature input-type
  */
 public class UnitsWithinRange<T extends FeatureInputWithResolution>
-        extends FeatureSingleElemWithRes<T> {
+        extends FeatureSingleElemWithResolution<T> {
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */
@@ -76,9 +77,9 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution>
             throws FeatureCalculationException {
 
         try {
-            Optional<Resolution> resolutionOptional = Optional.of(resolution);
-            double minVoxels = min.resolveToVoxels(resolutionOptional);
-            double maxVoxels = max.resolveToVoxels(resolutionOptional);
+            Optional<UnitConverter> unitConverter = Optional.of(resolution.unitConvert());
+            double minVoxels = min.resolveToVoxels(unitConverter);
+            double maxVoxels = max.resolveToVoxels(unitConverter);
 
             if (value >= minVoxels && value <= maxVoxels) {
                 return within;

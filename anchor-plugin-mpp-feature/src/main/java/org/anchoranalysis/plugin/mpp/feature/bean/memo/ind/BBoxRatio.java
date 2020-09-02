@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
@@ -56,7 +56,7 @@ public class BBoxRatio extends FeatureSingleMemo {
         int[] extent = bb.extent().asOrderedArray();
 
         // Let's change the z-dimension to include the relative-resolution
-        extent[2] = (int) (bb.extent().z() * dimensions.resolution().getZRelativeResolution());
+        extent[2] = (int) (bb.extent().z() * dimensions.resolution().zRelative());
 
         return extent;
     }

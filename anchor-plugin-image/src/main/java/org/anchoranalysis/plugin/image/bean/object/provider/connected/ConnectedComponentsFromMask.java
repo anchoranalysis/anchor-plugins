@@ -79,7 +79,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(maskCreated.dimensions().resolution())));
+                                            Optional.of(maskCreated.dimensions().unitConvert())));
 
             if (bySlices) {
                 return createObjectsBySlice(maskCreated, minNumberVoxels);

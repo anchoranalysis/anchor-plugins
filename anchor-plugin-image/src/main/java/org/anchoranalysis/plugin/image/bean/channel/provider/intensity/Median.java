@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -79,7 +79,7 @@ public class Median extends ChannelProviderUnary {
             for (int y = yMin; y <= yMax; y++) {
                 for (int x = xMin; x <= xMax; x++) {
 
-                    int val = ByteConverter.unsignedByteToInt(bb.get(extent.offset(x, y)));
+                    int val = PrimitiveConverter.unsignedByteToInt(bb.get(extent.offset(x, y)));
                     set.add(val);
                 }
             }
@@ -95,7 +95,7 @@ public class Median extends ChannelProviderUnary {
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
+                int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
                 assert (set.contains(val));
                 set.remove(val);
             }
@@ -111,7 +111,7 @@ public class Median extends ChannelProviderUnary {
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
+                int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
                 set.add(val);
             }
         }
