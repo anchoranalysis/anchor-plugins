@@ -108,11 +108,11 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
             // Scale each object-mask and extract as an object-collection
             return ScaleExtractObjects.apply(
                     maybeFilterList(objectsWithConfidence), pair._2(), stack.extent());
-        } catch (OperationFailedException | CreateException e) {
-            throw new SegmentationFailedException(e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
+        } catch (Throwable e) {
+            throw new SegmentationFailedException(e);            
         }
     }
 
