@@ -45,7 +45,7 @@ public class Intensity extends FeatureSingleMemo {
     /** Feature to apply to the histogram */
     @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
-    /** If TRUE, zeros are excluded from considering in the histogram */
+    /** If true, zeros are excluded from considering in the histogram */
     @BeanField @Getter @Setter private boolean excludeZero = false;
 
     @BeanField @Getter @Setter private MarkRegion region;

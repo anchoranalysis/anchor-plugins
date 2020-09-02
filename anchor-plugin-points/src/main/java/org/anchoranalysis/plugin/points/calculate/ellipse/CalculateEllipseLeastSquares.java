@@ -52,7 +52,7 @@ public class CalculateEllipseLeastSquares
             throws FeatureCalculationException {
 
         try {
-            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().getEnergyStack();
+            EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
 
             ObjectMask object = extractEllipseSlice(input.getObject());
 

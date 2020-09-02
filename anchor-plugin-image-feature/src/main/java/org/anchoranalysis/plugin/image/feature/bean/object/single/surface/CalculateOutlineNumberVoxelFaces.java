@@ -50,7 +50,7 @@ class CalculateOutlineNumberVoxelFaces
 
     /**
      * Whether to suppress 3D calculations (only consider XY neighbors). Doesn't make sense if
-     * mip=TRUE, and will then be ignroed.
+     * mip=true, and will then be ignroed.
      */
     private final boolean suppress3D;
 

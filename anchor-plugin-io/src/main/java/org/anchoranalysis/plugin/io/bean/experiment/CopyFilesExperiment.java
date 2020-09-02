@@ -186,7 +186,7 @@ public class CopyFilesExperiment extends Experiment {
             Optional<Path> destination =
                     copyFilesNaming.destinationPath(sourcePath, destPath, file, iter);
 
-            // Skip any files with a NULL destinationPath
+            // Skip any files with a null destinationPath
             if (!destination.isPresent()) {
                 if (dummyMode) {
                     logger.logFormatted("Skipping %s%n", file.getPath());

@@ -43,7 +43,7 @@ public class FeatureInputOverlappingCircleFixture {
     /**
      * Two object-masks of circles in different locations WITH some overlap
      *
-     * @param sameSize iff TRUE the object-masks are the same size, otherwise not
+     * @param sameSize iff true the object-masks are the same size, otherwise not
      * @return the params populated with the two object-masks
      */
     public static FeatureInputPairObjects twoOverlappingCircles(boolean sameSize) {
@@ -53,7 +53,7 @@ public class FeatureInputOverlappingCircleFixture {
     /**
      * Two object-masks of circles in different locations WITHOUT any overlap
      *
-     * @param sameSize iff TRUE the object-masks are the same size, otherwise not
+     * @param sameSize iff true the object-masks are the same size, otherwise not
      * @return the params populated with the two object-masks
      */
     public static FeatureInputPairObjects twoNonOverlappingCircles(boolean sameSize) {

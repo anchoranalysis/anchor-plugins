@@ -48,7 +48,7 @@ public class IntersectingCircleObjectsFixture {
      * @param numberIntersecting the number of circles that intersect that should be produced
      * @param numberNotIntersecting the number of circles that do not intersect that should be
      *     produced
-     * @param sameSize iff TRUE all circles have the same radius ({@code INITIAL_RAIDUS}), otherwise
+     * @param sameSize iff true all circles have the same radius ({@code INITIAL_RAIDUS}), otherwise
      *     the radius gradually increments
      */
     public static ObjectCollection generateIntersectingObjects(

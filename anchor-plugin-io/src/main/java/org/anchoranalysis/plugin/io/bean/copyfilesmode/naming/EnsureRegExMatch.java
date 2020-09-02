@@ -42,7 +42,7 @@ public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {
 
     // START BEAN PROPERTIES
     /**
-     * Iff TRUE, then a file is rejected if regEx matches and vice-versa (opposite to normal
+     * Iff true, then a file is rejected if regEx matches and vice-versa (opposite to normal
      * behaviour)
      */
     @BeanField @Getter @Setter private boolean invert = false;

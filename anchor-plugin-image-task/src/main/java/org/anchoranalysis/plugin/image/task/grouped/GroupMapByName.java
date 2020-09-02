@@ -100,7 +100,7 @@ public abstract class GroupMapByName<S, T> {
      *
      * @param channelChecker channel checker
      * @param context
-     * @throws IOException if something goes wrong, or if includeGroupName is FALSE, but more than
+     * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
      *     one group-names exist
      */
     public void outputGroupedData(ConsistentChannelChecker channelChecker, BoundIOContext context)

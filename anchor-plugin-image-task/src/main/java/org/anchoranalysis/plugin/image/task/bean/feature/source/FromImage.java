@@ -119,7 +119,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     private Optional<DisplayStack> extractThumbnail(EnergyStack energyStack, boolean thumbnails)
             throws CreateException {
         if (thumbnails) {
-            return Optional.of(thumbnail.thumbnailFor(energyStack.getEnergyStack().asStack()));
+            return Optional.of(thumbnail.thumbnailFor(energyStack.withoutParams().asStack()));
         } else {
             return Optional.empty();
         }

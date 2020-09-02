@@ -44,11 +44,11 @@ import org.apache.commons.io.IOCase;
 public class FilePathPattern extends Summarizer<Path> {
 
     // START BEAN PROPERTIES
-    /** Iff TRUE, any hidden-path is not considered, and simply ignored */
+    /** Iff true, any hidden-path is not considered, and simply ignored */
     private boolean ignoreHidden = true;
 
     /**
-     * if TRUE, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
+     * if true, case is ignored in the pattern matching. Otherwise the system-default is used i.e.
      * Windows ingores case, Linux doesn't
      */
     private boolean ignoreCase = false;

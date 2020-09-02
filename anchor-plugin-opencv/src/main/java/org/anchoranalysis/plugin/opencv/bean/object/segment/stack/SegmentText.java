@@ -82,7 +82,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     /** Bounding boxes with IoU scores above this threshold are removed */
     @BeanField @Getter @Setter private double suppressIntersectionOverUnionAbove = 0.3;
 
-    /** Iff TRUE, non-maxima-suppression is applied to filter the proposed bounding boxes */
+    /** Iff true, non-maxima-suppression is applied to filter the proposed bounding boxes */
     @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
     // END BEAN PROPERTIES
     

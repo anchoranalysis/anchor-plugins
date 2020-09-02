@@ -74,7 +74,7 @@ class OptSchemeFixture {
      * @param markFactory creates a new mark when a "birth" occurs
      * @param energyScheme how the Energy is calculated
      * @param energyStack the stack on which features are applied to calcualte the Energy
-     * @param logToConsole iff TRUE prints ongoing optimziation progress to console (useful for
+     * @param logToConsole iff true prints ongoing optimziation progress to console (useful for
      *     debugging)
      * @return the optimal state according to the algorithm
      * @throws OptTerminatedEarlyException

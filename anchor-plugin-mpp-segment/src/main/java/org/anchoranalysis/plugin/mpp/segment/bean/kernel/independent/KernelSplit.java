@@ -105,7 +105,7 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         return Optional.of(
                 createMarks(
                         existing.get(),
-                        propContext.getEnergyStack().getEnergyStack(),
+                        propContext.getEnergyStack().withoutParams(),
                         pairNew.get(),
                         markExstIndex));
     }
