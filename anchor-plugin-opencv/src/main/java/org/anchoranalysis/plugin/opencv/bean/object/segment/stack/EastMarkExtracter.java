@@ -33,6 +33,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
@@ -59,21 +60,25 @@ class EastMarkExtracter {
      * @param image an RGB image to extract boxes from
      * @param minConfidence filters boxes to have confidence >= minConfidence
      * @return a list of bounding-boxes, each with a confidence value
-     * @throws InterruptedException 
+     * @throws Throwable 
      */
     public static List<WithConfidence<Mark>> extractBoundingBoxes( ConcurrentModelPool<Net> modelPool,
-            Mat image, double minConfidence) throws InterruptedException {
+            Mat image, double minConfidence) throws Throwable {
         return modelPool.excuteOrWait( model->forwardPass(model, image, minConfidence) );
     }
     
-    private static List<WithConfidence<Mark>> forwardPass(Net model, Mat image, double minConfidence) {
-        model.setInput(
-                Dnn.blobFromImage(
-                        image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false));
-
-        List<Mat> output = new ArrayList<>();
-        model.forward(output, Arrays.asList(OUTPUT_SCORES,OUTPUT_GEOMETRY));
-        return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
+    private static List<WithConfidence<Mark>> forwardPass(Net model, Mat image, double minConfidence) throws ConcurrentModelException {
+        try {
+            model.setInput(
+                    Dnn.blobFromImage(
+                            image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false));
+    
+            List<Mat> output = new ArrayList<>();
+            model.forward(output, Arrays.asList(OUTPUT_SCORES,OUTPUT_GEOMETRY));
+            return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
+        } catch (Exception e) {
+            throw new ConcurrentModelException(e);
+        }
     }
 
     private static List<WithConfidence<Mark>> extractFromMatrices(

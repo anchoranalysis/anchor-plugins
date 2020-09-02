@@ -55,7 +55,7 @@ import org.opencv.dnn.Net;
 class EastObjectsExtracter {
     
     public static List<WithConfidence<ObjectMask>> apply(ConcurrentModelPool<Net> modelPool,
-            Mat image, Resolution resolution, double minConfidence) throws InterruptedException {
+            Mat image, Resolution resolution, double minConfidence) throws Throwable {
         List<WithConfidence<Mark>> listMarks =
                 EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
