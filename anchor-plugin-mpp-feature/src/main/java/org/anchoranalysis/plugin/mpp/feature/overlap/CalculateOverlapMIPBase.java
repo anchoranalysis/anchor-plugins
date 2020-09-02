@@ -45,8 +45,8 @@ public abstract class CalculateOverlapMIPBase
     @Override
     protected Double execute(FeatureInputPairMemo params) {
 
-        VoxelizedMarkMemo mark1 = params.getObj1();
-        VoxelizedMarkMemo mark2 = params.getObj2();
+        VoxelizedMarkMemo mark1 = params.getObject1();
+        VoxelizedMarkMemo mark2 = params.getObject2();
 
         VoxelizedMark voxelized1 = mark1.voxelized();
         VoxelizedMark voxelized2 = mark2.voxelized();
