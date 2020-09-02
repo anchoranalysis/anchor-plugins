@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class InvertedMax<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class InvertedMax<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PARAMETERS
     @BeanField @Getter @Setter private double max = 100;

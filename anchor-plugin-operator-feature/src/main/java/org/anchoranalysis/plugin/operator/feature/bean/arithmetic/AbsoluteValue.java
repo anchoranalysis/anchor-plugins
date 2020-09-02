@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public class AbsoluteValue<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class AbsoluteValue<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
     // END BEAN PROPERTIES

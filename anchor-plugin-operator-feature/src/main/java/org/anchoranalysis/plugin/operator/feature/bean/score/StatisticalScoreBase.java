@@ -24,40 +24,58 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.operator.feature.bean;
+package org.anchoranalysis.plugin.operator.feature.bean.score;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
 /**
- * Operations that use a specified constant value
+ * Calculates a score based upon the statistical mean and std-deviation.
  *
  * @author Owen Feehan
- * @param <T>
+ * @param <T> feature input-type
  */
-public abstract class FeatureGenericWithValue<T extends FeatureInput>
-        extends FeatureGenericSingleElem<T> {
+public abstract class StatisticalScoreBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private double value = 0;
+    @BeanField @Getter @Setter private Feature<T> itemMean;
+
+    @BeanField @Getter @Setter private Feature<T> itemStdDev;
     // END BEAN PROPERTIES
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return combineValueAndFeature(value, input.calculate(getItem()));
+
+        return deriveScore(
+                input.calculate(getItem()), input.calculate(itemMean), () -> input.calculate(itemStdDev));
     }
+
+    /**
+     * Derive scores given the value, mean and standard-deviation
+     *
+     * @param featureValue the feature-value calculated from getItem()
+     * @param mean the mean
+     * @param stdDev a means to get the std-deviation (if needed)
+     * @return
+     * @throws FeatureCalculationException
+     */
+    protected abstract double deriveScore(
+            double featureValue, double mean, FeatureResultSupplier stdDev)
+            throws FeatureCalculationException;
 
     @Override
-    public String descriptionLong() {
-        return combineDscr(String.format("%f", value), getItem().descriptionLong());
+    public String describeParams() {
+        return String.format(
+                "%s,%s,%s",
+                getItem().descriptionLong(),
+                getItemMean().descriptionLong(),
+                getItemStdDev().descriptionLong());
     }
-
-    protected abstract double combineValueAndFeature(double value, double featureResult);
-
-    protected abstract String combineDscr(String valueDscr, String featureDscr);
 }

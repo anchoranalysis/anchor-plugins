@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
+import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
-public class ToThePowerOfConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
+public class ToThePowerOfConstant<T extends FeatureInput> extends WithValueBase<T> {
 
     @Override
     protected double combineValueAndFeature(double value, double featureResult) {

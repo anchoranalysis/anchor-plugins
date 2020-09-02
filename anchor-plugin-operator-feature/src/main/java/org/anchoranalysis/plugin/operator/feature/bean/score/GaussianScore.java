@@ -36,7 +36,7 @@ import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 // A score between 0 and 1, based upon the CDF of a guassian. as one approaches the mean, the score
 // approaches 1.0
-public class GaussianScore<T extends FeatureInput> extends FeatureStatScore<T> {
+public class GaussianScore<T extends FeatureInput> extends StatisticalScoreBase<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter

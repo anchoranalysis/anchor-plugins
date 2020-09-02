@@ -36,7 +36,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorSimple;
+import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
@@ -47,7 +47,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private FeatureEvaluatorSimple<FeatureInputPairObjects> featureEvaluator;
+    private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 
     @BeanField @Getter @Setter private double maxCost = 1.0;
 

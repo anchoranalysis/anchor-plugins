@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 
-public class AsObject extends FeatureSingleElem<FeatureInputSingleMemo, FeatureInputSingleObject> {
+public class AsObject extends FeatureUnary<FeatureInputSingleMemo, FeatureInputSingleObject> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RegionMap regionMap = RegionMapSingleton.instance();

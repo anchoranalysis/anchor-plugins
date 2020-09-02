@@ -84,7 +84,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
         super.start(dim, objectsToFilter);
 
         // Now we calculate feature values for each object, and a standard deviation
-        featureVals = calculateFeatures(objectsToFilter, featureEvaluator.createAndStartSession());
+        featureVals = calculateFeatures(objectsToFilter, featureEvaluator.createFeatureSession());
 
         featureMap = createFeatureMap(objectsToFilter, featureVals);
 

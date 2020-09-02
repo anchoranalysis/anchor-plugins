@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.operator.feature.bean.replace;
 
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
+import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
 /**
  * Calculates the underlying feature, but replaces the result with a constant if it happens to be an
@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
  * @param <T>
  */
 public abstract class ReplaceUnusualValue<T extends FeatureInput>
-        extends FeatureGenericWithValue<T> {
+        extends WithValueBase<T> {
 
     @Override
     protected double combineValueAndFeature(double value, double featureResult) {

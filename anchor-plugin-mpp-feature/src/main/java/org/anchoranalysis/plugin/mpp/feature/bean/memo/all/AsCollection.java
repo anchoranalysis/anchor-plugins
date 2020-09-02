@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.all;
 
-import org.anchoranalysis.feature.bean.operator.FeatureSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnary;
 import org.anchoranalysis.feature.cache.ChildCacheName;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkColle
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 
 public class AsCollection
-        extends FeatureSingleElem<FeatureInputAllMemo, FeatureInputMarkCollection> {
+        extends FeatureUnary<FeatureInputAllMemo, FeatureInputMarkCollection> {
 
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCollection.class);
 

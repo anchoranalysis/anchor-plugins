@@ -45,7 +45,6 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleChangeInput;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingleFromMulti;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
-import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluatorWithEnergy;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
@@ -73,7 +72,7 @@ public class MergePairs extends MergeWithFeature {
     @BeanField @Getter @Setter private RelationBean relation = new GreaterThanEqualToBean();
 
     @BeanField @Getter @Setter
-    private FeatureEvaluatorWithEnergy<FeatureInputPairObjects> featureEvaluatorMerge;
+    private FeatureEvaluator<FeatureInputPairObjects> featureEvaluatorMerge;
     // END BEAN PROPERTIES
 
     @Override
@@ -87,7 +86,7 @@ public class MergePairs extends MergeWithFeature {
         try {
             double threshold =
                     featureEvaluatorThreshold
-                            .createAndStartSession()
+                            .createFeatureSession()
                             .calculate(FeatureInputNull.instance());
 
             return new AssignPriorityFromPair(
