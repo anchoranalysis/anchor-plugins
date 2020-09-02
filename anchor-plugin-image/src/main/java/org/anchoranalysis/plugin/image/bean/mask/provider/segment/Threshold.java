@@ -58,7 +58,7 @@ public class Threshold extends FromChannelBase {
             BinaryVoxels<ByteBuffer> voxelsThresholded =
                     thresholder.threshold(source.voxels(), BinaryValuesByte.getDefault());
 
-            return new Mask(voxelsThresholded, source.dimensions().resolution());
+            return new Mask(voxelsThresholded, source.resolution());
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);

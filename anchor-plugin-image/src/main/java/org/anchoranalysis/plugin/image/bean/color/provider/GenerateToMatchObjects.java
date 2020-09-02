@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 
 /**
  * Generates colors to match the size of an object-collection
@@ -45,7 +45,7 @@ import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
 public class GenerateToMatchObjects extends ColorProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ColorSetGenerator colorSetGenerator;
+    @BeanField @Getter @Setter private ColorListFactory colorSetGenerator;
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
@@ -61,7 +61,7 @@ public class GenerateToMatchObjects extends ColorProvider {
         }
 
         try {
-            return colorSetGenerator.generateColors(objectsCreated.size());
+            return colorSetGenerator.create(objectsCreated.size());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

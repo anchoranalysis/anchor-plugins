@@ -75,7 +75,7 @@ public class SegmentChannel extends FromChannelBase {
 
     @Override
     protected Mask createFromSource(Channel source) throws CreateException {
-        return new Mask(segmentChannel(source), source.dimensions().resolution());
+        return new Mask(segmentChannel(source), source.resolution());
     }
 
     private BinaryVoxels<ByteBuffer> segmentChannel(Channel channel) throws CreateException {
@@ -91,9 +91,9 @@ public class SegmentChannel extends FromChannelBase {
         }
     }
 
-    private BinarySegmentationParameters createParams(Dimensions dim) throws CreateException {
+    private BinarySegmentationParameters createParams(Dimensions dimensions) throws CreateException {
         return new BinarySegmentationParameters(
-                dim.resolution(), OptionalFactory.create(histogram));
+                dimensions.resolution(), OptionalFactory.create(histogram));
     }
 
     private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {

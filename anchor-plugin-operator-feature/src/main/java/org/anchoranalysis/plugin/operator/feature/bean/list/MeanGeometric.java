@@ -45,7 +45,7 @@ public class MeanGeometric<T extends FeatureInput> extends FeatureListElem<T> {
 
         for (int i = 0; i < getList().size(); i++) {
             Feature<T> elem = getList().get(i);
-            result[i] = input.calc(elem);
+            result[i] = input.calculate(elem);
         }
 
         return meanCalculator.evaluate(result);

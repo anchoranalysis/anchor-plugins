@@ -33,7 +33,7 @@ import java.nio.ShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -140,7 +140,7 @@ class VoxelsArithmetic {
                 int b1 = in1.get();
                 short b2 = in2.get();
 
-                int sum = b1 + ByteConverter.unsignedShortToInt(b2);
+                int sum = b1 + PrimitiveConverter.unsignedShortToInt(b2);
                 oneStepBackward(in1);
                 in1.put(sum);
             }
@@ -162,7 +162,7 @@ class VoxelsArithmetic {
                 int b1 = in1.get();
                 byte b2 = in2.get();
 
-                int sum = b1 + ByteConverter.unsignedByteToInt(b2);
+                int sum = b1 + PrimitiveConverter.unsignedByteToInt(b2);
                 oneStepBackward(in1);
                 in1.put(sum);
             }

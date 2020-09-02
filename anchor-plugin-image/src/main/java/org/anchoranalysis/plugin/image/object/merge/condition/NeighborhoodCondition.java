@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
@@ -68,7 +68,7 @@ public class NeighborhoodCondition implements UpdatableBeforeCondition {
     }
 
     @Override
-    public void updateSourceObject(ObjectMask source, Optional<Resolution> res)
+    public void updateSourceObject(ObjectMask source, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
 
         boxSrcGrown = requireBBoxNeighbors ? boundingBoxGrown(source) : null;

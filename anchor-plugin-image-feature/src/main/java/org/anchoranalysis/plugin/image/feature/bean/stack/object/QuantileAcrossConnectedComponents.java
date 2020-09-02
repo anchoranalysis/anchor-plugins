@@ -59,7 +59,7 @@ public class QuantileAcrossConnectedComponents extends FeatureStack {
         ResolvedCalculation<ObjectCollection, FeatureInputStack> ccObjects =
                 input.resolver().search(new CalculateConnectedComponents(energyChannelIndex));
 
-        int size = input.calc(ccObjects).size();
+        int size = input.calculate(ccObjects).size();
 
         DoubleArrayList featureVals = new DoubleArrayList();
 

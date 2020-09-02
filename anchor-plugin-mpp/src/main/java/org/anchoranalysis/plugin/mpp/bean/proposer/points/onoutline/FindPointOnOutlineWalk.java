@@ -172,12 +172,11 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         if (maxDistance != null) {
             double distance =
                     maskCreated
-                            .dimensions()
                             .resolution()
                             .distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(maskCreated.dimensions().resolution()),
+                            Optional.of(maskCreated.dimensions().unitConvert()),
                             centerPoint,
                             pointDouble);
             return distance > maxDistanceResolved;

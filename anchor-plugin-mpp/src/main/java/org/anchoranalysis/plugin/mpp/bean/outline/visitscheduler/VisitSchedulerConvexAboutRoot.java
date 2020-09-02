@@ -46,19 +46,19 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     private Point3i root;
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution res) {
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution) {
         return Optional.empty();
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution res)
+    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
         // NOTHING TO DO
     }
 
     @Override
     public void afterCreateObject(
-            Point3i root, Resolution res, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         this.root = root;
     }

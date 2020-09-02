@@ -47,9 +47,9 @@ public class Identity extends VoxelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double pxlValue = pixelVals[energyChannelIndex];
+        double pxlValue = voxelIntensities[energyChannelIndex];
 
         if (normalize) {
             double val = pxlValue / 255;

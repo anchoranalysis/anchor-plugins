@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.bean.channel.convert;
 
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.voxels.ConvertToByteScaleByType;
 
 public class ToByteScaleByType extends ConvertChannelTo {
 
     @Override
     public ChannelConverter<?> createConverter() {
-        return new ChannelConverterToUnsignedByte(new ConvertToByteScaleByType());
+        return new ToUnsignedByte(new ConvertToByteScaleByType());
     }
 }

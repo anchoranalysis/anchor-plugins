@@ -31,8 +31,8 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
 

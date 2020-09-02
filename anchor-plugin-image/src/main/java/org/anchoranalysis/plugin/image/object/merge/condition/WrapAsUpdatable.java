@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
@@ -46,13 +46,13 @@ public class WrapAsUpdatable implements UpdatableBeforeCondition {
 
     // TEMPORARILY UPDATED
     private ObjectMask objectSource;
-    private Optional<Resolution> resolution;
+    private Optional<UnitConverter> resolution;
 
     @Override
-    public void updateSourceObject(ObjectMask source, Optional<Resolution> res)
+    public void updateSourceObject(ObjectMask source, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
         this.objectSource = source;
-        this.resolution = res;
+        this.resolution = unitConverter;
     }
 
     @Override

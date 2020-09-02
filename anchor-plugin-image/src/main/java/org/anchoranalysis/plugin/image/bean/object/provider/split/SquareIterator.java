@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.split;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 /**
  * Iterates over an extent in successive (mostly) fixed-sized squares in and x any y dimensions

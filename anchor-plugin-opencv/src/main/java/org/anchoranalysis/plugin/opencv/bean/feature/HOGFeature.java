@@ -95,7 +95,7 @@ public class HOGFeature extends FeatureStack {
     @Override
     protected double calculate(SessionInput<FeatureInputStack> input)
             throws FeatureCalculationException {
-        float[] arr = input.calc(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
+        float[] arr = input.calculate(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 
         if (index >= arr.length) {
             throw new FeatureCalculationException(

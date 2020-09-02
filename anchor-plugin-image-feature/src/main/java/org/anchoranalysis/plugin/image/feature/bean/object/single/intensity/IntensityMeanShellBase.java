@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
@@ -108,7 +108,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calc(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
+        return input.calculate(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
     private Optional<ObjectMask> intersectWithEnergyMask(

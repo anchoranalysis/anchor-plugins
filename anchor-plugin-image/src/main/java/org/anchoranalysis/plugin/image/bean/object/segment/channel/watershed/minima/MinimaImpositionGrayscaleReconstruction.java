@@ -94,7 +94,7 @@ public class MinimaImpositionGrayscaleReconstruction extends MinimaImposition {
                         voxelsIntensity, markerForReconstruction, containingMask);
 
         return ChannelFactory.instance()
-                .create(reconBuffer.any(), channel.dimensions().resolution());
+                .create(reconBuffer.any(), channel.resolution());
     }
 
     private VoxelsWrapper createMarkerImageFromGradient(Mask marker, VoxelsWrapper gradientImage) {

@@ -59,13 +59,13 @@ public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleEle
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        double featureConditionResult = input.calc(featureCondition);
+        double featureConditionResult = input.calculate(featureCondition);
         RelationToValue relation = threshold.relation();
 
         if (relation.isRelationToValueTrue(featureConditionResult, threshold.threshold())) {
-            return input.calc(super.getItem());
+            return input.calculate(super.getItem());
         } else {
-            return input.calc(featureElse);
+            return input.calculate(featureElse);
         }
     }
 }

@@ -49,7 +49,7 @@ public class MinimumDistanceByDimension extends FeaturePairMemo {
                         params.getObj1().getMark().centerPoint(),
                         params.getObj2().getMark().centerPoint());
 
-        return minDimension(centerPoint, params.getObj1().getMark().numDims() >= 3);
+        return minDimension(centerPoint, params.getObj1().getMark().numberDimensions() >= 3);
     }
 
     /** Calculates the distance between two points in each dimension independently */

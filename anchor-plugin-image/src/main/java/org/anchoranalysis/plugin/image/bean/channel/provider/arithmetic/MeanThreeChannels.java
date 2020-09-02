@@ -31,7 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderTernary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
@@ -80,9 +80,9 @@ public class MeanThreeChannels extends ChannelProviderTernary {
                 byte b2 = in2.get();
                 byte b3 = in3.get();
 
-                int i1 = ByteConverter.unsignedByteToInt(b1);
-                int i2 = ByteConverter.unsignedByteToInt(b2);
-                int i3 = ByteConverter.unsignedByteToInt(b3);
+                int i1 = PrimitiveConverter.unsignedByteToInt(b1);
+                int i2 = PrimitiveConverter.unsignedByteToInt(b2);
+                int i3 = PrimitiveConverter.unsignedByteToInt(b3);
 
                 int mean = (i1 + i2 + i3) / 3;
 

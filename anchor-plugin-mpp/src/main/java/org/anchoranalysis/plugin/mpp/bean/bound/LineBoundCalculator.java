@@ -39,7 +39,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -67,7 +67,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChannel.dimensions().resolution(),
+                                    outlineChannel.resolution(),
                                     rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
@@ -141,14 +141,14 @@ public class LineBoundCalculator extends BoundCalculator {
             }
 
             int index = dimensions.offsetSlice(runningInt);
-            int v = ByteConverter.unsignedByteToInt(arr.get(index));
+            int v = PrimitiveConverter.unsignedByteToInt(arr.get(index));
 
             if (v > 0) {
                 // We calculate how far we have travelled in total
                 return extra
                         + normZMag(
                                 runningDbl,
-                                channel.dimensions().resolution().getZRelativeResolution());
+                                channel.resolution().zRelative());
             }
         }
         return -1;

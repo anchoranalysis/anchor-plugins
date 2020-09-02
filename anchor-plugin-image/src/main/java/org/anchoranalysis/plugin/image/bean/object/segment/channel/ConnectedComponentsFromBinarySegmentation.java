@@ -64,12 +64,12 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
             throws SegmentationFailedException {
 
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.dimensions().resolution());
+                new BinarySegmentationParameters(channel.resolution());
 
         BinaryVoxels<ByteBuffer> bvb = segment.segment(channel.voxels(), params, objectMask);
         return createFromVoxels(
                 bvb,
-                channel.dimensions().resolution(),
+                channel.resolution(),
                 objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 

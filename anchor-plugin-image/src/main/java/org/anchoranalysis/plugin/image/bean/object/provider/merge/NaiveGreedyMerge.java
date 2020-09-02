@@ -41,9 +41,9 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
@@ -62,7 +62,7 @@ class NaiveGreedyMerge {
     private final boolean replaceWithMidpoint;
     private final BeforeCondition beforeCondition;
     private final AfterCondition afterCondition;
-    private final Optional<Resolution> res;
+    private final Optional<UnitConverter> unitConverter;
     private final Logger logger;
 
     @Value
@@ -139,14 +139,14 @@ class NaiveGreedyMerge {
     private Optional<ObjectMask> tryMerge(ObjectMask source, ObjectMask destination)
             throws OperationFailedException {
 
-        if (!beforeCondition.accept(source, destination, res)) {
+        if (!beforeCondition.accept(source, destination, unitConverter)) {
             return Optional.empty();
         }
 
         // Do merge
         ObjectMask merged = merge(source, destination);
 
-        if (!afterCondition.accept(source, destination, merged, res)) {
+        if (!afterCondition.accept(source, destination, merged)) {
             return Optional.empty();
         }
 

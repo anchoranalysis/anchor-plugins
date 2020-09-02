@@ -46,7 +46,7 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
 
     @BeanField @Getter @Setter private int energyChannelIndexFail = 0;
 
-    @BeanField @Getter @Setter private int histIndex = 0;
+    @BeanField @Getter @Setter private int histogramIndex = 0;
 
     @BeanField @Getter @Setter private RelationBean relation;
 
@@ -55,17 +55,17 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
     @BeanField @Getter @Setter private boolean max = true; // We use the max, otherwise the min
     // END BEAN PROPERTIES
 
-    private int histMax;
+    private int histogramMax;
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        double pxlValue = pixelVals[energyChannelIndexCheck];
+        double pxlValue = voxelIntensities[energyChannelIndexCheck];
 
-        if (relation.create().isRelationToValueTrue(pxlValue, histMax)) {
+        if (relation.create().isRelationToValueTrue(pxlValue, histogramMax)) {
             return value;
         } else {
-            return pixelVals[energyChannelIndexFail];
+            return voxelIntensities[energyChannelIndexFail];
         }
     }
 
@@ -74,9 +74,9 @@ public class IdentityImposeValueRelationToHistogram extends VoxelScore {
             throws InitException {
         try {
             if (max) {
-                histMax = histograms.get(histIndex).calculateMaximum();
+                histogramMax = histograms.get(histogramIndex).calculateMaximum();
             } else {
-                histMax = histograms.get(histIndex).calculateMinimum();
+                histogramMax = histograms.get(histogramIndex).calculateMinimum();
             }
         } catch (OperationFailedException e) {
             throw new InitException(e);

@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ParamsOverlappingCircleFixture {
+public class FeatureInputOverlappingCircleFixture {
 
     private static final int DEFAULT_CIRCLE_RADIUS = 30;
 

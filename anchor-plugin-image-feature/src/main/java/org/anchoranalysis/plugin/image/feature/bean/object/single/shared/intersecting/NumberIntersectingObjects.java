@@ -42,6 +42,6 @@ public class NumberIntersectingObjects extends FeatureIntersectingObjects {
             SessionInput<FeatureInputSingleObject> params,
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> intersecting)
             throws FeatureCalculationException {
-        return params.calc(intersecting).size();
+        return params.calculate(intersecting).size();
     }
 }

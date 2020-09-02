@@ -51,7 +51,7 @@ public class RadiiMinRatio extends CheckMark {
 
         ConicBase markCast = (ConicBase) mark;
         double[] radiiOrdered =
-                markCast.radiiOrderedResolved(energyStack.dimensions().resolution());
+                markCast.radiiOrderedResolved(energyStack.resolution());
 
         int len = radiiOrdered.length;
         assert (len >= 2);

@@ -55,6 +55,6 @@ public class BackgroundSubtractor extends WithRadiusBase {
                     true);
         }
 
-        return ConvertFromImagePlus.toChannel(imp, channel.dimensions().resolution());
+        return ConvertFromImagePlus.toChannel(imp, channel.resolution());
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class GrowUtilities {

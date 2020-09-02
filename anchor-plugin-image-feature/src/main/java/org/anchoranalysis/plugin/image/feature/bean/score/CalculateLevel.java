@@ -40,17 +40,17 @@ public class CalculateLevel extends CalculateLevelBase {
     private double distanceMaxDivider;
 
     @Override
-    protected void beforeCalcSetup(Histogram hist, int level) {
+    protected void beforeCalcSetup(Histogram histogram, int level) {
         // We divide by twice the distanceMax so we always get a figure bounded [0,0.5]
         distanceMaxDivider = distanceMax * 2;
     }
 
     @Override
-    protected double calculateForPixel(int pxlValue, int level) {
+    protected double calculateForVoxel(int voxelIntensity, int level) {
 
-        if (pxlValue < level) {
+        if (voxelIntensity < level) {
 
-            int diff = level - pxlValue;
+            int diff = level - voxelIntensity;
 
             if (diff > distanceMax) {
                 return 0;
@@ -59,7 +59,7 @@ public class CalculateLevel extends CalculateLevelBase {
             double mem = diff / distanceMaxDivider;
             return 0.5 - mem;
         } else {
-            int diff = pxlValue - level;
+            int diff = voxelIntensity - level;
 
             if (diff > distanceMax) {
                 return 1;

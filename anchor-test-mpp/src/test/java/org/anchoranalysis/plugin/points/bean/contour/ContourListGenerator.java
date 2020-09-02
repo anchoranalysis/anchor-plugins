@@ -33,13 +33,13 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.contour.Contour;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.HSB;
+import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.IterableObjectGenerator;
 import org.anchoranalysis.io.generator.ObjectGenerator;
@@ -63,8 +63,8 @@ class ContourListGenerator extends RasterGenerator
     private DisplayStack stack;
     private ColorIndex colorIndex;
 
-    public static ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR =
-            new ShuffleColorSetGenerator(new HSBColorSetGenerator());
+    public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR =
+            new Shuffle(new HSB());
 
     public ContourListGenerator(DisplayStack stack) {
         this(new Outline(1, false), null, stack);
@@ -150,7 +150,7 @@ class ContourListGenerator extends RasterGenerator
         if (colorIndex != null) {
             return colorIndex;
         } else {
-            return DEFAULT_COLOR_SET_GENERATOR.generateColors(size);
+            return DEFAULT_COLOR_SET_GENERATOR.create(size);
         }
     }
 

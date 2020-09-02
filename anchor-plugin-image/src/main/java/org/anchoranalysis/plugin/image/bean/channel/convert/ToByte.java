@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.bean.channel.convert;
 
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 
 public class ToByte extends ConvertChannelTo {
 
     @Override
     public ChannelConverter<?> createConverter() {
-        return new ChannelConverterToUnsignedByte();
+        return new ToUnsignedByte();
     }
 }

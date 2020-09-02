@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 
 public class BoundingBoxMinimumAlongAxis extends BoundingBoxAlongAxisBase {
 

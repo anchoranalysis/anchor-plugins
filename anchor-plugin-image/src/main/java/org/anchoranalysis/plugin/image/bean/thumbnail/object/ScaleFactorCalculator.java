@@ -30,8 +30,8 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 

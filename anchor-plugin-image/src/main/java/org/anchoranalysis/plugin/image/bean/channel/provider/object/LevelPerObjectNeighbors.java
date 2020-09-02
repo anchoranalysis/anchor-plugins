@@ -119,13 +119,13 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     /**
-     * Sums hist and everything in others
+     * Sums histogram and everything in others
      *
      * @throws OperationFailedException
      */
-    private static Histogram createSumHistograms(Histogram hist, Collection<Histogram> others)
+    private static Histogram createSumHistograms(Histogram histogram, Collection<Histogram> others)
             throws OperationFailedException {
-        Histogram out = hist.duplicate();
+        Histogram out = histogram.duplicate();
         for (Histogram other : others) {
             out.addHistogram(other);
         }

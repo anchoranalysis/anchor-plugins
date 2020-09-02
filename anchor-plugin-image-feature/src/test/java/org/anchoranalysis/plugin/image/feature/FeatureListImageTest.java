@@ -50,7 +50,7 @@ import org.anchoranalysis.test.feature.ConstantsInListFixture;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
 import org.anchoranalysis.test.feature.plugins.HistogramFixture;
 import org.anchoranalysis.test.image.EnergyStackFixture;
-import org.anchoranalysis.test.image.obj.ObjectMaskFixture;
+import org.anchoranalysis.test.image.object.ObjectMaskFixture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -181,7 +181,7 @@ public class FeatureListImageTest {
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
         return new FeatureInputHistogram(
-                histogram, Optional.of(ENERGY_STACK.dimensions().resolution()));
+                histogram, Optional.of(ENERGY_STACK.resolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

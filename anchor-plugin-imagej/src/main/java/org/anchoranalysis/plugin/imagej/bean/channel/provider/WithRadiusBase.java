@@ -33,8 +33,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.UnitConverter;
 
 /** A {@link ChannelProviderUnary} with a 'radius' parameter */
 public abstract class WithRadiusBase extends ChannelProviderUnary {
@@ -48,17 +47,17 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return createFromChannel(channel, radiusInVoxels(channel.dimensions()));
+        return createFromChannel(channel, radiusInVoxels(channel.resolution().unitConvert()));
     }
 
     protected abstract Channel createFromChannel(Channel channel, int radius)
             throws CreateException;
 
-    private int radiusInVoxels(Dimensions dim) {
+    private int radiusInVoxels(UnitConverter converter) {
         if (radiusInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            return (int) Math.round(ImageUnitConverter.convertFromMeters(radius, dim.resolution()));
+            return (int) Math.round(converter.fromPhysicalDistance(radius));
         } else {
             return (int) radius;
         }

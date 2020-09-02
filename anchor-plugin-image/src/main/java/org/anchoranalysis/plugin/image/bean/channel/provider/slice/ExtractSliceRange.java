@@ -61,11 +61,11 @@ public class ExtractSliceRange extends ChannelProviderUnary {
 
         Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 
-        Extent e = channel.extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
+        Extent extent = channel.extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel channelOut =
                 factory.createEmptyInitialised(
-                        new Dimensions(e, channel.dimensions().resolution()));
+                        new Dimensions(extent, channel.resolution()));
         Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();

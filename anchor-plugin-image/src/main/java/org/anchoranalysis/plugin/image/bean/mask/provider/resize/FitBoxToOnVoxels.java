@@ -36,7 +36,7 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
 

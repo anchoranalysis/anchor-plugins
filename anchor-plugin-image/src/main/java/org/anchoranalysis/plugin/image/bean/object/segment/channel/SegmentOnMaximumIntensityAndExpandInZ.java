@@ -96,7 +96,7 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
     private BinaryVoxels<ByteBuffer> binarySgmn(Channel channel)
             throws SegmentationFailedException {
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.dimensions().resolution());
+                new BinarySegmentationParameters(channel.resolution());
 
         Voxels<ByteBuffer> voxels = channel.voxels().asByte();
 

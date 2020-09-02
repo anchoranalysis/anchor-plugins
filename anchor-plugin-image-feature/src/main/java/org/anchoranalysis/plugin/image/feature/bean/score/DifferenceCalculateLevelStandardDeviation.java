@@ -52,19 +52,19 @@ public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBas
     private double widthGreaterThan;
 
     @Override
-    protected void beforeCalcSetup(Histogram hist, int level) throws OperationFailedException {
+    protected void beforeCalcSetup(Histogram histogram, int level) throws OperationFailedException {
 
-        Histogram lessThan = hist.threshold(new RelationToConstant(new LessThanBean(), level));
+        Histogram lessThan = histogram.threshold(new RelationToConstant(new LessThanBean(), level));
         Histogram greaterThan =
-                hist.threshold(new RelationToConstant(new GreaterThanEqualToBean(), level));
+                histogram.threshold(new RelationToConstant(new GreaterThanEqualToBean(), level));
 
         this.widthLessThan = lessThan.standardDeviation() * widthFactor;
         this.widthGreaterThan = greaterThan.standardDeviation() * widthFactor;
     }
 
     @Override
-    protected double calculateForPixel(int pxlValue, int level) {
+    protected double calculateForVoxel(int voxelIntensity, int level) {
         return DifferenceHelper.differenceFromValue(
-                pxlValue, level, widthGreaterThan, widthLessThan, minDifference);
+                voxelIntensity, level, widthGreaterThan, widthLessThan, minDifference);
     }
 }

@@ -101,7 +101,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
                     EastObjectsExtracter.apply(
                             modelPool,
                             pair._1(),
-                            stack.dimensions().resolution(),
+                            stack.resolution(),
                             minConfidence
                             );
 

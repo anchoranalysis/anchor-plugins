@@ -40,7 +40,7 @@ public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
         double result = 1;
 
         for (Feature<T> elem : getList()) {
-            result *= input.calc(elem);
+            result *= input.calculate(elem);
 
             // Early exit if we start multiplying by 0
             if (result == 0) {
