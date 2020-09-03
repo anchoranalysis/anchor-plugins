@@ -27,11 +27,13 @@
 package org.anchoranalysis.plugin.opencv.bean.stack.provider.color;
 
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProviderUnary;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.anchoranalysis.plugin.opencv.convert.ConvertFromMat;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -59,11 +61,15 @@ public abstract class ColorConverterBase extends StackProviderUnary {
 
         checkNumChannels(stackRGB);
 
-        Mat matBGR = MatConverter.makeRGBStack(stackRGB);
+        Mat matBGR = ConvertToMat.makeRGBStack(stackRGB);
 
         Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());
 
-        return createOutputStack(stackRGB, matHSV);
+        try {
+            return ConvertFromMat.toStack(matHSV);
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
+        }
     }
 
     /**
@@ -73,8 +79,8 @@ public abstract class ColorConverterBase extends StackProviderUnary {
      */
     protected abstract int colorSpaceCode();
 
-    private static Mat convertColorSpace(Extent e, Mat matBGR, int code) {
-        Mat matHSV = MatConverter.createEmptyMat(e, CvType.CV_8UC3);
+    private static Mat convertColorSpace(Extent extent, Mat matBGR, int code) {
+        Mat matHSV = ConvertToMat.createEmptyMat(extent, CvType.CV_8UC3);
         Imgproc.cvtColor(matBGR, matHSV, code);
         return matHSV;
     }
@@ -84,11 +90,5 @@ public abstract class ColorConverterBase extends StackProviderUnary {
             throw new CreateException(
                     "Input stack must have exactly 3 channels representing a RGB image");
         }
-    }
-
-    private static Stack createOutputStack(Stack stackIn, Mat matOut) throws CreateException {
-        Stack stackOut = stackIn.duplicate();
-        MatConverter.matToRGB(matOut, stackOut);
-        return stackOut;
     }
 }

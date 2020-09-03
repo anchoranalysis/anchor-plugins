@@ -34,7 +34,7 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.imgcodecs.Imgcodecs;
 import lombok.Getter;
 import lombok.Setter;
@@ -69,7 +69,7 @@ public class OpenCVWriter extends RasterWriter {
         }
 
         try {
-            Imgcodecs.imwrite(filePath.toString(), MatConverter.fromStack(stack));
+            Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
         } catch (CreateException e) {
             throw new RasterIOException(e);
         }

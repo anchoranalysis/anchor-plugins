@@ -37,7 +37,7 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 
@@ -67,7 +67,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 
             checkSize(extent);
 
-            Mat img = MatConverter.makeRGBStack(stack);
+            Mat img = ConvertToMat.makeRGBStack(stack);
 
             MatOfFloat descriptorValues = new MatOfFloat();
             params.createDescriptor(extent).compute(img, descriptorValues);
