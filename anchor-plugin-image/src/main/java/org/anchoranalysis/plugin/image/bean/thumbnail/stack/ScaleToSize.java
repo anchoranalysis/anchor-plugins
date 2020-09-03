@@ -67,14 +67,14 @@ public class ScaleToSize extends ThumbnailFromStack {
 
         try {
             Stack resized =
-                    stack.mapChannel(
+                    stack.extractUpToThreeChannels().mapChannel(
                             channel ->
-                                    channel.resizeXY(
+                                    channel.projectMax().resizeXY(
                                             size.getWidth(),
                                             size.getHeight(),
                                             interpolatorCreated));
 
-            return DisplayStack.create(resized.extractUpToThreeChannels());
+            return DisplayStack.create(resized);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);
