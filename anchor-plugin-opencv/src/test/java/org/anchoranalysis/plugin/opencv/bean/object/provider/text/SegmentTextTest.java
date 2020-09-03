@@ -35,7 +35,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
-import org.anchoranalysis.plugin.opencv.test.TestImageLoader;
+import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,7 @@ import org.junit.Test;
  */
 public class SegmentTextTest {
 
-    private TestImageLoader testLoader = new TestImageLoader();
+    private ImageLoader testLoader = new ImageLoader();
 
     private SegmentText segmenter;
     

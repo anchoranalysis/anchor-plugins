@@ -13,7 +13,7 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
  * @author Owen Feehan
  *
  */
-public class TestImageLoader {
+public class ImageLoader {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();

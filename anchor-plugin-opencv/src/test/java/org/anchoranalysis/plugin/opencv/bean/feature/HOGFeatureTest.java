@@ -33,13 +33,13 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.plugin.opencv.test.TestImageLoader;
+import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
 
 public class HOGFeatureTest {
 
-    private TestImageLoader testLoader = new TestImageLoader();
+    private ImageLoader testLoader = new ImageLoader();
 
     private EnergyStackWithoutParams stack = testLoader.carRGBAsEnergy();
 
