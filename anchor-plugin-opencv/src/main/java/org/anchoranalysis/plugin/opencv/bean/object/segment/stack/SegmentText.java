@@ -36,8 +36,11 @@ import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
@@ -89,7 +92,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     @Override
     public ObjectCollection segment(Stack stack, ConcurrentModelPool<Net> modelPool) throws SegmentationFailedException {
         
-        checkInput(stack);
+        stack = checkAndCorrectInput(stack);
 
         try {
             // Scales the input to the largest acceptable-extent
@@ -131,8 +134,23 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         }
     }
 
-    private void checkInput(Stack stack) throws SegmentationFailedException {
-
+    private Stack checkAndCorrectInput(Stack stack) throws SegmentationFailedException {
+        if (stack.getNumberChannels()==1) {
+            return checkInput( grayscaleToRGB(stack.getChannel(0)) );
+        } else {
+            return checkInput(stack);
+        }
+    }
+    
+    private static Stack grayscaleToRGB(Channel channel) {
+        try {
+            return new Stack(channel, channel.duplicate(), channel.duplicate());
+        } catch (IncorrectImageSizeException e) {
+            throw new AnchorImpossibleSituationException();
+        }
+    }
+        
+    private Stack checkInput(Stack stack) throws SegmentationFailedException {        
         if (stack.getNumberChannels() != 3) {
             throw new SegmentationFailedException(
                     String.format(
@@ -143,6 +161,8 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         if (stack.dimensions().z() > 1) {
             throw new SegmentationFailedException("z-stacks are not supported by this algorithm");
         }
+        
+        return stack;
     }
 
     private List<WithConfidence<ObjectMask>> maybeFilterList(

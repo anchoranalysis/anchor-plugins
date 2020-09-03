@@ -26,28 +26,22 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
-import static org.junit.Assert.assertTrue;
-
-import org.anchoranalysis.core.error.CreateException;
+import java.util.List;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
-import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.plugin.opencv.test.TestImageLoader;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link SegmentText}
+ * Tests {@link SegmentText}.
  *
  * <p>Note that the weights file for the EAST model is duplicated in src/test/resources, as well as
  * its usual location in the models/ directory of the Anchor distribution. This is as it's difficult
@@ -57,53 +51,34 @@ import org.junit.Test;
  */
 public class SegmentTextTest {
 
-    private TestLoaderImageIO testLoader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestImageLoader testLoader = new TestImageLoader();
 
+    private SegmentText segmenter;
+    
+    @Before
+    public void setUp() throws InitException {
+        segmenter = new SegmentText();
+        initSegmenter();
+    }
+    
     @Test
-    public void testCar() throws AnchorIOException, CreateException, InitException, SegmentationFailedException {
-        
-        Stack stack = createStack("car.jpg");
-        
-        SegmentText segmenter = new SegmentText();
-        initSegmenter(segmenter);
-        
+    public void testRGB() throws SegmentationFailedException {
+        segmentStack(testLoader.carRGB(), SegmentTextResults.rgb());
+    }
+    
+    @Test
+    public void testGrayscale8Bit() throws SegmentationFailedException {
+        segmentStack(testLoader.carGrayscale8Bit(), SegmentTextResults.grayscale());
+    }
+    
+    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes) throws SegmentationFailedException {
         ObjectCollection objects = segmenter.segment(stack);
-
-        assertTrue(objects.size() == 3);
-
-        assertAtLeastOneObjectHasBox(objects, boxAt(312, 319, 107, 34));
-        assertAtLeastOneObjectHasBox(objects, boxAt(394, 200, 27, 25));
-        assertAtLeastOneObjectHasBox(objects, boxAt(440, 312, 73, 36));
+        ExpectedBoxesChecker.assertExpectedBoxes(objects, expectedBoxes);
     }
 
-    private Stack createStack(String imageFilename) {
-        return testLoader.openStackFromTestPath(imageFilename);
-    }
-
-    private void assertAtLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        assertTrue(
-                "at least one object has box: " + box.toString(),
-                atLeastOneObjectHasBox(objects, box));
-    }
-
-    private boolean atLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        for (ObjectMask object : objects) {
-            if (object.boundingBox().equals(box)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void initSegmenter(SegmentText provider)
+    private void initSegmenter()
             throws InitException {
-        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(testLoader.getTestLoader().getRoot()); 
-        provider.init(ImageInitParamsFactory.create(context), context.getLogger());
-    }
-
-    /** Bounding box at particular point and coordinates */
-    private static BoundingBox boxAt(int x, int y, int width, int height) {
-        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
+        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(testLoader.modelDirectory()); 
+        segmenter.init(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }
