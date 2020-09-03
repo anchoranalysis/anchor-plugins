@@ -44,7 +44,7 @@ import org.junit.Test;
 
 public class PointsFromContourTraverserTest {
 
-    private TestLoaderImageIO testLoader =
+    private TestLoaderImageIO loader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
@@ -55,7 +55,7 @@ public class PointsFromContourTraverserTest {
 
     private void testFor(String suffix) throws CreateException, OperationFailedException {
 
-        ObjectMask objIn = LoadUtilities.openLargestObjectFrom(suffix, testLoader);
+        ObjectMask objIn = LoadUtilities.openLargestObjectFrom(suffix, loader);
 
         // Checks that first and last points are neighbors
         List<Contour> contours = CVFindContours.contoursForObject(objIn);

@@ -40,14 +40,14 @@ import org.junit.Test;
 
 public class SplitContourSmoothingSplineTest {
 
-    private TestLoaderImageIO testLoader =
+    private TestLoaderImageIO loader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
     public void test()
             throws CreateException, OperationFailedException, SetOperationFailedException {
 
-        ObjectMask contourIn = LoadUtilities.openLargestObjectFrom("01", testLoader);
+        ObjectMask contourIn = LoadUtilities.openLargestObjectFrom("01", loader);
 
         ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
 

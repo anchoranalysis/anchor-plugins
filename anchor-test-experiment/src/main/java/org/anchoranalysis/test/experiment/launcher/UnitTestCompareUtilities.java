@@ -54,8 +54,8 @@ public class UnitTestCompareUtilities {
 
         String pathTestDataFolder = createPathTestDataFolder(experimentName);
 
-        TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
-        ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(testLoader);
+        TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
+        ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(loader);
 
         launcher.runExperiment(
                 createPathExperiment(experimentName),
@@ -63,7 +63,7 @@ public class UnitTestCompareUtilities {
                 Optional.of(createPathReplacementOutput(pathTestDataFolder)));
 
         return DualComparerFactory.compareTwoSubdirectoriesInLoader(
-                testLoader,
+                loader,
                 createPathSavedOutput(experimentName),
                 createPathOutput(experimentIdentifierOutput));
     }
@@ -88,15 +88,15 @@ public class UnitTestCompareUtilities {
             String experimentIdentifierOutput,
             boolean includeShared,
             TemporaryFolder folderTemp) {
-        TestLoader testLoader = TestLoader.createFromMavenWorkingDirectory();
+        TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
 
         String pathTestDataFolder = createPathTestDataFolder(experimentName);
 
-        ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(testLoader);
+        ExperimentLauncherFromShell launcher = new ExperimentLauncherFromShell(loader);
 
         String[] subdirectories = selectSubdirectories(pathTestDataFolder, includeShared);
 
-        TestLoader testLoaderTemp =
+        TestLoader loaderTemp =
                 launcher.runExperimentInTemporaryFolder(
                         createPathExperiment(experimentName),
                         Optional.of(createPathReplacementInput(pathTestDataFolder)),
@@ -108,7 +108,7 @@ public class UnitTestCompareUtilities {
         String pathSavedOutput = createPathSavedOutput(experimentName);
 
         return DualComparerFactory.compareTwoSubdirectoriesInLoader(
-                testLoader, pathSavedOutput, testLoaderTemp, pathOutput);
+                loader, pathSavedOutput, loaderTemp, pathOutput);
     }
 
     private static String createPathExperiment(String experimentName) {

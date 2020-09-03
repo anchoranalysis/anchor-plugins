@@ -39,9 +39,9 @@ import org.junit.Test;
 
 public class HOGFeatureTest {
 
-    private ImageLoader testLoader = new ImageLoader();
+    private ImageLoader loader = new ImageLoader();
 
-    private EnergyStackWithoutParams stack = testLoader.carRGBAsEnergy();
+    private EnergyStackWithoutParams stack = loader.carRGBAsEnergy();
 
     @Test
     public void testWithinBounds() throws FeatureCalculationException {
