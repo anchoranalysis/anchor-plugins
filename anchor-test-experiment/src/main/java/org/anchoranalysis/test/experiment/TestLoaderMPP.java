@@ -37,8 +37,8 @@ public class TestLoaderMPP {
 
     private TestLoader delegate;
 
-    public TestLoaderMPP(TestLoader testLoader) {
-        this.delegate = testLoader;
+    public TestLoaderMPP(TestLoader loader) {
+        this.delegate = loader;
     }
 
     public MarkCollection openMarksFromTestPath(String testPath) {

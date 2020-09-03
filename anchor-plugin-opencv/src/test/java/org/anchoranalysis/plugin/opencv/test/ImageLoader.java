@@ -25,18 +25,18 @@ public class ImageLoader {
     
     private static final String PATH_CAR_GRAYSCALE_16_BIT = "carGrayscale16bit.tif";
     
-    private TestLoaderImageIO testLoader = new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderImageIO loader = new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     public Stack carRGB() {
-        return testLoader.openStackFromTestPath(PATH_CAR);
+        return loader.openStackFromTestPath(PATH_CAR);
     }
     
     public Stack carGrayscale8Bit() {
-        return testLoader.openStackFromTestPath(PATH_CAR_GRAYSCALE_8_BIT);
+        return loader.openStackFromTestPath(PATH_CAR_GRAYSCALE_8_BIT);
     }
     
     public Stack carGrayscale16Bit() {
-        return testLoader.openStackFromTestPath(PATH_CAR_GRAYSCALE_16_BIT);
+        return loader.openStackFromTestPath(PATH_CAR_GRAYSCALE_16_BIT);
     }
     
     public EnergyStackWithoutParams carRGBAsEnergy() {
@@ -44,6 +44,6 @@ public class ImageLoader {
     }
     
     public Path modelDirectory() {
-        return testLoader.getTestLoader().getRoot();
+        return loader.getLoader().getRoot();
     }
 }

@@ -39,8 +39,8 @@ public class LoadUtilities {
     private static ObjectsFromConnectedComponentsFactory FACTORY = new ObjectsFromConnectedComponentsFactory();;
     
     public static ObjectMask openLargestObjectFrom(
-            String suffix, TestLoaderImageIO testLoader) throws CreateException {
-        Stack stack = testLoader.openStackFromTestPath(path(suffix));
+            String suffix, TestLoaderImageIO loader) throws CreateException {
+        Stack stack = loader.openStackFromTestPath(path(suffix));
         return largestObjectFromStack(stack);
     }
 

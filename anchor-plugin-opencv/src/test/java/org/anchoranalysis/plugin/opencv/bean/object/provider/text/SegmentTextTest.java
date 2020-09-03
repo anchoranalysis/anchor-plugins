@@ -51,7 +51,7 @@ import org.junit.Test;
  */
 public class SegmentTextTest {
 
-    private ImageLoader testLoader = new ImageLoader();
+    private ImageLoader loader = new ImageLoader();
 
     private SegmentText segmenter;
     
@@ -63,12 +63,12 @@ public class SegmentTextTest {
     
     @Test
     public void testRGB() throws SegmentationFailedException {
-        segmentStack(testLoader.carRGB(), SegmentTextResults.rgb());
+        segmentStack(loader.carRGB(), SegmentTextResults.rgb());
     }
     
     @Test
     public void testGrayscale8Bit() throws SegmentationFailedException {
-        segmentStack(testLoader.carGrayscale8Bit(), SegmentTextResults.grayscale());
+        segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
     
     private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes) throws SegmentationFailedException {
@@ -78,7 +78,7 @@ public class SegmentTextTest {
 
     private void initSegmenter()
             throws InitException {
-        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(testLoader.modelDirectory()); 
+        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory()); 
         segmenter.init(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }

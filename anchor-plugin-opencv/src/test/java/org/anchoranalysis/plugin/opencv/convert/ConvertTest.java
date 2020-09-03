@@ -17,21 +17,21 @@ import org.opencv.core.Mat;
  */
 public class ConvertTest {
     
-    private ImageLoader testLoader = new ImageLoader();
+    private ImageLoader loader = new ImageLoader();
 
     @Test
     public void testGrayScale8Bit() throws OperationFailedException {
-        testConversion( testLoader.carGrayscale8Bit(), false );
+        testConversion( loader.carGrayscale8Bit(), false );
     }
     
     @Test
     public void testGrayScale16Bit() throws OperationFailedException {
-        testConversion( testLoader.carGrayscale16Bit(), false );
+        testConversion( loader.carGrayscale16Bit(), false );
     }
     
     @Test
     public void testRGB() throws OperationFailedException {
-        testConversion( testLoader.carRGB(), true );
+        testConversion( loader.carRGB(), true );
     }
     
     private void testConversion(Stack stack, boolean expectFinalStackBackedByArray) throws OperationFailedException {

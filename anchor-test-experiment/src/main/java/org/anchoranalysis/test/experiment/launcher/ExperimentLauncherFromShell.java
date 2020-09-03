@@ -54,11 +54,11 @@ public class ExperimentLauncherFromShell {
     /** System-property key for the path to directory that contains the anchor distribution */
     private static final String PATH_PROPERTY_IDENTIFIER = "anchor.distribution.path.test";
 
-    private TestLoader testLoader;
+    private TestLoader loader;
 
-    public ExperimentLauncherFromShell(TestLoader testLoader) {
+    public ExperimentLauncherFromShell(TestLoader loader) {
         super();
-        this.testLoader = testLoader;
+        this.loader = loader;
     }
 
     /**
@@ -140,7 +140,7 @@ public class ExperimentLauncherFromShell {
         // The command we pass to the shell
         CommandLine shellCmd =
                 createShellCommand(
-                        testLoader.resolveTestPath(testPathToExperiment),
+                        loader.resolveTestPath(testPathToExperiment),
                         resolve(testPathToInput),
                         resolve(testPathToOutput));
 
@@ -179,9 +179,9 @@ public class ExperimentLauncherFromShell {
 
         try {
             if (subdirectories != null) {
-                testLoader.copyToDirectory(subdirectories, temporaryFolder.getRoot());
+                loader.copyToDirectory(subdirectories, temporaryFolder.getRoot());
             } else {
-                testLoader.copyToDirectory(temporaryFolder.getRoot());
+                loader.copyToDirectory(temporaryFolder.getRoot());
             }
         } catch (IOException e) {
             throw new TestDataInitException(e);
@@ -242,6 +242,6 @@ public class ExperimentLauncherFromShell {
      * @return resolved path or null
      */
     private Optional<Path> resolve(Optional<String> testPath) {
-        return testPath.map(path -> testLoader.resolveTestPath(path));
+        return testPath.map(path -> loader.resolveTestPath(path));
     }
 }
