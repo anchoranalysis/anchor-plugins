@@ -1,5 +1,6 @@
 package org.anchoranalysis.plugin.opencv.test;
 
+import java.nio.file.Path;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -22,7 +23,7 @@ public class TestImageLoader {
     
     private static final String PATH_CAR_GRAYSCALE_8_BIT = "carGrayscale8bit.jpg";
     
-    private static final String PATH_CAR_GRAYSCALE_16_BIT = "carGrayscale16bit.jpg";
+    private static final String PATH_CAR_GRAYSCALE_16_BIT = "carGrayscale16bit.tif";
     
     private TestLoaderImageIO testLoader = new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
@@ -40,5 +41,9 @@ public class TestImageLoader {
     
     public EnergyStackWithoutParams carRGBAsEnergy() {
         return new EnergyStackWithoutParams(carRGB());
+    }
+    
+    public Path modelDirectory() {
+        return testLoader.getTestLoader().getRoot();
     }
 }
