@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.scale.ScaleFactorUtilities;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -57,7 +57,7 @@ class CreateScaledInput {
 
         // TODO Better to scale before openCV conversion, so less bytes to process for RGB
         // conversion
-        Mat original = MatConverter.makeRGBStack(stack);
+        Mat original = ConvertToMat.makeRGBStack(stack);
 
         Mat input = resizeMatToTarget(original, targetExtent);
 

@@ -24,10 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv;
+package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
+import java.util.function.BiConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
@@ -37,11 +40,18 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+/**
+ * Converts common image data-structures used by Anchor to the {@link Mat} class used by OpenCV.
+ * 
+ * @author Owen Feehan
+ *
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MatConverter {
+public class ConvertToMat {
 
     public static Mat fromObject(ObjectMask object) throws CreateException {
         Extent e = object.boundingBox().extent();
@@ -50,7 +60,7 @@ public class MatConverter {
                     "Objects with more than 1 z-stack are not supported for OpenCV to Mat conversion (at the moment)");
         }
 
-        return singleChannelMatFromVoxels(object.binaryVoxels().voxels());
+        return fromSingleChannelByte(object.binaryVoxels().voxels());
     }
 
     public static Mat fromStack(Stack stack) throws CreateException {
@@ -76,43 +86,49 @@ public class MatConverter {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
-        return matFromRGB(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        return fromRGB(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
     }
-
-    public static void matToRGB(Mat mat, Stack stack) throws CreateException {
-        if (stack.getNumberChannels() != 3) {
-            throw new CreateException("Stack must have 3 channels for RGB conversion");
-        }
-        matToRGB(mat, stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        
+    public static Mat createEmptyMat(Extent extent, int type) {
+        return new Mat(extent.y(), extent.x(), type);
     }
 
     private static Mat makeGrayscale(Channel channel) throws CreateException {
         if (channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
-            return singleChannelMatFromVoxels(channel.voxels().asByte());
+            return fromSingleChannelByte(channel.voxels().asByte());
+        } else if (channel.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
+                return fromSingleChannelShort(channel.voxels().asShort());            
         } else {
-            throw new CreateException("Only 8-bit channels are supported");
+            throw new CreateException("Only unsigned 8-bit or 16-bit channels are supported");
         }
     }
+    
+    private static Mat fromSingleChannelByte(Voxels<ByteBuffer> voxels) {
+        return fromSingleChannel(voxels, CvType.CV_8UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
+    }
+        
+    private static Mat fromSingleChannelShort(Voxels<ShortBuffer> voxels) {
+        return fromSingleChannel(voxels, CvType.CV_16UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
+    }
+    
+    private static <T extends Buffer> Mat fromSingleChannel(Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
+        Preconditions.checkArgument(voxels.extent().z() == 1);
 
-    private static Mat singleChannelMatFromVoxels(Voxels<ByteBuffer> voxels) {
-
-        assert (voxels.extent().z()) == 1;
-
-        Mat mat = createEmptyMat(voxels.extent(), CvType.CV_8UC1);
-        mat.put(0, 0, voxels.sliceBuffer(0).array());
+        Mat mat = createEmptyMat(voxels.extent(), matType);
+        populateMat.accept(mat, voxels.sliceBuffer(0));
         return mat;
     }
 
-    private static Mat matFromRGB(Channel channelRed, Channel channelGreen, Channel channelBlue) {
+    private static Mat fromRGB(Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
         Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_8UC3);
 
-        ByteBuffer red = bufferFromChannel(channelRed);
-        ByteBuffer green = bufferFromChannel(channelGreen);
-        ByteBuffer blue = bufferFromChannel(channelBlue);
+        ByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
+        ByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
+        ByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
 
         for (int y = 0; y < extent.y(); y++) {
             for (int x = 0; x < extent.x(); x++) {
@@ -124,41 +140,5 @@ public class MatConverter {
         }
 
         return mat;
-    }
-
-    private static void matToRGB(
-            Mat mat, Channel channelRed, Channel channelGreen, Channel channelBlue) {
-
-        Extent extent = channelRed.extent();
-        Preconditions.checkArgument(extent.z() == 1);
-
-        ByteBuffer red = bufferFromChannel(channelRed);
-        ByteBuffer green = bufferFromChannel(channelGreen);
-        ByteBuffer blue = bufferFromChannel(channelBlue);
-
-        byte[] arr = new byte[3];
-
-        for (int y = 0; y < extent.y(); y++) {
-            for (int x = 0; x < extent.x(); x++) {
-
-                mat.get(y, x, arr);
-
-                red.put(arr[0]);
-                green.put(arr[1]);
-                blue.put(arr[2]);
-            }
-        }
-
-        assert (!red.hasRemaining());
-        assert (!green.hasRemaining());
-        assert (!blue.hasRemaining());
-    }
-
-    private static ByteBuffer bufferFromChannel(Channel channel) {
-        return channel.voxels().asByte().sliceBuffer(0);
-    }
-
-    public static Mat createEmptyMat(Extent extent, int type) {
-        return new Mat(extent.y(), extent.x(), type);
     }
 }

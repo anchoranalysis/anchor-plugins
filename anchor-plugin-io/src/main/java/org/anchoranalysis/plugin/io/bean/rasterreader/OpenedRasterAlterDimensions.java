@@ -92,7 +92,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         Optional<Resolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
 
         if (res.isPresent()) {
-            return dimensions.duplicateChangeRes(res.get());
+            return dimensions.duplicateChangeResolution(res.get());
         } else {
             return dimensions;
         }

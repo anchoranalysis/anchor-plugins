@@ -33,18 +33,15 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
+import org.anchoranalysis.plugin.opencv.test.TestImageLoader;
 import org.anchoranalysis.test.LoggingFixture;
-import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 import org.junit.Test;
 
 public class HOGFeatureTest {
 
-    private TestLoaderImageIO testLoader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestImageLoader testLoader = new TestImageLoader();
 
-    private EnergyStackWithoutParams stack =
-            new EnergyStackWithoutParams(testLoader.openStackFromTestPath("car.jpg"));
+    private EnergyStackWithoutParams stack = testLoader.carRGBAsEnergy();
 
     @Test
     public void testWithinBounds() throws FeatureCalculationException {
