@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.opencv.test.TestImageLoader;
+import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.junit.Test;
 import org.opencv.core.Mat;
 
@@ -17,7 +17,7 @@ import org.opencv.core.Mat;
  */
 public class ConvertTest {
     
-    private TestImageLoader testLoader = new TestImageLoader();
+    private ImageLoader testLoader = new ImageLoader();
 
     @Test
     public void testGrayScale8Bit() throws OperationFailedException {
