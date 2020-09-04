@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.core.functional.RepeatUtilities;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.extent.Dimensions;
@@ -95,7 +95,7 @@ public class ConvertFromMat {
         
     private static Stack createEmptyStack(Dimensions dimensions, int numberChannels) {
         Stack stack = new Stack();
-        RepeatUtilities.repeat(numberChannels, ()-> {
+        FunctionalIterate.repeat(numberChannels, ()-> {
             try {
                 stack.addChannel( ChannelFactory.instance().create(dimensions, UnsignedByteVoxelType.INSTANCE) );
             } catch (IncorrectImageSizeException e) {

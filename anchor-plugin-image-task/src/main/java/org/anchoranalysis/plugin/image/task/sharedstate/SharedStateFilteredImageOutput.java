@@ -28,14 +28,15 @@ package org.anchoranalysis.plugin.image.task.sharedstate;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.feature.io.csv.writer.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
-import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -75,10 +76,9 @@ public class SharedStateFilteredImageOutput<T> {
         try {
             this.csvWriter =
                     FeatureCSVWriter.create(
-                            "group",
-                            baseOutputManager,
-                            new String[] {"name"},
-                            new FeatureNameList("group"));
+                        new FeatureCSVMetadata("group", Arrays.asList("name", "group")),
+                        baseOutputManager
+                    );
         } catch (AnchorIOException e) {
             throw new CreateException(e);
         }

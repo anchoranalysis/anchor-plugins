@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.writer.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
@@ -79,7 +79,7 @@ public class InputProcessContext<S> {
         return context.getLogger();
     }
 
-    public void addResultsFor(StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results) {
+    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) {
         adder.addResultsFor(labels, results);
     }
 

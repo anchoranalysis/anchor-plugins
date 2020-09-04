@@ -46,8 +46,8 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.results.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.writer.RowLabels;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
@@ -224,12 +224,12 @@ public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,Sha
         calculator.calculateFeaturesForObjects(objects, energyStack, featureInput -> identifierFor(input.getInputObject().descriptiveName(), featureInput, calculator) );        
     }
     
-    private StringLabelsForCsvRow identifierFor(
+    private RowLabels identifierFor(
             String imageIdentifier,
             FeatureInputSingleObject featureInput,
             CalculateFeaturesForObjects<FeatureInputSingleObject> calculator
     ) {
-        return new StringLabelsForCsvRow(
+        return new RowLabels(
                 Optional.of(new String[] {imageIdentifier, calculator.uniqueIdentifierFor(featureInput) }),
                 Optional.empty());
     }

@@ -34,7 +34,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.writer.RowLabels;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -66,7 +66,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     public void calculateFeaturesForObjects(
             ObjectCollection objects,
             EnergyStack energyStack,
-            Function<T, StringLabelsForCsvRow> identifierFromInput)
+            Function<T, RowLabels> identifierFromInput)
             throws OperationFailedException {
         try {
                 ListWithThumbnails<T,ObjectCollection> inputs =
@@ -95,7 +95,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            ListWithThumbnails<T,ObjectCollection> listInputs, Function<T, StringLabelsForCsvRow> labelsForInput)
+            ListWithThumbnails<T,ObjectCollection> listInputs, Function<T, RowLabels> labelsForInput)
             throws OperationFailedException {
 
         try {

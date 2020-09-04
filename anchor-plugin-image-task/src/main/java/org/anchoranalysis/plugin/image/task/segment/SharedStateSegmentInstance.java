@@ -29,7 +29,8 @@ import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.results.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.results.ResultsWriterOutputNames;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -50,7 +51,7 @@ public class SharedStateSegmentInstance<T> {
     
     public SharedStateSegmentInstance( ConcurrentModelPool<T> modelPool, FeatureTableCalculator<FeatureInputSingleObject> featureTable, LabelHeaders identifierHeaders, BoundIOContext context ) throws CreateException {
         this.modelPool = modelPool;
-        this.features = SharedStateExportFeatures.createForFeatures(featureTable, identifierHeaders, context);
+        this.features = SharedStateExportFeatures.createForFeatures( new ResultsWriterOutputNames("summary",false,false), featureTable, identifierHeaders, context);
     }
 
     public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>> createInputProcessContext(
