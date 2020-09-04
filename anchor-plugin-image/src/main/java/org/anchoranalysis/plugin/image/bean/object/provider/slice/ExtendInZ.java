@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
@@ -64,15 +64,15 @@ public class ExtendInZ extends WithDimensionsBase {
 
         BoundingBox box = object.boundingBox().changeExtentZ(dim.z());
 
-        Voxels<ByteBuffer> voxels =
+        Voxels<UnsignedByteBuffer> voxels =
                 createVoxelsOfDuplicatedPlanes(object.voxels().slice(0), box.extent());
 
         return new ObjectMask(box, voxels, object.binaryValues());
     }
 
-    private static Voxels<ByteBuffer> createVoxelsOfDuplicatedPlanes(
-            VoxelBuffer<ByteBuffer> planeIn, Extent extent) {
-        Voxels<ByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
+    private static Voxels<UnsignedByteBuffer> createVoxelsOfDuplicatedPlanes(
+            VoxelBuffer<UnsignedByteBuffer> planeIn, Extent extent) {
+        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getByte().createInitialized(extent);
         for (int z = 0; z < extent.z(); z++) {
             voxels.replaceSlice(z, planeIn);
         }

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -95,7 +95,7 @@ public class Invert extends MaskProviderUnary {
         IterateVoxels.callEachPoint(
                 maskToInvert.binaryVoxels().voxels(),
                 restricted,
-                (Point3i point, ByteBuffer buffer, int offset) -> {
+                (Point3i point, UnsignedByteBuffer buffer, int offset) -> {
                     byte value = buffer.get(offset);
 
                     if (value == byteOn) {

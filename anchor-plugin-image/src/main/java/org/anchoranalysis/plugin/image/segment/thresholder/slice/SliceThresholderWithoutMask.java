@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.segment.thresholder.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -40,7 +40,7 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
 
     @Override
     public void segmentAll(
-            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<UnsignedByteBuffer> voxelsOut) {
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
             sgmnSlice(
                     voxelsIn.extent(),
@@ -54,8 +54,8 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
             Extent extent,
             VoxelBuffer<?> voxelsIn,
             VoxelBuffer<?> voxelsThrshld,
-            VoxelBuffer<ByteBuffer> bbOut) {
-        ByteBuffer out = bbOut.buffer();
+            VoxelBuffer<UnsignedByteBuffer> bbOut) {
+        UnsignedByteBuffer out = bbOut.buffer();
 
         int offset = 0;
         for (int y = 0; y < extent.y(); y++) {

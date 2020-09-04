@@ -30,7 +30,7 @@ import ij.plugin.filter.RankFilters;
 import ij.process.ImageProcessor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.Consumer;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
@@ -70,15 +70,15 @@ public class FilterHelper {
 
     
     /**
-     * Applies a {@link Consumer} to each slice independently of a {@code BinaryVoxels<ByteBuffer>}.
+     * Applies a {@link Consumer} to each slice independently of a {@code BinaryVoxels<UnsignedByteBuffer>}.
      * 
      * <p>The slice is exposed as a {@link ImageProcessor}.
      * 
      * @param voxels the voxels whose slices will be processed.
      * @param consumer successively applied to the {@link ImageProcessor} derived from each slice. 
      */
-    public static void processEachSlice(BinaryVoxels<ByteBuffer> voxels, Consumer<ImageProcessor> consumer) {
-        PixelsForSlice<ByteBuffer> slices = voxels.slices();
+    public static void processEachSlice(BinaryVoxels<UnsignedByteBuffer> voxels, Consumer<ImageProcessor> consumer) {
+        PixelsForSlice<UnsignedByteBuffer> slices = voxels.slices();
         voxels.extent().iterateOverZ( z-> {
             ImageProcessor processor = ConvertToImageProcessor.fromByte(slices, z);
             consumer.accept(processor);

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -59,21 +59,21 @@ public class ExtractSliceRange extends ChannelProviderUnary {
 
         ChannelFactoryByte factory = new ChannelFactoryByte();
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         Extent extent = channel.extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel channelOut =
                 factory.createEmptyInitialised(
                         new Dimensions(extent, channel.resolution()));
-        Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();
         for (int z = sliceStart; z <= sliceEnd; z++) {
 
             // TODO change to use the replaceSlice method?
-            ByteBuffer bbIn = voxels.sliceBuffer(z);
-            ByteBuffer bbOut = voxelsOut.sliceBuffer(z - sliceStart);
+            UnsignedByteBuffer bbIn = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z - sliceStart);
 
             for (int i = 0; i < volumeXY; i++) {
                 bbOut.put(i, bbIn.get(i));

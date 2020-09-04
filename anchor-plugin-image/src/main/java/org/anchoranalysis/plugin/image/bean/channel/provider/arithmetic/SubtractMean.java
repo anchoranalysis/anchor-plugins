@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -53,7 +53,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Voxels<ByteBuffer> voxelsIntensity = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsIntensity = channel.voxels().asByte();
 
         double mean = calculateMean(voxelsIntensity, mask);
 
@@ -68,23 +68,23 @@ public class SubtractMean extends UnaryWithMaskBase {
         return channel;
     }
 
-    private double calculateMean(Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
+    private double calculateMean(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask) {
         return IterateVoxelsByte.calculateSumAndCount(voxelsIntensity, mask).mean(0);
     }
 
-    private void subtractMeanMask(Voxels<ByteBuffer> voxelsIntensity, Mask mask, int mean) {
+    private void subtractMeanMask(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask, int mean) {
         IterateVoxels.callEachPoint(
                 voxelsIntensity,
                 mask,
                 (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
-    private void subtractMeanAll(Voxels<ByteBuffer> voxelsIntensity, int mean) {
+    private void subtractMeanAll(Voxels<UnsignedByteBuffer> voxelsIntensity, int mean) {
         IterateVoxels.callEachPoint(
                 voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
-    private static void processPoint(ByteBuffer buffer, int offset, int mean) {
+    private static void processPoint(UnsignedByteBuffer buffer, int offset, int mean) {
         int intensity = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
 
         int intensitySubtracted = intensity - mean;

@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.imagej.mask;
 
 import ij.Prefs;
 import ij.plugin.filter.Binary;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -44,12 +44,12 @@ import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyImageJMorphologicalOperation {
 
-    public static void fill(BinaryVoxels<ByteBuffer> voxels) throws OperationFailedException {
+    public static void fill(BinaryVoxels<UnsignedByteBuffer> voxels) throws OperationFailedException {
         applyOperation(voxels, "fill", 1);
     }
 
-    public static BinaryVoxels<ByteBuffer> applyOperation(
-            BinaryVoxels<ByteBuffer> voxels, String command, int iterations)
+    public static BinaryVoxels<UnsignedByteBuffer> applyOperation(
+            BinaryVoxels<UnsignedByteBuffer> voxels, String command, int iterations)
             throws OperationFailedException {
 
         if (!voxels.binaryValues().equals(BinaryValues.getDefault())) {

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.segment.thresholder.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -38,14 +38,14 @@ public abstract class SliceThresholder {
     private final BinaryValuesByte binaryValuesByte;
 
     public abstract void segmentAll(
-            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut);
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<UnsignedByteBuffer> voxelsOut);
 
-    protected final void writeOffByte(int offset, ByteBuffer bbOut) {
+    protected final void writeOffByte(int offset, UnsignedByteBuffer bbOut) {
         bbOut.put(offset, binaryValuesByte.getOffByte());
     }
 
     protected final void writeThresholdedByte(
-            int offset, ByteBuffer bbOut, VoxelBuffer<?> bbIn, VoxelBuffer<?> bbThrshld) {
+            int offset, UnsignedByteBuffer bbOut, VoxelBuffer<?> bbIn, VoxelBuffer<?> bbThrshld) {
         int val = bbIn.getInt(offset);
         int valThrshld = bbThrshld.getInt(offset);
 

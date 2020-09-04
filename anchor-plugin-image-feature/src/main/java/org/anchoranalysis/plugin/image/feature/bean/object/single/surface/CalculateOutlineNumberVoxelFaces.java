@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.extent(),
                             object.boundingBox().cornerMin());
 
-            Voxels<ByteBuffer> voxelsProjected = object.extract().projectMax();
+            Voxels<UnsignedByteBuffer> voxelsProjected = object.extract().projectMax();
             return ApplyKernel.applyForCount(kernel, voxelsProjected);
 
         } else {

@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +49,7 @@ class PointsFromInsideHelper {
     private final PointListForConvex pointsConvexRoot;
 
     private final BoundingBox boundingBox;
-    private final BinaryVoxels<ByteBuffer> voxelsFilled;
+    private final BinaryVoxels<UnsignedByteBuffer> voxelsFilled;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
@@ -103,14 +103,14 @@ class PointsFromInsideHelper {
             Consumer<Point3i> processPoint) {
         BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Voxels<ByteBuffer> voxels = mask.channel().voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = mask.channel().voxels().asByte();
         Extent extent = voxels.extent();
 
         Iterator<Integer> itr = zRange.iterator();
         while (itr.hasNext()) {
             int z = itr.next();
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bb = voxels.sliceBuffer(z);
 
             if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;
@@ -128,7 +128,7 @@ class PointsFromInsideHelper {
 
     private boolean addPointsToSlice(
             Extent extent,
-            ByteBuffer bb,
+            UnsignedByteBuffer bb,
             BinaryValuesByte bvb,
             int z,
             Consumer<Point3i> processPoint) {

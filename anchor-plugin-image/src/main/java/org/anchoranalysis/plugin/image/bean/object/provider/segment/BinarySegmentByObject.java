@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.segment;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -71,7 +71,7 @@ public class BinarySegmentByObject extends UnaryWithChannelBase {
             throws SegmentationFailedException {
         Voxels<?> voxels = channelSource.extract().region(object.boundingBox(), true);
 
-        BinaryVoxels<ByteBuffer> bvb =
+        BinaryVoxels<UnsignedByteBuffer> bvb =
                 binarySgmn.segment(
                         new VoxelsWrapper(voxels),
                         new BinarySegmentationParameters(),

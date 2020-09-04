@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -90,7 +90,7 @@ public class ScoreVoxels extends ChannelProvider {
 
         VoxelsFromScoreCreator creator =
                 new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
-        Voxels<ByteBuffer> voxelsPixelScore = creator.createVoxelsFromPixelScore(score, object);
+        Voxels<UnsignedByteBuffer> voxelsPixelScore = creator.createVoxelsFromPixelScore(score, object);
 
         return new ChannelFactoryByte()
                 .create(voxelsPixelScore, intensityCreated.resolution());

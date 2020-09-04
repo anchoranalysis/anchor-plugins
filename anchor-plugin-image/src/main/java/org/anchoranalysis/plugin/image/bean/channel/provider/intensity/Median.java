@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 
 import com.google.common.collect.BoundType;
 import com.google.common.collect.TreeMultiset;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,7 @@ public class Median extends ChannelProviderUnary {
             set.clear();
         }
 
-        public void populateAt(int xCenter, int yMin, int yMax, ByteBuffer bb, Extent extent) {
+        public void populateAt(int xCenter, int yMin, int yMax, UnsignedByteBuffer bb, Extent extent) {
 
             int xMin = xCenter - kernelHalfWidth;
             int xMax = xCenter + kernelHalfWidth;
@@ -85,7 +85,7 @@ public class Median extends ChannelProviderUnary {
             }
         }
 
-        public void removeColumn(int x, int yMin, int yMax, ByteBuffer bb, Extent e) {
+        public void removeColumn(int x, int yMin, int yMax, UnsignedByteBuffer bb, Extent e) {
 
             if (x < 0) {
                 return;
@@ -101,7 +101,7 @@ public class Median extends ChannelProviderUnary {
             }
         }
 
-        public void addColumn(int x, int yMin, int yMax, ByteBuffer bb, Extent e) {
+        public void addColumn(int x, int yMin, int yMax, UnsignedByteBuffer bb, Extent e) {
 
             if (x < 0) {
                 return;
@@ -137,18 +137,18 @@ public class Median extends ChannelProviderUnary {
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 
         Channel dup = channel.duplicate();
-        Voxels<ByteBuffer> voxelsDup = dup.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsDup = dup.voxels().asByte();
         Extent extent = dup.extent();
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
-            ByteBuffer bbOut = voxelsDup.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsDup.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
@@ -163,15 +163,15 @@ public class Median extends ChannelProviderUnary {
 
                     if (x == 0) {
                         set.clear();
-                        set.populateAt(x, yMin, yMax, bb, extent);
+                        set.populateAt(x, yMin, yMax, buffer, extent);
                     } else {
-                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, bb, extent);
-                        set.addColumn(x + kernelHalfWidth, yMin, yMax, bb, extent);
+                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, buffer, extent);
+                        set.addColumn(x + kernelHalfWidth, yMin, yMax, buffer, extent);
                     }
 
                     int median = set.median();
 
-                    bbOut.put(offset, (byte) median);
+                    bufferOut.put(offset, (byte) median);
                     offset++;
                 }
             }

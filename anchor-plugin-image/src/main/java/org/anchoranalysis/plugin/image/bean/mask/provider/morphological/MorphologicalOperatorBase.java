@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +64,7 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
         return mask;
     }
 
-    protected Optional<Voxels<ByteBuffer>> background() throws CreateException {
+    protected Optional<Voxels<UnsignedByteBuffer>> background() throws CreateException {
 
         if (minIntensityValue > 0) {
             return Optional.of(backgroundChannelProvider.create().voxels().asByte());

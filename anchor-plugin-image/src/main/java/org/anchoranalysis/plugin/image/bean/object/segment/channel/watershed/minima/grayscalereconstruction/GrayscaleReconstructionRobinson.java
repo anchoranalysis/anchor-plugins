@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
@@ -68,7 +68,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
-        Voxels<ByteBuffer> voxelsFinalized =
+        Voxels<UnsignedByteBuffer> voxelsFinalized =
                 VoxelsFactory.getByte().createInitialized(marker.any().extent());
 
         // TODO make more efficient
@@ -99,14 +99,14 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> markerVb,
             Voxels<?> maskVb,
-            Voxels<ByteBuffer> voxelsFinalized,
+            Voxels<UnsignedByteBuffer> voxelsFinalized,
             Optional<ObjectMask> containingMask) {
 
         Extent extent = markerVb.extent();
 
         SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
         SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
-        SlidingBuffer<ByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
+        SlidingBuffer<UnsignedByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
 
         BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 
@@ -138,7 +138,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     private void populateQueueFromNonZeroPixels(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> voxels,
-            Voxels<ByteBuffer> voxelsFinalized) {
+            Voxels<UnsignedByteBuffer> voxelsFinalized) {
 
         byte maskOn = BinaryValuesByte.getDefault().getOnByte();
 
@@ -146,7 +146,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         for (int z = 0; z < e.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z);
-            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            UnsignedByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {
@@ -169,7 +169,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     private void populateQueueFromNonZeroPixelsMask(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> voxels,
-            Voxels<ByteBuffer> voxelsFinalized,
+            Voxels<UnsignedByteBuffer> voxelsFinalized,
             ObjectMask containingMask) {
 
         ReadableTuple3i crnrpointMin = containingMask.boundingBox().cornerMin();
@@ -181,8 +181,8 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         for (int z = crnrpointMin.z(); z <= crnrpointMax.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z);
-            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
-            ByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
+            UnsignedByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            UnsignedByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
             for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {

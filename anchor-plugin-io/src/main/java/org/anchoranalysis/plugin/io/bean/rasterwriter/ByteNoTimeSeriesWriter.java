@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.file.Path;
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
@@ -109,7 +109,7 @@ public abstract class ByteNoTimeSeriesWriter extends RasterWriter {
         int cnt = 0;
         for (int c = 0; c < stack.getNumberChannels(); c++) {
             Channel channel = stack.getChannel(c);
-            Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+            Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
             for (int z = 0; z < stack.dimensions().z(); z++) {
                 writer.saveBytes(cnt++, voxels.sliceBuffer(z).array());

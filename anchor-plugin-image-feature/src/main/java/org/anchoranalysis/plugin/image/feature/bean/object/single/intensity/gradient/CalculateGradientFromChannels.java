@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -97,7 +97,7 @@ class CalculateGradientFromChannels
     private void putGradientValue(
             ObjectMask object, List<Point3d> points, int axisIndex, Channel channel) {
 
-        BinaryVoxels<ByteBuffer> bvb = object.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> bvb = object.binaryVoxels();
         Voxels<?> voxels = channel.voxels().any();
         BoundingBox box = object.boundingBox();
 
@@ -112,7 +112,7 @@ class CalculateGradientFromChannels
         for (int z = 0; z < eMask.z(); z++) {
 
             VoxelBuffer<?> bb = voxels.slice(z + box.cornerMin().z());
-            VoxelBuffer<ByteBuffer> bbMask = bvb.voxels().slice(z);
+            VoxelBuffer<UnsignedByteBuffer> bbMask = bvb.voxels().slice(z);
 
             for (int y = 0; y < eMask.y(); y++) {
                 for (int x = 0; x < eMask.x(); x++) {

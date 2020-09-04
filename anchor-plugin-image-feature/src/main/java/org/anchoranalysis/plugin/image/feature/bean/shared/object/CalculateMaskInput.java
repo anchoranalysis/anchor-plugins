@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
@@ -50,14 +50,14 @@ class CalculateMaskInput<T extends FeatureInputEnergy>
     @Override
     protected FeatureInputSingleObject execute(T input) throws FeatureCalculationException {
 
-        BinaryVoxels<ByteBuffer> bvb = binaryVoxels(mask);
+        BinaryVoxels<UnsignedByteBuffer> bvb = binaryVoxels(mask);
 
         return new FeatureInputSingleObject(new ObjectMask(bvb), input.getEnergyStackOptional());
     }
 
-    private static BinaryVoxels<ByteBuffer> binaryVoxels(Mask mask)
+    private static BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Mask mask)
             throws FeatureCalculationException {
-        Voxels<ByteBuffer> voxels;
+        Voxels<UnsignedByteBuffer> voxels;
         try {
             voxels = mask.channel().voxels().asByte();
         } catch (IncorrectVoxelTypeException e) {

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -155,7 +155,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
+        UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
         return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 

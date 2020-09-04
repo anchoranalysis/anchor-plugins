@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -52,7 +52,7 @@ public class IsPointConvexToTest {
 
         Mask mask = new Mask(stack.getChannel(0));
 
-        BinaryVoxels<ByteBuffer> bvb = mask.binaryVoxels();
+        BinaryVoxels<UnsignedByteBuffer> bvb = mask.binaryVoxels();
 
         Point3i pointRoot = new Point3i(62, 84, 15);
 

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -105,7 +105,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
         ObjectsFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
-        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extract();
+        VoxelsExtracter<UnsignedByteBuffer> extracter = mask.voxels().extract();
 
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
@@ -114,14 +114,14 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                 z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
     }
 
-    private static BinaryVoxels<ByteBuffer> extractSlice(
-            VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
+    private static BinaryVoxels<UnsignedByteBuffer> extractSlice(
+            VoxelsExtracter<UnsignedByteBuffer> extracter, int z, BinaryValues binaryValues) {
         return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 
     private ObjectCollection createForSlice(
             ObjectsFromConnectedComponentsFactory objectCreator,
-            BinaryVoxels<ByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             int z) {
         // respecify the z
         return objectCreator.createConnectedComponents(bvb).stream()

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -73,12 +73,12 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> bvb) {
+            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> bvb) {
         return isPointConvexTo(root, point, bvb, false);
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i destPoint, BinaryVoxels<ByteBuffer> voxels, boolean debug) {
+            Point3i root, Point3i destPoint, BinaryVoxels<UnsignedByteBuffer> voxels, boolean debug) {
 
         Point3d distance = relVector(root, destPoint);
         double mag =
@@ -94,7 +94,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
 
         // Now we keep checking that points are inside the region until we reach our final point
         Point3d point = PointConverter.doubleFromInt(root);
-        VoxelsExtracter<ByteBuffer> extracter = voxels.extract();
+        VoxelsExtracter<UnsignedByteBuffer> extracter = voxels.extract();
         while (!pointEquals(point, destPoint)) {
 
             if (debug) {
@@ -125,7 +125,7 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     private static boolean isPointOnObject(
-            Point3d point, VoxelsExtracter<ByteBuffer> extracter, Extent extent, BinaryValues bv) {
+            Point3d point, VoxelsExtracter<UnsignedByteBuffer> extracter, Extent extent, BinaryValues bv) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 

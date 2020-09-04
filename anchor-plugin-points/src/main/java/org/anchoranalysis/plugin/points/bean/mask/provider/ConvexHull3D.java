@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.points.bean.mask.provider;
 
 import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
@@ -70,7 +70,7 @@ public class ConvexHull3D extends ConvexHullBase {
 
         // we write the vertices to the outline
         Channel out = outline.channel();
-        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
         VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
         VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -65,7 +65,7 @@ public class RepeatSlice extends MaskProviderUnary {
         Mask out = createEmptyMask(mask, dimensionsForOutput);
 
         // Always takes the same slice as input buffer
-        ByteBuffer bufferSliceToRepeat = mask.sliceBuffer(sliceIndex);
+        UnsignedByteBuffer bufferSliceToRepeat = mask.sliceBuffer(sliceIndex);
 
         Extent extent = dimensionsForOutput.extent();
         extent.iterateOverZ(z -> copySliceInto(bufferSliceToRepeat, z, extent, out));
@@ -83,9 +83,9 @@ public class RepeatSlice extends MaskProviderUnary {
     }
 
     private static void copySliceInto(
-            ByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
+            UnsignedByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
         // Variously takes different z slices
-        ByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
+        UnsignedByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
 
         extent.iterateOverXYOffset(
                 offset -> bufferOut.put(offset, bufferSliceToRepeat.get(offset)));
