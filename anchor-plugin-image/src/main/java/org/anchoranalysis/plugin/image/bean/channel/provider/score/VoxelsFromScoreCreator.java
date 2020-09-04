@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ class VoxelsFromScoreCreator {
     private Optional<KeyValueParams> keyValueParams;
     private List<Histogram> listAdditionalHistograms;
 
-    public Voxels<ByteBuffer> createVoxelsFromPixelScore(
+    public Voxels<UnsignedByteBuffer> createVoxelsFromPixelScore(
             VoxelScore pixelScore, Optional<ObjectMask> object) throws CreateException {
 
         // Sets up the Feature
@@ -64,7 +64,7 @@ class VoxelsFromScoreCreator {
             Extent extent = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            Voxels<ByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(extent);
+            Voxels<UnsignedByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(extent);
 
             if (object.isPresent()) {
                 setVoxelsWithMask(voxelsOut, object.get(), pixelScore);
@@ -97,7 +97,7 @@ class VoxelsFromScoreCreator {
         return out;
     }
 
-    private void setVoxelsWithoutMask(Voxels<ByteBuffer> voxelsOut, VoxelScore pixelScore)
+    private void setVoxelsWithoutMask(Voxels<UnsignedByteBuffer> voxelsOut, VoxelScore pixelScore)
             throws FeatureCalculationException {
 
         Extent extent = voxelsOut.extent();
@@ -106,7 +106,7 @@ class VoxelsFromScoreCreator {
 
             List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
 
-            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
@@ -119,7 +119,7 @@ class VoxelsFromScoreCreator {
     }
 
     private void setVoxelsWithMask(
-            Voxels<ByteBuffer> voxelsOut, ObjectMask object, VoxelScore pixelScore)
+            Voxels<UnsignedByteBuffer> voxelsOut, ObjectMask object, VoxelScore pixelScore)
             throws FeatureCalculationException {
 
         byte maskOn = object.binaryValuesByte().getOnByte();
@@ -135,8 +135,8 @@ class VoxelsFromScoreCreator {
 
             int zRel = z - cornerMin.z();
 
-            ByteBuffer bbMask = object.sliceBufferLocal(zRel);
-            ByteBuffer bbOut = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer bbMask = object.sliceBufferLocal(zRel);
+            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {

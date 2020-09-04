@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -73,7 +73,7 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         return mask;
     }
 
-    private BoundingBox minimalBoxAroundMask(BinaryVoxels<ByteBuffer> voxels)
+    private BoundingBox minimalBoxAroundMask(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws CreateException {
 
         PointRange pointRange = new PointRange();

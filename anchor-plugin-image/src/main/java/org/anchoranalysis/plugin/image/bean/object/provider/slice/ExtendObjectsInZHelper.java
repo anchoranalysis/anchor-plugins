@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
@@ -48,7 +48,7 @@ class ExtendObjectsInZHelper {
 
         ObjectMask objectNew = container.region(box, false);
 
-        ByteBuffer bbFlat = flat.sliceBufferLocal(0);
+        UnsignedByteBuffer bbFlat = flat.sliceBufferLocal(0);
 
         int zLow = box.cornerMin().z();
         int zHigh = box.calculateCornerMax().z();
@@ -66,7 +66,7 @@ class ExtendObjectsInZHelper {
     }
 
     private static boolean extend(
-            ByteBuffer bbFlat,
+            UnsignedByteBuffer bbFlat,
             Extent extent,
             ObjectMask objectNew,
             ObjectMask flat,
@@ -86,7 +86,7 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            ByteBuffer bbExst = objectNew.sliceBufferLocal(zRel);
+            UnsignedByteBuffer bbExst = objectNew.sliceBufferLocal(zRel);
 
             if (andMode) { // NOSONAR
 
@@ -113,7 +113,7 @@ class ExtendObjectsInZHelper {
         return writtenOneSlice;
     }
 
-    private static void setBufferLow(int numVoxels, ByteBuffer buffer, BinaryValuesByte bvb) {
+    private static void setBufferLow(int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
         for (int i = 0; i < numVoxels; i++) {
             buffer.put(i, bvb.getOffByte());
         }
@@ -125,8 +125,8 @@ class ExtendObjectsInZHelper {
      */
     private static boolean bufferLogicalAnd(
             int numVoxels,
-            ByteBuffer buffer,
-            ByteBuffer receive,
+            UnsignedByteBuffer buffer,
+            UnsignedByteBuffer receive,
             BinaryValuesByte bvb,
             BinaryValuesByte bvbReceive) {
 

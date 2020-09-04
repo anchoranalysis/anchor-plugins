@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
@@ -168,7 +168,7 @@ class NaiveGreedyMerge {
 
     private static ObjectMask createSinglePixelObject(Point3i point) {
         Extent extent = new Extent(1, 1, 1);
-        BinaryVoxels<ByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
+        BinaryVoxels<UnsignedByteBuffer> voxels = BinaryVoxelsFactory.createEmptyOn(extent);
         return new ObjectMask(new BoundingBox(point, extent), voxels);
     }
 

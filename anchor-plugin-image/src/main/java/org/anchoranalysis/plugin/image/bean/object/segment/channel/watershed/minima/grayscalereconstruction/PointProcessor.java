@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
@@ -38,12 +38,12 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueI
 class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Object> {
 
     private SlidingBuffer<?> sbMask;
-    private SlidingBuffer<ByteBuffer> sbFinalized;
+    private SlidingBuffer<UnsignedByteBuffer> sbFinalized;
     private PriorityQueueIndexRangeDownhill<Point3i> queue;
 
     // Current ByteBuffer
     private VoxelBuffer<?> bbMask;
-    private VoxelBuffer<ByteBuffer> bbFinalized;
+    private VoxelBuffer<UnsignedByteBuffer> bbFinalized;
     private int z = 0;
 
     private final BinaryValuesByte bv;
@@ -51,7 +51,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     public PointProcessor(
             SlidingBuffer<?> sbMarker,
             SlidingBuffer<?> sbMask,
-            SlidingBuffer<ByteBuffer> sbFinalized,
+            SlidingBuffer<UnsignedByteBuffer> sbFinalized,
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             BinaryValuesByte bv) {
         super(sbMarker);

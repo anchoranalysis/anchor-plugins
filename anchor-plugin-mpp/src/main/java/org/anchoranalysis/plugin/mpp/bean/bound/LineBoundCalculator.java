@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.bound;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -114,10 +114,10 @@ public class LineBoundCalculator extends BoundCalculator {
     private double maxReachablePoint(
             Channel channel, Point3d point, Point3d marg, int maxPossiblePoint) {
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         // This only exists in 2d for now so we can use a slice byteArray
-        ByteBuffer arr = null;
+        UnsignedByteBuffer arr = null;
 
         int zPrev = 0;
         arr = voxels.slices().slice(zPrev).buffer();

@@ -27,8 +27,7 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
@@ -103,7 +102,7 @@ public class ConvertToMat {
         }
     }
     
-    private static Mat fromSingleChannelByte(Voxels<ByteBuffer> voxels) {
+    private static Mat fromSingleChannelByte(Voxels<UnsignedByteBuffer> voxels) {
         return fromSingleChannel(voxels, CvType.CV_8UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
     }
         
@@ -111,7 +110,7 @@ public class ConvertToMat {
         return fromSingleChannel(voxels, CvType.CV_16UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
     }
     
-    private static <T extends Buffer> Mat fromSingleChannel(Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
+    private static <T> Mat fromSingleChannel(Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
         Preconditions.checkArgument(voxels.extent().z() == 1);
 
         Mat mat = createEmptyMat(voxels.extent(), matType);
@@ -126,15 +125,15 @@ public class ConvertToMat {
 
         Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_8UC3);
 
-        ByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
-        ByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
-        ByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
+        UnsignedByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
+        UnsignedByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
+        UnsignedByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
 
         for (int y = 0; y < extent.y(); y++) {
             for (int x = 0; x < extent.x(); x++) {
 
                 // Note BGR format in OpenCV
-                byte[] colArr = new byte[] {blue.get(), green.get(), red.get()};
+                byte[] colArr = new byte[] {blue.getByte(), green.getByte(), red.getByte()};
                 mat.put(y, x, colArr);
             }
         }

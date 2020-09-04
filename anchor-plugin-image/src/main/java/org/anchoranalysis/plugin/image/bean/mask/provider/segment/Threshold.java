@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -55,7 +55,7 @@ public class Threshold extends FromChannelBase {
     @Override
     protected Mask createFromSource(Channel source) throws CreateException {
         try {
-            BinaryVoxels<ByteBuffer> voxelsThresholded =
+            BinaryVoxels<UnsignedByteBuffer> voxelsThresholded =
                     thresholder.threshold(source.voxels(), BinaryValuesByte.getDefault());
 
             return new Mask(voxelsThresholded, source.resolution());

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
@@ -125,7 +125,7 @@ class WalkShortestPath {
     }
 
     private static void drawLineOnVoxelBuffer(
-            VoxelBuffer<ByteBuffer> plane,
+            VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
             BinaryValuesByte bvb,
             Point3i point1,
@@ -149,7 +149,7 @@ class WalkShortestPath {
     Author: Gabriel Landini (G.Landini at bham.ac.uk)
      */
     private static void drawLine4(
-            VoxelBuffer<ByteBuffer> plane,
+            VoxelBuffer<UnsignedByteBuffer> plane,
             Extent extent,
             BinaryValuesByte bvb,
             int x1,
@@ -183,7 +183,7 @@ class WalkShortestPath {
     }
 
     private static void drawPoint(
-            VoxelBuffer<ByteBuffer> plane, Extent extent, BinaryValuesByte bvb, int x, int y) {
+            VoxelBuffer<UnsignedByteBuffer> plane, Extent extent, BinaryValuesByte bvb, int x, int y) {
         plane.putByte(extent.offset(x, y), bvb.getOnByte());
     }
 }

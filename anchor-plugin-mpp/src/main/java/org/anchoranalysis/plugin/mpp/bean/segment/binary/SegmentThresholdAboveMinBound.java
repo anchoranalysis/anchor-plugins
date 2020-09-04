@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.segment.binary;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +58,7 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
     private BinarySegmentationThreshold delegate = new BinarySegmentationThreshold();
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)

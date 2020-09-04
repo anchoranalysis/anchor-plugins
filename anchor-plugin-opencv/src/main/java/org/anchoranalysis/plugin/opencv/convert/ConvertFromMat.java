@@ -1,7 +1,7 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.function.Function;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -34,9 +34,9 @@ public class ConvertFromMat {
     public static Stack toStack(Mat mat) throws OperationFailedException {
         
         if (mat.type() == CvType.CV_8UC1) {
-            return toGrayscale(mat, VoxelBufferByte::wrap, VoxelsFactory.getByte());
+            return toGrayscale(mat, VoxelBufferByte::wrapUnsigned, VoxelsFactory.getByte());
         } else if (mat.type() == CvType.CV_16UC1) {
-            return toGrayscale(mat, VoxelBufferShort::wrap, VoxelsFactory.getShort());
+            return toGrayscale(mat, VoxelBufferShort::wrapBuffer, VoxelsFactory.getShort());
         } else if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {
@@ -44,15 +44,15 @@ public class ConvertFromMat {
         }
     }
 
-    private static <T extends Buffer> Stack toGrayscale(Mat mat, Function<T,VoxelBuffer<T>> createVoxelBuffer, VoxelsFactoryTypeBound<T> factory) {
+    private static <T extends Buffer,S> Stack toGrayscale(Mat mat, Function<T,VoxelBuffer<S>> createVoxelBuffer, VoxelsFactoryTypeBound<S> factory) {
 
         Dimensions dimensions = dimensionsFrom(mat);
         
         org.bytedeco.opencv.opencv_core.Mat matConverted = CONVERTER.convertToMat( CONVERTER.convert(mat) );
         
-        VoxelBuffer<T> buffer = createVoxelBuffer.apply( matConverted.createBuffer() );
+        VoxelBuffer<S> buffer = createVoxelBuffer.apply( matConverted.createBuffer() );
         
-        Voxels<T> voxels = factory.createForBuffer(buffer, dimensions.extent());
+        Voxels<S> voxels = factory.createForBuffer(buffer, dimensions.extent());
         
         Channel channel = ChannelFactory.instance().create(voxels);
         return new Stack(channel);
@@ -70,9 +70,9 @@ public class ConvertFromMat {
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        ByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
-        ByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
-        ByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
+        UnsignedByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
+        UnsignedByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
+        UnsignedByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
 
         byte[] arr = new byte[3];
 

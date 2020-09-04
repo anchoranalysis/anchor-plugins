@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +78,7 @@ public class SegmentChannel extends FromChannelBase {
         return new Mask(segmentChannel(source), source.resolution());
     }
 
-    private BinaryVoxels<ByteBuffer> segmentChannel(Channel channel) throws CreateException {
+    private BinaryVoxels<UnsignedByteBuffer> segmentChannel(Channel channel) throws CreateException {
         Optional<ObjectMask> object = objectFromMask(channel.dimensions());
 
         BinarySegmentationParameters params = createParams(channel.dimensions());

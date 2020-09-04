@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -80,7 +80,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
     private int estimateSurfaceSize(VoxelizedMarkMemo pxlMarkMemo, ObjectMask object)
             throws FeatureCalculationException {
 
-        Voxels<ByteBuffer> voxelsOutline = outline(object, !suppressZ);
+        Voxels<UnsignedByteBuffer> voxelsOutline = outline(object, !suppressZ);
 
         Extent extent = object.boundingBox().extent();
 
@@ -104,7 +104,7 @@ public class SurfaceSizeMaskNonZero extends FeatureSingleMemoRegion {
         }
     }
 
-    private static Voxels<ByteBuffer> outline(ObjectMask object, boolean useZ) {
+    private static Voxels<UnsignedByteBuffer> outline(ObjectMask object, boolean useZ) {
         OutlineKernel3 kernel = new OutlineKernel3(object.binaryValuesByte(), false, useZ);
         return ApplyKernel.apply(kernel, object.voxels(), object.binaryValuesByte());
     }

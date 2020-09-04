@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,13 +70,13 @@ public class Sequence extends BinarySegmentation {
     }
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
-        BinaryVoxels<ByteBuffer> out = null;
+        BinaryVoxels<UnsignedByteBuffer> out = null;
 
         // A bounding-box capturing what part of the scene is being segmented
         BoundingBox box =
@@ -88,7 +88,7 @@ public class Sequence extends BinarySegmentation {
         Optional<ObjectMask> evolvingMask = objectMask;
         for (BinarySegmentation segment : list) {
 
-            BinaryVoxels<ByteBuffer> outNew = segment.segment(voxels, params, evolvingMask);
+            BinaryVoxels<UnsignedByteBuffer> outNew = segment.segment(voxels, params, evolvingMask);
 
             out = outNew;
             evolvingMask = Optional.of(new ObjectMask(box, outNew));

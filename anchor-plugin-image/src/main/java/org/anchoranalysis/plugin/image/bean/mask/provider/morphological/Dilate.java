@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +64,7 @@ public class Dilate extends MorphologicalOperatorBase {
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 
-        BinaryVoxels<ByteBuffer> out =
+        BinaryVoxels<UnsignedByteBuffer> out =
                 MorphologicalDilation.dilate(
                         source.binaryVoxels(),
                         do3D,

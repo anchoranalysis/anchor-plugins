@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -93,14 +93,14 @@ public class SegmentOnMaximumIntensityAndExpandInZ extends SegmentChannelIntoObj
         return objects.stream().anyMatch(objectMask -> objectMask.extent().z() > 1);
     }
 
-    private BinaryVoxels<ByteBuffer> binarySgmn(Channel channel)
+    private BinaryVoxels<UnsignedByteBuffer> binarySgmn(Channel channel)
             throws SegmentationFailedException {
         BinarySegmentationParameters params =
                 new BinarySegmentationParameters(channel.resolution());
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
-        Voxels<ByteBuffer> stackBinary = voxels.duplicate();
+        Voxels<UnsignedByteBuffer> stackBinary = voxels.duplicate();
         return segmentStack.segment(new VoxelsWrapper(stackBinary), params, Optional.empty());
     }
 

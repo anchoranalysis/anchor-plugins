@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
@@ -57,10 +57,10 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
         return FindOutline.outline(obj, 1, false, true).binaryVoxels().countOn();
     }
 
-    private static int cntForByteBuffer(ByteBuffer bb, byte equalVal) {
+    private static int countForByteBuffer(UnsignedByteBuffer buffer, byte equalVal) {
         int cnt = 0;
-        while (bb.hasRemaining()) {
-            if (bb.get() == equalVal) {
+        while (buffer.hasRemaining()) {
+            if (buffer.getByte() == equalVal) {
                 cnt++;
             }
         }
@@ -73,8 +73,8 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
         int ind = 0;
 
         for (int z = 0; z < object.boundingBox().extent().z(); z++) {
-            ByteBuffer bb = object.sliceBufferLocal(z);
-            int count = cntForByteBuffer(bb, object.binaryValuesByte().getOnByte());
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
+            int count = countForByteBuffer(buffer, object.binaryValuesByte().getOnByte());
 
             if (count > max) {
                 max = count;

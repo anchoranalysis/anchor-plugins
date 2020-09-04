@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.filter.independent;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -91,7 +91,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer bb = object.sliceBufferLocal(z);
 
             VoxelBuffer<?> bbChannel = voxels.slice(z + object.boundingBox().cornerMin().z());
 

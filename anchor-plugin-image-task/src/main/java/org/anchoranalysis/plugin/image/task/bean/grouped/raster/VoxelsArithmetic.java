@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import lombok.AccessLevel;
@@ -104,12 +104,12 @@ class VoxelsArithmetic {
      * @param voxelsOut
      */
     private static void divideValueByte(
-            Voxels<IntBuffer> voxelsIn, int div, Voxels<ByteBuffer> voxelsOut) {
+            Voxels<IntBuffer> voxelsIn, int div, Voxels<UnsignedByteBuffer> voxelsOut) {
 
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
 
             IntBuffer in = voxelsIn.sliceBuffer(z);
-            ByteBuffer out = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
 
@@ -150,17 +150,17 @@ class VoxelsArithmetic {
         }
     }
 
-    private static void addByte(Voxels<IntBuffer> voxels, Voxels<ByteBuffer> toAdd) {
+    private static void addByte(Voxels<IntBuffer> voxels, Voxels<UnsignedByteBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
             IntBuffer in1 = voxels.sliceBuffer(z);
-            ByteBuffer in2 = toAdd.sliceBuffer(z);
+            UnsignedByteBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 
                 int b1 = in1.get();
-                byte b2 = in2.get();
+                byte b2 = in2.getByte();
 
                 int sum = b1 + PrimitiveConverter.unsignedByteToInt(b2);
                 oneStepBackward(in1);

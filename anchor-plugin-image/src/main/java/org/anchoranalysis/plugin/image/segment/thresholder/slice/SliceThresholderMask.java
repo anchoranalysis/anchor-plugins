@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.segment.thresholder.slice;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.extent.Extent;
@@ -51,7 +51,7 @@ public class SliceThresholderMask extends SliceThresholder {
 
     @Override
     public void segmentAll(
-            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<ByteBuffer> voxelsOut) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<UnsignedByteBuffer> voxelsOut) {
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
             int relZ = z - cornerMin.z();
@@ -70,11 +70,11 @@ public class SliceThresholderMask extends SliceThresholder {
             Extent extent,
             VoxelBuffer<?> voxelsIn,
             VoxelBuffer<?> voxelsThrshld,
-            VoxelBuffer<ByteBuffer> voxelsOut,
-            VoxelBuffer<ByteBuffer> voxelsMask,
+            VoxelBuffer<UnsignedByteBuffer> voxelsOut,
+            VoxelBuffer<UnsignedByteBuffer> voxelsMask,
             BinaryValuesByte bvbMask) {
         int offsetMask = 0;
-        ByteBuffer out = voxelsOut.buffer();
+        UnsignedByteBuffer out = voxelsOut.buffer();
 
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {

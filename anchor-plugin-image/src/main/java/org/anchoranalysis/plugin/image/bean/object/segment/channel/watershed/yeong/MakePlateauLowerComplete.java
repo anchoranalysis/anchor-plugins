@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import java.nio.ByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +52,7 @@ class MakePlateauLowerComplete {
         private final List<Point3i> foundPoints = new ArrayList<>();
 
         private int zChange;
-        private ByteBuffer bb;
+        private UnsignedByteBuffer buffer;
         private int z1;
         private final byte maskValueOff;
 
@@ -68,8 +68,8 @@ class MakePlateauLowerComplete {
         }
 
         @Override
-        public void notifyChangeZ(int zChange, int z1, ByteBuffer objectMaskBuffer) {
-            this.bb = objectMaskBuffer;
+        public void notifyChangeZ(int zChange, int z1, UnsignedByteBuffer objectMaskBuffer) {
+            this.buffer = objectMaskBuffer;
             this.zChange = zChange;
             this.z1 = z1;
         }
@@ -80,7 +80,7 @@ class MakePlateauLowerComplete {
 
             Point3i pointRel = new Point3i(x1, y1, z1);
             foundPoints.add(pointRel);
-            bb.put(objectMaskOffset, maskValueOff);
+            buffer.put(objectMaskOffset, maskValueOff);
 
             // We point this value in the direction opposite to which it came
             matS.setPointDirection(pointRel, xChange * -1, yChange * -1, zChange * -1);
