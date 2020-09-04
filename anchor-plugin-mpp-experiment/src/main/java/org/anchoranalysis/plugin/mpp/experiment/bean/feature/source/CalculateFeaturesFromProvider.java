@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.writer.RowLabels;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -48,7 +48,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
 
     public void processProvider(
             ObjectCollectionProvider provider,
-            Function<T, StringLabelsForCsvRow> identifierFromInput)
+            Function<T, RowLabels> identifierFromInput)
             throws OperationFailedException {
         calculator.calculateFeaturesForObjects(
                 objectsFromProvider(provider, initParams.getImageInit(), calculator.getLogger()),

@@ -37,9 +37,11 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
-import org.anchoranalysis.feature.io.csv.GroupedResultsVectorCollection;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.results.ResultsWriter;
+import org.anchoranalysis.feature.io.csv.results.ResultsWriterMetadata;
+import org.anchoranalysis.feature.io.csv.results.ResultsWriterOutputNames;
+import org.anchoranalysis.feature.io.csv.results.LabelHeaders;
+import org.anchoranalysis.feature.io.csv.writer.RowLabels;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
@@ -69,7 +71,7 @@ public class SharedStateExportFeatures<S> {
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
 
-    private final GroupedResultsVectorCollection groupedResults;
+    private final ResultsWriter groupedResults;
         
     @Getter private final FeatureNameList featureNames;
 
@@ -81,26 +83,23 @@ public class SharedStateExportFeatures<S> {
     private BoundIOContext context;
     
     /**
-     * Creates the shared state
+     * Creates the shared state.
      *
-     * @param labelHeaders headers for the label columns
-     * @param featureNames names of each feature in the featuer columns
+     * @param outputMetadata headers and output-name for the feature CSV file that is written
      * @param rowSource source of rows in the feature-table (called independently for each thread)
      * @param context IO-context including directory in which grouped/thumbnails sub-directorys may
      *     be created
      * @throws AnchorIOException
      */
     public SharedStateExportFeatures(
-            LabelHeaders labelHeaders,
-            FeatureNameList featureNames,
+            ResultsWriterMetadata outputMetadata,
             Supplier<S> rowSource,
             BoundIOContext context)
             throws AnchorIOException {
-        this.featureNames = featureNames;
+        this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
         this.context = context;
-        this.groupedResults =
-                new GroupedResultsVectorCollection(labelHeaders, featureNames, context);
+        this.groupedResults = new ResultsWriter(outputMetadata, context);
     }
     
     /**
@@ -130,8 +129,7 @@ public class SharedStateExportFeatures<S> {
     public static <T extends FeatureInput> SharedStateExportFeatures<FeatureList<T>> createForFeatures( NamedFeatureStore<T> featureStore, LabelHeaders metadataHeaders, BoundIOContext context) throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    metadataHeaders,
-                    featureStore.createFeatureNames(),
+                    new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames()),
                     featureStore.deepCopy()::listFeatures,
                     context);
         } catch (AnchorIOException e) {
@@ -142,18 +140,18 @@ public class SharedStateExportFeatures<S> {
     /**
      * Alternative static constructor that creates a shared-state from a feature-store
      * 
-     * @param <T> feature input-type in store
+     * @param outputNames the names of the feature outputs
      * @param features a table calculator for features
      * @param identifierHeaders headers to describe the identifier metadata before the feature values
      * @param context io context
+     * @param <T> feature input-type in store
      * @return a newly created {@link SharedStateExportFeatures}
      * @throws CreateException 
      */
-    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures( FeatureTableCalculator<T> features, LabelHeaders identifierHeaders, BoundIOContext context) throws CreateException {
+    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures( ResultsWriterOutputNames outputNames, FeatureTableCalculator<T> features, LabelHeaders identifierHeaders, BoundIOContext context) throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    identifierHeaders,
-                    features.createFeatureNames(),
+                    new ResultsWriterMetadata(outputNames, identifierHeaders, features.createFeatureNames()),
                     features::duplicateForNewThread,
                     context);
         } catch (AnchorIOException e) {
@@ -171,7 +169,7 @@ public class SharedStateExportFeatures<S> {
     }
 
     /**
-     * Writes all the results that have been collected as a CSV file
+     * Writes all the results that have been collected as a CSV file.
      *
      * @param featuresAggregate features that can be used for generating additional "aggregated"
      *     exports
@@ -204,7 +202,7 @@ public class SharedStateExportFeatures<S> {
      * @return
      */
     private ExportFeatureResultsAdder addResultsFor() {
-        return (StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results) -> {
+        return (RowLabels labels, ResultsVectorWithThumbnail results) -> {
             // Synchronization is important to preserve identical order in thumbnails and in the
             // exported feature CSV file, as multiple threads will concurrently add results
             synchronized (this) {

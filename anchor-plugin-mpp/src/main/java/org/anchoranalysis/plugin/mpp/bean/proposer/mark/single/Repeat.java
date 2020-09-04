@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.mark.single;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.functional.RepeatUtilities;
+import org.anchoranalysis.core.functional.FunctionalIterate;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
@@ -47,6 +47,6 @@ public class Repeat extends MarkProposerUnary {
     protected boolean propose(
             VoxelizedMarkMemo inputMark, ProposerContext context, MarkProposer source)
             throws ProposalAbnormalFailureException {
-        return RepeatUtilities.repeatUntil(maxIter, () -> source.propose(inputMark, context));
+        return FunctionalIterate.repeatUntil(maxIter, () -> source.propose(inputMark, context));
     }
 }
