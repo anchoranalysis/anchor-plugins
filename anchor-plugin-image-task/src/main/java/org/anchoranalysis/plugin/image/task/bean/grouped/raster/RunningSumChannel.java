@@ -36,11 +36,13 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
- * A channel associated with a count. This is a useful structure for finding the mean of many
- * channels
+ * A channel associated with a running sum for each voxel and a total count.
+ * 
+ * <p>This is a useful structure for finding the mean of several channels, where
+ * the channel contained here represent the sum.
  */
 @Accessors(fluent = true)
-class AggregateChannel {
+class RunningSumChannel {
 
     // We create only when we have the first channel, so dimensions can then be determined
     private Channel raster = null;
@@ -57,7 +59,7 @@ class AggregateChannel {
                             channel.dimensions(), raster.dimensions()));
         }
 
-        VoxelsArithmetic.add(raster.voxels().asInt(), channel.voxels(), channel.getVoxelDataType());
+        VoxelwiseArithmetic.add(raster.voxels().asInt(), channel.voxels());
 
         count++;
     }
@@ -65,7 +67,7 @@ class AggregateChannel {
     /**
      * Create a channel with the mean-value of all the aggregated channels
      *
-     * @return the channel with newly created voxels
+     * @return the channel, with newly created voxels, containing the mean-value of each voxel
      * @throws OperationFailedException
      */
     public Channel createMeanChannel(VoxelDataType outputType) throws OperationFailedException {
@@ -77,7 +79,7 @@ class AggregateChannel {
 
         Channel channelOut = ChannelFactory.instance().create(raster.dimensions(), outputType);
 
-        VoxelsArithmetic.divide(raster.voxels().asInt(), count, channelOut.voxels(), outputType);
+        VoxelwiseArithmetic.divide(raster.voxels().asInt(), count, channelOut.voxels());
 
         return channelOut;
     }

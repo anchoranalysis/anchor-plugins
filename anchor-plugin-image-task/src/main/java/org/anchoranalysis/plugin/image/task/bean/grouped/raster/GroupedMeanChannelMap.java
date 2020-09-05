@@ -35,23 +35,23 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
-class GroupedMeanChannelMap extends GroupMapByName<Channel, AggregateChannel> {
+class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
     private static final String MANIFEST_FUNCTION = "channelMean";
 
     public GroupedMeanChannelMap() {
-        super("channel", MANIFEST_FUNCTION, AggregateChannel::new);
+        super("channel", MANIFEST_FUNCTION, RunningSumChannel::new);
     }
 
     @Override
-    protected void addTo(Channel ind, AggregateChannel agg) throws OperationFailedException {
+    protected void addTo(Channel ind, RunningSumChannel agg) throws OperationFailedException {
         agg.addChannel(ind);
     }
 
     @Override
     protected void writeGroupOutputInSubdirectory(
             String outputName,
-            AggregateChannel agg,
+            RunningSumChannel agg,
             ConsistentChannelChecker channelChecker,
             BoundIOContext context)
             throws IOException {
