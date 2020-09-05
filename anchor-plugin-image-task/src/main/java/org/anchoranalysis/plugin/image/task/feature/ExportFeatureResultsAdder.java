@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.RowLabels;
 
 /**
  * Adds results (a row in a feature-table) for export-features

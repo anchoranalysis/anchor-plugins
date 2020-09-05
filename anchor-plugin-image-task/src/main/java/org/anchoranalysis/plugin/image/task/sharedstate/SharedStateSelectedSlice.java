@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVMetadata;
-import org.anchoranalysis.feature.io.csv.writer.FeatureCSVWriter;
+import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
+import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 
