@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,26 +27,26 @@ package org.anchoranalysis.plugin.image.feature.object;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import lombok.Getter;
+import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 
 /**
  * A list of items with an associated thumbnail-batch
- * 
+ *
  * @author Owen Feehan
  * @param <T> list-type
  * @param <S> thumbnail input type
  */
-public class ListWithThumbnails<T,S> {
+public class ListWithThumbnails<T, S> {
 
     private final List<T> list;
     @Getter private final Optional<ThumbnailBatch<S>> thumbnailBatch;
-    
+
     public ListWithThumbnails(List<T> list) {
         this.list = list;
         this.thumbnailBatch = Optional.empty();
     }
-    
+
     public ListWithThumbnails(List<T> list, ThumbnailBatch<S> thumbnailBatch) {
         this.list = list;
         this.thumbnailBatch = Optional.of(thumbnailBatch);

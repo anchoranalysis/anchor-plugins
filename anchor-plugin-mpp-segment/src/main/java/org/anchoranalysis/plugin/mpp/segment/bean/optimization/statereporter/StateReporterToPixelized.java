@@ -62,7 +62,8 @@ public class StateReporterToPixelized<T>
 
     @Override
     public Optional<StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy>> secondaryReport() {
-        StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy> compose = new Compose<>(new RetrieveSourceFromVoxelized<>(), secondary);
+        StateTransformer<ToPixelized<T>, VoxelizedMarksWithEnergy> compose =
+                new Compose<>(new RetrieveSourceFromVoxelized<>(), secondary);
         return Optional.of(compose);
     }
 }

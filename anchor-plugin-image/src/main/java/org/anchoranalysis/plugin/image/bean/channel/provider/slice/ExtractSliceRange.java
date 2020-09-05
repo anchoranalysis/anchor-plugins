@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -64,8 +64,7 @@ public class ExtractSliceRange extends ChannelProviderUnary {
         Extent extent = channel.extent().duplicateChangeZ(sliceEnd - sliceStart + 1);
 
         Channel channelOut =
-                factory.createEmptyInitialised(
-                        new Dimensions(extent, channel.resolution()));
+                factory.createEmptyInitialised(new Dimensions(extent, channel.resolution()));
         Voxels<UnsignedByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();

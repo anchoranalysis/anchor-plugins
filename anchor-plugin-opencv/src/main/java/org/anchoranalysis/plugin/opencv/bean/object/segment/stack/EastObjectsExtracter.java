@@ -51,11 +51,15 @@ import org.opencv.dnn.Net;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastObjectsExtracter {
-    
-    public static List<WithConfidence<ObjectMask>> apply(ConcurrentModelPool<Net> modelPool,
-            Mat image, Resolution resolution, double minConfidence) throws Throwable {
+
+    public static List<WithConfidence<ObjectMask>> apply(
+            ConcurrentModelPool<Net> modelPool,
+            Mat image,
+            Resolution resolution,
+            double minConfidence)
+            throws Throwable {
         List<WithConfidence<Mark>> listMarks =
                 EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
@@ -65,7 +69,8 @@ class EastObjectsExtracter {
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
             List<WithConfidence<Mark>> listMarks, Dimensions dim) {
-        return FunctionalList.mapToList(listMarks, withConfidence -> convertToObject(withConfidence, dim));
+        return FunctionalList.mapToList(
+                listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
     private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {

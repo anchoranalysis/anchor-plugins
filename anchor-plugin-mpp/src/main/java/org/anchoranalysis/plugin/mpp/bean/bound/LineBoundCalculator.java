@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.bound;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +38,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -66,8 +66,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChannel.resolution(),
-                                    rotMatrix.getNumDim() >= 3);
+                                    outlineChannel.resolution(), rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
 
@@ -143,10 +142,7 @@ public class LineBoundCalculator extends BoundCalculator {
 
             if (arr.getUnsigned(index) > 0) {
                 // We calculate how far we have travelled in total
-                return extra
-                        + normZMag(
-                                runningDouble,
-                                channel.resolution().zRelative());
+                return extra + normZMag(runningDouble, channel.resolution().zRelative());
             }
         }
         return -1;

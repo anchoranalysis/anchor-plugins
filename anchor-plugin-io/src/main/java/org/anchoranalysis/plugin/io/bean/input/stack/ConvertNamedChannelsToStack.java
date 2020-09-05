@@ -48,7 +48,10 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInput> input;
 
-    /** By default all channels are converted into a stack. If non-empty, only this channel is converted into a stack. */
+    /**
+     * By default all channels are converted into a stack. If non-empty, only this channel is
+     * converted into a stack.
+     */
     @BeanField @Getter @Setter @AllowEmpty private String channelName;
 
     @BeanField @Getter @Setter private int timeIndex = 0;
@@ -61,6 +64,6 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     }
 
     private StackSequenceInput convert(NamedChannelsInput in) {
-        return new ConvertChannelsInputToStack(in, timeIndex, OptionalFactory.create(channelName) );
+        return new ConvertChannelsInputToStack(in, timeIndex, OptionalFactory.create(channelName));
     }
 }

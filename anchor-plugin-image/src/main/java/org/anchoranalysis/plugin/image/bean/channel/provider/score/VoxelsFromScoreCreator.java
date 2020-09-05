@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 import org.anchoranalysis.image.histogram.Histogram;
@@ -64,7 +64,8 @@ class VoxelsFromScoreCreator {
             Extent extent = listVoxels.getFirstExtent();
 
             // We make our index buffer
-            Voxels<UnsignedByteBuffer> voxelsOut = VoxelsFactory.getByte().createInitialized(extent);
+            Voxels<UnsignedByteBuffer> voxelsOut =
+                    VoxelsFactory.getByte().createInitialized(extent);
 
             if (object.isPresent()) {
                 setVoxelsWithMask(voxelsOut, object.get(), pixelScore);
@@ -146,7 +147,8 @@ class VoxelsFromScoreCreator {
                     int offsetMask = eMask.offset(x - cornerMin.x(), y - cornerMin.y());
 
                     if (bufferMask.getRaw(offsetMask) == maskOn) {
-                        BufferUtilities.putScoreForOffset(pixelScore, bufferList, bufferOut, offset);
+                        BufferUtilities.putScoreForOffset(
+                                pixelScore, bufferList, bufferOut, offset);
                     }
                 }
             }

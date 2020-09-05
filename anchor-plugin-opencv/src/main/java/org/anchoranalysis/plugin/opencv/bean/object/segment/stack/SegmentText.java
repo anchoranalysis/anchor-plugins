@@ -32,8 +32,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
@@ -88,10 +88,11 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     /** Iff true, non-maxima-suppression is applied to filter the proposed bounding boxes */
     @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
     // END BEAN PROPERTIES
-    
+
     @Override
-    public ObjectCollection segment(Stack stack, ConcurrentModelPool<Net> modelPool) throws SegmentationFailedException {
-        
+    public ObjectCollection segment(Stack stack, ConcurrentModelPool<Net> modelPool)
+            throws SegmentationFailedException {
+
         stack = checkAndCorrectInput(stack);
 
         try {
@@ -102,11 +103,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
             // Convert marks to object-masks
             List<WithConfidence<ObjectMask>> objectsWithConfidence =
                     EastObjectsExtracter.apply(
-                            modelPool,
-                            pair._1(),
-                            stack.resolution(),
-                            minConfidence
-                            );
+                            modelPool, pair._1(), stack.resolution(), minConfidence);
 
             // Scale each object-mask and extract as an object-collection
             return ScaleExtractObjects.apply(
@@ -115,7 +112,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
         } catch (Throwable e) {
-            throw new SegmentationFailedException(e);            
+            throw new SegmentationFailedException(e);
         }
     }
 
@@ -135,13 +132,13 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     }
 
     private Stack checkAndCorrectInput(Stack stack) throws SegmentationFailedException {
-        if (stack.getNumberChannels()==1) {
-            return checkInput( grayscaleToRGB(stack.getChannel(0)) );
+        if (stack.getNumberChannels() == 1) {
+            return checkInput(grayscaleToRGB(stack.getChannel(0)));
         } else {
             return checkInput(stack);
         }
     }
-    
+
     private static Stack grayscaleToRGB(Channel channel) {
         try {
             return new Stack(channel, channel.duplicate(), channel.duplicate());
@@ -149,8 +146,8 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
             throw new AnchorImpossibleSituationException();
         }
     }
-        
-    private Stack checkInput(Stack stack) throws SegmentationFailedException {        
+
+    private Stack checkInput(Stack stack) throws SegmentationFailedException {
         if (stack.getNumberChannels() != 3) {
             throw new SegmentationFailedException(
                     String.format(
@@ -161,7 +158,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         if (stack.dimensions().z() > 1) {
             throw new SegmentationFailedException("z-stacks are not supported by this algorithm");
         }
-        
+
         return stack;
     }
 
@@ -175,24 +172,23 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         }
     }
 
-
     @Override
     public ConcurrentModelPool<Net> createModelPool(ConcurrencyPlan plan) {
         Path modelPath = pathToEastModel();
-        return new ConcurrentModelPool<>(plan, useGPU -> createNet(modelPath, useGPU) );
+        return new ConcurrentModelPool<>(plan, useGPU -> createNet(modelPath, useGPU));
     }
-    
+
     private static Net createNet(Path pathToModel, boolean useGPU) {
-        
+
         Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
-        
+
         if (useGPU) {
             net.setPreferableBackend(Dnn.DNN_BACKEND_CUDA);
-            net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);    
+            net.setPreferableTarget(Dnn.DNN_TARGET_CUDA);
         }
         return net;
     }
-    
+
     private Path pathToEastModel() {
         return getInitializationParameters()
                 .getModelDirectory()

@@ -44,7 +44,8 @@ public class DistanceCondition implements BeforeCondition {
     private final MessageLogger logger;
 
     @Override
-    public boolean accept(ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
+    public boolean accept(
+            ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
 
         // We impose a maximum distance condition if necessary
@@ -65,7 +66,9 @@ public class DistanceCondition implements BeforeCondition {
 
         double maxDistanceResolved =
                 resolveDistance(
-                        unitConverter, source.boundingBox().midpoint(), destination.boundingBox().midpoint());
+                        unitConverter,
+                        source.boundingBox().midpoint(),
+                        destination.boundingBox().midpoint());
 
         if (distance >= maxDistanceResolved) {
             return false;
@@ -82,7 +85,8 @@ public class DistanceCondition implements BeforeCondition {
         }
     }
 
-    private double resolveDistance(Optional<UnitConverter> unitConverter, Point3d point1, Point3d point2)
+    private double resolveDistance(
+            Optional<UnitConverter> unitConverter, Point3d point1, Point3d point2)
             throws OperationFailedException {
         if (suppressZ) {
             return maxDistance // NOSONAR

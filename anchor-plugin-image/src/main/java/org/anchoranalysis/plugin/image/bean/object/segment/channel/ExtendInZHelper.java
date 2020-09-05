@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -53,7 +53,8 @@ class ExtendInZHelper {
         return objects2D.stream().map(object -> extendObject(object, mask3D));
     }
 
-    private static ObjectMask extendObject(ObjectMask object2D, BinaryVoxels<UnsignedByteBuffer> voxels3D) {
+    private static ObjectMask extendObject(
+            ObjectMask object2D, BinaryVoxels<UnsignedByteBuffer> voxels3D) {
         return new ObjectMask(extendObject(object2D.boundedVoxels(), voxels3D));
     }
 

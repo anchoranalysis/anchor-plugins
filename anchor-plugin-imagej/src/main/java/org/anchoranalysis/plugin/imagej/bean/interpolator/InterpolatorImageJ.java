@@ -32,8 +32,8 @@ import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
+import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 
 class InterpolatorImageJ implements Interpolator {
 

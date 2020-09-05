@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -113,7 +113,8 @@ class ExtendObjectsInZHelper {
         return writtenOneSlice;
     }
 
-    private static void setBufferLow(int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
+    private static void setBufferLow(
+            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
         for (int i = 0; i < numVoxels; i++) {
             buffer.putRaw(i, bvb.getOffByte());
         }

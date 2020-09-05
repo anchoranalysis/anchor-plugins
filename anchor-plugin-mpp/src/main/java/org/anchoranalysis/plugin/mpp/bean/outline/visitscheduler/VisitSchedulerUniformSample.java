@@ -55,7 +55,8 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    public void beforeCreateObject(
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
         selected = randomNumberGenerator.sampleFromList(list);
         selected.beforeCreateObject(randomNumberGenerator, resolution);

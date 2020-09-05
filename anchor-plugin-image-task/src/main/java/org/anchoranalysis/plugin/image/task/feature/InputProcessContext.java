@@ -70,7 +70,6 @@ public class InputProcessContext<S> {
         this.thumbnailsEnabled = areThumbnailsEnabled(context);
     }
 
-
     public Path getModelDirectory() {
         return context.getModelDirectory();
     }

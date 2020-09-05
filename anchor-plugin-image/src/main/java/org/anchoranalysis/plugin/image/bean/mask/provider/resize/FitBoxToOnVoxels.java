@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +35,7 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.points.PointRange;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
@@ -79,8 +79,7 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         PointRange pointRange = new PointRange();
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsEqualTo.equalToReusePoint(
-                voxels.voxels(), bvb.getOnByte(), pointRange::add);
+        IterateVoxelsEqualTo.equalToReusePoint(voxels.voxels(), bvb.getOnByte(), pointRange::add);
 
         try {
             return pointRange.deriveBoundingBox();

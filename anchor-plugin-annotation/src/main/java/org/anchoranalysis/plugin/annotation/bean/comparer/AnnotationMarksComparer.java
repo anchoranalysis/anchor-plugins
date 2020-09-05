@@ -45,9 +45,7 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
- * 
  * @author Owen Feehan
- *
  * @param <T> rejection-reason
  */
 public class AnnotationMarksComparer<T> extends Comparer {
@@ -76,21 +74,22 @@ public class AnnotationMarksComparer<T> extends Comparer {
         }
 
         if (annotation.isPresent()) {
-            return objectsFromAnnotation(annotation.get(), filePath, dimensions);    
+            return objectsFromAnnotation(annotation.get(), filePath, dimensions);
         } else {
             return new NotFound<>(filePath, "No annotation exists");
         }
     }
-    
-    private Findable<ObjectCollection> objectsFromAnnotation(DualMarksAnnotation<T> annotation, Path filePath, Dimensions dimensions) {
-        
+
+    private Findable<ObjectCollection> objectsFromAnnotation(
+            DualMarksAnnotation<T> annotation, Path filePath, Dimensions dimensions) {
+
         if (!annotation.isAccepted()) {
             return new NotFound<>(filePath, "The annotation is NOT accepted");
         }
 
         ObjectCollectionWithProperties objects =
-                annotation.marks().deriveObjects(dimensions,annotation.region());
-        
+                annotation.marks().deriveObjects(dimensions, annotation.region());
+
         return new Found<>(objects.withoutProperties());
     }
 }

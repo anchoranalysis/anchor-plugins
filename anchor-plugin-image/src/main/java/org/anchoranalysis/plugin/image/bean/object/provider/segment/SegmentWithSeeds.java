@@ -153,8 +153,6 @@ public class SegmentWithSeeds extends WithChannelBase {
     private static Channel createChannelForBox(Channel channel, BoundingBox boundingBox) {
         // We make a channel just for the object
         return ChannelFactory.instance()
-                .create(
-                        channel.extract().region(boundingBox, false),
-                        channel.resolution());
+                .create(channel.extract().region(boundingBox, false), channel.resolution());
     }
 }

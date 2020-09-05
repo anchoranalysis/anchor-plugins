@@ -40,8 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * @author Owen Feehan
  * @param <T>
  */
-public abstract class WithValueBase<T extends FeatureInput>
-        extends FeatureUnaryGeneric<T> {
+public abstract class WithValueBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private double value = 0;

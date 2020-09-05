@@ -26,9 +26,9 @@
 
 package org.anchoranalysisplugin.io.test.image;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Random;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;

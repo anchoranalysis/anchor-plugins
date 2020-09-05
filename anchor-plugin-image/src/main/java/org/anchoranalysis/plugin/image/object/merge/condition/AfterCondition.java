@@ -35,7 +35,6 @@ public interface AfterCondition {
 
     void init(Logger logger) throws InitException;
 
-    boolean accept(
-            ObjectMask source, ObjectMask destination, ObjectMask merged)
+    boolean accept(ObjectMask source, ObjectMask destination, ObjectMask merged)
             throws OperationFailedException;
 }

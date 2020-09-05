@@ -45,9 +45,8 @@ import org.anchoranalysis.io.error.FileProviderException;
 
 /**
  * Only considers annotations that have been accepted.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T> rejection-reason
  */
 public class FilterForAcceptedAnnotations<T> extends FileProvider {

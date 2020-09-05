@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;

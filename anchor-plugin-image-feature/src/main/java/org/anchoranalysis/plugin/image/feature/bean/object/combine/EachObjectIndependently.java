@@ -59,10 +59,11 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
         return createFeatures(storeFactory.createNamedFeatureList(list));
     }
 
-    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(NamedFeatureStore<FeatureInputSingleObject> features) {
+    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
+            NamedFeatureStore<FeatureInputSingleObject> features) {
         return new SingleTableCalculator(features);
     }
-    
+
     @Override
     public String uniqueIdentifierFor(FeatureInputSingleObject input) {
         return UniqueIdentifierUtilities.forObject(input.getObject());
@@ -81,7 +82,8 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public ObjectCollection objectsForThumbnail(FeatureInputSingleObject input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputSingleObject input)
+            throws CreateException {
         return ObjectCollectionFactory.of(input.getObject());
     }
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +37,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -136,7 +136,8 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
     }
 
     private static ObjectCollection createObjectsFromLabels(
-            Voxels<UnsignedIntBuffer> matS, Optional<ObjectMask> objectMask) throws CreateException {
+            Voxels<UnsignedIntBuffer> matS, Optional<ObjectMask> objectMask)
+            throws CreateException {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 

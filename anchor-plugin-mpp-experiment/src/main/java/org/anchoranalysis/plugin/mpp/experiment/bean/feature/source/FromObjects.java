@@ -121,7 +121,11 @@ public class FromObjects<T extends FeatureInput>
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
-            return SharedStateExportFeatures.createForFeatures( new ResultsWriterOutputNames("features",true,true), tableCalculator, metadataHeaders, context);
+            return SharedStateExportFeatures.createForFeatures(
+                    new ResultsWriterOutputNames("features", true, true),
+                    tableCalculator,
+                    metadataHeaders,
+                    context);
         } catch (InitException e) {
             throw new CreateException(e);
         }
@@ -167,14 +171,11 @@ public class FromObjects<T extends FeatureInput>
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
-        CalculateFeaturesForObjects<T> objectsCalculator = new CalculateFeaturesForObjects<>(
-                combine,
-                initParams,
-                suppressErrors,
-                context
-        );
-        
-        CalculateFeaturesFromProvider<T> fromProviderCalculator = new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
+        CalculateFeaturesForObjects<T> objectsCalculator =
+                new CalculateFeaturesForObjects<>(combine, initParams, suppressErrors, context);
+
+        CalculateFeaturesFromProvider<T> fromProviderCalculator =
+                new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
         processAllProviders(
                 descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 

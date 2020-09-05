@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.ImageWriter;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -69,7 +69,8 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
             UnsignedByteBuffer blue = voxelsBlue.sliceBuffer(z);
 
             UnsignedByteBuffer merged =
-                    UnsignedByteBuffer.allocate(red.capacity() + green.capacity() + blue.capacity());
+                    UnsignedByteBuffer.allocate(
+                            red.capacity() + green.capacity() + blue.capacity());
             merged.put(red);
             merged.put(green);
             merged.put(blue);

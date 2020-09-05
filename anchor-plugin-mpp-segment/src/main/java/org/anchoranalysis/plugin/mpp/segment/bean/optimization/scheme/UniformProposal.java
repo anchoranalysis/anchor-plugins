@@ -44,11 +44,10 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
 
 /**
  * Repeatedly propose new collections of marks and take the collection with optimal energy.
- * 
- * <p>Each proposal is independent of the previous state.
- * 
- * @author Owen Feehan
  *
+ * <p>Each proposal is independent of the previous state.
+ *
+ * @author Owen Feehan
  * @param <S>
  */
 @NoArgsConstructor
@@ -91,7 +90,7 @@ public class UniformProposal<S> extends OptimizationScheme<S, S> {
 
         return best;
     }
-    
+
     private boolean isSuperior(S proposal, S best) {
         return (best == null || extractScore(proposal) > extractScore(best));
     }

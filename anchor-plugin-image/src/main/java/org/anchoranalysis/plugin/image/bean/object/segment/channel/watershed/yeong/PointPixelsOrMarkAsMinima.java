@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
+import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 final class PointPixelsOrMarkAsMinima implements ProcessPoint {
@@ -37,9 +37,9 @@ final class PointPixelsOrMarkAsMinima implements ProcessPoint {
     // START REQUIRED ARGUMENTS
     private final SlidingBufferPlus bufferPlus;
     // END REQUIRED ARGUMENTS
-    
+
     private EncodedIntBuffer bufferS;
-    
+
     @Override
     public void notifyChangeSlice(int z) {
         bufferS = bufferPlus.getSPlane(z);

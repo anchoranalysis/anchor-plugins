@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,27 +26,26 @@
 package org.anchoranalysis.plugin.opencv.nonmaxima;
 
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.OverlapCalculator;
 import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Calculates the intersection-over-union scores for different object pairs.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntersectionOverUnion {
 
     public static double forObjects(ObjectMask object1, ObjectMask object2) {
         ObjectMask merged = ObjectMaskMerger.merge(object1, object2);
         return OverlapCalculator.calculateOverlapRatio(object1, object2, merged);
     }
-    
+
     public static double forBoxes(BoundingBox box1, BoundingBox box2) {
         Optional<BoundingBox> intersection = box1.intersection().with(box2);
         if (!intersection.isPresent()) {

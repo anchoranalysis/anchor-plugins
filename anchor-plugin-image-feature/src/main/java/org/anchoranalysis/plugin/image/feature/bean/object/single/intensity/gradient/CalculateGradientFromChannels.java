@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -39,6 +38,7 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -121,7 +121,8 @@ class CalculateGradientFromChannels
 
                     if (bufferMask.buffer().getRaw(offsetMask) == bvbMask.getOnByte()) {
 
-                        int offset = extent.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
+                        int offset =
+                                extent.offset(x + box.cornerMin().x(), y + box.cornerMin().y());
 
                         int gradVal = buffer.getInt(offset) - subtractConstant;
 

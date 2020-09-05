@@ -33,8 +33,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputAllMemo;
 
-public class AsCollection
-        extends FeatureUnary<FeatureInputAllMemo, FeatureInputMarkCollection> {
+public class AsCollection extends FeatureUnary<FeatureInputAllMemo, FeatureInputMarkCollection> {
 
     private static final ChildCacheName CACHE_NAME = new ChildCacheName(AsCollection.class);
 

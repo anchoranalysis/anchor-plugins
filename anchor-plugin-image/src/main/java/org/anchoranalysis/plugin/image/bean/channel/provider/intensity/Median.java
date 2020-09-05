@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 
 import com.google.common.collect.BoundType;
 import com.google.common.collect.TreeMultiset;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -67,7 +67,8 @@ public class Median extends ChannelProviderUnary {
             set.clear();
         }
 
-        public void populateAt(int xCenter, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
+        public void populateAt(
+                int xCenter, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
 
             int xMin = xCenter - kernelHalfWidth;
             int xMax = xCenter + kernelHalfWidth;
@@ -109,7 +110,7 @@ public class Median extends ChannelProviderUnary {
 
             for (int y = yMin; y <= yMax; y++) {
                 int offset = extent.offset(x, y);
-                set.add( buffer.getUnsigned(offset) );
+                set.add(buffer.getUnsigned(offset));
             }
         }
 

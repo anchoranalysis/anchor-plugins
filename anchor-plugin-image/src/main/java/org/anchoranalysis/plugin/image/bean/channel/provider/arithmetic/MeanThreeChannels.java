@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderTernary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 

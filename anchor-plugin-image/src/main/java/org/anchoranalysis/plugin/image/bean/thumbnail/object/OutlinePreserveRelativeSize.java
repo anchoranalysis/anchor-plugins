@@ -105,33 +105,36 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     private RGBColorBean colorUnselectedObjects = new RGBColorBean(0, 0, 255);
     // END BEAN PROPERTIES
 
-
     private class BatchImplementation implements ThumbnailBatch<ObjectCollection> {
-        
+
         private final DrawObjectOnStackGenerator generator;
         private final FlattenAndScaler scaler;
         private final Extent sceneExtentScaled;
-       
+
         /**
          * Sets up the generator and the related {@code sceneExtentScaled} variable
          *
          * @param objectsUnscaled unscaled objects
          * @param backgroundScaled scaled background if it exists
          */
-        public BatchImplementation( FlattenAndScaler scaler, ObjectCollection objectsUnscaled, Optional<ScaleableBackground> backgroundScaled) {
+        public BatchImplementation(
+                FlattenAndScaler scaler,
+                ObjectCollection objectsUnscaled,
+                Optional<ScaleableBackground> backgroundScaled) {
             this.scaler = scaler;
-            
-            this.sceneExtentScaled = scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
+
+            this.sceneExtentScaled =
+                    scaler.extentFromStackOrObjects(backgroundScaled, objectsUnscaled);
 
             // Create a generator that draws objects on the background
             this.generator =
                     DrawObjectOnStackGenerator.createFromStack(
                             backgroundScaled, outlineWidth, createColorIndex(false));
         }
-        
+
         @Override
         public DisplayStack thumbnailFor(ObjectCollection element) throws CreateException {
-         // For now only work with the first object in the collection
+            // For now only work with the first object in the collection
             try {
                 ObjectsWithBoundingBox objectsScaled =
                         new ObjectsWithBoundingBox(scaler.scaleObjects(element));
@@ -149,7 +152,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 assert centeredBox.extent().equals(size.asExtent());
                 assert sceneExtentScaled.contains(centeredBox);
 
-                generator.setIterableElement(determineObjectsForGenerator(objectsScaled, centeredBox));
+                generator.setIterableElement(
+                        determineObjectsForGenerator(objectsScaled, centeredBox));
 
                 return DisplayStack.create(generator.generate());
 
@@ -157,11 +161,12 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 throw new CreateException(e);
             }
         }
-        
+
         private ObjectsWithBoundingBox determineObjectsForGenerator(
                 ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox)
                 throws OperationFailedException {
-            ObjectsWithBoundingBox objectsMapped = objectsScaled.mapBoundingBoxToBigger(centeredBox);
+            ObjectsWithBoundingBox objectsMapped =
+                    objectsScaled.mapBoundingBoxToBigger(centeredBox);
 
             // Add any other objects which intersect with the scaled-bounding box, excluding
             //  the object themselves
@@ -175,8 +180,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         }
 
         /**
-         * Creates a suitable color index for distinguishing between the different types of objects that
-         * appear
+         * Creates a suitable color index for distinguishing between the different types of objects
+         * that appear
          *
          * @param pairs whether pairs are being used or not
          * @return the color index
@@ -201,13 +206,18 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                     new FlattenAndScaler(
                             boundingBoxes, objects, interpolatorBackground, size.asExtent());
 
-            return new BatchImplementation(scaler, objects,
-                    determineBackgroundMaybeOutlined(backgroundSource, scaler, interpolatorBackground));
+            return new BatchImplementation(
+                    scaler,
+                    objects,
+                    determineBackgroundMaybeOutlined(
+                            backgroundSource, scaler, interpolatorBackground));
         } else {
-            return objectForBatch -> { throw new CreateException("No objects are expected in this batch"); }; 
+            return objectForBatch -> {
+                throw new CreateException("No objects are expected in this batch");
+            };
         }
     }
-    
+
     private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
             Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator) {
         BackgroundSelector backgroundHelper =

@@ -59,8 +59,7 @@ import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
  */
 public abstract class ColoredBase extends StackProvider {
 
-    protected static final ColorListFactory DEFAULT_COLOR_SET_GENERATOR =
-            new Shuffle(new HSB());
+    protected static final ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     // START BEAN PROPERTIES
     /**

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -49,7 +49,8 @@ public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
 
         for (int z = 0; z < params.getObject().boundingBox().extent().z(); z++) {
             UnsignedByteBuffer buffer = params.getObject().sliceBufferLocal(z);
-            int count = countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOnByte());
+            int count =
+                    countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOnByte());
 
             if (count > max) {
                 max = count;

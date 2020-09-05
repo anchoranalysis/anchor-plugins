@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -183,7 +183,11 @@ class WalkShortestPath {
     }
 
     private static void drawPoint(
-            VoxelBuffer<UnsignedByteBuffer> plane, Extent extent, BinaryValuesByte bvb, int x, int y) {
+            VoxelBuffer<UnsignedByteBuffer> plane,
+            Extent extent,
+            BinaryValuesByte bvb,
+            int x,
+            int y) {
         plane.putByte(extent.offset(x, y), bvb.getOnByte());
     }
 }

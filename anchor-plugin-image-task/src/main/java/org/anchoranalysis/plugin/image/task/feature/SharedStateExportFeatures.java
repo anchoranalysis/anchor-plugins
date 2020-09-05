@@ -72,7 +72,7 @@ public class SharedStateExportFeatures<S> {
             NamedFeatureStoreFactory.factoryParamsOnly();
 
     private final ResultsWriter groupedResults;
-        
+
     @Getter private final FeatureNameList featureNames;
 
     private final Supplier<S> rowSource;
@@ -81,7 +81,7 @@ public class SharedStateExportFeatures<S> {
     private GeneratorSequenceIncrementalRerouteErrors<Stack> thumbnailGenerator;
 
     private BoundIOContext context;
-    
+
     /**
      * Creates the shared state.
      *
@@ -92,41 +92,51 @@ public class SharedStateExportFeatures<S> {
      * @throws AnchorIOException
      */
     public SharedStateExportFeatures(
-            ResultsWriterMetadata outputMetadata,
-            Supplier<S> rowSource,
-            BoundIOContext context)
+            ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, BoundIOContext context)
             throws AnchorIOException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
         this.context = context;
         this.groupedResults = new ResultsWriter(outputMetadata, context);
     }
-    
+
     /**
-     * Alternative static constructor that creates a shared-state from a list of named feature-providers
-     * 
+     * Alternative static constructor that creates a shared-state from a list of named
+     * feature-providers
+     *
      * @param <T> feature input-type in store
      * @param features a list of beans to create the features
      * @param metadataHeaders headers to describe any metadata
      * @param context io context
      * @return a newly created {@link SharedStateExportFeatures}
-     * @throws CreateException 
+     * @throws CreateException
      */
-    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureList<T>> createForFeatures( List<NamedBean<FeatureListProvider<T>>> features, LabelHeaders metadataHeaders, BoundIOContext context) throws CreateException {
-        return createForFeatures(STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, context);
+    public static <T extends FeatureInput>
+            SharedStateExportFeatures<FeatureList<T>> createForFeatures(
+                    List<NamedBean<FeatureListProvider<T>>> features,
+                    LabelHeaders metadataHeaders,
+                    BoundIOContext context)
+                    throws CreateException {
+        return createForFeatures(
+                STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, context);
     }
-    
+
     /**
      * Alternative static constructor that creates a shared-state from a feature-store
-     * 
+     *
      * @param <T> feature input-type in store
      * @param featureStore a list of beans to create the features
      * @param metadataHeaders headers to describe any metadata
      * @param context io context
      * @return a newly created {@link SharedStateExportFeatures}
-     * @throws CreateException 
+     * @throws CreateException
      */
-    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureList<T>> createForFeatures( NamedFeatureStore<T> featureStore, LabelHeaders metadataHeaders, BoundIOContext context) throws CreateException {
+    public static <T extends FeatureInput>
+            SharedStateExportFeatures<FeatureList<T>> createForFeatures(
+                    NamedFeatureStore<T> featureStore,
+                    LabelHeaders metadataHeaders,
+                    BoundIOContext context)
+                    throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
                     new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames()),
@@ -136,36 +146,41 @@ public class SharedStateExportFeatures<S> {
             throw new CreateException(e);
         }
     }
-    
+
     /**
      * Alternative static constructor that creates a shared-state from a feature-store
-     * 
+     *
      * @param outputNames the names of the feature outputs
      * @param features a table calculator for features
-     * @param identifierHeaders headers to describe the identifier metadata before the feature values
+     * @param identifierHeaders headers to describe the identifier metadata before the feature
+     *     values
      * @param context io context
      * @param <T> feature input-type in store
      * @return a newly created {@link SharedStateExportFeatures}
-     * @throws CreateException 
+     * @throws CreateException
      */
-    public static <T extends FeatureInput> SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures( ResultsWriterOutputNames outputNames, FeatureTableCalculator<T> features, LabelHeaders identifierHeaders, BoundIOContext context) throws CreateException {
+    public static <T extends FeatureInput>
+            SharedStateExportFeatures<FeatureTableCalculator<T>> createForFeatures(
+                    ResultsWriterOutputNames outputNames,
+                    FeatureTableCalculator<T> features,
+                    LabelHeaders identifierHeaders,
+                    BoundIOContext context)
+                    throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    new ResultsWriterMetadata(outputNames, identifierHeaders, features.createFeatureNames()),
+                    new ResultsWriterMetadata(
+                            outputNames, identifierHeaders, features.createFeatureNames()),
                     features::duplicateForNewThread,
                     context);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
         }
     }
-    
-    public InputProcessContext<S> createInputProcessContext(Optional<String> groupName, BoundIOContext context) {
+
+    public InputProcessContext<S> createInputProcessContext(
+            Optional<String> groupName, BoundIOContext context) {
         return new InputProcessContext<>(
-                        addResultsFor(),
-                        rowSource.get(),
-                        featureNames,
-                        groupName,
-                        context);
+                addResultsFor(), rowSource.get(), featureNames, groupName, context);
     }
 
     /**
@@ -192,7 +207,7 @@ public class SharedStateExportFeatures<S> {
         }
         groupedResults.close();
     }
-    
+
     /**
      * An adder for results
      *
@@ -214,7 +229,7 @@ public class SharedStateExportFeatures<S> {
             }
         };
     }
-    
+
     private void addThumbnail(DisplayStack thumbnail, BoundIOContext context) {
         if (thumbnailGenerator == null) {
             thumbnailGenerator =

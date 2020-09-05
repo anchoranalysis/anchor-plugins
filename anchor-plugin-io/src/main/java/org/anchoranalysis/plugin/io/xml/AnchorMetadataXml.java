@@ -48,20 +48,20 @@ import org.xml.sax.SAXException;
 
 /**
  * Reads and writes a metadata XML file specifying the image-resolution.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AnchorMetadataXml {
-    
+
     private static final String ELEMENT_NAME_X = "xres";
     private static final String ELEMENT_NAME_Y = "yres";
     private static final String ELEMENT_NAME_Z = "zres";
-    
+
     /**
-     * Retrieves resolution from a XML file previously written by {@link #writeResolutionXml(Resolution, Path)}.
-     * 
+     * Retrieves resolution from a XML file previously written by {@link
+     * #writeResolutionXml(Resolution, Path)}.
+     *
      * @param file the file to open
      * @return a resolution read from the file
      * @throws RasterIOException if file I/O or parsing errors occur.
@@ -88,12 +88,13 @@ public class AnchorMetadataXml {
 
     /**
      * Writes a XML metadata file describing the image-resolution.
-     * 
+     *
      * @param path path to write to
      * @param resolution the resolution to write
      * @throws RasterIOException if any file I/O or parser errors occur
      */
-    public static void writeResolutionXml(Resolution resolution, Path path) throws RasterIOException {
+    public static void writeResolutionXml(Resolution resolution, Path path)
+            throws RasterIOException {
 
         try {
             DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
@@ -116,15 +117,23 @@ public class AnchorMetadataXml {
             throw new RasterIOException(e.toString());
         }
     }
-    
-    private static void appendDimension(Document document, String elementName, Resolution resolution, ToDoubleFunction<Resolution> extractDimension, Element elementToAppendTo) {
+
+    private static void appendDimension(
+            Document document,
+            String elementName,
+            Resolution resolution,
+            ToDoubleFunction<Resolution> extractDimension,
+            Element elementToAppendTo) {
         Element element = document.createElement(elementName);
         elementToAppendTo.appendChild(element);
-        element.appendChild( textNode(document, resolution, extractDimension) );
+        element.appendChild(textNode(document, resolution, extractDimension));
     }
-    
-    private static Text textNode(Document document, Resolution resolution, ToDoubleFunction<Resolution> extractDimension) {
-        return document.createTextNode(Double.toString( extractDimension.applyAsDouble(resolution) ));
+
+    private static Text textNode(
+            Document document,
+            Resolution resolution,
+            ToDoubleFunction<Resolution> extractDimension) {
+        return document.createTextNode(Double.toString(extractDimension.applyAsDouble(resolution)));
     }
 
     private static Resolution resolutionFromNodes(NodeList nodes) {

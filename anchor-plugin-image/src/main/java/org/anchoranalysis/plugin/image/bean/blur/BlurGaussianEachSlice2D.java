@@ -47,9 +47,13 @@ public class BlurGaussianEachSlice2D extends BlurStrategy {
 
         double[] sigmaArr = new double[] {sigma, sigma};
 
-        voxels.any().extent().iterateOverZ( z->
-            GaussianBlurUtilities.applyBlur(
-                    ConvertToImg.fromSlice(voxels,z), dimensions.resolution(), sigmaArr)
-        );
+        voxels.any()
+                .extent()
+                .iterateOverZ(
+                        z ->
+                                GaussianBlurUtilities.applyBlur(
+                                        ConvertToImg.fromSlice(voxels, z),
+                                        dimensions.resolution(),
+                                        sigmaArr));
     }
 }

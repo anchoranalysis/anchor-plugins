@@ -42,7 +42,10 @@ import org.anchoranalysis.image.outline.FindOutline;
 public class Outline extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    /** If true, any 3D mask is flattened in the z-dimension (maximum intensity projection) to make it 2D */
+    /**
+     * If true, any 3D mask is flattened in the z-dimension (maximum intensity projection) to make
+     * it 2D
+     */
     @BeanField @Getter @Setter private boolean flatten = false;
 
     @BeanField @Getter @Setter private boolean outlineAtBoundary = true;

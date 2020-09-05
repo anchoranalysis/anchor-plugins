@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -38,7 +38,10 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 class BufferUtilities {
 
     public static void putScoreForOffset(
-            VoxelScore pixelScore, List<VoxelBuffer<?>> bufferList, UnsignedByteBuffer bufferOut, int offset)
+            VoxelScore pixelScore,
+            List<VoxelBuffer<?>> bufferList,
+            UnsignedByteBuffer bufferOut,
+            int offset)
             throws FeatureCalculationException {
         double score = pixelScore.calculate(createParams(bufferList, offset));
         bufferOut.putUnsigned(offset, (int) Math.round(score * 255));

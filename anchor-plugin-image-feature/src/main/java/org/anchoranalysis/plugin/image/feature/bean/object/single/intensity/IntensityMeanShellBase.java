@@ -108,7 +108,8 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calculate(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
+        return input.calculate(
+                CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
     private Optional<ObjectMask> intersectWithEnergyMask(

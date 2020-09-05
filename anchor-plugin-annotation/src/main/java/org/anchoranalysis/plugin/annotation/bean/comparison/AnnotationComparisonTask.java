@@ -84,7 +84,9 @@ public class AnnotationComparisonTask<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {

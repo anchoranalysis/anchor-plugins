@@ -63,8 +63,7 @@ class ContourListGenerator extends RasterGenerator
     private DisplayStack stack;
     private ColorIndex colorIndex;
 
-    public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR =
-            new Shuffle(new HSB());
+    public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     public ContourListGenerator(DisplayStack stack) {
         this(new Outline(1, false), null, stack);

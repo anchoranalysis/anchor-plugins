@@ -71,7 +71,8 @@ public class WatershedYeongTest {
         Optional<ObjectMask> objectMask = pathMask.map(this::maskAsObject);
 
         ObjectCollection objectsResult =
-                new WatershedYeong().segment(channelFor(PATH_CHANNEL_BLURRED), objectMask, Optional.empty());
+                new WatershedYeong()
+                        .segment(channelFor(PATH_CHANNEL_BLURRED), objectMask, Optional.empty());
 
         ObjectCollection objectsExpected = loader.openObjectsFromTestPath(pathObjectsExpected);
 

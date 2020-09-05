@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 

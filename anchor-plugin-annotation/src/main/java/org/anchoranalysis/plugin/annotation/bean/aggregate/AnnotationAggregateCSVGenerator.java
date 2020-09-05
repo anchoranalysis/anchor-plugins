@@ -34,7 +34,8 @@ import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class AnnotationAggregateCSVGenerator extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
+public class AnnotationAggregateCSVGenerator
+        extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
 
     public AnnotationAggregateCSVGenerator() {
         super("aggregateAnnotationLabel", Arrays.asList("id", "label"));

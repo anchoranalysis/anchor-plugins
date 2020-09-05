@@ -82,7 +82,9 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputManager);

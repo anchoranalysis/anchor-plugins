@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
@@ -35,6 +34,7 @@ import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;

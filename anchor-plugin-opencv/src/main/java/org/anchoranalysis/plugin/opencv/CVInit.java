@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.opencv;
 
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.opencv.opencv_java;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CVInit {

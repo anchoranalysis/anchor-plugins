@@ -39,9 +39,8 @@ import org.anchoranalysis.math.moment.ImageMoments;
  * A base class for features that are calculated using image-moments
  *
  * <p>If there are too few voxels, then a constant value is returned.
- * 
- * @see <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  *
+ * @see <a href="https://en.wikipedia.org/wiki/Image_moment">Image Moment on Wikipedia</a>
  * @author Owen Feehan
  */
 public abstract class ImageMomentsBase extends FeatureSingleObject {

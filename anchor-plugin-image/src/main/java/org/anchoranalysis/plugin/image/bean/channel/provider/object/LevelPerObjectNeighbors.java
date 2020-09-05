@@ -59,8 +59,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
 
     // START BEAN
     /**
-     * How many neighbors to include by distance (distance==1 implies all directly touching neighbors,
-     * distance==2 implies those touching the directly touching etc.)
+     * How many neighbors to include by distance (distance==1 implies all directly touching
+     * neighbors, distance==2 implies those touching the directly touching etc.)
      */
     @BeanField @Positive @Getter @Setter private int distance; // Determines the neighbor distance
     // END BEAN
@@ -85,7 +85,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
         for (ObjectWithHistogram omLocal : currentVisit) {
 
             Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVertices(omLocal);
-            
+
             for (ObjectWithHistogram object : adjacentObjects) {
                 if (!visited.contains(object)) {
                     toVisit.add(object);

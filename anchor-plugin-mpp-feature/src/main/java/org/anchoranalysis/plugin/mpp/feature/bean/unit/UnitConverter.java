@@ -57,7 +57,8 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
      * @return distance expressed in desired units
      * @throws FeatureCalculationException
      */
-    public double resolveDistance(double value, Optional<Resolution> resolution, DirectionVector direction)
+    public double resolveDistance(
+            double value, Optional<Resolution> resolution, DirectionVector direction)
             throws FeatureCalculationException {
 
         // If we aren't doing anything physical, we can just return the current value

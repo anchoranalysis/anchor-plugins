@@ -42,7 +42,8 @@ public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
             throws OperationFailedException;
 
     public abstract void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution) throws InitException;
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            throws InitException;
 
     public abstract void afterCreateObject(
             Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)

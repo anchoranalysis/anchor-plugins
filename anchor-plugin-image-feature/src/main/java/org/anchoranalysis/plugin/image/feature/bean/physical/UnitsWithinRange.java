@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
 
 /**
@@ -45,8 +45,7 @@ import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class UnitsWithinRange<T extends FeatureInputWithResolution>
-        extends WithResolutionBase<T> {
+public class UnitsWithinRange<T extends FeatureInputWithResolution> extends WithResolutionBase<T> {
 
     // START BEAN PROPERTIES
     /** Returned as a constant if a value lies within the range */

@@ -37,8 +37,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.MatchedObject;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -96,7 +96,7 @@ public abstract class MergeBase extends WithContainerBase {
             throw new OperationFailedException(e);
         }
     }
-        
+
     private Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
             return OptionalFactory.create(dimensions).map(Dimensions::resolution);

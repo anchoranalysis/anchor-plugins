@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;

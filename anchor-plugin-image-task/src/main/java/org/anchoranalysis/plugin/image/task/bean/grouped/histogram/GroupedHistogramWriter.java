@@ -39,7 +39,8 @@ class GroupedHistogramWriter {
         generator.setIgnoreZeros(ignoreZeros);
     }
 
-    public void writeHistogramToFile(Histogram histogram, String outputName, BoundIOContext context) {
+    public void writeHistogramToFile(
+            Histogram histogram, String outputName, BoundIOContext context) {
         generator.setIterableElement(histogram);
 
         context.getOutputManager().getWriterCheckIfAllowed().write(outputName, () -> generator);

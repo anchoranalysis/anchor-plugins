@@ -36,8 +36,7 @@ import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
  * @author Owen Feehan
  * @param <T>
  */
-public abstract class ReplaceUnusualValue<T extends FeatureInput>
-        extends WithValueBase<T> {
+public abstract class ReplaceUnusualValue<T extends FeatureInput> extends WithValueBase<T> {
 
     @Override
     protected double combineValueAndFeature(double value, double featureResult) {

@@ -49,7 +49,8 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
     private double maxDistance;
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    public void beforeCreateObject(
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
         try {
             maxDistance = maxDistanceProposer.propose(randomNumberGenerator, resolution);
