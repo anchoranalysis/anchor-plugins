@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.nio.Buffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -78,22 +78,20 @@ class VoxelsArithmetic {
      * @param voxelsOut
      */
     private static void divideValueShort(
-            Voxels<IntBuffer> voxelsIn, int div, Voxels<ShortBuffer> voxelsOut) {
+            Voxels<IntBuffer> voxelsIn, int div, Voxels<UnsignedShortBuffer> voxelsOut) {
 
-        for (int z = 0; z < voxelsIn.extent().z(); z++) {
+        voxelsIn.extent().iterateOverZ( z-> {
 
             IntBuffer in = voxelsIn.sliceBuffer(z);
-            ShortBuffer out = voxelsOut.sliceBuffer(z);
+            UnsignedShortBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
-
-                int b1 = in.get();
-                out.put((short) (b1 / div));
+                out.putUnsigned(in.get() / div);
             }
 
             assert (!in.hasRemaining());
             assert (!out.hasRemaining());
-        }
+        });
     }
 
     /**
@@ -112,9 +110,7 @@ class VoxelsArithmetic {
             UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
-
-                int b1 = in.get();
-                out.putUnsignedByte(b1 / div);
+                out.putUnsigned(in.get() / div);
             }
 
             assert (!in.hasRemaining());
@@ -128,19 +124,15 @@ class VoxelsArithmetic {
                 String.format("Unsupported data type: %s", voxelDataType));
     }
 
-    private static void addShort(Voxels<IntBuffer> voxels, Voxels<ShortBuffer> toAdd) {
+    private static void addShort(Voxels<IntBuffer> voxels, Voxels<UnsignedShortBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
             IntBuffer in1 = voxels.sliceBuffer(z);
-            ShortBuffer in2 = toAdd.sliceBuffer(z);
+            UnsignedShortBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-
-                int b1 = in1.get();
-                short b2 = in2.get();
-
-                int sum = b1 + PrimitiveConverter.unsignedShortToInt(b2);
+                int sum = in1.get() + in2.getUnsigned();
                 oneStepBackward(in1);
                 in1.put(sum);
             }

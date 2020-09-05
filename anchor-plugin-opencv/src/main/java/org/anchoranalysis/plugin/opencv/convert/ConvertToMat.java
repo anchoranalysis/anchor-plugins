@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -106,7 +106,7 @@ public class ConvertToMat {
         return fromSingleChannel(voxels, CvType.CV_8UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
     }
         
-    private static Mat fromSingleChannelShort(Voxels<ShortBuffer> voxels) {
+    private static Mat fromSingleChannelShort(Voxels<UnsignedShortBuffer> voxels) {
         return fromSingleChannel(voxels, CvType.CV_16UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
     }
     
