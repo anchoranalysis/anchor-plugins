@@ -38,7 +38,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.points.PointRange;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 /**
  * Fits a box around the ON pixels.
@@ -79,7 +79,7 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         PointRange pointRange = new PointRange();
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesReusePoint(
+        IterateVoxelsEqualTo.equalToReusePoint(
                 voxels.voxels(), bvb.getOnByte(), pointRange::add);
 
         try {

@@ -40,7 +40,7 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskInverter;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsMask;
 
 /**
  * Switches <i>on</i> voxels to <i>off</i> and vice-versa.
@@ -92,9 +92,9 @@ public class Invert extends MaskProviderUnary {
         final byte byteOn = invertedIndex.getOnByte();
         final byte byteOff = invertedIndex.getOffByte();
 
-        IterateVoxels.callEachPoint(
-                maskToInvert.binaryVoxels().voxels(),
+        IterateVoxelsMask.withBuffer(
                 restricted,
+                maskToInvert.binaryVoxels().voxels(),
                 (Point3i point, UnsignedByteBuffer buffer, int offset) -> {
                     if (buffer.getRaw(offset) == byteOn) {
                         buffer.putRaw(offset, byteOff);

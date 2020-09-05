@@ -38,9 +38,9 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
@@ -130,7 +130,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             // We have a point, and a value
             // Now we iterate through the neighbors (but only if they haven't been finalised)
             // Makes sure that it includes its center point
-            IterateVoxels.callEachPointInNeighborhood(
+            IterateVoxelsNeighbors.callEachPointInNeighborhood(
                     point, neighborhood, do3D, process, nextVal, extent.offsetSlice(point));
         }
     }
@@ -142,15 +142,15 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
         byte maskOn = BinaryValuesByte.getDefault().getOnByte();
 
-        Extent e = voxels.extent();
-        for (int z = 0; z < e.z(); z++) {
+        Extent extent = voxels.extent();
+        for (int z = 0; z < extent.z(); z++) {
 
             VoxelBuffer<?> buffer = voxels.slice(z);
             UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     {
                         int val = buffer.getInt(offset);
