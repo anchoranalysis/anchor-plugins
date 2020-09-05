@@ -84,7 +84,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     }
 
     private static void processPoint(UnsignedByteBuffer buffer, int offset, int mean) {
-        int intensity = buffer.getUnsignedByte(offset);
+        int intensity = buffer.getUnsigned(offset);
 
         int intensitySubtracted = intensity - mean;
 
@@ -93,6 +93,6 @@ public class SubtractMean extends UnaryWithMaskBase {
             intensitySubtracted = 0;
         }
 
-        buffer.putUnsignedByte(offset, intensitySubtracted);
+        buffer.putUnsigned(offset, intensitySubtracted);
     }
 }

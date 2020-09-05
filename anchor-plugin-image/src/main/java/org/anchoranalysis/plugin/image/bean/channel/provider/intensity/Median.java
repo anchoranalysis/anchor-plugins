@@ -77,7 +77,7 @@ public class Median extends ChannelProviderUnary {
 
             for (int y = yMin; y <= yMax; y++) {
                 for (int x = xMin; x <= xMax; x++) {
-                    set.add(buffer.getUnsignedByte(extent.offset(x, y)));
+                    set.add(buffer.getUnsigned(extent.offset(x, y)));
                 }
             }
         }
@@ -92,7 +92,7 @@ public class Median extends ChannelProviderUnary {
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int value = buffer.getUnsignedByte(e.offset(x, y));
+                int value = buffer.getUnsigned(e.offset(x, y));
                 assert (set.contains(value));
                 set.remove(value);
             }
@@ -109,7 +109,7 @@ public class Median extends ChannelProviderUnary {
 
             for (int y = yMin; y <= yMax; y++) {
                 int offset = extent.offset(x, y);
-                set.add( buffer.getUnsignedByte(offset) );
+                set.add( buffer.getUnsigned(offset) );
             }
         }
 
@@ -168,7 +168,7 @@ public class Median extends ChannelProviderUnary {
 
                     int median = set.median();
 
-                    bufferOut.putUnsignedByte(offset, median);
+                    bufferOut.putUnsigned(offset, median);
                     offset++;
                 }
             }

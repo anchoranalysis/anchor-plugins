@@ -41,7 +41,7 @@ class BufferUtilities {
             VoxelScore pixelScore, List<VoxelBuffer<?>> bufferList, UnsignedByteBuffer bufferOut, int offset)
             throws FeatureCalculationException {
         double score = pixelScore.calculate(createParams(bufferList, offset));
-        bufferOut.putUnsignedByte(offset, (int) Math.round(score * 255));
+        bufferOut.putUnsigned(offset, (int) Math.round(score * 255));
     }
 
     private static int[] createParams(List<VoxelBuffer<?>> list, int offset) {

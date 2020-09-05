@@ -141,7 +141,7 @@ public class LineBoundCalculator extends BoundCalculator {
 
             int index = dimensions.offsetSlice(runningInt);
 
-            if (arr.getUnsignedByte(index) > 0) {
+            if (arr.getUnsigned(index) > 0) {
                 // We calculate how far we have travelled in total
                 return extra
                         + normZMag(

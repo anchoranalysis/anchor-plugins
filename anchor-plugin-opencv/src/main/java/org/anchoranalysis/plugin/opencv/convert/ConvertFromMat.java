@@ -40,7 +40,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
@@ -61,7 +61,7 @@ public class ConvertFromMat {
         if (mat.type() == CvType.CV_8UC1) {
             return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getByte());
         } else if (mat.type() == CvType.CV_16UC1) {
-            return toGrayscale(mat, VoxelBufferShort::wrapBuffer, VoxelsFactory.getShort());
+            return toGrayscale(mat, VoxelBufferUnsignedShort::wrapRaw, VoxelsFactory.getShort());
         } else if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {

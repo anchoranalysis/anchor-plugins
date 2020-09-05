@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.imagej.bean.interpolator;
 
 import ij.process.ImageProcessor;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
@@ -50,9 +50,9 @@ class InterpolatorImageJ implements Interpolator {
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> voxelsSource,
-            VoxelBuffer<ShortBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelsSource,
+            VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 
