@@ -44,13 +44,13 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMaskOptional;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 /**
  * A 'rainfall' watershed algorithm
  *
- * <p><div> See:
+ * <p>See:
  *
  * <ul>
  *   <li>3D watershed based on rainfall-simulation for volume segmentation, Yeong et al. 2009
@@ -59,15 +59,11 @@ import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
  *       et al., Pattern Reconigion(40), 2007
  * </ul>
  *
- * </div>
- *
- * <p><div> Note:
+ * <p>Note:
  *
  * <ul>
  *   <li>Does not record a watershed line
  * </ul>
- *
- * </div>
  *
  * @author Owen Feehan
  */
@@ -125,13 +121,13 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             Optional<MinimaStore> minimaStore) {
 
         SlidingBufferPlus buffer = new SlidingBufferPlus(voxelsImg, matS, objectMask, minimaStore);
-        IterateVoxelsObjectMask.withSlidingBuffer(
+        IterateVoxelsObjectMaskOptional.withSlidingBuffer(
                 objectMask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
     }
 
     private static void convertAllToConnectedComponents(
             EncodedVoxels matS, Optional<ObjectMask> objectMask) {
-        IterateVoxelsObjectMask.withBuffer(
+        IterateVoxelsObjectMaskOptional.withBuffer(
                 objectMask, matS.voxels(), new ConvertAllToConnectedComponents(matS));
     }
 
@@ -141,7 +137,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 
-        IterateVoxelsObjectMask.withBuffer(
+        IterateVoxelsObjectMaskOptional.withBuffer(
                 objectMask,
                 matS,
                 (Point3i point, UnsignedIntBuffer buffer, int offset) -> {
