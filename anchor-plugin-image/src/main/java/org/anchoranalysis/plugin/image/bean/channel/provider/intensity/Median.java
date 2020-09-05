@@ -37,7 +37,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -68,7 +67,7 @@ public class Median extends ChannelProviderUnary {
             set.clear();
         }
 
-        public void populateAt(int xCenter, int yMin, int yMax, UnsignedByteBuffer bb, Extent extent) {
+        public void populateAt(int xCenter, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
 
             int xMin = xCenter - kernelHalfWidth;
             int xMax = xCenter + kernelHalfWidth;
@@ -78,14 +77,12 @@ public class Median extends ChannelProviderUnary {
 
             for (int y = yMin; y <= yMax; y++) {
                 for (int x = xMin; x <= xMax; x++) {
-
-                    int val = PrimitiveConverter.unsignedByteToInt(bb.get(extent.offset(x, y)));
-                    set.add(val);
+                    set.add(buffer.getUnsignedByte(extent.offset(x, y)));
                 }
             }
         }
 
-        public void removeColumn(int x, int yMin, int yMax, UnsignedByteBuffer bb, Extent e) {
+        public void removeColumn(int x, int yMin, int yMax, UnsignedByteBuffer buffer, Extent e) {
 
             if (x < 0) {
                 return;
@@ -95,24 +92,24 @@ public class Median extends ChannelProviderUnary {
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
-                assert (set.contains(val));
-                set.remove(val);
+                int value = buffer.getUnsignedByte(e.offset(x, y));
+                assert (set.contains(value));
+                set.remove(value);
             }
         }
 
-        public void addColumn(int x, int yMin, int yMax, UnsignedByteBuffer bb, Extent e) {
+        public void addColumn(int x, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
 
             if (x < 0) {
                 return;
             }
-            if (x >= e.x()) {
+            if (x >= extent.x()) {
                 return;
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = PrimitiveConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
-                set.add(val);
+                int offset = extent.offset(x, y);
+                set.add( buffer.getUnsignedByte(offset) );
             }
         }
 
@@ -171,7 +168,7 @@ public class Median extends ChannelProviderUnary {
 
                     int median = set.median();
 
-                    bufferOut.put(offset, (byte) median);
+                    bufferOut.putUnsignedByte(offset, median);
                     offset++;
                 }
             }

@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
@@ -85,7 +84,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     }
 
     private static void processPoint(UnsignedByteBuffer buffer, int offset, int mean) {
-        int intensity = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
+        int intensity = buffer.getUnsignedByte(offset);
 
         int intensitySubtracted = intensity - mean;
 
@@ -94,6 +93,6 @@ public class SubtractMean extends UnaryWithMaskBase {
             intensitySubtracted = 0;
         }
 
-        buffer.put(offset, (byte) intensitySubtracted);
+        buffer.putUnsignedByte(offset, intensitySubtracted);
     }
 }

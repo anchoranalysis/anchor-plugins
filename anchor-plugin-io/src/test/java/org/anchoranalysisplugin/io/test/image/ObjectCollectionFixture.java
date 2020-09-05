@@ -80,7 +80,7 @@ class ObjectCollectionFixture {
 
             for (int i = 0; i < volumeXY; i++) {
                 prevVal = randomMaybeChangeValue(prevVal);
-                buffer.put((byte) prevVal);
+                buffer.putUnsignedByte(prevVal);
             }
         }
 

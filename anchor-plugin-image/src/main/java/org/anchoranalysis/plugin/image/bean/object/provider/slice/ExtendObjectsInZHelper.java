@@ -48,7 +48,7 @@ class ExtendObjectsInZHelper {
 
         ObjectMask objectNew = container.region(box, false);
 
-        UnsignedByteBuffer bbFlat = flat.sliceBufferLocal(0);
+        UnsignedByteBuffer bufferFlat = flat.sliceBufferLocal(0);
 
         int zLow = box.cornerMin().z();
         int zHigh = box.calculateCornerMax().z();
@@ -60,13 +60,13 @@ class ExtendObjectsInZHelper {
             zCenter = zLow;
         }
 
-        extend(bbFlat, extent, objectNew, flat, zLow, IntStream.range(zCenter, zHigh + 1));
-        extend(bbFlat, extent, objectNew, flat, zLow, revRange(zLow, zCenter));
+        extend(bufferFlat, extent, objectNew, flat, zLow, IntStream.range(zCenter, zHigh + 1));
+        extend(bufferFlat, extent, objectNew, flat, zLow, revRange(zLow, zCenter));
         return objectNew;
     }
 
     private static boolean extend(
-            UnsignedByteBuffer bbFlat,
+            UnsignedByteBuffer bufferFlat,
             Extent extent,
             ObjectMask objectNew,
             ObjectMask flat,
@@ -86,14 +86,14 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            UnsignedByteBuffer bbExst = objectNew.sliceBufferLocal(zRel);
+            UnsignedByteBuffer bufferExisting = objectNew.sliceBufferLocal(zRel);
 
             if (andMode) { // NOSONAR
 
                 if (bufferLogicalAnd(
                         volumeXY,
-                        bbExst,
-                        bbFlat,
+                        bufferExisting,
+                        bufferFlat,
                         objectNew.binaryValuesByte(),
                         flat.binaryValuesByte())) {
                     writtenOneSlice = true;
@@ -106,7 +106,7 @@ class ExtendObjectsInZHelper {
                 }
 
             } else {
-                setBufferLow(extent.volumeXY(), bbExst, objectNew.binaryValuesByte());
+                setBufferLow(extent.volumeXY(), bufferExisting, objectNew.binaryValuesByte());
             }
         }
 
@@ -115,7 +115,7 @@ class ExtendObjectsInZHelper {
 
     private static void setBufferLow(int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
         for (int i = 0; i < numVoxels; i++) {
-            buffer.put(i, bvb.getOffByte());
+            buffer.putRaw(i, bvb.getOffByte());
         }
     }
 
@@ -124,7 +124,7 @@ class ExtendObjectsInZHelper {
      * unchanged Returns true if at least one pixel is HIGH, or false otherwise
      */
     private static boolean bufferLogicalAnd(
-            int numVoxels,
+            int numberVoxels,
             UnsignedByteBuffer buffer,
             UnsignedByteBuffer receive,
             BinaryValuesByte bvb,
@@ -132,16 +132,16 @@ class ExtendObjectsInZHelper {
 
         boolean atLeastOneHigh = false;
 
-        for (int i = 0; i < numVoxels; i++) {
+        for (int i = 0; i < numberVoxels; i++) {
 
-            byte byteBuffer = buffer.get(i);
-            byte byteReceive = receive.get(i);
+            byte byteBuffer = buffer.getRaw(i);
+            byte byteReceive = receive.getRaw(i);
 
             if (byteBuffer == bvb.getOnByte() && byteReceive == bvbReceive.getOnByte()) {
                 // No need to change buffer, as byte is already HIGH
                 atLeastOneHigh = true;
             } else {
-                buffer.put(i, bvb.getOffByte());
+                buffer.putRaw(i, bvb.getOffByte());
             }
         }
 

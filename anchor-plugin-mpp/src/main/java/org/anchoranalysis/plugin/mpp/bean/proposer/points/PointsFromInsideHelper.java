@@ -110,9 +110,9 @@ class PointsFromInsideHelper {
         while (itr.hasNext()) {
             int z = itr.next();
 
-            UnsignedByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
+            if (!addPointsToSlice(extent, buffer, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;
             } else if (successiveEmptySlices != -1) {
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -128,7 +128,7 @@ class PointsFromInsideHelper {
 
     private boolean addPointsToSlice(
             Extent extent,
-            UnsignedByteBuffer bb,
+            UnsignedByteBuffer buffer,
             BinaryValuesByte bvb,
             int z,
             Consumer<Point3i> processPoint) {
@@ -136,7 +136,7 @@ class PointsFromInsideHelper {
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
-                if (bb.get(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == bvb.getOnByte()) {
 
                     Point3i point = new Point3i(x, y, z);
                     if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {

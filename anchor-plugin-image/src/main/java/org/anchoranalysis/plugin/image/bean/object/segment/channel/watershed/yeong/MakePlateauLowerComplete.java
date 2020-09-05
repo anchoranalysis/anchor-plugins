@@ -80,7 +80,7 @@ class MakePlateauLowerComplete {
 
             Point3i pointRel = new Point3i(x1, y1, z1);
             foundPoints.add(pointRel);
-            buffer.put(objectMaskOffset, maskValueOff);
+            buffer.putRaw(objectMaskOffset, maskValueOff);
 
             // We point this value in the direction opposite to which it came
             matS.setPointDirection(pointRel, xChange * -1, yChange * -1, zChange * -1);

@@ -59,7 +59,7 @@ public class ConvertFromMat {
     public static Stack toStack(Mat mat) throws OperationFailedException {
         
         if (mat.type() == CvType.CV_8UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapUnsigned, VoxelsFactory.getByte());
+            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getByte());
         } else if (mat.type() == CvType.CV_16UC1) {
             return toGrayscale(mat, VoxelBufferShort::wrapBuffer, VoxelsFactory.getShort());
         } else if (mat.type() == CvType.CV_8UC3) {
@@ -107,9 +107,9 @@ public class ConvertFromMat {
                 mat.get(y, x, arr);
 
                 // OpenCV uses a BGR order as opposed to RGB in Anchor.
-                blue.put(arr[0]);
-                green.put(arr[1]);
-                red.put(arr[2]);
+                blue.putRaw(arr[0]);
+                green.putRaw(arr[1]);
+                red.putRaw(arr[2]);
             }
         }
 

@@ -29,16 +29,20 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
 
+    // START REQUIRED ARGUMENTS
     private final SlidingBufferPlus bufferPlus;
-
-    private EncodedIntBuffer bbS;
-
-    public PointPixelsOrMarkAsMinima(SlidingBufferPlus bufferPlus) {
-        super();
-        this.bufferPlus = bufferPlus;
+    // END REQUIRED ARGUMENTS
+    
+    private EncodedIntBuffer bufferS;
+    
+    @Override
+    public void notifyChangeSlice(int z) {
+        bufferS = bufferPlus.getSPlane(z);
     }
 
     @Override
@@ -47,7 +51,7 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
         int indxBuffer = bufferPlus.offsetSlice(point);
 
         // Exit early if this voxel has already been visited
-        if (!bbS.isUnvisited(indxBuffer)) {
+        if (!bufferS.isUnvisited(indxBuffer)) {
             return;
         }
 
@@ -59,19 +63,14 @@ final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
 
         if (bufferPlus.isMinima(chainCode)) {
             // Treat as local minima
-            bbS.putCode(indxBuffer, chainCode);
+            bufferS.putCode(indxBuffer, chainCode);
             bufferPlus.maybeAddMinima(point);
 
         } else if (bufferPlus.isPlateau(chainCode)) {
             bufferPlus.makePlateauAt(point);
         } else {
             // Record steepest
-            bbS.putCode(indxBuffer, chainCode);
+            bufferS.putCode(indxBuffer, chainCode);
         }
-    }
-
-    @Override
-    public void notifyChangeSlice(int z) {
-        bbS = bufferPlus.getSPlane(z);
     }
 }

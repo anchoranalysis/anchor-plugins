@@ -61,7 +61,7 @@ public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
     private static int countForByteBuffer(UnsignedByteBuffer buffer, byte equalValue) {
         int count = 0;
         while (buffer.hasRemaining()) {
-            if (buffer.getByte() == equalValue) {
+            if (buffer.getRaw() == equalValue) {
                 count++;
             }
         }

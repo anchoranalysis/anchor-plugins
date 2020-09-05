@@ -42,8 +42,8 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     private PriorityQueueIndexRangeDownhill<Point3i> queue;
 
     // Current ByteBuffer
-    private VoxelBuffer<?> bbMask;
-    private VoxelBuffer<UnsignedByteBuffer> bbFinalized;
+    private VoxelBuffer<?> bufferMask;
+    private VoxelBuffer<UnsignedByteBuffer> bufferFinalized;
     private int z = 0;
 
     private final BinaryValuesByte bv;
@@ -64,8 +64,8 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     @Override
     public void notifyChangeZ(int zChange, int z) {
         super.notifyChangeZ(zChange, z);
-        this.bbMask = sbMask.bufferRel(zChange);
-        this.bbFinalized = sbFinalized.bufferRel(zChange);
+        this.bufferMask = sbMask.bufferRel(zChange);
+        this.bufferFinalized = sbFinalized.bufferRel(zChange);
         this.z = z;
     }
 
@@ -76,11 +76,11 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
         int index = changedOffset(xChange, yChange);
 
         // We see if it's been finalized or not
-        byte b = bbFinalized.buffer().get(index);
+        byte b = bufferFinalized.buffer().getRaw(index);
         if (b == bv.getOffByte()) {
 
             // get value from mask
-            int maskVal = bbMask.getInt(index);
+            int maskVal = bufferMask.getInt(index);
 
             int valToWrite = Math.min(maskVal, sourceVal);
 
@@ -91,7 +91,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
             queue.put(new Point3i(x1, y1, z), valToWrite);
 
             // point as finalized
-            bbFinalized.buffer().put(index, bv.getOnByte());
+            bufferFinalized.buffer().putRaw(index, bv.getOnByte());
 
             return true;
         }

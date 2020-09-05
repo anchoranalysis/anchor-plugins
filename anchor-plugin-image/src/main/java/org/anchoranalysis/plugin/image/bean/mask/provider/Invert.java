@@ -96,12 +96,10 @@ public class Invert extends MaskProviderUnary {
                 maskToInvert.binaryVoxels().voxels(),
                 restricted,
                 (Point3i point, UnsignedByteBuffer buffer, int offset) -> {
-                    byte value = buffer.get(offset);
-
-                    if (value == byteOn) {
-                        buffer.put(offset, byteOff);
+                    if (buffer.getRaw(offset) == byteOn) {
+                        buffer.putRaw(offset, byteOff);
                     } else {
-                        buffer.put(offset, byteOn);
+                        buffer.putRaw(offset, byteOn);
                     }
                 });
     }

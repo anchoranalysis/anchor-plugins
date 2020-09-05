@@ -91,16 +91,16 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            UnsignedByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
 
-            VoxelBuffer<?> bbChannel = voxels.slice(z + object.boundingBox().cornerMin().z());
+            VoxelBuffer<?> bufferChannel = voxels.slice(z + object.boundingBox().cornerMin().z());
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
                     int offset = extent.offset(x, y);
 
-                    if (bb.get(offset) == object.binaryValuesByte().getOnByte()) {
+                    if (buffer.getRaw(offset) == object.binaryValuesByte().getOnByte()) {
 
                         int y1 = y + object.boundingBox().cornerMin().y();
                         int x1 = x + object.boundingBox().cornerMin().x();
@@ -108,7 +108,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
                         int offsetGlobal = voxels.extent().offset(x1, y1);
 
                         // Now we get a value from the voxels
-                        int val = bbChannel.getInt(offsetGlobal);
+                        int val = bufferChannel.getInt(offsetGlobal);
                         if (val >= thresholdResolved) {
                             return true;
                         }

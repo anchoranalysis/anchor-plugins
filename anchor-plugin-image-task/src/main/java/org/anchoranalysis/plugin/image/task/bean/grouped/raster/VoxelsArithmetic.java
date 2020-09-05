@@ -114,7 +114,7 @@ class VoxelsArithmetic {
             while (in.hasRemaining()) {
 
                 int b1 = in.get();
-                out.put((byte) (b1 / div));
+                out.putUnsignedByte(b1 / div);
             }
 
             assert (!in.hasRemaining());
@@ -160,7 +160,7 @@ class VoxelsArithmetic {
             while (in1.hasRemaining()) {
 
                 int b1 = in1.get();
-                byte b2 = in2.getByte();
+                byte b2 = in2.getRaw();
 
                 int sum = b1 + PrimitiveConverter.unsignedByteToInt(b2);
                 oneStepBackward(in1);

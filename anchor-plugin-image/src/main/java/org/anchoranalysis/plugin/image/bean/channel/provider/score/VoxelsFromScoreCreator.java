@@ -104,15 +104,15 @@ class VoxelsFromScoreCreator {
 
         for (int z = 0; z < extent.z(); z++) {
 
-            List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
+            List<VoxelBuffer<?>> bufferList = listVoxels.bufferListForSlice(z);
 
-            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z);
 
             for (int y = 0; y < extent.y(); y++) {
                 for (int x = 0; x < extent.x(); x++) {
 
                     int offset = extent.offset(x, y);
-                    BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
+                    BufferUtilities.putScoreForOffset(pixelScore, bufferList, bufferOut, offset);
                 }
             }
         }
@@ -131,12 +131,12 @@ class VoxelsFromScoreCreator {
 
         for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            List<VoxelBuffer<?>> bbList = listVoxels.bufferListForSlice(z);
+            List<VoxelBuffer<?>> bufferList = listVoxels.bufferListForSlice(z);
 
             int zRel = z - cornerMin.z();
 
-            UnsignedByteBuffer bbMask = object.sliceBufferLocal(zRel);
-            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer bufferMask = object.sliceBufferLocal(zRel);
+            UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z);
 
             for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
                 for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
@@ -145,8 +145,8 @@ class VoxelsFromScoreCreator {
 
                     int offsetMask = eMask.offset(x - cornerMin.x(), y - cornerMin.y());
 
-                    if (bbMask.get(offsetMask) == maskOn) {
-                        BufferUtilities.putScoreForOffset(pixelScore, bbList, bbOut, offset);
+                    if (bufferMask.getRaw(offsetMask) == maskOn) {
+                        BufferUtilities.putScoreForOffset(pixelScore, bufferList, bufferOut, offset);
                     }
                 }
             }

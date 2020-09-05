@@ -88,6 +88,6 @@ public class RepeatSlice extends MaskProviderUnary {
         UnsignedByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
 
         extent.iterateOverXYOffset(
-                offset -> bufferOut.put(offset, bufferSliceToRepeat.get(offset)));
+                offset -> bufferOut.putRaw(offset, bufferSliceToRepeat.getRaw(offset)));
     }
 }

@@ -40,12 +40,12 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
 
     @Override
     public void segmentAll(
-            Voxels<?> voxelsIn, Voxels<?> voxelsThrshld, Voxels<UnsignedByteBuffer> voxelsOut) {
+            Voxels<?> voxelsIn, Voxels<?> voxelsThreshold, Voxels<UnsignedByteBuffer> voxelsOut) {
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
             sgmnSlice(
                     voxelsIn.extent(),
                     voxelsIn.slice(z),
-                    voxelsThrshld.slice(z),
+                    voxelsThreshold.slice(z),
                     voxelsOut.slice(z));
         }
     }
@@ -53,14 +53,14 @@ public class SliceThresholderWithoutMask extends SliceThresholder {
     private void sgmnSlice(
             Extent extent,
             VoxelBuffer<?> voxelsIn,
-            VoxelBuffer<?> voxelsThrshld,
-            VoxelBuffer<UnsignedByteBuffer> bbOut) {
-        UnsignedByteBuffer out = bbOut.buffer();
+            VoxelBuffer<?> voxelsThreshold,
+            VoxelBuffer<UnsignedByteBuffer> bufferOut) {
+        UnsignedByteBuffer out = bufferOut.buffer();
 
         int offset = 0;
         for (int y = 0; y < extent.y(); y++) {
             for (int x = 0; x < extent.x(); x++) {
-                writeThresholdedByte(offset, out, voxelsIn, voxelsThrshld);
+                writeThresholdedByte(offset, out, voxelsIn, voxelsThreshold);
                 offset++;
             }
         }
