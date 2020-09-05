@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
  * Subtracts each voxel from the maximum value for the channel's data type (e.g. 255 for unsigned
@@ -47,7 +47,7 @@ public class Invert extends ChannelProviderUnary {
 
         int maxValue = (int) voxels.getVoxelDataType().maxValue();
 
-        IterateVoxelsVoxelBoxAsInt.changeEachPoint(voxels.any(), value -> maxValue - value);
+        IterateVoxelsAll.changeIntensity(voxels.any(), value -> maxValue - value);
 
         return channel;
     }

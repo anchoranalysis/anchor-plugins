@@ -27,12 +27,12 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxel;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-final class PointPixelsOrMarkAsMinima implements ProcessVoxel {
+final class PointPixelsOrMarkAsMinima implements ProcessPoint {
 
     // START REQUIRED ARGUMENTS
     private final SlidingBufferPlus bufferPlus;

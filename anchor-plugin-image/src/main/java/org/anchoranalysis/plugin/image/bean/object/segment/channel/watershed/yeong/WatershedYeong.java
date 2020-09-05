@@ -44,7 +44,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 /**
@@ -125,14 +125,14 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
             Optional<MinimaStore> minimaStore) {
 
         SlidingBufferPlus buffer = new SlidingBufferPlus(voxelsImg, matS, objectMask, minimaStore);
-        IterateVoxels.callEachPoint(
+        IterateVoxelsObjectMask.withSlidingBuffer(
                 objectMask, buffer.getSlidingBuffer(), new PointPixelsOrMarkAsMinima(buffer));
     }
 
     private static void convertAllToConnectedComponents(
             EncodedVoxels matS, Optional<ObjectMask> objectMask) {
-        IterateVoxels.callEachPoint(
-                matS.voxels(), objectMask, new ConvertAllToConnectedComponents(matS));
+        IterateVoxelsObjectMask.withBuffer(
+                objectMask, matS.voxels(), new ConvertAllToConnectedComponents(matS));
     }
 
     private static ObjectCollection createObjectsFromLabels(
@@ -140,12 +140,12 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
         final BoundingBoxMap bbm = new BoundingBoxMap();
 
-        IterateVoxels.callEachPoint(
-                matS,
+        IterateVoxelsObjectMask.withBuffer(
                 objectMask,
+                matS,
                 (Point3i point, UnsignedIntBuffer buffer, int offset) -> {
-                    int crntVal = buffer.getRaw(offset);
-                    buffer.putRaw(offset, bbm.addPointForValue(point, crntVal) + 1);
+                    int value = buffer.getRaw(offset);
+                    buffer.putRaw(offset, bbm.addPointForValue(point, value) + 1);
                 });
 
         try {

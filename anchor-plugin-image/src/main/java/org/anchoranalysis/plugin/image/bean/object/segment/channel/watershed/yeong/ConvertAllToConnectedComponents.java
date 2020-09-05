@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
-final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<UnsignedIntBuffer> {
+final class ConvertAllToConnectedComponents implements ProcessBufferUnary<UnsignedIntBuffer> {
 
     private final EncodedVoxels matS;
     private final Extent extent;

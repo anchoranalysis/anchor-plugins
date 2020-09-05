@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.bean.channel.provider;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.functional.function.IntBinaryOperation;
 import org.anchoranalysis.image.bean.provider.ChannelProviderBinary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
-import org.anchoranalysis.image.voxel.iterator.IntBinaryOperation;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
  * Takes the two channels and creates a NEW third channel whose pixels are a function of the two
@@ -55,7 +55,7 @@ public abstract class TwoVoxelMappingBase extends ChannelProviderBinary {
                 ChannelFactory.instance()
                         .create(channel1.dimensions(), UnsignedByteVoxelType.INSTANCE);
 
-        IterateVoxelsByte.callEachPointWithBinaryOperation(
+        IterateVoxelsAll.binaryOperation(
                 channel1.voxels().asByte(),
                 channel2.voxels().asByte(),
                 channelOut.voxels().asByte(),
