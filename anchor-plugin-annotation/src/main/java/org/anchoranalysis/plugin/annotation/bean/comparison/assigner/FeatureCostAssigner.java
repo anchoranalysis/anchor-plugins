@@ -46,8 +46,7 @@ import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 public class FeatureCostAssigner extends AnnotationComparisonAssigner<AssignmentOverlapFromPairs> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
+    @BeanField @Getter @Setter private FeatureEvaluator<FeatureInputPairObjects> featureEvaluator;
 
     @BeanField @Getter @Setter private double maxCost = 1.0;
 

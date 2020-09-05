@@ -96,6 +96,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
 
     private static ObjectMask createObjectFromContour(Contour contour, boolean round)
             throws CreateException {
-        return SingleObjectFromPointsFactory.create(PointConverter.convert3i(contour.getPoints(), round));
+        return SingleObjectFromPointsFactory.create(
+                PointConverter.convert3i(contour.getPoints(), round));
     }
 }

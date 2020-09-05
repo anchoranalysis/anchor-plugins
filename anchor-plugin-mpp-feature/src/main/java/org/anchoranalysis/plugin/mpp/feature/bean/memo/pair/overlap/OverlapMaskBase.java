@@ -57,7 +57,8 @@ public abstract class OverlapMaskBase extends FeaturePairMemoSingleRegion {
     @Override
     protected double overlappingNumVoxels(SessionInput<FeatureInputPairMemo> input)
             throws FeatureCalculationException {
-        return input.calculate(new CalculateOverlapMask(getRegionID(), energyIndex, (byte) maskValue));
+        return input.calculate(
+                new CalculateOverlapMask(getRegionID(), energyIndex, (byte) maskValue));
     }
 
     protected double volumeAgg(

@@ -52,7 +52,9 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
 
     @Override
     public Summarizer<S> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         if (params.isDetailedLogging()) {

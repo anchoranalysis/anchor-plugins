@@ -170,7 +170,10 @@ public class XYOrientationExtendToZ extends PointsProposer {
     }
 
     private int skipZDistance(Resolution resolution) throws OperationFailedException {
-        return (int) Math.round(distanceZEndIfEmpty.resolveForAxis(Optional.of(resolution.unitConvert()), AxisType.Z));
+        return (int)
+                Math.round(
+                        distanceZEndIfEmpty.resolveForAxis(
+                                Optional.of(resolution.unitConvert()), AxisType.Z));
     }
 
     private Optional<Mask> channelFilled() throws CreateException {

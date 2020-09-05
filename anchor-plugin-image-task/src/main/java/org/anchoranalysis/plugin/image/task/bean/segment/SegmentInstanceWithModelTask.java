@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,11 +29,13 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -73,78 +75,78 @@ import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Using a model-pool, performs instance segmentation on an image producing zero, one or more objects per image.
- * 
+ * Using a model-pool, performs instance segmentation on an image producing zero, one or more
+ * objects per image.
+ *
  * <p>Various visualizations and export types are supported.
- * 
- * <p>The task will output the segmentation results (in HDF5 form and as a mask) for each input, together with visualizations of the outlines.
- * 
- * <p>The task also provides a aggregated outputs (features, thumbnails) of extracted objects
- * across all inputs. 
- * 
+ *
+ * <p>The task will output the segmentation results (in HDF5 form and as a mask) for each input,
+ * together with visualizations of the outlines.
+ *
+ * <p>The task also provides a aggregated outputs (features, thumbnails) of extracted objects across
+ * all inputs.
+ *
  * @author Owen Feehan
  * @param <T> model-type in pool
- *
  */
-public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,SharedStateSegmentInstance<T>> {
+public class SegmentInstanceWithModelTask<T>
+        extends Task<StackSequenceInput, SharedStateSegmentInstance<T>> {
 
     private static final EachObjectIndependently COMBINE_OBJECTS = new EachObjectIndependently();
-    
+
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
-    
+
     /** Output-name for the input-image for the segmentation */
     private static final String OUTPUT_INPUT_IMAGE = "input";
-    
+
     /** Output-name for HDF5 encoded object-masks */
     private static final String OUTPUT_H5 = "objects";
-    
+
     /** Output-name for object-masks merged together as a mask */
     private static final String OUTPUT_MERGED_AS_MASK = "mask";
-    
+
     /** Output-name for a colored outline placed around the masks */
     private static final String OUTPUT_OUTLINE = "outline";
-    
+
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
-    
-    private static final String[] FEATURE_LABEL_HEADERS = new String[]{"image", "object"};
-    
+
+    private static final String[] FEATURE_LABEL_HEADERS = new String[] {"image", "object"};
+
     // START BEAN FIELDS
     /** The segmentation algorithm */
-    @BeanField @Getter @Setter
-    private SegmentStackIntoObjectsPooled<T> segment;
-    
+    @BeanField @Getter @Setter private SegmentStackIntoObjectsPooled<T> segment;
+
     /** The width of the outline */
-    @BeanField @Getter @Setter
-    private int outlineWidth = 1;
-    
+    @BeanField @Getter @Setter private int outlineWidth = 1;
+
     /** The color of the outline */
-    @BeanField @OptionalBean @Getter @Setter private RGBColorBean outlineColor = new RGBColorBean(Color.GREEN);
-    
-    /** 
+    @BeanField @OptionalBean @Getter @Setter
+    private RGBColorBean outlineColor = new RGBColorBean(Color.GREEN);
+
+    /**
      * If true the colors change for different objects in the image (using a default color set).
-     * 
+     *
      * <p>This takes precedence over {@code outlineColor}.
      */
     @BeanField @Getter @Setter private boolean varyColors = false;
-    
+
     /**
-     * Features to calculate for objects in the features output. If unspecified, default features of bounding-box coordinates and number of voxels are selected.
+     * Features to calculate for objects in the features output. If unspecified, default features of
+     * bounding-box coordinates and number of voxels are selected.
      */
-    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features;
-    
+    @BeanField @OptionalBean @Getter @Setter
+    private List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features;
+
     /**
-     * If true, then the outputs (outline, mask, image etc.) are not written for images that produce no objects. 
+     * If true, then the outputs (outline, mask, image etc.) are not written for images that produce
+     * no objects.
      */
     @BeanField @Getter @Setter private boolean ignoreNoObjects = true;
     // END BEAN FIELDS
 
-    
-    
     @Override
     public InputTypesExpected inputTypesExpected() {
         // A stack is needed, not individual channels
@@ -153,14 +155,17 @@ public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,Sha
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan plan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan plan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.getContext());
             ConcurrentModelPool<T> modelPool = segment.createModelPool(plan);
-            
+
             LabelHeaders headers = new LabelHeaders(FEATURE_LABEL_HEADERS);
-            return new SharedStateSegmentInstance<>(modelPool, tableCalculator(), headers, params.getContext());
+            return new SharedStateSegmentInstance<>(
+                    modelPool, tableCalculator(), headers, params.getContext());
         } catch (CreateException | InitException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -172,20 +177,25 @@ public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,Sha
             throws JobExecutionException {
         try {
             initializeBeans(input.context());
-            
+
             Stack stack = inputStack(input);
-            
-            ObjectCollection objects = segment.segment(stack, input.getSharedState().getModelPool());
+
+            ObjectCollection objects =
+                    segment.segment(stack, input.getSharedState().getModelPool());
 
             DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
-            
+
             if (objects.size() > 0 || !ignoreNoObjects) {
-                writeOutputsForImage( stack, objects, background, input.context().getOutputManager() );
-    
+                writeOutputsForImage(
+                        stack, objects, background, input.context().getOutputManager());
+
                 calculateFeaturesForImage(input, stack, objects);
             }
-                        
-        } catch (SegmentationFailedException | OperationFailedException | CreateException | InitException e) {
+
+        } catch (SegmentationFailedException
+                | OperationFailedException
+                | CreateException
+                | InitException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -205,71 +215,102 @@ public class SegmentInstanceWithModelTask<T> extends Task<StackSequenceInput,Sha
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
-    private void calculateFeaturesForImage(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input, Stack stack, ObjectCollection objects) throws OperationFailedException {
-        
-        if (objects.size()==0) {
+
+    private void calculateFeaturesForImage(
+            InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input,
+            Stack stack,
+            ObjectCollection objects)
+            throws OperationFailedException {
+
+        if (objects.size() == 0) {
             // Exit early, nothing to do
             return;
         }
-        
+
         EnergyStack energyStack = new EnergyStack(stack);
- 
-        CalculateFeaturesForObjects<FeatureInputSingleObject> calculator = new CalculateFeaturesForObjects<>(
-            COMBINE_OBJECTS,
-            new InitParamsWithEnergyStack(energyStack, input.context()),
-            true,
-            input.getSharedState().createInputProcessContext(Optional.empty(), input.context())
-        );
-        calculator.calculateFeaturesForObjects(objects, energyStack, featureInput -> identifierFor(input.getInputObject().descriptiveName(), featureInput, calculator) );        
+
+        CalculateFeaturesForObjects<FeatureInputSingleObject> calculator =
+                new CalculateFeaturesForObjects<>(
+                        COMBINE_OBJECTS,
+                        new InitParamsWithEnergyStack(energyStack, input.context()),
+                        true,
+                        input.getSharedState()
+                                .createInputProcessContext(Optional.empty(), input.context()));
+        calculator.calculateFeaturesForObjects(
+                objects,
+                energyStack,
+                featureInput ->
+                        identifierFor(
+                                input.getInputObject().descriptiveName(),
+                                featureInput,
+                                calculator));
     }
-    
+
     private RowLabels identifierFor(
             String imageIdentifier,
             FeatureInputSingleObject featureInput,
-            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator
-    ) {
+            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator) {
         return new RowLabels(
-                Optional.of(new String[] {imageIdentifier, calculator.uniqueIdentifierFor(featureInput) }),
+                Optional.of(
+                        new String[] {
+                            imageIdentifier, calculator.uniqueIdentifierFor(featureInput)
+                        }),
                 Optional.empty());
     }
-    
-    private void writeOutputsForImage(Stack stack, ObjectCollection objects, DisplayStack background, BoundOutputManagerRouteErrors outputManager) {
+
+    private void writeOutputsForImage(
+            Stack stack,
+            ObjectCollection objects,
+            DisplayStack background,
+            BoundOutputManagerRouteErrors outputManager) {
 
         WriterRouterErrors writer = outputManager.getWriterCheckIfAllowed();
-        
-        writer.write(OUTPUT_INPUT_IMAGE, () -> new StackGenerator(stack, true, MANIFEST_FUNCTION_INPUT_IMAGE) );
-        writer.write(OUTPUT_H5, () -> new GeneratorHDF5(objects) );
-        writer.write(OUTPUT_MERGED_AS_MASK, () -> new ObjectsMergedAsMaskGenerator(stack.dimensions(), objects) );
-        
-        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects, background) );
+
+        writer.write(
+                OUTPUT_INPUT_IMAGE,
+                () -> new StackGenerator(stack, true, MANIFEST_FUNCTION_INPUT_IMAGE));
+        writer.write(OUTPUT_H5, () -> new GeneratorHDF5(objects));
+        writer.write(
+                OUTPUT_MERGED_AS_MASK,
+                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions(), objects));
+
+        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects, background));
     }
-    
-    private DrawObjectsGenerator outlineGenerator(ObjectCollection objects, DisplayStack background) {
+
+    private DrawObjectsGenerator outlineGenerator(
+            ObjectCollection objects, DisplayStack background) {
         if (varyColors) {
             return DrawObjectsGenerator.outlineVariedColors(objects, outlineWidth, background);
         } else {
-            return DrawObjectsGenerator.outlineSingleColor(objects, outlineWidth, background, outlineColor.rgbColor());
+            return DrawObjectsGenerator.outlineSingleColor(
+                    objects, outlineWidth, background, outlineColor.rgbColor());
         }
     }
-    
-    /** The stack to use as an input to the segmentation algorithm. Always uses the first timepoint. */
-    private Stack inputStack(InputBound<StackSequenceInput, ?> input) throws OperationFailedException {
+
+    /**
+     * The stack to use as an input to the segmentation algorithm. Always uses the first timepoint.
+     */
+    private Stack inputStack(InputBound<StackSequenceInput, ?> input)
+            throws OperationFailedException {
         try {
-            TimeSequence sequence = input.getInputObject().createStackSequenceForSeries(0).get(ProgressReporterNull.get());
+            TimeSequence sequence =
+                    input.getInputObject()
+                            .createStackSequenceForSeries(0)
+                            .get(ProgressReporterNull.get());
             return sequence.get(0);
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     private void initializeBeans(BoundIOContext context) throws InitException {
         ImageInitParams params = ImageInitParamsFactory.create(context);
-        segment.initRecursive(params, context.getLogger());        
+        segment.initRecursive(params, context.getLogger());
     }
-        
-    private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator() throws CreateException {
-        if (features==null) {
+
+    private FeatureTableCalculator<FeatureInputSingleObject> tableCalculator()
+            throws CreateException {
+        if (features == null) {
             return COMBINE_OBJECTS.createFeatures(FeaturesCreator.defaultInstanceSegmentation());
         } else {
             return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);

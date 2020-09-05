@@ -112,7 +112,9 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
@@ -133,7 +135,8 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
                             input.getInputObject().pathForBindingRequired(),
                             input.context().isDebugEnabled());
 
-            InputProcessContext<S> inputProcessContext = input.getSharedState().createInputProcessContext(groupName, input.context());
+            InputProcessContext<S> inputProcessContext =
+                    input.getSharedState().createInputProcessContext(groupName, input.context());
 
             source.processInput(input.getInputObject(), inputProcessContext);
 

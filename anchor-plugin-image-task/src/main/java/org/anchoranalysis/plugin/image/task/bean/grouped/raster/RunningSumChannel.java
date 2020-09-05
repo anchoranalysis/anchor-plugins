@@ -37,9 +37,9 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /**
  * A channel associated with a running sum for each voxel and a total count.
- * 
- * <p>This is a useful structure for finding the mean of several channels, where
- * the channel contained here represent the sum.
+ *
+ * <p>This is a useful structure for finding the mean of several channels, where the channel
+ * contained here represent the sum.
  */
 @Accessors(fluent = true)
 class RunningSumChannel {

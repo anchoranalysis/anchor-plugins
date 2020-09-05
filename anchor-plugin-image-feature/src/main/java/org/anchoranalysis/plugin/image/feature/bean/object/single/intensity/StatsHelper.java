@@ -115,7 +115,8 @@ class StatsHelper {
             boolean ignoreZero,
             double emptyValue,
             ToDoubleFunction<VoxelStatisticsFromHistogram> funcExtractStatistic) {
-        Histogram histogram = HistogramFactory.createHistogramIgnoreZero(channel, object, ignoreZero);
+        Histogram histogram =
+                HistogramFactory.createHistogramIgnoreZero(channel, object, ignoreZero);
 
         if (histogram.getTotalCount() == 0) {
             return emptyValue;

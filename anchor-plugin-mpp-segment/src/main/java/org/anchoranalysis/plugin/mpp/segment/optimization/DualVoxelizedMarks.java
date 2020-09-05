@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.segment.optimization;
 
-import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 
 /**
  * A transformation of one {@link VoxelizedMarksWithEnergy} into another

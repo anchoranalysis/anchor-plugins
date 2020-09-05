@@ -56,19 +56,19 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 class Outputter {
 
     private static final Optional<String> MANIFEST_FUNCTION_MARKS = Optional.of("marks");
-    
+
     /** XML serialized version of marks */
     private static final String OUTPUT_MARKS_XML_SERIALIZED = "finalMarks";
-    
+
     /** XML serialized version of marks plus an energy breakdown */
     private static final String OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED = "finalMarksEnergy";
-    
+
     /** Marks on a background with a thin outline */
     private static final String OUTPUT_OUTLINE_THIN = "finalOutline";
-    
+
     /** Marks on a background with a thick outline */
     private static final String OUTPUT_OUTLINE_THICK = "finalOutlineVisual";
-    
+
     public static void outputResults(
             MarksWithEnergyBreakdown marks,
             DualStack dualStack,
@@ -100,7 +100,9 @@ class Outputter {
     }
 
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
-        writer.write(OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED, () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
+        writer.write(
+                OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED,
+                () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
     }
 
     private static void writeMarksMaskCollection(
@@ -143,7 +145,9 @@ class Outputter {
     }
 
     private static void writeFinalMarks(MarkCollection marks, WriterRouterErrors writer) {
-        writer.write(OUTPUT_MARKS_XML_SERIALIZED, () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
+        writer.write(
+                OUTPUT_MARKS_XML_SERIALIZED,
+                () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
         writer.write(
                 "finalMarksBinary",
                 () -> new ObjectOutputStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));

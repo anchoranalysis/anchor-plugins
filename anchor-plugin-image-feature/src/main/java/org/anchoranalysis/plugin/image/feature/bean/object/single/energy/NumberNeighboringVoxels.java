@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.energy;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +35,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;

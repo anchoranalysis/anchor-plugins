@@ -47,7 +47,9 @@ public class SharedStateSelectedSlice {
         try {
             this.csvWriter =
                     FeatureCSVWriter.create(
-                            new FeatureCSVMetadata("selectedSlices", Arrays.asList("name","sliceIndex", "featureOptima")),
+                            new FeatureCSVMetadata(
+                                    "selectedSlices",
+                                    Arrays.asList("name", "sliceIndex", "featureOptima")),
                             baseOutputManager);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
@@ -62,7 +64,7 @@ public class SharedStateSelectedSlice {
                         new TypedValue(featureOptima, 7));
         this.csvWriter.ifPresent(writer -> writer.addRow(row));
     }
-    
+
     public void close() {
         csvWriter.ifPresent(FeatureCSVWriter::close);
     }

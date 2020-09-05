@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -66,7 +66,8 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
         BinarySegmentationParameters params =
                 new BinarySegmentationParameters(channel.resolution());
 
-        BinaryVoxels<UnsignedByteBuffer> bvb = segment.segment(channel.voxels(), params, objectMask);
+        BinaryVoxels<UnsignedByteBuffer> bvb =
+                segment.segment(channel.voxels(), params, objectMask);
         return createFromVoxels(
                 bvb,
                 channel.resolution(),

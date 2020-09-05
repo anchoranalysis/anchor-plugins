@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.merge;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
@@ -41,6 +40,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.box.BoundingBox;

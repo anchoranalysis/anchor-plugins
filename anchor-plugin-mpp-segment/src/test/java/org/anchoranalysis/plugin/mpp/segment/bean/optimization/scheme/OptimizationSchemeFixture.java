@@ -56,9 +56,7 @@ import org.anchoranalysis.test.image.BoundIOContextFixture;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptimizationSchemeFixture {
 
-    /** 
-     * A simulated annealing scheme using direct-assign mode.
-     */
+    /** A simulated annealing scheme using direct-assign mode. */
     public static <T> OptimizationScheme<T, T> simulatedAnnealing(
             ExtractScoreSize<T> extractScoreSize, int numberOfIterations) {
         SimulatedAnnealing<T, T, T> optimization = new SimulatedAnnealing<>();

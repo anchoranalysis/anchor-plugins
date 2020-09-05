@@ -36,10 +36,12 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 
 public class LoadUtilities {
 
-    private static ObjectsFromConnectedComponentsFactory FACTORY = new ObjectsFromConnectedComponentsFactory();;
-    
-    public static ObjectMask openLargestObjectFrom(
-            String suffix, TestLoaderImageIO loader) throws CreateException {
+    private static ObjectsFromConnectedComponentsFactory FACTORY =
+            new ObjectsFromConnectedComponentsFactory();
+    ;
+
+    public static ObjectMask openLargestObjectFrom(String suffix, TestLoaderImageIO loader)
+            throws CreateException {
         Stack stack = loader.openStackFromTestPath(path(suffix));
         return largestObjectFromStack(stack);
     }
@@ -55,9 +57,11 @@ public class LoadUtilities {
     }
 
     private static ObjectMask findLargestObject(ObjectCollection objects) {
-        return objects.streamStandardJava().max(LoadUtilities::compareObjectsByNumberVoxelsOn).get(); // NOSONAR
+        return objects.streamStandardJava()
+                .max(LoadUtilities::compareObjectsByNumberVoxelsOn)
+                .get(); // NOSONAR
     }
-    
+
     private static int compareObjectsByNumberVoxelsOn(ObjectMask object1, ObjectMask object2) {
         return Integer.compare(object1.numberVoxelsOn(), object2.numberVoxelsOn());
     }

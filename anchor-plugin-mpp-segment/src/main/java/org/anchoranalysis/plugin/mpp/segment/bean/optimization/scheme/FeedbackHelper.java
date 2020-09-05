@@ -32,9 +32,9 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.segment.bean.optimization.ExtractScoreSize;
 import org.anchoranalysis.mpp.segment.kernel.proposer.WeightedKernelList;
 import org.anchoranalysis.mpp.segment.optimization.OptimizationContext;
-import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
-import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackReceiver;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeedbackHelper {
@@ -69,8 +69,7 @@ class FeedbackHelper {
         return feedbackParams;
     }
 
-    private static <T> FeedbackEndParameters<T> feedbackEndParams(
-            T state, MessageLogger logger) {
+    private static <T> FeedbackEndParameters<T> feedbackEndParams(T state, MessageLogger logger) {
         return new FeedbackEndParameters<>(state, logger);
     }
 }

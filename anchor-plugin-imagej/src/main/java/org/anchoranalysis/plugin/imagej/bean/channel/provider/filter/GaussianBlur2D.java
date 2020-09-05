@@ -46,7 +46,7 @@ public class GaussianBlur2D extends ChannelProviderUnary {
     private Channel blur(Channel channel) {
 
         GaussianBlur gb = new GaussianBlur();
-        FilterHelper.processEachSlice(channel, processor -> gb.blur(processor, sigma) ); // NOSONAR
+        FilterHelper.processEachSlice(channel, processor -> gb.blur(processor, sigma)); // NOSONAR
         return channel;
     }
 

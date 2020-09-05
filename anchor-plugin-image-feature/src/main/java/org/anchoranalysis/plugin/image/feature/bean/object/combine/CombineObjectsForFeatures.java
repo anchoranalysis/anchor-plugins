@@ -93,7 +93,8 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     public abstract String uniqueIdentifierFor(T input);
 
     /**
-     * Derives a list of inputs (i.e. rows in a feature table) and starts a batch of related thumbnail generation.
+     * Derives a list of inputs (i.e. rows in a feature table) and starts a batch of related
+     * thumbnail generation.
      *
      * @param objects the objects from which inputs are derived
      * @param energyStack energy-stack used during feature calculation
@@ -102,7 +103,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the list of inputs
      * @throws CreateException
      */
-    public ListWithThumbnails<T,ObjectCollection> deriveInputsStartBatch(
+    public ListWithThumbnails<T, ObjectCollection> deriveInputsStartBatch(
             ObjectCollection objects,
             EnergyStack energyStack,
             boolean thumbnailsEnabled,
@@ -113,9 +114,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
         if (thumbnailsEnabled) {
             try {
                 return new ListWithThumbnails<>(
-                    inputs,
-                    thumbnail.start(objects, scaledBoundingBoxes(inputs), Optional.of(energyStack.asStack()))
-                );
+                        inputs,
+                        thumbnail.start(
+                                objects,
+                                scaledBoundingBoxes(inputs),
+                                Optional.of(energyStack.asStack())));
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
@@ -131,7 +134,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
      * @return the thumbnail
      */
     public abstract ObjectCollection objectsForThumbnail(T input) throws CreateException;
-    
+
     /**
      * Derives a list of inputs from an object-collection
      *
@@ -144,7 +147,7 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
     protected abstract List<T> startBatchDeriveInputs(
             ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException;
-    
+
     /**
      * Creates a bounding-box that tightly fits the input to a particular table row (could be for
      * one or more objects)

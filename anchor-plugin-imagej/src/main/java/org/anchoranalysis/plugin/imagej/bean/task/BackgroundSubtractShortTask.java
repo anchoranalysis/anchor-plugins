@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.task;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,8 +36,9 @@ import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
 import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.converter.ToUnsignedByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;

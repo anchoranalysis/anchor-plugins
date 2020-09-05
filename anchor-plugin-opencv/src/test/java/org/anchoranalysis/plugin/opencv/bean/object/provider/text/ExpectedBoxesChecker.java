@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,25 +26,23 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import static org.junit.Assert.assertTrue;
+
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.opencv.nonmaxima.IntersectionOverUnion;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExpectedBoxesChecker {
-    
-    /**
-     * Minimum intersection-over-union score required to be considered identical to a box.
-     */
+
+    /** Minimum intersection-over-union score required to be considered identical to a box. */
     private static final double THRESHOLD_SCORE = 0.9;
-    
-    public static void assertExpectedBoxes(ObjectCollection objects, List<BoundingBox> expectedBoxes) {
-        expectedBoxes.stream().forEach( box->
-            assertOverlap(objects, box)
-        );        
+
+    public static void assertExpectedBoxes(
+            ObjectCollection objects, List<BoundingBox> expectedBoxes) {
+        expectedBoxes.stream().forEach(box -> assertOverlap(objects, box));
     }
 
     private static void assertOverlap(ObjectCollection objects, BoundingBox box) {
@@ -54,8 +52,10 @@ class ExpectedBoxesChecker {
     }
 
     private static boolean atLeastOneObjectOverlaps(ObjectCollection objects, BoundingBox box) {
-        return objects.stream().anyMatch( object ->
-            IntersectionOverUnion.forBoxes(object.boundingBox(), box) > THRESHOLD_SCORE
-        );
+        return objects.stream()
+                .anyMatch(
+                        object ->
+                                IntersectionOverUnion.forBoxes(object.boundingBox(), box)
+                                        > THRESHOLD_SCORE);
     }
 }

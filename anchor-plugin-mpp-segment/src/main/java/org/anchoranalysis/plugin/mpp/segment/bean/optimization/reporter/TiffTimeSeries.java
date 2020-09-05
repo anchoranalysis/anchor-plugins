@@ -68,9 +68,7 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
             throws ReporterException {
 
         try {
-            colorIndex =
-                    new HashedColorSet(
-                            new Shuffle(new HSB()), numColors);
+            colorIndex = new HashedColorSet(new Shuffle(new HSB()), numColors);
         } catch (OperationFailedException e1) {
             throw new ReporterException(e1);
         }
@@ -107,8 +105,7 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
     }
 
     private ColoredMarksWithDisplayStack addColor(
-            MarkCollection marks,
-            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
+            MarkCollection marks, FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
         ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);

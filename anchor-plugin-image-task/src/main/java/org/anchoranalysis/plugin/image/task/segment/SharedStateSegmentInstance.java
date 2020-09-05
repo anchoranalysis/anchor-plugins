@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.task.segment;
 
 import java.io.IOException;
 import java.util.Optional;
+import lombok.Getter;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
@@ -36,26 +37,36 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
-import lombok.Getter;
 
 /**
  * Shared-state for instance segmentation
- * 
+ *
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
 public class SharedStateSegmentInstance<T> {
 
-    private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>> features;
+    private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>
+            features;
     @Getter private final ConcurrentModelPool<T> modelPool;
-    
-    public SharedStateSegmentInstance( ConcurrentModelPool<T> modelPool, FeatureTableCalculator<FeatureInputSingleObject> featureTable, LabelHeaders identifierHeaders, BoundIOContext context ) throws CreateException {
+
+    public SharedStateSegmentInstance(
+            ConcurrentModelPool<T> modelPool,
+            FeatureTableCalculator<FeatureInputSingleObject> featureTable,
+            LabelHeaders identifierHeaders,
+            BoundIOContext context)
+            throws CreateException {
         this.modelPool = modelPool;
-        this.features = SharedStateExportFeatures.createForFeatures( new ResultsWriterOutputNames("summary",false,false), featureTable, identifierHeaders, context);
+        this.features =
+                SharedStateExportFeatures.createForFeatures(
+                        new ResultsWriterOutputNames("summary", false, false),
+                        featureTable,
+                        identifierHeaders,
+                        context);
     }
 
-    public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>> createInputProcessContext(
-            Optional<String> groupName, BoundIOContext context) {
+    public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>>
+            createInputProcessContext(Optional<String> groupName, BoundIOContext context) {
         return features.createInputProcessContext(groupName, context);
     }
 

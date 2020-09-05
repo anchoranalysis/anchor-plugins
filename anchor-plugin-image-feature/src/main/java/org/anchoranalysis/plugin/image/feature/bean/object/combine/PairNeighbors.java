@@ -186,7 +186,8 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input)
+            throws CreateException {
         // A collection is made with the left-object as first element, and the right-object as the
         // second
         return ObjectCollectionFactory.of(input.getFirst(), input.getSecond());

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.geometry.Point3d;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -51,7 +51,8 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    public void beforeCreateObject(
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
         // NOTHING TO DO
     }
@@ -78,7 +79,10 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     public static boolean isPointConvexTo(
-            Point3i root, Point3i destPoint, BinaryVoxels<UnsignedByteBuffer> voxels, boolean debug) {
+            Point3i root,
+            Point3i destPoint,
+            BinaryVoxels<UnsignedByteBuffer> voxels,
+            boolean debug) {
 
         Point3d distance = relVector(root, destPoint);
         double mag =
@@ -125,7 +129,10 @@ public class VisitSchedulerConvexAboutRoot extends VisitScheduler {
     }
 
     private static boolean isPointOnObject(
-            Point3d point, VoxelsExtracter<UnsignedByteBuffer> extracter, Extent extent, BinaryValues bv) {
+            Point3d point,
+            VoxelsExtracter<UnsignedByteBuffer> extracter,
+            Extent extent,
+            BinaryValues bv) {
 
         Point3i pointInt = PointConverter.intFromDoubleFloor(point);
 

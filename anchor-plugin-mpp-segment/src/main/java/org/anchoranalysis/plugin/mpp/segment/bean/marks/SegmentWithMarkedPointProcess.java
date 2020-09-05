@@ -69,12 +69,10 @@ import org.anchoranalysis.mpp.segment.optimization.OptimizationTerminatedEarlyEx
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 import org.anchoranalysis.plugin.mpp.segment.SgmnMPPState;
 
-
 /**
  * Segments a channel with marked pointed processes
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
 
@@ -94,12 +92,12 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
 
     @BeanField @Getter @Setter private DefineOutputterMPPWithEnergy define;
 
-    /** Iff true the algorithm exits before optimization begins (useful for debugging).*/
+    /** Iff true the algorithm exits before optimization begins (useful for debugging). */
     @BeanField @Getter @Setter private boolean exitBeforeOptimization = false;
 
     /**
      * Iff true uses a constant seed for the random-number-generator (useful for debugging).
-     * 
+     *
      * <p>Otherwise, the random-number-generator seeds from the system clock.
      */
     @BeanField @Getter @Setter private boolean fixRandomSeed = false;

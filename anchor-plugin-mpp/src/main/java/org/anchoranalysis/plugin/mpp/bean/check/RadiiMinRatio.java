@@ -50,8 +50,7 @@ public class RadiiMinRatio extends CheckMark {
     public boolean check(Mark mark, RegionMap regionMap, EnergyStack energyStack) {
 
         ConicBase markCast = (ConicBase) mark;
-        double[] radiiOrdered =
-                markCast.radiiOrderedResolved(energyStack.resolution());
+        double[] radiiOrdered = markCast.radiiOrderedResolved(energyStack.resolution());
 
         int len = radiiOrdered.length;
         assert (len >= 2);

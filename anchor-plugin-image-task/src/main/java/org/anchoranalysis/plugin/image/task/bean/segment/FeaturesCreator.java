@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,34 +25,33 @@
  */
 package org.anchoranalysis.plugin.image.task.bean.segment;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Creates certain hard-coded features
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FeaturesCreator {
 
     /**
      * Creates default features for describing the results of instance-segmentation
-     * 
+     *
      * @return
      */
     public static NamedFeatureStore<FeatureInputSingleObject> defaultInstanceSegmentation() {
         NamedFeatureStore<FeatureInputSingleObject> store = new NamedFeatureStore<>();
-        store.add("centerOfGravity.x", new CenterOfGravity(AxisType.X) );
-        store.add("centerOfGravity.y", new CenterOfGravity(AxisType.Y) );
-        store.add("centerOfGravity.z", new CenterOfGravity(AxisType.Z) );
-        store.add("numberVoxels", new NumberVoxels() );
+        store.add("centerOfGravity.x", new CenterOfGravity(AxisType.X));
+        store.add("centerOfGravity.y", new CenterOfGravity(AxisType.Y));
+        store.add("centerOfGravity.z", new CenterOfGravity(AxisType.Z));
+        store.add("numberVoxels", new NumberVoxels());
         return store;
     }
 }

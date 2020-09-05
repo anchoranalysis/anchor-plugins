@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.geometry.Point2i;
@@ -44,7 +44,7 @@ import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastMarkExtracter {
 
     private static final Scalar MEAN_SUBTRACTION_CONSTANTS = new Scalar(123.68, 116.78, 103.94);
@@ -53,28 +53,29 @@ class EastMarkExtracter {
     private static final String OUTPUT_GEOMETRY = "feature_fusion/concat_3";
 
     private static final ScaleFactorInt SCALE_BY_4 = new ScaleFactorInt(4, 4);
-    
+
     /**
      * Extracts rotatable bounding boxes (as marks) from an image using the EAST model
      *
      * @param image an RGB image to extract boxes from
      * @param minConfidence filters boxes to have confidence >= minConfidence
      * @return a list of bounding-boxes, each with a confidence value
-     * @throws Throwable 
+     * @throws Throwable
      */
-    public static List<WithConfidence<Mark>> extractBoundingBoxes( ConcurrentModelPool<Net> modelPool,
-            Mat image, double minConfidence) throws Throwable {
-        return modelPool.excuteOrWait( model->forwardPass(model, image, minConfidence) );
+    public static List<WithConfidence<Mark>> extractBoundingBoxes(
+            ConcurrentModelPool<Net> modelPool, Mat image, double minConfidence) throws Throwable {
+        return modelPool.excuteOrWait(model -> forwardPass(model, image, minConfidence));
     }
-    
-    private static List<WithConfidence<Mark>> forwardPass(Net model, Mat image, double minConfidence) throws ConcurrentModelException {
+
+    private static List<WithConfidence<Mark>> forwardPass(
+            Net model, Mat image, double minConfidence) throws ConcurrentModelException {
         try {
             model.setInput(
                     Dnn.blobFromImage(
                             image, 1.0, image.size(), MEAN_SUBTRACTION_CONSTANTS, true, false));
-    
+
             List<Mat> output = new ArrayList<>();
-            model.forward(output, Arrays.asList(OUTPUT_SCORES,OUTPUT_GEOMETRY));
+            model.forward(output, Arrays.asList(OUTPUT_SCORES, OUTPUT_GEOMETRY));
             return extractFromMatrices(output.get(0), output.get(1), SCALE_BY_4, minConfidence);
         } catch (Exception e) {
             throw new ConcurrentModelException(e);

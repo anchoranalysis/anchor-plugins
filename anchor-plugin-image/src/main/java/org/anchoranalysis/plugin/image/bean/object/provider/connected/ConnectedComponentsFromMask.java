@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,9 +40,10 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 

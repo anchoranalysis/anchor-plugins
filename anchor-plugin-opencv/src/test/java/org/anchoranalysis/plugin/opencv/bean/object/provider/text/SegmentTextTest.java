@@ -54,31 +54,32 @@ public class SegmentTextTest {
     private ImageLoader loader = new ImageLoader();
 
     private SegmentText segmenter;
-    
+
     @Before
     public void setUp() throws InitException {
         segmenter = new SegmentText();
         initSegmenter();
     }
-    
+
     @Test
     public void testRGB() throws SegmentationFailedException {
         segmentStack(loader.carRGB(), SegmentTextResults.rgb());
     }
-    
+
     @Test
     public void testGrayscale8Bit() throws SegmentationFailedException {
         segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
-    
-    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes) throws SegmentationFailedException {
+
+    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
+            throws SegmentationFailedException {
         ObjectCollection objects = segmenter.segment(stack);
         ExpectedBoxesChecker.assertExpectedBoxes(objects, expectedBoxes);
     }
 
-    private void initSegmenter()
-            throws InitException {
-        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory()); 
+    private void initSegmenter() throws InitException {
+        BoundIOContext context =
+                BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory());
         segmenter.init(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }

@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.nio.file.Path;
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
@@ -35,6 +34,7 @@ import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;

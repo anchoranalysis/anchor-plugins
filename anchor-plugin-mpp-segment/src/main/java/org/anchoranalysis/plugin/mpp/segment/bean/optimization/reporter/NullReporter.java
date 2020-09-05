@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
-import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
+import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 

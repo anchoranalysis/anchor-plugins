@@ -129,7 +129,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -159,8 +161,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacks stacks =
-                    createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
             NamedStacks stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 

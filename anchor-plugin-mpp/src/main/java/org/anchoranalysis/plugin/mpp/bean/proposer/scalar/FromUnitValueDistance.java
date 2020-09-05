@@ -50,6 +50,7 @@ public class FromUnitValueDistance extends ScalarProposer {
             throws OperationFailedException {
         // TODO this could be a bit slow, we are creating an object on the heap every time from
         // directionVector
-        return unitValueDistance.resolve(Optional.of(resolution.unitConvert()), directionVector.createVector());
+        return unitValueDistance.resolve(
+                Optional.of(resolution.unitConvert()), directionVector.createVector());
     }
 }

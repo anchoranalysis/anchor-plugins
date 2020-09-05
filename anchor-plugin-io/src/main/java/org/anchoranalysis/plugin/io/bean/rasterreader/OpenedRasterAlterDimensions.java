@@ -67,8 +67,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 
         for (Stack stack : ts) {
-            Optional<Resolution> res =
-                    processor.maybeUpdatedResolution(stack.resolution());
+            Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
             res.ifPresent(stack::updateResolution);
         }
         return ts;

@@ -51,8 +51,7 @@ public class AllSlicesMaskEverythingNonZero extends SelectSlicesWithIndexBase {
         Histogram index = histogramForAllSlices(mark, false);
         Histogram nonZero = histogramForAllSlices(mark, true);
 
-        long numNonZero =
-                nonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
+        long numNonZero = nonZero.countThreshold(new RelationToConstant(new GreaterThanBean(), 0));
 
         return new VoxelStatisticsFromHistogram(histogramExtractedFromRight(index, numNonZero));
     }

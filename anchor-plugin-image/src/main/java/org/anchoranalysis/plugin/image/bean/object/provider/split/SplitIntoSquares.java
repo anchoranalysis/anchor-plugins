@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import java.util.Iterator;
 import java.util.Optional;
 import lombok.Getter;
@@ -35,6 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;

@@ -45,7 +45,8 @@ import org.anchoranalysis.plugin.image.object.merge.condition.IncreaseFeatureCon
  * occur before a superior one, as long as both merges fulfill the conditions.
  *
  * <p>A merge occurs if the feature is increased in the merge object compared to both pre-merged
- * objects i.e. {@code feature(merged) > feature(object1)} and {@code feature(merged) > feature(object2)}.
+ * objects i.e. {@code feature(merged) > feature(object1)} and {@code feature(merged) >
+ * feature(object2)}.
  *
  * @author Owen Feehan
  */

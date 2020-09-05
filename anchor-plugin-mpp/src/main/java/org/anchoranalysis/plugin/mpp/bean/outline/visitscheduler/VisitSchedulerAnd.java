@@ -72,7 +72,8 @@ public class VisitSchedulerAnd extends VisitScheduler {
     }
 
     @Override
-    public void beforeCreateObject(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    public void beforeCreateObject(
+            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws InitException {
 
         for (VisitScheduler vs : list) {

@@ -126,7 +126,8 @@ class TaskSingleInputHelper {
             S sharedState = task.beforeAnyJobIsExecuted(bom, concurrencyPlan, paramsExperiment);
 
             boolean successful =
-                    task.executeJob(new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
+                    task.executeJob(
+                            new ParametersUnbound<>(paramsExperiment, input, sharedState, false));
 
             task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 

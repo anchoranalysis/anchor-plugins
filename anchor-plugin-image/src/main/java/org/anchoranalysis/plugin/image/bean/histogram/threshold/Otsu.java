@@ -38,9 +38,8 @@ import org.anchoranalysis.image.histogram.Histogram;
  *
  * <p>This minimizes intra-class intensity variance, or equivalently, maximizes inter-class
  * variance.
- * 
- * @see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method">Otsu&#39;s method on wikipedia</a>
  *
+ * @see <a href="https://en.wikipedia.org/wiki/Otsu%27s_method">Otsu&#39;s method on wikipedia</a>
  * @author Owen Feehan
  */
 @EqualsAndHashCode(callSuper = false)
@@ -61,7 +60,9 @@ public class Otsu extends CalculateLevel {
         // Search for max between-class variance
         int minIntensity = histogram.calculateMinimum() + 1;
         int maxIntensity = histogram.calculateMaximum() - 1;
-        for (int intensity = minIntensity; intensity <= maxIntensity; intensity++) { // Avoid min and max
+        for (int intensity = minIntensity;
+                intensity <= maxIntensity;
+                intensity++) { // Avoid min and max
             runningSum += intensity * histogram.getCount(intensity);
             runningCount += histogram.getCount(intensity);
 

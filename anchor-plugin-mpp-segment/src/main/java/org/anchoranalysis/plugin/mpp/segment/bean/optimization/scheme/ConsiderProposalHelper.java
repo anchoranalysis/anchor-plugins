@@ -89,10 +89,12 @@ class ConsiderProposalHelper {
         // check that the proposal actually contains a change
         assert !Double.isNaN(accptanceProbability);
 
-        if (randomValueBetweenZeroAndOne <= accptanceProbability || !optStep.getBest().isPresent()) {
+        if (randomValueBetweenZeroAndOne <= accptanceProbability
+                || !optStep.getBest().isPresent()) {
 
             // We inform the kernels that we've accepted new marks
-            kernelUpdater.kernelAccepted(optStep.getKernel().getKernel(), current, proposal, context);
+            kernelUpdater.kernelAccepted(
+                    optStep.getKernel().getKernel(), current, proposal, context);
 
             optStep.acceptProposal(accptProbCalculator.getFuncScore());
 

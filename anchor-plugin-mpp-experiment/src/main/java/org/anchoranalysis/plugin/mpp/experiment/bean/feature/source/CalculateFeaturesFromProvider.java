@@ -47,8 +47,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final InitParamsWithEnergyStack initParams;
 
     public void processProvider(
-            ObjectCollectionProvider provider,
-            Function<T, RowLabels> identifierFromInput)
+            ObjectCollectionProvider provider, Function<T, RowLabels> identifierFromInput)
             throws OperationFailedException {
         calculator.calculateFeaturesForObjects(
                 objectsFromProvider(provider, initParams.getImageInit(), calculator.getLogger()),

@@ -69,7 +69,7 @@ public class AnchorMetadataXmlTest {
         Document docGroundTruth = loader.openXmlFromTestPath(pathSerializedMock01);
         assertTrue(TestLoader.areXmlEqual(docFromFileSystem, docGroundTruth));
     }
-    
+
     private static Resolution createMockResolution() {
         return new Resolution(1.0, 2.0, 3.0);
     }

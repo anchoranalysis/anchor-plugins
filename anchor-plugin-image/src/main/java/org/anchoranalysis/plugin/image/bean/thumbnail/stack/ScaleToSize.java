@@ -67,12 +67,14 @@ public class ScaleToSize extends ThumbnailFromStack {
 
         try {
             Stack resized =
-                    stack.extractUpToThreeChannels().mapChannel(
-                            channel ->
-                                    channel.projectMax().resizeXY(
-                                            size.getWidth(),
-                                            size.getHeight(),
-                                            interpolatorCreated));
+                    stack.extractUpToThreeChannels()
+                            .mapChannel(
+                                    channel ->
+                                            channel.projectMax()
+                                                    .resizeXY(
+                                                            size.getWidth(),
+                                                            size.getHeight(),
+                                                            interpolatorCreated));
 
             return DisplayStack.create(resized);
 

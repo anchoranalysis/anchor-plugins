@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.opencv.convert;
 
 import com.google.common.base.Preconditions;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -45,9 +45,8 @@ import org.opencv.core.Mat;
 
 /**
  * Converts common image data-structures used by Anchor to the {@link Mat} class used by OpenCV.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConvertToMat {
@@ -87,7 +86,7 @@ public class ConvertToMat {
         }
         return fromRGB(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
     }
-        
+
     public static Mat createEmptyMat(Extent extent, int type) {
         return new Mat(extent.y(), extent.x(), type);
     }
@@ -96,21 +95,24 @@ public class ConvertToMat {
         if (channel.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return fromSingleChannelByte(channel.voxels().asByte());
         } else if (channel.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
-                return fromSingleChannelShort(channel.voxels().asShort());            
+            return fromSingleChannelShort(channel.voxels().asShort());
         } else {
             throw new CreateException("Only unsigned 8-bit or 16-bit channels are supported");
         }
     }
-    
+
     private static Mat fromSingleChannelByte(Voxels<UnsignedByteBuffer> voxels) {
-        return fromSingleChannel(voxels, CvType.CV_8UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
+        return fromSingleChannel(
+                voxels, CvType.CV_8UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
     }
-        
+
     private static Mat fromSingleChannelShort(Voxels<UnsignedShortBuffer> voxels) {
-        return fromSingleChannel(voxels, CvType.CV_16UC1, (mat,buffer) -> mat.put(0, 0, buffer.array()));
+        return fromSingleChannel(
+                voxels, CvType.CV_16UC1, (mat, buffer) -> mat.put(0, 0, buffer.array()));
     }
-    
-    private static <T> Mat fromSingleChannel(Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
+
+    private static <T> Mat fromSingleChannel(
+            Voxels<T> voxels, int matType, BiConsumer<Mat, T> populateMat) {
         Preconditions.checkArgument(voxels.extent().z() == 1);
 
         Mat mat = createEmptyMat(voxels.extent(), matType);

@@ -180,8 +180,7 @@ public class FeatureListImageTest {
     }
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
-        return new FeatureInputHistogram(
-                histogram, Optional.of(ENERGY_STACK.resolution()));
+        return new FeatureInputHistogram(histogram, Optional.of(ENERGY_STACK.resolution()));
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

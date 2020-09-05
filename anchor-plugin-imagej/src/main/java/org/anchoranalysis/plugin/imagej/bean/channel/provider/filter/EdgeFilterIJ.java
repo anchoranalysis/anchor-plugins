@@ -38,7 +38,8 @@ public class EdgeFilterIJ extends ChannelProviderUnary {
     public Channel createFromChannel(Channel channel) throws CreateException {
 
         Channel out = channel.duplicate();
-        FilterHelper.processEachSlice(out, processor -> processor.filter(ImageProcessor.FIND_EDGES) );
+        FilterHelper.processEachSlice(
+                out, processor -> processor.filter(ImageProcessor.FIND_EDGES));
         return out;
     }
 }

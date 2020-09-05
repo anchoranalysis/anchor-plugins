@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,40 +34,40 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 
 /**
  * Loads images used in OpenCV tests and initializes openCV if needed.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class ImageLoader {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
-    
+
     private static final String PATH_CAR = "car.jpg";
-    
+
     private static final String PATH_CAR_GRAYSCALE_8_BIT = "carGrayscale8bit.jpg";
-    
+
     private static final String PATH_CAR_GRAYSCALE_16_BIT = "carGrayscale16bit.tif";
-    
-    private TestLoaderImageIO loader = new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+
+    private TestLoaderImageIO loader =
+            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     public Stack carRGB() {
         return loader.openStackFromTestPath(PATH_CAR);
     }
-    
+
     public Stack carGrayscale8Bit() {
         return loader.openStackFromTestPath(PATH_CAR_GRAYSCALE_8_BIT);
     }
-    
+
     public Stack carGrayscale16Bit() {
         return loader.openStackFromTestPath(PATH_CAR_GRAYSCALE_16_BIT);
     }
-    
+
     public EnergyStackWithoutParams carRGBAsEnergy() {
         return new EnergyStackWithoutParams(carRGB());
     }
-    
+
     public Path modelDirectory() {
         return loader.getLoader().getRoot();
     }

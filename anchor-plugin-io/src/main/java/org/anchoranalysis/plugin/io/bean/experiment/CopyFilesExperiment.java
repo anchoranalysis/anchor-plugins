@@ -90,7 +90,7 @@ public class CopyFilesExperiment extends Experiment {
 
         // Determine a destination for the output, and create a corresponding logger
         Path destination = determineDestination(arguments.isDebugModeEnabled());
-        
+
         StatefulMessageLogger logger;
         try {
             logger = createLoggerFor(destination, arguments);
@@ -124,7 +124,9 @@ public class CopyFilesExperiment extends Experiment {
     private StatefulMessageLogger createLoggerFor(
             Path destination, ExperimentExecutionArguments arguments) throws BindFailedException {
         return log.createWithConsoleFallback(
-                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting), arguments, false);
+                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting),
+                arguments,
+                false);
     }
 
     @Override

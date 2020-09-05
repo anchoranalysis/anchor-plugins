@@ -113,7 +113,8 @@ class SimulatedAnnealingHelper {
                         optStep.reporting(iter, assignMode.stateReporter(), context),
                         feedbackGenerator);
             } catch (OperationFailedException | ReporterException e) {
-                throw new OptimizationTerminatedEarlyException("Cannot create reporting for optStep", e);
+                throw new OptimizationTerminatedEarlyException(
+                        "Cannot create reporting for optStep", e);
             }
         } while (continueIterations(
                 optStep.getBest(),
@@ -185,7 +186,8 @@ class SimulatedAnnealingHelper {
                     optStep, iter, kid, context, accptProbCalc, kernelUpdater, kernelAssigner);
 
         } catch (KernelCalculateEnergyException e) {
-            throw new OptimizationTerminatedEarlyException("A kernel-calculation error occurred", e);
+            throw new OptimizationTerminatedEarlyException(
+                    "A kernel-calculation error occurred", e);
         } catch (UpdateMarkSetException e) {
             throw new OptimizationTerminatedEarlyException("An update-mask-set error occurred", e);
         }

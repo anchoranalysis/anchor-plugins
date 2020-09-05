@@ -54,7 +54,9 @@ public abstract class StatisticalScoreBase<T extends FeatureInput> extends Featu
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
         return deriveScore(
-                input.calculate(getItem()), input.calculate(itemMean), () -> input.calculate(itemStdDev));
+                input.calculate(getItem()),
+                input.calculate(itemMean),
+                () -> input.calculate(itemStdDev));
     }
 
     /**

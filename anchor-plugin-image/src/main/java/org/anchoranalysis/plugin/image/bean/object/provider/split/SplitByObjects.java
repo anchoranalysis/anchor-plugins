@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,11 +36,12 @@ import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
 import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
