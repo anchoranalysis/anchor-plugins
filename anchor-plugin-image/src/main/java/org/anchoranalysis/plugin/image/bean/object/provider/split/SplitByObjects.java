@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -82,7 +82,7 @@ public class SplitByObjects extends WithDimensionsBase {
         // Then we find connected components
 
         // An Integer buffer with 0 by default and the same bounds as the object to be split
-        BoundedVoxels<IntBuffer> voxelsWithIdentifiers =
+        BoundedVoxels<UnsignedIntBuffer> voxelsWithIdentifiers =
                 BoundedVoxelsFactory.createInt(objectToSplit.boundingBox());
 
         // Populate boundedVbId with id values
@@ -106,15 +106,15 @@ public class SplitByObjects extends WithDimensionsBase {
      * <p>The code will not change pixels that don't match ON
      */
     private ObjectCollection floodFillEachIdentifier(
-            int count, BoundedVoxels<IntBuffer> voxelsWithIdentifiers) {
+            int count, BoundedVoxels<UnsignedIntBuffer> voxelsWithIdentifiers) {
         return ObjectCollectionFactory.flatMapFromRange(
                 1, count, index -> createObjectForIndex(index, voxelsWithIdentifiers));
     }
 
     /** Creates objects from all connected-components in a buffer with particular voxel values */
     private static ObjectCollection createObjectForIndex(
-            int voxelEqualTo, BoundedVoxels<IntBuffer> voxels) {
-        BinaryVoxels<IntBuffer> binaryVoxels =
+            int voxelEqualTo, BoundedVoxels<UnsignedIntBuffer> voxels) {
+        BinaryVoxels<UnsignedIntBuffer> binaryVoxels =
                 BinaryVoxelsFactory.reuseInt(voxels.voxels(), new BinaryValues(0, voxelEqualTo));
 
         // for every object we add the objToSplit Bounding Box corner, to restore it to global

@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +54,7 @@ final class BoundingBoxMap {
                 });
     }
 
-    public ObjectCollection deriveObjects(Voxels<IntBuffer> matS) throws OperationFailedException {
+    public ObjectCollection deriveObjects(Voxels<UnsignedIntBuffer> matS) throws OperationFailedException {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,

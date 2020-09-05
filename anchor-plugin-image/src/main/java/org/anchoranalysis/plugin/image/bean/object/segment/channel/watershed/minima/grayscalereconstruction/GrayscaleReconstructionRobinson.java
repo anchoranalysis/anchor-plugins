@@ -74,7 +74,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         // TODO make more efficient
         // Find maximum value of markerVb.... we can probably get this elsewhere without having to
         // iterate the image again
-        int maxValue = marker.extract().voxelWithMaxIntensity();
+        int maxValue = (int) marker.extract().voxelWithMaxIntensity();
 
         PriorityQueueIndexRangeDownhill<Point3i> queue =
                 new PriorityQueueIndexRangeDownhill<>(maxValue);
