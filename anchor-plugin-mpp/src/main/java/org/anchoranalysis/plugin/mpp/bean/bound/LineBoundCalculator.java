@@ -39,7 +39,6 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -122,13 +121,13 @@ public class LineBoundCalculator extends BoundCalculator {
         int zPrev = 0;
         arr = voxels.slices().slice(zPrev).buffer();
 
-        Point3d runningDbl = new Point3d();
+        Point3d runningDouble = new Point3d();
 
         for (int i = 1; i < maxPossiblePoint; i++) {
-            runningDbl.add(marg);
+            runningDouble.add(marg);
 
             Point3i runningInt =
-                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDbl));
+                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDouble));
 
             Dimensions dimensions = channel.dimensions();
             if (dimensions.contains(runningInt)) {
@@ -141,13 +140,12 @@ public class LineBoundCalculator extends BoundCalculator {
             }
 
             int index = dimensions.offsetSlice(runningInt);
-            int v = PrimitiveConverter.unsignedByteToInt(arr.get(index));
 
-            if (v > 0) {
+            if (arr.getUnsignedByte(index) > 0) {
                 // We calculate how far we have travelled in total
                 return extra
                         + normZMag(
-                                runningDbl,
+                                runningDouble,
                                 channel.resolution().zRelative());
             }
         }

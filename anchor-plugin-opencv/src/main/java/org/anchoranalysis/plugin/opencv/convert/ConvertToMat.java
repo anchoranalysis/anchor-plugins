@@ -133,7 +133,7 @@ public class ConvertToMat {
             for (int x = 0; x < extent.x(); x++) {
 
                 // Note BGR format in OpenCV
-                byte[] colArr = new byte[] {blue.getByte(), green.getByte(), red.getByte()};
+                byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
                 mat.put(y, x, colArr);
             }
         }

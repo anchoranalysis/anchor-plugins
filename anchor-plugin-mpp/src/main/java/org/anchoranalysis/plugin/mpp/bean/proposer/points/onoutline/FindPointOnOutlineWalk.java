@@ -156,7 +156,7 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
         }
 
         UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
-        return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
+        return buffer.getRaw(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {

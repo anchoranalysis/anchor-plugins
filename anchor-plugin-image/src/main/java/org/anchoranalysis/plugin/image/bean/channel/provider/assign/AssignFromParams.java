@@ -74,7 +74,7 @@ public class AssignFromParams extends ChannelProviderUnary {
 
             int offset = 0;
             while (offset < volumeXY) {
-                buffer.put(offset++, valueByte);
+                buffer.putRaw(offset++, valueByte);
             }
         }
 

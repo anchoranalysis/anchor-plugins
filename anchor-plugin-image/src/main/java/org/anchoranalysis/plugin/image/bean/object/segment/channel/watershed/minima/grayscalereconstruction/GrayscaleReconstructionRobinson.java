@@ -145,18 +145,18 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
         Extent e = voxels.extent();
         for (int z = 0; z < e.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.slice(z);
-            UnsignedByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            VoxelBuffer<?> buffer = voxels.slice(z);
+            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < e.y(); y++) {
                 for (int x = 0; x < e.x(); x++) {
 
                     {
-                        int val = bb.getInt(offset);
+                        int val = buffer.getInt(offset);
                         if (val != 0) {
                             queue.put(new Point3i(x, y, z), val);
-                            bbFinalized.put(offset, maskOn);
+                            bufferFinalized.putRaw(offset, maskOn);
                         }
                     }
 
@@ -172,30 +172,30 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             Voxels<UnsignedByteBuffer> voxelsFinalized,
             ObjectMask containingMask) {
 
-        ReadableTuple3i crnrpointMin = containingMask.boundingBox().cornerMin();
-        ReadableTuple3i crnrpointMax = containingMask.boundingBox().calculateCornerMax();
+        ReadableTuple3i cornerMin = containingMask.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = containingMask.boundingBox().calculateCornerMax();
 
         byte maskOn = containingMask.binaryValuesByte().getOnByte();
 
         Extent e = voxels.extent();
-        for (int z = crnrpointMin.z(); z <= crnrpointMax.z(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.slice(z);
-            UnsignedByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
-            UnsignedByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
+            VoxelBuffer<?> buffer = voxels.slice(z);
+            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
+            UnsignedByteBuffer bufferMask = containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
-            for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {
-                for (int x = crnrpointMin.x(); x <= crnrpointMax.x(); x++) {
-                    if (bbMask.get(offset) == maskOn) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
+                    if (bufferMask.getRaw(offset) == maskOn) {
 
                         int offsetGlobal = e.offset(x, y);
 
                         {
-                            int val = bb.getInt(offsetGlobal);
+                            int val = buffer.getInt(offsetGlobal);
                             if (val != 0) {
                                 queue.put(new Point3i(x, y, z), val);
-                                bbFinalized.put(offsetGlobal, maskOn);
+                                bufferFinalized.putRaw(offsetGlobal, maskOn);
                             }
                         }
                     }

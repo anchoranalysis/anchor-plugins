@@ -69,12 +69,12 @@ public class Invert extends BinarySegmentationOne {
             UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
             for (int index = 0; index < volumeXY; index++) {
 
-                byte val = buffer.getByte(index);
+                byte val = buffer.getRaw(index);
 
                 if (val == bv.getOnByte()) {
-                    buffer.put(index, bv.getOffByte());
+                    buffer.putRaw(index, bv.getOffByte());
                 } else if (val == bv.getOffByte()) {
-                    buffer.put(index, bv.getOnByte());
+                    buffer.putRaw(index, bv.getOnByte());
                 } else {
                     assert false;
                 }

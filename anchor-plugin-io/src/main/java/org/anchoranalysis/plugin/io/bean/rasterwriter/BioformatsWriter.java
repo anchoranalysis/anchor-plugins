@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
@@ -68,8 +67,8 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
         Channel channelGreen = stack.getChannel(1);
         Channel channelBlue = stack.getChannel(2);
 
-        int cap = channelRed.voxels().any().extent().volumeXY();
-        int cap3 = cap * 3;
+        int capacity = channelRed.voxels().any().extent().volumeXY();
+        int capacityTimesThree = capacity * 3;
 
         for (int z = 0; z < stack.dimensions().z(); z++) {
 
@@ -77,7 +76,7 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
             UnsignedByteBuffer green = channelGreen.voxels().asByte().sliceBuffer(z);
             UnsignedByteBuffer blue = channelBlue.voxels().asByte().sliceBuffer(z);
 
-            UnsignedByteBuffer merged = new UnsignedByteBuffer( ByteBuffer.allocate(cap3) );
+            UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacityTimesThree);
             merged.put(red);
             merged.put(green);
             merged.put(blue);

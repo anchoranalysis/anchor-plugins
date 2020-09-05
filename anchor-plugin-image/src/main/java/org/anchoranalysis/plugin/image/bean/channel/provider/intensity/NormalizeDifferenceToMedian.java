@@ -34,7 +34,6 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -90,12 +89,12 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 channelLookup.voxels().asByte(),
                 object,
                 (point, buffer, bufferLookup, offset) -> {
-                    int lookupVal = PrimitiveConverter.unsignedByteToInt(bufferLookup.get(offset));
+                    int lookupVal = bufferLookup.getUnsignedByte(offset);
 
-                    int valueExisting = PrimitiveConverter.unsignedByteToInt(buffer.get(offset));
+                    int valueExisting = buffer.getUnsignedByte(offset);
                     int valueToAssign = clipValue(valueExisting - medianFromObject + lookupVal);
 
-                    buffer.put(offset, (byte) valueToAssign);
+                    buffer.putUnsignedByte(offset, valueToAssign);
                 });
     }
 

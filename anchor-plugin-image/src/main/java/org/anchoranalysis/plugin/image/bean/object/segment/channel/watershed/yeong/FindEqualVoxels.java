@@ -177,9 +177,9 @@ final class FindEqualVoxels {
             Point3i point = stack.pop();
 
             // If we've already visited this point, we skip it
-            EncodedIntBuffer bbVisited = matS.getPixelsForPlane(point.z());
+            EncodedIntBuffer bufferVisited = matS.getPixelsForPlane(point.z());
             int offset = slidingBuffer.extent().offsetSlice(point);
-            if (bbVisited.isTemporary(offset)) {
+            if (bufferVisited.isTemporary(offset)) {
                 continue;
             }
 
@@ -189,7 +189,7 @@ final class FindEqualVoxels {
                     IterateVoxels.callEachPointInNeighborhood(
                             point, neighborhood, do3D, process, valToFind, offset);
 
-            bbVisited.markAsTemporary(offset);
+            bufferVisited.markAsTemporary(offset);
 
             if (lowestNeighborIndex.isPresent()) {
                 plateau.addEdge(point, lowestNeighborIndex.get());

@@ -72,11 +72,11 @@ public class ExtractSliceRange extends ChannelProviderUnary {
         for (int z = sliceStart; z <= sliceEnd; z++) {
 
             // TODO change to use the replaceSlice method?
-            UnsignedByteBuffer bbIn = voxels.sliceBuffer(z);
-            UnsignedByteBuffer bbOut = voxelsOut.sliceBuffer(z - sliceStart);
+            UnsignedByteBuffer bufferIn = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsOut.sliceBuffer(z - sliceStart);
 
             for (int i = 0; i < volumeXY; i++) {
-                bbOut.put(i, bbIn.get(i));
+                bufferOut.putRaw(i, bufferIn.getRaw(i));
             }
         }
 

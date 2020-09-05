@@ -60,7 +60,7 @@ public class MaximumNumberContourVoxelsOnSlice extends FeatureSingleObject {
     private static int countForByteBuffer(UnsignedByteBuffer buffer, byte equalVal) {
         int cnt = 0;
         while (buffer.hasRemaining()) {
-            if (buffer.getByte() == equalVal) {
+            if (buffer.getRaw() == equalVal) {
                 cnt++;
             }
         }

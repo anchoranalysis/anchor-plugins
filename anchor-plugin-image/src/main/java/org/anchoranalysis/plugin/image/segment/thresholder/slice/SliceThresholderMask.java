@@ -81,7 +81,7 @@ public class SliceThresholderMask extends SliceThresholder {
 
                 int offset = extent.offset(x, y);
 
-                if (voxelsMask.buffer().get(offsetMask++) == bvbMask.getOffByte()) {
+                if (voxelsMask.buffer().getRaw(offsetMask++) == bvbMask.getOffByte()) {
 
                     if (clearOutsideMask) {
                         writeOffByte(offset, out);

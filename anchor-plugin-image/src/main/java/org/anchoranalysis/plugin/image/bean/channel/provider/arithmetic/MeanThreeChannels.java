@@ -75,9 +75,9 @@ public class MeanThreeChannels extends ChannelProviderTernary {
 
             while (in1.hasRemaining()) {
 
-                int mean = (in1.getInt() + in2.getInt() + in3.getInt()) / 3;
+                int mean = (in1.getUnsignedByte() + in2.getUnsignedByte() + in3.getUnsignedByte()) / 3;
 
-                out.put((byte) mean);
+                out.putUnsignedByte(mean);
             }
 
             assert (!in2.hasRemaining());
