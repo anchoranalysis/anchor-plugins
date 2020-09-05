@@ -37,7 +37,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 

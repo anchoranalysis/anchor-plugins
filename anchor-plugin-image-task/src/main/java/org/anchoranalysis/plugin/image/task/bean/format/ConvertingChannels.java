@@ -30,8 +30,8 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 
 @AllArgsConstructor

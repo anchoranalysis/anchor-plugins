@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
