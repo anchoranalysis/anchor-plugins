@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
 
 /**
  * Converts a channel by applying a converter (no histogram is involved in the conversion).

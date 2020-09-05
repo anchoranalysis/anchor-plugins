@@ -30,8 +30,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
-import org.anchoranalysis.image.channel.converter.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.channel.converter.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
+import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.channel.convert.attached.histogram.UpperLowerQuantileIntensityFromHistogram;
 import org.anchoranalysis.image.histogram.Histogram;
 
 public class ToByteUpperLowerQuantileIntensity extends ConvertChannelToWithHistogram {

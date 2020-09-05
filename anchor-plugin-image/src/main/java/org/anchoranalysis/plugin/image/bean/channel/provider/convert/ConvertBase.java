@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 
 public abstract class ConvertBase extends ChannelProviderUnary {
 

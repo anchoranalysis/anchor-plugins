@@ -35,7 +35,7 @@ import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.pixelsforslice.PixelsForSlice;
+import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -78,7 +78,7 @@ public class FilterHelper {
      */
     public static void processEachSlice(
             BinaryVoxels<UnsignedByteBuffer> voxels, Consumer<ImageProcessor> consumer) {
-        PixelsForSlice<UnsignedByteBuffer> slices = voxels.slices();
+        SliceBufferIndex<UnsignedByteBuffer> slices = voxels.slices();
         voxels.extent()
                 .iterateOverZ(
                         z -> {
