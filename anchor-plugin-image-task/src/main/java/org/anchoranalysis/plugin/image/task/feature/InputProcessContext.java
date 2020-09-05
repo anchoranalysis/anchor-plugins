@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.io.csv.writer.RowLabels;
+import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 

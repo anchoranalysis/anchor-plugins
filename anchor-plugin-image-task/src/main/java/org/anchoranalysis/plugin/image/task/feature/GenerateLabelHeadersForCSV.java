@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import org.anchoranalysis.feature.io.csv.results.LabelHeaders;
+import org.anchoranalysis.feature.io.results.LabelHeaders;
 import lombok.RequiredArgsConstructor;
 
 /**
