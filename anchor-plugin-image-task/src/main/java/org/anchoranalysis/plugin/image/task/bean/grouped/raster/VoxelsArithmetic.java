@@ -26,14 +26,12 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
-import java.nio.Buffer;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -44,7 +42,7 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 class VoxelsArithmetic {
 
     public static void divide(
-            Voxels<IntBuffer> voxels, int cnt, VoxelsWrapper out, VoxelDataType outputType)
+            Voxels<UnsignedIntBuffer> voxels, int cnt, VoxelsWrapper out, VoxelDataType outputType)
             throws OperationFailedException {
 
         if (outputType.equals(UnsignedShortVoxelType.INSTANCE)) {
@@ -58,7 +56,7 @@ class VoxelsArithmetic {
         }
     }
 
-    public static void add(Voxels<IntBuffer> voxels, VoxelsWrapper toAdd, VoxelDataType toAddType)
+    public static void add(Voxels<UnsignedIntBuffer> voxels, VoxelsWrapper toAdd, VoxelDataType toAddType)
             throws OperationFailedException {
 
         if (toAddType.equals(UnsignedShortVoxelType.INSTANCE)) {
@@ -78,15 +76,15 @@ class VoxelsArithmetic {
      * @param voxelsOut
      */
     private static void divideValueShort(
-            Voxels<IntBuffer> voxelsIn, int div, Voxels<UnsignedShortBuffer> voxelsOut) {
+            Voxels<UnsignedIntBuffer> voxelsIn, int div, Voxels<UnsignedShortBuffer> voxelsOut) {
 
         voxelsIn.extent().iterateOverZ( z-> {
 
-            IntBuffer in = voxelsIn.sliceBuffer(z);
+            UnsignedIntBuffer in = voxelsIn.sliceBuffer(z);
             UnsignedShortBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
-                out.putUnsigned(in.get() / div);
+                out.putLong(in.getUnsigned() / div);
             }
 
             assert (!in.hasRemaining());
@@ -102,15 +100,15 @@ class VoxelsArithmetic {
      * @param voxelsOut
      */
     private static void divideValueByte(
-            Voxels<IntBuffer> voxelsIn, int div, Voxels<UnsignedByteBuffer> voxelsOut) {
+            Voxels<UnsignedIntBuffer> voxelsIn, int div, Voxels<UnsignedByteBuffer> voxelsOut) {
 
         for (int z = 0; z < voxelsIn.extent().z(); z++) {
 
-            IntBuffer in = voxelsIn.sliceBuffer(z);
+            UnsignedIntBuffer in = voxelsIn.sliceBuffer(z);
             UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in.hasRemaining()) {
-                out.putUnsigned(in.get() / div);
+                out.putLong(in.getUnsigned() / div);
             }
 
             assert (!in.hasRemaining());
@@ -124,17 +122,17 @@ class VoxelsArithmetic {
                 String.format("Unsupported data type: %s", voxelDataType));
     }
 
-    private static void addShort(Voxels<IntBuffer> voxels, Voxels<UnsignedShortBuffer> toAdd) {
+    private static void addShort(Voxels<UnsignedIntBuffer> voxels, Voxels<UnsignedShortBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
-            IntBuffer in1 = voxels.sliceBuffer(z);
+            UnsignedIntBuffer in1 = voxels.sliceBuffer(z);
             UnsignedShortBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-                int sum = in1.get() + in2.getUnsigned();
+                long sum = in1.getUnsigned() + in2.getUnsigned();
                 oneStepBackward(in1);
-                in1.put(sum);
+                in1.putUnsigned(sum);
             }
 
             assert (!in1.hasRemaining());
@@ -142,21 +140,17 @@ class VoxelsArithmetic {
         }
     }
 
-    private static void addByte(Voxels<IntBuffer> voxels, Voxels<UnsignedByteBuffer> toAdd) {
+    private static void addByte(Voxels<UnsignedIntBuffer> voxels, Voxels<UnsignedByteBuffer> toAdd) {
 
         for (int z = 0; z < toAdd.extent().z(); z++) {
 
-            IntBuffer in1 = voxels.sliceBuffer(z);
+            UnsignedIntBuffer in1 = voxels.sliceBuffer(z);
             UnsignedByteBuffer in2 = toAdd.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
-
-                int b1 = in1.get();
-                byte b2 = in2.getRaw();
-
-                int sum = b1 + PrimitiveConverter.unsignedByteToInt(b2);
+                long sum = in1.getUnsigned() + in2.getUnsigned();
                 oneStepBackward(in1);
-                in1.put(sum);
+                in1.putUnsigned(sum);
             }
 
             assert (!in1.hasRemaining());
@@ -164,7 +158,7 @@ class VoxelsArithmetic {
         }
     }
 
-    private static void oneStepBackward(Buffer buffer) {
+    private static void oneStepBackward(UnsignedIntBuffer buffer) {
         buffer.position(buffer.position() - 1);
     }
 }

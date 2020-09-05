@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
-import java.nio.IntBuffer;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,12 +44,11 @@ public final class EncodedVoxels {
 
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
 
-    @Getter private final Voxels<IntBuffer> voxels;
+    @Getter private final Voxels<UnsignedIntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
         int offset = voxels.extent().offset(point.x(), point.y());
-        IntBuffer bufferS = voxels.sliceBuffer(point.z());
-        bufferS.put(offset, code);
+        voxels.sliceBuffer(point.z()).putRaw(offset, code);
     }
 
     public void setPointConnectedComponentID(Point3i point, int connectedComponentID) {
@@ -141,7 +140,7 @@ public final class EncodedVoxels {
     // Returns the CODED final index (global)
     public int calculateConnectedComponentID(Point3i point, int firstChainCode) {
 
-        Extent e = voxels.extent();
+        Extent extent = voxels.extent();
 
         int crntChainCode = firstChainCode;
 
@@ -149,10 +148,10 @@ public final class EncodedVoxels {
             // Get local index from global index
             point = addDirectionFromChainCode(point, crntChainCode);
 
-            assert (e.contains(point)); // NOSONAR
+            assert (extent.contains(point)); // NOSONAR
 
             // Replace with intelligence slices buffer?
-            int nextVal = voxels.sliceBuffer(point.z()).get(e.offsetSlice(point));
+            int nextVal = voxels.sliceBuffer(point.z()).getRaw(extent.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);
@@ -162,7 +161,7 @@ public final class EncodedVoxels {
             }
 
             if (nextVal == WatershedEncoding.CODE_MINIMA) {
-                return ENCODING.encodeConnectedComponentID(e.offset(point));
+                return ENCODING.encodeConnectedComponentID(extent.offset(point));
             }
 
             crntChainCode = nextVal;
