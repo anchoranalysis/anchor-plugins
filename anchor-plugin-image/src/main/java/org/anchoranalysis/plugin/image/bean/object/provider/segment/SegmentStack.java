@@ -54,7 +54,7 @@ public class SegmentStack<T> extends ObjectCollectionProvider {
     @Override
     public ObjectCollection create() throws CreateException {
         try {
-            return segment.segment(stack.createAsStack());
+            return segment.segment(stack.createAsStack()).asObjects();
         } catch (SegmentationFailedException e) {
             throw new CreateException(e);
         }

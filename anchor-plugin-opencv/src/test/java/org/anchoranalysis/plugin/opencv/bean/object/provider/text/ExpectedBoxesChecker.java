@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.opencv.nonmaxima.IntersectionOverUnion;
 class ExpectedBoxesChecker {
 
     /** Minimum intersection-over-union score required to be considered identical to a box. */
-    private static final double THRESHOLD_SCORE = 0.9;
+    private static final double THRESHOLD_SCORE = 0.80;
 
     public static void assertExpectedBoxes(
             ObjectCollection objects, List<BoundingBox> expectedBoxes) {

@@ -27,12 +27,14 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.BoundedList;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 
@@ -47,8 +49,8 @@ import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AddPaddingToGenerator {
 
-    public static IterableGenerator<ObjectsWithBoundingBox> addPadding(
-            IterableGenerator<ObjectsWithBoundingBox> generator,
+    public static IterableGenerator<BoundedList<ObjectMask>> addPadding(
+            IterableGenerator<BoundedList<ObjectMask>> generator,
             Dimensions dimensions,
             Padding padding,
             boolean keepEntireImage) {
@@ -57,18 +59,19 @@ class AddPaddingToGenerator {
                 generator,
                 objects -> {
                     if (keepEntireImage) {
-                        return objects.mapObjectsToUseEntireImage(dimensions);
+                        return mapObjectsToUseEntireImage(objects, dimensions);
                     } else {
                         return maybePadObjects(objects, dimensions, padding);
                     }
                 });
     }
 
-    private static ObjectsWithBoundingBox maybePadObjects(
-            ObjectsWithBoundingBox objects, Dimensions dimensions, Padding padding)
+    private static BoundedList<ObjectMask> maybePadObjects(
+            BoundedList<ObjectMask> objects, Dimensions dimensions, Padding padding)
             throws OperationFailedException {
         if (objects.size() == 1) {
-            return new ObjectsWithBoundingBox(maybePadObject(objects.get(0), dimensions, padding));
+            return new BoundedList<>(
+                    maybePadObject(objects.get(0), dimensions, padding), ObjectMask::boundingBox);
         } else {
             throw new OperationFailedException("Padding is only supported for single-objects");
         }
@@ -88,9 +91,33 @@ class AddPaddingToGenerator {
             return object;
         }
 
-        BoundingBox boxToExtract =
-                object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
+        BoundingBox boxToExtract = object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
 
         return object.mapBoundingBoxChangeExtent(boxToExtract);
+    }
+    
+
+    /**
+     * Maps the containing-box to the entire image-dimensions, and changes each object-mask to
+     * belong to the entire dimensions
+     *
+     * @param dimensions the scene dimensions
+     * @return newly-created with new objects and a new bounding-box
+     * @throws OperationFailedException if the image-dimensions don't contain the existing
+     *     bounding-box
+     */
+    public static BoundedList<ObjectMask> mapObjectsToUseEntireImage(BoundedList<ObjectMask> collection, Dimensions dimensions)
+            throws OperationFailedException {
+        if (!dimensions.contains(collection.boundingBox())) {
+            throw new OperationFailedException(
+                    String.format(
+                            "The dimensions-box to be assigned (%s) must contain the existing bounding-box (%s), but it does not",
+                            dimensions, collection.boundingBox()));
+        }
+        BoundingBox boxToAssign = new BoundingBox(dimensions);
+        List<ObjectMask> mappedList = FunctionalList.mapToList( collection.stream(), object->
+                    object.mapBoundingBoxChangeExtent(boxToAssign)
+                ); 
+        return new BoundedList<>(mappedList, boxToAssign, ObjectMask::boundingBox);
     }
 }

@@ -148,10 +148,9 @@ class FlattenAndScaler {
      *     found that has the same bounding-box and number of pixels)
      * @return the objects that intersect with the bounding-box except any in {@code
      *     excludeFromAdding}
-     * @throws OperationFailedException
      */
     public ObjectCollection objectsThatIntersectWith(
-            BoundingBox box, ObjectCollection excludeFromAdding) throws OperationFailedException {
+            BoundingBox box, ObjectCollection excludeFromAdding) {
 
         ObjectCollection intersectingObjects = objectsIndexed.intersectsWith(box);
 

@@ -32,6 +32,7 @@ import java.util.Set;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 
 public class NonMaximaSuppressionObjects extends NonMaximaSuppression<ObjectMask> {
 

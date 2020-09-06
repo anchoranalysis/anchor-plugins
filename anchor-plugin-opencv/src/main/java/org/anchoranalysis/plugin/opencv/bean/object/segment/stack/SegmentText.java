@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple2;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -41,14 +41,12 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
-import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
@@ -90,7 +88,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     // END BEAN PROPERTIES
 
     @Override
-    public ObjectCollection segment(Stack stack, ConcurrentModelPool<Net> modelPool)
+    public SegmentedObjects segment(Stack stack, ConcurrentModelPool<Net> modelPool)
             throws SegmentationFailedException {
 
         stack = checkAndCorrectInput(stack);
@@ -101,13 +99,12 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
                     CreateScaledInput.apply(stack, findLargestExtent(stack.extent()));
 
             // Convert marks to object-masks
-            List<WithConfidence<ObjectMask>> objectsWithConfidence =
+            SegmentedObjects objects =
                     EastObjectsExtracter.apply(
                             modelPool, pair._1(), stack.resolution(), minConfidence);
 
             // Scale each object-mask and extract as an object-collection
-            return ScaleExtractObjects.apply(
-                    maybeFilterList(objectsWithConfidence), pair._2(), stack.extent());
+            return maybeFilterObjects(objects).scale(pair._2(), Optional.of(stack.extent()) );
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
@@ -162,13 +159,12 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         return stack;
     }
 
-    private List<WithConfidence<ObjectMask>> maybeFilterList(
-            List<WithConfidence<ObjectMask>> list) {
+    private SegmentedObjects maybeFilterObjects(SegmentedObjects objects) {
         if (suppressNonMaxima) {
-            return new NonMaximaSuppressionObjects()
-                    .apply(list, suppressIntersectionOverUnionAbove);
+            return new SegmentedObjects( new NonMaximaSuppressionObjects()
+                    .apply(objects.asList(), suppressIntersectionOverUnionAbove) );
         } else {
-            return list;
+            return objects;
         }
     }
 

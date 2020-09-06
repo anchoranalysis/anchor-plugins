@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.opencv.nonmaxima;
 import com.google.common.base.Predicate;
 import java.util.Collection;
 import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 
 /**
  * Non-maxima suppression for axis-aligned bounding-boxes using an Intersection over Union score.

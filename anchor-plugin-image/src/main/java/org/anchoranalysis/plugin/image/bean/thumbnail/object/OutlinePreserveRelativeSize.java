@@ -43,7 +43,9 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.BoundedList;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
@@ -136,8 +138,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         public DisplayStack thumbnailFor(ObjectCollection element) throws CreateException {
             // For now only work with the first object in the collection
             try {
-                ObjectsWithBoundingBox objectsScaled =
-                        new ObjectsWithBoundingBox(scaler.scaleObjects(element));
+                BoundedList<ObjectMask> objectsScaled =
+                        new BoundedList<>(scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
 
                 assert (!objectsScaled
                         .boundingBox()
@@ -162,10 +164,10 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             }
         }
 
-        private ObjectsWithBoundingBox determineObjectsForGenerator(
-                ObjectsWithBoundingBox objectsScaled, BoundingBox centeredBox)
+        private BoundedList<ObjectMask> determineObjectsForGenerator(
+                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox)
                 throws OperationFailedException {
-            ObjectsWithBoundingBox objectsMapped =
+            BoundedList<ObjectMask> objectsMapped =
                     objectsScaled.mapBoundingBoxToBigger(centeredBox);
 
             // Add any other objects which intersect with the scaled-bounding box, excluding
@@ -173,7 +175,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             if (colorUnselectedObjects != null) {
                 return objectsMapped.addObjectsNoBoundingBoxChange(
                         scaler.objectsThatIntersectWith(
-                                objectsMapped.boundingBox(), objectsScaled.objects()));
+                                objectsMapped.boundingBox(),
+                                ObjectCollectionFactory.of(objectsScaled.list())).asList());
             } else {
                 return objectsMapped;
             }
