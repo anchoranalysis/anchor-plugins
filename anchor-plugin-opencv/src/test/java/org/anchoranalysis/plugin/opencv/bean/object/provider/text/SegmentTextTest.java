@@ -31,9 +31,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
@@ -73,8 +73,8 @@ public class SegmentTextTest {
 
     private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
-        ObjectCollection objects = segmenter.segment(stack);
-        ExpectedBoxesChecker.assertExpectedBoxes(objects, expectedBoxes);
+        SegmentedObjects segmentResults = segmenter.segment(stack);
+        ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
     }
 
     private void initSegmenter() throws InitException {

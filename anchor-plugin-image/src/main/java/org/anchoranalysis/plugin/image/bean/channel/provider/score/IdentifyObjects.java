@@ -34,7 +34,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 
 /**
- * Assigns a unique id number to each object
+ * Assigns a unique id number to each object.
  *
  * <p>The behaviour is undefined when objects overlap with each other. An ID of either object
  * arbitrarily will be assigned.

@@ -49,7 +49,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.BoundedList;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -143,15 +144,15 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private void outputGeneratorSequence(
-            IterableGenerator<ObjectsWithBoundingBox> generator,
+            IterableGenerator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
             BoundIOContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> sequence =
+        GeneratorSequenceIncrementalRerouteErrors<BoundedList<ObjectMask>> sequence =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
         sequence.start();
         objects.streamStandardJava()
-                .forEach(object -> sequence.add(new ObjectsWithBoundingBox(object)));
+                .forEach(object -> sequence.add(new BoundedList<ObjectMask>(object, ObjectMask::boundingBox)));
         sequence.end();
     }
 
@@ -209,11 +210,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks.withoutUniformSizeConstraint();
     }
 
-    private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
+    private IterableGenerator<BoundedList<ObjectMask>> createGenerator(
             Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
-        IterableGenerator<ObjectsWithBoundingBox> generator =
+        IterableGenerator<BoundedList<ObjectMask>> generator =
                 new BuildGeneratorHelper(outlineWidth)
                         .forStacks(
                                 dimensions,

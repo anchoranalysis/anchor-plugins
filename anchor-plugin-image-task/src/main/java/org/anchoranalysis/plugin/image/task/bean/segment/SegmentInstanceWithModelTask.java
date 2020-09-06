@@ -181,7 +181,7 @@ public class SegmentInstanceWithModelTask<T>
             Stack stack = inputStack(input);
 
             ObjectCollection objects =
-                    segment.segment(stack, input.getSharedState().getModelPool());
+                    segment.segment(stack, input.getSharedState().getModelPool()).asObjects();
 
             DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
 

@@ -30,7 +30,7 @@ import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -53,24 +53,26 @@ public abstract class SegmentStackIntoObjectsPooled<T>
 
     /**
      * Segments individually using a pool of size 1 just for one stack
-     *
+     * 
+     * <p>See {@link #segment(Stack, ConcurrentModelPool)} for more details.
+     * 
      * @param stack the stack to segment
-     * @return a newly created collection of objects for each segment. The created objects will
-     *     always exist inside the stack's extent.
+     * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public ObjectCollection segment(Stack stack) throws SegmentationFailedException {
+    public SegmentedObjects segment(Stack stack) throws SegmentationFailedException {
         return segment(stack, createModelPool(ConcurrencyPlan.singleProcessor(0)));
     }
 
     /**
      * Segments a stack to produce an object-collection.
      *
+     * <p>Any created objects will always exist inside the stack's {@link Extent}.
+     * 
      * @param stack the stack to segment
-     * @return a newly created collection of objects for each segment. The created objects will
-     *     always exist inside the stack's extent.
+     * @ret@return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public abstract ObjectCollection segment(Stack stack, ConcurrentModelPool<T> modelPool)
+    public abstract SegmentedObjects segment(Stack stack, ConcurrentModelPool<T> modelPool)
             throws SegmentationFailedException;
 }

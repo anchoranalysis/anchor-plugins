@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.Predicate;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 
 /**
  * Non-maxima suppression, that keeps highest-confidence bounding boxes removing overlapping boxes.

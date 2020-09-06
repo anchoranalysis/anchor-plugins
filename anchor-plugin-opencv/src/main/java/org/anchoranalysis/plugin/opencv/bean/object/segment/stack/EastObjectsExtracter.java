@@ -40,7 +40,8 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 
@@ -54,7 +55,7 @@ import org.opencv.dnn.Net;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastObjectsExtracter {
 
-    public static List<WithConfidence<ObjectMask>> apply(
+    public static SegmentedObjects apply(
             ConcurrentModelPool<Net> modelPool,
             Mat image,
             Resolution resolution,
@@ -64,7 +65,9 @@ class EastObjectsExtracter {
                 EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
         // Convert marks to object-masks
-        return convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution));
+        return new SegmentedObjects(
+            convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution))
+        );
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(

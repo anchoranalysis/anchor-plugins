@@ -27,38 +27,38 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 
 /**
- * Extracts and object-mask from the list and scales
+ * Extracts and object-mask from the list and scales.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ScaleExtractObjects {
 
-    public static ObjectCollection apply(
-            List<WithConfidence<ObjectMask>> list, ScaleFactor scaleFactor, Extent extent)
-            throws OperationFailedException {
+    public static SegmentedObjects apply(
+            SegmentedObjects segmentedObjects, ScaleFactor scaleFactor, Extent extent)
+            {
         // Scale back to the needed original resolution
-        return scaleObjects(extractObjects(list), scaleFactor, extent);
+        return scaleObjects(segmentedObjects.asList(), scaleFactor, extent);
     }
 
-    private static ObjectCollection extractObjects(List<WithConfidence<ObjectMask>> list) {
-        return ObjectCollectionFactory.mapFrom(list, WithConfidence::getObject);
+    private static SegmentedObjects scaleObjects(
+            List<WithConfidence<ObjectMask>> objects, ScaleFactor scaleFactor, Extent extent)
+    {
+        return new SegmentedObjects( FunctionalList.mapToList(objects, withConfidence -> scale(withConfidence, scaleFactor, extent) ));
     }
-
-    private static ObjectCollection scaleObjects(
-            ObjectCollection objects, ScaleFactor scaleFactor, Extent extent)
-            throws OperationFailedException {
-        return objects.scale(scaleFactor, extent).asCollectionOrderNotPreserved();
+    
+    private static WithConfidence<ObjectMask> scale(WithConfidence<ObjectMask> withConfidence, ScaleFactor scaleFactor, Extent extent) {
+        return withConfidence.map( object -> object.scale(scaleFactor, Optional.of(extent)) );
     }
 }

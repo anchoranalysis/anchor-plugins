@@ -24,8 +24,9 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
+import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,5 +47,16 @@ public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
     @Override
     public int compareTo(WithConfidence<T> other) {
         return Double.compare(other.confidence, confidence);
+    }
+    
+    /**
+     * Maps the existing object to another object, while retaining an identical confidence score.
+     * 
+     * @param <S> type to map to
+     * @param transform
+     * @return
+     */
+    public <S> WithConfidence<S> map( Function<T,S> transform ) {
+        return new WithConfidence<>( transform.apply(object), confidence );
     }
 }
