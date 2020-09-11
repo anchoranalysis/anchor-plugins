@@ -23,16 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object;
+package org.anchoranalysis.plugin.image.object;
 
-import static org.anchoranalysis.plugin.image.bean.object.CheckVolumeBeforeAfter.assertCircularArea;
-import static org.anchoranalysis.plugin.image.bean.object.CheckVolumeBeforeAfter.assertDiscreteVolume;
+import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.assertCircularArea;
+import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.assertDiscreteVolume;
 import static org.junit.Assert.assertEquals;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.CircleObjectFixture;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 /**

@@ -23,15 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object;
+package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ScaledObjectCollection;
+import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 @RequiredArgsConstructor
@@ -60,8 +60,8 @@ class ScaledObjectAreaChecker {
         assertExpectedArea(unscaled.numberVoxelsOn(), scaled.numberVoxelsOn());
     }
 
-    public void assertExpectedArea(ObjectCollection unscaled, ScaledObjectCollection scaled) {
-        assertExpectedArea(totalArea(unscaled), totalArea(scaled.asCollectionOrderNotPreserved()));
+    public void assertExpectedArea(ObjectCollection unscaled, ScaledElements<ObjectMask> scaled) {
+        assertExpectedArea(totalArea(unscaled.asList()), totalArea(scaled.asCollectionOrderNotPreserved()));
     }
 
     public void assertExpectedArea(int sizeUnscaled, int sizeScaled) {
@@ -73,7 +73,7 @@ class ScaledObjectAreaChecker {
                 sizeScaled * TOLERANCE_RATIO_SIZE);
     }
 
-    private static int totalArea(ObjectCollection objects) {
-        return objects.streamStandardJava().mapToInt(ObjectMask::numberVoxelsOn).sum();
+    private static int totalArea(Collection<ObjectMask> objects) {
+        return objects.stream().mapToInt(ObjectMask::numberVoxelsOn).sum();
     }
 }

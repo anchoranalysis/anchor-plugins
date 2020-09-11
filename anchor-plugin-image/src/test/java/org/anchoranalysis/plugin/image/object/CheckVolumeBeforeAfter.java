@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object;
+package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 

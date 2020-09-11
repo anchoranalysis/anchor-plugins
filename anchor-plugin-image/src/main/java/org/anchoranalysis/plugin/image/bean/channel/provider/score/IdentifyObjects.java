@@ -29,8 +29,9 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.LabelObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.label.LabelObjects;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 
 /**
@@ -43,12 +44,12 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBas
  */
 public class IdentifyObjects extends UnaryWithObjectsBase {
 
-    private static final LabelObjects LABELLER = new LabelObjects();
+    private static final LabelObjects<ObjectMask> LABELLER = new LabelObjects<>(object->object, (object,back) -> object.shiftBackBy(back));
 
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
             throws CreateException {
-        LABELLER.labelObjectsInChannel(channel, objects, Optional.empty());
+        LABELLER.labelElements(channel, objects.asList(), Optional.empty());
         return channel;
     }
 }

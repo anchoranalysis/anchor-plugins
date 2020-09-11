@@ -35,7 +35,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ScaledObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.scale.ScaleFactor;
 
 /**
@@ -64,8 +66,8 @@ public class Scale extends WithDimensionsBase {
         }
 
         try {
-            ScaledObjectCollection scaledObjects = objects.scale(scaleFactor, dimensions.extent());
-            return scaledObjects.asCollectionOrderNotPreserved();
+            ScaledElements<ObjectMask> scaledObjects = objects.scale(scaleFactor, dimensions.extent());
+            return ObjectCollectionFactory.of( scaledObjects.asCollectionOrderNotPreserved() );
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }
