@@ -38,6 +38,7 @@ import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
@@ -45,7 +46,6 @@ import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackgro
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.BoundedList;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;

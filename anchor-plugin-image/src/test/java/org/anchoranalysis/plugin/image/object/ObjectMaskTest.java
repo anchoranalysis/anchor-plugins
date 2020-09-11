@@ -23,15 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object;
+package org.anchoranalysis.plugin.image.object;
 
-import static org.anchoranalysis.plugin.image.bean.object.CheckVolumeBeforeAfter.*;
+import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.*;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.object.CircleObjectFixture;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.junit.Test;

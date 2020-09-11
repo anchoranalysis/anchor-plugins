@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import io.vavr.Tuple2;
 import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -104,7 +103,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
                             modelPool, pair._1(), stack.resolution(), minConfidence);
 
             // Scale each object-mask and extract as an object-collection
-            return maybeFilterObjects(objects).scale(pair._2(), Optional.of(stack.extent()) );
+            return maybeFilterObjects(objects).scale(pair._2(), stack.extent());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);

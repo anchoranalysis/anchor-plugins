@@ -23,15 +23,15 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.bean.object;
+package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.object.CircleObjectFixture;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ScaledObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.junit.Test;
 
 /**
@@ -78,7 +78,7 @@ public class ObjectCollectionTest {
                 CircleObjectFixture.successiveCircles(
                         numberCircles, new Point2d(10, 10), 3, new Point2d(10, 8), radiusIncrease);
 
-        ScaledObjectCollection scaled = unscaled.scale(checker.factor());
+        ScaledElements<ObjectMask> scaled = unscaled.scale(checker.factor());
 
         checker.assertExpectedArea(unscaled, scaled);
         assertEquals(unscaled.size(), scaled.size());
