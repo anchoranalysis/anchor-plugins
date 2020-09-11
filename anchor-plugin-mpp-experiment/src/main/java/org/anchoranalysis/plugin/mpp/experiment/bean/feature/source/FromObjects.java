@@ -193,7 +193,7 @@ public class FromObjects<T extends FeatureInput>
         for (NamedBean<ObjectCollectionProvider> namedBean : objects) {
             calculator.processProvider(
                     namedBean.getValue(),
-                    input ->
+                    (input, index) ->
                             identifierFor(
                                     imageIdentifier,
                                     combine.uniqueIdentifierFor(input),

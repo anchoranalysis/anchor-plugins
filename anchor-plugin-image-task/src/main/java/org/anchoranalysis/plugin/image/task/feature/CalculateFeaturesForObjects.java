@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -56,6 +55,18 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     private final InputProcessContext<FeatureTableCalculator<T>> context;
 
+    public interface LabelsForInput<T extends FeatureInput> {
+    
+        /**
+         * Calculates labels for a given input (and index)
+         * 
+         * @param input the input to calculate labels for
+         * @param index the index in the input-collection for the particular input
+         * @return row-labels for the input
+         */
+        RowLabels deriveLabels(T input, int index);
+    }
+    
     public CalculateFeaturesForObjects(
             CombineObjectsForFeatures<T> table,
             InitParamsWithEnergyStack initParams,
@@ -71,7 +82,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     public void calculateFeaturesForObjects(
             ObjectCollection objects,
             EnergyStack energyStack,
-            Function<T, RowLabels> identifierFromInput)
+            LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
         try {
             ListWithThumbnails<T, ObjectCollection> inputs =
@@ -81,7 +92,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
                             context.isThumbnailsEnabled(),
                             context.getLogger());
 
-            calculateManyFeaturesInto(inputs, identifierFromInput);
+            calculateManyFeaturesInto(inputs, labelsForInput);
 
         } catch (CreateException | OperationFailedException e) {
             throw new OperationFailedException(e);
@@ -90,7 +101,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     /**
      * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the
-     * stored-results
+     * stored-results.
      *
      * <p>The stored-results also have an additional first-column with the ID.
      *
@@ -100,7 +111,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      */
     private void calculateManyFeaturesInto(
             ListWithThumbnails<T, ObjectCollection> listInputs,
-            Function<T, RowLabels> labelsForInput)
+            LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
 
         try {
@@ -115,7 +126,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
                                 i + 1, listInputs.size(), input.toString());
 
                 context.addResultsFor(
-                        labelsForInput.apply(input),
+                        labelsForInput.deriveLabels(input, i),
                         new ResultsVectorWithThumbnail(
                                 calculator.calculate(
                                         input, context.getLogger().errorReporter(), suppressErrors),

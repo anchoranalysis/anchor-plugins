@@ -62,6 +62,7 @@ import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenera
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.objects.GeneratorHDF5;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -70,6 +71,8 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
@@ -113,7 +116,7 @@ public class SegmentInstanceWithModelTask<T>
 
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
-    private static final String[] FEATURE_LABEL_HEADERS = new String[] {"image", "object"};
+    private static final String[] FEATURE_LABEL_HEADERS = new String[] {"image", "object", "confidence"};
 
     // START BEAN FIELDS
     /** The segmentation algorithm */
@@ -180,16 +183,16 @@ public class SegmentInstanceWithModelTask<T>
 
             Stack stack = inputStack(input);
 
-            ObjectCollection objects =
-                    segment.segment(stack, input.getSharedState().getModelPool()).asObjects();
+            SegmentedObjects segments =
+                    segment.segment(stack, input.getSharedState().getModelPool());
 
             DisplayStack background = DisplayStack.create(stack.extractUpToThreeChannels());
 
-            if (objects.size() > 0 || !ignoreNoObjects) {
+            if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack, objects, background, input.context().getOutputManager());
+                        stack, segments.asObjects(), background, input.context().getOutputManager());
 
-                calculateFeaturesForImage(input, stack, objects);
+                calculateFeaturesForImage(input, stack, segments.asList());
             }
 
         } catch (SegmentationFailedException
@@ -219,10 +222,10 @@ public class SegmentInstanceWithModelTask<T>
     private void calculateFeaturesForImage(
             InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input,
             Stack stack,
-            ObjectCollection objects)
+            List<WithConfidence<ObjectMask>> segments)
             throws OperationFailedException {
 
-        if (objects.size() == 0) {
+        if (segments.isEmpty()) {
             // Exit early, nothing to do
             return;
         }
@@ -237,23 +240,23 @@ public class SegmentInstanceWithModelTask<T>
                         input.getSharedState()
                                 .createInputProcessContext(Optional.empty(), input.context()));
         calculator.calculateFeaturesForObjects(
-                objects,
+                deriveObjects(segments),
                 energyStack,
-                featureInput ->
+                (featureInput, index) ->
                         identifierFor(
                                 input.getInputObject().descriptiveName(),
                                 featureInput,
-                                calculator));
+                                calculator, segments.get(index).getConfidence()));
     }
 
     private RowLabels identifierFor(
             String imageIdentifier,
             FeatureInputSingleObject featureInput,
-            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator) {
+            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator, double confidence) {
         return new RowLabels(
                 Optional.of(
                         new String[] {
-                            imageIdentifier, calculator.uniqueIdentifierFor(featureInput)
+                            imageIdentifier, calculator.uniqueIdentifierFor(featureInput), Double.toString(confidence)
                         }),
                 Optional.empty());
     }
@@ -315,5 +318,9 @@ public class SegmentInstanceWithModelTask<T>
         } else {
             return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);
         }
+    }    
+    
+    private static ObjectCollection deriveObjects(List<WithConfidence<ObjectMask>> segments) {
+        return new ObjectCollection( segments.stream().map(WithConfidence::getObject) );
     }
 }

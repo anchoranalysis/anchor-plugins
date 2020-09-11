@@ -49,4 +49,8 @@ public class SegmentedObjects {
     public List<WithConfidence<ObjectMask>> asList() {
         return list;
     }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 }
