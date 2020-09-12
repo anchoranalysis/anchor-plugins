@@ -35,7 +35,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
@@ -103,30 +102,22 @@ class EastMarkExtracter {
         float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
 
-        int index = 0;
+        extent.iterateOverXYOffset( (point,offset) -> {
+            float confidence = scoresData[offset];
+            if (confidence >= minConfidence) {
 
-        Point2i point = new Point2i(0, 0);
-        for (point.setY(0); point.y() < extent.y(); point.incrementY()) {
-            for (point.setX(0); point.x() < extent.x(); point.incrementX()) {
+                Mark mark = RotatableBoundingBoxFromArrays.markFor(
+                                geometryArrs, offset, offsetScale.scale(point));
 
-                float confidence = scoresData[index];
-                if (confidence >= minConfidence) {
-
-                    Mark mark =
-                            RotatableBoundingBoxFromArrays.markFor(
-                                    geometryArrs, index, offsetScale.scale(point));
-
-                    list.add(new WithConfidence<>(mark, confidence));
-                }
-                index++;
+                list.add(new WithConfidence<>(mark, confidence));
             }
-        }
+        });
 
         return list;
     }
 
     /**
-     * Reshapes the geometry matrix from 4D to 2D
+     * Reshapes the geometry matrix from 4D to 2D.
      *
      * <p>As the Java interface to OpenCV only supports 2 dimensional matrices (rather than n
      * dimensional) it is necessary to reshape the matrix to be 2 dimensions only
