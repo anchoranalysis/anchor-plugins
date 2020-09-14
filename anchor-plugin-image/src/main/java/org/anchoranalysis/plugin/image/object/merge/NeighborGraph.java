@@ -32,8 +32,8 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.TypedEdge;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -50,8 +50,8 @@ class NeighborGraph {
     private final Optional<UnitConverter> unitConverter;
     // END REQUIRED ARGUMENTS
 
-    private GraphWithEdgeTypes<ObjectVertex, PrioritisedVertex> graph =
-            new GraphWithEdgeTypes<>(true);
+    private GraphWithPayload<ObjectVertex, PrioritisedVertex> graph =
+            new GraphWithPayload<>(true);
 
     /**
      * Adds a vertex to the graph, adding appropriate edges where neighborhood conditions are
@@ -83,65 +83,62 @@ class NeighborGraph {
      * vertices associated with the edge)
      */
     public Set<ObjectVertex> neighborNodesFor(
-            EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> edge) {
+            TypedEdge<ObjectVertex, PrioritisedVertex> edge) {
         Set<ObjectVertex> setOut = new HashSet<>();
-        addNeighborsToSet(edge.getNode1(), setOut);
-        addNeighborsToSet(edge.getNode2(), setOut);
-        setOut.remove(edge.getNode1());
-        setOut.remove(edge.getNode2());
+        addNeighborsToSet(edge.getFrom(), setOut);
+        addNeighborsToSet(edge.getTo(), setOut);
+        setOut.remove(edge.getFrom());
+        setOut.remove(edge.getTo());
         return setOut;
     }
 
     /** Creates an object-mask collection representing all the objects in the vertices */
     public ObjectCollection verticesAsObjects() {
-        return ObjectCollectionFactory.mapFrom(graph.vertexSet(), ObjectVertex::getObject);
+        return ObjectCollectionFactory.mapFrom(graph.vertices(), ObjectVertex::getObject);
     }
 
+       public void removeVertex(ObjectVertex node) throws OperationFailedException {
+        graph.removeVertex(node);
+    }
+
+    int numberVertices() {
+        return graph.numberVertices();
+    }
+
+    public Collection<TypedEdge<ObjectVertex, PrioritisedVertex>> edgeSetUnique() {
+        return graph.edgesUnique();
+    }
+
+    Collection<ObjectVertex> vertexSet() {
+        return graph.vertices();
+    }
+    
     private void addNeighborsToSet(ObjectVertex vertex, Set<ObjectVertex> setPossibleNeighbors) {
 
         // Remove the nodes associated with this edge
-        for (EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> edge : graph.edgesOf(vertex)) {
-            if (!edge.getNode1().equals(vertex)) {
-                setPossibleNeighbors.add(edge.getNode1());
+        for (TypedEdge<ObjectVertex, PrioritisedVertex> edge : graph.outgoingEdgesFor(vertex)) {
+            if (!edge.getFrom().equals(vertex)) {
+                setPossibleNeighbors.add(edge.getFrom());
             }
-            if (!edge.getNode2().equals(vertex)) {
-                setPossibleNeighbors.add(edge.getNode2());
+            if (!edge.getTo().equals(vertex)) {
+                setPossibleNeighbors.add(edge.getTo());
             }
         }
     }
 
     // Returns true if an edge is added, false otherwise
     private boolean maybeAddEdge(
-            ObjectVertex src, ObjectVertex dest, AssignPriority prioritizer, GraphLogger logger)
+            ObjectVertex from, ObjectVertex to, AssignPriority prioritizer, GraphLogger logger)
             throws OperationFailedException {
 
-        if (!beforeCondition.accept(dest.getObject())) {
+        if (!beforeCondition.accept(to.getObject())) {
             return false;
         }
 
-        PrioritisedVertex withPriority = prioritizer.assignPriority(src, dest, logger);
+        PrioritisedVertex withPriority = prioritizer.assignPriority(from, to, logger);
 
-        graph.addEdge(src, dest, withPriority);
+        graph.addEdge(from, to, withPriority);
         return true;
     }
 
-    public void removeVertex(ObjectVertex node) {
-        graph.removeVertex(node);
-    }
-
-    int numVertices() {
-        return graph.numVertices();
-    }
-
-    int numEdges() {
-        return graph.numEdges();
-    }
-
-    public Collection<EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex>> edgeSetUnique() {
-        return graph.edgeSetUnique();
-    }
-
-    Collection<ObjectVertex> vertexSet() {
-        return graph.vertexSet();
-    }
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.extent.UnitConverter;
@@ -155,14 +155,14 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
             throws OperationFailedException {
 
         // Find the edge with the best improvement
-        EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
+        TypedEdge<ObjectVertex, PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
 
         if (edgeToMerge == null) {
             return false;
         }
 
         // When we decide to merge, we save the merged object
-        saveObjects.ifPresent(so -> so.add(edgeToMerge.getEdge().getVertex().getObject()));
+        saveObjects.ifPresent(so -> so.add(edgeToMerge.getPayload().getVertex().getObject()));
 
         graph.merge(edgeToMerge);
 

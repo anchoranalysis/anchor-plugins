@@ -41,7 +41,7 @@ import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 
@@ -77,18 +77,18 @@ class EastObjectsExtracter {
     }
 
     private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
-
-        int width = (int) matrix.size().width;
-        int height = (int) matrix.size().height;
-
-        return new Dimensions(new Extent(width, height), resolution);
+        Extent extent = new Extent(
+            (int) matrix.size().width,
+            (int) matrix.size().height
+        );
+        return new Dimensions(extent, resolution);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(
             WithConfidence<Mark> mark, Dimensions dimensions) {
 
         ObjectWithProperties object =
-                mark.getObject()
+                mark.getElement()
                         .deriveObject(
                                 dimensions,
                                 RegionMapSingleton.instance()

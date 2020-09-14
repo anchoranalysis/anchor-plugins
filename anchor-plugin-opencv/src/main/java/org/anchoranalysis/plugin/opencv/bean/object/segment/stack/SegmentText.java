@@ -45,7 +45,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
-import org.anchoranalysis.plugin.opencv.nonmaxima.NonMaximaSuppressionObjects;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
@@ -78,12 +77,6 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     // START BEAN PROPERTIES
     /** Proposed bounding boxes below this confidence interval are removed */
     @BeanField @Getter @Setter private double minConfidence = 0.5;
-
-    /** Bounding boxes with IoU scores above this threshold are removed */
-    @BeanField @Getter @Setter private double suppressIntersectionOverUnionAbove = 0.3;
-
-    /** Iff true, non-maxima-suppression is applied to filter the proposed bounding boxes */
-    @BeanField @Getter @Setter private boolean suppressNonMaxima = true;
     // END BEAN PROPERTIES
 
     @Override
@@ -103,7 +96,7 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
                             modelPool, pair._1(), stack.resolution(), minConfidence);
 
             // Scale each object-mask and extract as an object-collection
-            return maybeFilterObjects(objects).scale(pair._2(), stack.extent());
+            return objects.scale(pair._2(), stack.extent());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new SegmentationFailedException(e);
@@ -156,15 +149,6 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
         }
 
         return stack;
-    }
-
-    private SegmentedObjects maybeFilterObjects(SegmentedObjects objects) {
-        if (suppressNonMaxima) {
-            return new SegmentedObjects( new NonMaximaSuppressionObjects()
-                    .apply(objects.asList(), suppressIntersectionOverUnionAbove) );
-        } else {
-            return objects;
-        }
     }
 
     @Override

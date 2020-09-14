@@ -23,29 +23,28 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.box;
 
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.OverlapCalculator;
-import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 
 /**
- * Calculates the intersection-over-union scores for different object pairs.
+ * Calculates the intersection-over-union score a pair of bounding-boxes.
  *
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntersectionOverUnion {
 
-    public static double forObjects(ObjectMask object1, ObjectMask object2) {
-        ObjectMask merged = ObjectMaskMerger.merge(object1, object2);
-        return OverlapCalculator.calculateOverlapRatio(object1, object2, merged);
-    }
-
+    /**
+     * Calculates the intersection-over-union score a pair of bounding-boxes.
+     * 
+     * @param box1 first box
+     * @param box2 second box
+     * @return the area of intersection divided by the area of union, with 0 if there is no intersection or union.
+     */
     public static double forBoxes(BoundingBox box1, BoundingBox box2) {
         Optional<BoundingBox> intersection = box1.intersection().with(box2);
         if (!intersection.isPresent()) {

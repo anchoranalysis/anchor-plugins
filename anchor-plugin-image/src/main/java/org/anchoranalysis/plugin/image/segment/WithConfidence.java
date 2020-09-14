@@ -24,23 +24,24 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.bean.object.segment.stack;
+package org.anchoranalysis.plugin.image.segment;
 
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Wraps an object with a confidence-score and imposes an ordering (highest confidence first)
+ * Wraps an element with a confidence-score and imposes an ordering (highest confidence first).
  *
- * @param <T> object to be associated with a confidence score
+ * @param <T> element to be associated with a confidence score
  */
 @AllArgsConstructor
 @EqualsAndHashCode
 public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
 
-    @Getter private T object;
+    @Getter @Setter private T element;
 
     @Getter private double confidence;
 
@@ -57,6 +58,6 @@ public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
      * @return
      */
     public <S> WithConfidence<S> map( Function<T,S> transform ) {
-        return new WithConfidence<>( transform.apply(object), confidence );
+        return new WithConfidence<>( transform.apply(element), confidence );
     }
 }

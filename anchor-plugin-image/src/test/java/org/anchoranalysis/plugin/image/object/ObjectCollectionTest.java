@@ -32,6 +32,7 @@ import org.anchoranalysis.core.geometry.Point2d;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.ScaledElements;
+import org.anchoranalysis.test.image.object.CircleObjectFixture;
 import org.junit.Test;
 
 /**

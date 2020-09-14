@@ -24,37 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.bean.box;
 
 import com.google.common.base.Predicate;
-import java.util.Collection;
+import java.util.List;
 import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
+import org.anchoranalysis.plugin.image.bean.object.segment.reduce.NonMaximaSuppression;
+import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
- * Non-maxima suppression for axis-aligned bounding-boxes using an Intersection over Union score.
+ * Non-maxima suppression for axis-aligned bounding-boxes using an <a href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
  *
+ * @see NonMaximaSuppression for a description of the algorithm.
  * @author Owen Feehan
  */
-public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<BoundingBox> {
+public class RemoveOverlappingBoundingBoxes extends NonMaximaSuppression<BoundingBox> {
 
     @Override
-    protected void init(Collection<WithConfidence<BoundingBox>> allProposals) {
+    protected void init(List<WithConfidence<BoundingBox>> allElements) {
         // NOTHING TO DO
-    }
-
-    /**
-     * The Intersection over Union (IoU) score for two bounding-boxes
-     *
-     * @see <a
-     *     href="https://www.quora.com/How-does-non-maximum-suppression-work-in-object-detection">Intersection-over-Union</a>
-     * @param box1 the first bounding-box
-     * @param box2 the second bounding-box
-     * @return the IoU score
-     */
-    @Override
-    protected double overlapScoreFor(BoundingBox box1, BoundingBox box2) {
-        return IntersectionOverUnion.forBoxes(box1, box2);
     }
 
     /** As bounding box intersection test is cheap, we pass back all neighbors */
@@ -63,5 +52,19 @@ public class NonMaximaSuppressionBoundingBox extends NonMaximaSuppression<Boundi
             BoundingBox src, Iterable<WithConfidence<BoundingBox>> others) {
         // Accept all
         return irrelevant -> true;
+    }
+    
+    /**
+     * The Intersection over Union (IoU) score for two bounding-boxes
+     *
+     * @see <a
+     *     href="https://www.quora.com/How-does-non-maximum-suppression-work-in-object-detection">Intersection-over-Union</a>
+     * @param element1 the first bounding-box
+     * @param element2 the second bounding-box
+     * @return the IoU score
+     */
+    @Override
+    protected double overlapScoreFor(BoundingBox element1, BoundingBox element2) {
+        return IntersectionOverUnion.forBoxes(element1, element2);
     }
 }

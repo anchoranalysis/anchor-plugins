@@ -44,14 +44,6 @@ public abstract class SegmentStackIntoObjectsPooled<T>
         extends SegmentationBean<SegmentStackIntoObjectsPooled<T>> {
 
     /**
-     * Creates the model pool (to be used by multiple threads)
-     *
-     * @param plan the number and types of processors available for concurrent execution
-     * @return the newly created model pool
-     */
-    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan);
-
-    /**
      * Segments individually using a pool of size 1 just for one stack
      * 
      * <p>See {@link #segment(Stack, ConcurrentModelPool)} for more details.
@@ -63,6 +55,14 @@ public abstract class SegmentStackIntoObjectsPooled<T>
     public SegmentedObjects segment(Stack stack) throws SegmentationFailedException {
         return segment(stack, createModelPool(ConcurrencyPlan.singleProcessor(0)));
     }
+    
+    /**
+     * Creates the model pool (to be used by multiple threads)
+     *
+     * @param plan the number and types of processors available for concurrent execution
+     * @return the newly created model pool
+     */
+    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan);
 
     /**
      * Segments a stack to produce an object-collection.

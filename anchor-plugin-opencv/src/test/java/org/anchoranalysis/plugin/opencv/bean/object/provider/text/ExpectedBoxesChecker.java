@@ -32,16 +32,17 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.opencv.nonmaxima.IntersectionOverUnion;
+import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExpectedBoxesChecker {
 
     /** Minimum intersection-over-union score required to be considered identical to a box. */
-    private static final double THRESHOLD_SCORE = 0.80;
+    private static final double THRESHOLD_SCORE = 0.70;
 
     public static void assertExpectedBoxes(
             ObjectCollection objects, List<BoundingBox> expectedBoxes) {
+        assertTrue("number of boxes", expectedBoxes.size() < 5);
         expectedBoxes.stream().forEach(box -> assertOverlap(objects, box));
     }
 
