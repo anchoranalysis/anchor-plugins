@@ -23,6 +23,10 @@ import lombok.Setter;
  * 
  * <p>Otherwise, the overlapping element remains in the list to be reduced (with whatever change to its voxels).
  * 
+ * <p>This achieves a similar result as {@link ThresholdConfidence} but is typically slower (unless there are very few
+ * overlapping objects). However, it offers a greater ability to distinguish overlapping objects of significanntly differing
+ * confidence.
+ *  
  * @author Owen Feehan
  *
  */
