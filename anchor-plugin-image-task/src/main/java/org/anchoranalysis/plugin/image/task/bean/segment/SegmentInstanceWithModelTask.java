@@ -72,8 +72,8 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
@@ -321,6 +321,6 @@ public class SegmentInstanceWithModelTask<T>
     }    
     
     private static ObjectCollection deriveObjects(List<WithConfidence<ObjectMask>> segments) {
-        return new ObjectCollection( segments.stream().map(WithConfidence::getObject) );
+        return new ObjectCollection( segments.stream().map(WithConfidence::getElement) );
     }
 }

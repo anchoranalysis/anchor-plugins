@@ -2,6 +2,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -9,6 +10,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.object.scale.Scaler;
 import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -42,8 +44,12 @@ public class SegmentedObjects {
         return new SegmentedObjects(listScaled.asListOrderPreserved(list));
     }
     
+    public Optional<WithConfidence<ObjectMask>> highestConfidence() {
+        return list.stream().max( (a,b) -> Double.compare(a.getConfidence(), b.getConfidence()) );
+    }
+    
     public ObjectCollection asObjects() {
-        return new ObjectCollection( asList().stream().map(WithConfidence::getObject) );
+        return new ObjectCollection( asList().stream().map(WithConfidence::getElement) );
     }
     
     public List<WithConfidence<ObjectMask>> asList() {

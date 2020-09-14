@@ -6,6 +6,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.AccessObjectMask;
 import org.anchoranalysis.image.object.scale.Scaler;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,7 @@ import lombok.AllArgsConstructor;
     
     @Override
     public ObjectMask objectFor(WithConfidence<ObjectMask> element) {
-        return element.getObject();
+        return element.getElement();
     }
 
     @Override

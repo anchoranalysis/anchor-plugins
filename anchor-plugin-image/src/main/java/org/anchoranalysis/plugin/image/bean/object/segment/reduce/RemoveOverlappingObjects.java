@@ -24,38 +24,48 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.nonmaxima;
+package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import com.google.common.base.Predicate;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.OverlapCalculator;
+import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
-public class NonMaximaSuppressionObjects extends NonMaximaSuppression<ObjectMask> {
+/**
+ * Non-maxima suppression for object-masks using an <a href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
+ * 
+ * @see NonMaximaSuppression for a description of the algorithm.
+ * @author Owen Feehan
+ *
+ */
+public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
 
     private ObjectCollectionRTree rTree;
 
     @Override
-    protected void init(Collection<WithConfidence<ObjectMask>> allProposals) {
+    protected void init(List<WithConfidence<ObjectMask>> allElements) {
         // NOTHING TO DO
         rTree =
                 new ObjectCollectionRTree(
-                        ObjectCollectionFactory.mapFrom(allProposals, WithConfidence::getObject));
-    }
-
-    @Override
-    protected double overlapScoreFor(ObjectMask item1, ObjectMask item2) {
-        return IntersectionOverUnion.forObjects(item1, item2);
+                        ObjectCollectionFactory.mapFrom(allElements, WithConfidence::getElement));
     }
 
     @Override
     protected Predicate<ObjectMask> possibleOverlappingObjects(
-            ObjectMask src, Iterable<WithConfidence<ObjectMask>> others) {
+            ObjectMask source, Iterable<WithConfidence<ObjectMask>> others) {
         // All possible other objects as a hash-set
-        Set<ObjectMask> possibleOthers = rTree.intersectsWith(src).stream().toSet();
+        Set<ObjectMask> possibleOthers = rTree.intersectsWith(source).stream().toSet();
         return possibleOthers::contains;
+    }
+    
+    @Override
+    protected double overlapScoreFor(ObjectMask element1, ObjectMask element2) {
+        ObjectMask merged = ObjectMaskMerger.merge(element1, element2);
+        return OverlapCalculator.calculateOverlapRatio(element1, element2, merged);
     }
 }

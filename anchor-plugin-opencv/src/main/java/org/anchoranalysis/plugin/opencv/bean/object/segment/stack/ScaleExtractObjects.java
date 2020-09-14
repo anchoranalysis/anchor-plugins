@@ -35,7 +35,7 @@ import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
-import org.anchoranalysis.plugin.image.bean.object.segment.stack.WithConfidence;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
  * Extracts and object-mask from the list and scales.

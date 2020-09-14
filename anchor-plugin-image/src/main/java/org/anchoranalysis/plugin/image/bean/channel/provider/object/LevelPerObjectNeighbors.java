@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -78,13 +78,13 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private static void visit(
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            GraphWithPayload<ObjectWithHistogram, Integer> graph,
             List<ObjectWithHistogram> currentVisit,
             List<ObjectWithHistogram> toVisit,
             Set<ObjectWithHistogram> visited) {
         for (ObjectWithHistogram omLocal : currentVisit) {
 
-            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVertices(omLocal);
+            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVerticesOutgoing(omLocal);
 
             for (ObjectWithHistogram object : adjacentObjects) {
                 if (!visited.contains(object)) {
@@ -97,11 +97,11 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private static Collection<ObjectWithHistogram> verticesWithinDistance(
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            GraphWithPayload<ObjectWithHistogram, Integer> graph,
             ObjectWithHistogram om,
             int neighborDistance) {
         if (neighborDistance == 1) {
-            return graph.adjacentVertices(om);
+            return graph.adjacentVerticesOutgoing(om);
         } else {
 
             Set<ObjectWithHistogram> visited = new HashSet<>();
@@ -143,7 +143,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             CreateNeighborGraph<ObjectWithHistogram> graphCreator =
                     new CreateNeighborGraph<>(new EdgeAdderParameters(false));
 
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph =
+            GraphWithPayload<ObjectWithHistogram, Integer> graph =
                     graphCreator.createGraph(
                             objectsWithHistograms(objects, channelIntensity),
                             ObjectWithHistogram::getObject,
@@ -156,7 +156,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectWithHistogram, Integer> mapLevel = new HashMap<>();
 
-            for (ObjectWithHistogram om : graph.vertexSet()) {
+            for (ObjectWithHistogram om : graph.vertices()) {
 
                 getLogger()
                         .messageLogger()

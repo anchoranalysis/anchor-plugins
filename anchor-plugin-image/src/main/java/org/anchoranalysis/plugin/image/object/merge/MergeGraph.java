@@ -34,7 +34,7 @@ import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Comparator3i;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.extent.UnitConverter;
@@ -104,14 +104,14 @@ public class MergeGraph {
         return listAdded;
     }
 
-    public ObjectVertex merge(EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> bestImprovement)
+    public ObjectVertex merge(TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement)
             throws OperationFailedException {
 
         Set<ObjectVertex> setPossibleNeighbors = graph.neighborNodesFor(bestImprovement);
-        graph.removeVertex(bestImprovement.getNode1());
-        graph.removeVertex(bestImprovement.getNode2());
+        graph.removeVertex(bestImprovement.getFrom());
+        graph.removeVertex(bestImprovement.getTo());
 
-        ObjectVertex omMerged = bestImprovement.getEdge().getVertex();
+        ObjectVertex omMerged = bestImprovement.getPayload().getVertex();
         graph.addVertex(omMerged, setPossibleNeighbors, prioritizer, logger);
 
         logger.describeMerge(omMerged, bestImprovement);
@@ -119,24 +119,24 @@ public class MergeGraph {
         return omMerged;
     }
 
-    public EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> findMaxPriority() {
+    public TypedEdge<ObjectVertex, PrioritisedVertex> findMaxPriority() {
 
-        EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> max = null;
+        TypedEdge<ObjectVertex, PrioritisedVertex> max = null;
 
         Comparator3i<Point3i> comparator = new Comparator3i<>();
 
-        for (EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> entry : graph.edgeSetUnique()) {
+        for (TypedEdge<ObjectVertex, PrioritisedVertex> entry : graph.edgeSetUnique()) {
 
-            PrioritisedVertex edge = entry.getEdge();
+            PrioritisedVertex edge = entry.getPayload();
 
             // We skip any edges that don't off an improvement
             if (!edge.isConsiderForMerge()) {
                 continue;
             }
 
-            if (max == null || edge.getPriority() > max.getEdge().getPriority()) {
+            if (max == null || edge.getPriority() > max.getPayload().getPriority()) {
                 max = entry;
-            } else if (DoubleUtilities.areEqual(edge.getPriority(), max.getEdge().getPriority())) {
+            } else if (DoubleUtilities.areEqual(edge.getPriority(), max.getPayload().getPriority())) {
 
                 // We can safely assume a point exists on the object-mask and call .get(), as none
                 // of the
@@ -146,7 +146,7 @@ public class MergeGraph {
                 // so as to keep the output of the algorithm as deterministic as possible
                 int cmp =
                         comparator.compare(
-                                max.getEdge() // NOSONAR
+                                max.getPayload() // NOSONAR
                                         .getVertex()
                                         .getObject()
                                         .findArbitraryOnVoxel()
