@@ -3,6 +3,7 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
@@ -52,6 +53,10 @@ public class SuppressNonMaxima<T> extends SegmentStackIntoObjectsPooled<T> {
             throws SegmentationFailedException {
         SegmentedObjects objects = segment.segment(stack, modelPool);
         
-        return new SegmentedObjects( reduce.reduce(objects.asList()) );
+        try {
+            return new SegmentedObjects( reduce.reduce(objects.asList()) );
+        } catch (OperationFailedException e) {
+            throw new SegmentationFailedException(e);
+        }
     }
 }

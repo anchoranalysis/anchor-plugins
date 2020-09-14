@@ -13,17 +13,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Where two objects overlap, then the lowest-confidence object has voxels removed so there is no longer overlap.
+ * Where objects overlap, they are merged together if certain conditions are fulfilled.
  * 
- * <p>If the number of voxels in the lower-confidence element is small (relative to the higher-confidence object) <b>or</b> if
- * the confidence of the two elements is similar, then the overlapping element is merged into the source element, and adopts its confidence
+ * <p>Conditions:
+ * <ul>
+ * <li>if the number of voxels in the lower-confidence element is small (relative to the higher-confidence object) <b>or</b>
+ * <li>if the confidence of the two elements is similar, then the overlapping element is merged into the source element, and adopts its confidence.
+ * </ul>
  * 
  * <p>Otherwise, the overlapping element remains in the list to be reduced (with whatever change to its voxels).
  * 
  * @author Owen Feehan
  *
  */
-public class ClipOverlappingObjects extends ReduceElements<ObjectMask> {
+public class ConditionallyMergeOverlappingObjects extends ReduceElementsGreedy<ObjectMask> {
 
     // START BEAN PROPERTIES
     /** The maximum size for merging. If a clipped-object has fewer voxels than this (relative to the source object) it is always merged. */ 

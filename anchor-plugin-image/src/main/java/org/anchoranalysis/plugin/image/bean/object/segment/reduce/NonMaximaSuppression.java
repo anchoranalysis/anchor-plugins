@@ -18,7 +18,7 @@ import lombok.Setter;
  * @author Owen Feehan
  * @param <T> the element-type that exists in the collection (with confidence)
  */
-public abstract class NonMaximaSuppression<T> extends ReduceElements<T> {
+public abstract class NonMaximaSuppression<T> extends ReduceElementsGreedy<T> {
 
     // START BEAN FIELDS
     /** Bounding boxes with scores above this threshold are removed */
