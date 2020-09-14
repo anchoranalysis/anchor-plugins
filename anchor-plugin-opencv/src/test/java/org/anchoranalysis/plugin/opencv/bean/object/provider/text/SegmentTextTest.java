@@ -33,7 +33,7 @@ import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ClipOverlappingObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
@@ -64,7 +64,7 @@ public class SegmentTextTest {
 
     @Before
     public void setUp() throws InitException {
-        segmenter = new SuppressNonMaxima<>( new SegmentText(), new ClipOverlappingObjects() );
+        segmenter = new SuppressNonMaxima<>( new SegmentText(), new ConditionallyMergeOverlappingObjects() );
         initSegmenter();
     }
 
