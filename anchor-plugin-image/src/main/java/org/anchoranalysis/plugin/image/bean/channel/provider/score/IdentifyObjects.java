@@ -44,7 +44,8 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBas
  */
 public class IdentifyObjects extends UnaryWithObjectsBase {
 
-    private static final LabelObjects<ObjectMask> LABELLER = new LabelObjects<>(object->object, (object,back) -> object.shiftBackBy(back));
+    private static final LabelObjects<ObjectMask> LABELLER =
+            new LabelObjects<>(object -> object, (object, back) -> object.shiftBackBy(back));
 
     @Override
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)

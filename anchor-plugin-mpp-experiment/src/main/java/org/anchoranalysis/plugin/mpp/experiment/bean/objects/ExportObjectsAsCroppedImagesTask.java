@@ -152,7 +152,10 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
         sequence.start();
         objects.streamStandardJava()
-                .forEach(object -> sequence.add(BoundedList.createSingle(object, ObjectMask::boundingBox)));
+                .forEach(
+                        object ->
+                                sequence.add(
+                                        BoundedList.createSingle(object, ObjectMask::boundingBox)));
         sequence.end();
     }
 

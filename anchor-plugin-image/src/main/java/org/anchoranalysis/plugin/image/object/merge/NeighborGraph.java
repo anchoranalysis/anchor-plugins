@@ -32,8 +32,8 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.graph.GraphWithPayload;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -50,8 +50,7 @@ class NeighborGraph {
     private final Optional<UnitConverter> unitConverter;
     // END REQUIRED ARGUMENTS
 
-    private GraphWithPayload<ObjectVertex, PrioritisedVertex> graph =
-            new GraphWithPayload<>(true);
+    private GraphWithPayload<ObjectVertex, PrioritisedVertex> graph = new GraphWithPayload<>(true);
 
     /**
      * Adds a vertex to the graph, adding appropriate edges where neighborhood conditions are
@@ -82,8 +81,7 @@ class NeighborGraph {
      * Get a set of all neighboring vertices of the vertices on a particular edge (not including the
      * vertices associated with the edge)
      */
-    public Set<ObjectVertex> neighborNodesFor(
-            TypedEdge<ObjectVertex, PrioritisedVertex> edge) {
+    public Set<ObjectVertex> neighborNodesFor(TypedEdge<ObjectVertex, PrioritisedVertex> edge) {
         Set<ObjectVertex> setOut = new HashSet<>();
         addNeighborsToSet(edge.getFrom(), setOut);
         addNeighborsToSet(edge.getTo(), setOut);
@@ -97,7 +95,7 @@ class NeighborGraph {
         return ObjectCollectionFactory.mapFrom(graph.vertices(), ObjectVertex::getObject);
     }
 
-       public void removeVertex(ObjectVertex node) throws OperationFailedException {
+    public void removeVertex(ObjectVertex node) throws OperationFailedException {
         graph.removeVertex(node);
     }
 
@@ -112,7 +110,7 @@ class NeighborGraph {
     Collection<ObjectVertex> vertexSet() {
         return graph.vertices();
     }
-    
+
     private void addNeighborsToSet(ObjectVertex vertex, Set<ObjectVertex> setPossibleNeighbors) {
 
         // Remove the nodes associated with this edge
@@ -140,5 +138,4 @@ class NeighborGraph {
         graph.addEdge(from, to, withPriority);
         return true;
     }
-
 }

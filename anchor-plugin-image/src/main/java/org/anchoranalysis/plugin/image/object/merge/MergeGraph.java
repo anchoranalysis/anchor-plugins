@@ -136,7 +136,8 @@ public class MergeGraph {
 
             if (max == null || edge.getPriority() > max.getPayload().getPriority()) {
                 max = entry;
-            } else if (DoubleUtilities.areEqual(edge.getPriority(), max.getPayload().getPriority())) {
+            } else if (DoubleUtilities.areEqual(
+                    edge.getPriority(), max.getPayload().getPriority())) {
 
                 // We can safely assume a point exists on the object-mask and call .get(), as none
                 // of the

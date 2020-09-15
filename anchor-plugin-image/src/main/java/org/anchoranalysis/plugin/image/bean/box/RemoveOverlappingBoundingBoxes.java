@@ -34,7 +34,8 @@ import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
- * Non-maxima suppression for axis-aligned bounding-boxes using an <a href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
+ * Non-maxima suppression for axis-aligned bounding-boxes using an <a
+ * href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
  *
  * @see NonMaximaSuppression for a description of the algorithm.
  * @author Owen Feehan
@@ -53,7 +54,7 @@ public class RemoveOverlappingBoundingBoxes extends NonMaximaSuppression<Boundin
         // Accept all
         return irrelevant -> true;
     }
-    
+
     /**
      * The Intersection over Union (IoU) score for two bounding-boxes
      *

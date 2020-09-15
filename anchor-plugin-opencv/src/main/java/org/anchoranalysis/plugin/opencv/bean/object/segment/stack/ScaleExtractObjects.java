@@ -46,19 +46,20 @@ import org.anchoranalysis.plugin.image.segment.WithConfidence;
 class ScaleExtractObjects {
 
     public static SegmentedObjects apply(
-            SegmentedObjects segmentedObjects, ScaleFactor scaleFactor, Extent extent)
-            {
+            SegmentedObjects segmentedObjects, ScaleFactor scaleFactor, Extent extent) {
         // Scale back to the needed original resolution
         return scaleObjects(segmentedObjects.asList(), scaleFactor, extent);
     }
 
     private static SegmentedObjects scaleObjects(
-            List<WithConfidence<ObjectMask>> objects, ScaleFactor scaleFactor, Extent extent)
-    {
-        return new SegmentedObjects( FunctionalList.mapToList(objects, withConfidence -> scale(withConfidence, scaleFactor, extent) ));
+            List<WithConfidence<ObjectMask>> objects, ScaleFactor scaleFactor, Extent extent) {
+        return new SegmentedObjects(
+                FunctionalList.mapToList(
+                        objects, withConfidence -> scale(withConfidence, scaleFactor, extent)));
     }
-    
-    private static WithConfidence<ObjectMask> scale(WithConfidence<ObjectMask> withConfidence, ScaleFactor scaleFactor, Extent extent) {
-        return withConfidence.map( object -> object.scale(scaleFactor, Optional.of(extent)) );
+
+    private static WithConfidence<ObjectMask> scale(
+            WithConfidence<ObjectMask> withConfidence, ScaleFactor scaleFactor, Extent extent) {
+        return withConfidence.map(object -> object.scale(scaleFactor, Optional.of(extent)));
     }
 }

@@ -5,9 +5,9 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyM
 import org.junit.Test;
 
 public class ConditionallyMergeOverlappingObjectsTest {
-    
+
     private ReduceElementsTester tester = new ReduceElementsTester();
-    
+
     @Test
     public void testReduce() throws OperationFailedException {
         tester.test(new ConditionallyMergeOverlappingObjects(), true, 5, 0.8);

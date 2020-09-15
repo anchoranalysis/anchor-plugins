@@ -45,9 +45,9 @@ public abstract class SegmentStackIntoObjectsPooled<T>
 
     /**
      * Segments individually using a pool of size 1 just for one stack
-     * 
+     *
      * <p>See {@link #segment(Stack, ConcurrentModelPool)} for more details.
-     * 
+     *
      * @param stack the stack to segment
      * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
@@ -55,7 +55,7 @@ public abstract class SegmentStackIntoObjectsPooled<T>
     public SegmentedObjects segment(Stack stack) throws SegmentationFailedException {
         return segment(stack, createModelPool(ConcurrencyPlan.singleProcessor(0)));
     }
-    
+
     /**
      * Creates the model pool (to be used by multiple threads)
      *
@@ -68,7 +68,7 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      * Segments a stack to produce an object-collection.
      *
      * <p>Any created objects will always exist inside the stack's {@link Extent}.
-     * 
+     *
      * @param stack the stack to segment
      * @ret@return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.

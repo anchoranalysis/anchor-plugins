@@ -37,11 +37,11 @@ import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
- * Non-maxima suppression for object-masks using an <a href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
- * 
+ * Non-maxima suppression for object-masks using an <a
+ * href="https://en.wikipedia.org/wiki/Jaccard_index">Intersection over Union</a> score.
+ *
  * @see NonMaximaSuppression for a description of the algorithm.
  * @author Owen Feehan
- *
  */
 public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
 
@@ -62,7 +62,7 @@ public class RemoveOverlappingObjects extends NonMaximaSuppression<ObjectMask> {
         Set<ObjectMask> possibleOthers = rTree.intersectsWith(source).stream().toSet();
         return possibleOthers::contains;
     }
-    
+
     @Override
     protected double overlapScoreFor(ObjectMask element1, ObjectMask element2) {
         ObjectMask merged = ObjectMaskMerger.merge(element1, element2);

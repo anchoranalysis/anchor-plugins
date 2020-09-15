@@ -32,23 +32,26 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**
- * Reduces the number or spatial-extent of elements by favouring higher-confidence elements over lower-confidence elements.
+ * Reduces the number or spatial-extent of elements by favouring higher-confidence elements over
+ * lower-confidence elements.
  *
  * @param <T> the element-type that exists in the collection (with confidence)
  * @author Owen Feehan
  */
 public abstract class ReduceElements<T> extends AnchorBean<ReduceElements<T>> {
-    
+
     /**
      * Reduce a list of elements (each with a confidence score) to a smaller-list.
      *
      * <p>See the class javadoc for details of algorithm.
-     * 
-     * <p>It is not guaranteed that the resulting list will have fewer elements than the input list, but never more.
+     *
+     * <p>It is not guaranteed that the resulting list will have fewer elements than the input list,
+     * but never more.
      *
      * @param elements proposed bounding-boxes with scores
      * @return accepted proposals
      * @throws OperationFailedException if anything goes wrong
      */
-    public abstract List<WithConfidence<T>> reduce(List<WithConfidence<T>> elements) throws OperationFailedException;
+    public abstract List<WithConfidence<T>> reduce(List<WithConfidence<T>> elements)
+            throws OperationFailedException;
 }

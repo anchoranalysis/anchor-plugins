@@ -86,7 +86,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         // Segment and scale results back up to original-scale
         try {
             return scaleResultToOriginalScale(
-                            scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
+                    scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
@@ -125,8 +125,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
             throws OperationFailedException {
         return ObjectCollectionFactory.of(
-              objects.scale(scaleFactor.invert(), originalExtent).asCollectionOrderNotPreserved()
-          );
+                objects.scale(scaleFactor.invert(), originalExtent)
+                        .asCollectionOrderNotPreserved());
     }
 
     /**

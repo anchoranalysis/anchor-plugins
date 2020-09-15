@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,20 +25,21 @@
  */
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ScoreHelper {
-    
-    public static double confidenceDifference(WithConfidence<ObjectMask> source, WithConfidence<ObjectMask> overlapping) {
+
+    public static double confidenceDifference(
+            WithConfidence<ObjectMask> source, WithConfidence<ObjectMask> overlapping) {
         return source.getConfidence() - overlapping.getConfidence();
     }
-    
+
     public static double overlapScore(int numberVoxelsClipped, ObjectMask sourceElement) {
         // The latter part of this calculation is likely being repeated. Consider caching.
-        return ((double) numberVoxelsClipped) / sourceElement.numberVoxelsOn(); 
+        return ((double) numberVoxelsClipped) / sourceElement.numberVoxelsOn();
     }
 }

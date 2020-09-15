@@ -117,10 +117,14 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     private ObjectCollection objectsFromLabels(Channel channel, int numberLabels)
             throws OperationFailedException {
         try {
-            DecodeLabels<ObjectMask> createObjects = new DecodeLabels<>(
-                    channel.voxels().asByte(), 1, numberLabels, (index,scaledObject) -> scaledObject);
-            
-            return ObjectCollectionFactory.of( createObjects.create(minimumBoundingBoxVolume) );
+            DecodeLabels<ObjectMask> createObjects =
+                    new DecodeLabels<>(
+                            channel.voxels().asByte(),
+                            1,
+                            numberLabels,
+                            (index, scaledObject) -> scaledObject);
+
+            return ObjectCollectionFactory.of(createObjects.create(minimumBoundingBoxVolume));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

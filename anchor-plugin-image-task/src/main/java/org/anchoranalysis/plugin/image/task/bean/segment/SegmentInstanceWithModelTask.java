@@ -116,7 +116,8 @@ public class SegmentInstanceWithModelTask<T>
 
     private static final String MANIFEST_FUNCTION_INPUT_IMAGE = "input_image";
 
-    private static final String[] FEATURE_LABEL_HEADERS = new String[] {"image", "object", "confidence"};
+    private static final String[] FEATURE_LABEL_HEADERS =
+            new String[] {"image", "object", "confidence"};
 
     // START BEAN FIELDS
     /** The segmentation algorithm */
@@ -190,7 +191,10 @@ public class SegmentInstanceWithModelTask<T>
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack, segments.asObjects(), background, input.context().getOutputManager());
+                        stack,
+                        segments.asObjects(),
+                        background,
+                        input.context().getOutputManager());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -246,17 +250,21 @@ public class SegmentInstanceWithModelTask<T>
                         identifierFor(
                                 input.getInputObject().descriptiveName(),
                                 featureInput,
-                                calculator, segments.get(index).getConfidence()));
+                                calculator,
+                                segments.get(index).getConfidence()));
     }
 
     private RowLabels identifierFor(
             String imageIdentifier,
             FeatureInputSingleObject featureInput,
-            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator, double confidence) {
+            CalculateFeaturesForObjects<FeatureInputSingleObject> calculator,
+            double confidence) {
         return new RowLabels(
                 Optional.of(
                         new String[] {
-                            imageIdentifier, calculator.uniqueIdentifierFor(featureInput), Double.toString(confidence)
+                            imageIdentifier,
+                            calculator.uniqueIdentifierFor(featureInput),
+                            Double.toString(confidence)
                         }),
                 Optional.empty());
     }
@@ -318,9 +326,9 @@ public class SegmentInstanceWithModelTask<T>
         } else {
             return COMBINE_OBJECTS.createFeatures(features, STORE_FACTORY, true);
         }
-    }    
-    
+    }
+
     private static ObjectCollection deriveObjects(List<WithConfidence<ObjectMask>> segments) {
-        return new ObjectCollection( segments.stream().map(WithConfidence::getElement) );
+        return new ObjectCollection(segments.stream().map(WithConfidence::getElement));
     }
 }

@@ -89,11 +89,11 @@ class AddPaddingToGenerator {
             return object;
         }
 
-        BoundingBox boxToExtract = object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
+        BoundingBox boxToExtract =
+                object.boundingBox().growBy(padding.asPoint(), dimensions.extent());
 
         return object.mapBoundingBoxChangeExtent(boxToExtract);
     }
-    
 
     /**
      * Maps the containing-box to the entire image-dimensions, and changes each object-mask to
@@ -104,7 +104,8 @@ class AddPaddingToGenerator {
      * @throws OperationFailedException if the image-dimensions don't contain the existing
      *     bounding-box
      */
-    public static BoundedList<ObjectMask> mapObjectsToUseEntireImage(BoundedList<ObjectMask> collection, Dimensions dimensions)
+    public static BoundedList<ObjectMask> mapObjectsToUseEntireImage(
+            BoundedList<ObjectMask> collection, Dimensions dimensions)
             throws OperationFailedException {
         if (!dimensions.contains(collection.boundingBox())) {
             throw new OperationFailedException(
@@ -114,6 +115,7 @@ class AddPaddingToGenerator {
         }
 
         BoundingBox boxToAssign = new BoundingBox(dimensions);
-        return collection.assignBoundingBoxAndMap(boxToAssign, object -> object.mapBoundingBoxChangeExtent(boxToAssign));
+        return collection.assignBoundingBoxAndMap(
+                boxToAssign, object -> object.mapBoundingBoxChangeExtent(boxToAssign));
     }
 }

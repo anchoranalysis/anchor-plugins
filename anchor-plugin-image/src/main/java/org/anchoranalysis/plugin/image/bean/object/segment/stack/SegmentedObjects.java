@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,6 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -36,18 +38,15 @@ import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.object.scale.Scaler;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
 /**
  * Objects that are a result of an instance-segmentation.
- * 
- * <p>Unlike a {@link ObjectCollection}, each object also has a confidence score.
- * 
- * @author Owen Feehan
  *
+ * <p>Unlike a {@link ObjectCollection}, each object also has a confidence score.
+ *
+ * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SegmentedObjects {
 
     private final List<WithConfidence<ObjectMask>> list;
@@ -55,28 +54,31 @@ public class SegmentedObjects {
     public SegmentedObjects() {
         list = new ArrayList<>();
     }
-    
+
     /**
      * Scales the segmented-objects.
-     * 
+     *
      * @param scaleFactor how much to scale by
      * @param extent an extent all objects are clipped to remain inside.
-     * @return a segmented-objects with identical order, confidence-values etc. but with corresponding object-masks scaled.
+     * @return a segmented-objects with identical order, confidence-values etc. but with
+     *     corresponding object-masks scaled.
      * @throws OperationFailedException
      */
-    public SegmentedObjects scale(ScaleFactor scaleFactor, Extent extent) throws OperationFailedException {
-        ScaledElements<WithConfidence<ObjectMask>> listScaled = Scaler.scaleElements(list, scaleFactor, extent, new AccessSegmentedObjects(list));
+    public SegmentedObjects scale(ScaleFactor scaleFactor, Extent extent)
+            throws OperationFailedException {
+        ScaledElements<WithConfidence<ObjectMask>> listScaled =
+                Scaler.scaleElements(list, scaleFactor, extent, new AccessSegmentedObjects(list));
         return new SegmentedObjects(listScaled.asListOrderPreserved(list));
     }
-    
+
     public Optional<WithConfidence<ObjectMask>> highestConfidence() {
-        return list.stream().max( (a,b) -> Double.compare(a.getConfidence(), b.getConfidence()) );
+        return list.stream().max((a, b) -> Double.compare(a.getConfidence(), b.getConfidence()));
     }
-    
+
     public ObjectCollection asObjects() {
-        return new ObjectCollection( asList().stream().map(WithConfidence::getElement) );
+        return new ObjectCollection(asList().stream().map(WithConfidence::getElement));
     }
-    
+
     public List<WithConfidence<ObjectMask>> asList() {
         return list;
     }

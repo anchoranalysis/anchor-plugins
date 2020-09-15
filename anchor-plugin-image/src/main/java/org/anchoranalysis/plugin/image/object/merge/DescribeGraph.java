@@ -102,8 +102,7 @@ public class DescribeGraph {
     }
 
     public String describeMerge(
-            ObjectVertex omMerged,
-            TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
+            ObjectVertex omMerged, TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         if (includePayload) {
             return String.format(
                     "Merging %s and %s to %s (%f,%f->%f). Num vertices=%d.",
@@ -113,16 +112,14 @@ public class DescribeGraph {
                     bestImprovement.getFrom().getPayload(),
                     bestImprovement.getTo().getPayload(),
                     omMerged.getPayload(),
-                    graph.numberVertices()
-                    );
+                    graph.numberVertices());
         } else {
             return String.format(
                     "Merging %s and %s to %s. Num vertices=%d.",
                     bestImprovement.getFrom().getObject().centerOfGravity(),
                     bestImprovement.getTo().getObject().centerOfGravity(),
                     omMerged.getObject().centerOfGravity(),
-                    graph.numberVertices()
-                    );
+                    graph.numberVertices());
         }
     }
 

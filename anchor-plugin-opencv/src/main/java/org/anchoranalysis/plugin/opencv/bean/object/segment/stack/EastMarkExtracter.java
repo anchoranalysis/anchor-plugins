@@ -102,16 +102,18 @@ class EastMarkExtracter {
         float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
 
-        extent.iterateOverXYOffset( (point,offset) -> {
-            float confidence = scoresData[offset];
-            if (confidence >= minConfidence) {
+        extent.iterateOverXYOffset(
+                (point, offset) -> {
+                    float confidence = scoresData[offset];
+                    if (confidence >= minConfidence) {
 
-                Mark mark = RotatableBoundingBoxFromArrays.markFor(
-                                geometryArrs, offset, offsetScale.scale(point));
+                        Mark mark =
+                                RotatableBoundingBoxFromArrays.markFor(
+                                        geometryArrs, offset, offsetScale.scale(point));
 
-                list.add(new WithConfidence<>(mark, confidence));
-            }
-        });
+                        list.add(new WithConfidence<>(mark, confidence));
+                    }
+                });
 
         return list;
     }

@@ -40,10 +40,11 @@ public class IntersectionOverUnion {
 
     /**
      * Calculates the intersection-over-union score a pair of bounding-boxes.
-     * 
+     *
      * @param box1 first box
      * @param box2 second box
-     * @return the area of intersection divided by the area of union, with 0 if there is no intersection or union.
+     * @return the area of intersection divided by the area of union, with 0 if there is no
+     *     intersection or union.
      */
     public static double forBoxes(BoundingBox box1, BoundingBox box2) {
         Optional<BoundingBox> intersection = box1.intersection().with(box2);
