@@ -23,4 +23,9 @@
  * THE SOFTWARE.
  * #L%
  */
+/**
+ * Instance-segmentation of a {@link org.anchoranalysis.image.stack.Stack}.
+ * 
+ * <p>i.e. a collection of object-masks is inferred from an image-stack. 
+ */
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;

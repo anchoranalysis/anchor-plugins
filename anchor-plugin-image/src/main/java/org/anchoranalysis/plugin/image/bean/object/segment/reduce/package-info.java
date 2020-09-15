@@ -23,4 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
+/**
+ * Strategies for reducing the number of elements with a list by merging/removing lower-confidence elements that overlap.
+ */
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
