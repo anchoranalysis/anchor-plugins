@@ -44,7 +44,7 @@ import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFac
 public class DecomposeIntoConnectedComponents extends ObjectCollectionProviderUnary {
 
     // START BEAN PROPERTIES
-    /** if TRUE, uses 8 neighborhood instead of 4, and similarly in 3d */
+    /** if true, uses 8 neighborhood instead of 4, and similarly in 3d */
     @BeanField @Getter @Setter private boolean bigNeighborhood = false;
     // END BEAN PROPERTIES
 

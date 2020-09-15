@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +41,7 @@ import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -155,8 +155,8 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
 
-        ByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
-        return buffer.get(dimensions.offsetSlice(point)) == bvb.getOnByte();
+        UnsignedByteBuffer buffer = channel.voxels().asByte().sliceBuffer(point.z());
+        return buffer.getRaw(dimensions.offsetSlice(point)) == bvb.getOnByte();
     }
 
     private static Point3d marginalStepFrom(RotationMatrix matrix, boolean is3d) {
@@ -170,14 +170,10 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             throws OperationFailedException {
         // We do check
         if (maxDistance != null) {
-            double distance =
-                    maskCreated
-                            .dimensions()
-                            .resolution()
-                            .distanceZRelative(centerPoint, pointDouble);
+            double distance = maskCreated.resolution().distanceZRelative(centerPoint, pointDouble);
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(maskCreated.dimensions().resolution()),
+                            Optional.of(maskCreated.dimensions().unitConvert()),
                             centerPoint,
                             pointDouble);
             return distance > maxDistanceResolved;

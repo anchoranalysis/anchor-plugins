@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,9 +40,10 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.apache.commons.lang.time.StopWatch;
 
@@ -79,7 +79,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(maskCreated.dimensions().resolution())));
+                                            Optional.of(maskCreated.dimensions().unitConvert())));
 
             if (bySlices) {
                 return createObjectsBySlice(maskCreated, minNumberVoxels);
@@ -105,7 +105,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
 
         ObjectsFromConnectedComponentsFactory creator = createFactory(minNumberVoxels);
 
-        VoxelsExtracter<ByteBuffer> extracter = mask.voxels().extract();
+        VoxelsExtracter<UnsignedByteBuffer> extracter = mask.voxels().extract();
 
         return ObjectCollectionFactory.flatMapFromRange(
                 0,
@@ -114,14 +114,14 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                 z -> createForSlice(creator, extractSlice(extracter, z, mask.binaryValues()), z));
     }
 
-    private static BinaryVoxels<ByteBuffer> extractSlice(
-            VoxelsExtracter<ByteBuffer> extracter, int z, BinaryValues binaryValues) {
+    private static BinaryVoxels<UnsignedByteBuffer> extractSlice(
+            VoxelsExtracter<UnsignedByteBuffer> extracter, int z, BinaryValues binaryValues) {
         return BinaryVoxelsFactory.reuseByte(extracter.slice(z), binaryValues);
     }
 
     private ObjectCollection createForSlice(
             ObjectsFromConnectedComponentsFactory objectCreator,
-            BinaryVoxels<ByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             int z) {
         // respecify the z
         return objectCreator.createConnectedComponents(bvb).stream()

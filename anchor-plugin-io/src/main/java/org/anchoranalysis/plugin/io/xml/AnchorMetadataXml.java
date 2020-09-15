@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.io.xml;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.ToDoubleFunction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -42,84 +43,119 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+/**
+ * Reads and writes a metadata XML file specifying the image-resolution.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AnchorMetadataXml {
 
-    // Opens the meta data, setting resolutions on the dimensions
-    public static Resolution readResolutionXml(File fileMeta) throws RasterIOException {
+    private static final String ELEMENT_NAME_X = "xres";
+    private static final String ELEMENT_NAME_Y = "yres";
+    private static final String ELEMENT_NAME_Z = "zres";
+
+    /**
+     * Retrieves resolution from a XML file previously written by {@link
+     * #writeResolutionXml(Resolution, Path)}.
+     *
+     * @param file the file to open
+     * @return a resolution read from the file
+     * @throws RasterIOException if file I/O or parsing errors occur.
+     */
+    public static Resolution readResolutionXml(File file) throws RasterIOException {
 
         try {
-            DocumentBuilder db = XmlUtilities.createDocumentBuilder();
-            Document doc = db.parse(fileMeta);
-            doc.getDocumentElement().normalize();
+            DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
+            Document document = builder.parse(file);
+            document.getDocumentElement().normalize();
 
-            NodeList resLst = doc.getElementsByTagName("resolution");
+            NodeList allResolutionElements = document.getElementsByTagName("resolution");
 
-            if (resLst.getLength() != 1) {
-                throw new RasterIOException("There must only one resolution tag");
+            if (allResolutionElements.getLength() != 1) {
+                throw new RasterIOException("There must be only one resolution tag.");
             }
 
-            return resFromNodeList(resLst.item(0).getChildNodes());
+            return resolutionFromNodes(allResolutionElements.item(0).getChildNodes());
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new RasterIOException(e);
         }
     }
 
-    public static void writeResolutionXml(Path filePath, Resolution res) throws RasterIOException {
+    /**
+     * Writes a XML metadata file describing the image-resolution.
+     *
+     * @param path path to write to
+     * @param resolution the resolution to write
+     * @throws RasterIOException if any file I/O or parser errors occur
+     */
+    public static void writeResolutionXml(Resolution resolution, Path path)
+            throws RasterIOException {
 
         try {
-            DocumentBuilder db = XmlUtilities.createDocumentBuilder();
-            Document doc = db.newDocument();
+            DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
+            Document document = builder.newDocument();
 
             // create the root element and add it to the document
-            Element root = doc.createElement("metadata");
-            doc.appendChild(root);
+            Element root = document.createElement("metadata");
+            document.appendChild(root);
 
-            Element elmnRes = doc.createElement("resolution");
-            root.appendChild(elmnRes);
+            Element elementResolution = document.createElement("resolution");
+            root.appendChild(elementResolution);
 
-            Element xRes = doc.createElement("xres");
-            Element yRes = doc.createElement("yres");
-            Element zRes = doc.createElement("zres");
+            appendDimension(document, ELEMENT_NAME_X, resolution, Resolution::x, elementResolution);
+            appendDimension(document, ELEMENT_NAME_Y, resolution, Resolution::y, elementResolution);
+            appendDimension(document, ELEMENT_NAME_Z, resolution, Resolution::z, elementResolution);
 
-            elmnRes.appendChild(xRes);
-            elmnRes.appendChild(yRes);
-            elmnRes.appendChild(zRes);
-
-            xRes.appendChild(doc.createTextNode(Double.toString(res.x())));
-            yRes.appendChild(doc.createTextNode(Double.toString(res.y())));
-            zRes.appendChild(doc.createTextNode(Double.toString(res.z())));
-
-            XmlOutputter.writeXmlToFile(doc, filePath);
+            XmlOutputter.writeXmlToFile(document, path);
 
         } catch (TransformerException | ParserConfigurationException | IOException e) {
             throw new RasterIOException(e.toString());
         }
     }
 
-    private static Resolution resFromNodeList(NodeList nodeList) {
+    private static void appendDimension(
+            Document document,
+            String elementName,
+            Resolution resolution,
+            ToDoubleFunction<Resolution> extractDimension,
+            Element elementToAppendTo) {
+        Element element = document.createElement(elementName);
+        elementToAppendTo.appendChild(element);
+        element.appendChild(textNode(document, resolution, extractDimension));
+    }
+
+    private static Text textNode(
+            Document document,
+            Resolution resolution,
+            ToDoubleFunction<Resolution> extractDimension) {
+        return document.createTextNode(Double.toString(extractDimension.applyAsDouble(resolution)));
+    }
+
+    private static Resolution resolutionFromNodes(NodeList nodes) {
 
         // Initialize to defaults
-        Resolution res = new Resolution();
-        double x = res.x();
-        double y = res.y();
-        double z = res.z();
+        Resolution resolution = new Resolution();
+        double x = resolution.x();
+        double y = resolution.y();
+        double z = resolution.z();
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
 
-            Node n = nodeList.item(i);
+            Node node = nodes.item(i);
 
-            if (n.getNodeType() == Node.ELEMENT_NODE) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
 
-                if (n.getNodeName().equals("xres")) {
-                    x = doubleFromNode(n);
-                } else if (n.getNodeName().equals("yres")) {
-                    y = doubleFromNode(n);
-                } else if (n.getNodeName().equals("zres")) {
-                    z = doubleFromNode(n);
+                if (node.getNodeName().equals(ELEMENT_NAME_X)) {
+                    x = doubleFromNode(node);
+                } else if (node.getNodeName().equals(ELEMENT_NAME_Y)) {
+                    y = doubleFromNode(node);
+                } else if (node.getNodeName().equals(ELEMENT_NAME_Z)) {
+                    z = doubleFromNode(node);
                 }
             }
         }
@@ -127,7 +163,7 @@ public class AnchorMetadataXml {
         return new Resolution(x, y, z);
     }
 
-    private static double doubleFromNode(Node n) {
-        return Double.parseDouble(n.getTextContent());
+    private static double doubleFromNode(Node node) {
+        return Double.parseDouble(node.getTextContent());
     }
 }

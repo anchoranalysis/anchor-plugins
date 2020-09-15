@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +43,8 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -90,10 +90,10 @@ public class ScoreVoxels extends ChannelProvider {
 
         VoxelsFromScoreCreator creator =
                 new VoxelsFromScoreCreator(voxelsCreated, paramsCreated, histogramsCreated);
-        Voxels<ByteBuffer> voxelsPixelScore = creator.createVoxelsFromPixelScore(score, object);
+        Voxels<UnsignedByteBuffer> voxelsPixelScore =
+                creator.createVoxelsFromPixelScore(score, object);
 
-        return new ChannelFactoryByte()
-                .create(voxelsPixelScore, intensityCreated.dimensions().resolution());
+        return new ChannelFactoryByte().create(voxelsPixelScore, intensityCreated.resolution());
     }
 
     private VoxelsWrapperList createVoxelsList(Channel channelIntensity) throws CreateException {

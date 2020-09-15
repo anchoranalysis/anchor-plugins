@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.bound;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +38,7 @@ import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
@@ -67,8 +66,7 @@ public class LineBoundCalculator extends BoundCalculator {
                     getInitializationParameters()
                             .getMarkBounds()
                             .calculateMinMax(
-                                    outlineChannel.dimensions().resolution(),
-                                    rotMatrix.getNumDim() >= 3);
+                                    outlineChannel.resolution(), rotMatrix.getNumDim() >= 3);
 
             int maxPossiblePoint = (int) Math.ceil(minMax.getMax());
 
@@ -114,21 +112,21 @@ public class LineBoundCalculator extends BoundCalculator {
     private double maxReachablePoint(
             Channel channel, Point3d point, Point3d marg, int maxPossiblePoint) {
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         // This only exists in 2d for now so we can use a slice byteArray
-        ByteBuffer arr = null;
+        UnsignedByteBuffer arr = null;
 
         int zPrev = 0;
         arr = voxels.slices().slice(zPrev).buffer();
 
-        Point3d runningDbl = new Point3d();
+        Point3d runningDouble = new Point3d();
 
         for (int i = 1; i < maxPossiblePoint; i++) {
-            runningDbl.add(marg);
+            runningDouble.add(marg);
 
             Point3i runningInt =
-                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDbl));
+                    PointConverter.intFromDoubleFloor(Point3d.immutableAdd(point, runningDouble));
 
             Dimensions dimensions = channel.dimensions();
             if (dimensions.contains(runningInt)) {
@@ -141,14 +139,10 @@ public class LineBoundCalculator extends BoundCalculator {
             }
 
             int index = dimensions.offsetSlice(runningInt);
-            int v = ByteConverter.unsignedByteToInt(arr.get(index));
 
-            if (v > 0) {
+            if (arr.getUnsigned(index) > 0) {
                 // We calculate how far we have travelled in total
-                return extra
-                        + normZMag(
-                                runningDbl,
-                                channel.dimensions().resolution().getZRelativeResolution());
+                return extra + normZMag(runningDouble, channel.resolution().zRelative());
             }
         }
         return -1;

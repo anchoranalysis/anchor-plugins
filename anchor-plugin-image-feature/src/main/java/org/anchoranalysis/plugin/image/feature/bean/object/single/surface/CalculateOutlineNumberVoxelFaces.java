@@ -26,12 +26,12 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.surface;
 
-import java.nio.ByteBuffer;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -50,7 +50,7 @@ class CalculateOutlineNumberVoxelFaces
 
     /**
      * Whether to suppress 3D calculations (only consider XY neighbors). Doesn't make sense if
-     * mip=TRUE, and will then be ignroed.
+     * mip=true, and will then be ignroed.
      */
     private final boolean suppress3D;
 
@@ -70,7 +70,7 @@ class CalculateOutlineNumberVoxelFaces
                             dimensions.extent(),
                             object.boundingBox().cornerMin());
 
-            Voxels<ByteBuffer> voxelsProjected = object.extract().projectMax();
+            Voxels<UnsignedByteBuffer> voxelsProjected = object.extract().projectMax();
             return ApplyKernel.applyForCount(kernel, voxelsProjected);
 
         } else {

@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.plugin.operator.feature.bean.FeatureGenericWithValue;
+import org.anchoranalysis.plugin.operator.feature.bean.WithValueBase;
 
 @NoArgsConstructor
-public class MultiplyByConstant<T extends FeatureInput> extends FeatureGenericWithValue<T> {
+public class MultiplyByConstant<T extends FeatureInput> extends WithValueBase<T> {
 
     public MultiplyByConstant(Feature<T> feature, double value) {
         setItem(feature);

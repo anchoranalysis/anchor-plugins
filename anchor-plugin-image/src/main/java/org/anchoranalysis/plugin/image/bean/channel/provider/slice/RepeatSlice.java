@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -34,6 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -71,8 +71,8 @@ public class RepeatSlice extends FromDimensionsBase {
                 ChannelFactory.instance()
                         .createUninitialised(dimensions, UnsignedByteVoxelType.INSTANCE);
 
-        Voxels<ByteBuffer> voxelsSlice = sliceCreated.voxels().asByte();
-        Voxels<ByteBuffer> voxelsOut = channelOut.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsSlice = sliceCreated.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = channelOut.voxels().asByte();
 
         voxelsOut
                 .extent()

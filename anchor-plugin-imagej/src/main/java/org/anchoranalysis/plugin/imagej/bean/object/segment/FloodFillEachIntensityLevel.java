@@ -37,9 +37,10 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.CreateObjectsFromLabels;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.label.DecodeLabels;
 import org.anchoranalysis.image.seed.SeedCollection;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 
@@ -105,7 +106,7 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     }
 
     /**
-     * Create object-masks from an image labelled as per {@link #floodFillChannel(Channel)}
+     * Create object-masks from an image labelled as per {@link #floodFillChannel(Channel)}.
      *
      * @param channel a channel labelled as per {@link #floodFillChannel(Channel)}
      * @param numberLabels the number of objects, so that the label ids are a sequence (1,numLabels)
@@ -116,8 +117,10 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     private ObjectCollection objectsFromLabels(Channel channel, int numberLabels)
             throws OperationFailedException {
         try {
-            return new CreateObjectsFromLabels(channel.voxels().asByte(), 1, numberLabels)
-                    .create(minimumBoundingBoxVolume);
+            DecodeLabels<ObjectMask> createObjects = new DecodeLabels<>(
+                    channel.voxels().asByte(), 1, numberLabels, (index,scaledObject) -> scaledObject);
+            
+            return ObjectCollectionFactory.of( createObjects.create(minimumBoundingBoxVolume) );
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

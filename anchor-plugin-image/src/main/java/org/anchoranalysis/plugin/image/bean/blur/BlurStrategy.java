@@ -33,7 +33,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
@@ -62,7 +61,7 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
         if (sigmaInMeters) {
             // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
             // later)
-            sigmaToUse = ImageUnitConverter.convertFromMeters(sigma, dimensions.resolution());
+            sigmaToUse = dimensions.unitConvert().fromPhysicalDistance(sigma);
 
             logger.logFormatted("Converted sigmaInMeters=%f into sigma=%f", sigma, sigmaToUse);
         }

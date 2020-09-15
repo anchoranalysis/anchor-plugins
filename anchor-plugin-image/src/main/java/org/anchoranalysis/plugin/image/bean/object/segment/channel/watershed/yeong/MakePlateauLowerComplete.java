@@ -26,18 +26,18 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessChangedPointAbsoluteMasked;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessChangedPointAbsoluteMasked;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
@@ -52,7 +52,7 @@ class MakePlateauLowerComplete {
         private final List<Point3i> foundPoints = new ArrayList<>();
 
         private int zChange;
-        private ByteBuffer bb;
+        private UnsignedByteBuffer buffer;
         private int z1;
         private final byte maskValueOff;
 
@@ -68,8 +68,8 @@ class MakePlateauLowerComplete {
         }
 
         @Override
-        public void notifyChangeZ(int zChange, int z1, ByteBuffer objectMaskBuffer) {
-            this.bb = objectMaskBuffer;
+        public void notifyChangeZ(int zChange, int z1, UnsignedByteBuffer objectMaskBuffer) {
+            this.buffer = objectMaskBuffer;
             this.zChange = zChange;
             this.z1 = z1;
         }
@@ -80,7 +80,7 @@ class MakePlateauLowerComplete {
 
             Point3i pointRel = new Point3i(x1, y1, z1);
             foundPoints.add(pointRel);
-            bb.put(objectMaskOffset, maskValueOff);
+            buffer.putRaw(objectMaskOffset, maskValueOff);
 
             // We point this value in the direction opposite to which it came
             matS.setPointDirection(pointRel, xChange * -1, yChange * -1, zChange * -1);
@@ -172,7 +172,7 @@ class MakePlateauLowerComplete {
         for (Point3i point : points) {
 
             foundPoints.addAll(
-                    IterateVoxels.callEachPointInNeighborhood(
+                    IterateVoxelsNeighbors.callEachPointInNeighborhood(
                             point,
                             neighborhood,
                             do3D,

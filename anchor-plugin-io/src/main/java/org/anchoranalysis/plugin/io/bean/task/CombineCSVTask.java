@@ -62,7 +62,9 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
@@ -106,7 +108,7 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
             String name =
-                    addName ? inputObject.descriptiveName() : null; // NULL means no-name is added
+                    addName ? inputObject.descriptiveName() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {

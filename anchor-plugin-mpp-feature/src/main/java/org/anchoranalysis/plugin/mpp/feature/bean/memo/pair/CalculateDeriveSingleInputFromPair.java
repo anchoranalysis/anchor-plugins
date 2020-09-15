@@ -37,12 +37,12 @@ import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 class CalculateDeriveSingleInputFromPair
         extends FeatureCalculation<FeatureInputSingleMemo, FeatureInputPairMemo> {
 
-    /** Iff TRUE, then the first object from the pair is used, otherwise the second is */
+    /** Iff true, then the first object from the pair is used, otherwise the second is */
     private final boolean first;
 
     @Override
     protected FeatureInputSingleMemo execute(FeatureInputPairMemo input) {
         return new FeatureInputSingleMemo(
-                first ? input.getObj1() : input.getObj2(), input.getEnergyStackOptional());
+                first ? input.getObject1() : input.getObject2(), input.getEnergyStackOptional());
     }
 }

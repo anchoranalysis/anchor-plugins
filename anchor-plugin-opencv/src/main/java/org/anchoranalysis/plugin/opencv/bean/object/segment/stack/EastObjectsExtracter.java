@@ -40,7 +40,8 @@ import org.anchoranalysis.image.object.properties.ObjectWithProperties;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
-import org.anchoranalysis.plugin.opencv.nonmaxima.WithConfidence;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
+import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 
@@ -51,36 +52,43 @@ import org.opencv.dnn.Net;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class EastObjectsExtracter {
-    
-    public static List<WithConfidence<ObjectMask>> apply(ConcurrentModelPool<Net> modelPool,
-            Mat image, Resolution res, double minConfidence) throws InterruptedException {
+
+    public static SegmentedObjects apply(
+            ConcurrentModelPool<Net> modelPool,
+            Mat image,
+            Resolution resolution,
+            double minConfidence)
+            throws Throwable {
         List<WithConfidence<Mark>> listMarks =
                 EastMarkExtracter.extractBoundingBoxes(modelPool, image, minConfidence);
 
         // Convert marks to object-masks
-        return convertMarksToObject(listMarks, dimensionsForMatrix(image, res));
+        return new SegmentedObjects(
+            convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution))
+        );
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
             List<WithConfidence<Mark>> listMarks, Dimensions dim) {
-        return FunctionalList.mapToList(listMarks, withConfidence -> convertToObject(withConfidence, dim));
+        return FunctionalList.mapToList(
+                listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
-    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution res) {
-
-        int width = (int) matrix.size().width;
-        int height = (int) matrix.size().height;
-
-        return new Dimensions(new Extent(width, height), res);
+    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
+        Extent extent = new Extent(
+            (int) matrix.size().width,
+            (int) matrix.size().height
+        );
+        return new Dimensions(extent, resolution);
     }
 
     private static WithConfidence<ObjectMask> convertToObject(
             WithConfidence<Mark> mark, Dimensions dimensions) {
 
         ObjectWithProperties object =
-                mark.getObject()
+                mark.getElement()
                         .deriveObject(
                                 dimensions,
                                 RegionMapSingleton.instance()

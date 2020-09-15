@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParame
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
@@ -51,18 +51,18 @@ public class Repeat extends BinarySegmentationOne {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxels<ByteBuffer> segmentFromExistingSegmentation(
+    public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxels<ByteBuffer> outOld = null;
+        BinaryVoxels<UnsignedByteBuffer> outOld = null;
 
         int cnt = 0;
         while (cnt++ < iterations) {
-            BinaryVoxels<ByteBuffer> outNew = sgmn.segment(voxels, params, objectMask);
+            BinaryVoxels<UnsignedByteBuffer> outNew = sgmn.segment(voxels, params, objectMask);
 
             if (outNew == null) {
                 return outOld;

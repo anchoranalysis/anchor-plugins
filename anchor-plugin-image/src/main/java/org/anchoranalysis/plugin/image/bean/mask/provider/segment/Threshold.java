@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -37,6 +36,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
@@ -55,10 +55,10 @@ public class Threshold extends FromChannelBase {
     @Override
     protected Mask createFromSource(Channel source) throws CreateException {
         try {
-            BinaryVoxels<ByteBuffer> voxelsThresholded =
+            BinaryVoxels<UnsignedByteBuffer> voxelsThresholded =
                     thresholder.threshold(source.voxels(), BinaryValuesByte.getDefault());
 
-            return new Mask(voxelsThresholded, source.dimensions().resolution());
+            return new Mask(voxelsThresholded, source.resolution());
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);

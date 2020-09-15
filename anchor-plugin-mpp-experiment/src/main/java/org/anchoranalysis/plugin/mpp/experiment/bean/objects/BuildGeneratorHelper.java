@@ -33,11 +33,12 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.name.value.SimpleNameValue;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ExtractBoundingBoxAreaFromStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBoxGenerator;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
@@ -74,16 +75,16 @@ class BuildGeneratorHelper {
     /** The width of the outline of the object (e.g. 1 pixel) */
     private final int outlineWidth;
 
-    public IterableGenerator<ObjectsWithBoundingBox> forStacks(
+    public IterableGenerator<BoundedList<ObjectMask>> forStacks(
             Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
         // First generator generates object-masks and bounding-boxes for each object
-        IterableGenerator<ObjectsWithBoundingBox> wrappedObjectWithBoundingBoxGenerator =
+        IterableGenerator<BoundedList<ObjectMask>> wrappedObjectWithBoundingBoxGenerator =
                 WrapGenerators.wrapObjectMask(
                         new ObjectWithBoundingBoxGenerator(dimensions.resolution()));
 
-        IterableCombinedListGenerator<ObjectsWithBoundingBox> out =
+        IterableCombinedListGenerator<BoundedList<ObjectMask>> out =
                 new IterableCombinedListGenerator<>(
                         new SimpleNameValue<>("mask", wrappedObjectWithBoundingBoxGenerator));
 
@@ -98,7 +99,7 @@ class BuildGeneratorHelper {
 
     private void addGeneratorForEachStack(
             NamedStacks stacks,
-            IterableCombinedListGenerator<ObjectsWithBoundingBox> out,
+            IterableCombinedListGenerator<BoundedList<ObjectMask>> out,
             boolean flatten)
             throws NamedProviderGetException {
 

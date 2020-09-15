@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,6 +34,7 @@ import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
@@ -65,7 +65,7 @@ public class RepeatSlice extends MaskProviderUnary {
         Mask out = createEmptyMask(mask, dimensionsForOutput);
 
         // Always takes the same slice as input buffer
-        ByteBuffer bufferSliceToRepeat = mask.sliceBuffer(sliceIndex);
+        UnsignedByteBuffer bufferSliceToRepeat = mask.sliceBuffer(sliceIndex);
 
         Extent extent = dimensionsForOutput.extent();
         extent.iterateOverZ(z -> copySliceInto(bufferSliceToRepeat, z, extent, out));
@@ -83,11 +83,11 @@ public class RepeatSlice extends MaskProviderUnary {
     }
 
     private static void copySliceInto(
-            ByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
+            UnsignedByteBuffer bufferSliceToRepeat, int sliceIndexOut, Extent extent, Mask out) {
         // Variously takes different z slices
-        ByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
+        UnsignedByteBuffer bufferOut = out.sliceBuffer(sliceIndexOut);
 
         extent.iterateOverXYOffset(
-                offset -> bufferOut.put(offset, bufferSliceToRepeat.get(offset)));
+                offset -> bufferOut.putRaw(offset, bufferSliceToRepeat.getRaw(offset)));
     }
 }

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.split;
 
-import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Optional;
 import lombok.Getter;
@@ -35,8 +34,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -95,7 +95,7 @@ public class SplitIntoSquares extends ObjectCollectionProviderUnary {
     private ObjectMask extractFromObject(ObjectMask objectToSplit, BoundingBox box) {
 
         // Voxels for the new square
-        Voxels<ByteBuffer> voxelsNew = objectToSplit.voxels().extract().region(box, false);
+        Voxels<UnsignedByteBuffer> voxelsNew = objectToSplit.voxels().extract().region(box, false);
 
         return new ObjectMask(
                 box.shiftBy(objectToSplit.boundingBox().cornerMin()),

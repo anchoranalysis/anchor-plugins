@@ -41,7 +41,7 @@ public class RootedFilePath extends FilePath {
 
     @BeanField @Getter @Setter private String rootName;
 
-    // If TRUE, we will disable debug-mode for this current bean, if debug-mode it's set. Otherwise,
+    // If true, we will disable debug-mode for this current bean, if debug-mode it's set. Otherwise,
     // there is no impact.
     @BeanField @Getter @Setter private boolean disableDebugMode = false;
     // END BEAN PROPERTIES

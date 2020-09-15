@@ -73,15 +73,15 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel = objectMask;
             }
 
-            Histogram h = HistogramFactory.create(channel, objectForCalculateLevel);
+            Histogram histogram = HistogramFactory.create(channel, objectForCalculateLevel);
             int level;
             try {
-                level = calculateLevel.calculateLevel(h);
+                level = calculateLevel.calculateLevel(histogram);
             } catch (OperationFailedException e) {
                 throw new CreateException(e);
             }
 
-            LevelResult res = new LevelResult(level, objectMask, h);
+            LevelResult res = new LevelResult(level, objectMask, histogram);
 
             logger.logFormatted("Level result is %d", res.getLevel());
 

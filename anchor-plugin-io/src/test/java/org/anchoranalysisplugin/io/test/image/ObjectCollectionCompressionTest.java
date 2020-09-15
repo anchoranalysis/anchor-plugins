@@ -45,7 +45,7 @@ public class ObjectCollectionCompressionTest {
     // An uncompressed obj-mask-collection
     private static final String PATH_UNCOMPRESSED_OBJECTS = "objectsUncompressed/objects.h5";
 
-    private TestLoaderImageIO testLoader =
+    private TestLoaderImageIO loader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     @Rule public TemporaryFolder folder = new TemporaryFolder();
@@ -71,9 +71,9 @@ public class ObjectCollectionCompressionTest {
     private ObjectCollectionWithSize calculateUncompressed(String pathIn) {
 
         // Read the object, and write it again, this time compressed
-        ObjectCollection objects = testLoader.openObjectsFromTestPath(pathIn);
+        ObjectCollection objects = loader.openObjectsFromTestPath(pathIn);
 
-        long size = fileSizeBytes(testLoader.getTestLoader().resolveTestPath(pathIn));
+        long size = fileSizeBytes(loader.resolveTestPath(pathIn));
 
         return new ObjectCollectionWithSize(objects, size);
     }

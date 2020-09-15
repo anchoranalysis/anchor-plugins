@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean;
 
+import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.function.Function;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -68,7 +68,9 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
 
     @Override
     public S beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return task.beforeAnyJobIsExecuted(outputManager, concurrencyPlan, params);
     }
@@ -85,7 +87,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
         } else if (expectedFromDelegate.doesClassInheritFromAny(MultiInput.class)) {
             doJobWithMultiInput(input);
         } else if (expectedFromDelegate.doesClassInheritFromAny(StackSequenceInput.class)) {
-            doJobWithStackSequenceInput(input);            
+            doJobWithStackSequenceInput(input);
         } else {
             throw new JobExecutionException(
                     String.format(
@@ -125,17 +127,21 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     private void doJobWithMultiInput(InputBound<T, S> input) throws JobExecutionException {
         doJobWithConvertedInput(input, MultiInput::new);
     }
-    
+
     private void doJobWithStackSequenceInput(InputBound<T, S> input) throws JobExecutionException {
         doJobWithConvertedInput(input, ConvertChannelsInputToStack::new);
     }
-    
-    private void doJobWithConvertedInput(InputBound<T, S> input, Function<T,InputFromManager> deriveChangedInput ) throws JobExecutionException {
-        doJobWithInputCast( input.changeInputObject( deriveChangedInput.apply(input.getInputObject())) );        
+
+    private void doJobWithConvertedInput(
+            InputBound<T, S> input, Function<T, InputFromManager> deriveChangedInput)
+            throws JobExecutionException {
+        doJobWithInputCast(
+                input.changeInputObject(deriveChangedInput.apply(input.getInputObject())));
     }
-    
+
     @SuppressWarnings("unchecked")
-    private void doJobWithInputCast(InputBound<? extends InputFromManager, S> input) throws JobExecutionException {
+    private void doJobWithInputCast(InputBound<? extends InputFromManager, S> input)
+            throws JobExecutionException {
         task.doJobOnInputObject((InputBound<U, S>) input);
     }
 }

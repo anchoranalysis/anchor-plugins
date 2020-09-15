@@ -26,19 +26,18 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects.LabelsForInput;
 
 @AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
@@ -47,13 +46,12 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final InitParamsWithEnergyStack initParams;
 
     public void processProvider(
-            ObjectCollectionProvider provider,
-            Function<T, StringLabelsForCsvRow> identifierFromInput)
+            ObjectCollectionProvider provider, LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
         calculator.calculateFeaturesForObjects(
                 objectsFromProvider(provider, initParams.getImageInit(), calculator.getLogger()),
                 initParams.getEnergyStack(),
-                identifierFromInput);
+                labelsForInput);
     }
 
     private static ObjectCollection objectsFromProvider(

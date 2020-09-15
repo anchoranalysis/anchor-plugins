@@ -39,11 +39,12 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.io.csv.name.CombinedName;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
-import org.anchoranalysis.feature.io.csv.name.SimpleName;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.name.CombinedName;
+import org.anchoranalysis.feature.io.name.MultiName;
+import org.anchoranalysis.feature.io.name.SimpleName;
+import org.anchoranalysis.feature.io.results.LabelHeaders;
+import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
@@ -120,7 +121,11 @@ public class FromObjects<T extends FeatureInput>
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
-            return SharedStateExportFeatures.createForFeatures(tableCalculator,  metadataHeaders, context);
+            return SharedStateExportFeatures.createForFeatures(
+                    new ResultsWriterOutputNames("features", true, true),
+                    tableCalculator,
+                    metadataHeaders,
+                    context);
         } catch (InitException e) {
             throw new CreateException(e);
         }
@@ -166,14 +171,11 @@ public class FromObjects<T extends FeatureInput>
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
 
-        CalculateFeaturesForObjects<T> objectsCalculator = new CalculateFeaturesForObjects<>(
-                combine,
-                initParams,
-                suppressErrors,
-                context
-        );
-        
-        CalculateFeaturesFromProvider<T> fromProviderCalculator = new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
+        CalculateFeaturesForObjects<T> objectsCalculator =
+                new CalculateFeaturesForObjects<>(combine, initParams, suppressErrors, context);
+
+        CalculateFeaturesFromProvider<T> fromProviderCalculator =
+                new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
         processAllProviders(
                 descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
 
@@ -191,7 +193,7 @@ public class FromObjects<T extends FeatureInput>
         for (NamedBean<ObjectCollectionProvider> namedBean : objects) {
             calculator.processProvider(
                     namedBean.getValue(),
-                    input ->
+                    (input, index) ->
                             identifierFor(
                                     imageIdentifier,
                                     combine.uniqueIdentifierFor(input),
@@ -200,12 +202,12 @@ public class FromObjects<T extends FeatureInput>
         }
     }
 
-    private StringLabelsForCsvRow identifierFor(
+    private RowLabels identifierFor(
             String imageIdentifier,
             String objectIdentifier,
             Optional<String> groupGeneratorName,
             String providerName) {
-        return new StringLabelsForCsvRow(
+        return new RowLabels(
                 Optional.of(new String[] {imageIdentifier, objectIdentifier}),
                 createGroupName(groupGeneratorName, providerName));
     }

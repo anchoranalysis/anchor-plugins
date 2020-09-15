@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.VoxelizedMarksWithEnergyFactory;
+import org.anchoranalysis.plugin.mpp.segment.optimization.VoxelizedMarksWithEnergyFactory;
 
 public class PointsFitter extends StateTransformerBean<MarkCollection, VoxelizedMarksWithEnergy> {
 

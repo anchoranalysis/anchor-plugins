@@ -101,10 +101,10 @@ public class FillHoles extends MaskProviderUnary {
                 .filter(objectMask -> includeObject(objectMask, dimensions, maxVolumeResolved));
     }
 
-    private double determineMaxVolume(Dimensions dim) throws CreateException {
+    private double determineMaxVolume(Dimensions dimensions) throws CreateException {
         if (maxVolume != null) {
             try {
-                return maxVolume.resolveToVoxels(Optional.of(dim.resolution()));
+                return maxVolume.resolveToVoxels(Optional.of(dimensions.unitConvert()));
             } catch (UnitValueException e) {
                 throw new CreateException(e);
             }

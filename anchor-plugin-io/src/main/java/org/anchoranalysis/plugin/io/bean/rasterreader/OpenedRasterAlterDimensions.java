@@ -46,11 +46,11 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         /**
          * A possibly-updated image resolution
          *
-         * @param res the existing image resolution
+         * @param resolution the existing image resolution
          * @return a new image resolution or empty if no change should occur
          * @throws RasterIOException
          */
-        Optional<Resolution> maybeUpdatedResolution(Resolution res) throws RasterIOException;
+        Optional<Resolution> maybeUpdatedResolution(Resolution resolution) throws RasterIOException;
     }
 
     private OpenedRaster delegate;
@@ -67,8 +67,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         TimeSequence ts = delegate.open(seriesIndex, progressReporter);
 
         for (Stack stack : ts) {
-            Optional<Resolution> res =
-                    processor.maybeUpdatedResolution(stack.dimensions().resolution());
+            Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
             res.ifPresent(stack::updateResolution);
         }
         return ts;
@@ -92,7 +91,7 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
         Optional<Resolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
 
         if (res.isPresent()) {
-            return dimensions.duplicateChangeRes(res.get());
+            return dimensions.duplicateChangeResolution(res.get());
         } else {
             return dimensions;
         }

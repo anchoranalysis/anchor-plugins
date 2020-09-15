@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitSchedulerConvexAboutRoot;
 
 class PointListForConvex {
@@ -42,11 +42,12 @@ class PointListForConvex {
     }
 
     public boolean convexWithAtLeastOnePoint(
-            Point3i root, Point3i point, BinaryVoxels<ByteBuffer> voxels) {
+            Point3i root, Point3i point, BinaryVoxels<UnsignedByteBuffer> voxels) {
         return VisitSchedulerConvexAboutRoot.isPointConvexTo(root, point, voxels);
     }
 
-    public boolean convexWithAtLeastOnePoint(Point3i pointToHave, BinaryVoxels<ByteBuffer> voxels) {
+    public boolean convexWithAtLeastOnePoint(
+            Point3i pointToHave, BinaryVoxels<UnsignedByteBuffer> voxels) {
         return list.stream()
                 .anyMatch(point -> convexWithAtLeastOnePoint(point, pointToHave, voxels));
     }

@@ -90,7 +90,7 @@ class StatsHelper {
      * @param object
      * @param numberVoxels the number of voxels to be considered (either the highest-intensity
      *     pixels, or lowest-intensity pixel)
-     * @param highest iff TRUE the highest-intensity voxels are used in the mask, otherwise the
+     * @param highest iff true the highest-intensity voxels are used in the mask, otherwise the
      *     lowest-intensity pixels are used
      * @return
      * @throws OperationFailedException
@@ -101,12 +101,12 @@ class StatsHelper {
 
         Histogram histogram = HistogramFactory.create(channel, object);
 
-        Histogram hCut =
+        Histogram histogramCut =
                 highest
                         ? histogram.extractValuesFromRight(numberVoxels)
                         : histogram.extractValuesFromLeft(numberVoxels);
 
-        return hCut.mean();
+        return histogramCut.mean();
     }
 
     public static double calculateStatistic(
@@ -115,12 +115,13 @@ class StatsHelper {
             boolean ignoreZero,
             double emptyValue,
             ToDoubleFunction<VoxelStatisticsFromHistogram> funcExtractStatistic) {
-        Histogram hist = HistogramFactory.createHistogramIgnoreZero(channel, object, ignoreZero);
+        Histogram histogram =
+                HistogramFactory.createHistogramIgnoreZero(channel, object, ignoreZero);
 
-        if (hist.getTotalCount() == 0) {
+        if (histogram.getTotalCount() == 0) {
             return emptyValue;
         }
 
-        return funcExtractStatistic.applyAsDouble(new VoxelStatisticsFromHistogram(hist));
+        return funcExtractStatistic.applyAsDouble(new VoxelStatisticsFromHistogram(histogram));
     }
 }

@@ -34,12 +34,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
@@ -85,17 +84,18 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
     private void adjustObject(
             ObjectMask object, Channel channel, Channel channelLookup, int medianFromObject) {
 
-        IterateVoxels.callEachPointTwo(
+        IterateVoxelsObjectMask.withTwoBuffers(
+                object,
                 channel.voxels().asByte(),
                 channelLookup.voxels().asByte(),
-                object,
                 (point, buffer, bufferLookup, offset) -> {
-                    int lookupVal = ByteConverter.unsignedByteToInt(bufferLookup.get(offset));
+                    int valueToAssign =
+                            clipValue(
+                                    buffer.getUnsigned(offset)
+                                            - medianFromObject
+                                            + bufferLookup.getUnsigned(offset));
 
-                    int valueExisting = ByteConverter.unsignedByteToInt(buffer.get(offset));
-                    int valueToAssign = clipValue(valueExisting - medianFromObject + lookupVal);
-
-                    buffer.put(offset, (byte) valueToAssign);
+                    buffer.putUnsigned(offset, valueToAssign);
                 });
     }
 

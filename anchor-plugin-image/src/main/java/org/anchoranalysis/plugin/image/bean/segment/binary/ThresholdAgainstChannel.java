@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +39,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -67,12 +67,12 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels, BinarySegmentationParameters params, Optional<ObjectMask> object)
             throws SegmentationFailedException {
 
         Voxels<?> voxelsIn = voxels.any();
-        Voxels<ByteBuffer> voxelsOut = createOutputVoxels(voxels);
+        Voxels<UnsignedByteBuffer> voxelsOut = createOutputVoxels(voxels);
 
         BinaryValuesByte bvb = BinaryValuesByte.getDefault();
 
@@ -121,7 +121,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
      * @param voxels
      * @return
      */
-    private Voxels<ByteBuffer> createOutputVoxels(VoxelsWrapper voxels) {
+    private Voxels<UnsignedByteBuffer> createOutputVoxels(VoxelsWrapper voxels) {
 
         if (voxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return voxels.asByte();

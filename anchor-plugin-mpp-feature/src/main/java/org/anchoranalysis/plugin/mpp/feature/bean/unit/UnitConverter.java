@@ -32,9 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.convert.ImageUnitConverter;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.DirectionVector;
 
@@ -55,70 +53,58 @@ public class UnitConverter extends AnchorBean<UnitConverter> {
      * Convert distance into another unit representation
      *
      * @param value distance expressed as number of voxels
-     * @param res image-resolution
+     * @param resolution image-resolution
      * @return distance expressed in desired units
      * @throws FeatureCalculationException
      */
-    public double resolveDistance(double value, Optional<Resolution> res, DirectionVector dirVector)
+    public double resolveDistance(
+            double value, Optional<Resolution> resolution, DirectionVector direction)
             throws FeatureCalculationException {
 
         // If we aren't doing anything physical, we can just return the current value
-        if (isNonPhysical(res)) {
+        if (isNonPhysical(resolution)) {
             return value;
         }
 
-        double valuePhysical =
-                ImageUnitConverter.convertToPhysicalDistance(value, res.get(), dirVector);
-        SpatialConversionUtilities.UnitSuffix prefixType =
-                SpatialConversionUtilities.suffixFromMeterString(unitType);
-
-        return SpatialConversionUtilities.convertToUnits(valuePhysical, prefixType);
+        return resolution.get().unitConvert().toPhysicalDistance(value, direction, unitType);
     }
 
     /**
      * Convert volume into another unit representation
      *
      * @param value volume as number of voxels
-     * @param res image-resolution
+     * @param resolution image-resolution
      * @return volume expressed in desired units
      * @throws FeatureCalculationException
      */
-    public double resolveVolume(double value, Optional<Resolution> res)
+    public double resolveVolume(double value, Optional<Resolution> resolution)
             throws FeatureCalculationException {
 
         // If we aren't doing anything physical, we can just return the current value
-        if (isNonPhysical(res)) {
+        if (isNonPhysical(resolution)) {
             return value;
         }
 
-        double valuePhysical = ImageUnitConverter.convertToPhysicalVolume(value, res.get());
-
-        SpatialConversionUtilities.UnitSuffix prefixType =
-                SpatialConversionUtilities.suffixFromMeterString(unitType);
-        return SpatialConversionUtilities.convertToUnits(valuePhysical, prefixType);
+        return resolution.get().unitConvert().toPhysicalVolume(value, unitType);
     }
 
     /**
      * Convert area into another unit representation
      *
      * @param value area as number of voxels
-     * @param res image-resolution
+     * @param resolution image-resolution
      * @return area expressed in desired units
      * @throws FeatureCalculationException
      */
-    public double resolveArea(double value, Optional<Resolution> res)
+    public double resolveArea(double value, Optional<Resolution> resolution)
             throws FeatureCalculationException {
 
         // If we aren't doing anything physical, we can just return the current value
-        if (isNonPhysical(res)) {
+        if (isNonPhysical(resolution)) {
             return value;
         }
 
-        double valuePhysical = ImageUnitConverter.convertToPhysicalArea(value, res.get());
-
-        SpatialConversionUtilities.UnitSuffix prefixType =
-                SpatialConversionUtilities.suffixFromMeterString(unitType);
-        return SpatialConversionUtilities.convertToUnits(valuePhysical, prefixType);
+        return resolution.get().unitConvert().toPhysicalArea(value, unitType);
     }
 
     /**

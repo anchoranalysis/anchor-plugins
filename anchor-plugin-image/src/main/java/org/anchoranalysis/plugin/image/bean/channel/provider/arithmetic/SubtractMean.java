@@ -26,17 +26,16 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskBase;
 
 /**
@@ -53,7 +52,7 @@ public class SubtractMean extends UnaryWithMaskBase {
     @Override
     protected Channel createFromMaskedChannel(Channel channel, Mask mask) throws CreateException {
 
-        Voxels<ByteBuffer> voxelsIntensity = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsIntensity = channel.voxels().asByte();
 
         double mean = calculateMean(voxelsIntensity, mask);
 
@@ -68,24 +67,24 @@ public class SubtractMean extends UnaryWithMaskBase {
         return channel;
     }
 
-    private double calculateMean(Voxels<ByteBuffer> voxelsIntensity, Mask mask) {
-        return IterateVoxelsByte.calculateSumAndCount(voxelsIntensity, mask).mean(0);
+    private double calculateMean(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask) {
+        return IterateVoxelsMask.calculateRunningSum(mask, voxelsIntensity).mean(0);
     }
 
-    private void subtractMeanMask(Voxels<ByteBuffer> voxelsIntensity, Mask mask, int mean) {
-        IterateVoxels.callEachPoint(
-                voxelsIntensity,
+    private void subtractMeanMask(Voxels<UnsignedByteBuffer> voxelsIntensity, Mask mask, int mean) {
+        IterateVoxelsMask.withBuffer(
                 mask,
+                voxelsIntensity,
                 (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
-    private void subtractMeanAll(Voxels<ByteBuffer> voxelsIntensity, int mean) {
-        IterateVoxels.callEachPoint(
+    private void subtractMeanAll(Voxels<UnsignedByteBuffer> voxelsIntensity, int mean) {
+        IterateVoxelsAll.withBuffer(
                 voxelsIntensity, (point, buffer, offset) -> processPoint(buffer, offset, mean));
     }
 
-    private static void processPoint(ByteBuffer buffer, int offset, int mean) {
-        int intensity = ByteConverter.unsignedByteToInt(buffer.get(offset));
+    private static void processPoint(UnsignedByteBuffer buffer, int offset, int mean) {
+        int intensity = buffer.getUnsigned(offset);
 
         int intensitySubtracted = intensity - mean;
 
@@ -94,6 +93,6 @@ public class SubtractMean extends UnaryWithMaskBase {
             intensitySubtracted = 0;
         }
 
-        buffer.put(offset, (byte) intensitySubtracted);
+        buffer.putUnsigned(offset, intensitySubtracted);
     }
 }

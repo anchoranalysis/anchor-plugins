@@ -32,8 +32,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.BoundingBoxDistance;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.extent.box.BoundingBoxDistance;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @AllArgsConstructor
@@ -44,19 +44,20 @@ public class DistanceCondition implements BeforeCondition {
     private final MessageLogger logger;
 
     @Override
-    public boolean accept(ObjectMask source, ObjectMask destination, Optional<Resolution> res)
+    public boolean accept(
+            ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
 
         // We impose a maximum distance condition if necessary
         if (maxDistance.isPresent()) {
-            return isWithinMaxDistance(source, destination, res);
+            return isWithinMaxDistance(source, destination, unitConverter);
         } else {
             return true;
         }
     }
 
     private boolean isWithinMaxDistance(
-            ObjectMask source, ObjectMask destination, Optional<Resolution> res)
+            ObjectMask source, ObjectMask destination, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
 
         double distance =
@@ -65,7 +66,9 @@ public class DistanceCondition implements BeforeCondition {
 
         double maxDistanceResolved =
                 resolveDistance(
-                        res, source.boundingBox().midpoint(), destination.boundingBox().midpoint());
+                        unitConverter,
+                        source.boundingBox().midpoint(),
+                        destination.boundingBox().midpoint());
 
         if (distance >= maxDistanceResolved) {
             return false;
@@ -82,16 +85,17 @@ public class DistanceCondition implements BeforeCondition {
         }
     }
 
-    private double resolveDistance(Optional<Resolution> res, Point3d point1, Point3d point2)
+    private double resolveDistance(
+            Optional<UnitConverter> unitConverter, Point3d point1, Point3d point2)
             throws OperationFailedException {
         if (suppressZ) {
             return maxDistance // NOSONAR
                     .get()
-                    .resolve(res, point1.dropZ(), point2.dropZ());
+                    .resolve(unitConverter, point1.dropZ(), point2.dropZ());
         } else {
             return maxDistance // NOSONAR
                     .get()
-                    .resolve(res, point1, point2);
+                    .resolve(unitConverter, point1, point2);
         }
     }
 }

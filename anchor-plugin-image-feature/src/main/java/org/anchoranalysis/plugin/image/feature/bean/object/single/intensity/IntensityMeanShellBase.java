@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
@@ -56,7 +56,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
     private MorphologicalIterations iterations = new MorphologicalIterations();
 
     /**
-     * Iff TRUE, calculates instead on the inverse of the object-mask (what's left when the shell is
+     * Iff true, calculates instead on the inverse of the object-mask (what's left when the shell is
      * removed)
      */
     @BeanField @Getter @Setter private boolean inverse = false;
@@ -94,7 +94,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
             // If an Energy mask is defined...
             Optional<ObjectMask> omIntersected =
                     intersectWithEnergyMask(
-                            objectShell, input.get().getEnergyStackRequired().getEnergyStack());
+                            objectShell, input.get().getEnergyStackRequired().withoutParams());
 
             if (omIntersected.isPresent()) {
                 objectShell = omIntersected.get();
@@ -108,7 +108,8 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private ObjectMask createShell(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calc(CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
+        return input.calculate(
+                CalculateShellObjectMask.of(input.resolver(), iterations, 0, inverse));
     }
 
     private Optional<ObjectMask> intersectWithEnergyMask(

@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.imagej.bean.threshold;
 
 import ij.Prefs;
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +37,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.Thresholder;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -58,7 +58,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
     // END BEAN PROPERTIES
 
     @Override
-    public BinaryVoxels<ByteBuffer> threshold(
+    public BinaryVoxels<UnsignedByteBuffer> threshold(
             VoxelsWrapper inputBuffer,
             BinaryValuesByte bvOut,
             Optional<Histogram> histogram,
@@ -69,7 +69,7 @@ public class ThresholderSimpleFillHoles2D extends Thresholder {
             throw new OperationFailedException("A mask is not supported for this operation");
         }
 
-        BinaryVoxels<ByteBuffer> thresholded =
+        BinaryVoxels<UnsignedByteBuffer> thresholded =
                 VoxelsThresholder.thresholdForLevel(
                         inputBuffer, minIntensity, bvOut, objectMask, false);
 

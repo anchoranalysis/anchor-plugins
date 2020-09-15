@@ -48,8 +48,8 @@ import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.VeryBrightColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -80,11 +80,13 @@ public class AnnotationComparisonTask<T extends Assignment>
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
     // END BEAN PROPERTIES
 
-    private ColorSetGenerator colorSetGeneratorUnpaired = new VeryBrightColorSetGenerator();
+    private ColorListFactory colorSetGeneratorUnpaired = new VeryBright();
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {

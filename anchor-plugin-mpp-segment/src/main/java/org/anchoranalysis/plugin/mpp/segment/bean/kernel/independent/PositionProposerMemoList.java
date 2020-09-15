@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -92,14 +92,14 @@ class PositionProposerMemoList implements OptionalPointProposer {
                 Point3i.immutableSubtract(
                         PointConverter.intFromDoubleFloor(point), box.cornerMin());
 
-        byte membershipExst =
+        byte membershipExisting =
                 voxelized
                         .voxels()
                         .sliceBufferLocal(pointRelative.z())
-                        .get(box.extent().offsetSlice(pointRelative));
+                        .getRaw(box.extent().offsetSlice(pointRelative));
 
         // If it's not inside our mark, then we don't consider it
-        if (!rm.isMemberFlag(membershipExst, flags)) {
+        if (!rm.isMemberFlag(membershipExisting, flags)) {
             return false;
         }
 

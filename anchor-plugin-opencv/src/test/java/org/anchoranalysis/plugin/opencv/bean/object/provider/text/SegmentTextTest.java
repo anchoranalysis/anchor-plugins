@@ -26,28 +26,27 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
-import static org.junit.Assert.assertTrue;
-
-import org.anchoranalysis.core.error.CreateException;
+import java.util.List;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.extent.BoundingBox;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
+import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
-import org.anchoranalysis.test.TestLoader;
+import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
+import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.anchoranalysis.test.image.BoundIOContextFixture;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.WriteIntoFolder;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Tests {@link SegmentText}
+ * Tests {@link SegmentText}.
  *
  * <p>Note that the weights file for the EAST model is duplicated in src/test/resources, as well as
  * its usual location in the models/ directory of the Anchor distribution. This is as it's difficult
@@ -57,53 +56,40 @@ import org.junit.Test;
  */
 public class SegmentTextTest {
 
-    private TestLoaderImageIO testLoader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private ImageLoader loader = new ImageLoader();
+
+    private SegmentStackIntoObjectsPooled<?> segmenter;
+    
+    @Rule public WriteIntoFolder writer = new WriteIntoFolder(true);
+
+    @Before
+    public void setUp() throws InitException {
+        segmenter = new SuppressNonMaxima<>( new SegmentText(), new ConditionallyMergeOverlappingObjects() );
+        initSegmenter();
+    }
 
     @Test
-    public void testCar() throws AnchorIOException, CreateException, InitException, SegmentationFailedException {
-        
-        Stack stack = createStack("car.jpg");
-        
-        SegmentText segmenter = new SegmentText();
-        initSegmenter(segmenter);
-        
-        ObjectCollection objects = segmenter.segment(stack);
-
-        assertTrue(objects.size() == 3);
-
-        assertAtLeastOneObjectHasBox(objects, boxAt(312, 319, 107, 34));
-        assertAtLeastOneObjectHasBox(objects, boxAt(394, 200, 27, 25));
-        assertAtLeastOneObjectHasBox(objects, boxAt(440, 312, 73, 36));
+    public void testRGB() throws SegmentationFailedException {
+        segmentStack(loader.carRGB(), SegmentTextResults.rgb());
     }
 
-    private Stack createStack(String imageFilename) {
-        return testLoader.openStackFromTestPath(imageFilename);
+    @Test
+    public void testGrayscale8Bit() throws SegmentationFailedException {
+        segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 
-    private void assertAtLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        assertTrue(
-                "at least one object has box: " + box.toString(),
-                atLeastOneObjectHasBox(objects, box));
+    private static int cnt = 0;
+    
+    private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
+            throws SegmentationFailedException {
+        SegmentedObjects segmentResults = segmenter.segment(stack);
+        writer.writeObjects("objects" + cnt++, segmentResults.asObjects(), loader.carRGB());
+        ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
     }
 
-    private boolean atLeastOneObjectHasBox(ObjectCollection objects, BoundingBox box) {
-        for (ObjectMask object : objects) {
-            if (object.boundingBox().equals(box)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void initSegmenter(SegmentText provider)
-            throws InitException {
-        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger(testLoader.getTestLoader().getRoot()); 
-        provider.init(ImageInitParamsFactory.create(context), context.getLogger());
-    }
-
-    /** Bounding box at particular point and coordinates */
-    private static BoundingBox boxAt(int x, int y, int width, int height) {
-        return new BoundingBox(new Point3i(x, y, 0), new Extent(width, height));
+    private void initSegmenter() throws InitException {
+        BoundIOContext context =
+                BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory());
+        segmenter.initRecursive(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }

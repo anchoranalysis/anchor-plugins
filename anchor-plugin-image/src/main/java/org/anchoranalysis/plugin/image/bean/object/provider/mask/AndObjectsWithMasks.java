@@ -42,8 +42,9 @@ import org.anchoranalysis.image.object.ObjectMask;
  *
  * <p>Note the masking overwrites the current objects in situ, so it is often recommended to a
  * duplicate operation beforehand to preserve the existing objects.
- * 
- * <p>This is equivalent to applying a logical AND operation on each voxel for the binary-mask AND object-mask.
+ *
+ * <p>This is equivalent to applying a logical AND operation on each voxel for the binary-mask AND
+ * object-mask.
  *
  * @author feehano
  */

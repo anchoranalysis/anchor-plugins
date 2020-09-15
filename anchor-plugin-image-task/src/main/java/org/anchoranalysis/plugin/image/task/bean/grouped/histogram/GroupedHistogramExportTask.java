@@ -108,14 +108,14 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
             BoundIOContext context)
             throws JobExecutionException {
 
-        Histogram hist = histogramExtracter.extractFrom(channel.getChannel());
+        Histogram histogram = histogramExtracter.extractFrom(channel.getChannel());
 
         if (writeImageHistograms) {
             // We keep histogram as private member variable so it is thread-safe
-            createWriter().writeHistogramToFile(hist, channel.getName(), context);
+            createWriter().writeHistogramToFile(histogram, channel.getName(), context);
         }
 
-        groupMap.add(groupName, channel.getName(), hist);
+        groupMap.add(groupName, channel.getName(), histogram);
     }
 
     private GroupedHistogramWriter createWriter() {

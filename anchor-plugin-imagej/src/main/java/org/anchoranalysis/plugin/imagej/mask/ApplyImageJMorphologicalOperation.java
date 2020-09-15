@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.imagej.mask;
 
 import ij.Prefs;
 import ij.plugin.filter.Binary;
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
@@ -44,12 +44,13 @@ import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplyImageJMorphologicalOperation {
 
-    public static void fill(BinaryVoxels<ByteBuffer> voxels) throws OperationFailedException {
+    public static void fill(BinaryVoxels<UnsignedByteBuffer> voxels)
+            throws OperationFailedException {
         applyOperation(voxels, "fill", 1);
     }
 
-    public static BinaryVoxels<ByteBuffer> applyOperation(
-            BinaryVoxels<ByteBuffer> voxels, String command, int iterations)
+    public static BinaryVoxels<UnsignedByteBuffer> applyOperation(
+            BinaryVoxels<UnsignedByteBuffer> voxels, String command, int iterations)
             throws OperationFailedException {
 
         if (!voxels.binaryValues().equals(BinaryValues.getDefault())) {

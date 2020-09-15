@@ -33,8 +33,8 @@ import java.util.function.Supplier;
 import org.anchoranalysis.core.collection.MapCreate;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.feature.io.csv.name.MultiName;
-import org.anchoranalysis.feature.io.csv.name.MultiNameFactory;
+import org.anchoranalysis.feature.io.name.MultiName;
+import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -100,7 +100,7 @@ public abstract class GroupMapByName<S, T> {
      *
      * @param channelChecker channel checker
      * @param context
-     * @throws IOException if something goes wrong, or if includeGroupName is FALSE, but more than
+     * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
      *     one group-names exist
      */
     public void outputGroupedData(ConsistentChannelChecker channelChecker, BoundIOContext context)
@@ -120,10 +120,10 @@ public abstract class GroupMapByName<S, T> {
             MultiName name = entry.getKey();
 
             writeGroupOutputInSubdirectory(
-                    name.filePart(),
+                    name.secondPart(),
                     entry.getValue(),
                     channelChecker,
-                    subdirectoryCache.get(name.directoryPart()));
+                    subdirectoryCache.get(name.firstPart()));
         }
     }
 

@@ -26,14 +26,14 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import java.nio.IntBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.voxel.iterator.ProcessVoxelSliceBuffer;
+import org.anchoranalysis.image.voxel.iterator.process.ProcessBufferUnary;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
-final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<IntBuffer> {
+final class ConvertAllToConnectedComponents implements ProcessBufferUnary<UnsignedIntBuffer> {
 
     private final EncodedVoxels matS;
     private final Extent extent;
@@ -53,8 +53,7 @@ final class ConvertAllToConnectedComponents implements ProcessVoxelSliceBuffer<I
     }
 
     @Override
-    public void process(Point3i point, IntBuffer buffer, int offsetSlice) {
-        assert (buffer != null);
+    public void process(Point3i point, UnsignedIntBuffer buffer, int offsetSlice) {
         new EncodedIntBuffer(buffer, EncodedVoxels.ENCODING)
                 .convertCode(offsetSlice, offsetZ + offsetSlice, matS, point);
     }

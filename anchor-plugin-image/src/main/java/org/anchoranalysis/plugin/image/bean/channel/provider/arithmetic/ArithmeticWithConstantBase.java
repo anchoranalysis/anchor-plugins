@@ -30,7 +30,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
 import org.anchoranalysis.image.channel.factory.ChannelFactorySingleType;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 
 /**
@@ -51,7 +51,7 @@ public abstract class ArithmeticWithConstantBase extends UnaryWithValueBase {
 
         Channel channelOut = FACTORY.createEmptyInitialised(channel.dimensions());
 
-        IterateVoxelsVoxelBoxAsInt.callEachPointTwo(
+        IterateVoxelsAll.withTwoVoxelBuffers(
                 channel.voxels().any(),
                 channelOut.voxels().any(),
                 (buffer1, buffer2, offset) -> {

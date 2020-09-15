@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
@@ -34,6 +33,7 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
@@ -45,19 +45,19 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 public class Invert extends BinarySegmentationOne {
 
     @Override
-    public BinaryVoxels<ByteBuffer> segmentFromExistingSegmentation(
+    public BinaryVoxels<UnsignedByteBuffer> segmentFromExistingSegmentation(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask,
             BinarySegmentation sgmn)
             throws SegmentationFailedException {
 
-        BinaryVoxels<ByteBuffer> voxelsSegmented = sgmn.segment(voxels, params, objectMask);
+        BinaryVoxels<UnsignedByteBuffer> voxelsSegmented = sgmn.segment(voxels, params, objectMask);
         invertVoxels(voxelsSegmented);
         return voxelsSegmented;
     }
 
-    private void invertVoxels(BinaryVoxels<ByteBuffer> voxels) {
+    private void invertVoxels(BinaryVoxels<UnsignedByteBuffer> voxels) {
 
         BinaryValuesByte bv = voxels.binaryValues().createByte();
 
@@ -66,15 +66,15 @@ public class Invert extends BinarySegmentationOne {
         // We invert each item in the voxels
         for (int z = 0; z < voxels.extent().z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
             for (int index = 0; index < volumeXY; index++) {
 
-                byte val = bb.get(index);
+                byte val = buffer.getRaw(index);
 
                 if (val == bv.getOnByte()) {
-                    bb.put(index, bv.getOffByte());
+                    buffer.putRaw(index, bv.getOffByte());
                 } else if (val == bv.getOffByte()) {
-                    bb.put(index, bv.getOnByte());
+                    buffer.putRaw(index, bv.getOnByte());
                 } else {
                     assert false;
                 }

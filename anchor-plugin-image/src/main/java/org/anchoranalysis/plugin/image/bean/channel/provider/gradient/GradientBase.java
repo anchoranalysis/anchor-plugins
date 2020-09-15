@@ -31,10 +31,10 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedShort;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
 
 public abstract class GradientBase extends ChannelProviderUnary {
 
@@ -46,10 +46,7 @@ public abstract class GradientBase extends ChannelProviderUnary {
     // END BEAN
 
     protected Channel convertToOutputType(Channel channelToConvert) {
-        ChannelConverter<?> converter =
-                outputShort
-                        ? new ChannelConverterToUnsignedShort()
-                        : new ChannelConverterToUnsignedByte();
+        ChannelConverter<?> converter = outputShort ? new ToUnsignedShort() : new ToUnsignedByte();
         return converter.convert(channelToConvert, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
     }
 }

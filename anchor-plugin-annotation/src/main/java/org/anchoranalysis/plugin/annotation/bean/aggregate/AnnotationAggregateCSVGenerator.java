@@ -30,24 +30,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.feature.io.csv.writer.TableCSVGenerator;
+import org.anchoranalysis.feature.io.csv.FeatureTableCSVGenerator;
 import org.anchoranalysis.io.output.csv.CSVWriter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-public class AnnotationAggregateCSVGenerator extends TableCSVGenerator<List<ImageAnnotation>> {
+public class AnnotationAggregateCSVGenerator
+        extends FeatureTableCSVGenerator<List<ImageAnnotation>> {
 
     public AnnotationAggregateCSVGenerator() {
         super("aggregateAnnotationLabel", Arrays.asList("id", "label"));
     }
 
     @Override
-    protected void writeRowsAndColumns(
-            CSVWriter writer, List<ImageAnnotation> rows, List<String> headerNames)
+    protected void writeFeaturesToCSV(
+            CSVWriter writer, List<ImageAnnotation> allFeatureResults, List<String> headerNames)
             throws OutputWriteFailedException {
         // We add a header line
         writer.writeHeaders(headerNames);
 
-        for (ImageAnnotation ann : rows) {
+        for (ImageAnnotation ann : allFeatureResults) {
 
             List<TypedValue> csvRow = new ArrayList<>();
             addString(csvRow, ann.getIdentifier());

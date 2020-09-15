@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.assign;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,6 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 public class AssignFromParams extends ChannelProviderUnary {
@@ -66,15 +66,15 @@ public class AssignFromParams extends ChannelProviderUnary {
 
         byte valueByte = (byte) Double.parseDouble(params.getProperty(key));
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         int volumeXY = voxels.extent().volumeXY();
         for (int z = 0; z < voxels.extent().z(); z++) {
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
             int offset = 0;
             while (offset < volumeXY) {
-                bb.put(offset++, valueByte);
+                buffer.putRaw(offset++, valueByte);
             }
         }
 

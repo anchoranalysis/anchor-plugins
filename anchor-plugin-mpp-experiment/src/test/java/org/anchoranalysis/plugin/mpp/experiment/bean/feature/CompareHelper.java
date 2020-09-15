@@ -56,10 +56,10 @@ class CompareHelper {
 
     private static void assertIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
-        assertTrue(relativePath + " is not identical", compareForExtr(comparer, relativePath));
+        assertTrue(relativePath + " is not identical", compareForExtra(comparer, relativePath));
     }
 
-    private static boolean compareForExtr(DualComparer comparer, String relativePath)
+    private static boolean compareForExtra(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         try {
             if (hasExtension(relativePath, ".tif")) {

@@ -30,12 +30,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
 
-public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
     /** Constant to return if outside the range (below the minimum allowed) */
@@ -47,7 +47,7 @@ public abstract class RangeCompareBase<T extends FeatureInput> extends FeatureGe
 
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
-        return calculateForValue(input.calc(featureToCalcInputVal()), input);
+        return calculateForValue(input.calculate(featureToCalcInputVal()), input);
     }
 
     /** Boundary to define the minimum accepted value in the range */

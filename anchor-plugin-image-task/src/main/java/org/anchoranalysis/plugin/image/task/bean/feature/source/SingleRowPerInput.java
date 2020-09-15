@@ -37,9 +37,9 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
-import org.anchoranalysis.feature.io.csv.name.SimpleName;
+import org.anchoranalysis.feature.io.csv.RowLabels;
+import org.anchoranalysis.feature.io.name.SimpleName;
+import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
@@ -95,10 +95,10 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             T inputObject, InputProcessContext<FeatureList<S>> context)
             throws NamedFeatureCalculateException;
 
-    private static StringLabelsForCsvRow identifierFor(
+    private static RowLabels identifierFor(
             String descriptiveName, Optional<String> groupGeneratorName)
             throws OperationFailedException {
-        return new StringLabelsForCsvRow(
+        return new RowLabels(
                 Optional.of(new String[] {descriptiveName}),
                 groupGeneratorName.map(SimpleName::new));
     }

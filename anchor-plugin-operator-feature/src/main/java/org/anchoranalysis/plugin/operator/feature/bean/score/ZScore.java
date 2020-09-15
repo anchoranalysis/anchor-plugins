@@ -32,7 +32,7 @@ import org.anchoranalysis.math.statistics.FirstSecondOrderStatistic;
 import org.anchoranalysis.plugin.operator.feature.score.FeatureResultSupplier;
 
 // Z-score of a value
-public class ZScore<T extends FeatureInput> extends FeatureStatScore<T> {
+public class ZScore<T extends FeatureInput> extends StatisticalScoreBase<T> {
 
     @Override
     protected double deriveScore(double featureValue, double mean, FeatureResultSupplier stdDev)

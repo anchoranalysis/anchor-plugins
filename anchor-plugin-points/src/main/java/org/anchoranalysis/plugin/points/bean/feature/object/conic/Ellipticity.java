@@ -49,7 +49,7 @@ public class Ellipticity extends FeatureSingleObject {
 
         ObjectWithEllipse both;
         try {
-            both = input.calc(new CalculateEllipseLeastSquares());
+            both = input.calculate(new CalculateEllipseLeastSquares());
         } catch (FeatureCalculationException e) {
             if (e.getCause() instanceof InsufficientPointsException) {
                 // If we don't have enough points, we return perfectly ellipticity as it's so small

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculator;
 import org.anchoranalysis.test.feature.plugins.FeatureTestCalculatorDuo;
-import org.anchoranalysis.test.feature.plugins.objects.ParamsOverlappingCircleFixture;
+import org.anchoranalysis.test.feature.plugins.objects.FeatureInputOverlappingCircleFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParamsFixtureHelper {
@@ -91,7 +91,7 @@ public class ParamsFixtureHelper {
         FeatureTestCalculator.assertIntResult(
                 "simple",
                 feature,
-                ParamsOverlappingCircleFixture.twoOverlappingCircles(false),
+                FeatureInputOverlappingCircleFixture.twoOverlappingCircles(false),
                 expected);
     }
 
@@ -109,7 +109,7 @@ public class ParamsFixtureHelper {
         FeatureTestCalculator.assertDoubleResult(
                 "simple",
                 feature,
-                ParamsOverlappingCircleFixture.twoOverlappingCircles(false),
+                FeatureInputOverlappingCircleFixture.twoOverlappingCircles(false),
                 expected);
     }
 
@@ -119,8 +119,8 @@ public class ParamsFixtureHelper {
         FeatureTestCalculatorDuo.assertDoubleResult(
                 message(sameSize),
                 feature,
-                ParamsOverlappingCircleFixture.twoOverlappingCircles(sameSize),
-                ParamsOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
+                FeatureInputOverlappingCircleFixture.twoOverlappingCircles(sameSize),
+                FeatureInputOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
                 expected,
                 0);
     }
@@ -131,8 +131,8 @@ public class ParamsFixtureHelper {
         FeatureTestCalculatorDuo.assertIntResult(
                 message(sameSize),
                 feature,
-                ParamsOverlappingCircleFixture.twoOverlappingCircles(sameSize),
-                ParamsOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
+                FeatureInputOverlappingCircleFixture.twoOverlappingCircles(sameSize),
+                FeatureInputOverlappingCircleFixture.twoNonOverlappingCircles(sameSize),
                 expected,
                 0);
     }

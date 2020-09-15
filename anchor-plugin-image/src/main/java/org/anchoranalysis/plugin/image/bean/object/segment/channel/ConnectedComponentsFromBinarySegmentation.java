@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -64,17 +64,18 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
             throws SegmentationFailedException {
 
         BinarySegmentationParameters params =
-                new BinarySegmentationParameters(channel.dimensions().resolution());
+                new BinarySegmentationParameters(channel.resolution());
 
-        BinaryVoxels<ByteBuffer> bvb = segment.segment(channel.voxels(), params, objectMask);
+        BinaryVoxels<UnsignedByteBuffer> bvb =
+                segment.segment(channel.voxels(), params, objectMask);
         return createFromVoxels(
                 bvb,
-                channel.dimensions().resolution(),
+                channel.resolution(),
                 objectMask.map(object -> object.boundingBox().cornerMin()));
     }
 
     private ObjectCollection createFromVoxels(
-            BinaryVoxels<ByteBuffer> bvb,
+            BinaryVoxels<UnsignedByteBuffer> bvb,
             Resolution resolution,
             Optional<ReadableTuple3i> maskShiftBy) {
         Mask mask = new Mask(bvb, resolution);

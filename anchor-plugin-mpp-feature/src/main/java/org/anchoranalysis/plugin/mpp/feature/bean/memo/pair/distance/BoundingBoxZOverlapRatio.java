@@ -32,8 +32,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
 
@@ -58,8 +58,8 @@ public class BoundingBoxZOverlapRatio extends FeaturePairMemoSingleRegion {
 
         FeatureInputPairMemo inputSessionless = input.get();
 
-        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObj1);
-        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObj2);
+        BoundingBox box1 = box(inputSessionless, FeatureInputPairMemo::getObject1);
+        BoundingBox box2 = box(inputSessionless, FeatureInputPairMemo::getObject2);
 
         // Check the bounding boxes intersect in general (including XY)
         if (!box1.intersection().existsWith(box2)) {

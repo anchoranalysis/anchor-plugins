@@ -50,8 +50,8 @@ public class Difference extends VoxelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
         return DifferenceHelper.differenceFromParams(
-                pixelVals, channelFirst, channelSecond, width, minDifference);
+                voxelIntensities, channelFirst, channelSecond, width, minDifference);
     }
 }

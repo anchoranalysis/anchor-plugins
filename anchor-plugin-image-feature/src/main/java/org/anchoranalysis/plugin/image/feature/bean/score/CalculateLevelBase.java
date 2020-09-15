@@ -42,7 +42,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private CalculateLevel calculateLevel;
 
-    @BeanField @Getter @Setter private int histChannelIndex = 0;
+    @BeanField @Getter @Setter private int histogramChannelIndex = 0;
     // END BEAN PROPERTIES
 
     private int level;
@@ -52,7 +52,7 @@ public abstract class CalculateLevelBase extends SingleChannel {
             throws InitException {
 
         try {
-            Histogram histogram = histograms.get(histChannelIndex);
+            Histogram histogram = histograms.get(histogramChannelIndex);
             level = calculateLevel.calculateLevel(histogram);
 
             beforeCalcSetup(histogram, level);
@@ -62,12 +62,12 @@ public abstract class CalculateLevelBase extends SingleChannel {
     }
 
     @Override
-    protected double deriveScoreFromPixelVal(int pixelVal) {
-        return calculateForPixel(pixelVal, level);
+    protected double deriveScoreFromVoxel(int voxelIntensity) {
+        return calculateForVoxel(voxelIntensity, level);
     }
 
-    protected abstract void beforeCalcSetup(Histogram hist, int level)
+    protected abstract void beforeCalcSetup(Histogram histogram, int level)
             throws OperationFailedException;
 
-    protected abstract double calculateForPixel(int pxlValue, int level);
+    protected abstract double calculateForVoxel(int voxelIntensity, int level);
 }

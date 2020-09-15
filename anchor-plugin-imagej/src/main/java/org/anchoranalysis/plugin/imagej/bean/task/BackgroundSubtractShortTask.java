@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.task;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,9 +35,10 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByte;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -94,7 +94,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
                 voxelsSubOut.arithmetic().multiplyBy(scaleRatio);
             }
 
-            ChannelConverter<ByteBuffer> converter = new ChannelConverterToUnsignedByte();
+            ChannelConverter<UnsignedByteBuffer> converter = new ToUnsignedByte();
             Channel channelOut =
                     converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 

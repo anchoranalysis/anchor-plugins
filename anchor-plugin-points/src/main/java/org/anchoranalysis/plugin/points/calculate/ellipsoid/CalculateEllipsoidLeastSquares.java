@@ -58,7 +58,7 @@ public class CalculateEllipsoidLeastSquares
         ResolvedCalculation<Ellipsoid, FeatureInputSingleObject> ccEllipsoid =
                 input.resolver()
                         .search(new CalculateEllipsoidLeastSquares(suppressZCovariance, ccPoints));
-        return input.calc(ccEllipsoid);
+        return input.calculate(ccEllipsoid);
     }
 
     @Override

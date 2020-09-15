@@ -41,7 +41,7 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 public class IndependentChannels extends ChannelConvertStyle {
 
     // START BEAN PROPERTIES
-    /** Iff TRUE and we cannot find a channel in the file, we ignore it and carry on */
+    /** Iff true and we cannot find a channel in the file, we ignore it and carry on */
     @BeanField @Getter @Setter private boolean ignoreMissingChannel = true;
     // END BEAN PROPERTIES
 

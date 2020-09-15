@@ -68,7 +68,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
         try {
             double thresholdVal =
                     threshold.resolve(
-                            Optional.of(dimensions.resolution()),
+                            Optional.of(dimensions.unitConvert()),
                             mark1.getMark().centerPoint(),
                             mark2.getMark().centerPoint());
             return d < thresholdVal;

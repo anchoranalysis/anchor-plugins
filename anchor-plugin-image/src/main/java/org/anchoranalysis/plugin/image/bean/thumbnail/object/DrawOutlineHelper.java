@@ -55,12 +55,13 @@ class DrawOutlineHelper {
         try {
             DisplayStack displayStack = DisplayStack.create(backgroundScaled);
 
-            DrawObjectsGenerator drawOthers = DrawObjectsGenerator.outlineSingleColor(objects, outlineWidth, displayStack, color.rgbColor());
+            DrawObjectsGenerator drawOthers =
+                    DrawObjectsGenerator.outlineSingleColor(
+                            objects, outlineWidth, displayStack, color.rgbColor());
 
             return drawOthers.generate();
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-
 }

@@ -43,9 +43,9 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.image.provider.ProviderAsStack;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.HSBColorSetGenerator;
-import org.anchoranalysis.io.bean.color.generator.ShuffleColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.HSB;
+import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -59,8 +59,7 @@ import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
  */
 public abstract class ColoredBase extends StackProvider {
 
-    protected static final ColorSetGenerator DEFAULT_COLOR_SET_GENERATOR =
-            new ShuffleColorSetGenerator(new HSBColorSetGenerator());
+    protected static final ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     // START BEAN PROPERTIES
     /**
@@ -131,7 +130,7 @@ public abstract class ColoredBase extends StackProvider {
 
         try {
             if (colors == null) {
-                colors = DEFAULT_COLOR_SET_GENERATOR.generateColors(objects.size());
+                colors = DEFAULT_COLOR_SET_GENERATOR.create(objects.size());
             }
 
             DrawObjectsGenerator generator =

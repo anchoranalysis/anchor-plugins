@@ -40,6 +40,6 @@ public class CalculateOverlap extends FeatureCalculation<Double, FeatureInputPai
 
     @Override
     protected Double execute(FeatureInputPairMemo params) {
-        return OverlapUtilities.overlapWith(params.getObj1(), params.getObj2(), regionID);
+        return OverlapUtilities.overlapWith(params.getObject1(), params.getObject2(), regionID);
     }
 }

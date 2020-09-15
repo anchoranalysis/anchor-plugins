@@ -111,7 +111,9 @@ public class HomeSubdirectory extends FilePathPrefixer {
             throws InitException {
         Path resolvedPath = pathHomeDir.resolve(relativePathSubdirectory);
         try {
-            Files.createDirectory(resolvedPath);
+            if (!resolvedPath.toFile().exists()) {
+                Files.createDirectory(resolvedPath);
+            }
         } catch (IOException e) {
             throw new InitException(e);
         }

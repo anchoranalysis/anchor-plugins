@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.object.merge;
 
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
@@ -53,7 +53,7 @@ public class GraphLogger {
 
     public void describeMerge(
             ObjectVertex omMerged,
-            EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> bestImprovement) {
+            TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         log(describeGraph.describeMerge(omMerged, bestImprovement));
     }
 

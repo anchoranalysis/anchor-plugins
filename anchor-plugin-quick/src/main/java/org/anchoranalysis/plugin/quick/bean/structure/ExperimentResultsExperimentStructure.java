@@ -77,7 +77,7 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
     @BeanField @Getter @Setter private boolean rootInStructure = false;
 
     /**
-     * If rootInStructure==TRUE, the rootName is placed in the folder structure. If this is
+     * If rootInStructure==true, the rootName is placed in the folder structure. If this is
      * non-empty, a different rootName is inserted into this structure instead of the default
      * rootName
      */

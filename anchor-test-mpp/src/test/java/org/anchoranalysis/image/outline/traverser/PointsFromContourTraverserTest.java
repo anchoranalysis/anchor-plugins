@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.contour.Contour;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.outline.traverser.path.PointsListNeighborUtilities;
 import org.anchoranalysis.plugin.opencv.CVFindContours;
@@ -44,7 +44,7 @@ import org.junit.Test;
 
 public class PointsFromContourTraverserTest {
 
-    private TestLoaderImageIO testLoader =
+    private TestLoaderImageIO loader =
             new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
@@ -55,7 +55,7 @@ public class PointsFromContourTraverserTest {
 
     private void testFor(String suffix) throws CreateException, OperationFailedException {
 
-        ObjectMask objIn = LoadUtilities.openLargestObjectBinaryFrom(suffix, testLoader);
+        ObjectMask objIn = LoadUtilities.openLargestObjectFrom(suffix, loader);
 
         // Checks that first and last points are neighbors
         List<Contour> contours = CVFindContours.contoursForObject(objIn);

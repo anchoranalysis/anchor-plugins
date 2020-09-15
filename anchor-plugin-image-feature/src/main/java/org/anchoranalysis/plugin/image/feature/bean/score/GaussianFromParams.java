@@ -53,15 +53,15 @@ public class GaussianFromParams extends FromParamsBase {
     }
 
     @Override
-    protected double deriveScoreFromPixelVal(int pixelVal) {
+    protected double deriveScoreFromVoxel(int voxelIntensity) {
 
         // Values higher than the mean should be included for definite
-        if (pixelVal > mean) {
+        if (voxelIntensity > mean) {
             return 1.0;
         }
 
         double scoreBeforeShift =
-                GaussianScoreCalculator.calc(mean, stdDev, pixelVal, false, false);
+                GaussianScoreCalculator.calc(mean, stdDev, voxelIntensity, false, false);
 
         double scoreShifted = (scoreBeforeShift - shift) / (1 - shift);
 

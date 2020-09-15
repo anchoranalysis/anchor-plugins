@@ -38,7 +38,7 @@ public class InitParamsWithEnergyStack {
 
     ImageInitParams imageInit;
     EnergyStack energyStack;
-    
+
     public InitParamsWithEnergyStack(EnergyStack energyStack, BoundIOContext context) {
         this.energyStack = energyStack;
         this.imageInit = ImageInitParamsFactory.create(context);

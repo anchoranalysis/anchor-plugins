@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,9 +35,10 @@ import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.points.PointRange;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 /**
  * Fits a box around the ON pixels.
@@ -73,14 +73,13 @@ public class FitBoxToOnVoxels extends MaskProviderUnary {
         return mask;
     }
 
-    private BoundingBox minimalBoxAroundMask(BinaryVoxels<ByteBuffer> voxels)
+    private BoundingBox minimalBoxAroundMask(BinaryVoxels<UnsignedByteBuffer> voxels)
             throws CreateException {
 
         PointRange pointRange = new PointRange();
 
         BinaryValuesByte bvb = voxels.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValuesReusePoint(
-                voxels.voxels(), bvb.getOnByte(), pointRange::add);
+        IterateVoxelsEqualTo.equalToReusePoint(voxels.voxels(), bvb.getOnByte(), pointRange::add);
 
         try {
             return pointRange.deriveBoundingBox();

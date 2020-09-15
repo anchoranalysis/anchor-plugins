@@ -32,7 +32,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -67,14 +67,16 @@ public class ScaleToSize extends ThumbnailFromStack {
 
         try {
             Stack resized =
-                    stack.mapChannel(
-                            channel ->
-                                    channel.resizeXY(
-                                            size.getWidth(),
-                                            size.getHeight(),
-                                            interpolatorCreated));
+                    stack.extractUpToThreeChannels()
+                            .mapChannel(
+                                    channel ->
+                                            channel.projectMax()
+                                                    .resizeXY(
+                                                            size.getWidth(),
+                                                            size.getHeight(),
+                                                            interpolatorCreated));
 
-            return DisplayStack.create(resized.extractUpToThreeChannels());
+            return DisplayStack.create(resized);
 
         } catch (OperationFailedException e) {
             throw new CreateException(e);

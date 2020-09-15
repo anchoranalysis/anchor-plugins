@@ -56,7 +56,7 @@ public class Intensity extends FeatureEnergyChannel {
     /** Feature to apply to the histogram */
     @BeanField @Getter @Setter private Feature<FeatureInputHistogram> item = new Mean();
 
-    /** Iff TRUE, zero-valued voxels are excluded from the histogram */
+    /** Iff true, zero-valued voxels are excluded from the histogram */
     @BeanField @Getter @Setter private boolean excludeZero = false;
     // END BEAN PROEPRTIES
 

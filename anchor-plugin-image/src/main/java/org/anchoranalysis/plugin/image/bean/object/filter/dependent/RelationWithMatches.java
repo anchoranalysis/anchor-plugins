@@ -90,14 +90,14 @@ public class RelationWithMatches extends ObjectFilterRelation {
 
     private void setupEvaluators() throws OperationFailedException {
 
-        evaluatorForSource = featureEvaluator.createAndStartSession();
+        evaluatorForSource = featureEvaluator.createFeatureSession();
 
         // Use a specific evaluator for matching if defined, otherwise reuse the existing evaluator
         // and cache it so we don't have to repeatedly calculate on the same object
         evaluatorForMatch =
                 new FeatureCalculatorCachedSingle<>(
                         featureEvaluatorMatch != null
-                                ? featureEvaluatorMatch.createAndStartSession()
+                                ? featureEvaluatorMatch.createFeatureSession()
                                 : evaluatorForSource,
                         cacheSize);
     }

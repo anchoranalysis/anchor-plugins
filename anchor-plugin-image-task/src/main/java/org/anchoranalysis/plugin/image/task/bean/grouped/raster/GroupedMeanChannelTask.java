@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  *
  * @author Owen Feehan
  */
-public class GroupedMeanChannelTask extends GroupedStackTask<Channel, AggregateChannel> {
+public class GroupedMeanChannelTask extends GroupedStackTask<Channel, RunningSumChannel> {
 
     // START BEAN PROPERTIES
     /**
@@ -61,7 +61,7 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, AggregateC
     // END BEAN PROPERTIES
 
     @Override
-    protected GroupMapByName<Channel, AggregateChannel> createGroupMap(
+    protected GroupMapByName<Channel, RunningSumChannel> createGroupMap(
             ConsistentChannelChecker channelChecker) {
         return new GroupedMeanChannelMap();
     }
@@ -70,7 +70,7 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, AggregateC
     protected void processKeys(
             NamedStacks store,
             Optional<String> groupName,
-            GroupedSharedState<Channel, AggregateChannel> sharedState,
+            GroupedSharedState<Channel, RunningSumChannel> sharedState,
             BoundIOContext context)
             throws JobExecutionException {
 

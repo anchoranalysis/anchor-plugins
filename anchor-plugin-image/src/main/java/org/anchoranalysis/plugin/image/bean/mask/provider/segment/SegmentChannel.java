@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.segment;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +41,7 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
@@ -75,10 +75,11 @@ public class SegmentChannel extends FromChannelBase {
 
     @Override
     protected Mask createFromSource(Channel source) throws CreateException {
-        return new Mask(segmentChannel(source), source.dimensions().resolution());
+        return new Mask(segmentChannel(source), source.resolution());
     }
 
-    private BinaryVoxels<ByteBuffer> segmentChannel(Channel channel) throws CreateException {
+    private BinaryVoxels<UnsignedByteBuffer> segmentChannel(Channel channel)
+            throws CreateException {
         Optional<ObjectMask> object = objectFromMask(channel.dimensions());
 
         BinarySegmentationParameters params = createParams(channel.dimensions());
@@ -91,9 +92,10 @@ public class SegmentChannel extends FromChannelBase {
         }
     }
 
-    private BinarySegmentationParameters createParams(Dimensions dim) throws CreateException {
+    private BinarySegmentationParameters createParams(Dimensions dimensions)
+            throws CreateException {
         return new BinarySegmentationParameters(
-                dim.resolution(), OptionalFactory.create(histogram));
+                dimensions.resolution(), OptionalFactory.create(histogram));
     }
 
     private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {

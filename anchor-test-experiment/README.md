@@ -1,6 +1,6 @@
 # anchor-test-experiment
 
-Test fixtures and utilities have dependencies on [anchor-experiment](https://github.com/anchoranalysis/anchor/tree/master/anchor-experiment).
+Test fixtures and utilities having dependencies on [anchor-experiment](https://github.com/anchoranalysis/anchor/tree/master/anchor-experiment).
 
 ## What is Anchor?
 

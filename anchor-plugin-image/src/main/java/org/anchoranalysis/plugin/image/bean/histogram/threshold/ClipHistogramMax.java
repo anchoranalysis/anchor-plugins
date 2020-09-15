@@ -61,9 +61,7 @@ public class ClipHistogramMax extends CalculateLevelOne {
                 histogram.countThreshold(new RelationToConstant(new GreaterThanBean(), maxVal));
 
         Histogram out = new Histogram(histogram.getMaxBin());
-        for (int i = histogram.getMinBin(); i <= maxVal; i++) {
-            out.incrementValueBy(i, histogram.getCount(i));
-        }
+        histogram.iterateBinsUntil(maxVal, out::incrementValueBy);
         out.incrementValueBy(maxVal, numAbove);
         return out;
     }

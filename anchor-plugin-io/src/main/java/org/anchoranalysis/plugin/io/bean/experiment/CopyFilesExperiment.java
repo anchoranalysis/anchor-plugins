@@ -90,7 +90,7 @@ public class CopyFilesExperiment extends Experiment {
 
         // Determine a destination for the output, and create a corresponding logger
         Path destination = determineDestination(arguments.isDebugModeEnabled());
-        
+
         StatefulMessageLogger logger;
         try {
             logger = createLoggerFor(destination, arguments);
@@ -124,7 +124,9 @@ public class CopyFilesExperiment extends Experiment {
     private StatefulMessageLogger createLoggerFor(
             Path destination, ExperimentExecutionArguments arguments) throws BindFailedException {
         return log.createWithConsoleFallback(
-                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting), arguments, false);
+                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting),
+                arguments,
+                false);
     }
 
     @Override
@@ -186,7 +188,7 @@ public class CopyFilesExperiment extends Experiment {
             Optional<Path> destination =
                     copyFilesNaming.destinationPath(sourcePath, destPath, file, iter);
 
-            // Skip any files with a NULL destinationPath
+            // Skip any files with a null destinationPath
             if (!destination.isPresent()) {
                 if (dummyMode) {
                     logger.logFormatted("Skipping %s%n", file.getPath());

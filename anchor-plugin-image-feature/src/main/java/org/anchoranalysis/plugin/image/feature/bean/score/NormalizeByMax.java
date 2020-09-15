@@ -53,7 +53,7 @@ public class NormalizeByMax extends SingleChannel {
     }
 
     @Override
-    protected double deriveScoreFromPixelVal(int pixelVal) {
-        return pixelVal / maxEdge;
+    protected double deriveScoreFromVoxel(int voxelIntensity) {
+        return voxelIntensity / maxEdge;
     }
 }

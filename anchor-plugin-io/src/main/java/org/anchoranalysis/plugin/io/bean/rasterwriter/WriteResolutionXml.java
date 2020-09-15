@@ -59,14 +59,14 @@ public class WriteResolutionXml extends RasterWriter {
     public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
         writer.writeStackByte(stack, filePath, makeRGB);
-        writeResolutionXml(filePath, stack.dimensions().resolution());
+        writeResolutionXml(filePath, stack.resolution());
     }
 
     @Override
     public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
             throws RasterIOException {
         writer.writeStackShort(stack, filePath, makeRGB);
-        writeResolutionXml(filePath, stack.dimensions().resolution());
+        writeResolutionXml(filePath, stack.resolution());
     }
 
     @Override
@@ -76,11 +76,11 @@ public class WriteResolutionXml extends RasterWriter {
 
         // We assume all the stacks in the series have the same dimension, and write only one
         // metadata file
-        writeResolutionXml(filePath, stackSeries.get(0).dimensions().resolution());
+        writeResolutionXml(filePath, stackSeries.get(0).resolution());
     }
 
-    private void writeResolutionXml(Path filePath, Resolution res) throws RasterIOException {
+    private void writeResolutionXml(Path filePath, Resolution resolution) throws RasterIOException {
         Path pathOut = Paths.get(filePath.toString() + ".xml");
-        AnchorMetadataXml.writeResolutionXml(pathOut, res);
+        AnchorMetadataXml.writeResolutionXml(resolution, pathOut);
     }
 }

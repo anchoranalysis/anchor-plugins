@@ -35,7 +35,7 @@ import org.anchoranalysis.mpp.mark.set.UpdateMarkSetException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelBirth;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.MarksFromPartition;
+import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 
 /**
  * Proposes new marks ONLY if they haven't already been proposed and accepted.

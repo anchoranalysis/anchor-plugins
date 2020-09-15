@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -41,12 +41,12 @@ import org.anchoranalysis.feature.input.FeatureInput;
  * The result of featureCondition is compared to a threshold, and then either the underlying feature
  * is calculated (positive case), or featureElse is (negative case)
  *
- * <p>The positive case is when relation(featureCondition,value) is TRUE..
+ * <p>The positive case is when relation(featureCondition,value) is true..
  *
  * @author Owen Feehan
  * @param <T> feature input-type
  */
-public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class IfCondition<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIRES
     @BeanField @Getter @Setter private Feature<T> featureCondition;
@@ -59,13 +59,13 @@ public class IfCondition<T extends FeatureInput> extends FeatureGenericSingleEle
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        double featureConditionResult = input.calc(featureCondition);
+        double featureConditionResult = input.calculate(featureCondition);
         RelationToValue relation = threshold.relation();
 
         if (relation.isRelationToValueTrue(featureConditionResult, threshold.threshold())) {
-            return input.calc(super.getItem());
+            return input.calculate(super.getItem());
         } else {
-            return input.calc(featureElse);
+            return input.calculate(featureElse);
         }
     }
 }

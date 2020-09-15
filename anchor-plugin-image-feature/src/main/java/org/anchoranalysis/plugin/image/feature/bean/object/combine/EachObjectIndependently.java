@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.feature.session.SingleTableCalculator;
@@ -59,10 +59,11 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
         return createFeatures(storeFactory.createNamedFeatureList(list));
     }
 
-    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(NamedFeatureStore<FeatureInputSingleObject> features) {
+    public FeatureTableCalculator<FeatureInputSingleObject> createFeatures(
+            NamedFeatureStore<FeatureInputSingleObject> features) {
         return new SingleTableCalculator(features);
     }
-    
+
     @Override
     public String uniqueIdentifierFor(FeatureInputSingleObject input) {
         return UniqueIdentifierUtilities.forObject(input.getObject());
@@ -81,7 +82,8 @@ public class EachObjectIndependently extends CombineObjectsForFeatures<FeatureIn
     }
 
     @Override
-    public ObjectCollection objectsForThumbnail(FeatureInputSingleObject input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputSingleObject input)
+            throws CreateException {
         return ObjectCollectionFactory.of(input.getObject());
     }
 

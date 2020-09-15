@@ -27,20 +27,20 @@
 package org.anchoranalysis.plugin.imagej.bean.interpolator;
 
 import ij.process.ImageProcessor;
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.convert.UnsignedShortBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
+import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
 
 class InterpolatorImageJ implements Interpolator {
 
     @Override
-    public VoxelBuffer<ByteBuffer> interpolateByte(
-            VoxelBuffer<ByteBuffer> voxelsSource,
-            VoxelBuffer<ByteBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedByteBuffer> interpolateByte(
+            VoxelBuffer<UnsignedByteBuffer> voxelsSource,
+            VoxelBuffer<UnsignedByteBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 
@@ -50,9 +50,9 @@ class InterpolatorImageJ implements Interpolator {
     }
 
     @Override
-    public VoxelBuffer<ShortBuffer> interpolateShort(
-            VoxelBuffer<ShortBuffer> voxelsSource,
-            VoxelBuffer<ShortBuffer> voxelsDestination,
+    public VoxelBuffer<UnsignedShortBuffer> interpolateShort(
+            VoxelBuffer<UnsignedShortBuffer> voxelsSource,
+            VoxelBuffer<UnsignedShortBuffer> voxelsDestination,
             Extent extentSource,
             Extent extentDestination) {
 

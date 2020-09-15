@@ -53,7 +53,10 @@ public class OverlapRatioMask extends OverlapMaskBase {
         double overlap = overlapWithGlobalMask(input);
 
         return overlapRatioToggle(
-                inputSessionless.getObj1(), inputSessionless.getObj2(), overlap, getRegionID());
+                inputSessionless.getObject1(),
+                inputSessionless.getObject2(),
+                overlap,
+                getRegionID());
     }
 
     private double overlapRatioToggle(

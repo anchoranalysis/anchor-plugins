@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.feature.io.csv.LabelHeaders;
+import org.anchoranalysis.feature.io.results.LabelHeaders;
 
 /**
  * Generates a list of header-names for columns unrelated to features (identifiers and groups)

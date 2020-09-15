@@ -26,15 +26,16 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
-import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.SegmentationBean;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * A base class for algorithms to segment a stack into one or more objects - using a pool of models (e.g. deep-learning models).
+ * A base class for algorithms to segment a stack into one or more objects - using a pool of models
+ * (e.g. deep-learning models).
  *
  * @author Owen Feehan
  * @param <T> model-type
@@ -43,33 +44,35 @@ public abstract class SegmentStackIntoObjectsPooled<T>
         extends SegmentationBean<SegmentStackIntoObjectsPooled<T>> {
 
     /**
-     * Creates the model pool (to be used by multiple threads)
-     * @param plan the number and types of processors available for concurrent execution
-     * 
-     * @return the newly created model pool
-     */
-    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan);
-    
-    /** 
      * Segments individually using a pool of size 1 just for one stack
      * 
-     * @param stack the stack to segment
-     * @return a newly created collection of objects for each segment. The created objects will
-     *     always exist inside the stack's extent.
-     * @throws SegmentationFailedException if anything goes wrong during the segmentation.
+     * <p>See {@link #segment(Stack, ConcurrentModelPool)} for more details.
      * 
-     **/
-    public ObjectCollection segment(Stack stack) throws SegmentationFailedException {
-        return segment(stack, createModelPool( ConcurrencyPlan.singleProcessor(0) ));
+     * @param stack the stack to segment
+     * @return a collection of objects with corresponding confidence scores.
+     * @throws SegmentationFailedException if anything goes wrong during the segmentation.
+     */
+    public SegmentedObjects segment(Stack stack) throws SegmentationFailedException {
+        return segment(stack, createModelPool(ConcurrencyPlan.singleProcessor(0)));
     }
     
     /**
+     * Creates the model pool (to be used by multiple threads)
+     *
+     * @param plan the number and types of processors available for concurrent execution
+     * @return the newly created model pool
+     */
+    public abstract ConcurrentModelPool<T> createModelPool(ConcurrencyPlan plan);
+
+    /**
      * Segments a stack to produce an object-collection.
      *
+     * <p>Any created objects will always exist inside the stack's {@link Extent}.
+     * 
      * @param stack the stack to segment
-     * @return a newly created collection of objects for each segment. The created objects will
-     *     always exist inside the stack's extent.
+     * @ret@return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
-    public abstract ObjectCollection segment(Stack stack, ConcurrentModelPool<T> modelPool) throws SegmentationFailedException;
+    public abstract SegmentedObjects segment(Stack stack, ConcurrentModelPool<T> modelPool)
+            throws SegmentationFailedException;
 }

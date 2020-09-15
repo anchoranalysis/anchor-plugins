@@ -56,6 +56,6 @@ public class IfConditionWithinRange<T extends FeatureInput> extends RangeCompare
     protected double withinRangeValue(double valWithinRange, SessionInput<T> input)
             throws FeatureCalculationException {
         // If the condition lies within the range, then we calculate the derived feature as intended
-        return input.calc(getItem());
+        return input.calculate(getItem());
     }
 }
