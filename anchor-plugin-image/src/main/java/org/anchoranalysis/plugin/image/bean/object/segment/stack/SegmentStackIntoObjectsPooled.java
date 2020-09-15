@@ -70,7 +70,7 @@ public abstract class SegmentStackIntoObjectsPooled<T>
      * <p>Any created objects will always exist inside the stack's {@link Extent}.
      *
      * @param stack the stack to segment
-     * @ret@return a collection of objects with corresponding confidence scores.
+     * @return a collection of objects with corresponding confidence scores.
      * @throws SegmentationFailedException if anything goes wrong during the segmentation.
      */
     public abstract SegmentedObjects segment(Stack stack, ConcurrentModelPool<T> modelPool)
