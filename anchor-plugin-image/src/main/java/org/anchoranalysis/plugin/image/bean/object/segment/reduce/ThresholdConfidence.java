@@ -79,7 +79,7 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
             return new ArrayList<>();
         }
         
-        BoundedList<WithConfidence<ObjectMask>> boundedList = new BoundedList<>(elements, withConfidence -> withConfidence.getElement().boundingBox() ); 
+        BoundedList<WithConfidence<ObjectMask>> boundedList = BoundedList.createFromList(elements, withConfidence -> withConfidence.getElement().boundingBox() ); 
         return DeriveObjectsFromList.deriveObjects(boundedList, elements, minConfidence, minNumberVoxels);
     }
 }

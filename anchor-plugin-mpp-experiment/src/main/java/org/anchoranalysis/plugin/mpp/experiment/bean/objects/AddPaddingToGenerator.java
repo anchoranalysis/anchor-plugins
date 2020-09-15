@@ -27,9 +27,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.spatial.Padding;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
@@ -70,7 +68,7 @@ class AddPaddingToGenerator {
             BoundedList<ObjectMask> objects, Dimensions dimensions, Padding padding)
             throws OperationFailedException {
         if (objects.size() == 1) {
-            return new BoundedList<>(
+            return BoundedList.createSingle(
                     maybePadObject(objects.get(0), dimensions, padding), ObjectMask::boundingBox);
         } else {
             throw new OperationFailedException("Padding is only supported for single-objects");
@@ -114,10 +112,8 @@ class AddPaddingToGenerator {
                             "The dimensions-box to be assigned (%s) must contain the existing bounding-box (%s), but it does not",
                             dimensions, collection.boundingBox()));
         }
+
         BoundingBox boxToAssign = new BoundingBox(dimensions);
-        List<ObjectMask> mappedList = FunctionalList.mapToList( collection.stream(), object->
-                    object.mapBoundingBoxChangeExtent(boxToAssign)
-                ); 
-        return new BoundedList<>(mappedList, boxToAssign, ObjectMask::boundingBox);
+        return collection.assignBoundingBoxAndMap(boxToAssign, object -> object.mapBoundingBoxChangeExtent(boxToAssign));
     }
 }
