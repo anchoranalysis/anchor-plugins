@@ -59,12 +59,14 @@ public class SegmentTextTest {
     private ImageLoader loader = new ImageLoader();
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
-    
+
     @Rule public WriteIntoFolder writer = new WriteIntoFolder(true);
 
     @Before
     public void setUp() throws InitException {
-        segmenter = new SuppressNonMaxima<>( new SegmentText(), new ConditionallyMergeOverlappingObjects() );
+        segmenter =
+                new SuppressNonMaxima<>(
+                        new SegmentText(), new ConditionallyMergeOverlappingObjects());
         initSegmenter();
     }
 
@@ -79,7 +81,7 @@ public class SegmentTextTest {
     }
 
     private static int cnt = 0;
-    
+
     private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults = segmenter.segment(stack);

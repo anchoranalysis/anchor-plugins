@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -61,7 +62,8 @@ class ScaledObjectAreaChecker {
     }
 
     public void assertExpectedArea(ObjectCollection unscaled, ScaledElements<ObjectMask> scaled) {
-        assertExpectedArea(totalArea(unscaled.asList()), totalArea(scaled.asCollectionOrderNotPreserved()));
+        assertExpectedArea(
+                totalArea(unscaled.asList()), totalArea(scaled.asCollectionOrderNotPreserved()));
     }
 
     public void assertExpectedArea(int sizeUnscaled, int sizeScaled) {

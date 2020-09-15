@@ -66,8 +66,7 @@ class EastObjectsExtracter {
 
         // Convert marks to object-masks
         return new SegmentedObjects(
-            convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution))
-        );
+                convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution)));
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
@@ -77,10 +76,7 @@ class EastObjectsExtracter {
     }
 
     private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
-        Extent extent = new Extent(
-            (int) matrix.size().width,
-            (int) matrix.size().height
-        );
+        Extent extent = new Extent((int) matrix.size().width, (int) matrix.size().height);
         return new Dimensions(extent, resolution);
     }
 

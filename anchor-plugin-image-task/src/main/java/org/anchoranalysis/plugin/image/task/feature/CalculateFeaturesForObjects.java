@@ -56,17 +56,17 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     private final InputProcessContext<FeatureTableCalculator<T>> context;
 
     public interface LabelsForInput<T extends FeatureInput> {
-    
+
         /**
          * Calculates labels for a given input (and index)
-         * 
+         *
          * @param input the input to calculate labels for
          * @param index the index in the input-collection for the particular input
          * @return row-labels for the input
          */
         RowLabels deriveLabels(T input, int index);
     }
-    
+
     public CalculateFeaturesForObjects(
             CombineObjectsForFeatures<T> table,
             InitParamsWithEnergyStack initParams,
@@ -80,9 +80,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     }
 
     public void calculateFeaturesForObjects(
-            ObjectCollection objects,
-            EnergyStack energyStack,
-            LabelsForInput<T> labelsForInput)
+            ObjectCollection objects, EnergyStack energyStack, LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
         try {
             ListWithThumbnails<T, ObjectCollection> inputs =
@@ -110,8 +108,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            ListWithThumbnails<T, ObjectCollection> listInputs,
-            LabelsForInput<T> labelsForInput)
+            ListWithThumbnails<T, ObjectCollection> listInputs, LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
 
         try {

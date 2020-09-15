@@ -66,8 +66,9 @@ public class Scale extends WithDimensionsBase {
         }
 
         try {
-            ScaledElements<ObjectMask> scaledObjects = objects.scale(scaleFactor, dimensions.extent());
-            return ObjectCollectionFactory.of( scaledObjects.asCollectionOrderNotPreserved() );
+            ScaledElements<ObjectMask> scaledObjects =
+                    objects.scale(scaleFactor, dimensions.extent());
+            return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

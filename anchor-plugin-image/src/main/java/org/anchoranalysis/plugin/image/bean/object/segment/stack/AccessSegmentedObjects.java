@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,45 +26,44 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.AccessObjectMask;
 import org.anchoranalysis.image.object.scale.Scaler;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
 /**
- * Provides access for the {@link Scaler} to the object-representation of {@code WithConfidence<ObjectMask>}.
- * 
- * @author Owen Feehan
+ * Provides access for the {@link Scaler} to the object-representation of {@code
+ * WithConfidence<ObjectMask>}.
  *
+ * @author Owen Feehan
  */
-@AllArgsConstructor(access=AccessLevel.PUBLIC) class AccessSegmentedObjects implements AccessObjectMask<WithConfidence<ObjectMask>> {
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+class AccessSegmentedObjects implements AccessObjectMask<WithConfidence<ObjectMask>> {
 
     private final List<WithConfidence<ObjectMask>> listUnscaled;
-    
+
     @Override
     public ObjectMask objectFor(WithConfidence<ObjectMask> element) {
         return element.getElement();
     }
 
     @Override
-    public WithConfidence<ObjectMask> shiftBy(WithConfidence<ObjectMask> element,
-            ReadableTuple3i quantity) {
-        return element.map( existingObject->existingObject.shiftBy(quantity) );
+    public WithConfidence<ObjectMask> shiftBy(
+            WithConfidence<ObjectMask> element, ReadableTuple3i quantity) {
+        return element.map(existingObject -> existingObject.shiftBy(quantity));
     }
 
     @Override
-    public WithConfidence<ObjectMask> clipTo(WithConfidence<ObjectMask> element,
-            Extent extent) {
-        return element.map( existingObject->existingObject.clipTo(extent) );
+    public WithConfidence<ObjectMask> clipTo(WithConfidence<ObjectMask> element, Extent extent) {
+        return element.map(existingObject -> existingObject.clipTo(extent));
     }
 
     @Override
     public WithConfidence<ObjectMask> createFrom(int index, ObjectMask object) {
-        return listUnscaled.get(index).map( existingObject->object );
+        return listUnscaled.get(index).map(existingObject -> object);
     }
-    
 }

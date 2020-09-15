@@ -139,7 +139,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             // For now only work with the first object in the collection
             try {
                 BoundedList<ObjectMask> objectsScaled =
-                        BoundedList.createFromList(scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
+                        BoundedList.createFromList(
+                                scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
 
                 assert (!objectsScaled
                         .boundingBox()
@@ -167,16 +168,16 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         private BoundedList<ObjectMask> determineObjectsForGenerator(
                 BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox)
                 throws OperationFailedException {
-            BoundedList<ObjectMask> objectsMapped =
-                    objectsScaled.assignBoundingBox(centeredBox);
+            BoundedList<ObjectMask> objectsMapped = objectsScaled.assignBoundingBox(centeredBox);
 
             // Add any other objects which intersect with the scaled-bounding box, excluding
             //  the object themselves
             if (colorUnselectedObjects != null) {
                 return objectsMapped.addObjectsNoBoundingBoxChange(
                         scaler.objectsThatIntersectWith(
-                                objectsMapped.boundingBox(),
-                                ObjectCollectionFactory.of(objectsScaled.list())).asList());
+                                        objectsMapped.boundingBox(),
+                                        ObjectCollectionFactory.of(objectsScaled.list()))
+                                .asList());
             } else {
                 return objectsMapped;
             }

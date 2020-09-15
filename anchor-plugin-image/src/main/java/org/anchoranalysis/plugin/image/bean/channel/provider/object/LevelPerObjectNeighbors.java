@@ -84,7 +84,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             Set<ObjectWithHistogram> visited) {
         for (ObjectWithHistogram omLocal : currentVisit) {
 
-            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVerticesOutgoing(omLocal);
+            Collection<ObjectWithHistogram> adjacentObjects =
+                    graph.adjacentVerticesOutgoing(omLocal);
 
             for (ObjectWithHistogram object : adjacentObjects) {
                 if (!visited.contains(object)) {

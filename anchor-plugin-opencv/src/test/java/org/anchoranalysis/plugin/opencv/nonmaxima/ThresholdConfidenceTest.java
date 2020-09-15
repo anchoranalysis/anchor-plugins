@@ -5,12 +5,11 @@ import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfi
 import org.junit.Test;
 
 public class ThresholdConfidenceTest {
-    
+
     private ReduceElementsTester tester = new ReduceElementsTester();
-    
+
     @Test
     public void testReduce() throws OperationFailedException {
         tester.test(new ThresholdConfidence(0), false, 1, 0.56827);
     }
-   
 }

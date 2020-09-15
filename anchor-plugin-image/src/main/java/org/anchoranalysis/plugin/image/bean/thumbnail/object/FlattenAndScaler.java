@@ -88,7 +88,8 @@ class FlattenAndScaler {
         this.objectsScaled =
                 allObjects.scale(scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
         this.objectsIndexed =
-                new ObjectCollectionRTree( ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()) );
+                new ObjectCollectionRTree(
+                        ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()));
     }
 
     /**
