@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.Logger;
 
 /**
  * Checks to see if a bean has been misconfigured, when created manually in tests (thereby skipping
- * the usual checks during the BeanXML loading process)
+ * the usual checks during the BeanXML loading process).
  *
  * <p>Additionally wraps the exceptions thrown in {@link AnchorFriendlyRuntimeException} to make
  * tests more readable, rather than having too many different checked exception types in the test
@@ -51,7 +51,7 @@ import org.anchoranalysis.core.log.Logger;
 public class BeanTestChecker {
 
     /**
-     * Checks if a bean has all necessary items, throwing a run-time exception if it does not
+     * Checks if a bean has all necessary items, throwing a run-time exception if it does not.
      *
      * @param <T> bean-type
      * @param bean bean to check
@@ -66,7 +66,8 @@ public class BeanTestChecker {
     }
 
     /**
-     * Checks if a bean has all necessary items as with {@link #check} and also initializes the bean
+     * Checks if a bean has all necessary items as with {@link #check} and also initializes the
+     * bean.
      *
      * @param <T> bean-type
      * @param <P> initialization-parameters-type accepted by the bean

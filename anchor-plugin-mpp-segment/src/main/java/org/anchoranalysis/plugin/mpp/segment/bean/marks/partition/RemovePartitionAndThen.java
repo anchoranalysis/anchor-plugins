@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.transformer.Compose;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.MarksFromPartition;
+import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 
 public class RemovePartitionAndThen<T> extends StateTransformerBean<MarksFromPartition, T> {
 

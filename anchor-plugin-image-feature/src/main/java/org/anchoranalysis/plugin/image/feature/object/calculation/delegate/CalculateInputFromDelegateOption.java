@@ -87,7 +87,7 @@ public abstract class CalculateInputFromDelegateOption<
         FeatureCalculation<Optional<S>, T> ccParamsDerived =
                 funcCreateFromDelegate.apply(input.resolver().search(delegate));
 
-        Optional<S> inputForDelegate = input.calc(ccParamsDerived);
+        Optional<S> inputForDelegate = input.calculate(ccParamsDerived);
 
         if (!inputForDelegate.isPresent()) {
             return emptyValue;

@@ -26,46 +26,42 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
-import java.nio.IntBuffer;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 
+@AllArgsConstructor
 public final class EncodedIntBuffer {
 
-    private final IntBuffer delegate;
+    private final UnsignedIntBuffer delegate;
     private final WatershedEncoding encoding;
 
-    public EncodedIntBuffer(IntBuffer buffer, final WatershedEncoding encoding) {
-        super();
-        this.delegate = buffer;
-        this.encoding = encoding;
-    }
-
     public boolean isTemporary(int offset) {
-        return (delegate.get(offset) == WatershedEncoding.CODE_TEMPORARY);
+        return (delegate.getRaw(offset) == WatershedEncoding.CODE_TEMPORARY);
     }
 
     public boolean isUnvisited(int offset) {
-        return (delegate.get(offset) == WatershedEncoding.CODE_UNVISITED);
+        return (delegate.getRaw(offset) == WatershedEncoding.CODE_UNVISITED);
     }
 
     public boolean isMinima(int offset) {
-        return (delegate.get(offset) == WatershedEncoding.CODE_MINIMA);
+        return (delegate.getRaw(offset) == WatershedEncoding.CODE_MINIMA);
     }
 
     public boolean isConnectedComponentID(int offset) {
-        return (encoding.isConnectedComponentIDCode(delegate.get(offset)));
+        return (encoding.isConnectedComponentIDCode(delegate.getRaw(offset)));
     }
 
     public void markAsTemporary(int offset) {
-        delegate.put(offset, WatershedEncoding.CODE_TEMPORARY);
+        delegate.putRaw(offset, WatershedEncoding.CODE_TEMPORARY);
     }
 
     public int getCode(int index) {
-        return delegate.get(index);
+        return delegate.getRaw(index);
     }
 
-    public IntBuffer putCode(int index, int code) {
-        return delegate.put(index, code);
+    public void putCode(int index, int code) {
+        delegate.putRaw(index, code);
     }
 
     /** Convert code to connected-component */
@@ -91,8 +87,8 @@ public final class EncodedIntBuffer {
         }
     }
 
-    private IntBuffer putConnectedComponentID(int index, int connectedComponentID) {
+    private void putConnectedComponentID(int index, int connectedComponentID) {
         int encoded = encoding.encodeConnectedComponentID(connectedComponentID);
-        return delegate.put(index, encoded);
+        delegate.putRaw(index, encoded);
     }
 }

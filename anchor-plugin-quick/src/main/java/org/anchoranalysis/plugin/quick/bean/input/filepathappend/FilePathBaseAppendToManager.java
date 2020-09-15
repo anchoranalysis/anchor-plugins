@@ -36,7 +36,7 @@ public abstract class FilePathBaseAppendToManager extends FilePathAppendBase {
 
     /**
      * @param inputManager
-     * @param rootName if non-empty (and non-NULL) a rooted filePathGenerator is created instead of
+     * @param rootName if non-empty (and non-null) a rooted filePathGenerator is created instead of
      *     a non rooted
      * @param regex a regular-expression that returns two groups, the first is the dataset name, the
      *     second is the file-name

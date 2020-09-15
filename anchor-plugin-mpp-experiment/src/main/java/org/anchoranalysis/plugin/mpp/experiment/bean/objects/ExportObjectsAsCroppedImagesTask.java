@@ -48,8 +48,9 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectsWithBoundingBox;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.IterableGenerator;
@@ -129,7 +130,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -140,17 +143,17 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         // NOTHING TO DO
     }
 
-    private void outputGeneratorSeq(
-            IterableGenerator<ObjectsWithBoundingBox> generator,
+    private void outputGeneratorSequence(
+            IterableGenerator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
             BoundIOContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<ObjectsWithBoundingBox> generatorSeq =
+        GeneratorSequenceIncrementalRerouteErrors<BoundedList<ObjectMask>> sequence =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
-        generatorSeq.start();
+        sequence.start();
         objects.streamStandardJava()
-                .forEach(object -> generatorSeq.add(new ObjectsWithBoundingBox(object)));
-        generatorSeq.end();
+                .forEach(object -> sequence.add(new BoundedList<ObjectMask>(object, ObjectMask::boundingBox)));
+        sequence.end();
     }
 
     private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
@@ -159,8 +162,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         try {
             Logger logger = context.getLogger();
 
-            NamedStacks stacks =
-                    createStacksFromProviders(listStackProvider, paramsInit, logger);
+            NamedStacks stacks = createStacksFromProviders(listStackProvider, paramsInit, logger);
             NamedStacks stacksProjected =
                     createStacksFromProviders(listStackProviderMIP, paramsInit, logger);
 
@@ -171,7 +173,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
             Dimensions dimensions = stacks.getArbitraryElement().dimensions();
 
-            outputGeneratorSeq(
+            outputGeneratorSequence(
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.z()),
                     context);
@@ -208,11 +210,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks.withoutUniformSizeConstraint();
     }
 
-    private IterableGenerator<ObjectsWithBoundingBox> createGenerator(
+    private IterableGenerator<BoundedList<ObjectMask>> createGenerator(
             Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
-        IterableGenerator<ObjectsWithBoundingBox> generator =
+        IterableGenerator<BoundedList<ObjectMask>> generator =
                 new BuildGeneratorHelper(outlineWidth)
                         .forStacks(
                                 dimensions,

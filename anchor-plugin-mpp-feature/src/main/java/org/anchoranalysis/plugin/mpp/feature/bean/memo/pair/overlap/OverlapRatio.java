@@ -46,8 +46,8 @@ public class OverlapRatio extends OverlapMIPBase {
         FeatureInputPairMemo inputSessionless = input.get();
 
         return OverlapRatioUtilities.overlapRatio(
-                inputSessionless.getObj1(),
-                inputSessionless.getObj2(),
+                inputSessionless.getObject1(),
+                inputSessionless.getObject2(),
                 overlappingNumVoxels(input),
                 getRegionID(),
                 isMip(),

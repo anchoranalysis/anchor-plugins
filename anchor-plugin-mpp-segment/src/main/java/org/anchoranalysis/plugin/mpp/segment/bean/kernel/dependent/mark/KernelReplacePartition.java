@@ -31,7 +31,7 @@ import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.KernelReplace;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.MarksFromPartition;
+import org.anchoranalysis.plugin.mpp.segment.optimization.MarksFromPartition;
 
 public class KernelReplacePartition extends KernelReplace<MarksFromPartition> {
 

@@ -53,9 +53,10 @@ public class NumberRemovedVoxelsAfterClosing extends FeatureSingleObject {
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
 
-        ObjectMask closed = input.calc(CalculateClosing.of(input.resolver(), iterations, do3D));
+        ObjectMask closed =
+                input.calculate(CalculateClosing.of(input.resolver(), iterations, do3D));
 
-        double numVoxels = input.calc(new CalculateNumVoxels(false));
+        double numVoxels = input.calculate(new CalculateNumVoxels(false));
 
         return closed.numberVoxelsOn() - numVoxels;
     }

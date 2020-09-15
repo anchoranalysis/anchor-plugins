@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.orientation.DirectionVector;
@@ -74,20 +74,20 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
         }
     }
 
-    private boolean isDistanceMoreThanMax(FeatureInputPairObjects params)
+    private boolean isDistanceMoreThanMax(FeatureInputPairObjects input)
             throws FeatureCalculationException {
 
-        if (!params.getResolutionOptional().isPresent()) {
+        if (!input.getUnitConverterOptional().isPresent()) {
             throw new FeatureCalculationException(
-                    "This feature requires an Image-Res in the input");
+                    "This feature requires an image-resolution in the input");
         }
 
-        Point3d cog1 = params.getFirst().centerOfGravity();
-        Point3d cog2 = params.getSecond().centerOfGravity();
+        Point3d cog1 = input.getFirst().centerOfGravity();
+        Point3d cog2 = input.getSecond().centerOfGravity();
 
         double distance = calculateDistance(cog1, cog2);
         try {
-            return distance > calculateMaxDistance(cog1, cog2, params.getResolutionOptional());
+            return distance > calculateMaxDistance(cog1, cog2, input.getUnitConverterOptional());
         } catch (OperationFailedException e) {
             throw new FeatureCalculationException(e);
         }
@@ -102,9 +102,10 @@ public class CostOverlapWithinMidpointDistance extends FeaturePairObjects {
     }
 
     // We measure the euclidian distance between center-points
-    private double calculateMaxDistance(Point3d cog1, Point3d cog2, Optional<Resolution> res)
+    private double calculateMaxDistance(
+            Point3d cog1, Point3d cog2, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
         DirectionVector vec = DirectionVector.createBetweenTwoPoints(cog1, cog2);
-        return maxDistance.resolve(res, vec);
+        return maxDistance.resolve(unitConverter, vec);
     }
 }

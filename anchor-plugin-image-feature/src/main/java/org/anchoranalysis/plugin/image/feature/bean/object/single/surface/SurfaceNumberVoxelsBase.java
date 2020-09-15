@@ -46,7 +46,7 @@ public abstract class SurfaceNumberVoxelsBase extends FeatureSingleObject {
     @Override
     public double calculate(SessionInput<FeatureInputSingleObject> input)
             throws FeatureCalculationException {
-        return input.calc(createParams(mip, suppress3D));
+        return input.calculate(createParams(mip, suppress3D));
     }
 
     protected abstract FeatureCalculation<Integer, FeatureInputSingleObject> createParams(

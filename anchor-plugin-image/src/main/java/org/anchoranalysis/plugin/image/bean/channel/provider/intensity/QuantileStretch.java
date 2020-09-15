@@ -37,7 +37,7 @@ import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.histogram.HistogramFactory;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 
 /**
  * Changes the voxel values to map the range of 0th quantile to xth quantile across the entire voxel
@@ -83,7 +83,7 @@ public class QuantileStretch extends ChannelProviderUnary {
 
         double rangeMult = 255 / (rangeMax - rangeMin);
 
-        IterateVoxelsVoxelBoxAsInt.changeEachPoint(
+        IterateVoxelsAll.changeIntensity(
                 voxels, value -> roundAndClip((value - rangeMin) * rangeMult));
     }
 

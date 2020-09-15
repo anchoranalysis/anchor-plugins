@@ -68,7 +68,7 @@ public class ThresholdedFeature extends ObjectFilterRelation {
         // This could be called many times, so we create a new feature session only on the first
         // occasion
         if (featureSession == null) {
-            featureSession = featureEvaluator.createAndStartSession();
+            featureSession = featureEvaluator.createFeatureSession();
         }
 
         if (debug) {

@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.bean.kernel.KernelIndependent;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.VoxelizedMarksWithEnergyFactory;
+import org.anchoranalysis.plugin.mpp.segment.optimization.VoxelizedMarksWithEnergyFactory;
 
 @NoArgsConstructor
 public class KernelInitialMarksVoxelized extends KernelIndependent<VoxelizedMarksWithEnergy> {

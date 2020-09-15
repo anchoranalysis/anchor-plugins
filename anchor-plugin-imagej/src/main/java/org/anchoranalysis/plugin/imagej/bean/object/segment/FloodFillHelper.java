@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.imagej.bean.object.segment;
 import ij.process.ImageProcessor;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.PrimitiveConverter;
 
 @AllArgsConstructor
 class FloodFillHelper {
@@ -52,7 +52,7 @@ class FloodFillHelper {
      */
     public FloodFillHelper(int minNumberPixels, byte equalValueAsByte, ImageProcessor processor) {
         this.minNumberPixels = minNumberPixels;
-        this.equalValueAsInt = ByteConverter.unsignedByteToInt(equalValueAsByte);
+        this.equalValueAsInt = PrimitiveConverter.unsignedByteToInt(equalValueAsByte);
         this.processor = processor;
         this.floodFiller = new IJFloodFiller(processor);
     }

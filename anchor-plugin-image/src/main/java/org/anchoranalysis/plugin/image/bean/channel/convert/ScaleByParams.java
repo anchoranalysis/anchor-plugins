@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -67,7 +67,7 @@ public class ScaleByParams extends ConvertChannelTo {
                 .messageLogger()
                 .logFormatted("ChannelConverter: scale with min=%d max=%d%n", min, max);
 
-        return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
+        return new ToUnsignedByteScaleByMinMaxValue(min, max);
     }
 
     private int getScaled(KeyValueParams kvp, String key, double scale) throws CreateException {

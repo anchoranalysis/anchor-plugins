@@ -51,6 +51,6 @@ public class MockFeatureWithCalculation extends FeatureOperator<FeatureInput> {
     protected double calculate(SessionInput<FeatureInput> input)
             throws FeatureCalculationException {
         countCalculateCalled++; // NOSONAR
-        return input.calc(new MockCalculation());
+        return input.calculate(new MockCalculation());
     }
 }

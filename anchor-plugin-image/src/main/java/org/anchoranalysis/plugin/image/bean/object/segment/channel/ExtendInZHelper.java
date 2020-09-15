@@ -26,15 +26,15 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel;
 
-import java.nio.ByteBuffer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -49,32 +49,33 @@ import org.anchoranalysis.image.voxel.BoundedVoxelsFactory;
 class ExtendInZHelper {
 
     public static ObjectCollection extendObjects(
-            ObjectCollection objects2D, BinaryVoxels<ByteBuffer> mask3D) {
+            ObjectCollection objects2D, BinaryVoxels<UnsignedByteBuffer> mask3D) {
         return objects2D.stream().map(object -> extendObject(object, mask3D));
     }
 
-    private static ObjectMask extendObject(ObjectMask object2D, BinaryVoxels<ByteBuffer> voxels3D) {
+    private static ObjectMask extendObject(
+            ObjectMask object2D, BinaryVoxels<UnsignedByteBuffer> voxels3D) {
         return new ObjectMask(extendObject(object2D.boundedVoxels(), voxels3D));
     }
 
-    private static BoundedVoxels<ByteBuffer> extendObject(
-            BoundedVoxels<ByteBuffer> obj2D, BinaryVoxels<ByteBuffer> mask3D) {
+    private static BoundedVoxels<UnsignedByteBuffer> extendObject(
+            BoundedVoxels<UnsignedByteBuffer> obj2D, BinaryVoxels<UnsignedByteBuffer> mask3D) {
 
         BoundingBox newBBox = createBoundingBoxForAllZ(obj2D.boundingBox(), mask3D.extent().z());
 
-        BoundedVoxels<ByteBuffer> newMask = BoundedVoxelsFactory.createByte(newBBox);
+        BoundedVoxels<UnsignedByteBuffer> newMask = BoundedVoxelsFactory.createByte(newBBox);
 
         ReadableTuple3i max = newBBox.calculateCornerMax();
         Point3i point = new Point3i();
 
         BinaryValuesByte bv = mask3D.binaryValues().createByte();
 
-        ByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
+        UnsignedByteBuffer bufferIn2D = obj2D.voxels().sliceBuffer(0);
 
         for (point.setZ(0); point.z() <= max.z(); point.incrementZ()) {
 
-            ByteBuffer bufferMask3D = mask3D.voxels().sliceBuffer(point.z());
-            ByteBuffer bufferOut3D = newMask.voxels().sliceBuffer(point.z());
+            UnsignedByteBuffer bufferMask3D = mask3D.voxels().sliceBuffer(point.z());
+            UnsignedByteBuffer bufferOut3D = newMask.voxels().sliceBuffer(point.z());
 
             int ind = 0;
 
@@ -84,14 +85,14 @@ class ExtendInZHelper {
                         point.x() <= max.x();
                         point.incrementX(), ind++) {
 
-                    if (bufferIn2D.get(ind) != bv.getOnByte()) {
+                    if (bufferIn2D.getRaw(ind) != bv.getOnByte()) {
                         continue;
                     }
 
                     int indexGlobal = mask3D.extent().offset(point.x(), point.y());
-                    bufferOut3D.put(
+                    bufferOut3D.putRaw(
                             ind,
-                            bufferMask3D.get(indexGlobal) == bv.getOnByte()
+                            bufferMask3D.getRaw(indexGlobal) == bv.getOnByte()
                                     ? bv.getOnByte()
                                     : bv.getOffByte());
                 }

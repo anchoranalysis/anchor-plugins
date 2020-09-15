@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.ToPixelized;
+import org.anchoranalysis.plugin.mpp.segment.optimization.ToPixelized;
 
 /**
  * Converts a Marks to a MarksToPixelized using a transformer

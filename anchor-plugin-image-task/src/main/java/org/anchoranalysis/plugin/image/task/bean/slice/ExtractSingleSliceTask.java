@@ -82,7 +82,9 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputManager);
@@ -147,13 +149,13 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
         try {
             double[] scores = calculateScoreForEachSlice(scoreFeature, energyStack, logger);
 
-            int optimaSliceIndex = findOptimaSlice(scores);
+            int optimalSliceIndex = findOptimalSlice(scores);
 
-            logger.messageLogger().logFormatted("Selected optima is slice %d", optimaSliceIndex);
+            logger.messageLogger().logFormatted("Selected optima is slice %d", optimalSliceIndex);
 
-            params.writeRow(imageName, optimaSliceIndex, scores[optimaSliceIndex]);
+            params.writeRow(imageName, optimalSliceIndex, scores[optimalSliceIndex]);
 
-            return optimaSliceIndex;
+            return optimalSliceIndex;
         } catch (FeatureCalculationException e) {
             throw new OperationFailedException(e);
         }
@@ -194,7 +196,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
                 stackCollection, outputManager, OUTPUT_STACK_KEY, false);
     }
 
-    private int findOptimaSlice(double[] scores) {
+    private int findOptimalSlice(double[] scores) {
         if (findMaxima) {
             return ArraySearchUtilities.findIndexOfMaximum(scores);
         } else {
@@ -217,7 +219,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
                 // Calculate feature for this slice
                 double featVal =
-                        session.calculate(new FeatureInputStack(energyStackSlice.getEnergyStack()));
+                        session.calculate(new FeatureInputStack(energyStackSlice.withoutParams()));
 
                 logger.messageLogger().logFormatted("Slice %3d has score %f", z, featVal);
 

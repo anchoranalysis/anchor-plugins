@@ -98,7 +98,7 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
      * correspond to the unique name of the dataset. The third group should correspond to the unique
      * name of the experiment.
      *
-     * @param rootName if non-empty (and non-NULL) a rooted filePathGenerator is created instead of
+     * @param rootName if non-empty (and non-null) a rooted filePathGenerator is created instead of
      *     a non rooted
      * @param regEx
      * @return

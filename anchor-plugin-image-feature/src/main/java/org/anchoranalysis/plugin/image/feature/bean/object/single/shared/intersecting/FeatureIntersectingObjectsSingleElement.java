@@ -62,7 +62,7 @@ public abstract class FeatureIntersectingObjectsSingleElement extends FeatureInt
             ResolvedCalculation<ObjectCollection, FeatureInputSingleObject> ccIntersecting)
             throws FeatureCalculationException {
 
-        int size = paramsExst.calc(ccIntersecting).size();
+        int size = paramsExst.calculate(ccIntersecting).size();
 
         List<Double> results = new ArrayList<>();
         for (int i = 0; i < size; i++) {

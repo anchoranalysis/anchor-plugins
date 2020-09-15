@@ -36,8 +36,9 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.contour.Contour;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -57,7 +58,7 @@ public class CVFindContours {
         try {
             // We clone ss the source image is modified by the algorithm according to OpenCV docs
             // https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours
-            Mat mat = MatConverter.fromObject(object.duplicate());
+            Mat mat = ConvertToMat.fromObject(object.duplicate());
 
             List<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(

@@ -41,7 +41,7 @@ class CalculateHistogramForChannel
         extends FeatureCalculation<FeatureInputHistogram, FeatureInputSingleObject> {
 
     /**
-     * iff TRUE zero-intensity values are excluded from the histogram, otherwise they are included
+     * iff true zero-intensity values are excluded from the histogram, otherwise they are included
      */
     private boolean excludeZero = false;
 
@@ -54,10 +54,10 @@ class CalculateHistogramForChannel
     @Override
     protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
 
-        Histogram hist =
+        Histogram histogram =
                 HistogramFactory.createHistogramIgnoreZero(
                         channel, params.getObject(), excludeZero);
 
-        return new FeatureInputHistogram(hist, params.getResolutionOptional());
+        return new FeatureInputHistogram(histogram, params.getResolutionOptional());
     }
 }

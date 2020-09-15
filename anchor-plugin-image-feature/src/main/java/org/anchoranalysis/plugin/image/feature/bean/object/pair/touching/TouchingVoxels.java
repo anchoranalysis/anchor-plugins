@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.bean.object.pair.FeaturePairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -77,7 +77,7 @@ public abstract class TouchingVoxels extends FeaturePairObjects {
      */
     private Optional<BoundingBox> boxIntersectDilated(SessionInput<FeatureInputPairObjects> input)
             throws FeatureCalculationException {
-        return input.calc(new CalculateIntersectionOfDilatedBoundingBox(do3D));
+        return input.calculate(new CalculateIntersectionOfDilatedBoundingBox(do3D));
     }
 
     protected CountKernel createCountKernelMask(ObjectMask object1, ObjectMask object2Relative) {

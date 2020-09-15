@@ -45,7 +45,7 @@ class CalculateOutlineNumberVoxels extends FeatureCalculation<Integer, FeatureIn
 
     /**
      * Whether to suppress 3D calculations (only consider XY neighbors). Doesn't make sense if
-     * mip=TRUE, and will then be ignored.
+     * mip=true, and will then be ignored.
      */
     private boolean suppress3D;
 

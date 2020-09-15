@@ -72,7 +72,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     // START BEAN PROPERTIES
     /**
-     * If non-NULL, a histogram is extracted from this provider rather than the histogram from the
+     * If non-null, a histogram is extracted from this provider rather than the histogram from the
      * inputted CSV.
      *
      * <p>The histogram from the inputted CSV is available in the SharedObjects as "input".

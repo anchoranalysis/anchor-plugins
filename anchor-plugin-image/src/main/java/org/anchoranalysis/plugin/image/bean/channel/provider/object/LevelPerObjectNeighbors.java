@@ -40,7 +40,7 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -59,8 +59,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
 
     // START BEAN
     /**
-     * How many neighbors to include by distance (distance==1 implies all directly touching neighbors,
-     * distance==2 implies those touching the directly touching etc.)
+     * How many neighbors to include by distance (distance==1 implies all directly touching
+     * neighbors, distance==2 implies those touching the directly touching etc.)
      */
     @BeanField @Positive @Getter @Setter private int distance; // Determines the neighbor distance
     // END BEAN
@@ -78,14 +78,14 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private static void visit(
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            GraphWithPayload<ObjectWithHistogram, Integer> graph,
             List<ObjectWithHistogram> currentVisit,
             List<ObjectWithHistogram> toVisit,
             Set<ObjectWithHistogram> visited) {
         for (ObjectWithHistogram omLocal : currentVisit) {
 
-            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVertices(omLocal);
-            
+            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVerticesOutgoing(omLocal);
+
             for (ObjectWithHistogram object : adjacentObjects) {
                 if (!visited.contains(object)) {
                     toVisit.add(object);
@@ -97,11 +97,11 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     private static Collection<ObjectWithHistogram> verticesWithinDistance(
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph,
+            GraphWithPayload<ObjectWithHistogram, Integer> graph,
             ObjectWithHistogram om,
             int neighborDistance) {
         if (neighborDistance == 1) {
-            return graph.adjacentVertices(om);
+            return graph.adjacentVerticesOutgoing(om);
         } else {
 
             Set<ObjectWithHistogram> visited = new HashSet<>();
@@ -119,13 +119,13 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
     }
 
     /**
-     * Sums hist and everything in others
+     * Sums histogram and everything in others
      *
      * @throws OperationFailedException
      */
-    private static Histogram createSumHistograms(Histogram hist, Collection<Histogram> others)
+    private static Histogram createSumHistograms(Histogram histogram, Collection<Histogram> others)
             throws OperationFailedException {
-        Histogram out = hist.duplicate();
+        Histogram out = histogram.duplicate();
         for (Histogram other : others) {
             out.addHistogram(other);
         }
@@ -143,7 +143,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             CreateNeighborGraph<ObjectWithHistogram> graphCreator =
                     new CreateNeighborGraph<>(new EdgeAdderParameters(false));
 
-            GraphWithEdgeTypes<ObjectWithHistogram, Integer> graph =
+            GraphWithPayload<ObjectWithHistogram, Integer> graph =
                     graphCreator.createGraph(
                             objectsWithHistograms(objects, channelIntensity),
                             ObjectWithHistogram::getObject,
@@ -156,7 +156,7 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             // We don't need this for the computation, used only for outputting debugging
             Map<ObjectWithHistogram, Integer> mapLevel = new HashMap<>();
 
-            for (ObjectWithHistogram om : graph.vertexSet()) {
+            for (ObjectWithHistogram om : graph.vertices()) {
 
                 getLogger()
                         .messageLogger()

@@ -57,10 +57,10 @@ public class AddEdgeFilters extends DefineAdderWithPrefixBean {
 
     @BeanField @Positive @Getter @Setter private double gaussianSigmaMeters = 0;
 
-    /** If TRUE, the median filter is included */
+    /** If true, the median filter is included */
     @BeanField @Getter @Setter private boolean median = true;
 
-    /** If TRUE, the Gaussian filter is included */
+    /** If true, the Gaussian filter is included */
     @BeanField @Getter @Setter private boolean gaussian = true;
     // END BEAN PROPERTIES
 

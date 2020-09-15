@@ -38,7 +38,7 @@ import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
-import org.anchoranalysis.image.channel.converter.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelFilter;

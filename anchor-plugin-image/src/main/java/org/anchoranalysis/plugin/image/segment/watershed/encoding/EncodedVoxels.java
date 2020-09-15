@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +34,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -44,12 +44,11 @@ public final class EncodedVoxels {
 
     public static final WatershedEncoding ENCODING = new WatershedEncoding();
 
-    @Getter private final Voxels<IntBuffer> voxels;
+    @Getter private final Voxels<UnsignedIntBuffer> voxels;
 
     public void setPoint(Point3i point, int code) {
         int offset = voxels.extent().offset(point.x(), point.y());
-        IntBuffer bbS = voxels.sliceBuffer(point.z());
-        bbS.put(offset, code);
+        voxels.sliceBuffer(point.z()).putRaw(offset, code);
     }
 
     public void setPointConnectedComponentID(Point3i point, int connectedComponentID) {
@@ -85,10 +84,10 @@ public final class EncodedVoxels {
         int volumeXY = extent().volumeXY();
 
         for (int z = 0; z < extent().z(); z++) {
-            EncodedIntBuffer bb = getPixelsForPlane(z);
+            EncodedIntBuffer buffer = getPixelsForPlane(z);
 
             for (int i = 0; i < volumeXY; i++) {
-                if (bb.isTemporary(i)) {
+                if (buffer.isTemporary(i)) {
                     return true;
                 }
             }
@@ -101,13 +100,13 @@ public final class EncodedVoxels {
         ArrayList<Point3i> listOut = new ArrayList<>();
 
         for (int z = 0; z < extent().z(); z++) {
-            EncodedIntBuffer bb = getPixelsForPlane(z);
+            EncodedIntBuffer buffer = getPixelsForPlane(z);
 
             int offset = 0;
             for (int y = 0; y < extent().y(); y++) {
                 for (int x = 0; x < extent().x(); x++) {
 
-                    if (bb.isTemporary(offset++)) {
+                    if (buffer.isTemporary(offset++)) {
                         listOut.add(new Point3i(x, y, z));
                     }
                 }
@@ -122,14 +121,14 @@ public final class EncodedVoxels {
         Set<Integer> setOut = new HashSet<>();
 
         for (int z = 0; z < extent().z(); z++) {
-            EncodedIntBuffer bb = getPixelsForPlane(z);
+            EncodedIntBuffer buffer = getPixelsForPlane(z);
 
             int offset = 0;
             for (int y = 0; y < extent().y(); y++) {
                 for (int x = 0; x < extent().x(); x++) {
 
-                    if (bb.isConnectedComponentID(offset)) {
-                        setOut.add(bb.getCode(offset));
+                    if (buffer.isConnectedComponentID(offset)) {
+                        setOut.add(buffer.getCode(offset));
                     }
                     offset++;
                 }
@@ -141,7 +140,7 @@ public final class EncodedVoxels {
     // Returns the CODED final index (global)
     public int calculateConnectedComponentID(Point3i point, int firstChainCode) {
 
-        Extent e = voxels.extent();
+        Extent extent = voxels.extent();
 
         int crntChainCode = firstChainCode;
 
@@ -149,10 +148,10 @@ public final class EncodedVoxels {
             // Get local index from global index
             point = addDirectionFromChainCode(point, crntChainCode);
 
-            assert (e.contains(point)); // NOSONAR
+            assert (extent.contains(point)); // NOSONAR
 
             // Replace with intelligence slices buffer?
-            int nextVal = voxels.sliceBuffer(point.z()).get(e.offsetSlice(point));
+            int nextVal = voxels.sliceBuffer(point.z()).getRaw(extent.offsetSlice(point));
 
             assert (nextVal != WatershedEncoding.CODE_UNVISITED);
             assert (nextVal != WatershedEncoding.CODE_TEMPORARY);
@@ -162,7 +161,7 @@ public final class EncodedVoxels {
             }
 
             if (nextVal == WatershedEncoding.CODE_MINIMA) {
-                return ENCODING.encodeConnectedComponentID(e.offset(point));
+                return ENCODING.encodeConnectedComponentID(extent.offset(point));
             }
 
             crntChainCode = nextVal;

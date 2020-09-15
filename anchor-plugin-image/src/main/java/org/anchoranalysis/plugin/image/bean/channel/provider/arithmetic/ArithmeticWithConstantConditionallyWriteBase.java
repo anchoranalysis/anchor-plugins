@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsAll;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithValueBase;
 
 public abstract class ArithmeticWithConstantConditionallyWriteBase extends UnaryWithValueBase {
@@ -48,7 +48,7 @@ public abstract class ArithmeticWithConstantConditionallyWriteBase extends Unary
 
         int constantAsInt = (int) Math.floor(constantToAssign);
 
-        IterateVoxelsVoxelBoxAsInt.assignEachMatchingPoint(
+        IterateVoxelsAll.assignEachMatchingPoint(
                 voxels,
                 value -> shouldOverwriteVoxelWithConstant(value, constantAsInt),
                 constantAsInt);

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.points.PointRange;
@@ -54,7 +54,8 @@ final class BoundingBoxMap {
                 });
     }
 
-    public ObjectCollection deriveObjects(Voxels<IntBuffer> matS) throws OperationFailedException {
+    public ObjectCollection deriveObjects(Voxels<UnsignedIntBuffer> matS)
+            throws OperationFailedException {
         return ObjectCollectionFactory.filterAndMapWithIndexFrom(
                 list,
                 Objects::nonNull,

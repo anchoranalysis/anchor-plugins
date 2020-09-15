@@ -54,8 +54,8 @@ public class Range<T extends FeatureInput> extends FeatureDoubleElem<T> {
     @Override
     public double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        double val1 = input.calc(getItem1());
-        double val2 = input.calc(getItem2());
+        double val1 = input.calculate(getItem1());
+        double val2 = input.calculate(getItem2());
 
         if (val1 == val2) {
             return 0.0;

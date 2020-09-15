@@ -43,7 +43,7 @@ import org.anchoranalysis.plugin.image.object.ObjectIntersectionRemover;
 public class RemoveIntersectingVoxels extends WithDimensionsBase {
 
     // START BEAN PROPERTIES
-    /** If TRUE, throws an error if there is a disconnected object after the erosion */
+    /** If true, throws an error if there is a disconnected object after the erosion */
     @BeanField @Getter @Setter private boolean errorDisconnectedObjects = false;
     // END BEAN PROPERTIES
 

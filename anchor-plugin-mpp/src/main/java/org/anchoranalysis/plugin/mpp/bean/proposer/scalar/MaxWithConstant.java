@@ -43,8 +43,8 @@ public class MaxWithConstant extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException {
-        return Math.max(scalarProposer.propose(randomNumberGenerator, res), constant);
+        return Math.max(scalarProposer.propose(randomNumberGenerator, resolution), constant);
     }
 }

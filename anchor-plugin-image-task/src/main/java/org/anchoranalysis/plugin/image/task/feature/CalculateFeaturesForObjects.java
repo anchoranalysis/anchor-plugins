@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,6 @@
 package org.anchoranalysis.plugin.image.task.feature;
 
 import java.util.Optional;
-import java.util.function.Function;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -34,7 +33,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -47,46 +46,62 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
 
     private final CombineObjectsForFeatures<T> table;
     private final FeatureCalculatorMulti<T> calculator;
-    
+
     /**
-     * iff TRUE no exceptions are thrown when an error occurs, but rather a message is written to
+     * iff true no exceptions are thrown when an error occurs, but rather a message is written to
      * the log
      */
     private final boolean suppressErrors;
 
     private final InputProcessContext<FeatureTableCalculator<T>> context;
+
+    public interface LabelsForInput<T extends FeatureInput> {
     
-    public CalculateFeaturesForObjects(CombineObjectsForFeatures<T> table, InitParamsWithEnergyStack initParams, boolean suppressErrors, InputProcessContext<FeatureTableCalculator<T>> context) throws OperationFailedException {
+        /**
+         * Calculates labels for a given input (and index)
+         * 
+         * @param input the input to calculate labels for
+         * @param index the index in the input-collection for the particular input
+         * @return row-labels for the input
+         */
+        RowLabels deriveLabels(T input, int index);
+    }
+    
+    public CalculateFeaturesForObjects(
+            CombineObjectsForFeatures<T> table,
+            InitParamsWithEnergyStack initParams,
+            boolean suppressErrors,
+            InputProcessContext<FeatureTableCalculator<T>> context)
+            throws OperationFailedException {
         this.table = table;
         this.calculator = startCalculator(context.getRowSource(), initParams, context.getLogger());
         this.suppressErrors = suppressErrors;
         this.context = context;
     }
-    
+
     public void calculateFeaturesForObjects(
             ObjectCollection objects,
             EnergyStack energyStack,
-            Function<T, StringLabelsForCsvRow> identifierFromInput)
+            LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
         try {
-                ListWithThumbnails<T,ObjectCollection> inputs =
-                        table.deriveInputsStartBatch(
-                                objects,
-                                energyStack,
-                                context.isThumbnailsEnabled(),
-                                context.getLogger());
-    
-                calculateManyFeaturesInto(inputs, identifierFromInput);
+            ListWithThumbnails<T, ObjectCollection> inputs =
+                    table.deriveInputsStartBatch(
+                            objects,
+                            energyStack,
+                            context.isThumbnailsEnabled(),
+                            context.getLogger());
 
+            calculateManyFeaturesInto(inputs, labelsForInput);
 
         } catch (CreateException | OperationFailedException e) {
             throw new OperationFailedException(e);
         }
     }
-    
+
     /**
      * Calculates a bunch of features with an objectID (unique) and a groupID and adds them to the
-     * stored-results
+     * stored-results.
      *
      * <p>The stored-results also have an additional first-column with the ID.
      *
@@ -95,7 +110,8 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
      * @throws OperationFailedException
      */
     private void calculateManyFeaturesInto(
-            ListWithThumbnails<T,ObjectCollection> listInputs, Function<T, StringLabelsForCsvRow> labelsForInput)
+            ListWithThumbnails<T, ObjectCollection> listInputs,
+            LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
 
         try {
@@ -110,26 +126,33 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
                                 i + 1, listInputs.size(), input.toString());
 
                 context.addResultsFor(
-                        labelsForInput.apply(input),
+                        labelsForInput.deriveLabels(input, i),
                         new ResultsVectorWithThumbnail(
                                 calculator.calculate(
                                         input, context.getLogger().errorReporter(), suppressErrors),
-                                thumbnailForInput(input, listInputs.getThumbnailBatch(), context.isThumbnailsEnabled() )));
+                                thumbnailForInput(
+                                        input,
+                                        listInputs.getThumbnailBatch(),
+                                        context.isThumbnailsEnabled())));
             }
 
         } catch (NamedFeatureCalculateException | CreateException e) {
             throw new OperationFailedException(e);
         }
     }
-    
-    private Optional<DisplayStack> thumbnailForInput(T input, Optional<ThumbnailBatch<ObjectCollection>> thumbnailBatch, boolean thumbnailsEnabled) throws CreateException {
+
+    private Optional<DisplayStack> thumbnailForInput(
+            T input,
+            Optional<ThumbnailBatch<ObjectCollection>> thumbnailBatch,
+            boolean thumbnailsEnabled)
+            throws CreateException {
         if (thumbnailsEnabled && thumbnailBatch.isPresent()) {
-            return Optional.of( thumbnailBatch.get().thumbnailFor( table.objectsForThumbnail(input) ) );
+            return Optional.of(thumbnailBatch.get().thumbnailFor(table.objectsForThumbnail(input)));
         } else {
             return Optional.empty();
         }
     }
-    
+
     public String uniqueIdentifierFor(T input) {
         return table.uniqueIdentifierFor(input);
     }
@@ -137,7 +160,7 @@ public class CalculateFeaturesForObjects<T extends FeatureInput> {
     public Logger getLogger() {
         return context.getLogger();
     }
-    
+
     private static <T extends FeatureInput> FeatureCalculatorMulti<T> startCalculator(
             FeatureTableCalculator<T> calculator,
             InitParamsWithEnergyStack initParams,

@@ -26,24 +26,24 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
 
 /** There's no meaningful "result" value here, so we always return -1 */
 class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Object> {
 
     private SlidingBuffer<?> sbMask;
-    private SlidingBuffer<ByteBuffer> sbFinalized;
+    private SlidingBuffer<UnsignedByteBuffer> sbFinalized;
     private PriorityQueueIndexRangeDownhill<Point3i> queue;
 
     // Current ByteBuffer
-    private VoxelBuffer<?> bbMask;
-    private VoxelBuffer<ByteBuffer> bbFinalized;
+    private VoxelBuffer<?> bufferMask;
+    private VoxelBuffer<UnsignedByteBuffer> bufferFinalized;
     private int z = 0;
 
     private final BinaryValuesByte bv;
@@ -51,7 +51,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     public PointProcessor(
             SlidingBuffer<?> sbMarker,
             SlidingBuffer<?> sbMask,
-            SlidingBuffer<ByteBuffer> sbFinalized,
+            SlidingBuffer<UnsignedByteBuffer> sbFinalized,
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             BinaryValuesByte bv) {
         super(sbMarker);
@@ -64,8 +64,8 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
     @Override
     public void notifyChangeZ(int zChange, int z) {
         super.notifyChangeZ(zChange, z);
-        this.bbMask = sbMask.bufferRel(zChange);
-        this.bbFinalized = sbFinalized.bufferRel(zChange);
+        this.bufferMask = sbMask.bufferRel(zChange);
+        this.bufferFinalized = sbFinalized.bufferRel(zChange);
         this.z = z;
     }
 
@@ -76,11 +76,11 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
         int index = changedOffset(xChange, yChange);
 
         // We see if it's been finalized or not
-        byte b = bbFinalized.buffer().get(index);
+        byte b = bufferFinalized.buffer().getRaw(index);
         if (b == bv.getOffByte()) {
 
             // get value from mask
-            int maskVal = bbMask.getInt(index);
+            int maskVal = bufferMask.getInt(index);
 
             int valToWrite = Math.min(maskVal, sourceVal);
 
@@ -91,7 +91,7 @@ class PointProcessor extends ProcessVoxelNeighborAbsoluteWithSlidingBuffer<Objec
             queue.put(new Point3i(x1, y1, z), valToWrite);
 
             // point as finalized
-            bbFinalized.buffer().put(index, bv.getOnByte());
+            bufferFinalized.buffer().putRaw(index, bv.getOnByte());
 
             return true;
         }

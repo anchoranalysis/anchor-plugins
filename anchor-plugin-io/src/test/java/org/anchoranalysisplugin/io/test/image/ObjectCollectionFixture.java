@@ -26,11 +26,11 @@
 
 package org.anchoranalysisplugin.io.test.image;
 
-import java.nio.ByteBuffer;
 import java.util.Random;
 import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -67,20 +67,20 @@ class ObjectCollectionFixture {
         return mockObject(crnr, e);
     }
 
-    private ObjectMask mockObject(Point3i corner, Extent e) {
+    private ObjectMask mockObject(Point3i corner, Extent extent) {
 
-        ObjectMask object = new ObjectMask(new BoundingBox(corner, e));
+        ObjectMask object = new ObjectMask(new BoundingBox(corner, extent));
 
-        int volumeXY = e.volumeXY();
-        for (int z = 0; z < e.z(); z++) {
+        int volumeXY = extent.volumeXY();
+        for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = object.sliceBufferLocal(z);
+            UnsignedByteBuffer buffer = object.sliceBufferLocal(z);
 
             int prevVal = 0;
 
             for (int i = 0; i < volumeXY; i++) {
                 prevVal = randomMaybeChangeValue(prevVal);
-                bb.put((byte) prevVal);
+                buffer.putUnsigned(prevVal);
             }
         }
 

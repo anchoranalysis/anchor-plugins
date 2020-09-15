@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +38,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
@@ -66,8 +66,8 @@ public class FillHoles extends ObjectCollectionProviderUnary {
 
         for (ObjectMask objectMask : objects) {
 
-            BinaryVoxels<ByteBuffer> voxels = objectMask.binaryVoxels();
-            BinaryVoxels<ByteBuffer> voxelsDuplicated = voxels.duplicate();
+            BinaryVoxels<UnsignedByteBuffer> voxels = objectMask.binaryVoxels();
+            BinaryVoxels<UnsignedByteBuffer> voxelsDuplicated = voxels.duplicate();
 
             try {
                 ApplyImageJMorphologicalOperation.fill(voxelsDuplicated);

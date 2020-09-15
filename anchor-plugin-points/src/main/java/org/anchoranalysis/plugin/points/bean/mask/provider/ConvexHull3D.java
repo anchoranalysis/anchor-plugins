@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.points.bean.mask.provider;
 
 import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
@@ -36,9 +35,10 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsByte;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 public class ConvexHull3D extends ConvexHullBase {
 
@@ -70,7 +70,7 @@ public class ConvexHull3D extends ConvexHullBase {
 
         // we write the vertices to the outline
         Channel out = outline.channel();
-        Voxels<ByteBuffer> voxelsOut = out.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsOut = out.voxels().asByte();
 
         VoxelsAssigner assignerOn = voxelsOut.assignValue(outline.binaryValues().getOnInt());
         VoxelsAssigner assignerOff = voxelsOut.assignValue(outline.binaryValues().getOffInt());
@@ -91,7 +91,7 @@ public class ConvexHull3D extends ConvexHullBase {
     private static List<Point3d> pointsFromMask(Mask mask) {
         List<Point3d> listOut = new ArrayList<>();
         BinaryValuesByte bvb = mask.binaryValues().createByte();
-        IterateVoxelsByte.iterateEqualValues(mask.voxels(), bvb.getOnByte(), Point3d::new);
+        IterateVoxelsEqualTo.equalToPrimitive(mask.voxels(), bvb.getOnByte(), Point3d::new);
         return listOut;
     }
 }

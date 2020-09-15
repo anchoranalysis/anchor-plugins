@@ -43,7 +43,7 @@ import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ScaledObjectCollection;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.seed.SeedCollection;
 
@@ -86,8 +86,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         // Segment and scale results back up to original-scale
         try {
             return scaleResultToOriginalScale(
-                            scaledSegmentationResult, scaleFactor, channel.dimensions().extent())
-                    .asCollectionOrderNotPreserved();
+                            scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
@@ -122,10 +121,12 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         }
     }
 
-    private ScaledObjectCollection scaleResultToOriginalScale(
+    private ObjectCollection scaleResultToOriginalScale(
             ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
             throws OperationFailedException {
-        return objects.scale(scaleFactor.invert(), originalExtent);
+        return ObjectCollectionFactory.of(
+              objects.scale(scaleFactor.invert(), originalExtent).asCollectionOrderNotPreserved()
+          );
     }
 
     /**

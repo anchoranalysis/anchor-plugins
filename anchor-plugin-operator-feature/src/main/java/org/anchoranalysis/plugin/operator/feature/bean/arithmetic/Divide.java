@@ -47,10 +47,10 @@ public class Divide<T extends FeatureInput> extends FeatureListElem<T> {
 
         int size = getList().size();
 
-        double result = input.calc(getList().get(0));
+        double result = input.calculate(getList().get(0));
 
         for (int i = 1; i < size; i++) {
-            double div = input.calc(getList().get(i));
+            double div = input.calculate(getList().get(i));
             if (div == 0.0) {
                 if (avoidDivideByZero) {
                     return divideByZeroValue;

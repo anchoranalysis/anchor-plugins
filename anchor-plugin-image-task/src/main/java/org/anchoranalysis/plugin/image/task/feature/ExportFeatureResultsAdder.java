@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.RowLabels;
 
 /**
  * Adds results (a row in a feature-table) for export-features
@@ -41,5 +41,5 @@ public interface ExportFeatureResultsAdder {
      * @param labels labels for results
      * @param results the results
      */
-    void addResultsFor(StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results);
+    void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results);
 }

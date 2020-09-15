@@ -26,15 +26,15 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
-import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,7 +48,7 @@ class ExtendObjectsInZHelper {
 
         ObjectMask objectNew = container.region(box, false);
 
-        ByteBuffer bbFlat = flat.sliceBufferLocal(0);
+        UnsignedByteBuffer bufferFlat = flat.sliceBufferLocal(0);
 
         int zLow = box.cornerMin().z();
         int zHigh = box.calculateCornerMax().z();
@@ -60,13 +60,13 @@ class ExtendObjectsInZHelper {
             zCenter = zLow;
         }
 
-        extend(bbFlat, extent, objectNew, flat, zLow, IntStream.range(zCenter, zHigh + 1));
-        extend(bbFlat, extent, objectNew, flat, zLow, revRange(zLow, zCenter));
+        extend(bufferFlat, extent, objectNew, flat, zLow, IntStream.range(zCenter, zHigh + 1));
+        extend(bufferFlat, extent, objectNew, flat, zLow, revRange(zLow, zCenter));
         return objectNew;
     }
 
     private static boolean extend(
-            ByteBuffer bbFlat,
+            UnsignedByteBuffer bufferFlat,
             Extent extent,
             ObjectMask objectNew,
             ObjectMask flat,
@@ -86,14 +86,14 @@ class ExtendObjectsInZHelper {
             int zRel = z - zLow;
 
             // We want to set to the Flat version ANDed with
-            ByteBuffer bbExst = objectNew.sliceBufferLocal(zRel);
+            UnsignedByteBuffer bufferExisting = objectNew.sliceBufferLocal(zRel);
 
             if (andMode) { // NOSONAR
 
                 if (bufferLogicalAnd(
                         volumeXY,
-                        bbExst,
-                        bbFlat,
+                        bufferExisting,
+                        bufferFlat,
                         objectNew.binaryValuesByte(),
                         flat.binaryValuesByte())) {
                     writtenOneSlice = true;
@@ -106,42 +106,43 @@ class ExtendObjectsInZHelper {
                 }
 
             } else {
-                setBufferLow(extent.volumeXY(), bbExst, objectNew.binaryValuesByte());
+                setBufferLow(extent.volumeXY(), bufferExisting, objectNew.binaryValuesByte());
             }
         }
 
         return writtenOneSlice;
     }
 
-    private static void setBufferLow(int numVoxels, ByteBuffer buffer, BinaryValuesByte bvb) {
+    private static void setBufferLow(
+            int numVoxels, UnsignedByteBuffer buffer, BinaryValuesByte bvb) {
         for (int i = 0; i < numVoxels; i++) {
-            buffer.put(i, bvb.getOffByte());
+            buffer.putRaw(i, bvb.getOffByte());
         }
     }
 
     /**
      * Does a logical AND between buffer and receive. The result is placed in buffer. receive is
-     * unchanged Returns TRUE if at least one pixel is HIGH, or false otherwise
+     * unchanged Returns true if at least one pixel is HIGH, or false otherwise
      */
     private static boolean bufferLogicalAnd(
-            int numVoxels,
-            ByteBuffer buffer,
-            ByteBuffer receive,
+            int numberVoxels,
+            UnsignedByteBuffer buffer,
+            UnsignedByteBuffer receive,
             BinaryValuesByte bvb,
             BinaryValuesByte bvbReceive) {
 
         boolean atLeastOneHigh = false;
 
-        for (int i = 0; i < numVoxels; i++) {
+        for (int i = 0; i < numberVoxels; i++) {
 
-            byte byteBuffer = buffer.get(i);
-            byte byteReceive = receive.get(i);
+            byte byteBuffer = buffer.getRaw(i);
+            byte byteReceive = receive.getRaw(i);
 
             if (byteBuffer == bvb.getOnByte() && byteReceive == bvbReceive.getOnByte()) {
                 // No need to change buffer, as byte is already HIGH
                 atLeastOneHigh = true;
             } else {
-                buffer.put(i, bvb.getOffByte());
+                buffer.putRaw(i, bvb.getOffByte());
             }
         }
 

@@ -70,15 +70,15 @@ public class RejectIfConditionXYResolution extends RasterReader {
         }
 
         @Override
-        public Optional<Resolution> maybeUpdatedResolution(Resolution res)
+        public Optional<Resolution> maybeUpdatedResolution(Resolution resolution)
                 throws RasterIOException {
 
-            if (res.x() != res.y()) {
+            if (resolution.x() != resolution.y()) {
                 throw new RasterIOException(
                         "X and Y pixel-sizes are different. They must be equal");
             }
 
-            if (relation.isRelationToValueTrue(res.x(), value)) {
+            if (relation.isRelationToValueTrue(resolution.x(), value)) {
                 throw new RasterIOException(
                         "XY-resolution fufills condition, and is thus rejected");
             } else {

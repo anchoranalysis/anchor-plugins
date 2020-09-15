@@ -7,7 +7,7 @@
   </parent>
   <artifactId>anchor-test-mpp</artifactId>
   <version>0.0.2-SNAPSHOT</version>
-  <description>Helper methods for testing involving image IO and manipulation</description>
+  <description>Tests for other packages involving image IO.</description>
     <dependencies>
    
    	<dependency>

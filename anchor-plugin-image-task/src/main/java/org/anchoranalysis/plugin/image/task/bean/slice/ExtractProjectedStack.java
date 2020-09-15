@@ -32,10 +32,10 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
@@ -124,8 +124,7 @@ class ExtractProjectedStack {
         Channel channelOut =
                 ChannelFactory.instance()
                         .create(
-                                new Dimensions(
-                                        extentOut, channelDestination.dimensions().resolution()),
+                                new Dimensions(extentOut, channelDestination.resolution()),
                                 UnsignedByteVoxelType.INSTANCE);
         channelDestination
                 .voxels()

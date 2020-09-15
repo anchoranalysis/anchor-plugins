@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
 import com.google.common.base.Preconditions;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,8 +39,9 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.Voxels;
 
 class PointsFromInsideHelper {
@@ -49,7 +49,7 @@ class PointsFromInsideHelper {
     private final PointListForConvex pointsConvexRoot;
 
     private final BoundingBox boundingBox;
-    private final BinaryVoxels<ByteBuffer> voxelsFilled;
+    private final BinaryVoxels<UnsignedByteBuffer> voxelsFilled;
     private final ReadableTuple3i cornerMin;
     private final ReadableTuple3i cornerMax;
 
@@ -103,16 +103,16 @@ class PointsFromInsideHelper {
             Consumer<Point3i> processPoint) {
         BinaryValuesByte bvb = mask.binaryValues().createByte();
 
-        Voxels<ByteBuffer> voxels = mask.channel().voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = mask.channel().voxels().asByte();
         Extent extent = voxels.extent();
 
         Iterator<Integer> itr = zRange.iterator();
         while (itr.hasNext()) {
             int z = itr.next();
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
 
-            if (!addPointsToSlice(extent, bb, bvb, z, processPoint)) {
+            if (!addPointsToSlice(extent, buffer, bvb, z, processPoint)) {
                 successiveEmptySlices = 0;
             } else if (successiveEmptySlices != -1) {
                 // We don't increase the counter until we've been inside a non-empty slice
@@ -128,7 +128,7 @@ class PointsFromInsideHelper {
 
     private boolean addPointsToSlice(
             Extent extent,
-            ByteBuffer bb,
+            UnsignedByteBuffer buffer,
             BinaryValuesByte bvb,
             int z,
             Consumer<Point3i> processPoint) {
@@ -136,7 +136,7 @@ class PointsFromInsideHelper {
         for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
             for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
                 int offset = extent.offset(x, y);
-                if (bb.get(offset) == bvb.getOnByte()) {
+                if (buffer.getRaw(offset) == bvb.getOnByte()) {
 
                     Point3i point = new Point3i(x, y, z);
                     if (pointsConvexRoot.convexWithAtLeastOnePoint(point, voxelsFilled)) {

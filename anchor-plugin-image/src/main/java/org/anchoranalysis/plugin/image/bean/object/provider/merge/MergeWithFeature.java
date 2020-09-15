@@ -34,10 +34,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.object.merge.MergeGraph;
@@ -106,7 +106,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
     /** Determines the priority (and selection criteria) used to allow merges between neighbors */
     protected abstract AssignPriority createPrioritizer() throws OperationFailedException;
 
-    /** Is the payload considered in making decisions? (iff FALSE, payload of nodes is irrelvant) */
+    /** Is the payload considered in making decisions? (iff false, payload of nodes is irrelvant) */
     protected abstract boolean isPlayloadUsed();
 
     /**
@@ -125,7 +125,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
 
         MergeGraph graph;
         try {
-            graph = createGraph(objects, resolutionOptional());
+            graph = createGraph(objects, unitConvertOptional());
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }
@@ -155,21 +155,21 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
             throws OperationFailedException {
 
         // Find the edge with the best improvement
-        EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
+        TypedEdge<ObjectVertex, PrioritisedVertex> edgeToMerge = graph.findMaxPriority();
 
         if (edgeToMerge == null) {
             return false;
         }
 
         // When we decide to merge, we save the merged object
-        saveObjects.ifPresent(so -> so.add(edgeToMerge.getEdge().getVertex().getObject()));
+        saveObjects.ifPresent(so -> so.add(edgeToMerge.getPayload().getVertex().getObject()));
 
         graph.merge(edgeToMerge);
 
         return true;
     }
 
-    private MergeGraph createGraph(ObjectCollection objects, Optional<Resolution> res)
+    private MergeGraph createGraph(ObjectCollection objects, Optional<UnitConverter> unitConverter)
             throws CreateException {
 
         try {
@@ -177,7 +177,7 @@ public abstract class MergeWithFeature extends MergeWithOptionalDistanceConstrai
                     new MergeGraph(
                             createPayloadCalculator(),
                             beforeConditions(),
-                            res,
+                            unitConverter,
                             createPrioritizer(),
                             getLogger(),
                             isPlayloadUsed());

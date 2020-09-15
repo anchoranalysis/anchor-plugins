@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /** Combines two UpdatableBeforeConditions as LOGICAL ANDs */
@@ -40,10 +40,10 @@ public class AndCondition implements UpdatableBeforeCondition {
     private final UpdatableBeforeCondition secondCondition;
 
     @Override
-    public void updateSourceObject(ObjectMask source, Optional<Resolution> res)
+    public void updateSourceObject(ObjectMask source, Optional<UnitConverter> unitConverter)
             throws OperationFailedException {
-        firstCondition.updateSourceObject(source, res);
-        secondCondition.updateSourceObject(source, res);
+        firstCondition.updateSourceObject(source, unitConverter);
+        secondCondition.updateSourceObject(source, unitConverter);
     }
 
     @Override

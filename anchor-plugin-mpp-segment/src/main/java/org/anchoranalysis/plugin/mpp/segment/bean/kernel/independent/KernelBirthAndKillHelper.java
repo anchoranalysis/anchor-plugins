@@ -127,7 +127,7 @@ class KernelBirthAndKillHelper {
     public static VoxelizedMarksWithEnergy updatedEnergy(
             VoxelizedMarksWithEnergy exst,
             VoxelizedMarkMemo memoNew,
-            VoxelizedMarkMemo pmmAdditional, // Can be NULL
+            VoxelizedMarkMemo pmmAdditional, // Can be null
             List<VoxelizedMarkMemo> toKill,
             ProposerContext propContext)
             throws KernelCalculateEnergyException {
@@ -139,7 +139,7 @@ class KernelBirthAndKillHelper {
         assert !Double.isNaN(newEnergy.getEnergyTotal());
 
         try {
-            newEnergy.add(memoNew, propContext.getEnergyStack().getEnergyStack());
+            newEnergy.add(memoNew, propContext.getEnergyStack().withoutParams());
             assert !Double.isNaN(newEnergy.getEnergyTotal());
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException("Cannot add memoNew", e);
@@ -147,7 +147,7 @@ class KernelBirthAndKillHelper {
 
         for (VoxelizedMarkMemo memo : toKill) {
             try {
-                newEnergy.remove(memo, propContext.getEnergyStack().getEnergyStack());
+                newEnergy.remove(memo, propContext.getEnergyStack().withoutParams());
                 assert !Double.isNaN(newEnergy.getEnergyTotal());
             } catch (NamedFeatureCalculateException e) {
                 throw new KernelCalculateEnergyException("Cannot remove memo", e);
@@ -157,7 +157,7 @@ class KernelBirthAndKillHelper {
         if (pmmAdditional != null) {
 
             try {
-                newEnergy.add(pmmAdditional, propContext.getEnergyStack().getEnergyStack());
+                newEnergy.add(pmmAdditional, propContext.getEnergyStack().withoutParams());
             } catch (NamedFeatureCalculateException e) {
                 throw new KernelCalculateEnergyException("Cannot add pmmAdditional", e);
             }

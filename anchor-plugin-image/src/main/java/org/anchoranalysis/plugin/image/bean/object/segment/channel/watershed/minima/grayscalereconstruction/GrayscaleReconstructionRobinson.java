@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.minima.grayscalereconstruction;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -38,9 +38,9 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.PriorityQueueIndexRangeDownhill;
@@ -68,13 +68,13 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             VoxelsWrapper mask, VoxelsWrapper marker, Optional<ObjectMask> containingMask) {
 
         // We use this to track if something has been finalized or not
-        Voxels<ByteBuffer> voxelsFinalized =
+        Voxels<UnsignedByteBuffer> voxelsFinalized =
                 VoxelsFactory.getByte().createInitialized(marker.any().extent());
 
         // TODO make more efficient
         // Find maximum value of markerVb.... we can probably get this elsewhere without having to
         // iterate the image again
-        int maxValue = marker.extract().voxelWithMaxIntensity();
+        int maxValue = (int) marker.extract().voxelWithMaxIntensity();
 
         PriorityQueueIndexRangeDownhill<Point3i> queue =
                 new PriorityQueueIndexRangeDownhill<>(maxValue);
@@ -99,14 +99,14 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> markerVb,
             Voxels<?> maskVb,
-            Voxels<ByteBuffer> voxelsFinalized,
+            Voxels<UnsignedByteBuffer> voxelsFinalized,
             Optional<ObjectMask> containingMask) {
 
         Extent extent = markerVb.extent();
 
         SlidingBuffer<?> sbMarker = new SlidingBuffer<>(markerVb);
         SlidingBuffer<?> sbMask = new SlidingBuffer<>(maskVb);
-        SlidingBuffer<ByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
+        SlidingBuffer<UnsignedByteBuffer> sbFinalized = new SlidingBuffer<>(voxelsFinalized);
 
         BinaryValuesByte bvFinalized = BinaryValuesByte.getDefault();
 
@@ -130,7 +130,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
             // We have a point, and a value
             // Now we iterate through the neighbors (but only if they haven't been finalised)
             // Makes sure that it includes its center point
-            IterateVoxels.callEachPointInNeighborhood(
+            IterateVoxelsNeighbors.callEachPointInNeighborhood(
                     point, neighborhood, do3D, process, nextVal, extent.offsetSlice(point));
         }
     }
@@ -138,25 +138,25 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     private void populateQueueFromNonZeroPixels(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> voxels,
-            Voxels<ByteBuffer> voxelsFinalized) {
+            Voxels<UnsignedByteBuffer> voxelsFinalized) {
 
         byte maskOn = BinaryValuesByte.getDefault().getOnByte();
 
-        Extent e = voxels.extent();
-        for (int z = 0; z < e.z(); z++) {
+        Extent extent = voxels.extent();
+        for (int z = 0; z < extent.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.slice(z);
-            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
+            VoxelBuffer<?> buffer = voxels.slice(z);
+            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
 
             int offset = 0;
-            for (int y = 0; y < e.y(); y++) {
-                for (int x = 0; x < e.x(); x++) {
+            for (int y = 0; y < extent.y(); y++) {
+                for (int x = 0; x < extent.x(); x++) {
 
                     {
-                        int val = bb.getInt(offset);
+                        int val = buffer.getInt(offset);
                         if (val != 0) {
                             queue.put(new Point3i(x, y, z), val);
-                            bbFinalized.put(offset, maskOn);
+                            bufferFinalized.putRaw(offset, maskOn);
                         }
                     }
 
@@ -169,33 +169,33 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
     private void populateQueueFromNonZeroPixelsMask(
             PriorityQueueIndexRangeDownhill<Point3i> queue,
             Voxels<?> voxels,
-            Voxels<ByteBuffer> voxelsFinalized,
+            Voxels<UnsignedByteBuffer> voxelsFinalized,
             ObjectMask containingMask) {
 
-        ReadableTuple3i crnrpointMin = containingMask.boundingBox().cornerMin();
-        ReadableTuple3i crnrpointMax = containingMask.boundingBox().calculateCornerMax();
+        ReadableTuple3i cornerMin = containingMask.boundingBox().cornerMin();
+        ReadableTuple3i cornerMax = containingMask.boundingBox().calculateCornerMax();
 
         byte maskOn = containingMask.binaryValuesByte().getOnByte();
 
         Extent e = voxels.extent();
-        for (int z = crnrpointMin.z(); z <= crnrpointMax.z(); z++) {
+        for (int z = cornerMin.z(); z <= cornerMax.z(); z++) {
 
-            VoxelBuffer<?> bb = voxels.slice(z);
-            ByteBuffer bbFinalized = voxelsFinalized.sliceBuffer(z);
-            ByteBuffer bbMask = containingMask.sliceBufferGlobal(z);
+            VoxelBuffer<?> buffer = voxels.slice(z);
+            UnsignedByteBuffer bufferFinalized = voxelsFinalized.sliceBuffer(z);
+            UnsignedByteBuffer bufferMask = containingMask.sliceBufferGlobal(z);
 
             int offset = 0;
-            for (int y = crnrpointMin.y(); y <= crnrpointMax.y(); y++) {
-                for (int x = crnrpointMin.x(); x <= crnrpointMax.x(); x++) {
-                    if (bbMask.get(offset) == maskOn) {
+            for (int y = cornerMin.y(); y <= cornerMax.y(); y++) {
+                for (int x = cornerMin.x(); x <= cornerMax.x(); x++) {
+                    if (bufferMask.getRaw(offset) == maskOn) {
 
                         int offsetGlobal = e.offset(x, y);
 
                         {
-                            int val = bb.getInt(offsetGlobal);
+                            int val = buffer.getInt(offsetGlobal);
                             if (val != 0) {
                                 queue.put(new Point3i(x, y, z), val);
-                                bbFinalized.put(offsetGlobal, maskOn);
+                                bufferFinalized.putRaw(offsetGlobal, maskOn);
                             }
                         }
                     }

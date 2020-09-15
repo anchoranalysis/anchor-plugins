@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.io.bean.input.stack;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -40,29 +41,31 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
-import lombok.AllArgsConstructor;
 
 /**
  * An input object that converts {@link NamedChannelsInput} to {@link StackSequenceInput}
  *
  * @author Owen Feehan
  */
-@AllArgsConstructor public class ConvertChannelsInputToStack implements StackSequenceInput {
+@AllArgsConstructor
+public class ConvertChannelsInputToStack implements StackSequenceInput {
 
     /** Input to convert */
     private NamedChannelsInput input;
 
     /** Time-index to convert */
     private int timeIndex = 0;
-        
-    /** By default all channels are converted into a stack. If set, only this channel is converted into a stack. */
+
+    /**
+     * By default all channels are converted into a stack. If set, only this channel is converted
+     * into a stack.
+     */
     private Optional<String> channelName;
 
     public ConvertChannelsInputToStack(NamedChannelsInput input) {
         this(input, 0, Optional.empty());
     }
-    
+
     @Override
     public String descriptiveName() {
         return input.descriptiveName();
@@ -118,18 +121,23 @@ import lombok.AllArgsConstructor;
                     in.createChannelsForSeries(seriesNum, new ProgressReporterOneOfMany(prm));
             prm.incrWorker();
 
-            return new TimeSequence( stackFromNamedChannels(namedChannels, prm) );
+            return new TimeSequence(stackFromNamedChannels(namedChannels, prm));
 
         } catch (RasterIOException e) {
             throw new OperationFailedException(e);
         }
     }
-            
-    private Stack stackFromNamedChannels(NamedChannelsForSeries namedChannels, ProgressReporterMultiple progressReporter) throws OperationFailedException {
+
+    private Stack stackFromNamedChannels(
+            NamedChannelsForSeries namedChannels, ProgressReporterMultiple progressReporter)
+            throws OperationFailedException {
         if (channelName.isPresent()) {
             try {
                 Channel channel =
-                        namedChannels.getChannel(channelName.get(), timeIndex, new ProgressReporterOneOfMany(progressReporter));
+                        namedChannels.getChannel(
+                                channelName.get(),
+                                timeIndex,
+                                new ProgressReporterOneOfMany(progressReporter));
                 return new Stack(channel);
             } catch (GetOperationFailedException e) {
                 throw new OperationFailedException(e);

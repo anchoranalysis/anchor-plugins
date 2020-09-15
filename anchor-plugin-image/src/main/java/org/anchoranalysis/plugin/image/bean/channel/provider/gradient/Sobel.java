@@ -37,7 +37,7 @@ import net.imglib2.view.Views;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.ImgLib2Wrap;
+import org.anchoranalysis.image.convert.imglib2.ConvertToNativeImg;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -56,7 +56,7 @@ public class Sobel extends GradientBase {
         Channel intermediate = createNewFloat(channelIn.dimensions());
 
         processMultiplexInputType(
-                channelIn, ImgLib2Wrap.wrapFloat(intermediate.voxels().asFloat()));
+                channelIn, ConvertToNativeImg.fromFloat(intermediate.voxels().asFloat()));
 
         // convert to our output from the float
         return convertToOutputType(intermediate);
@@ -70,12 +70,12 @@ public class Sobel extends GradientBase {
             throws CreateException {
         if (channelIn.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             process(
-                    ImgLib2Wrap.wrapByte(channelIn.voxels().asByte()),
+                    ConvertToNativeImg.fromByte(channelIn.voxels().asByte()),
                     out,
                     (float) getScaleFactor());
         } else if (channelIn.getVoxelDataType().equals(UnsignedShortVoxelType.INSTANCE)) {
             process(
-                    ImgLib2Wrap.wrapShort(channelIn.voxels().asShort()),
+                    ConvertToNativeImg.fromShort(channelIn.voxels().asShort()),
                     out,
                     (float) getScaleFactor());
         } else {

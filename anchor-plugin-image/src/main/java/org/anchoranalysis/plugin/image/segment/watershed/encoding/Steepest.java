@@ -30,10 +30,10 @@ import java.util.Optional;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxels;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighbor;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
-import org.anchoranalysis.image.voxel.iterator.changed.ProcessVoxelNeighborFactory;
+import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborAbsoluteWithSlidingBuffer;
+import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
 
@@ -112,7 +112,7 @@ public final class Steepest {
 
     // Calculates the steepest descent
     public int steepestDescent(Point3i point, int val, int indxBuffer) {
-        return IterateVoxels.callEachPointInNeighborhood(
+        return IterateVoxelsNeighbors.callEachPointInNeighborhood(
                 point, neighborhood, do3D, process, val, indxBuffer);
     }
 }

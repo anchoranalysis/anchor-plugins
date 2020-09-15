@@ -37,7 +37,7 @@ public class NormalizeByConstant extends SingleChannel {
     // END BEAN PROPERTIES
 
     @Override
-    protected double deriveScoreFromPixelVal(int pixelVal) {
-        return pixelVal / value;
+    protected double deriveScoreFromVoxel(int voxelIntensity) {
+        return voxelIntensity / value;
     }
 }

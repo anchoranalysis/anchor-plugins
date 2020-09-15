@@ -97,7 +97,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
     @BeanField @Getter @Setter private boolean stackAsChannel = false;
 
     /**
-     * If either stackAsChannel==TRUE or we have specified additionalChannels this indicated which
+     * If either stackAsChannel==true or we have specified additionalChannels this indicated which
      * channel to use from the stack
      */
     @BeanField @Getter @Setter private int channelIndex = 0;

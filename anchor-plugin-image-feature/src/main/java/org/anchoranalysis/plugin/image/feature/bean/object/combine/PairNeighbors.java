@@ -38,13 +38,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
-import org.anchoranalysis.core.graph.GraphWithEdgeTypes;
+import org.anchoranalysis.core.graph.TypedEdge;
+import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -162,19 +162,19 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
         // We create a neighbor-graph of our input objects
         CreateNeighborGraph<ObjectMask> graphCreator =
                 new CreateNeighborGraph<>(new EdgeAdderParameters(avoidOverlappingObjects));
-        GraphWithEdgeTypes<ObjectMask, Integer> graphNeighbors =
+        GraphWithPayload<ObjectMask, Integer> graphNeighbors =
                 graphCreator.createGraph(
                         objects.asList(),
                         Function.identity(),
                         (vector1, vector2, numberVoxels) -> numberVoxels,
-                        energyStack.getEnergyStack().extent(),
+                        energyStack.withoutParams().extent(),
                         do3D);
 
         // We iterate through every edge in the graph, edges can exist in both directions
-        for (EdgeTypeWithVertices<ObjectMask, Integer> edge : graphNeighbors.edgeSetUnique()) {
+        for (TypedEdge<ObjectMask, Integer> edge : graphNeighbors.edgesUnique()) {
             out.add(
                     new FeatureInputPairObjects(
-                            edge.getNode1(), edge.getNode2(), Optional.of(energyStack)));
+                            edge.getFrom(), edge.getTo(), Optional.of(energyStack)));
         }
 
         return out;
@@ -186,7 +186,8 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     }
 
     @Override
-    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input) throws CreateException {
+    public ObjectCollection objectsForThumbnail(FeatureInputPairObjects input)
+            throws CreateException {
         // A collection is made with the left-object as first element, and the right-object as the
         // second
         return ObjectCollectionFactory.of(input.getFirst(), input.getSecond());

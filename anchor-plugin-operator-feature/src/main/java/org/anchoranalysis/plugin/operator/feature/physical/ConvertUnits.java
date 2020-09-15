@@ -30,14 +30,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.unit.SpatialConversionUtilities;
-import org.anchoranalysis.feature.bean.operator.FeatureGenericSingleElem;
+import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInput;
+import org.anchoranalysis.image.extent.SpatialUnits;
 
 //
-public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleElem<T> {
+public class ConvertUnits<T extends FeatureInput> extends FeatureUnaryGeneric<T> {
 
     // START BEAN PROPERTIES
     @BeanField @AllowEmpty @Getter @Setter private String unitTypeFrom = "";
@@ -48,14 +48,9 @@ public class ConvertUnits<T extends FeatureInput> extends FeatureGenericSingleEl
     @Override
     protected double calculate(SessionInput<T> input) throws FeatureCalculationException {
 
-        double value = input.calc(getItem());
+        double value = input.calculate(getItem());
 
-        SpatialConversionUtilities.UnitSuffix typeFrom =
-                SpatialConversionUtilities.suffixFromMeterString(unitTypeFrom);
-        SpatialConversionUtilities.UnitSuffix typeTo =
-                SpatialConversionUtilities.suffixFromMeterString(unitTypeTo);
-
-        double valueBaseUnits = SpatialConversionUtilities.convertFromUnits(value, typeFrom);
-        return SpatialConversionUtilities.convertToUnits(valueBaseUnits, typeTo);
+        double valueBaseUnits = SpatialUnits.convertFromUnits(value, unitTypeFrom);
+        return SpatialUnits.convertToUnits(valueBaseUnits, unitTypeTo);
     }
 }

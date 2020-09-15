@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
@@ -48,23 +48,24 @@ public class MaximumNumberVoxelsOnSlice extends FeatureSingleObject {
         int max = 0;
 
         for (int z = 0; z < params.getObject().boundingBox().extent().z(); z++) {
-            ByteBuffer bb = params.getObject().sliceBufferLocal(z);
-            int cnt = cntForByteBuffer(bb, params.getObject().binaryValuesByte().getOnByte());
+            UnsignedByteBuffer buffer = params.getObject().sliceBufferLocal(z);
+            int count =
+                    countForByteBuffer(buffer, params.getObject().binaryValuesByte().getOnByte());
 
-            if (cnt > max) {
-                max = cnt;
+            if (count > max) {
+                max = count;
             }
         }
         return max;
     }
 
-    private static int cntForByteBuffer(ByteBuffer bb, byte equalVal) {
-        int cnt = 0;
-        while (bb.hasRemaining()) {
-            if (bb.get() == equalVal) {
-                cnt++;
+    private static int countForByteBuffer(UnsignedByteBuffer buffer, byte equalValue) {
+        int count = 0;
+        while (buffer.hasRemaining()) {
+            if (buffer.getRaw() == equalValue) {
+                count++;
             }
         }
-        return cnt;
+        return count;
     }
 }

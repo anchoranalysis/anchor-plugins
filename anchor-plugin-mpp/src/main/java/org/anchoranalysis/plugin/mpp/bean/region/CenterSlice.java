@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;

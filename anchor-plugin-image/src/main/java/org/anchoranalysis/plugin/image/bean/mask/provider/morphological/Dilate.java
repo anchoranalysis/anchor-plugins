@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 
@@ -64,7 +64,7 @@ public class Dilate extends MorphologicalOperatorBase {
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 
-        BinaryVoxels<ByteBuffer> out =
+        BinaryVoxels<UnsignedByteBuffer> out =
                 MorphologicalDilation.dilate(
                         source.binaryVoxels(),
                         do3D,

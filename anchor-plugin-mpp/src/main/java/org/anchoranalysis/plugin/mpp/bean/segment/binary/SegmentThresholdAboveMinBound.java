@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.segment.binary;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +37,7 @@ import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationThreshold;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.bean.threshold.ThresholderGlobal;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -58,7 +58,7 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
     private BinarySegmentationThreshold delegate = new BinarySegmentationThreshold();
 
     @Override
-    public BinaryVoxels<ByteBuffer> segment(
+    public BinaryVoxels<UnsignedByteBuffer> segment(
             VoxelsWrapper voxels,
             BinarySegmentationParameters params,
             Optional<ObjectMask> objectMask)
@@ -75,8 +75,8 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
         return delegate.segment(voxels, params, objectMask);
     }
 
-    private void setUpDelegate(Extent e, Resolution res) {
-        double minBound = markBounds.getMinResolved(res, e.z() > 1 && !suppress3D);
+    private void setUpDelegate(Extent extent, Resolution resolution) {
+        double minBound = markBounds.getMinResolved(resolution, extent.z() > 1 && !suppress3D);
 
         int threshold = (int) Math.floor(minBound);
 

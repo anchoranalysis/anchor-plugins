@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.intensity;
 
 import com.google.common.collect.BoundType;
 import com.google.common.collect.TreeMultiset;
-import java.nio.ByteBuffer;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -68,7 +67,8 @@ public class Median extends ChannelProviderUnary {
             set.clear();
         }
 
-        public void populateAt(int xCenter, int yMin, int yMax, ByteBuffer bb, Extent extent) {
+        public void populateAt(
+                int xCenter, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
 
             int xMin = xCenter - kernelHalfWidth;
             int xMax = xCenter + kernelHalfWidth;
@@ -78,14 +78,12 @@ public class Median extends ChannelProviderUnary {
 
             for (int y = yMin; y <= yMax; y++) {
                 for (int x = xMin; x <= xMax; x++) {
-
-                    int val = ByteConverter.unsignedByteToInt(bb.get(extent.offset(x, y)));
-                    set.add(val);
+                    set.add(buffer.getUnsigned(extent.offset(x, y)));
                 }
             }
         }
 
-        public void removeColumn(int x, int yMin, int yMax, ByteBuffer bb, Extent e) {
+        public void removeColumn(int x, int yMin, int yMax, UnsignedByteBuffer buffer, Extent e) {
 
             if (x < 0) {
                 return;
@@ -95,24 +93,24 @@ public class Median extends ChannelProviderUnary {
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
-                assert (set.contains(val));
-                set.remove(val);
+                int value = buffer.getUnsigned(e.offset(x, y));
+                assert (set.contains(value));
+                set.remove(value);
             }
         }
 
-        public void addColumn(int x, int yMin, int yMax, ByteBuffer bb, Extent e) {
+        public void addColumn(int x, int yMin, int yMax, UnsignedByteBuffer buffer, Extent extent) {
 
             if (x < 0) {
                 return;
             }
-            if (x >= e.x()) {
+            if (x >= extent.x()) {
                 return;
             }
 
             for (int y = yMin; y <= yMax; y++) {
-                int val = ByteConverter.unsignedByteToInt(bb.get(e.offset(x, y)));
-                set.add(val);
+                int offset = extent.offset(x, y);
+                set.add(buffer.getUnsigned(offset));
             }
         }
 
@@ -137,18 +135,18 @@ public class Median extends ChannelProviderUnary {
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
 
-        Voxels<ByteBuffer> voxels = channel.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
         RollingMultiSet set = new RollingMultiSet(kernelHalfWidth);
 
         Channel dup = channel.duplicate();
-        Voxels<ByteBuffer> voxelsDup = dup.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsDup = dup.voxels().asByte();
         Extent extent = dup.extent();
 
         for (int z = 0; z < extent.z(); z++) {
 
-            ByteBuffer bb = voxels.sliceBuffer(z);
-            ByteBuffer bbOut = voxelsDup.sliceBuffer(z);
+            UnsignedByteBuffer buffer = voxels.sliceBuffer(z);
+            UnsignedByteBuffer bufferOut = voxelsDup.sliceBuffer(z);
 
             int offset = 0;
             for (int y = 0; y < extent.y(); y++) {
@@ -163,15 +161,15 @@ public class Median extends ChannelProviderUnary {
 
                     if (x == 0) {
                         set.clear();
-                        set.populateAt(x, yMin, yMax, bb, extent);
+                        set.populateAt(x, yMin, yMax, buffer, extent);
                     } else {
-                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, bb, extent);
-                        set.addColumn(x + kernelHalfWidth, yMin, yMax, bb, extent);
+                        set.removeColumn(x - kernelHalfWidth - 1, yMin, yMax, buffer, extent);
+                        set.addColumn(x + kernelHalfWidth, yMin, yMax, buffer, extent);
                     }
 
                     int median = set.median();
 
-                    bbOut.put(offset, (byte) median);
+                    bufferOut.putUnsigned(offset, median);
                     offset++;
                 }
             }

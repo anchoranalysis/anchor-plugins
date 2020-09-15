@@ -52,7 +52,9 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
 
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();

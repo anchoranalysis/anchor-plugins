@@ -33,9 +33,9 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.proposer.KernelWithIdentifier;
-import org.anchoranalysis.mpp.segment.optscheme.step.OptimizationStep;
+import org.anchoranalysis.mpp.segment.optimization.step.OptimizationStep;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.bean.optscheme.kernelbridge.KernelStateBridge;
+import org.anchoranalysis.plugin.mpp.segment.bean.optimization.kernelbridge.KernelStateBridge;
 
 /**
  * @author Owen Feehan

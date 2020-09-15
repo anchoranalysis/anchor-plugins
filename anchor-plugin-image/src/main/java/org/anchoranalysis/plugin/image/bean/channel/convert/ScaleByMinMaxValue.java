@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
-import org.anchoranalysis.image.channel.converter.ChannelConverter;
-import org.anchoranalysis.image.channel.converter.ChannelConverterToUnsignedByteScaleByMinMaxValue;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByteScaleByMinMaxValue;
 
 /**
  * Scales by compressing a certain range of values into the 8-bit signal
@@ -47,6 +47,6 @@ public class ScaleByMinMaxValue extends ConvertChannelTo {
 
     @Override
     public ChannelConverter<?> createConverter() {
-        return new ChannelConverterToUnsignedByteScaleByMinMaxValue(min, max);
+        return new ToUnsignedByteScaleByMinMaxValue(min, max);
     }
 }

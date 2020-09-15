@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.feature.io.csv.StringLabelsForCsvRow;
+import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 
@@ -70,7 +70,6 @@ public class InputProcessContext<S> {
         this.thumbnailsEnabled = areThumbnailsEnabled(context);
     }
 
-
     public Path getModelDirectory() {
         return context.getModelDirectory();
     }
@@ -79,7 +78,7 @@ public class InputProcessContext<S> {
         return context.getLogger();
     }
 
-    public void addResultsFor(StringLabelsForCsvRow labels, ResultsVectorWithThumbnail results) {
+    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) {
         adder.addResultsFor(labels, results);
     }
 

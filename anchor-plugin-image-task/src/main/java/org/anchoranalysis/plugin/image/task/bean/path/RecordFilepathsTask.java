@@ -54,7 +54,9 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
 
     @Override
     public StringBuilder beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            BoundOutputManagerRouteErrors outputManager,
+            ConcurrencyPlan concurrencyPlan,
+            ParametersExperiment params)
             throws ExperimentExecutionException {
         return new StringBuilder();
     }

@@ -158,7 +158,7 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         VoxelizedMarksWithEnergy voxelizedMarks = existing.shallowCopy();
 
         try {
-            voxelizedMarks.removeTwo(sourceIndex, destinationIndex, energyStack.getEnergyStack());
+            voxelizedMarks.removeTwo(sourceIndex, destinationIndex, energyStack.withoutParams());
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException(
                     String.format("Cannot remove indexes %d and %d", sourceIndex, destinationIndex),
@@ -166,10 +166,10 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         }
 
         VoxelizedMarkMemo pmm =
-                PxlMarkMemoFactory.create(mark, energyStack.getEnergyStack(), regionMap);
+                PxlMarkMemoFactory.create(mark, energyStack.withoutParams(), regionMap);
 
         try {
-            voxelizedMarks.add(pmm, energyStack.getEnergyStack());
+            voxelizedMarks.add(pmm, energyStack.withoutParams());
         } catch (NamedFeatureCalculateException e) {
             throw new KernelCalculateEnergyException("Cannot add pmm", e);
         }

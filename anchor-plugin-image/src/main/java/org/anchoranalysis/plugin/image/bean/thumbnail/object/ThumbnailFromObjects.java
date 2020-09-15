@@ -29,7 +29,7 @@ import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
@@ -46,7 +46,8 @@ public abstract class ThumbnailFromObjects extends AnchorBean<ThumbnailFromObjec
      *
      * <p>A batch is a set of objects which are calibrated together (to have the same scale etc.)
      *
-     * @param objects the entire set of objects in the batch (for which thumbnails may be subsequently created)
+     * @param objects the entire set of objects in the batch (for which thumbnails may be
+     *     subsequently created)
      * @param boundingBoxes bounding-boxes that minimally enclose all the inputs to feature rows
      *     (e.g. a pair of objects or a single-object) and can be used for guessing scale-factors. A
      *     supplier is used as the stream may be desired multiple times.

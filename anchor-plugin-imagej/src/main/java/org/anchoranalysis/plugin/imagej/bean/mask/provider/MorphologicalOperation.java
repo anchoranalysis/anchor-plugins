@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.mask.provider;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
 
 /**
@@ -59,10 +59,10 @@ public class MorphologicalOperation extends MaskProviderUnary {
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
         try {
-            BinaryVoxels<ByteBuffer> processed =
+            BinaryVoxels<UnsignedByteBuffer> processed =
                     ApplyImageJMorphologicalOperation.applyOperation(
                             mask.binaryVoxels(), command, iterations);
-            return new Mask(processed, mask.dimensions().resolution());
+            return new Mask(processed, mask.resolution());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

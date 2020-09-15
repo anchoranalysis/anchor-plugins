@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.BoundingBox;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.kernel.count.CountKernel;

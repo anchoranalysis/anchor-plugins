@@ -63,7 +63,7 @@ public class Anonymize implements CopyFilesNaming {
 
     // START BEAN PROPERTIES
     /**
-     * Iff TRUE, a mapping.csv file is created showing the mapping between the original-names and
+     * Iff true, a mapping.csv file is created showing the mapping between the original-names and
      * the anonymized versions
      */
     @BeanField @Getter @Setter private boolean outputCSV = true;

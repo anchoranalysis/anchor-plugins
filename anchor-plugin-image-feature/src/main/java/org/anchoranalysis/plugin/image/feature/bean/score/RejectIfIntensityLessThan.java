@@ -43,14 +43,14 @@ public class RejectIfIntensityLessThan extends VoxelScore {
     // END BEAN PROPERTIES
 
     @Override
-    public double calculate(int[] pixelVals) throws FeatureCalculationException {
+    public double calculate(int[] voxelIntensities) throws FeatureCalculationException {
 
-        int intensity = pixelVals[energyChannelIndex];
+        int intensity = voxelIntensities[energyChannelIndex];
 
         if (intensity < minIntensity) {
             return 0;
         }
 
-        return item.calculate(pixelVals);
+        return item.calculate(voxelIntensities);
     }
 }

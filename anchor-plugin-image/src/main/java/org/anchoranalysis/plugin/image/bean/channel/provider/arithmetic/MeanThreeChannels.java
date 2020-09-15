@@ -26,12 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import java.nio.ByteBuffer;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderTernary;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.ByteConverter;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 
@@ -62,31 +61,23 @@ public class MeanThreeChannels extends ChannelProviderTernary {
     }
 
     private void processVoxels(
-            Voxels<ByteBuffer> voxelsOut,
-            Voxels<ByteBuffer> voxelsIn1,
-            Voxels<ByteBuffer> voxelsIn2,
-            Voxels<ByteBuffer> voxelsIn3) {
+            Voxels<UnsignedByteBuffer> voxelsOut,
+            Voxels<UnsignedByteBuffer> voxelsIn1,
+            Voxels<UnsignedByteBuffer> voxelsIn2,
+            Voxels<UnsignedByteBuffer> voxelsIn3) {
 
         for (int z = 0; z < voxelsOut.extent().z(); z++) {
 
-            ByteBuffer in1 = voxelsIn1.sliceBuffer(z);
-            ByteBuffer in2 = voxelsIn2.sliceBuffer(z);
-            ByteBuffer in3 = voxelsIn3.sliceBuffer(z);
-            ByteBuffer out = voxelsOut.sliceBuffer(z);
+            UnsignedByteBuffer in1 = voxelsIn1.sliceBuffer(z);
+            UnsignedByteBuffer in2 = voxelsIn2.sliceBuffer(z);
+            UnsignedByteBuffer in3 = voxelsIn3.sliceBuffer(z);
+            UnsignedByteBuffer out = voxelsOut.sliceBuffer(z);
 
             while (in1.hasRemaining()) {
 
-                byte b1 = in1.get();
-                byte b2 = in2.get();
-                byte b3 = in3.get();
+                int mean = (in1.getUnsigned() + in2.getUnsigned() + in3.getUnsigned()) / 3;
 
-                int i1 = ByteConverter.unsignedByteToInt(b1);
-                int i2 = ByteConverter.unsignedByteToInt(b2);
-                int i3 = ByteConverter.unsignedByteToInt(b3);
-
-                int mean = (i1 + i2 + i3) / 3;
-
-                out.put((byte) mean);
+                out.putUnsigned(mean);
             }
 
             assert (!in2.hasRemaining());

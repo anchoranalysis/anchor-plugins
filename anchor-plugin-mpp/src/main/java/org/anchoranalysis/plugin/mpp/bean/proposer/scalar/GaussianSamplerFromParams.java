@@ -51,7 +51,7 @@ public class GaussianSamplerFromParams extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution res)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
             throws OperationFailedException {
 
         try {

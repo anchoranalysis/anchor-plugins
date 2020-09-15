@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.score;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 
@@ -38,20 +38,21 @@ import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 class BufferUtilities {
 
     public static void putScoreForOffset(
-            VoxelScore pixelScore, List<VoxelBuffer<?>> bbList, ByteBuffer bbOut, int offset)
+            VoxelScore pixelScore,
+            List<VoxelBuffer<?>> bufferList,
+            UnsignedByteBuffer bufferOut,
+            int offset)
             throws FeatureCalculationException {
-        double score = pixelScore.calculate(createParams(bbList, offset));
-
-        int scoreInt = (int) Math.round(score * 255);
-        bbOut.put(offset, (byte) scoreInt);
+        double score = pixelScore.calculate(createParams(bufferList, offset));
+        bufferOut.putUnsigned(offset, (int) Math.round(score * 255));
     }
 
-    private static int[] createParams(List<VoxelBuffer<?>> bbList, int offset) {
+    private static int[] createParams(List<VoxelBuffer<?>> list, int offset) {
 
-        int[] vals = new int[bbList.size()];
+        int[] vals = new int[list.size()];
 
-        for (int c = 0; c < bbList.size(); c++) {
-            vals[c] = bbList.get(c).getInt(offset);
+        for (int index = 0; index < list.size(); index++) {
+            vals[index] = list.get(index).getInt(offset);
         }
 
         return vals;

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.energy;
 
-import java.nio.ByteBuffer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -36,6 +35,7 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.IncorrectVoxelTypeException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
@@ -72,7 +72,7 @@ public class NumberNeighboringVoxels extends OutlineKernelBase {
         return ApplyKernel.applyForCount(kernelMatch, object.voxels());
     }
 
-    private BinaryVoxels<ByteBuffer> binaryVoxels(Channel channel)
+    private BinaryVoxels<UnsignedByteBuffer> binaryVoxels(Channel channel)
             throws FeatureCalculationException {
         try {
             return BinaryVoxelsFactory.reuseByte(channel.voxels().asByte());

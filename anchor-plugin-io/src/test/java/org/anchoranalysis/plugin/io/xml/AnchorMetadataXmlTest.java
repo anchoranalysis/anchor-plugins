@@ -46,20 +46,16 @@ public class AnchorMetadataXmlTest {
 
     @Rule public TemporaryFolder folder = new TemporaryFolder();
 
-    private static Resolution createMockRes01() {
-        return new Resolution(1.0, 2.0, 3.0);
-    }
-
     @Test
     public void test()
             throws RasterIOException, ParserConfigurationException, SAXException, IOException,
                     URISyntaxException {
 
-        Resolution sr = createMockRes01();
+        Resolution resolution = createMockResolution();
 
         Path pathOut = folder.newFile("mockRes01.xml").toPath();
 
-        AnchorMetadataXml.writeResolutionXml(pathOut, sr);
+        AnchorMetadataXml.writeResolutionXml(resolution, pathOut);
 
         // basic test that the file exists, and nothing more
         assertTrue(Files.exists(pathOut));
@@ -72,5 +68,9 @@ public class AnchorMetadataXmlTest {
         TestLoader loader = TestLoader.createFromMavenWorkingDirectory();
         Document docGroundTruth = loader.openXmlFromTestPath(pathSerializedMock01);
         assertTrue(TestLoader.areXmlEqual(docFromFileSystem, docGroundTruth));
+    }
+
+    private static Resolution createMockResolution() {
+        return new Resolution(1.0, 2.0, 3.0);
     }
 }

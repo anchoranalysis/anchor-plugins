@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
-import org.anchoranalysis.core.graph.EdgeTypeWithVertices;
+import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
 /**
@@ -103,26 +103,26 @@ public class DescribeGraph {
 
     public String describeMerge(
             ObjectVertex omMerged,
-            EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> bestImprovement) {
+            TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         if (includePayload) {
             return String.format(
-                    "Merging %s and %s to %s (%f,%f->%f). Num vertices/edges=%d,%d.",
-                    bestImprovement.getNode1().getObject().centerOfGravity(),
-                    bestImprovement.getNode2().getObject().centerOfGravity(),
+                    "Merging %s and %s to %s (%f,%f->%f). Num vertices=%d.",
+                    bestImprovement.getFrom().getObject().centerOfGravity(),
+                    bestImprovement.getTo().getObject().centerOfGravity(),
                     omMerged.getObject().centerOfGravity(),
-                    bestImprovement.getNode1().getPayload(),
-                    bestImprovement.getNode2().getPayload(),
+                    bestImprovement.getFrom().getPayload(),
+                    bestImprovement.getTo().getPayload(),
                     omMerged.getPayload(),
-                    graph.numVertices(),
-                    graph.numEdges());
+                    graph.numberVertices()
+                    );
         } else {
             return String.format(
-                    "Merging %s and %s to %s. Num vertices/edges=%d,%d.",
-                    bestImprovement.getNode1().getObject().centerOfGravity(),
-                    bestImprovement.getNode2().getObject().centerOfGravity(),
+                    "Merging %s and %s to %s. Num vertices=%d.",
+                    bestImprovement.getFrom().getObject().centerOfGravity(),
+                    bestImprovement.getTo().getObject().centerOfGravity(),
                     omMerged.getObject().centerOfGravity(),
-                    graph.numVertices(),
-                    graph.numEdges());
+                    graph.numberVertices()
+                    );
         }
     }
 
@@ -139,14 +139,14 @@ public class DescribeGraph {
 
     private void describeAllEdges(StringBuilder sb) {
         sb.append("START Edges\n");
-        for (EdgeTypeWithVertices<ObjectVertex, PrioritisedVertex> edge : graph.edgeSetUnique()) {
+        for (TypedEdge<ObjectVertex, PrioritisedVertex> edge : graph.edgeSetUnique()) {
             sb.append(
                     describeEdge(
-                            edge.getNode1(),
-                            edge.getNode2(),
-                            edge.getEdge().getVertex(),
-                            edge.getEdge().getPriority(),
-                            edge.getEdge().isConsiderForMerge()));
+                            edge.getFrom(),
+                            edge.getTo(),
+                            edge.getPayload().getVertex(),
+                            edge.getPayload().getPriority(),
+                            edge.getPayload().isConsiderForMerge()));
             sb.append("\n");
         }
         sb.append("END Edges");

@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.generator.ColorSetGenerator;
+import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**
@@ -45,7 +45,7 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
 
     // START BEAN PROPERTIES
     /** Colors to use for drawing objects */
-    @BeanField @Getter @Setter private ColorSetGenerator colors = DEFAULT_COLOR_SET_GENERATOR;
+    @BeanField @Getter @Setter private ColorListFactory colors = DEFAULT_COLOR_SET_GENERATOR;
     // END BEAN PROPERTIES
 
     @Override
@@ -66,7 +66,7 @@ public abstract class ColoredBaseWithGenerator extends ColoredBase {
     private ColoredObjectCollection addColors(ObjectCollection objectsCreated)
             throws CreateException {
         try {
-            ColorList colorsGenerated = colors.generateColors(objectsCreated.size());
+            ColorList colorsGenerated = colors.create(objectsCreated.size());
             return new ColoredObjectCollection(objectsCreated, colorsGenerated);
         } catch (OperationFailedException e) {
             throw new CreateException(e);

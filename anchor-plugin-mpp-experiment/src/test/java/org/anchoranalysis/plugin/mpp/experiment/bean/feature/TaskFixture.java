@@ -85,7 +85,7 @@ class TaskFixture {
     /**
      * Change to use Merged-Pairs mode rather than Simple mode
      *
-     * @param includeFeaturesInPair iff TRUE "pair" features are populated in merged-pair mode
+     * @param includeFeaturesInPair iff true "pair" features are populated in merged-pair mode
      */
     public void changeToMergedPairs(boolean includeFeaturesInPair, boolean includeImageFeatures) {
         flexiFeatureTable = createMergedPairs(includeFeaturesInPair, includeImageFeatures);
@@ -138,6 +138,6 @@ class TaskFixture {
     }
 
     private EnergyStackWithoutParams createEnergyStack(boolean bigSizeEnergy) {
-        return EnergyStackFixture.create(bigSizeEnergy, false).getEnergyStack();
+        return EnergyStackFixture.create(bigSizeEnergy, false).withoutParams();
     }
 }

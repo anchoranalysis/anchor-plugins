@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.morphological;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.Voxels;
 
 /** Base class for performing morphological operations */
@@ -64,7 +64,7 @@ public abstract class MorphologicalOperatorBase extends MaskProviderUnary {
         return mask;
     }
 
-    protected Optional<Voxels<ByteBuffer>> background() throws CreateException {
+    protected Optional<Voxels<UnsignedByteBuffer>> background() throws CreateException {
 
         if (minIntensityValue > 0) {
             return Optional.of(backgroundChannelProvider.create().voxels().asByte());

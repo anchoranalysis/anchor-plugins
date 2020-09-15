@@ -31,10 +31,10 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.voxel.iterator.IterateVoxelsVoxelBoxAsInt;
+import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {
@@ -51,9 +51,9 @@ public class IntensityMeanCalculator {
 
         RunningSum running = new RunningSum();
 
-        IterateVoxelsVoxelBoxAsInt.callEachPoint(
-                channel.voxels().any(),
+        IterateVoxelsObjectMask.withVoxelBuffer(
                 object,
+                channel.voxels().any(),
                 (buffer, offset) -> {
                     int value = buffer.getInt(offset);
 

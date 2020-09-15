@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.contour.Contour;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -96,6 +96,7 @@ public class SplitContourAtSaddlePoints extends ObjectCollectionProviderUnary {
 
     private static ObjectMask createObjectFromContour(Contour contour, boolean round)
             throws CreateException {
-        return SingleObjectFromPointsFactory.create(PointConverter.convert3i(contour.getPoints(), round));
+        return SingleObjectFromPointsFactory.create(
+                PointConverter.convert3i(contour.getPoints(), round));
     }
 }

@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
-import lombok.AllArgsConstructor;
 
 /**
  * Allows merges if there is an increase in the payload i.e.

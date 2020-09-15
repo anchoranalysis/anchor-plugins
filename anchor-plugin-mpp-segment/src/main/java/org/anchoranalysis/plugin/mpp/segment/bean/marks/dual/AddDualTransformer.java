@@ -34,7 +34,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;
-import org.anchoranalysis.plugin.mpp.segment.optscheme.DualVoxelizedMarks;
+import org.anchoranalysis.plugin.mpp.segment.optimization.DualVoxelizedMarks;
 
 public class AddDualTransformer
         extends StateTransformerBean<VoxelizedMarksWithEnergy, DualVoxelizedMarks> {

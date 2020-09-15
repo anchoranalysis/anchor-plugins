@@ -33,11 +33,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.bean.size.SizeXY;
+import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.opencv.MatConverter;
+import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 
@@ -67,7 +67,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
 
             checkSize(extent);
 
-            Mat img = MatConverter.makeRGBStack(stack);
+            Mat img = ConvertToMat.makeRGBStack(stack);
 
             MatOfFloat descriptorValues = new MatOfFloat();
             params.createDescriptor(extent).compute(img, descriptorValues);
@@ -87,7 +87,7 @@ class CalculateHOGDescriptor extends FeatureCalculation<float[], FeatureInputSta
     private Stack extractStack(FeatureInputStack input) throws OperationFailedException {
 
         // We can rely that an energy stack always exists
-        Stack stack = input.getEnergyStackOptional().get().getEnergyStack().asStack();
+        Stack stack = input.getEnergyStackOptional().get().withoutParams().asStack();
 
         if (resizeTo.isPresent()) {
             SizeXY size = resizeTo.get();

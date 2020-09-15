@@ -35,15 +35,16 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.BoundingBox;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.index.ObjectCollectionRTree;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.ScaledObjectCollection;
+import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -56,7 +57,7 @@ class FlattenAndScaler {
     private final Interpolator interpolator;
 
     /** A scaled version of the objects */
-    private ScaledObjectCollection objectsScaled;
+    private ScaledElements<ObjectMask> objectsScaled;
 
     /**
      * An efficiently searchable index of the unscaled objects, indexed by their scaled
@@ -87,7 +88,7 @@ class FlattenAndScaler {
         this.objectsScaled =
                 allObjects.scale(scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
         this.objectsIndexed =
-                new ObjectCollectionRTree(objectsScaled.asCollectionOrderNotPreserved());
+                new ObjectCollectionRTree( ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()) );
     }
 
     /**
@@ -148,10 +149,9 @@ class FlattenAndScaler {
      *     found that has the same bounding-box and number of pixels)
      * @return the objects that intersect with the bounding-box except any in {@code
      *     excludeFromAdding}
-     * @throws OperationFailedException
      */
     public ObjectCollection objectsThatIntersectWith(
-            BoundingBox box, ObjectCollection excludeFromAdding) throws OperationFailedException {
+            BoundingBox box, ObjectCollection excludeFromAdding) {
 
         ObjectCollection intersectingObjects = objectsIndexed.intersectsWith(box);
 

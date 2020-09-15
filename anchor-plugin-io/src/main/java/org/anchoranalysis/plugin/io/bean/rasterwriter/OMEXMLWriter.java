@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.ImageWriter;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -58,18 +58,19 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
         Channel channelGreen = stack.getChannel(1);
         Channel channelBlue = stack.getChannel(2);
 
-        Voxels<ByteBuffer> voxelsRed = channelRed.voxels().asByte();
-        Voxels<ByteBuffer> voxelsGreen = channelGreen.voxels().asByte();
-        Voxels<ByteBuffer> voxelsBlue = channelBlue.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsRed = channelRed.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsGreen = channelGreen.voxels().asByte();
+        Voxels<UnsignedByteBuffer> voxelsBlue = channelBlue.voxels().asByte();
 
         for (int z = 0; z < stack.dimensions().z(); z++) {
 
-            ByteBuffer red = voxelsRed.sliceBuffer(z);
-            ByteBuffer green = voxelsGreen.sliceBuffer(z);
-            ByteBuffer blue = voxelsBlue.sliceBuffer(z);
+            UnsignedByteBuffer red = voxelsRed.sliceBuffer(z);
+            UnsignedByteBuffer green = voxelsGreen.sliceBuffer(z);
+            UnsignedByteBuffer blue = voxelsBlue.sliceBuffer(z);
 
-            ByteBuffer merged =
-                    ByteBuffer.allocate(red.capacity() + green.capacity() + blue.capacity());
+            UnsignedByteBuffer merged =
+                    UnsignedByteBuffer.allocate(
+                            red.capacity() + green.capacity() + blue.capacity());
             merged.put(red);
             merged.put(green);
             merged.put(blue);

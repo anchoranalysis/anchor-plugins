@@ -37,13 +37,13 @@ public class MedianFilter3D extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        ImagePlus imp = ConvertToImagePlus.from(channel);
+        ImagePlus image = ConvertToImagePlus.from(channel);
 
         Hybrid_3D_Median_Filter plugin = new Hybrid_3D_Median_Filter();
-        plugin.setup("", imp);
+        plugin.setup("", image);
 
-        ImagePlus impOut = plugin.Hybrid3dMedianizer(imp);
+        ImagePlus filtered = plugin.Hybrid3dMedianizer(image);
 
-        return ConvertFromImagePlus.toChannel(impOut, channel.dimensions().resolution());
+        return ConvertFromImagePlus.toChannel(filtered, channel.resolution());
     }
 }
