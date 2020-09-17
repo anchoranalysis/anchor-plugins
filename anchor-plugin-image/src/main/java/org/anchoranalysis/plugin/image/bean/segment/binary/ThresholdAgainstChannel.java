@@ -126,7 +126,7 @@ public class ThresholdAgainstChannel extends BinarySegmentation {
         if (voxels.getVoxelDataType().equals(UnsignedByteVoxelType.INSTANCE)) {
             return voxels.asByte();
         } else {
-            return VoxelsFactory.getByte().createInitialized(voxels.any().extent());
+            return VoxelsFactory.getUnsignedByte().createInitialized(voxels.any().extent());
         }
     }
 }

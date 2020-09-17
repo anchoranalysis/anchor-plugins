@@ -59,9 +59,9 @@ public class ConvertFromMat {
     public static Stack toStack(Mat mat) throws OperationFailedException {
 
         if (mat.type() == CvType.CV_8UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getByte());
+            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getUnsignedByte());
         } else if (mat.type() == CvType.CV_16UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedShort::wrapRaw, VoxelsFactory.getShort());
+            return toGrayscale(mat, VoxelBufferUnsignedShort::wrapRaw, VoxelsFactory.getUnsignedShort());
         } else if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {
