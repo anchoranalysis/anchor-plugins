@@ -111,7 +111,7 @@ public class WatershedYeong extends SegmentChannelIntoObjects {
 
     /** Create 'S' matrix */
     private EncodedVoxels createS(Extent extent) {
-        return new EncodedVoxels(VoxelsFactory.getInt().createInitialized(extent));
+        return new EncodedVoxels(VoxelsFactory.getUnsignedInt().createInitialized(extent));
     }
 
     private static void pointPixelsOrMarkAsMinima(

@@ -69,7 +69,7 @@ public class GrayscaleReconstructionRobinson extends GrayscaleReconstructionByEr
 
         // We use this to track if something has been finalized or not
         Voxels<UnsignedByteBuffer> voxelsFinalized =
-                VoxelsFactory.getByte().createInitialized(marker.any().extent());
+                VoxelsFactory.getUnsignedByte().createInitialized(marker.any().extent());
 
         // TODO make more efficient
         // Find maximum value of markerVb.... we can probably get this elsewhere without having to

@@ -65,7 +65,7 @@ class VoxelsFromScoreCreator {
 
             // We make our index buffer
             Voxels<UnsignedByteBuffer> voxelsOut =
-                    VoxelsFactory.getByte().createInitialized(extent);
+                    VoxelsFactory.getUnsignedByte().createInitialized(extent);
 
             if (object.isPresent()) {
                 setVoxelsWithMask(voxelsOut, object.get(), pixelScore);
