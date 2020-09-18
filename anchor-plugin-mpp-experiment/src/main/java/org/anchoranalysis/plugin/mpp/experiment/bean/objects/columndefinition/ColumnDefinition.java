@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.w3c.dom.Document;

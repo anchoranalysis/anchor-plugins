@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 import com.google.common.base.Predicate;
 import java.util.List;
 import java.util.Set;
-import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.OverlapCalculator;
 import org.anchoranalysis.image.object.combine.ObjectMaskMerger;

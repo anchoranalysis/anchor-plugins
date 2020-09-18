@@ -52,7 +52,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.index.ObjectCollectionRTree;
+import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
 import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
 import org.anchoranalysis.image.stack.DisplayStack;
