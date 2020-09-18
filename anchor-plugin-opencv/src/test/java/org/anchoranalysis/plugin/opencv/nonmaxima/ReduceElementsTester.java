@@ -72,7 +72,7 @@ class ReduceElementsTester {
         SegmentedObjects segments = createOverlappingCircles();
 
         SegmentedObjects reduced = new SegmentedObjects(reduce.reduce(segments.asList()));
-
+        
         writeIntoFolder.ifPresent(folder -> writeRasters(folder, segments, reduced));
 
         assertEquals(

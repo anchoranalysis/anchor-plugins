@@ -103,12 +103,12 @@ class DeriveObjectsFromList {
 
         for (WithConfidence<ObjectMask> withConfidence : elements) {
             int confidenceAsInt = convertConfidence.applyAsInt(withConfidence.getConfidence());
-
+            
             // Assign a value to the voxels only if it is greater than the existing-value
             channel.assignValue(confidenceAsInt)
                     .toObjectIf(
                             withConfidence.getElement().relativeMaskTo(boxOverall),
-                            voxelValue -> voxelValue == 0);
+                            voxelValue -> voxelValue == 0 || voxelValue > confidenceAsInt);
         }
 
         return channel;
