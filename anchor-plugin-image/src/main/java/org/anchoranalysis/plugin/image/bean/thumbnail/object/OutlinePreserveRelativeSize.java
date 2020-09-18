@@ -166,8 +166,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         }
 
         private BoundedList<ObjectMask> determineObjectsForGenerator(
-                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox)
-                throws OperationFailedException {
+                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox) {
             BoundedList<ObjectMask> objectsMapped = objectsScaled.assignBoundingBox(centeredBox);
 
             // Add any other objects which intersect with the scaled-bounding box, excluding
