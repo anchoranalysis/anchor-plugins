@@ -42,8 +42,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
@@ -59,9 +58,9 @@ public class ConvertFromMat {
     public static Stack toStack(Mat mat) throws OperationFailedException {
 
         if (mat.type() == CvType.CV_8UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getUnsignedByte());
+            return toGrayscale(mat, VoxelBufferWrap::unsignedByteRaw, VoxelsFactory.getUnsignedByte());
         } else if (mat.type() == CvType.CV_16UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedShort::wrapRaw, VoxelsFactory.getUnsignedShort());
+            return toGrayscale(mat, VoxelBufferWrap::unsignedShortRaw, VoxelsFactory.getUnsignedShort());
         } else if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {
