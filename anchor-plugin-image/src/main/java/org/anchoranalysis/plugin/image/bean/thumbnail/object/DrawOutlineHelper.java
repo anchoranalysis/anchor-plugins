@@ -59,7 +59,7 @@ class DrawOutlineHelper {
                     DrawObjectsGenerator.outlineSingleColor(
                             objects, outlineWidth, displayStack, color.rgbColor());
 
-            return drawOthers.generate();
+            return drawOthers.transform();
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }

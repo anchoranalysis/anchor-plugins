@@ -40,7 +40,7 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.color.HashedColorSet;
 import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -78,8 +78,8 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice
-        IterableCombinedListGenerator<MarksWithEnergyBreakdown> iterableCombined =
-                new IterableCombinedListGenerator<>(
+        CombinedListGenerator<MarksWithEnergyBreakdown> iterableCombined =
+                new CombinedListGenerator<>(
                         IterableGeneratorBridge.createOneToOne(
                                 iterableRaster,
                                 sourceObject -> addColor(sourceObject.getMarks(), initParams)));

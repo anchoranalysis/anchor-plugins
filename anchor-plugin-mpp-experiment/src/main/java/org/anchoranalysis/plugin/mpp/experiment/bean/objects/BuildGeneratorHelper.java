@@ -41,7 +41,7 @@ import org.anchoranalysis.image.io.generator.raster.object.ObjectWithBoundingBox
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 
 /**
  * Builds a generator for all relevant stacks that combines several generators
@@ -84,8 +84,8 @@ class BuildGeneratorHelper {
                 WrapGenerators.wrapObjectMask(
                         new ObjectWithBoundingBoxGenerator(dimensions.resolution()));
 
-        IterableCombinedListGenerator<BoundedList<ObjectMask>> out =
-                new IterableCombinedListGenerator<>(
+        CombinedListGenerator<BoundedList<ObjectMask>> out =
+                new CombinedListGenerator<>(
                         new SimpleNameValue<>("mask", wrappedObjectWithBoundingBoxGenerator));
 
         try {
@@ -99,7 +99,7 @@ class BuildGeneratorHelper {
 
     private void addGeneratorForEachStack(
             NamedStacks stacks,
-            IterableCombinedListGenerator<BoundedList<ObjectMask>> out,
+            CombinedListGenerator<BoundedList<ObjectMask>> out,
             boolean flatten)
             throws NamedProviderGetException {
 

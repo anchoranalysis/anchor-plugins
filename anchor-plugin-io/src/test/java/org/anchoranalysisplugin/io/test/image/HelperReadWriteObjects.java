@@ -28,8 +28,8 @@ package org.anchoranalysisplugin.io.test.image;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.objects.GeneratorHDF5;
-import org.anchoranalysis.image.io.objects.GeneratorTIFFDirectory;
+import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
+import org.anchoranalysis.image.io.objects.TIFFDirectoryObjectsGenerator;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
@@ -45,9 +45,9 @@ class HelperReadWriteObjects {
 
     public static IterableGenerator<ObjectCollection> generator(boolean hdf5, boolean compression) {
         if (hdf5) {
-            return new GeneratorHDF5(compression);
+            return new HDF5ObjectsGenerator(compression);
         } else {
-            return GeneratorTIFFDirectory.create();
+            return TIFFDirectoryObjectsGenerator.create();
         }
     }
 

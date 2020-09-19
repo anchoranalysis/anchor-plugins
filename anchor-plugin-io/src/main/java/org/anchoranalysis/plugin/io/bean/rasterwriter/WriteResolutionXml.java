@@ -35,6 +35,7 @@ import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
@@ -51,8 +52,8 @@ public class WriteResolutionXml extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String defaultExtension() {
-        return writer.defaultExtension();
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
+        return writer.fileExtension(multiplexOptions);
     }
 
     @Override

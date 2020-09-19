@@ -31,24 +31,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import lombok.NoArgsConstructor;
 
-class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements IterableGenerator<T> {
-
-    private T object = null;
-
-    public ObjectAsStringGenerator() {
-        super();
-    }
+@NoArgsConstructor
+class ObjectAsStringGenerator<T> extends OneStageGeneratorWithElement<T> {
 
     public ObjectAsStringGenerator(T object) {
-        super();
-        this.object = object;
+        super(object);
     }
 
     @Override
@@ -62,7 +55,7 @@ class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements Iter
         try (FileWriter outFile = new FileWriter(filePath.toFile())) {
 
             PrintWriter out = new PrintWriter(outFile);
-            out.println(object.toString());
+            out.println(getIterableElement().toString());
 
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
@@ -72,21 +65,6 @@ class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements Iter
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionText();
-    }
-
-    @Override
-    public T getIterableElement() {
-        return this.object;
-    }
-
-    @Override
-    public void setIterableElement(T element) {
-        this.object = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
     }
 
     @Override

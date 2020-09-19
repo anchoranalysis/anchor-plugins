@@ -30,25 +30,23 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.io.generator.serialized.SerializedGenerator;
+import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-class GroupParamsGenerator extends SerializedGenerator {
-
-    private KeyValueParams params;
+class GroupParamsGenerator extends OneStageGeneratorWithElement<KeyValueParams> {
 
     public GroupParamsGenerator(KeyValueParams params) {
         super();
-        this.params = params;
+        setIterableElement(params);
     }
 
     @Override
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
-            params.writeToFile(filePath);
+            getIterableElement().writeToFile(filePath);
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
         }

@@ -136,17 +136,17 @@ class CenterBoundingBoxHelper {
                 keepOnlyExcess(point.z(), sceneExtent.z()));
     }
 
-    private static int negativeOrZero(int val) {
-        if (val < 0) {
-            return val;
+    private static int negativeOrZero(int value) {
+        if (value < 0) {
+            return value;
         } else {
             return 0;
         }
     }
 
-    private static int keepOnlyExcess(int val, int boundary) {
-        if (val > boundary) {
-            return val - boundary;
+    private static int keepOnlyExcess(int value, int boundary) {
+        if (value > boundary) {
+            return value - boundary;
         } else {
             return 0;
         }
