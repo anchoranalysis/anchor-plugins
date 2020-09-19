@@ -62,7 +62,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
 
         try {
             Channel mean = agg.createMeanChannel(outputType);
-            generator.setIterableElement(mean);
+            generator.assignElement(mean);
             context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generator);
 
             context.getLogReporter()

@@ -61,7 +61,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
     public ObjectsDistanceMatrixGenerator(
             ObjectCollectionDistanceMatrix distanceMatrix, int numberDecimalPlaces) {
         super(MANIFEST_FUNCTION);
-        setIterableElement(distanceMatrix);
+        assignElement(distanceMatrix);
         this.numberDecimalPlaces = numberDecimalPlaces;
     }
 
@@ -69,7 +69,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        ObjectCollectionDistanceMatrix distanceMatrix = getIterableElement();
+        ObjectCollectionDistanceMatrix distanceMatrix = getElement();
         
         try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 

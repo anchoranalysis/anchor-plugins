@@ -295,7 +295,7 @@ public class ExportObjectsFromCSVTask
         // Output the group
         SubfolderGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
                 new SubfolderGenerator<>(listGenerator, "pair");
-        subFolderGenerator.setIterableElement(rows);
+        subFolderGenerator.assignElement(rows);
         return subFolderGenerator;
     }
 }

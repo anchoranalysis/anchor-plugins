@@ -279,7 +279,7 @@ public class SegmentInstanceWithModelTask<T>
 
         writer.write(
                 OUTPUT_INPUT_IMAGE,
-                () -> new StackGenerator(stack, true, MANIFEST_FUNCTION_INPUT_IMAGE));
+                () -> new StackGenerator(true, MANIFEST_FUNCTION_INPUT_IMAGE, stack));
         writer.write(OUTPUT_H5, () -> new HDF5ObjectsGenerator(objects));
         writer.write(
                 OUTPUT_MERGED_AS_MASK,

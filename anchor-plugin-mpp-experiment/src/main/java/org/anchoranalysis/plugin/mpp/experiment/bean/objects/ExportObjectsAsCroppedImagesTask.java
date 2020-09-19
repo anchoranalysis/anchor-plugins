@@ -53,7 +53,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -144,7 +144,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     private void outputGeneratorSequence(
-            IterableGenerator<BoundedList<ObjectMask>> generator,
+            Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
             BoundIOContext context) {
         GeneratorSequenceIncrementalRerouteErrors<BoundedList<ObjectMask>> sequence =
@@ -213,11 +213,11 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         return stacks.withoutUniformSizeConstraint();
     }
 
-    private IterableGenerator<BoundedList<ObjectMask>> createGenerator(
+    private Generator<BoundedList<ObjectMask>> createGenerator(
             Dimensions dimensions, NamedStacks stacks, NamedStacks stacksFlattened)
             throws CreateException {
 
-        IterableGenerator<BoundedList<ObjectMask>> generator =
+        Generator<BoundedList<ObjectMask>> generator =
                 new BuildGeneratorHelper(outlineWidth)
                         .forStacks(
                                 dimensions,

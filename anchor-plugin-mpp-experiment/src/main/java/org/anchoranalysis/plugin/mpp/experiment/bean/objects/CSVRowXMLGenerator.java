@@ -56,7 +56,7 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
             Element root = doc.createElement("identify");
             doc.appendChild(root);
 
-            getIterableElement().writeToXML(root, doc);
+            getElement().writeToXML(root, doc);
 
             XmlOutputter.writeXmlToFile(doc, filePath);
 
