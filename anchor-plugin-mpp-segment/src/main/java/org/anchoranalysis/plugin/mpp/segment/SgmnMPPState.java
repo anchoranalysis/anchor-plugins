@@ -33,18 +33,14 @@ import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
+import lombok.AllArgsConstructor;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
+@AllArgsConstructor
 public class SgmnMPPState implements ExperimentState {
 
     private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
     private Define define;
-
-    public SgmnMPPState(KernelProposer<VoxelizedMarksWithEnergy> kernelProposer, Define define) {
-        super();
-        this.kernelProposer = kernelProposer;
-        this.define = define;
-    }
 
     @Override
     public void outputBeforeAnyTasksAreExecuted(BoundOutputManagerRouteErrors outputManager) {

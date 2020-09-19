@@ -84,7 +84,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     private static AnnotationAggregateCSVGenerator createGenerator(
             List<ImageAnnotation> annotations) {
         AnnotationAggregateCSVGenerator generator = new AnnotationAggregateCSVGenerator();
-        generator.setIterableElement(annotations);
+        generator.assignElement(annotations);
         return generator;
     }
 

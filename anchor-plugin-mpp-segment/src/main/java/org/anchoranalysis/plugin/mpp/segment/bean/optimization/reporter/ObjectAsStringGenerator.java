@@ -31,14 +31,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.OneStageGeneratorWithElement;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-class ObjectAsStringGenerator<T> extends OneStageGeneratorWithElement<T> {
+class ObjectAsStringGenerator<T> extends OneStageGenerator<T> {
 
     public ObjectAsStringGenerator(T object) {
         super(object);
@@ -48,14 +48,14 @@ class ObjectAsStringGenerator<T> extends OneStageGeneratorWithElement<T> {
     public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        if (getIterableElement() == null) {
+        if (getElement() == null) {
             throw new OutputWriteFailedException("no mutable element set");
         }
 
         try (FileWriter outFile = new FileWriter(filePath.toFile())) {
 
             PrintWriter out = new PrintWriter(outFile);
-            out.println(getIterableElement().toString());
+            out.println(getElement().toString());
 
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);

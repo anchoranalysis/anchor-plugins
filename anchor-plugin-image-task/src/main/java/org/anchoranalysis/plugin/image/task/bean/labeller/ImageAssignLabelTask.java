@@ -151,6 +151,6 @@ public class ImageAssignLabelTask<T>
         // Copies the file into the output
         outputSub
                 .getWriterAlwaysAllowed()
-                .write(outputName, () -> new StackGenerator(stack, true, "raster"));
+                .write(outputName, () -> new StackGenerator(true, "raster", stack));
     }
 }

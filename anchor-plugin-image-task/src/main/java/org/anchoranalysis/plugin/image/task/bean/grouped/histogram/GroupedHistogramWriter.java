@@ -41,7 +41,7 @@ class GroupedHistogramWriter {
 
     public void writeHistogramToFile(
             Histogram histogram, String outputName, BoundIOContext context) {
-        generator.setIterableElement(histogram);
+        generator.assignElement(histogram);
 
         context.getOutputManager().getWriterCheckIfAllowed().write(outputName, () -> generator);
     }

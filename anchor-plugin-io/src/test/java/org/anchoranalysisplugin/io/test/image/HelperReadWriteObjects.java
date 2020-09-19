@@ -33,7 +33,7 @@ import org.anchoranalysis.image.io.objects.TIFFDirectoryObjectsGenerator;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.output.bound.BindFailedException;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
@@ -43,7 +43,7 @@ class HelperReadWriteObjects {
 
     public static final String TEMPORARY_FOLDER_OUT = "objects";
 
-    public static IterableGenerator<ObjectCollection> generator(boolean hdf5, boolean compression) {
+    public static Generator<ObjectCollection> generator(boolean hdf5, boolean compression) {
         if (hdf5) {
             return new HDF5ObjectsGenerator(compression);
         } else {
@@ -52,14 +52,14 @@ class HelperReadWriteObjects {
     }
 
     public static void writeObjects(
-            ObjectCollection objects, Path path, IterableGenerator<ObjectCollection> generator)
+            ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
             throws SetOperationFailedException, BindFailedException {
-        generator.setIterableElement(objects);
+        generator.assignElement(objects);
 
         BoundOutputManagerRouteErrors outputManager =
                 OutputManagerFixture.outputManagerForRouterErrors(path);
 
-        outputManager.getWriterAlwaysAllowed().write("objects", () -> generator.getGenerator());
+        outputManager.getWriterAlwaysAllowed().write("objects", () -> generator);
     }
 
     public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {

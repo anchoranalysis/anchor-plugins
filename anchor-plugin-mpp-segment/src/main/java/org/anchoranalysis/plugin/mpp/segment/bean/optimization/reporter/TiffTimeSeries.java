@@ -38,8 +38,8 @@ import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.color.HashedColorSet;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -73,14 +73,14 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
             throw new ReporterException(e1);
         }
 
-        IterableGenerator<ColoredMarksWithDisplayStack> iterableRaster =
+        Generator<ColoredMarksWithDisplayStack> iterableRaster =
                 new MarksGenerator(new Outline(), new IDGetterOverlayID());
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice
         CombinedListGenerator<MarksWithEnergyBreakdown> iterableCombined =
                 new CombinedListGenerator<>(
-                        IterableGeneratorBridge.createOneToOne(
+                        GeneratorBridge.createOneToOne(
                                 iterableRaster,
                                 sourceObject -> addColor(sourceObject.getMarks(), initParams)));
 

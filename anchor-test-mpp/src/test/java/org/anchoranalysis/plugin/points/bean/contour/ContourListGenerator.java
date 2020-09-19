@@ -51,24 +51,24 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 
 class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack,List<Contour>> {
 
-    private final DisplayStack stack;
+    private final DisplayStack background;
     private final ColorIndex colorIndex;
 
     public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
-    public ContourListGenerator(DisplayStack stack) {
-        this(new Outline(1, false), null, stack);
+    public ContourListGenerator(DisplayStack background) {
+        this(new Outline(1, false), null, background);
     }
 
-    public ContourListGenerator(DisplayStack stack, List<Contour> contours)
+    public ContourListGenerator(DisplayStack background, List<Contour> contours)
             throws SetOperationFailedException {
-        this(stack);
-        setIterableElement(contours);
+        this(background);
+        assignElement(contours);
     }
 
-    public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack) {
+    public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack background) {
         super( createDelegate(drawObject));
-        this.stack = stack;
+        this.background = background;
         this.colorIndex = colorIndex;
     }
     
@@ -79,7 +79,7 @@ class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksW
                         createMarksFromContourList(element),
                         generateColors(element.size()),
                         new IDGetterIter<>());
-        return new ColoredMarksWithDisplayStack(marks, stack);
+        return new ColoredMarksWithDisplayStack(marks, background);
     }
 
     @Override

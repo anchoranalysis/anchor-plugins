@@ -33,8 +33,8 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
 
 /**
  * Adds optional padding to objects before being passed into another generator
@@ -47,13 +47,13 @@ import org.anchoranalysis.io.generator.IterableGeneratorBridge;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class AddPaddingToGenerator {
 
-    public static IterableGenerator<BoundedList<ObjectMask>> addPadding(
-            IterableGenerator<BoundedList<ObjectMask>> generator,
+    public static Generator<BoundedList<ObjectMask>> addPadding(
+            Generator<BoundedList<ObjectMask>> generator,
             Dimensions dimensions,
             Padding padding,
             boolean keepEntireImage) {
         // Maybe we need to change the objectMask to a padded version
-        return IterableGeneratorBridge.createOneToOne(
+        return GeneratorBridge.createOneToOne(
                 generator,
                 objects -> {
                     if (keepEntireImage) {

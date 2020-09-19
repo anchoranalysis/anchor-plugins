@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.generator.IterableGenerator;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -77,7 +77,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
 
         BundleParameters bundleParams = createBundleParameters();
 
-        IterableGenerator<MarksWithEnergyBreakdown> iterableGenerator =
+        Generator<MarksWithEnergyBreakdown> generator =
                 new BundledObjectOutputStreamGenerator<>(
                         bundleParams,
                         this.generateOutputNameStyle(),
@@ -90,7 +90,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
                         outputManager.getDelegate(),
                         outputNameStyle.getOutputName(),
                         outputNameStyle,
-                        iterableGenerator,
+                        generator,
                         true,
                         new ManifestDescription("serialized", manifestFunction));
 
