@@ -76,7 +76,7 @@ public class SharedObjectsFromChannelTask extends RasterTask {
                                     .getWriterCheckIfAllowed()
                                     .write(
                                             outputNameOriginal,
-                                            () -> new ChannelGenerator(image, "original")));
+                                            () -> new ChannelGenerator("original",image)));
 
             define.processInput(ncc, context);
 

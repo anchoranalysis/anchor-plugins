@@ -28,12 +28,11 @@ package org.anchoranalysis.plugin.points.bean.contour;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRaster;
 import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
@@ -41,10 +40,6 @@ import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.generator.IterableObjectGenerator;
-import org.anchoranalysis.io.generator.ObjectGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
@@ -54,14 +49,10 @@ import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
-class ContourListGenerator extends RasterGenerator
-        implements IterableObjectGenerator<List<Contour>, Stack> {
+class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack,List<Contour>> {
 
-    private MarksGenerator delegate;
-
-    private List<Contour> contourList;
-    private DisplayStack stack;
-    private ColorIndex colorIndex;
+    private final DisplayStack stack;
+    private final ColorIndex colorIndex;
 
     public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
@@ -76,73 +67,24 @@ class ContourListGenerator extends RasterGenerator
     }
 
     public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack stack) {
+        super( createDelegate(drawObject));
         this.stack = stack;
-        delegate = new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
-        delegate.setManifestDescriptionFunction("contourRepresentationRGB");
         this.colorIndex = colorIndex;
     }
-
+    
     @Override
-    public boolean isRGB() {
-        return delegate.isRGB();
+    protected ColoredMarksWithDisplayStack convertBeforeSetter(List<Contour> element) throws OperationFailedException {
+        ColoredMarks marks =
+                new ColoredMarks(
+                        createMarksFromContourList(element),
+                        generateColors(element.size()),
+                        new IDGetterIter<>());
+        return new ColoredMarksWithDisplayStack(marks, stack);
     }
 
     @Override
-    public Stack generate() throws OutputWriteFailedException {
-        return delegate.generate();
-    }
-
-    @Override
-    public Optional<ManifestDescription> createManifestDescription() {
-        return delegate.createManifestDescription();
-    }
-
-    private static MarkCollection createMarksFromContourList(List<Contour> contourList) {
-
-        MarkCollection marks = new MarkCollection();
-
-        for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext(); ) {
-            marks.add(createMarkForContour(itr.next(), false));
-        }
-        return marks;
-    }
-
-    @Override
-    public void start() throws OutputWriteFailedException {
-        delegate.start();
-    }
-
-    @Override
-    public void end() throws OutputWriteFailedException {
-        delegate.end();
-    }
-
-    @Override
-    public List<Contour> getIterableElement() {
-        return contourList;
-    }
-
-    @Override
-    public void setIterableElement(List<Contour> element) throws SetOperationFailedException {
-
-        this.contourList = element;
-
-        try {
-            ColoredMarks marks =
-                    new ColoredMarks(
-                            createMarksFromContourList(contourList),
-                            generateColors(contourList.size()),
-                            new IDGetterIter<>());
-            delegate.setIterableElement(new ColoredMarksWithDisplayStack(marks, stack));
-
-        } catch (OperationFailedException e) {
-            throw new SetOperationFailedException(e);
-        }
-    }
-
-    @Override
-    public ObjectGenerator<Stack> getGenerator() {
-        return delegate.getGenerator();
+    protected Stack convertBeforeTransform(Stack stack) {
+        return stack;
     }
 
     private ColorIndex generateColors(int size) throws OperationFailedException {
@@ -156,4 +98,21 @@ class ContourListGenerator extends RasterGenerator
     private static PointList createMarkForContour(Contour c, boolean round) {
         return PointListFactory.createMarkFromPoints3f(c.getPoints());
     }
+    
+    private static MarkCollection createMarksFromContourList(List<Contour> contourList) {
+
+        MarkCollection marks = new MarkCollection();
+
+        for (Iterator<Contour> itr = contourList.iterator(); itr.hasNext(); ) {
+            marks.add(createMarkForContour(itr.next(), false));
+        }
+        return marks;
+    }
+        
+    private static MarksGenerator createDelegate(DrawObject drawObject) {
+        MarksGenerator delegate = new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
+        delegate.setManifestDescriptionFunction("contourRepresentationRGB");
+        return delegate;
+    }
+
 }

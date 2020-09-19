@@ -34,6 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
@@ -50,7 +51,7 @@ public class OpenCVWriter extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String defaultExtension() {
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
         return extension;
     }
 

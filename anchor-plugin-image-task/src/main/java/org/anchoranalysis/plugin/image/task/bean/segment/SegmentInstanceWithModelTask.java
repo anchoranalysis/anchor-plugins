@@ -60,7 +60,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsMergedAsMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.io.objects.GeneratorHDF5;
+import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -280,7 +280,7 @@ public class SegmentInstanceWithModelTask<T>
         writer.write(
                 OUTPUT_INPUT_IMAGE,
                 () -> new StackGenerator(stack, true, MANIFEST_FUNCTION_INPUT_IMAGE));
-        writer.write(OUTPUT_H5, () -> new GeneratorHDF5(objects));
+        writer.write(OUTPUT_H5, () -> new HDF5ObjectsGenerator(objects));
         writer.write(
                 OUTPUT_MERGED_AS_MASK,
                 () -> new ObjectsMergedAsMaskGenerator(stack.dimensions(), objects));

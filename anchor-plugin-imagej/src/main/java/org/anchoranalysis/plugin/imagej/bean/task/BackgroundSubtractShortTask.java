@@ -100,7 +100,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 
             context.getOutputManager()
                     .getWriterCheckIfAllowed()
-                    .write("bgsub", () -> new ChannelGenerator(channelOut, "imgChannel"));
+                    .write("bgsub", () -> new ChannelGenerator("imgChannel",channelOut));
 
         } catch (RasterIOException | GetOperationFailedException e) {
             throw new JobExecutionException(e);

@@ -53,18 +53,15 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
-import org.anchoranalysis.image.io.generator.raster.RasterGenerator;
-import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
+import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRaster;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
-import org.anchoranalysis.io.manifest.ManifestDescription;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -89,11 +86,7 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
 public class ExportObjectsFromCSVTask
         extends ExportObjectsBase<FromCSVInputObject, FromCSVSharedState> {
 
-    private class CSVRowRGBOutlineGenerator extends RasterGenerator
-            implements IterableGenerator<CSVRow> {
-
-        private DrawCroppedObjectsGenerator delegate;
-        private CSVRow element;
+    private class CSVRowRGBOutlineGenerator extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties,CSVRow> {
 
         /** All objects associated with the image. */
         private ObjectCollectionRTree allObjects;
@@ -104,58 +97,22 @@ public class ExportObjectsFromCSVTask
                 DisplayStack background,
                 RGBColor colorFirst,
                 RGBColor colorSecond) {
-            this.allObjects = allObjects;
-
-            delegate =
+            super(
                     createRGBMaskGenerator(
-                            drawObject, background, new ColorList(colorFirst, colorSecond));
+                            drawObject, background, new ColorList(colorFirst, colorSecond))
+            );
+            this.allObjects = allObjects;
         }
 
         @Override
-        public boolean isRGB() {
-            return delegate.isRGB();
+        protected ObjectCollectionWithProperties convertBeforeSetter(CSVRow element)
+                throws OperationFailedException {
+            return element.findObjectsMatchingRow(allObjects);
         }
-
+        
         @Override
-        public Stack generate() throws OutputWriteFailedException {
-            return delegate.generate();
-        }
-
-        @Override
-        public Optional<ManifestDescription> createManifestDescription() {
-            return delegate.createManifestDescription();
-        }
-
-        @Override
-        public CSVRow getIterableElement() {
-            return element;
-        }
-
-        @Override
-        public void setIterableElement(CSVRow element) throws SetOperationFailedException {
-            this.element = element;
-
-            try {
-                delegate.setIterableElement(element.findObjectsMatchingRow(allObjects));
-
-            } catch (OperationFailedException e) {
-                throw new SetOperationFailedException(e);
-            }
-        }
-
-        @Override
-        public void start() throws OutputWriteFailedException {
-            delegate.start();
-        }
-
-        @Override
-        public void end() throws OutputWriteFailedException {
-            delegate.end();
-        }
-
-        @Override
-        public Generator getGenerator() {
-            return this;
+        protected Stack convertBeforeTransform(Stack stack) {
+            return stack;
         }
     }
 
@@ -274,25 +231,24 @@ public class ExportObjectsFromCSVTask
             for (String groupName : groupNameSet) {
                 context.getLogReporter().logFormatted("Processing group '%s'", groupName);
 
-                Collection<CSVRow> rows = mapGroup.get(groupName);
-
-                if (rows == null || rows.isEmpty()) {
-                    context.getLogReporter()
-                            .logFormatted("No matching rows for group '%s'", groupName);
-                    continue;
-                }
-
-                // outputManager.resolveFolder(groupName, new FolderWritePhysical())
-                outputGroup(
-                        String.format("group_%s", groupName),
-                        rows,
-                        objects,
-                        background,
-                        context.getOutputManager());
+                processRows(mapGroup.get(groupName), groupName, objects, background, context);
             }
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);
         }
+    }
+    
+    private void processRows(Collection<CSVRow> rows, String groupName, ObjectCollectionRTree objects, DisplayStack background, BoundIOContext context) {
+        if (rows != null && !rows.isEmpty()) {
+            outputGroup(
+                    String.format("group_%s", groupName),
+                    rows,
+                    objects,
+                    background,
+                    context.getOutputManager());
+        } else {
+            context.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);                    
+        }        
     }
 
     private void outputGroup(
@@ -323,8 +279,8 @@ public class ExportObjectsFromCSVTask
             throws SetOperationFailedException {
         Outline outlineWriter = new Outline(1, false);
 
-        IterableCombinedListGenerator<CSVRow> listGenerator =
-                new IterableCombinedListGenerator<>(
+        CombinedListGenerator<CSVRow> listGenerator =
+                new CombinedListGenerator<>(
                         Stream.of(
                                 new SimpleNameValue<>(
                                         label,

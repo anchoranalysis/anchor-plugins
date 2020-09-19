@@ -140,7 +140,7 @@ public abstract class ColoredBase extends StackProvider {
                             Either.right(background),
                             colors);
 
-            return generator.generate();
+            return generator.transform();
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);

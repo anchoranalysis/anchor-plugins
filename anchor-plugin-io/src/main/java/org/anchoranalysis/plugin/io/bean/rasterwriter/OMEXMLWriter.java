@@ -33,6 +33,7 @@ import loci.formats.ImageWriter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 
@@ -41,7 +42,7 @@ public class OMEXMLWriter extends ByteNoTimeSeriesWriter {
 
     // A default extension
     @Override
-    public String defaultExtension() {
+    public String fileExtension(RasterWriteOptions multiplexOptions) {
         return "ome";
     }
 
