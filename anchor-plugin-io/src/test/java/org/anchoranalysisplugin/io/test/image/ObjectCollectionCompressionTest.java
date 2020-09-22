@@ -96,7 +96,7 @@ public class ObjectCollectionCompressionTest {
             ObjectCollection objects, Path pathRoot, Path pathOut)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        // Write the objects to the file-system and read again
+        // Write the objects to the filesystem and read again
         writeObjects(objects, pathRoot, generator(true, true));
         return readObjects(pathOut);
     }

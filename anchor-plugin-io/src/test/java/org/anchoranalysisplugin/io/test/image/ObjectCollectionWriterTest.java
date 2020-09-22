@@ -41,7 +41,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Writes an object-collection to the file-system, then reads it back again, and makes sure it is
+ * Writes an object-collection to the filesystem, then reads it back again, and makes sure it is
  * identical
  *
  * @author feehano

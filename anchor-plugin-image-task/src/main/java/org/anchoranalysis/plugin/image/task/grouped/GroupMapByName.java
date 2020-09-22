@@ -96,7 +96,7 @@ public abstract class GroupMapByName<S, T> {
     }
 
     /**
-     * Outputs the "grouped" data to the file-system
+     * Outputs the "grouped" data to the filesystem
      *
      * @param channelChecker channel checker
      * @param context

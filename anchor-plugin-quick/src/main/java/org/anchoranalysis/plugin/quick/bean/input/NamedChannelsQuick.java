@@ -110,7 +110,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
      */
     @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
 
-    /** If non-empty then a rooted file-system is used with this root */
+    /** If non-empty then a rooted filesystem is used with this root */
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     /** If set, a CSV is read with two columns: the names of images and a */

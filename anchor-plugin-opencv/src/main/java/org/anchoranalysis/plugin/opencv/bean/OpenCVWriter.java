@@ -56,15 +56,13 @@ public class OpenCVWriter extends RasterWriter {
     }
 
     @Override
-    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
             throws RasterIOException {
         throw new RasterIOException("Writing time-series is unsupported for this format");
     }
 
     @Override
-    public synchronized void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
-            throws RasterIOException {
-
+    public synchronized void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException {
         if (stack.getNumberChannels() == 3 && !makeRGB) {
             throw new RasterIOException("3-channel images can only be created as RGB");
         }
@@ -74,11 +72,5 @@ public class OpenCVWriter extends RasterWriter {
         } catch (CreateException e) {
             throw new RasterIOException(e);
         }
-    }
-
-    @Override
-    public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
-            throws RasterIOException {
-        writeStackByte(stack, filePath, makeRGB);
     }
 }
