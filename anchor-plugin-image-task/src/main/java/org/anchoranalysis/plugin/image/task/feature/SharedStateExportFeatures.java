@@ -234,7 +234,7 @@ public class SharedStateExportFeatures<S> {
         if (thumbnailGenerator == null) {
             thumbnailGenerator =
                     GENERATOR_SEQUENCE_FACTORY.createIncremental(
-                            new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL), context);
+                            new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL, true), context);
             thumbnailGenerator.start();
         }
         thumbnailGenerator.add(thumbnail.deriveStack(false));
