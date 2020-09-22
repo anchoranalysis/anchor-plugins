@@ -101,7 +101,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
             FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculateException {
 
-        // Reads histogram from file-system
+        // Reads histogram from filesystem
         try {
             Histogram histogramRead = readHistogramFromCsv(inputObject);
 

@@ -45,7 +45,7 @@ import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
  * A file path prefixer that combines a prefix with an experimentType
  *
  * <p>A convenience method for commonly used prefixer settings when the output occurs in an
- * experiment/$1/ file-system structure where $1 is the experimentType
+ * experiment/$1/ filesystem structure where $1 is the experimentType
  */
 public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 

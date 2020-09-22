@@ -68,7 +68,7 @@ public class FilePathPattern extends Summarizer<Path> {
     }
 
     private boolean acceptPath(Path path) throws IOException {
-        // Always accept the path if it doesn't exist on the file-system
+        // Always accept the path if it doesn't exist on the filesystem
         return !path.toFile().exists() || !ignoreHidden || !Files.isHidden(path);
     }
 

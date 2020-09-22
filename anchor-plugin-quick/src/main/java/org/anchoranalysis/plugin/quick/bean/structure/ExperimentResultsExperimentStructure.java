@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
  * Finds some files produced in a previous experiment assuming a certain structure
  *
  * <p>A convenience method for commonly used prefixer settings when the output occurs in an
- * experiment/$1/ file-system structure where $1 is the experimentType
+ * experiment/$1/ filesystem structure where $1 is the experimentType
  */
 public class ExperimentResultsExperimentStructure extends FileProvider {
 

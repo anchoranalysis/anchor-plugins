@@ -40,8 +40,11 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
 /**
- * When writing a Raster, an additional filename (with .xml appended, e.g. rasterFilename.tif.xml)
- * is also written containing the physical extents of a single voxel (the resolution)
+ * When writing a Raster, an additional file is written to indicate the physical voxel sizes.
+ * 
+ * <p>The path of this file is the raster-path  with .xml appended, e.g. {@code rasterFilename.tif.xml}.
+ * 
+ * <p>It contans physical extents of a single voxel (the resolution).
  *
  * @author Owen Feehan
  */
@@ -57,23 +60,15 @@ public class WriteResolutionXml extends RasterWriter {
     }
 
     @Override
-    public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
-            throws RasterIOException {
-        writer.writeStackByte(stack, filePath, makeRGB);
+    public void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException {
+        writer.writeStack(stack, filePath, makeRGB, writeOptions);
         writeResolutionXml(filePath, stack.resolution());
     }
-
+    
     @Override
-    public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
             throws RasterIOException {
-        writer.writeStackShort(stack, filePath, makeRGB);
-        writeResolutionXml(filePath, stack.resolution());
-    }
-
-    @Override
-    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
-            throws RasterIOException {
-        writer.writeTimeSeriesStackByte(stackSeries, filePath, makeRGB);
+        writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
 
         // We assume all the stacks in the series have the same dimension, and write only one
         // metadata file

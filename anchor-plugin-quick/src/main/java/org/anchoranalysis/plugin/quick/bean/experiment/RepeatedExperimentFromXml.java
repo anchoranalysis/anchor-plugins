@@ -150,7 +150,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         return filter;
     }
 
-    /*** Loads a bean from the file-system */
+    /*** Loads a bean from the filesystem */
     private InputManager<T> loadInputManagerFromXml(
             String datasetName, Path pathFolder, String beanExtension)
             throws ExperimentExecutionException {

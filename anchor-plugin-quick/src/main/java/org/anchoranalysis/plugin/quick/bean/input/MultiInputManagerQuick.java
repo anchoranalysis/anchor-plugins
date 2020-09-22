@@ -57,7 +57,7 @@ import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCs
 public class MultiInputManagerQuick extends MultiInputManagerBase {
 
     // START BEAN PROPERTIES
-    /** If non-empty then a rooted file-system is used with this root */
+    /** If non-empty then a rooted filesystem is used with this root */
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
