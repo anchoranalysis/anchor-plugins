@@ -51,7 +51,7 @@ public class OpenCVWriter extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(RasterWriteOptions multiplexOptions) {
+    public String fileExtension(RasterWriteOptions writeOptions) {
         return extension;
     }
 

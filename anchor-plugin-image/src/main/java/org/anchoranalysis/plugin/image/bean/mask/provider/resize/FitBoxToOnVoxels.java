@@ -50,14 +50,14 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 public class FitBoxToOnVoxels extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    // If true, then each z slice is treated seperately
-    @BeanField @Getter @Setter private boolean slicesSeperately = false;
+    // If true, then each z slice is treated separately
+    @BeanField @Getter @Setter private boolean slicesSeparately = false;
     // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
 
-        if (slicesSeperately) {
+        if (slicesSeparately) {
             mask.extent()
                     .iterateOverZ(
                             z -> {
