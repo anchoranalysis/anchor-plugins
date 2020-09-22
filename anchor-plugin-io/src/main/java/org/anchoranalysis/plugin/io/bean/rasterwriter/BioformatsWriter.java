@@ -27,26 +27,87 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import loci.common.services.DependencyException;
+import loci.common.services.ServiceException;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
+import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.Voxels;
 
-// Writes a stack to the file system in some manner
-public class BioformatsWriter extends ByteNoTimeSeriesWriter {
+/**
+ * Writes a stack to the filesystem using the <a href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class BioformatsWriter extends RasterWriter {
 
+    // Key interface method
+    @Override
+    public void writeStackByte(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+
+        if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
+            throw new RasterIOException("Stack must have 1 or 3 channels");
+        }
+
+        try (IFormatWriter writer = createWriter()) {
+
+            writer.setMetadataRetrieve(
+                    MetadataUtilities.createMetadata(
+                            stack.dimensions(),
+                            stack.getNumberChannels(),
+                            PixelType.UINT8,
+                            makeRGB,
+                            false));
+            writer.setInterleaved(false);
+            writer.setId(filePath.toString());
+
+            if (!writer.canDoStacks() && stack.dimensions().z() > 1) {
+                throw new RasterIOException("The writer must support stacks for Z > 1");
+            }
+
+            if (makeRGB && stack.getNumberChannels() == 3) {
+                writeRGB(writer, stack);
+            } else {
+                writeSeparateChannel(writer, stack);
+            }
+
+        } catch (IOException | FormatException | ServiceException | DependencyException e) {
+            throw new RasterIOException(e);
+        }
+    }
+    
     // A default extension
     @Override
-    public String fileExtension(RasterWriteOptions multiplexOptions) {
+    public String fileExtension(RasterWriteOptions writeOptions) {
         return "tif";
     }
 
     @Override
-    protected IFormatWriter createWriter() throws RasterIOException {
+    public void writeTimeSeriesStackByte(StackSeries stackSeries, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        throw new RasterIOException(
+                "Writing time-series is unsupported by this " + RasterWriter.class.getSimpleName());
+    }
+
+    @Override
+    public void writeStackShort(Stack stack, Path filePath, boolean makeRGB)
+            throws RasterIOException {
+        throw new RasterIOException(
+                "Writing ShortBuffer stack not yet implemented for this writer");
+    }
+    
+    private IFormatWriter createWriter() throws RasterIOException {
         try {
             TiffWriter writer = new TiffWriter();
             // COMPRESSION CURRENTLY DISABLED
@@ -60,9 +121,7 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
         }
     }
 
-    @Override
-    protected void writeRGB(IFormatWriter writer, Stack stack)
-            throws FormatException, IOException, RasterIOException {
+    private void writeRGB(IFormatWriter writer, Stack stack)  throws RasterIOException {
 
         Channel channelRed = stack.getChannel(0);
         Channel channelGreen = stack.getChannel(1);
@@ -71,18 +130,35 @@ public class BioformatsWriter extends ByteNoTimeSeriesWriter {
         int capacity = channelRed.voxels().any().extent().volumeXY();
         int capacityTimesThree = capacity * 3;
 
-        for (int z = 0; z < stack.dimensions().z(); z++) {
+        stack.dimensions().extent().iterateOverZ( z -> {
+            try {
+                UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacityTimesThree);
+                putSlice(merged, channelRed, z);
+                putSlice(merged, channelGreen, z);
+                putSlice(merged, channelBlue, z);
+    
+                writer.saveBytes(z, merged.array());
+            } catch (FormatException | IOException e) {
+                throw new RasterIOException(e);
+            }
+        });
+    }
+    
+    private static void putSlice(UnsignedByteBuffer merged, Channel channel, int z) {
+        merged.put( channel.voxels().asByte().sliceBuffer(z) );
+    }
 
-            UnsignedByteBuffer red = channelRed.voxels().asByte().sliceBuffer(z);
-            UnsignedByteBuffer green = channelGreen.voxels().asByte().sliceBuffer(z);
-            UnsignedByteBuffer blue = channelBlue.voxels().asByte().sliceBuffer(z);
+    private static void writeSeparateChannel(IFormatWriter writer, Stack stack)
+            throws FormatException, IOException {
 
-            UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacityTimesThree);
-            merged.put(red);
-            merged.put(green);
-            merged.put(blue);
+        int sliceIndex = 0;
+        for (int c = 0; c < stack.getNumberChannels(); c++) {
+            Channel channel = stack.getChannel(c);
+            Voxels<UnsignedByteBuffer> voxels = channel.voxels().asByte();
 
-            writer.saveBytes(z, merged.array());
+            for (int z = 0; z < stack.dimensions().z(); z++) {
+                writer.saveBytes(sliceIndex++, voxels.sliceBuffer(z).array());
+            }
         }
     }
 }

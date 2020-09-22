@@ -52,8 +52,8 @@ public class WriteResolutionXml extends RasterWriter {
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(RasterWriteOptions multiplexOptions) {
-        return writer.fileExtension(multiplexOptions);
+    public String fileExtension(RasterWriteOptions writeOptions) {
+        return writer.fileExtension(writeOptions);
     }
 
     @Override

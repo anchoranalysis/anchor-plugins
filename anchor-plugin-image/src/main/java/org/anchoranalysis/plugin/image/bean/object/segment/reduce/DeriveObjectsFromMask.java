@@ -61,7 +61,7 @@ class DeriveObjectsFromMask {
      * @param transformToConfidence transforms from the unsigned-integer found in {@code channel} to
      *     a confidence value {@code 0 <= confidence <= 1}.
      * @param shift a shift to add to the object-masks after extracting the confidence-level.
-     * @param minNumberVoxels the minimum number of voxels that must exist to form a seperate
+     * @param minNumberVoxels the minimum number of voxels that must exist to form a separate
      *     object, otherwise the voxels are ignored.
      * @return a list of objects created from the connected-components of the mask with associated
      *     confidence-values

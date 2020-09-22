@@ -60,11 +60,11 @@ public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
         PathTwoParts pathDir = new PathTwoParts(path);
 
         for (int i = 0; i < skipFirstTrim; i++) {
-            pathDir.moveLastDirToRest();
+            pathDir.moveLastDirectoryToRest();
         }
 
         for (int i = 0; i < n; i++) {
-            pathDir.removeLastDir();
+            pathDir.removeLastDirectory();
         }
 
         return pathDir.combine();

@@ -29,7 +29,9 @@ package org.anchoranalysis.plugin.quick.bean.filepath;
 import java.nio.file.Path;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-/** Seperates a path into two parts */
+/** 
+ * Separates a path into two parts
+ */
 class PathTwoParts {
     private Path first;
     private Path second;
@@ -47,12 +49,12 @@ class PathTwoParts {
     }
 
     /** Removes the last directory from the dir */
-    public void removeLastDir() {
+    public void removeLastDirectory() {
         first = first.getParent();
     }
 
     /** Removes the last directory in dir to rest */
-    public void moveLastDirToRest() {
+    public void moveLastDirectoryToRest() {
         Path name = first.getFileName();
         second = name.resolve(second);
         first = first.getParent();

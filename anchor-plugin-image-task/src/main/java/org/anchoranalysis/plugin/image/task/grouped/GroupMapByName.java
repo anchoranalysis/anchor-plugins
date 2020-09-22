@@ -113,7 +113,7 @@ public abstract class GroupMapByName<S, T> {
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory
-        // If there are two parts, it is assumed that the first-part is a group-name (a seperate
+        // If there are two parts, it is assumed that the first-part is a group-name (a separate
         // subdirectory) and the second-part is written without a subdirectory
         for (Entry<MultiName, T> entry : map.entrySet()) {
 

@@ -32,7 +32,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /**
- * Rejects a set of objects, if any object is not fully connected (pixels form two or more seperate
+ * Rejects a set of objects, if any object is not fully connected (pixels form two or more separate
  * connected components)
  *
  * @author Owen Feehan
