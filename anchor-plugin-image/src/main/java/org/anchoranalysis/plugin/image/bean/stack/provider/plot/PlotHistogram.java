@@ -46,7 +46,7 @@ import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.PlotInstance;
 import org.anchoranalysis.plot.bean.colorscheme.GraphColorScheme;
 import org.anchoranalysis.plot.index.LinePlot;
-import org.anchoranalysis.plot.io.GraphOutputter;
+import org.anchoranalysis.plot.io.PlotOutputter;
 
 /** Displays a histogram */
 public class PlotHistogram extends StackProvider {
@@ -68,7 +68,7 @@ public class PlotHistogram extends StackProvider {
                     createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
 
             BufferedImage image =
-                    GraphOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
+                    PlotOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
 
             return CreateStackFromBufferedImage.create(image);
 

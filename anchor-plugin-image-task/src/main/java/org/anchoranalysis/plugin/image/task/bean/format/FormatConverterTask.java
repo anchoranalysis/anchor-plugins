@@ -90,7 +90,7 @@ public class FormatConverterTask extends RasterTask {
             BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
             throws JobExecutionException {
 
-        StackGenerator generator = new StackGenerator(false, "out");
+        StackGenerator generator = new StackGenerator(false, "out", false);
 
         generatorSeq =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(

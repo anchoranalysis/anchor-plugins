@@ -73,7 +73,7 @@ class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksW
     }
     
     @Override
-    protected ColoredMarksWithDisplayStack convertBeforeSetter(List<Contour> element) throws OperationFailedException {
+    protected ColoredMarksWithDisplayStack convertBeforeAssign(List<Contour> element) throws OperationFailedException {
         ColoredMarks marks =
                 new ColoredMarks(
                         createMarksFromContourList(element),

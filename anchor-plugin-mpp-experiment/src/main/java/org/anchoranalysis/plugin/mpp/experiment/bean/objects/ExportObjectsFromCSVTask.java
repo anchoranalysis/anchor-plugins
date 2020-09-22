@@ -105,7 +105,7 @@ public class ExportObjectsFromCSVTask
         }
 
         @Override
-        protected ObjectCollectionWithProperties convertBeforeSetter(CSVRow element)
+        protected ObjectCollectionWithProperties convertBeforeAssign(CSVRow element)
                 throws OperationFailedException {
             return element.findObjectsMatchingRow(allObjects);
         }

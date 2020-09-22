@@ -99,7 +99,7 @@ public class OutlinePreserveRelativeSizeTest {
 
         try {
             List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
-            writer.writeList("thumbnails", thumbnails);
+            writer.writeList("thumbnails", thumbnails, true);
             return thumbnails;
         } catch (CreateException e) {
             throw new OperationFailedException(e);
