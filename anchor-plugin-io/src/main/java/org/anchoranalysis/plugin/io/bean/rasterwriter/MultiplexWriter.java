@@ -39,7 +39,6 @@ public class MultiplexWriter extends RasterWriter {
     public void writeStack(Stack stack, Path filePath, boolean makeRGB,
             RasterWriteOptions writeOptions) throws RasterIOException {
         selectDelegate(writeOptions).writeStack(stack, filePath, makeRGB, writeOptions);
-        
     }
 
     @Override

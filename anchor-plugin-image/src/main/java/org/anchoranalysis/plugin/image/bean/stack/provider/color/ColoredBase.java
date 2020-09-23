@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
-import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -134,10 +133,10 @@ public abstract class ColoredBase extends StackProvider {
             }
 
             DrawObjectsGenerator generator =
-                    new DrawObjectsGenerator(
+                    DrawObjectsGenerator.withBackgroundAndColors(
                             createDrawer(),
                             new ObjectCollectionWithProperties(objects),
-                            Either.right(background),
+                            background,
                             colors);
 
             return generator.transform();
