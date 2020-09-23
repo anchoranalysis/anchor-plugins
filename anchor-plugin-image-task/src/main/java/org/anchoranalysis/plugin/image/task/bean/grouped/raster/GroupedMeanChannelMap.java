@@ -32,6 +32,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
@@ -55,27 +56,25 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             ConsistentChannelChecker channelChecker,
             BoundIOContext context)
             throws IOException {
-
-        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION);
-
         VoxelDataType outputType = channelChecker.getChannelType();
-
+        context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generatorWithMean(agg, outputType, outputName, context) );
+    }
+    
+    private static ChannelGenerator generatorWithMean(RunningSumChannel agg, VoxelDataType outputType, String channelName, BoundIOContext context) throws OutputWriteFailedException {
         try {
             Channel mean = agg.createMeanChannel(outputType);
-            generator.assignElement(mean);
-            context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generator);
-
+            
             context.getLogReporter()
                     .logFormatted(
                             "Writing channel %s with %d items and numPixels>100=%d and outputType=%s",
-                            outputName,
+                            channelName,
                             agg.count(),
                             mean.voxelsGreaterThan(100).count(),
                             outputType);
-
+            
+            return new ChannelGenerator(MANIFEST_FUNCTION, mean);
         } catch (OperationFailedException e) {
-            throw new IOException(
-                    String.format("Cannot create mean channel for: %s", outputName), e);
+            throw new OutputWriteFailedException(e);
         }
     }
 }
