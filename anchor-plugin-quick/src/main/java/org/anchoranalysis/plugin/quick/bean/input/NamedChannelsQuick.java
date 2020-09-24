@@ -35,63 +35,39 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorReplace;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
-import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsBase;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.AppendStack;
-import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 /**
  * A particular type of NamedChannels which allows easier input of data, making several assumptions.
  *
- * <p>This is a convenient helper class to avoid a more complicated structure
+ * <p>This is a convenient helper class to avoid a more complicated structure.
+ * 
+ * <p>Note that {@code regexAdjacent} applies for adjacent-channels and {@code regex} applies for appended
+ * channels.
  */
-public class NamedChannelsQuick extends NamedChannelsBase {
+public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
 
     // START BEAN PROPERTIES
-    /** A path to the main channel of each file */
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
-
-    @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
-
+    
     /**
-     * This needs to be set if there is at least one adjacentChannel
+     * This needs to be set if there is at least one adjacentChannel.
      *
      * <p>This should be a regex (with a single group that is replaced) that is searched for in the
      * path returned by fileProvider This only needs to be set if at least one adjacentChannel is
      * specified
      */
     @BeanField @AllowEmpty @Getter @Setter private String regexAdjacent = "";
-
-    /**
-     * This should be a regex that is searched for in the path returned by fileProvider and returns
-     * two groups, the first
-     */
-
-    /**
-     * This needs to be set if there is at least one appendChannel
-     *
-     * <p>A regular-expression applied to the image file-path that matches three groups. The first
-     * group should correspond to top-level folder for the project The second group should
-     * correspond to the unique name of the dataset. The third group should correspond to the unique
-     * name of the experiment.
-     */
-    @BeanField @AllowEmpty @Getter @Setter private String regexAppend = "";
 
     /** The name of the channel provided by the rasters in file Provider */
     @BeanField @Getter @Setter private String mainChannelName;
@@ -109,12 +85,6 @@ public class NamedChannelsQuick extends NamedChannelsBase {
      * Channels that are located in a separate raster file somewhere else in the project's structure
      */
     @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
-
-    /** If non-empty then a rooted filesystem is used with this root */
-    @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
-
-    /** If set, a CSV is read with two columns: the names of images and a */
-    @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
 
     /** The raster-reader to use for opening the main image */
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
@@ -137,7 +107,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
         this.defaultInstances = defaultInstances;
 
         checkChannels(adjacentChannels, regexAdjacent, "adjacentChannel");
-        checkChannels(appendChannels, regexAppend, "appendChannel");
+        checkChannels(appendChannels, getRegex(), "appendChannel");
     }
 
     /**
@@ -178,17 +148,9 @@ public class NamedChannelsQuick extends NamedChannelsBase {
     private InputManager<NamedChannelsInputPart> createAppendedChannels()
             throws BeanMisconfiguredException {
 
-        InputManager<FileInput> files =
-                InputManagerFactory.createFiles(
-                        rootName,
-                        fileProvider,
-                        descriptiveNameFromFile,
-                        regexAppend,
-                        filterFilesCsv);
-
         InputManager<NamedChannelsInputPart> channels =
                 NamedChannelsCreator.create(
-                        files, mainChannelName, mainChannelIndex, additionalChannels, rasterReader);
+                        fileInputManager(), mainChannelName, mainChannelIndex, additionalChannels, rasterReader);
 
         channels =
                 appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
@@ -227,7 +189,7 @@ public class NamedChannelsQuick extends NamedChannelsBase {
                 throw new BeanMisconfiguredException(
                         String.format(
                                 "Cannot create file-path-generator for %s and regex %s",
-                                stack.getName(), regexAppend),
+                                stack.getName(), getRegex()),
                         e);
             }
         }
@@ -245,6 +207,6 @@ public class NamedChannelsQuick extends NamedChannelsBase {
 
     private NamedBean<FilePathGenerator> convertAppendStack(AppendStack stack)
             throws BeanMisconfiguredException {
-        return stack.createFilePathGenerator(rootName, regexAppend);
+        return stack.createFilePathGenerator(getRootName(), getRegex());
     }
 }

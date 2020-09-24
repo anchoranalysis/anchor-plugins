@@ -31,39 +31,25 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
-import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
-import org.anchoranalysis.mpp.io.bean.input.MultiInputManagerBase;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
-import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 /** A quicker for of multi-input manager that makes various assumptions */
-public class MultiInputManagerQuick extends MultiInputManagerBase {
+public class MultiInputManagerQuick extends QuickBase<MultiInput> {
 
     // START BEAN PROPERTIES
-    /** If non-empty then a rooted filesystem is used with this root */
-    @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
-
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
-
-    @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
 
     @BeanField @Getter @Setter private String inputName;
 
@@ -72,23 +58,12 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
     private List<FilePathBaseAppendToManager> listAppend = new ArrayList<>();
 
     /**
-     * A regular-expression applied to the image file-path that matches three groups. The first
-     * group should correspond to the unique name of the top-level owner The second group should
-     * correspond to the unique name of the dataset. The third group should correspond to the unique
-     * name of the experiment.
-     */
-    @BeanField @OptionalBean @Getter @Setter private String regex;
-
-    /**
      * Additional channels other than the main one, which are located in the main raster file
      *
      * <p>If this list has at least one, then we treat the main raster file not as a stack, but
      * break it into separate channels that are each presented as a separate stack to the MultiInput
      */
     @BeanField @Getter @Setter private List<ChannelEntry> additionalChannels = new ArrayList<>();
-
-    /** If set, a CSV is read with two columns: the names of images and a */
-    @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
 
     /**
      * If true, a raster-stack is treated as a single-channel, even if multiple exist (and no
@@ -119,7 +94,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
         this.inputManager = createMulti();
         inputManager.checkMisconfigured(defaultInstances);
 
-        if (!additionalChannels.isEmpty() && regex == null) {
+        if (!additionalChannels.isEmpty() && getRegex() == null) {
             throw new BeanMisconfiguredException(
                     "If there is at least one additionalChannel then regex must be set");
         }
@@ -133,7 +108,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 
         // Add all the various types of items that can be appended
         for (FilePathBaseAppendToManager append : listAppend) {
-            append.addToManager(input, rootName, regex);
+            append.addToManager(input, getRootName(), getRegex());
         }
 
         return input;
@@ -141,9 +116,7 @@ public class MultiInputManagerQuick extends MultiInputManagerBase {
 
     private InputManager<? extends ProvidesStackInput> createStacks()
             throws BeanMisconfiguredException {
-        InputManager<FileInput> files =
-                InputManagerFactory.createFiles(
-                        rootName, fileProvider, descriptiveNameFromFile, regex, filterFilesCsv);
+        InputManager<FileInput> files = fileInputManager();
 
         if (stackAsChannel || !additionalChannels.isEmpty()) {
             // Then we treat the main raster as comprising of multiple independent channels
