@@ -30,7 +30,7 @@ import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.file.FileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -45,7 +45,7 @@ import org.apache.commons.lang.time.StopWatch;
 public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
-    private Optional<FileOutput> csvOutput;
+    private Optional<TextFileOutput> csvOutput;
 
     private StopWatch timer = null;
 
@@ -140,7 +140,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
     public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
         super.reportEnd(params);
         timer.stop();
-        csvOutput.ifPresent(FileOutput::end);
+        csvOutput.ifPresent(TextFileOutput::end);
     }
 
     @Override

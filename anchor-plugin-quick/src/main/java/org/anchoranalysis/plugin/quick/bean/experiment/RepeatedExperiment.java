@@ -36,7 +36,7 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.manager.OutputManager;
 import org.apache.commons.configuration.XMLConfiguration;
 
 /***

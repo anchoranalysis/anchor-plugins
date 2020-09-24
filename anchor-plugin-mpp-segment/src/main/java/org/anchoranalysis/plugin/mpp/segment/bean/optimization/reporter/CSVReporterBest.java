@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.file.FileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
-    private Optional<FileOutput> csvOutput;
+    private Optional<TextFileOutput> csvOutput;
 
     @Override
     public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) {
@@ -84,7 +84,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
         csvOutput.ifPresent(output -> output.getWriter().close());
     }
 
-    private Optional<FileOutput> createOutput(
+    private Optional<TextFileOutput> createOutput(
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         return CSVReporterUtilities.createFileOutputFor(
                 "csvStatsBest", initParams, "event_aggregate_stats");
