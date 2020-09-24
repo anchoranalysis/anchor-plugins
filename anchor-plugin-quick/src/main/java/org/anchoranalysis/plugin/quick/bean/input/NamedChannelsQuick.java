@@ -86,12 +86,6 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
      */
     @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
 
-    /** The raster-reader to use for opening the main image */
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
-
-    /** The raster-reader to use for opening any appended-channels */
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAppend;
-
     /** The raster-reader to use for opening any adjacent-channels */
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAdjacent;
     // END BEAN PROPERTIES
@@ -150,12 +144,12 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
 
         InputManager<NamedChannelsInputPart> channels =
                 NamedChannelsCreator.create(
-                        fileInputManager(), mainChannelName, mainChannelIndex, additionalChannels, rasterReader);
+                        fileInputManager(), mainChannelName, mainChannelIndex, additionalChannels, getRasterReader());
 
         channels =
                 appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
 
-        channels = appendChannels(channels, createFilePathGeneratorsAppend(), rasterReaderAppend);
+        channels = appendChannels(channels, createFilePathGeneratorsAppend(), getRasterReaderAppend());
 
         return channels;
     }
@@ -198,11 +192,10 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     }
 
     private NamedBean<FilePathGenerator> convertAdjacentFile(AdjacentFile file) {
-
-        FilePathGeneratorReplace fpg = new FilePathGeneratorReplace();
-        fpg.setRegex(regexAdjacent);
-        fpg.setReplacement(file.getReplacement());
-        return new NamedBean<>(file.getName(), fpg);
+        FilePathGeneratorReplace generator = new FilePathGeneratorReplace();
+        generator.setRegex(regexAdjacent);
+        generator.setReplacement(file.getReplacement());
+        return new NamedBean<>(file.getName(), generator);
     }
 
     private NamedBean<FilePathGenerator> convertAppendStack(AppendStack stack)

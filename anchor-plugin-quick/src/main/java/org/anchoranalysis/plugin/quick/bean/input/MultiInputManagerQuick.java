@@ -32,10 +32,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -46,11 +44,14 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
 
-/** A quicker for of multi-input manager that makes various assumptions */
+/** 
+ * A multi-input manager that makes various assumptions, so it can be more quickly specified.
+ * 
+ * @author Owen Feehan
+ */
 public class MultiInputManagerQuick extends QuickBase<MultiInput> {
 
     // START BEAN PROPERTIES
-
     @BeanField @Getter @Setter private String inputName;
 
     /*** Additional entities that are appended to the multi-input */
@@ -76,12 +77,6 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
      * channel to use from the stack
      */
     @BeanField @Getter @Setter private int channelIndex = 0;
-
-    /** The raster-reader for reading the main file */
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
-
-    /** The raster-reader for reading any appended files */
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAppend;
     // END BEAN PROPERTIES
 
     private MultiInputManager inputManager;
@@ -100,11 +95,16 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
         }
     }
 
+    @Override
+    public List<MultiInput> inputObjects(InputManagerParams params) throws AnchorIOException {
+        return inputManager.inputObjects(params);
+    }
+
     private MultiInputManager createMulti() throws BeanMisconfiguredException {
         MultiInputManager input = new MultiInputManager();
         input.setInputName(inputName);
         input.setInput(createStacks());
-        input.setRasterReader(rasterReaderAppend);
+        input.setRasterReader(getRasterReaderAppend());
 
         // Add all the various types of items that can be appended
         for (FilePathBaseAppendToManager append : listAppend) {
@@ -125,18 +125,13 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
             // Channel 0 always takes the inputName
             // The other channels are defined by the contents of the ImgChannelMapEntry
             return NamedChannelsCreator.create(
-                    files, inputName, channelIndex, additionalChannels, rasterReader);
+                    files, inputName, channelIndex, additionalChannels, getRasterReader());
 
         } else {
             // Normal mode, where we simply wrap the FileProvider in a Stacks
             Stacks stacks = new Stacks(files);
-            stacks.setRasterReader(rasterReader);
+            stacks.setRasterReader(getRasterReader());
             return stacks;
         }
-    }
-
-    @Override
-    public List<MultiInput> inputObjects(InputManagerParams params) throws AnchorIOException {
-        return inputManager.inputObjects(params);
     }
 }
