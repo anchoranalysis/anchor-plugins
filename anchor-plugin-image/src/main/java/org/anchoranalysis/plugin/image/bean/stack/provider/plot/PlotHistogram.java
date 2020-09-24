@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.image.bean.stack.provider.plot;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
@@ -44,14 +44,18 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.bufferedimage.CreateStackFromBufferedImage;
 import org.anchoranalysis.plot.AxisLimits;
 import org.anchoranalysis.plot.PlotInstance;
-import org.anchoranalysis.plot.bean.colorscheme.GraphColorScheme;
+import org.anchoranalysis.plot.bean.colorscheme.PlotColorScheme;
 import org.anchoranalysis.plot.index.LinePlot;
-import org.anchoranalysis.plot.io.PlotOutputter;
 
-/** Displays a histogram */
+/** 
+ * Plots a histogram onto a stack.
+ *
+ * @author Owen Feehan
+ */
 public class PlotHistogram extends StackProvider {
 
     // START BEAN PROPERTIES
+    /** The histogram to plot. */
     @BeanField @Getter @Setter private HistogramProvider histogram;
 
     /** Size of the image produced showing a plot of the histogram */
@@ -68,7 +72,7 @@ public class PlotHistogram extends StackProvider {
                     createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
 
             BufferedImage image =
-                    PlotOutputter.createBufferedImage(plot, size.getWidth(), size.getHeight());
+                    plot.createBufferedImage(size.getWidth(), size.getHeight());
 
             return CreateStackFromBufferedImage.create(image);
 
@@ -83,7 +87,7 @@ public class PlotHistogram extends StackProvider {
             Optional<AxisLimits> rangeLimits)
             throws CreateException {
 
-        GraphColorScheme graphColorScheme = new GraphColorScheme();
+        PlotColorScheme graphColorScheme = new PlotColorScheme();
 
         LinePlot<HistogramBin> plot =
                 new LinePlot<>(
@@ -98,10 +102,6 @@ public class PlotHistogram extends StackProvider {
     }
 
     private static List<HistogramBin> binsFromHistogram(Histogram histogram) {
-        List<HistogramBin> out = new ArrayList<>();
-        for (int i = 1; i < histogram.size(); i++) {
-            out.add(new HistogramBin(i, histogram.getCount(i)));
-        }
-        return out;
+        return FunctionalList.mapRangeToList(1, histogram.size(), index -> new HistogramBin(index, histogram.getCount(index)) );
     }
 }
