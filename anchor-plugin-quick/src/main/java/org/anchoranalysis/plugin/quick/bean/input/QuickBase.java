@@ -27,8 +27,10 @@ package org.anchoranalysis.plugin.quick.bean.input;
 
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
@@ -70,6 +72,12 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
      * name of the experiment.
      */
     @BeanField @OptionalBean @Getter @Setter private String regex;
+    
+    /** The raster-reader for reading the main file */
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+
+    /** The raster-reader for reading any appended files */
+    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAppend;
     // END BEAN PROPERTIES
     
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {

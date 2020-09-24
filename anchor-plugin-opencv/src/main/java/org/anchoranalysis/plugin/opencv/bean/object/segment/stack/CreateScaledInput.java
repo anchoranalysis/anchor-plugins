@@ -55,25 +55,11 @@ class CreateScaledInput {
     public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
             throws CreateException {
 
-        // try {
-        // Stack stackRescaled = stack.mapChannel( channel -> channel.resizeXY(targetExtent, new
-        // InterpolatorImgLib2Linear()) );
-
-        // TODO Better to scale before openCV conversion, so less bytes to process for RGB
-        // conversion
+        // TODO consider scaling before if it it is quicker
         Mat original = ConvertToMat.makeRGBStack(stack);
 
         Mat input = resizeMatToTarget(original, targetExtent);
         return Tuple.of(input, relativeScale(original, input));
-
-        /*Mat matResized = ConvertToMat.makeRGBStack(stackRescaled);
-
-        ScaleFactor scaleFactorToReverse = ScaleFactorUtilities.relativeScale(stackRescaled.extent(), stack.extent());
-        return Tuple.of(matResized, scaleFactorToReverse);*/
-
-        /*} catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }*/
     }
 
     private static ScaleFactor relativeScale(Mat original, Mat resized) {
@@ -85,9 +71,9 @@ class CreateScaledInput {
     }
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {
-        Mat dst = new Mat();
-        Size sz = new Size(targetExtent.x(), targetExtent.y());
-        Imgproc.resize(src, dst, sz);
-        return dst;
+        Mat destination = new Mat();
+        Size size = new Size(targetExtent.x(), targetExtent.y());
+        Imgproc.resize(src, destination, size);
+        return destination;
     }
 }
