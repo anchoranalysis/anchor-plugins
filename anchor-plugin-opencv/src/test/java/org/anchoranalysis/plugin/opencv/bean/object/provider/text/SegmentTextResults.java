@@ -36,13 +36,13 @@ import org.anchoranalysis.image.extent.box.BoundingBox;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SegmentTextResults {
 
-    private static final BoundingBox BOX1_RGB = boxAt(312, 319, 107, 34);
+    private static final BoundingBox BOX1_RGB = boxAt(302, 315, 127, 42);
     private static final BoundingBox BOX1_GRAYSCALE = boxAt(316, 319, 104, 33);
 
-    private static final BoundingBox BOX2_RGB = boxAt(394, 200, 27, 25);
+    private static final BoundingBox BOX2_RGB = boxAt(393, 199, 31, 28);
     private static final BoundingBox BOX2_GRAYSCALE = boxAt(394, 199, 27, 27);
 
-    private static final BoundingBox BOX3 = boxAt(440, 312, 73, 36);
+    private static final BoundingBox BOX3 = boxAt(438, 310, 78, 40);
 
     public static List<BoundingBox> rgb() {
         return Arrays.asList(BOX1_RGB, BOX2_RGB, BOX3);
