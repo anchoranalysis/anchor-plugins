@@ -60,7 +60,7 @@ public class SegmentTextTest {
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
 
-    @Rule public WriteIntoFolder writer = new WriteIntoFolder(true);
+    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
 
     @Before
     public void setUp() throws InitException {
@@ -80,12 +80,12 @@ public class SegmentTextTest {
         segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 
-    private static int cnt = 0;
+    private static int count = 0;
 
     private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults = segmenter.segment(stack);
-        writer.writeObjects("objects" + cnt++, segmentResults.asObjects(), loader.carRGB());
+        writer.writeObjects("objects" + count++, segmentResults.asObjects(), loader.carRGB());
         ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
     }
 
