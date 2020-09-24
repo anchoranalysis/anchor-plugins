@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.bean.OutputManagerWithPrefixer;
 import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.NoOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.manager.OutputManagerWithPrefixer;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 public class OutputManagerStack extends OutputManagerWithPrefixer {

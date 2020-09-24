@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -46,7 +46,7 @@ import org.apache.commons.lang.time.StopWatch;
 public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
-    private Optional<FileOutput> fileOutput;
+    private Optional<TextFileOutput> fileOutput;
 
     private StopWatch timer = null;
 
@@ -55,7 +55,7 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
             throws AggregatorException {
         fileOutput =
-                FileOutputFromManager.create(
+                TextFileOutputFromManager.create(
                         "txt",
                         Optional.of(new ManifestDescription("text", "event_log")),
                         initParams.getInitContext().getOutputManager().getDelegate(),
