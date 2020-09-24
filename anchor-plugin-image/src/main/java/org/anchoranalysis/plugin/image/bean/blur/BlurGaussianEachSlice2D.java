@@ -53,7 +53,6 @@ public class BlurGaussianEachSlice2D extends BlurStrategy {
                         z ->
                                 GaussianBlurUtilities.applyBlur(
                                         ConvertToImg.fromSlice(voxels, z),
-                                        dimensions.resolution(),
                                         sigmaArr));
     }
 }
