@@ -37,10 +37,10 @@ import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
@@ -56,7 +56,7 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 
 /**
- * Base class for stacks that somehow are grouped-together
+ * Base class for stacks that somehow are grouped-together.
  *
  * @author Owen Feehan
  * @param <S> individual-type
@@ -98,7 +98,7 @@ public abstract class GroupedStackTask<S, T>
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<ProvidesStackInput, GroupedSharedState<S, T>> params)
+    public void doJobOnInput(InputBound<ProvidesStackInput, GroupedSharedState<S, T>> params)
             throws JobExecutionException {
 
         ProvidesStackInput inputObject = params.getInputObject();

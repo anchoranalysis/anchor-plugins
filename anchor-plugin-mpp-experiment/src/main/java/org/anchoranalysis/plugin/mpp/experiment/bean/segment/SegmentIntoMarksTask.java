@@ -42,10 +42,10 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -71,7 +71,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     // END BEAN PROPERTIES
 
     @Override
-    public void doJobOnInputObject(InputBound<MultiInput, ExperimentState> params)
+    public void doJobOnInput(InputBound<MultiInput, ExperimentState> params)
             throws JobExecutionException {
 
         MultiInput inputObject = params.getInputObject();

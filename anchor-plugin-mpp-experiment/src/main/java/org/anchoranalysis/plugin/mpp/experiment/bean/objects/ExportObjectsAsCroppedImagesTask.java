@@ -105,7 +105,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     // END BEAN PROPERTIES
 
     @Override
-    public void doJobOnInputObject(InputBound<MultiInput, NoSharedState> params)
+    public void doJobOnInput(InputBound<MultiInput, NoSharedState> params)
             throws JobExecutionException {
         try {
             define.processInputImage(

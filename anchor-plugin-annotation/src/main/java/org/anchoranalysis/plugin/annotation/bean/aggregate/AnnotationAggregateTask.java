@@ -34,10 +34,10 @@ import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -64,7 +64,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     }
 
     @Override
-    public void doJobOnInputObject(
+    public void doJobOnInput(
             InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
             throws JobExecutionException {
 

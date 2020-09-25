@@ -35,9 +35,9 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
@@ -66,7 +66,7 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<T, Summarizer<S>> params)
+    public void doJobOnInput(InputBound<T, Summarizer<S>> params)
             throws JobExecutionException {
         try {
             params.getSharedState().add(extractObjectForSummary(params.getInputObject()));

@@ -61,7 +61,7 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<ManifestCouplingDefinition, NoSharedState> params)
+    public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
             throws JobExecutionException {
 
         Logger logger = params.getLogger();

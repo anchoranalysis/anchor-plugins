@@ -67,7 +67,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<MultiInput, NoSharedState> params)
+    public void doJobOnInput(InputBound<MultiInput, NoSharedState> params)
             throws JobExecutionException {
 
         try {

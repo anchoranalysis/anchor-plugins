@@ -43,10 +43,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
@@ -127,7 +127,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<T, SharedStateExportFeatures<S>> input)
+    public void doJobOnInput(InputBound<T, SharedStateExportFeatures<S>> input)
             throws JobExecutionException {
         try {
             Optional<String> groupName =

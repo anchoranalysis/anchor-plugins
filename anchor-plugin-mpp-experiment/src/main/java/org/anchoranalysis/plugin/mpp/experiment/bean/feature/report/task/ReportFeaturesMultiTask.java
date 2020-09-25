@@ -39,10 +39,10 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -95,7 +95,7 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<MultiInput, CSVWriter> input)
+    public void doJobOnInput(InputBound<MultiInput, CSVWriter> input)
             throws JobExecutionException {
 
         CSVWriter writer = input.getSharedState();
@@ -120,16 +120,6 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
         }
     }
 
-    private void writeFeaturesIntoReporter(
-            MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
-        List<TypedValue> rowElements =
-                ReportFeatureUtilities.elementList(listReportFeatures, soMPP, logger);
-
-        rowElements.add(0, new TypedValue(inputDescriptiveName, false));
-
-        writer.writeRow(rowElements);
-    }
-
     @Override
     public void afterAllJobsAreExecuted(CSVWriter writer, BoundIOContext context)
             throws ExperimentExecutionException {
@@ -139,5 +129,15 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
+    }
+    
+    private void writeFeaturesIntoReporter(
+            MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
+        List<TypedValue> rowElements =
+                ReportFeatureUtilities.elementList(listReportFeatures, soMPP, logger);
+
+        rowElements.add(0, new TypedValue(inputDescriptiveName, false));
+
+        writer.writeRow(rowElements);
     }
 }
