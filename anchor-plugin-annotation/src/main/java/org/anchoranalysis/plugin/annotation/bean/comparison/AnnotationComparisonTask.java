@@ -41,10 +41,10 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
@@ -101,7 +101,7 @@ public class AnnotationComparisonTask<T extends Assignment>
     }
 
     @Override
-    public void doJobOnInputObject(
+    public void doJobOnInput(
             InputBound<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> params)
             throws JobExecutionException {
 

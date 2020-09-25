@@ -47,10 +47,10 @@ import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
 import org.anchoranalysis.experiment.bean.processor.DebugDependentProcessor;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.experiment.io.IReplaceInputManager;
-import org.anchoranalysis.experiment.io.IReplaceOutputManager;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceInputManager;
+import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
@@ -71,7 +71,7 @@ import org.anchoranalysis.io.output.bean.manager.OutputManager;
  * @param <S> shared-state
  */
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment
-        implements IReplaceInputManager, IReplaceOutputManager {
+        implements ReplaceInputManager, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String folderDataset;

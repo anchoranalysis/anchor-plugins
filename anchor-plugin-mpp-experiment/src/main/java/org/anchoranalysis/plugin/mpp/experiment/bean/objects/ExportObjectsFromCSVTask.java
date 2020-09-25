@@ -150,7 +150,7 @@ public class ExportObjectsFromCSVTask
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<FromCSVInputObject, FromCSVSharedState> input)
+    public void doJobOnInput(InputBound<FromCSVInputObject, FromCSVSharedState> input)
             throws JobExecutionException {
 
         FromCSVInputObject inputObject = input.getInputObject();

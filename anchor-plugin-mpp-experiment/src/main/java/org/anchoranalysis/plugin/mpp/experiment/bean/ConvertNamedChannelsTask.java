@@ -35,11 +35,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.experiment.io.IReplaceTask;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceTask;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 /**
  * Converts {@link NamedChannelsInput} to a variety of others to match a delegate task
  *
- * <p>Note that the presence of {@link IReplaceTask} gives special behavior to this task in the
+ * <p>Note that the presence of {@link ReplaceTask} gives special behavior to this task in the
  * {@link JobProcessor}
  *
  * @author Owen Feehan
@@ -60,7 +60,7 @@ import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
  * @param <U> the named-channels-input the delegate task contains
  */
 public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends NamedChannelsInput>
-        extends Task<T, S> implements IReplaceTask<U, S> {
+        extends Task<T, S> implements ReplaceTask<U, S> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Task<U, S> task;
@@ -76,7 +76,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<T, S> input) throws JobExecutionException {
+    public void doJobOnInput(InputBound<T, S> input) throws JobExecutionException {
 
         Class<? extends InputFromManager> inputObjClass = input.getInputObject().getClass();
 
@@ -142,6 +142,6 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     @SuppressWarnings("unchecked")
     private void doJobWithInputCast(InputBound<? extends InputFromManager, S> input)
             throws JobExecutionException {
-        task.doJobOnInputObject((InputBound<U, S>) input);
+        task.doJobOnInput((InputBound<U, S>) input);
     }
 }

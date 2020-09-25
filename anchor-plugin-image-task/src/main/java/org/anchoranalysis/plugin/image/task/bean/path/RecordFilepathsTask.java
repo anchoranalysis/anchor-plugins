@@ -34,10 +34,10 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
@@ -67,7 +67,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
     }
 
     @Override
-    public void doJobOnInputObject(InputBound<T, StringBuilder> params)
+    public void doJobOnInput(InputBound<T, StringBuilder> params)
             throws JobExecutionException {
 
         Path path;

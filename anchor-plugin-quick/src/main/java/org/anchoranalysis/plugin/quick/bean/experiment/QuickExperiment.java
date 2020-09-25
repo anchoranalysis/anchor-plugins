@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstan
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
-import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
