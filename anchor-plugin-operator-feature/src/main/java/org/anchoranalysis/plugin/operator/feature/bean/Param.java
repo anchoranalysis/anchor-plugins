@@ -35,9 +35,9 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 
 /**

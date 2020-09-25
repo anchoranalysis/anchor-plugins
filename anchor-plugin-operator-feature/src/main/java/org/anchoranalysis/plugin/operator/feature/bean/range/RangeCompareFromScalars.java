@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.operator.feature.bean.range;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /** A base-class for setting the boundaries of the range using constant scalars */

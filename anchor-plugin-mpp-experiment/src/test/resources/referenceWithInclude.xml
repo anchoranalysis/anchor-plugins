@@ -6,7 +6,7 @@
 	</include> 
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="cogYRef">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item config-class="org.anchoranalysis.feature.bean.operator.Reference" id="cogY"/>
 		</item>
 	</item>	

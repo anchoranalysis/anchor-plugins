@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.operator.feature.bean.arithmetic;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
@@ -39,8 +39,8 @@ public class Multiply<T extends FeatureInput> extends FeatureListElem<T> {
 
         double result = 1;
 
-        for (Feature<T> elem : getList()) {
-            result *= input.calculate(elem);
+        for (Feature<T> element : getList()) {
+            result *= input.calculate(element);
 
             // Early exit if we start multiplying by 0
             if (result == 0) {

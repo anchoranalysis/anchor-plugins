@@ -89,7 +89,7 @@ public class CalculateIncrementalOperationMapTest {
     }
 
     private void assertStoredCount(int expectedNumItemsStored) {
-        assertEquals(expectedNumItemsStored, mockMap.numItemsCurrentlyStored());
+        assertEquals(expectedNumItemsStored, mockMap.numberItemsCurrentlyStored());
     }
 
     private void callMockAndVerify(

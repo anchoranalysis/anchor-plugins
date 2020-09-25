@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.overlap;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;

@@ -29,13 +29,14 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.FeatureCalculationMap;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 
 @EqualsAndHashCode(callSuper = false)
 public abstract class CalculateIncrementalOperationMap
-        extends CacheableCalculationMapHash<
+        extends FeatureCalculationMap<
                 ObjectMask, FeatureInputSingleObject, Integer, FeatureCalculationException> {
     private boolean do3D;
 
@@ -83,6 +84,9 @@ public abstract class CalculateIncrementalOperationMap
         }
     }
 
+    protected abstract ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
+            throws OperationFailedException;
+    
     /** Lowest existing key. 0 if no key exists. */
     private int findHighestExistingKey(int max) {
         for (int i = max; i >= 1; i--) {
@@ -92,7 +96,4 @@ public abstract class CalculateIncrementalOperationMap
         }
         return 0;
     }
-
-    protected abstract ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
-            throws OperationFailedException;
 }
