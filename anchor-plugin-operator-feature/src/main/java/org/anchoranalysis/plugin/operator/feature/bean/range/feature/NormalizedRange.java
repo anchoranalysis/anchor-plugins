@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.operator.feature.bean.range.feature;
 
 import org.anchoranalysis.feature.bean.operator.FeatureDoubleElem;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

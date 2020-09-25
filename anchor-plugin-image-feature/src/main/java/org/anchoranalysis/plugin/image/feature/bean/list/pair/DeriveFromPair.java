@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
+import org.anchoranalysis.feature.bean.list.PrependName;
 import org.anchoranalysis.image.feature.bean.object.pair.FeatureDeriveFromPair;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
@@ -71,7 +71,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
         FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
         featDelegate.setItem(featExstDup);
 
-        FeatureListProviderPrependName.setNewNameOnFeature(
+        PrependName.setNewNameOnFeature(
                 featDelegate, featExstDup.getFriendlyName(), prependString);
         return featDelegate;
     }
