@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.opencv.test;
 import java.nio.file.Path;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
 
@@ -38,10 +37,6 @@ import org.anchoranalysis.test.image.io.TestLoaderImageIO;
  * @author Owen Feehan
  */
 public class ImageLoader {
-
-    static {
-        CVInit.alwaysExecuteBeforeCallingLibrary();
-    }
 
     private static final String PATH_CAR = "car.jpg";
 

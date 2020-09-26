@@ -61,6 +61,8 @@ public abstract class ColorConverterBase extends StackProviderUnary {
 
         checkNumChannels(stackRGB);
 
+        CVInit.blockUntilLoaded();
+        
         Mat matBGR = ConvertToMat.makeRGBStack(stackRGB);
 
         Mat matHSV = convertColorSpace(stackRGB.extent(), matBGR, colorSpaceCode());

@@ -27,46 +27,34 @@
 package org.anchoranalysis.plugin.opencv.bean;
 
 import java.nio.file.Path;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.rasterwriter.OneOrThreeChannelsWriter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
 import org.opencv.imgcodecs.Imgcodecs;
 
-public class OpenCVWriter extends RasterWriter {
+/**
+ * Writes a stack to the filesystem using OpenCV and a specified extension.
+ * 
+ * <p>Note that as initialization of OpenCV can take many seconds, this writer
+ * is not recommended as a default writer for anchor's command-line usage, which
+ * may wish to very quickly execute jobs.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class OpenCVWriter extends OneOrThreeChannelsWriter {
 
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String extension = "png";
-    // END BEAN PROPERTIES
-
     @Override
-    public String fileExtension(RasterWriteOptions writeOptions) {
-        return extension;
-    }
-
-    @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
-            throws RasterIOException {
-        throw new RasterIOException("Writing time-series is unsupported for this format");
-    }
-
-    @Override
-    public synchronized void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException {
-        if (stack.getNumberChannels() == 3 && !makeRGB) {
-            throw new RasterIOException("3-channel images can only be created as RGB");
-        }
-
+    protected synchronized void writeStackAfterCheck(Stack stack, Path filePath) throws RasterIOException {
+        CVInit.blockUntilLoaded();
+        
         try {
             Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
         } catch (CreateException e) {
