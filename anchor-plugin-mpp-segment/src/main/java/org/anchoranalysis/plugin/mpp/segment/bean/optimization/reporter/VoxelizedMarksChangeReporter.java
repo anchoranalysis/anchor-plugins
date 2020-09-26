@@ -88,15 +88,14 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
         sequenceWriter =
                 new GeneratorSequenceNonIncremental<>(
                         outputManager.getDelegate(),
-                        outputNameStyle.getOutputName(),
+                        Optional.of(outputNameStyle.getOutputName()),
                         outputNameStyle,
                         generator,
                         true,
-                        false,
                         new ManifestDescription("serialized", manifestFunction));
 
         try {
-            sequenceWriter.start(sequenceType, -1);
+            sequenceWriter.start(sequenceType);
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }

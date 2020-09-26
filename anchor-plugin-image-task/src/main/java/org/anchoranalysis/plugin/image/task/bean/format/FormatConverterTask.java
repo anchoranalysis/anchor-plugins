@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
+import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,16 +93,16 @@ public class FormatConverterTask extends RasterTask {
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
                                 outputManager.getDelegate(),
-                                "",
+                                Optional.empty(),
                                 // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
                                 new StringSuffixOutputNameStyle("", "%s"),
                                 generator,
-                                true, true),
+                                true),
                         errorReporter);
 
         // TODO it would be nicer to reflect the real sequence type, than just using a set of
         // indexes
-        generatorSeq.start(new SetSequenceType(), -1);
+        generatorSeq.start(new SetSequenceType());
     }
 
     @Override
