@@ -83,6 +83,6 @@ public class InputProcessContext<S> {
     }
 
     private boolean areThumbnailsEnabled(BoundIOContext context) {
-        return context.getOutputManager().isOutputAllowed(OUTPUT_THUMBNAILS);
+        return context.getOutputManager().outputsEnabled().isOutputAllowed(OUTPUT_THUMBNAILS);
     }
 }

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 
@@ -56,31 +56,31 @@ public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root)
+    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws FilePathPrefixerException {
 
-        FilePathPrefix fpp = filePathPrefixer.outFilePrefixFromPath(input, root);
+        FilePathPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
 
-        Path dir = fpp.getFolderPath();
+        Path dir = prefix.getFolderPath();
 
         if (dir.getNameCount() > 0) {
 
             String finalDirName = dir.getName(dir.getNameCount() - 1).toString();
 
             // Remove the final directory from the output
-            fpp.setFolderPath(fpp.getFolderPath().resolve("..").normalize());
+            prefix.setFolderPath(prefix.getFolderPath().resolve("..").normalize());
 
-            if (fpp.getFilenamePrefix() != null) {
-                fpp.setFilenamePrefix(finalDirName + delimiter + fpp.getFilenamePrefix());
+            if (prefix.getFilenamePrefix() != null) {
+                prefix.setFilenamePrefix(finalDirName + delimiter + prefix.getFilenamePrefix());
             } else {
-                fpp.setFilenamePrefix(finalDirName);
+                prefix.setFilenamePrefix(finalDirName);
             }
 
-            return fpp;
+            return prefix;
 
         } else {
             // Nothing to do
-            return fpp;
+            return prefix;
         }
     }
 }

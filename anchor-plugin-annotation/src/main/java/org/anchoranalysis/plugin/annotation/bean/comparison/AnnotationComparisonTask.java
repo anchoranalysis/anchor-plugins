@@ -220,7 +220,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             Assignment assignment,
             DisplayStack background) {
 
-        if (!outputManager.isOutputAllowed(outputName)) {
+        if (!outputManager.outputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 

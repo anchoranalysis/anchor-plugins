@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
@@ -56,12 +56,12 @@ public class Rooted extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            PathWithDescription input, String expName, FilePathPrefixerParams context)
+            NamedPath path, String expName, FilePathPrefixerParams context)
             throws FilePathPrefixerException {
 
         FilePathPrefix fpp =
                 filePathPrefixer.outFilePrefixAvoidResolve(
-                        removeRoot(input, context.isDebugMode()), expName);
+                        removeRoot(path, context.isDebugMode()), expName);
 
         Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
         fpp.setFolderPath(pathOut);
@@ -69,14 +69,14 @@ public class Rooted extends FilePathPrefixer {
         return fpp;
     }
 
-    private PathWithDescription removeRoot(PathWithDescription input, boolean debugMode)
+    private NamedPath removeRoot(NamedPath path, boolean debugMode)
             throws FilePathPrefixerException {
         try {
-            Path pathInWithoutRoot =
+            Path pathWithoutRoot =
                     RootPathMap.instance()
-                            .split(input.getPath(), rootName, debugMode)
+                            .split(path.getPath(), rootName, debugMode)
                             .getRemainder();
-            return new PathWithDescription(pathInWithoutRoot, input.getDescriptiveName());
+            return new NamedPath(pathWithoutRoot, path.getDescriptiveName());
         } catch (AnchorIOException e) {
             throw new FilePathPrefixerException(e);
         }

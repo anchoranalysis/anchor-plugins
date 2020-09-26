@@ -45,8 +45,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
@@ -78,15 +78,14 @@ public class MovieFromSlicesTask extends RasterTask {
 
         generatorSeq =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
-                        new GeneratorSequenceNonIncrementalWriter<>(
+                        new GeneratorSequenceNonIncremental<>(
                                 outputManager.getDelegate(),
                                 "",
                                 // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
                                 new StringSuffixOutputNameStyle("", "%s"),
                                 generator,
-                                true),
+                                true, true),
                         errorReporter);
-        generatorSeq.setSuppressSubfolder(true);
 
         // TODO it would be nicer to reflect the real sequence type, than just using a set of
         // indexes
