@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.io.ReplaceInputManager;
 import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.plugin.quick.bean.experiment.QuickMultiDatasetExperiment;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;

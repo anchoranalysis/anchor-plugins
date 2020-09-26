@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager;
+package org.anchoranalysis.plugin.mpp.experiment.bean.output;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +32,17 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.NoOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bean.manager.OutputManagerWithPrefixer;
+import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
-public class OutputManagerStack extends OutputManagerWithPrefixer {
+/**
+ * Legacy rules for whether outputs are enabled or not.
+ * 
+ * @author Owen Feehan
+ * @deprecated Prefer another sub-class of {@link OutputEnabledRules}.
+ *
+ */
+public class LegacyOutputEnabled extends OutputEnabledRules {
 
     // BEAN PROPERTIES
     /** What's allowed or not - highest level outputs */

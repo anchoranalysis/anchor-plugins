@@ -46,25 +46,24 @@ import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
 import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
-import org.anchoranalysis.io.output.bean.manager.OutputManager;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
-import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManagerStack;
+import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
 
 /**
  * A quick way of defining an InputOutputExperiment where several assumptions are made.
  *
- * <p>TODO remove the explicit setting of setWriteRasterMetadata
- *
  * @author Owen Feehan
  * @param <S> shared-state
  */
+@SuppressWarnings("deprecation")
 public class QuickExperiment<S> extends Experiment {
 
     // START BEAN PROPERTIES
@@ -112,49 +111,6 @@ public class QuickExperiment<S> extends Experiment {
             throws BeanMisconfiguredException {
         super.checkMisconfigured(defaultInstances);
         this.defaultInstances = defaultInstances;
-    }
-
-    private InputManager<MultiInput> createInputManagerBean(Path beanPath)
-            throws ExperimentExecutionException {
-        try {
-            return BeanXmlLoader.loadBean(beanPath);
-        } catch (BeanXmlException e) {
-            throw new ExperimentExecutionException(e);
-        }
-    }
-
-    private InputManager<MultiInput> createInputManagerImageFile(SearchDirectory fs) {
-        return new MultiInputManager(inputName, new Stacks(new Files(fs)));
-    }
-
-    private OutputManager createOutputManager(Path inPathBaseDir) {
-
-        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
-
-        OutputManagerStack outputManager = new OutputManagerStack();
-        outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputEnabled(outputEnabled);
-        outputManager.setObjects(objects);
-        outputManager.setStacksOutputEnabled(stacksOutputEnabled);
-        try {
-            outputManager.localise(getLocalPath());
-        } catch (BeanMisconfiguredException e) {
-            // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
-        }
-
-        DirectoryStructure filePathResolver = new DirectoryStructure();
-        filePathResolver.setInPathPrefix(inPathBaseDir.toString());
-        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
-        try {
-            filePathResolver.localise(getLocalPath());
-        } catch (BeanMisconfiguredException e) {
-            // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
-        }
-        outputManager.setFilePathPrefixer(filePathResolver);
-        outputManager.setOutputWriteSettings(outputWriteSettings);
-        return outputManager;
     }
 
     @Override
@@ -210,5 +166,56 @@ public class QuickExperiment<S> extends Experiment {
     @Override
     public boolean useDetailedLogging() {
         return delegate.useDetailedLogging();
+    }
+
+
+    private InputManager<MultiInput> createInputManagerBean(Path beanPath)
+            throws ExperimentExecutionException {
+        try {
+            return BeanXmlLoader.loadBean(beanPath);
+        } catch (BeanXmlException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    private InputManager<MultiInput> createInputManagerImageFile(SearchDirectory fs) {
+        return new MultiInputManager(inputName, new Stacks(new Files(fs)));
+    }
+
+    private OutputManager createOutputManager(Path inPathBaseDir) {
+
+        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
+
+        OutputManager outputManager = new OutputManager();
+        outputManager.setSilentlyDeleteExisting(true);
+        outputManager.setOutputsEnabled( outputRules() );
+                
+        try {
+            outputManager.localise(getLocalPath());
+        } catch (BeanMisconfiguredException e) {
+            // Should never arise, as getLocalPath() should always be absolute
+            assert (false);
+        }
+
+        DirectoryStructure filePathResolver = new DirectoryStructure();
+        filePathResolver.setInPathPrefix(inPathBaseDir.toString());
+        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
+        try {
+            filePathResolver.localise(getLocalPath());
+        } catch (BeanMisconfiguredException e) {
+            // Should never arise, as getLocalPath() should always be absolute
+            assert (false);
+        }
+        outputManager.setFilePathPrefixer(filePathResolver);
+        outputManager.setOutputWriteSettings(outputWriteSettings);
+        return outputManager;
+    }
+
+    private LegacyOutputEnabled outputRules() {
+        LegacyOutputEnabled rules = new LegacyOutputEnabled();
+        rules.setOutputEnabled(outputEnabled);
+        rules.setObjects(objects);
+        rules.setStacksOutputEnabled(stacksOutputEnabled);
+        return rules;
     }
 }
