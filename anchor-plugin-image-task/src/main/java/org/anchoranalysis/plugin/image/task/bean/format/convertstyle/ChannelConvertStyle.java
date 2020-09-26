@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.bean.format.convertsyle;
+package org.anchoranalysis.plugin.image.task.bean.format.convertstyle;
 
 import java.util.Set;
 import java.util.function.BiConsumer;

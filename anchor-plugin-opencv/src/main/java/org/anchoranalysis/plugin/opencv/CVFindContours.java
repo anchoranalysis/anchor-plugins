@@ -55,6 +55,8 @@ public class CVFindContours {
     public static List<Contour> contoursForObject(ObjectMask object)
             throws OperationFailedException {
 
+        CVInit.blockUntilLoaded();
+        
         try {
             // We clone ss the source image is modified by the algorithm according to OpenCV docs
             // https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=findcontours#findcontours

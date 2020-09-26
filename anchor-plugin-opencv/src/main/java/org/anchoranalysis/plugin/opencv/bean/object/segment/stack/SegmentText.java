@@ -159,6 +159,8 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
 
     private static Net createNet(Path pathToModel, boolean useGPU) {
 
+        CVInit.blockUntilLoaded();
+        
         Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
 
         if (useGPU) {

@@ -54,7 +54,7 @@ import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.plugin.image.task.bean.format.convertsyle.ChannelConvertStyle;
+import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
@@ -80,10 +80,6 @@ public class FormatConverterTask extends RasterTask {
     // END BEAN PROPERTIES
 
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
-
-    public FormatConverterTask() {
-        super();
-    }
 
     @Override
     public void startSeries(
