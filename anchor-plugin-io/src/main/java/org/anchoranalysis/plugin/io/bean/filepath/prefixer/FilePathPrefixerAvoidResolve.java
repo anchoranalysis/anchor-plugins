@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
@@ -77,11 +77,11 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            PathWithDescription input, String expName, FilePathPrefixerParams context)
+            NamedPath path, String expName, FilePathPrefixerParams context)
             throws FilePathPrefixerException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
-        return outFilePrefixFromPath(input, root);
+        return outFilePrefixFromPath(path, root);
     }
 
     /**
@@ -102,26 +102,26 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * Provides a prefix which can be prepended to all output files. It avoids resolving
      * relative-paths.
      *
-     * @param input an input-path to match against
+     * @param path an input-path to match against
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
      * @throws FilePathPrefixerException
      */
     public FilePathPrefix outFilePrefixAvoidResolve(
-            PathWithDescription input, String experimentIdentifier)
+            NamedPath path, String experimentIdentifier)
             throws FilePathPrefixerException {
         return outFilePrefixFromPath(
-                input, rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath());
+                path, rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath());
     }
 
     /**
      * Determines the out-file prefix from a path
      *
-     * @param input path to calculate prefix from with associated descriptive-name
+     * @param path path to calculate prefix from with associated descriptive-name
      * @param root root of prefix
      * @return folder/filename for prefixing
      */
-    protected abstract FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root)
+    protected abstract FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws FilePathPrefixerException;
 
     /** The root of the experiment for outputting files */

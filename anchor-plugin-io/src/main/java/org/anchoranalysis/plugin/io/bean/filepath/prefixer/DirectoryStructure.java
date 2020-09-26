@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -66,10 +66,10 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root)
+    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws FilePathPrefixerException {
 
-        PathDifferenceFromBase difference = differenceToPrefix(removeExtension(input.getPath()));
+        PathDifferenceFromBase difference = differenceToPrefix(removeExtension(path.getPath()));
 
         return new FilePathPrefix(buildOutPath(root, difference));
     }

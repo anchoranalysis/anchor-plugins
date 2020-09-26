@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
+import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
@@ -53,9 +53,9 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(PathWithDescription input, Path root)
+    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
             throws FilePathPrefixerException {
-        String[] components = componentsFromPath(input.getPath());
+        String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
     }
 

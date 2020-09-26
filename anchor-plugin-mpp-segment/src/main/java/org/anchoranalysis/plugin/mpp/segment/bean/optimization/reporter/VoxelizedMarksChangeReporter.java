@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalWriter;
+import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
@@ -60,7 +60,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     @BeanField @Getter @Setter private boolean best = false;
     // END BEAN PARAMETERS
 
-    private GeneratorSequenceNonIncrementalWriter<MarksWithEnergyBreakdown> sequenceWriter;
+    private GeneratorSequenceNonIncremental<MarksWithEnergyBreakdown> sequenceWriter;
 
     private ChangeSequenceType sequenceType;
 
@@ -86,12 +86,13 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
 
         IndexableOutputNameStyle outputNameStyle = generateOutputNameStyle();
         sequenceWriter =
-                new GeneratorSequenceNonIncrementalWriter<>(
+                new GeneratorSequenceNonIncremental<>(
                         outputManager.getDelegate(),
                         outputNameStyle.getOutputName(),
                         outputNameStyle,
                         generator,
                         true,
+                        false,
                         new ManifestDescription("serialized", manifestFunction));
 
         try {
