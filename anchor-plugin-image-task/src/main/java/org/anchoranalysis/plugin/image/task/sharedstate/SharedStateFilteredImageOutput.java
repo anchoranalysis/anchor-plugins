@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 
 /**
@@ -50,9 +50,9 @@ import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
 public class SharedStateFilteredImageOutput<T> {
 
     private ImageLabeller<T> filter;
-    private BoundOutputManagerRouteErrors baseOutputManager;
+    private Outputter baseOutputter;
 
-    private GroupedMultiplexOutputManagers outputManagers;
+    private GroupedMultiplexOutputters outputters;
 
     private Optional<FeatureCSVWriter> csvWriter;
 
@@ -61,15 +61,15 @@ public class SharedStateFilteredImageOutput<T> {
     private boolean groupIdentifierForCalled = false;
 
     /**
-     * @param baseOutputManager
+     * @param baseOutputter
      * @param filter the filter must not yet have been inited()
      * @throws CreateException
      */
     public SharedStateFilteredImageOutput(
-            BoundOutputManagerRouteErrors baseOutputManager, ImageLabeller<T> filter)
+            Outputter baseOutputter, ImageLabeller<T> filter)
             throws CreateException {
 
-        this.baseOutputManager = baseOutputManager;
+        this.baseOutputter = baseOutputter;
         this.filter = filter;
 
         // The CSV file with all names and corresponding groups
@@ -77,7 +77,7 @@ public class SharedStateFilteredImageOutput<T> {
             this.csvWriter =
                     FeatureCSVWriter.create(
                             new FeatureCSVMetadata("group", Arrays.asList("name", "group")),
-                            baseOutputManager);
+                            baseOutputter);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
         }
@@ -104,7 +104,7 @@ public class SharedStateFilteredImageOutput<T> {
             //  this function is called. We do this so we have a sensible input-path
             //  to give to the filter.
             try {
-                initFilterOutputManagers(input.pathForBindingRequired());
+                initFilterOutputters(input.pathForBindingRequired());
             } catch (InitException | AnchorIOException e) {
                 throw new OperationFailedException(e);
             }
@@ -115,9 +115,9 @@ public class SharedStateFilteredImageOutput<T> {
     }
 
     /** groupIdentifierFor should always called at least once before getOutputManagerFor */
-    public BoundOutputManagerRouteErrors getOutputManagerFor(String groupIdentifier) {
+    public Outputter getOutputterFor(String groupIdentifier) {
         assert (groupIdentifierForCalled);
-        return outputManagers.getOutputManagerFor(groupIdentifier);
+        return outputters.getOutputterFor(groupIdentifier);
     }
 
     public T getFilterInitParams(Path pathForBinding) throws InitException {
@@ -127,10 +127,10 @@ public class SharedStateFilteredImageOutput<T> {
         return filterInitParams;
     }
 
-    private void initFilterOutputManagers(Path pathForBinding) throws InitException {
+    private void initFilterOutputters(Path pathForBinding) throws InitException {
 
-        this.outputManagers =
-                new GroupedMultiplexOutputManagers(
-                        baseOutputManager, filter.allLabels(getFilterInitParams(pathForBinding)));
+        this.outputters =
+                new GroupedMultiplexOutputters(
+                        baseOutputter, filter.allLabels(getFilterInitParams(pathForBinding)));
     }
 }

@@ -63,7 +63,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.overlay.bean.DrawObject;
@@ -137,7 +137,7 @@ public class ExportObjectsFromCSVTask
 
     @Override
     public FromCSVSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -245,7 +245,7 @@ public class ExportObjectsFromCSVTask
                     rows,
                     objects,
                     background,
-                    context.getOutputManager());
+                    context.getOutputter());
         } else {
             context.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);                    
         }        
@@ -256,10 +256,10 @@ public class ExportObjectsFromCSVTask
             Collection<CSVRow> rows,
             ObjectCollectionRTree objects,
             DisplayStack background,
-            BoundOutputManagerRouteErrors outputManager) {
+            Outputter outputter) {
 
-        outputManager
-                .getWriterAlwaysAllowed()
+        outputter
+                .writerPermissive()
                 .write(
                         label,
                         () -> {

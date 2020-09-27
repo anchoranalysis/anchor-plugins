@@ -35,7 +35,7 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 class CSVAssignment {
 
@@ -47,7 +47,7 @@ class CSVAssignment {
     private boolean firstRow = true;
 
     public CSVAssignment(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             String outputName,
             boolean includeDescriptiveSplit,
             int maxSplitGroups)
@@ -56,7 +56,7 @@ class CSVAssignment {
         this.includeDescriptiveSplit = includeDescriptiveSplit;
         this.maxSplitGroups = maxSplitGroups;
 
-        writer = CSVWriter.createFromOutputManager(outputName, outputManager.getDelegate());
+        writer = CSVWriter.createFromOutputter(outputName, outputter.getChecked());
     }
 
     public synchronized void writeStatisticsForImage(

@@ -53,7 +53,7 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -87,7 +87,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
                     segment.duplicateBean()
                             .segment(stackCollection, objects, paramsCreated, params.context());
             writeVisualization(
-                    marks, params.getOutputManager(), stackCollection, params.getLogger());
+                    marks, params.getOutputter(), stackCollection, params.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -142,11 +142,11 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
 
     private void writeVisualization(
             MarkCollection marks,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             NamedStacks stackCollection,
             Logger logger) {
-        outputManager
-                .getWriterCheckIfAllowed()
+        outputter
+                .writerSelective()
                 .write("marks", () -> new XStreamGenerator<Object>(marks, Optional.of("marks")));
 
         try {
@@ -154,7 +154,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
                     BackgroundCreator.createBackground(
                             stackCollection, segment.getBackgroundStackName());
 
-            MarksVisualization.write(marks, outputManager, backgroundStack);
+            MarksVisualization.write(marks, outputter, backgroundStack);
         } catch (OperationFailedException | CreateException e) {
             logger.errorReporter().recordError(SegmentIntoMarksTask.class, e);
         }
@@ -167,18 +167,18 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
 
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
-        experimentState.outputBeforeAnyTasksAreExecuted(outputManager);
+        experimentState.outputBeforeAnyTasksAreExecuted(outputter);
         return experimentState;
     }
 
     @Override
     public void afterAllJobsAreExecuted(ExperimentState sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
-        sharedState.outputAfterAllTasksAreExecuted(context.getOutputManager());
+        sharedState.outputAfterAllTasksAreExecuted(context.getOutputter());
     }
 }

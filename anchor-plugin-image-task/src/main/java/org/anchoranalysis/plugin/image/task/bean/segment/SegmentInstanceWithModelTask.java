@@ -68,7 +68,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
@@ -159,7 +159,7 @@ public class SegmentInstanceWithModelTask<T>
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan plan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -194,7 +194,7 @@ public class SegmentInstanceWithModelTask<T>
                         stack,
                         segments.asObjects(),
                         background,
-                        input.context().getOutputManager());
+                        input.context().getOutputter());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -273,9 +273,9 @@ public class SegmentInstanceWithModelTask<T>
             Stack stack,
             ObjectCollection objects,
             DisplayStack background,
-            BoundOutputManagerRouteErrors outputManager) {
+            Outputter outputter) {
 
-        WriterRouterErrors writer = outputManager.getWriterCheckIfAllowed();
+        WriterRouterErrors writer = outputter.writerSelective();
 
         writer.write(
                 OUTPUT_INPUT_IMAGE,

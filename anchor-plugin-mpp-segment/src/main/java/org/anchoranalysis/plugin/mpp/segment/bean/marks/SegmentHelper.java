@@ -43,7 +43,7 @@ import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
@@ -59,13 +59,13 @@ class SegmentHelper {
 
     public static void writeStacks(
             ImageInitParams so, EnergyStack energyStack, BoundIOContext context) {
-        BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+        Outputter outputter = context.getOutputter();
 
         StacksOutputter.output(
                 StacksOutputter.subset(
                         CreateCombinedStack.apply(so),
-                        outputManager.outputsEnabled().outputAllowedSecondLevel(StackOutputKeys.STACK)),
-                outputManager.getDelegate(),
+                        outputter.outputsEnabled().outputAllowedSecondLevel(StackOutputKeys.STACK)),
+                outputter.getChecked(),
                 "stacks",
                 "stack_",
                 context.getErrorReporter(),

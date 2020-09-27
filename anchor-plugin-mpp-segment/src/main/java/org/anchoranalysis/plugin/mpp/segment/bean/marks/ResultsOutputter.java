@@ -36,7 +36,7 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -53,7 +53,7 @@ import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class Outputter {
+class ResultsOutputter {
 
     private static final Optional<String> MANIFEST_FUNCTION_MARKS = Optional.of("marks");
 
@@ -74,19 +74,19 @@ class Outputter {
             DualStack dualStack,
             RegionMembershipWithFlags regionMembership,
             Logger logger,
-            BoundOutputManagerRouteErrors outputManager)
+            Outputter outputter)
             throws OperationFailedException {
 
         ColoredMarks coloredMarks =
                 new ColoredMarks(
                         marks.getMarks(),
-                        outputManager.getOutputWriteSettings().defaultColorIndexFor(20),
+                        outputter.getSettings().defaultColorIndexFor(20),
                         new IDGetterIter<Mark>());
 
         ColoredMarksWithDisplayStack coloredMarksDisplayStack =
                 new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBackground());
 
-        WriterRouterErrors writer = outputManager.getWriterCheckIfAllowed();
+        WriterRouterErrors writer = outputter.writerSelective();
 
         writeMarks(marks, writer);
 

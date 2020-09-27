@@ -38,7 +38,7 @@ import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.sequencetype.ChangeSequenceType;
 import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
 import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -70,8 +70,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
             throws ReporterException {
 
-        BoundOutputManagerRouteErrors outputManager =
-                initParams.getInitContext().getOutputManager();
+        Outputter outputter = initParams.getInitContext().getOutputter();
 
         sequenceType = new ChangeSequenceType();
 
@@ -81,13 +80,13 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
                 new BundledObjectOutputStreamGenerator<>(
                         bundleParams,
                         this.generateOutputNameStyle(),
-                        outputManager.getDelegate(),
+                        outputter.getChecked(),
                         manifestFunction);
 
         IndexableOutputNameStyle outputNameStyle = generateOutputNameStyle();
         sequenceWriter =
                 new GeneratorSequenceNonIncremental<>(
-                        outputManager.getDelegate(),
+                        outputter.getChecked(),
                         Optional.of(outputNameStyle.getOutputName()),
                         outputNameStyle,
                         generator,

@@ -40,7 +40,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /**
  * Aggregates many per-image annotations together in form of a CSV file
@@ -52,7 +52,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
 
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -76,8 +76,8 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     public void afterAllJobsAreExecuted(AggregateSharedState sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
 
-        context.getOutputManager()
-                .getWriterCheckIfAllowed()
+        context.getOutputter()
+                .writerSelective()
                 .write("annotationsAgg", () -> createGenerator(sharedState.getAnnotations()));
     }
 

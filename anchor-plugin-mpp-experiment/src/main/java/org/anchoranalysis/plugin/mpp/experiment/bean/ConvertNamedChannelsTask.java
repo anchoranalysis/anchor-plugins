@@ -43,7 +43,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.ConvertChannelsInputToStack;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
@@ -68,11 +68,11 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
 
     @Override
     public S beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
-        return task.beforeAnyJobIsExecuted(outputManager, concurrencyPlan, params);
+        return task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, params);
     }
 
     @Override

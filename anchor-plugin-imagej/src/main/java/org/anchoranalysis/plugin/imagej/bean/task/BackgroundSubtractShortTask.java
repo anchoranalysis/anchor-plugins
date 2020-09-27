@@ -47,7 +47,7 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.BackgroundSubtractor;
 
 public class BackgroundSubtractShortTask extends RasterTask {
@@ -65,7 +65,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 
     @Override
     public void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
         // NOTHING TO DO
     }
@@ -98,8 +98,8 @@ public class BackgroundSubtractShortTask extends RasterTask {
             Channel channelOut =
                     converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
 
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            context.getOutputter()
+                    .writerSelective()
                     .write("bgsub", () -> new ChannelGenerator("imgChannel",channelOut));
 
         } catch (RasterIOException | GetOperationFailedException e) {
@@ -108,7 +108,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
     }
 
     @Override
-    public void endSeries(BoundOutputManagerRouteErrors outputManager)
+    public void endSeries(Outputter outputter)
             throws JobExecutionException {
         // NOTHING TO DO
     }

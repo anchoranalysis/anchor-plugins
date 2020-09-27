@@ -43,6 +43,6 @@ class GroupedHistogramWriter {
             Histogram histogram, String outputName, BoundIOContext context) {
         generator.assignElement(histogram);
 
-        context.getOutputManager().getWriterCheckIfAllowed().write(outputName, () -> generator);
+        context.getOutputter().writerSelective().write(outputName, () -> generator);
     }
 }

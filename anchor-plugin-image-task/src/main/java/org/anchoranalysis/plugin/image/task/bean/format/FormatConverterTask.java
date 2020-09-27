@@ -54,7 +54,7 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalR
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
@@ -84,7 +84,7 @@ public class FormatConverterTask extends RasterTask {
 
     @Override
     public void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
 
         StackGenerator generator = new StackGenerator(false, "out", false);
@@ -92,7 +92,7 @@ public class FormatConverterTask extends RasterTask {
         generatorSeq =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
-                                outputManager.getDelegate(),
+                                outputter.getChecked(),
                                 Optional.empty(),
                                 // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
                                 new StringSuffixOutputNameStyle("", "%s"),
@@ -204,7 +204,7 @@ public class FormatConverterTask extends RasterTask {
     }
 
     @Override
-    public void endSeries(BoundOutputManagerRouteErrors outputManager)
+    public void endSeries(Outputter outputter)
             throws JobExecutionException {
         generatorSeq.end();
     }

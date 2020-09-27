@@ -31,28 +31,28 @@ import java.util.Set;
 import java.util.TreeMap;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
-/** A set of output-managers, one for each group */
-class GroupedMultiplexOutputManagers {
+/** A set of outputters, one for each group */
+class GroupedMultiplexOutputters {
 
     private static final ManifestFolderDescription MANIFEST_DESCRIPTION =
             new ManifestFolderDescription("groupOutput", "outputManager", new SetSequenceType());
 
-    private Map<String, BoundOutputManagerRouteErrors> map;
+    private Map<String, Outputter> map;
 
-    public GroupedMultiplexOutputManagers(
-            BoundOutputManagerRouteErrors baseOutputManager, Set<String> groups) {
+    public GroupedMultiplexOutputters(
+            Outputter baseOutputter, Set<String> groups) {
 
         map = new TreeMap<>();
 
         for (String key : groups) {
-            map.put(key, baseOutputManager.deriveSubdirectory(key, MANIFEST_DESCRIPTION));
+            map.put(key, baseOutputter.deriveSubdirectory(key, MANIFEST_DESCRIPTION));
         }
     }
 
     // Returns null if no object exists
-    public BoundOutputManagerRouteErrors getOutputManagerFor(String key) {
+    public Outputter getOutputterFor(String key) {
         return map.get(key);
     }
 }
