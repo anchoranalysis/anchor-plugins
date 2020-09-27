@@ -34,7 +34,7 @@ import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.object.writer.Filled;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
@@ -54,13 +54,13 @@ class MarksVisualization {
 
     public static void write(
             MarkCollection marks,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             DisplayStack backgroundStack)
             throws OperationFailedException {
         ColorIndex colorIndex =
-                outputManager.getOutputWriteSettings().defaultColorIndexFor(marks.size());
+                outputter.getSettings().defaultColorIndexFor(marks.size());
 
-        WriterRouterErrors writeIfAllowed = outputManager.getWriterCheckIfAllowed();
+        WriterRouterErrors writeIfAllowed = outputter.writerSelective();
         ColoredMarksWithDisplayStack marksWithStack =
                 new ColoredMarksWithDisplayStack(
                         new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>()),

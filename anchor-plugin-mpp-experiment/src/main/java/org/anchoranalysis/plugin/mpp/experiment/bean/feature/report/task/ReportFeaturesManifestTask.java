@@ -44,7 +44,7 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
@@ -66,12 +66,12 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
 
         Logger logger = params.getLogger();
         ManifestCouplingDefinition input = params.getInputObject();
-        BoundOutputManagerRouteErrors outputManager = params.getOutputManager();
+        Outputter outputter = params.getOutputter();
 
         Optional<CSVWriter> writer;
         try {
             writer =
-                    CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
+                    CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
         } catch (AnchorIOException e1) {
             throw new JobExecutionException(e1);
         }

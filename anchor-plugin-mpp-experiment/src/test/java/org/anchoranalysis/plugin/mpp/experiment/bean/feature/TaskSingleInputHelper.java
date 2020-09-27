@@ -52,9 +52,9 @@ import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
+import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
  * Executes a task on a single-input outputting into a specific directory
@@ -114,13 +114,13 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            BoundOutputManagerRouteErrors bom =
-                    OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
+            Outputter bom =
+                    OutputterFixture.outputter(pathForOutputs);
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
             ParametersExperiment paramsExperiment =
-                    createParametersExperiment(pathForOutputs, bom.getDelegate(), logger);
+                    createParametersExperiment(pathForOutputs, bom.getChecked(), logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
             S sharedState = task.beforeAnyJobIsExecuted(bom, concurrencyPlan, paramsExperiment);
@@ -142,14 +142,14 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder, BoundOutputManager outputManager, StatefulMessageLogger logger)
+            Path pathTempFolder, OutputterChecked outputter, StatefulMessageLogger logger)
             throws AnchorIOException {
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExperimentExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
                         Optional.empty(),
-                        outputManager,
+                        outputter,
                         logger,
                         false);
         params.setLoggerTaskCreator(createLogReporterBean());

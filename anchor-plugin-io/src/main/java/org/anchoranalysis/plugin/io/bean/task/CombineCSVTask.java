@@ -45,7 +45,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 // At the moment, we don't check if the name number of rows/columns exist
 public class CombineCSVTask extends Task<FileInput, CSVWriter> {
@@ -62,14 +62,14 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
             Optional<CSVWriter> writer =
-                    CSVWriter.createFromOutputManager("featureReport", outputManager.getDelegate());
+                    CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
 
             if (!writer.isPresent()) {
                 throw new ExperimentExecutionException(

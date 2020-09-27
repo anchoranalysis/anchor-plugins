@@ -46,7 +46,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
@@ -171,7 +171,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                 return new MarkCollection();
             }
 
-            maybeWriteGroupParams(keyValueParams, context.getOutputManager());
+            maybeWriteGroupParams(keyValueParams, context.getOutputter());
 
             OptimizationContext initContext =
                     new OptimizationContext(
@@ -214,7 +214,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                                     context)
                             .getMarks();
 
-            Outputter.outputResults(
+            ResultsOutputter.outputResults(
                     marks,
                     context.getDualStack(),
                     energySchemeShared
@@ -222,7 +222,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                             .getRegionMap()
                             .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
                     context.getLogger(),
-                    context.getOutputManager());
+                    context.getOutputter());
 
             return marks.getMarksWithTotalEnergy();
 
@@ -241,10 +241,10 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private void maybeWriteGroupParams(
-            Optional<KeyValueParams> keyValueParams, BoundOutputManagerRouteErrors outputManager) {
+            Optional<KeyValueParams> keyValueParams, Outputter outputter) {
         if (keyValueParams.isPresent()) {
-            outputManager
-                    .getWriterCheckIfAllowed()
+            outputter
+                    .writerSelective()
                     .write("groupParams", () -> new GroupParamsGenerator(keyValueParams.get()));
         }
     }

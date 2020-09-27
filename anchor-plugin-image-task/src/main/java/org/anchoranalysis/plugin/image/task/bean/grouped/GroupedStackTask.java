@@ -48,7 +48,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.FromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
@@ -90,7 +90,7 @@ public abstract class GroupedStackTask<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {

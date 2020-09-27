@@ -57,7 +57,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             BoundIOContext context)
             throws IOException {
         VoxelDataType outputType = channelChecker.getChannelType();
-        context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generatorWithMean(agg, outputType, outputName, context) );
+        context.getOutputter().writerPermissive().write(outputName, () -> generatorWithMean(agg, outputType, outputName, context) );
     }
     
     private static ChannelGenerator generatorWithMean(RunningSumChannel agg, VoxelDataType outputType, String channelName, BoundIOContext context) throws OutputWriteFailedException {

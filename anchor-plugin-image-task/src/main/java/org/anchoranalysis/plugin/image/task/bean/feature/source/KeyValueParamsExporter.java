@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 /** Exports a ResultVector as a KeyValueParams */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -44,13 +44,13 @@ class KeyValueParamsExporter {
     public static void export(
             FeatureNameList featureNames, ResultsVector rv, BoundIOContext context) {
         KeyValueParams kvp = convert(featureNames, rv, context.getLogger());
-        writeKeyValueParams(kvp, context.getOutputManager());
+        writeKeyValueParams(kvp, context.getOutputter());
     }
 
     private static void writeKeyValueParams(
-            KeyValueParams kvp, BoundOutputManagerRouteErrors outputManager) {
-        outputManager
-                .getWriterCheckIfAllowed()
+            KeyValueParams kvp, Outputter outputter) {
+        outputter
+                .writerSelective()
                 .write("keyValueParams", () -> new KeyValueParamsGenerator(kvp, "keyValueParams"));
     }
 

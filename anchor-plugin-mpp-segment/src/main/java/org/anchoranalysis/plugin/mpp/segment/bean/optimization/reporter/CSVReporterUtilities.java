@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
-import org.anchoranalysis.io.generator.text.TextFileOutputFromManager;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -42,10 +42,10 @@ public class CSVReporterUtilities {
             String outputName,
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams,
             String manifestDscrFunction) {
-        return TextFileOutputFromManager.create(
+        return TextFileOutputter.create(
                 "csv",
                 Optional.of(new ManifestDescription("csv", manifestDscrFunction)),
-                initParams.getInitContext().getOutputManager().getDelegate(),
+                initParams.getInitContext().getOutputter().getChecked(),
                 outputName);
     }
 }

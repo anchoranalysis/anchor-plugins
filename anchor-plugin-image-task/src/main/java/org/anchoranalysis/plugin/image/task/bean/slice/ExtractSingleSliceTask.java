@@ -54,7 +54,7 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice;
@@ -82,12 +82,12 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            return new SharedStateSelectedSlice(outputManager);
+            return new SharedStateSelectedSlice(outputter);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -119,7 +119,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
                     params.getInputObject(),
                     energyStack,
                     optimaSliceIndex,
-                    params.getOutputManager());
+                    params.getOutputter());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -165,18 +165,18 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
             NamedChannelsInput inputObject,
             EnergyStack energyStack,
             int optimaSliceIndex,
-            BoundOutputManagerRouteErrors outputManager)
+            Outputter outputter)
             throws OperationFailedException {
 
-        NamedStacks stackCollection = collectionFromInput(inputObject);
+        NamedStacks stacks = collectionFromInput(inputObject);
 
         // Extract slices
-        NamedStacks sliceCollection =
-                stackCollection.applyOperation(
+        NamedStacks slices =
+                stacks.applyOperation(
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            outputSlices(outputManager, sliceCollection);
+            outputSlices(outputter, slices);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -190,10 +190,10 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
     }
 
     private void outputSlices(
-            BoundOutputManagerRouteErrors outputManager, NamedStacks stackCollection)
+            Outputter outputter, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
-                stackCollection, outputManager, OUTPUT_STACK_KEY, false);
+                stackCollection, outputter, OUTPUT_STACK_KEY, false);
     }
 
     private int findOptimalSlice(double[] scores) {

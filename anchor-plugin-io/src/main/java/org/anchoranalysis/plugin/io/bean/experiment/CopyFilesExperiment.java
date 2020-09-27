@@ -54,7 +54,7 @@ import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
+import org.anchoranalysis.io.output.bound.OutputterChecked;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.SimpleCopy;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.naming.CopyFilesNaming;
@@ -124,7 +124,7 @@ public class CopyFilesExperiment extends Experiment {
     private StatefulMessageLogger createLoggerFor(
             Path destination, ExperimentExecutionArguments arguments) throws BindFailedException {
         return log.createWithConsoleFallback(
-                BoundOutputManager.createPermissive(destination, silentlyDeleteExisting),
+                OutputterChecked.createForDirectoryPermissive(destination, silentlyDeleteExisting),
                 arguments,
                 false);
     }

@@ -43,7 +43,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
 
@@ -54,7 +54,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
 
     @Override
     public StringBuilder beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -99,8 +99,8 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
     public void afterAllJobsAreExecuted(StringBuilder sharedState, BoundIOContext context)
             throws ExperimentExecutionException {
 
-        context.getOutputManager()
-                .getWriterAlwaysAllowed()
+        context.getOutputter()
+                .writerPermissive()
                 .write("list", () -> new StringGenerator(sharedState.toString()));
     }
 

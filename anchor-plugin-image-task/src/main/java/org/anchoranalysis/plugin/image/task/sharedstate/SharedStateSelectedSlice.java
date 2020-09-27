@@ -34,13 +34,13 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 
 public class SharedStateSelectedSlice {
 
     private Optional<FeatureCSVWriter> csvWriter;
 
-    public SharedStateSelectedSlice(BoundOutputManagerRouteErrors baseOutputManager)
+    public SharedStateSelectedSlice(Outputter baseOutputter)
             throws CreateException {
         super();
 
@@ -50,7 +50,7 @@ public class SharedStateSelectedSlice {
                             new FeatureCSVMetadata(
                                     "selectedSlices",
                                     Arrays.asList("name", "sliceIndex", "featureOptima")),
-                            baseOutputManager);
+                            baseOutputter);
         } catch (AnchorIOException e) {
             throw new CreateException(e);
         }

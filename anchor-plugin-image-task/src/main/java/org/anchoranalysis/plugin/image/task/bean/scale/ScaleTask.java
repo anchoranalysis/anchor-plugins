@@ -53,7 +53,7 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
@@ -75,7 +75,7 @@ public class ScaleTask extends RasterTask {
 
     @Override
     public void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
         // NOTHING TO DO
     }
@@ -132,13 +132,13 @@ public class ScaleTask extends RasterTask {
             String outputSecondLevelKey,
             String outputName,
             BoundIOContext context) {
-        BoundOutputManagerRouteErrors outputManager = context.getOutputManager();
+        Outputter outputter = context.getOutputter();
 
         StacksOutputter.output(
                 StacksOutputter.subset(
                         stackCollection,
-                        outputManager.outputsEnabled().outputAllowedSecondLevel(outputSecondLevelKey)),
-                outputManager.getDelegate(),
+                        outputter.outputsEnabled().outputAllowedSecondLevel(outputSecondLevelKey)),
+                outputter.getChecked(),
                 outputName,
                 "",
                 context.getErrorReporter(),
@@ -156,7 +156,7 @@ public class ScaleTask extends RasterTask {
         for (String channelName : channelNames) {
 
             // If this output is not allowed we simply skip
-            if (!context.getOutputManager()
+            if (!context.getOutputter()
                     .outputsEnabled()
                     .outputAllowedSecondLevel(KEY_OUTPUT_STACK)
                     .isOutputAllowed(channelName)) {
@@ -194,7 +194,7 @@ public class ScaleTask extends RasterTask {
     }
 
     @Override
-    public void endSeries(BoundOutputManagerRouteErrors outputManager)
+    public void endSeries(Outputter outputter)
             throws JobExecutionException {
         // NOTHING TO DO
     }

@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
 
@@ -48,11 +48,11 @@ class CSVComparisonGroup<T extends Assignment> {
         writer.writeRow(annotationGroup.createValues());
     }
 
-    public void writeGroupStats(BoundOutputManagerRouteErrors outputManager)
+    public void writeGroupStats(Outputter outputter)
             throws AnchorIOException {
 
         Optional<CSVWriter> writer =
-                CSVWriter.createFromOutputManager("byGroup", outputManager.getDelegate());
+                CSVWriter.createFromOutputter("byGroup", outputter.getChecked());
 
         if (!writer.isPresent()) {
             return;

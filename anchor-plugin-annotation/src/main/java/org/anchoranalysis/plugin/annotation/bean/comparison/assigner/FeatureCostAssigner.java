@@ -83,8 +83,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
                 assignment.removeTouchingBorderXY(dimensions);
             }
 
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            context.getOutputter()
+                    .writerSelective()
                     .write(
                             "costMatrix",
                             () ->

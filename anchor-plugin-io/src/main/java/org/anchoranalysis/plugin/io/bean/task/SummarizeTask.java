@@ -40,7 +40,7 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
@@ -52,7 +52,7 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
 
     @Override
     public Summarizer<S> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {

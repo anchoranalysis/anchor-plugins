@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 public class SharedObjectsFromChannelTask extends RasterTask {
@@ -72,8 +72,8 @@ public class SharedObjectsFromChannelTask extends RasterTask {
                             StackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
             inputImage.ifPresent(
                     image ->
-                            context.getOutputManager()
-                                    .getWriterCheckIfAllowed()
+                            context.getOutputter()
+                                    .writerSelective()
                                     .write(
                                             outputNameOriginal,
                                             () -> new ChannelGenerator("original",image)));
@@ -87,13 +87,13 @@ public class SharedObjectsFromChannelTask extends RasterTask {
 
     @Override
     public void startSeries(
-            BoundOutputManagerRouteErrors outputManager, ErrorReporter errorReporter)
+            Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
-    public void endSeries(BoundOutputManagerRouteErrors outputManager)
+    public void endSeries(Outputter outputter)
             throws JobExecutionException {
         // NOTHING TO DO
     }

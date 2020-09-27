@@ -35,8 +35,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 import org.anchoranalysis.test.image.io.TestReaderWriterUtilities;
 
 class HelperReadWriteObjects {
@@ -56,10 +56,10 @@ class HelperReadWriteObjects {
             throws SetOperationFailedException, BindFailedException {
         generator.assignElement(objects);
 
-        BoundOutputManagerRouteErrors outputManager =
-                OutputManagerFixture.outputManagerForRouterErrors(path);
+        Outputter outputter =
+                OutputterFixture.outputter(path);
 
-        outputManager.getWriterAlwaysAllowed().write("objects", () -> generator);
+        outputter.writerPermissive().write("objects", () -> generator);
     }
 
     public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {

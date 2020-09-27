@@ -47,7 +47,7 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
 
 /**
@@ -74,12 +74,12 @@ public class ImageAssignLabelTask<T>
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            return new SharedStateFilteredImageOutput<>(outputManager, imageLabeller);
+            return new SharedStateFilteredImageOutput<>(outputter, imageLabeller);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -146,11 +146,9 @@ public class ImageAssignLabelTask<T>
             String outputName,
             SharedStateFilteredImageOutput<T> sharedState) {
 
-        BoundOutputManagerRouteErrors outputSub = sharedState.getOutputManagerFor(groupIdentifier);
-
         // Copies the file into the output
-        outputSub
-                .getWriterAlwaysAllowed()
+        sharedState.getOutputterFor(groupIdentifier)
+                .writerPermissive()
                 .write(outputName, () -> new StackGenerator(true, "raster", stack));
     }
 }

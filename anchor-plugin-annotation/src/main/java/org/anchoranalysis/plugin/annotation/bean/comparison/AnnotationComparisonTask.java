@@ -52,7 +52,7 @@ import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
@@ -84,7 +84,7 @@ public class AnnotationComparisonTask<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             ConcurrencyPlan concurrencyPlan,
             ParametersExperiment params)
             throws ExperimentExecutionException {
@@ -92,7 +92,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         try {
             CSVAssignment assignmentCSV =
                     new CSVAssignment(
-                            outputManager, "byImage", hasDescriptiveSplit(), maxSplitGroups);
+                            outputter, "byImage", hasDescriptiveSplit(), maxSplitGroups);
             return new SharedState<>(
                     assignmentCSV, numLevelsGrouping, key -> assigner.groupForKey(key));
         } catch (AnchorIOException e) {
@@ -127,7 +127,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         }
 
         writeRGBOutlineStack(
-                "rgbOutline", params.getOutputManager(), input, assignment.get(), background);
+                "rgbOutline", params.getOutputter(), input, assignment.get(), background);
     }
 
     private Optional<Assignment> compareAndUpdate(
@@ -215,24 +215,24 @@ public class AnnotationComparisonTask<T extends Assignment>
 
     private void writeRGBOutlineStack(
             String outputName,
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             AnnotationComparisonInput<ProvidesStackInput> inputObject,
             Assignment assignment,
             DisplayStack background) {
 
-        if (!outputManager.outputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.outputsEnabled().isOutputAllowed(outputName)) {
             return;
         }
 
         ColorPool colorPool =
                 new ColorPool(
                         assignment.numberPaired(),
-                        outputManager.getOutputWriteSettings().getDefaultColorSetGenerator(),
+                        outputter.getSettings().getDefaultColorSetGenerator(),
                         colorSetGeneratorUnpaired,
                         replaceMatchesWithSolids);
 
-        outputManager
-                .getWriterCheckIfAllowed()
+        outputter
+                .writerSelective()
                 .write(
                         "rgbOutline",
                         () ->
@@ -263,7 +263,7 @@ public class AnnotationComparisonTask<T extends Assignment>
         // Write group statistics
         try {
             new CSVComparisonGroup<>(sharedStateC.allGroups())
-                    .writeGroupStats(context.getOutputManager());
+                    .writeGroupStats(context.getOutputter());
         } catch (AnchorIOException e) {
             throw new ExperimentExecutionException(e);
         }
