@@ -34,7 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,7 +43,7 @@ class EnergyStackHelper {
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
     public static void writeEnergyStackParams(
-            ImageInitParams soImage, Optional<String> energyParamsName, BoundIOContext context) {
+            ImageInitParams soImage, Optional<String> energyParamsName, InputOutputContext context) {
 
         try {
             if (soImage.stacks().keys().contains("energyStack")) {

@@ -52,7 +52,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Shared-state for an export-features class
@@ -80,7 +80,7 @@ public class SharedStateExportFeatures<S> {
     // Generates thumbnails, lazily if needed.
     private GeneratorSequenceIncrementalRerouteErrors<Stack> thumbnailGenerator;
 
-    private BoundIOContext context;
+    private InputOutputContext context;
 
     /**
      * Creates the shared state.
@@ -92,7 +92,7 @@ public class SharedStateExportFeatures<S> {
      * @throws AnchorIOException
      */
     public SharedStateExportFeatures(
-            ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, BoundIOContext context)
+            ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, InputOutputContext context)
             throws AnchorIOException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
@@ -115,7 +115,7 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     List<NamedBean<FeatureListProvider<T>>> features,
                     LabelHeaders metadataHeaders,
-                    BoundIOContext context)
+                    InputOutputContext context)
                     throws CreateException {
         return createForFeatures(
                 STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, context);
@@ -135,7 +135,7 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     NamedFeatureStore<T> featureStore,
                     LabelHeaders metadataHeaders,
-                    BoundIOContext context)
+                    InputOutputContext context)
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
@@ -164,7 +164,7 @@ public class SharedStateExportFeatures<S> {
                     ResultsWriterOutputNames outputNames,
                     FeatureTableCalculator<T> features,
                     LabelHeaders identifierHeaders,
-                    BoundIOContext context)
+                    InputOutputContext context)
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
@@ -178,7 +178,7 @@ public class SharedStateExportFeatures<S> {
     }
 
     public InputProcessContext<S> createInputProcessContext(
-            Optional<String> groupName, BoundIOContext context) {
+            Optional<String> groupName, InputOutputContext context) {
         return new InputProcessContext<>(
                 addResultsFor(), rowSource.get(), featureNames, groupName, context);
     }
@@ -196,7 +196,7 @@ public class SharedStateExportFeatures<S> {
     public void writeGroupedResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext context)
+            InputOutputContext context)
             throws AnchorIOException {
         groupedResults.writeResultsForAllGroups(featuresAggregate, includeGroups, context);
     }
@@ -230,7 +230,7 @@ public class SharedStateExportFeatures<S> {
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, BoundIOContext context) {
+    private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) {
         if (thumbnailGenerator == null) {
             thumbnailGenerator =
                     GENERATOR_SEQUENCE_FACTORY.createIncremental(

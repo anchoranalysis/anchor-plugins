@@ -34,13 +34,13 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureCalculatorRepeated {
 
     public static EnergyStack extractStack(
-            ProvidesStackInput inputObject, StackProvider stackEnergy, BoundIOContext context)
+            ProvidesStackInput inputObject, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {
         ImageInitParams paramsInit =
                 StackInputInitParamsCreator.createInitParams(inputObject, context);

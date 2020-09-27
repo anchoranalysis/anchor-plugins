@@ -36,7 +36,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
@@ -55,7 +55,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
     public abstract SharedStateExportFeatures<S> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<U>>> features,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException;
 
     /**

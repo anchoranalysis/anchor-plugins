@@ -36,8 +36,8 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
@@ -56,7 +56,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     public <S> S processInput(
             InputForMPPBean input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithEnergyStack<ImageInitParams, S> operation)
             throws OperationFailedException {
 
@@ -70,7 +70,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
     }
 
     public <S> S processInput(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams,
@@ -92,7 +92,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
             ImageInitParams imageParams,
             MPPInitParams mppParams,
             OperationWithEnergyStack<T, S> operation,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         try {
             EnergyStack energyStack = super.createEnergyStack(imageParams, context.getLogger());
@@ -110,7 +110,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     // General objects can be outputted
     private void outputSharedObjects(
-            MPPInitParams initParams, EnergyStack energyStack, BoundIOContext context)
+            MPPInitParams initParams, EnergyStack energyStack, InputOutputContext context)
             throws OutputWriteFailedException {
 
         super.outputSharedObjects(initParams, context);

@@ -42,7 +42,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
@@ -60,7 +60,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 
     @Override
     public String labelFor(
-            NoSharedState sharedState, ProvidesStackInput input, BoundIOContext context)
+            NoSharedState sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException {
 
         try {
@@ -73,7 +73,7 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
                             .calculatorSingleFromProvider(classifierProvider, "classifierProvider")
                             .calculate(new FeatureInputStack());
 
-            context.getLogReporter().logFormatted("Classification value = %f", classificationValue);
+            context.getMessageReporter().logFormatted("Classification value = %f", classificationValue);
 
             // If classification val is >= 0, then it is POSITIVE
             // If classification val is < 0, then it is NEGATIVE

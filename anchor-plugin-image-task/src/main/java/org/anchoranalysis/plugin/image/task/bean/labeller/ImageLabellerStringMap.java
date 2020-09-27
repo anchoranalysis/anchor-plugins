@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.shared.StringMap;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageLabellerStringMapInitParams;
 
 /**
@@ -67,7 +67,7 @@ public class ImageLabellerStringMap<T> extends ImageLabeller<ImageLabellerString
     public String labelFor(
             ImageLabellerStringMapInitParams<T> sharedState,
             ProvidesStackInput input,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         String firstId = filter.labelFor(sharedState.getInitParams(), input, context);
         return sharedState.getMap().get(firstId);

@@ -46,8 +46,8 @@ import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.BackgroundSubtractor;
 
 public class BackgroundSubtractShortTask extends RasterTask {
@@ -72,7 +72,7 @@ public class BackgroundSubtractShortTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
             throws JobExecutionException {
 
         ProgressReporter progressReporter = ProgressReporterNull.get();

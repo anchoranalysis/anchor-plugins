@@ -39,8 +39,8 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
@@ -78,11 +78,11 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
     }
 
     @Override
-    public void afterAllJobsAreExecuted(Summarizer<S> sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(Summarizer<S> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         try {
-            context.getLogReporter().log(sharedState.describe());
+            context.getMessageReporter().log(sharedState.describe());
         } catch (OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         }

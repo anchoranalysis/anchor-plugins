@@ -62,9 +62,9 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
@@ -154,7 +154,7 @@ public class ExportObjectsFromCSVTask
             throws JobExecutionException {
 
         FromCSVInputObject inputObject = input.getInputObject();
-        BoundIOContext context = input.context();
+        InputOutputContext context = input.context();
 
         try {
             IndexedCSVRows groupedRows =
@@ -168,7 +168,7 @@ public class ExportObjectsFromCSVTask
             MapGroupToRow mapGroup = groupedRows.get(fileID);
 
             if (mapGroup == null) {
-                context.getLogReporter()
+                context.getMessageReporter()
                         .logFormatted(
                                 "No matching rows in CSV file for id '%s' from '%s'",
                                 fileID, inputObject.pathForBinding());
@@ -191,7 +191,7 @@ public class ExportObjectsFromCSVTask
     }
 
     @Override
-    public void afterAllJobsAreExecuted(FromCSVSharedState sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(FromCSVSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         // NOTHING TO DO
     }
@@ -217,7 +217,7 @@ public class ExportObjectsFromCSVTask
             ImageInitParams imageInit,
             MapGroupToRow mapGroup,
             Set<String> groupNameSet,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
 
         try {
@@ -229,7 +229,7 @@ public class ExportObjectsFromCSVTask
             // Loop through each group, and output a series of TIFFs, where set of objects is shown
             // on a successive image, cropped appropriately
             for (String groupName : groupNameSet) {
-                context.getLogReporter().logFormatted("Processing group '%s'", groupName);
+                context.getMessageReporter().logFormatted("Processing group '%s'", groupName);
 
                 processRows(mapGroup.get(groupName), groupName, objects, background, context);
             }
@@ -238,7 +238,7 @@ public class ExportObjectsFromCSVTask
         }
     }
     
-    private void processRows(Collection<CSVRow> rows, String groupName, ObjectCollectionRTree objects, DisplayStack background, BoundIOContext context) {
+    private void processRows(Collection<CSVRow> rows, String groupName, ObjectCollectionRTree objects, DisplayStack background, InputOutputContext context) {
         if (rows != null && !rows.isEmpty()) {
             outputGroup(
                     String.format("group_%s", groupName),
@@ -247,7 +247,7 @@ public class ExportObjectsFromCSVTask
                     background,
                     context.getOutputter());
         } else {
-            context.getLogReporter().logFormatted("No matching rows for group '%s'", groupName);                    
+            context.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);                    
         }        
     }
 

@@ -45,8 +45,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjects;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -121,7 +121,7 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     }
 
     @Override
-    public void afterAllJobsAreExecuted(CSVWriter writer, BoundIOContext context)
+    public void afterAllJobsAreExecuted(CSVWriter writer, InputOutputContext context)
             throws ExperimentExecutionException {
         writer.close();
     }

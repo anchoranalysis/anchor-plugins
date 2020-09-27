@@ -53,8 +53,8 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
@@ -120,7 +120,7 @@ public class FormatConverterTask extends RasterTask {
             NamedChannelsInput inputObjectUntyped,
             int seriesIndex,
             int numSeries,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         try {
@@ -192,7 +192,7 @@ public class FormatConverterTask extends RasterTask {
     }
 
     private ChannelGetter maybeAddFilter(
-            NamedChannelsForSeries channelCollection, BoundIOContext context) {
+            NamedChannelsForSeries channelCollection, InputOutputContext context) {
 
         if (channelFilter != null) {
 

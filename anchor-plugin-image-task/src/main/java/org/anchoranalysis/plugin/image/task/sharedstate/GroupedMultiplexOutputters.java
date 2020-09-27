@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /** A set of outputters, one for each group */
 class GroupedMultiplexOutputters {

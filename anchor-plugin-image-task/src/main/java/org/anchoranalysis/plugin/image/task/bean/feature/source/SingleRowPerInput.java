@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
@@ -66,7 +66,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     public SharedStateExportFeatures<FeatureList<S>> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<S>>> features,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
         return SharedStateExportFeatures.createForFeatures(features, metadataHeaders, context);
     }

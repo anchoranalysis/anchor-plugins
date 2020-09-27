@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
 public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> {
@@ -75,7 +75,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
     public String labelFor(
             ImageCSVLabellerInitParams sharedState,
             ProvidesStackInput input,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         String label = sharedState.getLabelMap().get(input.descriptiveName());
 

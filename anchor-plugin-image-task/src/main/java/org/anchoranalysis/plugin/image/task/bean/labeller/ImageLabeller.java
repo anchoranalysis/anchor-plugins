@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * @author Owen Feehan
@@ -60,6 +60,6 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      *
      * @param sharedState TODO
      */
-    public abstract String labelFor(T sharedState, ProvidesStackInput input, BoundIOContext context)
+    public abstract String labelFor(T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;
 }

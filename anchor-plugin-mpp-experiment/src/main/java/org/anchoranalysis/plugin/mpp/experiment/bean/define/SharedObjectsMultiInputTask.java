@@ -44,7 +44,7 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
@@ -83,7 +83,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     }
 
     private void outputFeatureTablesMultiplex(
-            ImageInitParams imageInitParams, BoundIOContext context)
+            ImageInitParams imageInitParams, InputOutputContext context)
             throws OperationFailedException {
 
         try {
@@ -105,7 +105,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
         return false;
     }
 
-    private void outputFeatureTables(ImageInitParams so, BoundIOContext context) {
+    private void outputFeatureTables(ImageInitParams so, InputOutputContext context) {
 
         for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
             try {
@@ -117,7 +117,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
         }
     }
 
-    private void outputFeatureTablesWithException(ImageInitParams so, BoundIOContext context)
+    private void outputFeatureTablesWithException(ImageInitParams so, InputOutputContext context)
             throws IOException {
         for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
 

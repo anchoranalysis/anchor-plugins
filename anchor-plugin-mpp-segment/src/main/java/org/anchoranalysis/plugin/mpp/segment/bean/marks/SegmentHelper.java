@@ -42,8 +42,8 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
@@ -58,7 +58,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 class SegmentHelper {
 
     public static void writeStacks(
-            ImageInitParams so, EnergyStack energyStack, BoundIOContext context) {
+            ImageInitParams so, EnergyStack energyStack, InputOutputContext context) {
         Outputter outputter = context.getOutputter();
 
         StacksOutputter.output(

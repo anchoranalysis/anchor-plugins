@@ -51,8 +51,8 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
@@ -134,7 +134,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
             SplitString descriptiveSplit,
-            BoundIOContext context,
+            InputOutputContext context,
             SharedState<T> sharedState)
             throws JobExecutionException {
 
@@ -185,10 +185,10 @@ public class AnnotationComparisonTask<T extends Assignment>
             IAddAnnotation<T> addAnnotation,
             SharedState<T> sharedStateC,
             SplitString descriptiveSplit,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
-        context.getLogReporter().log("Start processAcceptedAnnotation");
+        context.getMessageReporter().log("Start processAcceptedAnnotation");
 
         try {
             T assignment =
@@ -252,7 +252,7 @@ public class AnnotationComparisonTask<T extends Assignment>
     }
 
     @Override
-    public void afterAllJobsAreExecuted(SharedState<T> sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(SharedState<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         @SuppressWarnings("unchecked")

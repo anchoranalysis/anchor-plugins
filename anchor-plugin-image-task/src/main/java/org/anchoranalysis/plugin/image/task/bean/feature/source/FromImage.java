@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ThumbnailFromStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
@@ -126,7 +126,7 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
-            ProvidesStackInput inputObject, BoundIOContext context)
+            ProvidesStackInput inputObject, InputOutputContext context)
             throws NamedFeatureCalculateException {
         try {
             return new FeatureCalculatorFromProvider<>(

@@ -67,8 +67,8 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
@@ -209,7 +209,7 @@ public class SegmentInstanceWithModelTask<T>
 
     @Override
     public void afterAllJobsAreExecuted(
-            SharedStateSegmentInstance<T> sharedState, BoundIOContext context)
+            SharedStateSegmentInstance<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         try {
             sharedState.closeAnyOpenIO();
@@ -314,7 +314,7 @@ public class SegmentInstanceWithModelTask<T>
         }
     }
 
-    private void initializeBeans(BoundIOContext context) throws InitException {
+    private void initializeBeans(InputOutputContext context) throws InitException {
         ImageInitParams params = ImageInitParamsFactory.create(context);
         segment.initRecursive(params, context.getLogger());
     }
