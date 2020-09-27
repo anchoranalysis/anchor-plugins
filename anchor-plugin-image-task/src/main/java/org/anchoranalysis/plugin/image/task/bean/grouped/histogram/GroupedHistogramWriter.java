@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 class GroupedHistogramWriter {
 
@@ -40,7 +40,7 @@ class GroupedHistogramWriter {
     }
 
     public void writeHistogramToFile(
-            Histogram histogram, String outputName, BoundIOContext context) {
+            Histogram histogram, String outputName, InputOutputContext context) {
         generator.assignElement(histogram);
 
         context.getOutputter().writerSelective().write(outputName, () -> generator);

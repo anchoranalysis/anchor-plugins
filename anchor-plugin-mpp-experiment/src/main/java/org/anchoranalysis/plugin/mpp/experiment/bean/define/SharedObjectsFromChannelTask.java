@@ -42,8 +42,8 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 public class SharedObjectsFromChannelTask extends RasterTask {
@@ -56,7 +56,7 @@ public class SharedObjectsFromChannelTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
             throws JobExecutionException {
 
         NamedChannelsForSeries ncc;

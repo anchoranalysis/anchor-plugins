@@ -37,8 +37,8 @@ import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -103,13 +103,13 @@ public abstract class GroupMapByName<S, T> {
      * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
      *     one group-names exist
      */
-    public void outputGroupedData(ConsistentChannelChecker channelChecker, BoundIOContext context)
+    public void outputGroupedData(ConsistentChannelChecker channelChecker, InputOutputContext context)
             throws IOException {
 
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
-        CacheSubdirectoryContext subdirectoryCache =
-                new CacheSubdirectoryContext(context, manifestFolderDescription);
+        IntputOutputContextSubdirectoryCache subdirectoryCache =
+                new IntputOutputContextSubdirectoryCache(context, manifestFolderDescription);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory
@@ -133,6 +133,6 @@ public abstract class GroupMapByName<S, T> {
             String outputName,
             T agg,
             ConsistentChannelChecker channelChecker,
-            BoundIOContext context)
+            InputOutputContext context)
             throws IOException;
 }

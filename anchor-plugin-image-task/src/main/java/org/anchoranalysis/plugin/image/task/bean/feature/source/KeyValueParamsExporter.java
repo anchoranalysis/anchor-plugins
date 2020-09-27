@@ -34,15 +34,15 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 /** Exports a ResultVector as a KeyValueParams */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class KeyValueParamsExporter {
 
     public static void export(
-            FeatureNameList featureNames, ResultsVector rv, BoundIOContext context) {
+            FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
         KeyValueParams kvp = convert(featureNames, rv, context.getLogger());
         writeKeyValueParams(kvp, context.getOutputter());
     }

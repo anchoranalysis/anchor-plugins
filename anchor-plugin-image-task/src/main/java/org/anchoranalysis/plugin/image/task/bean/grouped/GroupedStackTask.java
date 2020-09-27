@@ -47,8 +47,8 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.All;
 import org.anchoranalysis.plugin.image.task.bean.grouped.selectchannels.FromStacks;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
@@ -102,7 +102,7 @@ public abstract class GroupedStackTask<S, T>
             throws JobExecutionException {
 
         ProvidesStackInput inputObject = params.getInputObject();
-        BoundIOContext context = params.context();
+        InputOutputContext context = params.context();
 
         // Extract a group name
         Optional<String> groupName =
@@ -115,7 +115,7 @@ public abstract class GroupedStackTask<S, T>
 
     @Override
     public void afterAllJobsAreExecuted(
-            GroupedSharedState<S, T> sharedState, BoundIOContext context)
+            GroupedSharedState<S, T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         try {
@@ -144,7 +144,7 @@ public abstract class GroupedStackTask<S, T>
             NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<S, T> sharedState,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException;
 
     private Optional<String> extractGroupName(Optional<Path> path, boolean debugEnabled)

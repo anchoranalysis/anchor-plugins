@@ -45,8 +45,8 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
@@ -116,13 +116,13 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
-            BoundIOContext context)
+            InputOutputContext context)
             throws SegmentationFailedException {
         ListUpdatableMarkSetCollection updatableMarkSetCollection =
                 new ListUpdatableMarkSetCollection();
 
         try {
-            MemoryUtilities.logMemoryUsage("Start of segment", context.getLogReporter());
+            MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
 
             return define.processInput(
                     context,
@@ -147,20 +147,20 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             EnergyStack energyStack,
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             Optional<KeyValueParams> keyValueParams,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         try {
             init(mppInit, context.getLogger());
 
             SegmentHelper.writeStacks(mppInit.getImage(), energyStack, context);
 
-            context.getLogReporter()
+            context.getMessageReporter()
                     .log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap());
 
             // We initialize the feedback receiver
             feedbackReceiver.initRecursive(mppInit, context.getLogger());
 
-            MemoryUtilities.logMemoryUsage("Before findOpt", context.getLogReporter());
+            MemoryUtilities.logMemoryUsage("Before findOpt", context.getMessageReporter());
 
             new UpdateMarkSet(mppInit, energyStack, updatableMarkSetCollection, context.getLogger())
                     .apply();

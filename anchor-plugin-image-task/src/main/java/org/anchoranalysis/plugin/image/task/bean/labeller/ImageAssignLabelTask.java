@@ -46,8 +46,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
 
 /**
@@ -116,7 +116,7 @@ public class ImageAssignLabelTask<T>
     }
 
     private static Stack createFromProviderWith(
-            StackProvider provider, ProvidesStackInput stack, BoundIOContext context)
+            StackProvider provider, ProvidesStackInput stack, InputOutputContext context)
             throws CreateException {
         try {
             provider.initRecursive(
@@ -135,7 +135,7 @@ public class ImageAssignLabelTask<T>
 
     @Override
     public void afterAllJobsAreExecuted(
-            SharedStateFilteredImageOutput<T> sharedState, BoundIOContext context)
+            SharedStateFilteredImageOutput<T> sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         sharedState.close();
     }

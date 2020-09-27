@@ -52,8 +52,8 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
@@ -82,7 +82,7 @@ public class ScaleTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, BoundIOContext context)
+            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
             throws JobExecutionException {
 
         // Input
@@ -107,7 +107,7 @@ public class ScaleTask extends RasterTask {
         populateAndOutputCollections(soImage, context);
     }
 
-    private void populateAndOutputCollections(ImageInitParams soImage, BoundIOContext context)
+    private void populateAndOutputCollections(ImageInitParams soImage, InputOutputContext context)
             throws JobExecutionException {
         // Our output collections
         NamedStacks stackCollection = new NamedStacks();
@@ -131,7 +131,7 @@ public class ScaleTask extends RasterTask {
             NamedProvider<Stack> stackCollection,
             String outputSecondLevelKey,
             String outputName,
-            BoundIOContext context) {
+            InputOutputContext context) {
         Outputter outputter = context.getOutputter();
 
         StacksOutputter.output(
@@ -149,7 +149,7 @@ public class ScaleTask extends RasterTask {
             ImageInitParams params,
             NamedStacks stackCollection,
             NamedStacks stackCollectionMIP,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         Set<String> channelNames = params.stacks().keys();

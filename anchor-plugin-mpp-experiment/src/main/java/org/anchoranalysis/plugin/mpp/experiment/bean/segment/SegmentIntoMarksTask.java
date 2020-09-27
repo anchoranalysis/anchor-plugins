@@ -52,8 +52,8 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
 import org.anchoranalysis.mpp.mark.MarkCollection;
@@ -177,7 +177,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     }
 
     @Override
-    public void afterAllJobsAreExecuted(ExperimentState sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(ExperimentState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         sharedState.outputAfterAllTasksAreExecuted(context.getOutputter());
     }

@@ -36,7 +36,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
@@ -71,7 +71,7 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, RunningSum
             NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<Channel, RunningSumChannel> sharedState,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         ChannelSource source =

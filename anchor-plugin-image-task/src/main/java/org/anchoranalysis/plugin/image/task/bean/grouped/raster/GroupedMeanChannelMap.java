@@ -31,8 +31,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
@@ -54,17 +54,17 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             String outputName,
             RunningSumChannel agg,
             ConsistentChannelChecker channelChecker,
-            BoundIOContext context)
+            InputOutputContext context)
             throws IOException {
         VoxelDataType outputType = channelChecker.getChannelType();
         context.getOutputter().writerPermissive().write(outputName, () -> generatorWithMean(agg, outputType, outputName, context) );
     }
     
-    private static ChannelGenerator generatorWithMean(RunningSumChannel agg, VoxelDataType outputType, String channelName, BoundIOContext context) throws OutputWriteFailedException {
+    private static ChannelGenerator generatorWithMean(RunningSumChannel agg, VoxelDataType outputType, String channelName, InputOutputContext context) throws OutputWriteFailedException {
         try {
             Channel mean = agg.createMeanChannel(outputType);
             
-            context.getLogReporter()
+            context.getMessageReporter()
                     .logFormatted(
                             "Writing channel %s with %d items and numPixels>100=%d and outputType=%s",
                             channelName,

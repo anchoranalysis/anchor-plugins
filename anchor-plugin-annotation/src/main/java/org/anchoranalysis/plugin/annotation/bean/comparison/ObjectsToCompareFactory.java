@@ -38,7 +38,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
@@ -50,7 +50,7 @@ class ObjectsToCompareFactory {
             AnnotationComparisonInput<ProvidesStackInput> input,
             IAddAnnotation<?> addAnnotation,
             Dimensions dimensions,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         // Both objects need to be found
@@ -66,7 +66,7 @@ class ObjectsToCompareFactory {
             IAddAnnotation<?> addAnnotation,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
                 createFindable(left, input, dimensions, context.isDebugEnabled());

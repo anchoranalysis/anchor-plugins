@@ -56,8 +56,8 @@ import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
@@ -138,7 +138,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     @Override
-    public void afterAllJobsAreExecuted(NoSharedState sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         // NOTHING TO DO
     }
@@ -146,7 +146,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     private void outputGeneratorSequence(
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
-            BoundIOContext context) {
+            InputOutputContext context) {
         GeneratorSequenceIncrementalRerouteErrors<BoundedList<ObjectMask>> sequence =
                 GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
@@ -159,7 +159,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
         sequence.end();
     }
 
-    private void outputObjects(ImageInitParams paramsInit, BoundIOContext context)
+    private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)
             throws OperationFailedException {
 
         try {

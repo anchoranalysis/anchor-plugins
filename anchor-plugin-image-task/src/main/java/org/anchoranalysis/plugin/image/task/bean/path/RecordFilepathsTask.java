@@ -42,8 +42,8 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
 
@@ -96,7 +96,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
     }
 
     @Override
-    public void afterAllJobsAreExecuted(StringBuilder sharedState, BoundIOContext context)
+    public void afterAllJobsAreExecuted(StringBuilder sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         context.getOutputter()

@@ -53,7 +53,7 @@ import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Calculates feature or feature values, adding a energyStack (optionally) from either provider or
@@ -73,7 +73,7 @@ public class FeatureCalculatorFromProvider<T extends FeatureInputEnergy> {
     public FeatureCalculatorFromProvider(
             ProvidesStackInput stackInput,
             Optional<StackProvider> stackEnergy,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         super();
         this.initParams = StackInputInitParamsCreator.createInitParams(stackInput, context);

@@ -54,7 +54,7 @@ import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 
@@ -130,7 +130,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     }
 
     private Histogram filterHistogramFromProvider(
-            Histogram inputtedHistogram, BoundIOContext context) throws OperationFailedException {
+            Histogram inputtedHistogram, InputOutputContext context) throws OperationFailedException {
 
         HistogramProvider providerDuplicated = histogram.duplicateBean();
 
@@ -144,7 +144,7 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
-    private ImageInitParams createImageInitParams(Histogram inputtedHist, BoundIOContext context)
+    private ImageInitParams createImageInitParams(Histogram inputtedHist, InputOutputContext context)
             throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);

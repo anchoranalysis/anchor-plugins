@@ -44,8 +44,8 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 // At the moment, we don't check if the name number of rows/columns exist
 public class CombineCSVTask extends Task<FileInput, CSVWriter> {
@@ -123,7 +123,7 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
     }
 
     @Override
-    public void afterAllJobsAreExecuted(CSVWriter writer, BoundIOContext context)
+    public void afterAllJobsAreExecuted(CSVWriter writer, InputOutputContext context)
             throws ExperimentExecutionException {
         if (writer != null) {
             writer.close();

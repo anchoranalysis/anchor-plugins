@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.initializable.params.NullInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -104,7 +104,7 @@ class OptimizationSchemeFixture {
             MarkFactory markFactory,
             EnergySchemeWithSharedFeatures energyScheme,
             EnergyStack energyStack,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
 
         MarkWithIdentifierFactory factoryWithidentifier =

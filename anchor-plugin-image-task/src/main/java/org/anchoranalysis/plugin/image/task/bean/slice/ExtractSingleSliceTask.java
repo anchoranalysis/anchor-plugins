@@ -53,9 +53,9 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.Outputter;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice;
 
@@ -128,7 +128,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
     @Override
     public void afterAllJobsAreExecuted(
-            SharedStateSelectedSlice sharedState, BoundIOContext context)
+            SharedStateSelectedSlice sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         sharedState.close();
     }

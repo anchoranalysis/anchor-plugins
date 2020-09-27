@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
@@ -54,7 +54,7 @@ public class SharedStateSegmentInstance<T> {
             ConcurrentModelPool<T> modelPool,
             FeatureTableCalculator<FeatureInputSingleObject> featureTable,
             LabelHeaders identifierHeaders,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
         this.modelPool = modelPool;
         this.features =
@@ -66,7 +66,7 @@ public class SharedStateSegmentInstance<T> {
     }
 
     public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>>
-            createInputProcessContext(Optional<String> groupName, BoundIOContext context) {
+            createInputProcessContext(Optional<String> groupName, InputOutputContext context) {
         return features.createInputProcessContext(groupName, context);
     }
 

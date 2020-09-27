@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
@@ -60,7 +60,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
             ObjectsToCompare objectsToCompare,
             Dimensions dimensions,
             boolean useMIP,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
         try {
             SharedFeaturesInitParams soFeature =
