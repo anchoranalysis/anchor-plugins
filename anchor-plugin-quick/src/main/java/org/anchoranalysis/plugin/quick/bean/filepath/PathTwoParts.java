@@ -29,9 +29,7 @@ package org.anchoranalysis.plugin.quick.bean.filepath;
 import java.nio.file.Path;
 import org.anchoranalysis.io.error.AnchorIOException;
 
-/** 
- * Separates a path into two parts
- */
+/** Separates a path into two parts */
 class PathTwoParts {
     private Path first;
     private Path second;

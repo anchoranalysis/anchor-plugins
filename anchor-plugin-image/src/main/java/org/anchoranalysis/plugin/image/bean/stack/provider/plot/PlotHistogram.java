@@ -47,7 +47,7 @@ import org.anchoranalysis.plot.PlotInstance;
 import org.anchoranalysis.plot.bean.colorscheme.PlotColorScheme;
 import org.anchoranalysis.plot.index.LinePlot;
 
-/** 
+/**
  * Plots a histogram onto a stack.
  *
  * @author Owen Feehan
@@ -71,8 +71,7 @@ public class PlotHistogram extends StackProvider {
             PlotInstance plot =
                     createPlot(histogramItems.iterator(), Optional.empty(), Optional.empty());
 
-            BufferedImage image =
-                    plot.createBufferedImage(size.getWidth(), size.getHeight());
+            BufferedImage image = plot.createBufferedImage(size.getWidth(), size.getHeight());
 
             return CreateStackFromBufferedImage.create(image);
 
@@ -102,6 +101,7 @@ public class PlotHistogram extends StackProvider {
     }
 
     private static List<HistogramBin> binsFromHistogram(Histogram histogram) {
-        return FunctionalList.mapRangeToList(1, histogram.size(), index -> new HistogramBin(index, histogram.getCount(index)) );
+        return FunctionalList.mapRangeToList(
+                1, histogram.size(), index -> new HistogramBin(index, histogram.getCount(index)));
     }
 }

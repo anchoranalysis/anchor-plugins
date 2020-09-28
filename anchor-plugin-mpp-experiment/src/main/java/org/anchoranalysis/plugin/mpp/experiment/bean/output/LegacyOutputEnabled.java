@@ -29,47 +29,45 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.output;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.NoOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.None;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
 import org.anchoranalysis.mpp.io.output.StackOutputKeys;
 
 /**
  * Legacy rules for whether outputs are enabled or not.
- * 
+ *
  * @author Owen Feehan
  * @deprecated Prefer another sub-class of {@link OutputEnabledRules}.
- *
  */
 public class LegacyOutputEnabled extends OutputEnabledRules {
 
     // BEAN PROPERTIES
     /** What's allowed or not - highest level outputs */
-    @BeanField @Getter @Setter private OutputAllowed outputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled outputEnabled = All.INSTANCE;
 
     /** What's allowed or not when outputting stacks */
-    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled stacksOutputEnabled = All.INSTANCE;
 
     /** What's allowed or not when outputting configurations */
-    @BeanField @Getter @Setter private OutputAllowed marksOutputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled marksOutputEnabled = All.INSTANCE;
 
     /** What's allowed or not when outputting object-collections */
-    @BeanField @Getter @Setter private OutputAllowed objects = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled objects = All.INSTANCE;
 
     /** What's allowed or not when outputting histograms */
-    @BeanField @Getter @Setter
-    private OutputAllowed histogramsOutputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled histogramsOutputEnabled = All.INSTANCE;
     // END BEAN PROPERTIES
 
     @Override
-    public OutputAllowed first() {
+    public OutputEnabled first() {
         // TODO Auto-generated method stub
         return outputEnabled;
     }
-    
+
     @Override
-    public OutputAllowed second(String outputName) {
+    public OutputEnabled second(String outputName) {
         switch (outputName) {
             case StackOutputKeys.STACK:
                 return getStacksOutputEnabled();
@@ -80,7 +78,7 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
             case StackOutputKeys.OBJECTS:
                 return getObjects();
             default:
-                return new NoOutputAllowed();
+                return new None();
         }
     }
 }

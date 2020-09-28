@@ -56,6 +56,8 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -112,9 +114,7 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
 
     @Override
     public SharedStateExportFeatures<S> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return source.createSharedState(
@@ -159,6 +159,13 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
         } catch (AnchorIOException | CreateException | IOException e) {
             throw new ExperimentExecutionException(e);
         }
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     @Override

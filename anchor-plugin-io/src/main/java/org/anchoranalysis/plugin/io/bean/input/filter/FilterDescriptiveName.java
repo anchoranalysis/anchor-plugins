@@ -60,13 +60,13 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(equals, contains);
 
         return filter.removeNonMatching(
-                input.inputObjects(params) // Existing collection
+                input.inputs(params) // Existing collection
                 );
     }
 }

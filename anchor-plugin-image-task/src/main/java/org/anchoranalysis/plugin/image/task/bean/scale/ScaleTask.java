@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
+import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,6 +53,8 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
@@ -74,15 +77,17 @@ public class ScaleTask extends RasterTask {
     // END BEAN PROPERTIES
 
     @Override
-    public void startSeries(
-            Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
+            NamedChannelsInput inputObject,
+            int seriesIndex,
+            int numSeries,
+            InputOutputContext context)
             throws JobExecutionException {
 
         // Input
@@ -136,8 +141,7 @@ public class ScaleTask extends RasterTask {
 
         StacksOutputter.output(
                 StacksOutputter.subset(
-                        stackCollection,
-                        outputter.outputsEnabled().second(outputSecondLevelKey)),
+                        stackCollection, outputter.outputsEnabled().second(outputSecondLevelKey)),
                 outputter.getChecked(),
                 outputName,
                 "",
@@ -194,8 +198,14 @@ public class ScaleTask extends RasterTask {
     }
 
     @Override
-    public void endSeries(Outputter outputter)
-            throws JobExecutionException {
+    public void endSeries(Outputter outputter) throws JobExecutionException {
         // NOTHING TO DO
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 }

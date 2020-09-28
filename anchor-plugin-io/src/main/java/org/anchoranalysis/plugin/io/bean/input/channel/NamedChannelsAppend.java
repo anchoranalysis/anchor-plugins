@@ -67,13 +67,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            Iterator<NamedChannelsInputPart> itr = input.inputObjects(params).iterator();
+            Iterator<NamedChannelsInputPart> itr = input.inputs(params).iterator();
 
             prm.incrWorker();
 

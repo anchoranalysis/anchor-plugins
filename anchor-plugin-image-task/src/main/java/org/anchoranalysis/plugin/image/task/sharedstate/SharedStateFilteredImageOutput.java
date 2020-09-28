@@ -65,8 +65,7 @@ public class SharedStateFilteredImageOutput<T> {
      * @param filter the filter must not yet have been inited()
      * @throws CreateException
      */
-    public SharedStateFilteredImageOutput(
-            Outputter baseOutputter, ImageLabeller<T> filter)
+    public SharedStateFilteredImageOutput(Outputter baseOutputter, ImageLabeller<T> filter)
             throws CreateException {
 
         this.baseOutputter = baseOutputter;

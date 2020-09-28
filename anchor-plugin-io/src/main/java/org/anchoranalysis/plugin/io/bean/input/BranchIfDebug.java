@@ -54,18 +54,18 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         if (params.isDebugModeActivated()) {
             if (inputDebug == null) {
                 // We pick the first
-                Iterator<T> all = input.inputObjects(params).iterator();
+                Iterator<T> all = input.inputs(params).iterator();
                 T firstItem = all.next();
                 return Collections.singletonList(firstItem);
             }
 
-            return inputDebug.inputObjects(params);
+            return inputDebug.inputs(params);
         }
-        return input.inputObjects(params);
+        return input.inputs(params);
     }
 }

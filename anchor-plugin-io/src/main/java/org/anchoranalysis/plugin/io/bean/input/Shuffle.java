@@ -49,9 +49,9 @@ public class Shuffle<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
-        List<T> list = input.inputObjects(params);
+        List<T> list = input.inputs(params);
         Collections.shuffle(list);
         return list;
     }

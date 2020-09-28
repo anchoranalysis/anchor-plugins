@@ -41,9 +41,10 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
 /**
  * When writing a Raster, an additional file is written to indicate the physical voxel sizes.
- * 
- * <p>The path of this file is the raster-path  with .xml appended, e.g. {@code rasterFilename.tif.xml}.
- * 
+ *
+ * <p>The path of this file is the raster-path with .xml appended, e.g. {@code
+ * rasterFilename.tif.xml}.
+ *
  * <p>It contans physical extents of a single voxel (the resolution).
  *
  * @author Owen Feehan
@@ -60,13 +61,19 @@ public class WriteResolutionXml extends RasterWriter {
     }
 
     @Override
-    public void writeStack(Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions) throws RasterIOException {
+    public void writeStack(
+            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            throws RasterIOException {
         writer.writeStack(stack, filePath, makeRGB, writeOptions);
         writeResolutionXml(filePath, stack.resolution());
     }
-    
+
     @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+    public void writeStackSeries(
+            StackSeries stackSeries,
+            Path filePath,
+            boolean makeRGB,
+            RasterWriteOptions writeOptions)
             throws RasterIOException {
         writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
 

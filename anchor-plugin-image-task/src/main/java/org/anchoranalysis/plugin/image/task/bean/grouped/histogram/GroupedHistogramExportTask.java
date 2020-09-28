@@ -37,6 +37,8 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
@@ -68,6 +70,13 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
 
     @BeanField @Getter @Setter private boolean csvIgnoreZeros = false;
     // END BEAN PROPERTIES
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
+    }
 
     @Override
     protected GroupMapByName<Histogram, Histogram> createGroupMap(

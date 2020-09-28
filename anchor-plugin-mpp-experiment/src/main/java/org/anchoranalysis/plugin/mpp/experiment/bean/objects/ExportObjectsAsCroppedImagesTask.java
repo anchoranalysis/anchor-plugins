@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -56,6 +57,8 @@ import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -130,9 +133,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
     @Override
     public NoSharedState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
@@ -141,6 +142,13 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         // NOTHING TO DO
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     private void outputGeneratorSequence(

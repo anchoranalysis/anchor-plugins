@@ -70,7 +70,7 @@ public class Dilate extends MorphologicalOperatorBase {
             BinaryVoxels<UnsignedByteBuffer> out =
                     MorphologicalDilation.dilate(
                             source.binaryVoxels(),
-                            SelectDimensionsFactory.of(do3D,zOnly),
+                            SelectDimensionsFactory.of(do3D, zOnly),
                             getIterations(),
                             background(),
                             getMinIntensityValue(),

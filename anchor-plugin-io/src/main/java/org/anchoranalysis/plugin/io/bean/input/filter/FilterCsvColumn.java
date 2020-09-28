@@ -62,10 +62,10 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         // Existing collection
-        List<T> in = input.inputObjects(params);
+        List<T> in = input.inputs(params);
 
         if (in.isEmpty()) {
             return in;

@@ -52,14 +52,14 @@ import org.anchoranalysis.plugin.quick.bean.input.filepathappend.AppendStack;
  * A particular type of NamedChannels which allows easier input of data, making several assumptions.
  *
  * <p>This is a convenient helper class to avoid a more complicated structure.
- * 
- * <p>Note that {@code regexAdjacent} applies for adjacent-channels and {@code regex} applies for appended
- * channels.
+ *
+ * <p>Note that {@code regexAdjacent} applies for adjacent-channels and {@code regex} applies for
+ * appended channels.
  */
 public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
 
     // START BEAN PROPERTIES
-    
+
     /**
      * This needs to be set if there is at least one adjacentChannel.
      *
@@ -122,10 +122,9 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     }
 
     @Override
-    public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
         createAppendedChannelsIfNecessary();
-        return append.inputObjects(params);
+        return append.inputs(params);
     }
 
     private void createAppendedChannelsIfNecessary() throws AnchorIOException {
@@ -144,12 +143,17 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
 
         InputManager<NamedChannelsInputPart> channels =
                 NamedChannelsCreator.create(
-                        fileInputManager(), mainChannelName, mainChannelIndex, additionalChannels, getRasterReader());
+                        fileInputManager(),
+                        mainChannelName,
+                        mainChannelIndex,
+                        additionalChannels,
+                        getRasterReader());
 
         channels =
                 appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
 
-        channels = appendChannels(channels, createFilePathGeneratorsAppend(), getRasterReaderAppend());
+        channels =
+                appendChannels(channels, createFilePathGeneratorsAppend(), getRasterReaderAppend());
 
         return channels;
     }

@@ -51,9 +51,9 @@ public class FilterIfDebug<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
-        List<T> unfiltered = input.inputObjects(params);
+        List<T> unfiltered = input.inputs(params);
 
         return params.getDebugModeParams()
                 .map(dir -> takeFirst(maybeFilteredList(unfiltered, dir)))

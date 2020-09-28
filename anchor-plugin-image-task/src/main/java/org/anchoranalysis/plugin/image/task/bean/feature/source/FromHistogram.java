@@ -130,7 +130,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     }
 
     private Histogram filterHistogramFromProvider(
-            Histogram inputtedHistogram, InputOutputContext context) throws OperationFailedException {
+            Histogram inputtedHistogram, InputOutputContext context)
+            throws OperationFailedException {
 
         HistogramProvider providerDuplicated = histogram.duplicateBean();
 
@@ -144,8 +145,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
-    private ImageInitParams createImageInitParams(Histogram inputtedHist, InputOutputContext context)
-            throws OperationFailedException {
+    private ImageInitParams createImageInitParams(
+            Histogram inputtedHist, InputOutputContext context) throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
         paramsInit.histograms().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);

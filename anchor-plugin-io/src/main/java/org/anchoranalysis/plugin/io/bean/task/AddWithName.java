@@ -33,8 +33,8 @@ import java.util.List;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 
 class AddWithName {
 

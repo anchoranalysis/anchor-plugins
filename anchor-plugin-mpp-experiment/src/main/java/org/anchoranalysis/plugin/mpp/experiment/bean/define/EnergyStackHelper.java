@@ -43,7 +43,9 @@ class EnergyStackHelper {
     // TODO make this more elegant in the design We make a special exception for writing our
     // energyStacks
     public static void writeEnergyStackParams(
-            ImageInitParams soImage, Optional<String> energyParamsName, InputOutputContext context) {
+            ImageInitParams soImage,
+            Optional<String> energyParamsName,
+            InputOutputContext context) {
 
         try {
             if (soImage.stacks().keys().contains("energyStack")) {

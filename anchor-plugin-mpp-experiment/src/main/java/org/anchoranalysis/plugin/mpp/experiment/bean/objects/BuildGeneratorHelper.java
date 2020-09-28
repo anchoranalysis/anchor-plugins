@@ -98,9 +98,7 @@ class BuildGeneratorHelper {
     }
 
     private void addGeneratorForEachStack(
-            NamedStacks stacks,
-            CombinedListGenerator<BoundedList<ObjectMask>> out,
-            boolean flatten)
+            NamedStacks stacks, CombinedListGenerator<BoundedList<ObjectMask>> out, boolean flatten)
             throws NamedProviderGetException {
 
         for (String key : stacks.keys()) {

@@ -118,8 +118,9 @@ public class Sobel extends GradientBase {
             oc.get().set(normedSobelOnKernel(kernel) * scaleFactor);
         }
     }
-    
-    private static <T extends RealType<T>> void readPointInto(OutOfBounds<T> ra, float[][] kernel, int kernelIndex) {
+
+    private static <T extends RealType<T>> void readPointInto(
+            OutOfBounds<T> ra, float[][] kernel, int kernelIndex) {
         ra.bck(1);
         kernel[kernelIndex][0] = ra.get().getRealFloat();
         ra.fwd(1);
@@ -128,7 +129,7 @@ public class Sobel extends GradientBase {
         kernel[kernelIndex][2] = ra.get().getRealFloat();
         ra.bck(1);
     }
-    
+
     private static float normedSobelOnKernel(float[][] kernel) {
         // https://en.wikipedia.org/wiki/Sobel_operator
         float gx =
@@ -146,9 +147,9 @@ public class Sobel extends GradientBase {
                         + 2 * kernel[1][2]
                         + 1 * kernel[2][2];
 
-        return (float) Math.sqrt(Math.pow(gx, 2.0) + Math.pow(gy, 2.0));        
+        return (float) Math.sqrt(Math.pow(gx, 2.0) + Math.pow(gy, 2.0));
     }
-    
+
     private static Channel createNewFloat(Dimensions dimensions) {
         return ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
     }

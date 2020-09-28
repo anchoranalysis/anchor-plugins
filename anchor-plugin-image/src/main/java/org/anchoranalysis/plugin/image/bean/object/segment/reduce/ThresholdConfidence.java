@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,6 @@ import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.rtree.SpatiallySeparate;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import com.google.common.collect.Lists;
 
 /**
  * Combines object-masks by projecting the maximum confidence-level for each voxel and thresholding.
@@ -84,24 +84,27 @@ public class ThresholdConfidence extends ReduceElements<ObjectMask> {
             return new ArrayList<>();
         }
 
-        SpatiallySeparate<WithConfidence<ObjectMask>> separate = new SpatiallySeparate<>( withConfidence -> withConfidence.getElement().boundingBox() );
-        
+        SpatiallySeparate<WithConfidence<ObjectMask>> separate =
+                new SpatiallySeparate<>(
+                        withConfidence -> withConfidence.getElement().boundingBox());
+
         List<WithConfidence<ObjectMask>> out = new ArrayList<>();
 
         // For efficiency on rasters sparsely populated with objects, process each
         //  spatially-connected set of objects separately.
-        for( Set<WithConfidence<ObjectMask>> split : separate.separate(elements) ) {
-            out.addAll( deriveObjects( Lists.newArrayList(split)) );
+        for (Set<WithConfidence<ObjectMask>> split : separate.separate(elements)) {
+            out.addAll(deriveObjects(Lists.newArrayList(split)));
         }
-        
+
         return out;
     }
-    
-    private List<WithConfidence<ObjectMask>> deriveObjects(List<WithConfidence<ObjectMask>> elements) throws OperationFailedException {
+
+    private List<WithConfidence<ObjectMask>> deriveObjects(
+            List<WithConfidence<ObjectMask>> elements) throws OperationFailedException {
         BoundedList<WithConfidence<ObjectMask>> boundedList =
                 BoundedList.createFromList(
                         elements, withConfidence -> withConfidence.getElement().boundingBox());
         return DeriveObjectsFromList.deriveObjects(
-                boundedList, elements, minConfidence, minNumberVoxels);        
+                boundedList, elements, minConfidence, minNumberVoxels);
     }
 }

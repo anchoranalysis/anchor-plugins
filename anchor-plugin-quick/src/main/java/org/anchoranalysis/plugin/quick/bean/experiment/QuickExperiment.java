@@ -48,8 +48,8 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
@@ -82,11 +82,11 @@ public class QuickExperiment<S> extends Experiment {
 
     @BeanField @Getter @Setter private String inputName = "stackInput";
 
-    @BeanField @Getter @Setter private OutputAllowed outputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled outputEnabled = All.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed objects = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled objects = All.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = AllOutputAllowed.INSTANCE;
+    @BeanField @Getter @Setter private OutputEnabled stacksOutputEnabled = All.INSTANCE;
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
@@ -114,7 +114,7 @@ public class QuickExperiment<S> extends Experiment {
     }
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
         delegate.associateXml(getXMLConfiguration());
 
@@ -160,14 +160,13 @@ public class QuickExperiment<S> extends Experiment {
             throw new ExperimentExecutionException(e);
         }
 
-        delegate.doExperiment(arguments);
+        delegate.executeExperiment(arguments);
     }
 
     @Override
     public boolean useDetailedLogging() {
         return delegate.useDetailedLogging();
     }
-
 
     private InputManager<MultiInput> createInputManagerBean(Path beanPath)
             throws ExperimentExecutionException {
@@ -188,8 +187,8 @@ public class QuickExperiment<S> extends Experiment {
 
         OutputManager outputManager = new OutputManager();
         outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputsEnabled( outputRules() );
-                
+        outputManager.setOutputsEnabled(outputRules());
+
         try {
             outputManager.localise(getLocalPath());
         } catch (BeanMisconfiguredException e) {

@@ -66,8 +66,7 @@ class WrapGenerators {
      */
     public static Generator<BoundedList<ObjectMask>> wrapObjectMask(
             Generator<ObjectMask> generator) {
-        return GeneratorBridge.createOneToMany(
-                generator, objects -> objects.list().stream());
+        return GeneratorBridge.createOneToMany(generator, objects -> objects.list().stream());
     }
 
     private static BoundingBox boundingBoxFromObject(

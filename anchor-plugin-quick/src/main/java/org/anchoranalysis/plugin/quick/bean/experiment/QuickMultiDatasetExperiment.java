@@ -144,7 +144,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(

@@ -60,12 +60,11 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEANS
 
     @Override
-    public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
 
         List<NamedChannelsInputPart> out = new ArrayList<>();
 
-        Iterator<FileInput> iteratorFiles = fileInput.inputObjects(params).iterator();
+        Iterator<FileInput> iteratorFiles = fileInput.inputs(params).iterator();
         while (iteratorFiles.hasNext()) {
             out.add(
                     new MapPart(

@@ -51,10 +51,9 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<FromCSVInputObject> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<FromCSVInputObject> inputs(InputManagerParams params) throws AnchorIOException {
 
-        Iterator<MultiInput> itr = input.inputObjects(params).iterator();
+        Iterator<MultiInput> itr = input.inputs(params).iterator();
 
         List<FromCSVInputObject> out = new ArrayList<>();
 

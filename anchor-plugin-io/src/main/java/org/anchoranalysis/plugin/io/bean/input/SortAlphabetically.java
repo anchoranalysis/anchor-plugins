@@ -51,11 +51,11 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         List<T> list = new ArrayList<>();
 
-        Iterator<T> itr = input.inputObjects(params).iterator();
+        Iterator<T> itr = input.inputs(params).iterator();
         while (itr.hasNext()) {
             list.add(itr.next());
         }

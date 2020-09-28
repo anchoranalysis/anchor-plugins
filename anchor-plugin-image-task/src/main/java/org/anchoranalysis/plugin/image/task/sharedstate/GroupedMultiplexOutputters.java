@@ -41,8 +41,7 @@ class GroupedMultiplexOutputters {
 
     private Map<String, Outputter> map;
 
-    public GroupedMultiplexOutputters(
-            Outputter baseOutputter, Set<String> groups) {
+    public GroupedMultiplexOutputters(Outputter baseOutputter, Set<String> groups) {
 
         map = new TreeMap<>();
 

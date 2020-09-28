@@ -44,6 +44,8 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
@@ -54,6 +56,13 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
     @BeanField @Getter @Setter
     private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
     // END BEAN PROPERTIES
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
+    }
 
     @Override
     public InputTypesExpected inputTypesExpected() {
@@ -70,8 +79,7 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
 
         Optional<CSVWriter> writer;
         try {
-            writer =
-                    CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
+            writer = CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
         } catch (AnchorIOException e1) {
             throw new JobExecutionException(e1);
         }

@@ -65,7 +65,7 @@ public class Files extends InputManager<FileInput> {
     }
 
     @Override
-    public List<FileInput> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<FileInput> inputs(InputManagerParams params) throws AnchorIOException {
         try {
             Collection<File> files = getFileProvider().create(params);
 

@@ -52,6 +52,8 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -86,8 +88,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
             MarkCollection marks =
                     segment.duplicateBean()
                             .segment(stackCollection, objects, paramsCreated, params.context());
-            writeVisualization(
-                    marks, params.getOutputter(), stackCollection, params.getLogger());
+            writeVisualization(marks, params.getOutputter(), stackCollection, params.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -101,6 +102,13 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(MultiInput.class);
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     private NamedStacks stacksFromInput(MultiInput inputObject) throws OperationFailedException {
@@ -141,10 +149,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     }
 
     private void writeVisualization(
-            MarkCollection marks,
-            Outputter outputter,
-            NamedStacks stackCollection,
-            Logger logger) {
+            MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
         outputter
                 .writerSelective()
                 .write("marks", () -> new XStreamGenerator<Object>(marks, Optional.of("marks")));
@@ -167,9 +172,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
 
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         ExperimentState experimentState = segment.createExperimentState();
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);

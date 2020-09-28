@@ -44,9 +44,9 @@ import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.FilePathBaseAppendToManager;
 
-/** 
+/**
  * A multi-input manager that makes various assumptions, so it can be more quickly specified.
- * 
+ *
  * @author Owen Feehan
  */
 public class MultiInputManagerQuick extends QuickBase<MultiInput> {
@@ -96,8 +96,8 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
     }
 
     @Override
-    public List<MultiInput> inputObjects(InputManagerParams params) throws AnchorIOException {
-        return inputManager.inputObjects(params);
+    public List<MultiInput> inputs(InputManagerParams params) throws AnchorIOException {
+        return inputManager.inputs(params);
     }
 
     private MultiInputManager createMulti() throws BeanMisconfiguredException {

@@ -85,7 +85,7 @@ public class CopyFilesExperiment extends Experiment {
     // END BEAN PROPERTIES
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         // Determine a destination for the output, and create a corresponding logger

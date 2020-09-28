@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,8 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.RasterIOException;
@@ -33,25 +35,25 @@ import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Uses different raster-writers under different sets of conditions.
- * 
- * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
- * 
- * @author Owen Feehan
  *
+ * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
+ *
+ * @author Owen Feehan
  */
 public class MultiplexWriter extends RasterWriter {
 
     /** Default writer, if a more specific writer is not specified for a condition. */
     @BeanField @Getter @Setter private RasterWriter writer;
-    
-    /** Writer employed if a stack is a one or three-channeled image, that is <b>not 3D</b>, and not RGB. */
+
+    /**
+     * Writer employed if a stack is a one or three-channeled image, that is <b>not 3D</b>, and not
+     * RGB.
+     */
     @BeanField @OptionalBean @Getter @Setter private RasterWriter whenOneOrThreeChannels;
-    
+
     /** Writer employed if a stack is a three-channeled RGB image and is <b>not 3D</b>. */
     @BeanField @OptionalBean @Getter @Setter private RasterWriter whenRGB;
 
@@ -61,20 +63,25 @@ public class MultiplexWriter extends RasterWriter {
     }
 
     @Override
-    public void writeStack(Stack stack, Path filePath, boolean makeRGB,
-            RasterWriteOptions writeOptions) throws RasterIOException {
+    public void writeStack(
+            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            throws RasterIOException {
         selectDelegate(writeOptions).writeStack(stack, filePath, makeRGB, writeOptions);
     }
 
     @Override
-    public void writeStackSeries(StackSeries stackSeries, Path filePath, boolean makeRGB,
-            RasterWriteOptions writeOptions) throws RasterIOException {
+    public void writeStackSeries(
+            StackSeries stackSeries,
+            Path filePath,
+            boolean makeRGB,
+            RasterWriteOptions writeOptions)
+            throws RasterIOException {
         selectDelegate(writeOptions).writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
     }
-    
+
     private RasterWriter selectDelegate(RasterWriteOptions writeOptions) {
         if (writeOptions.isAlways2D()) {
-            
+
             if (writeOptions.isRgb()) {
                 return whenRGB;
             } else if (writeOptions.isAlwaysOneOrThreeChannels()) {
@@ -82,7 +89,7 @@ public class MultiplexWriter extends RasterWriter {
             } else {
                 return writer;
             }
-            
+
         } else {
             return writer;
         }

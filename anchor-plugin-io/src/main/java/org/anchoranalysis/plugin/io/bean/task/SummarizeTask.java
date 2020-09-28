@@ -52,9 +52,7 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
 
     @Override
     public Summarizer<S> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         if (params.isDetailedLogging()) {
@@ -66,8 +64,7 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
     }
 
     @Override
-    public void doJobOnInput(InputBound<T, Summarizer<S>> params)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<T, Summarizer<S>> params) throws JobExecutionException {
         try {
             params.getSharedState().add(extractObjectForSummary(params.getInputObject()));
         } catch (OperationFailedException e) {

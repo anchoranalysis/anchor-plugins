@@ -97,13 +97,12 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<NamedChannelsInput> inputs(InputManagerParams params) throws AnchorIOException {
 
         GroupFilesMap map = new GroupFilesMap();
 
         // Iterate through each file, match against the reg-exp and populate a hash-map
-        Iterator<FileInput> itrFiles = fileInput.inputObjects(params).iterator();
+        Iterator<FileInput> itrFiles = fileInput.inputs(params).iterator();
         while (itrFiles.hasNext()) {
 
             FileInput f = itrFiles.next();

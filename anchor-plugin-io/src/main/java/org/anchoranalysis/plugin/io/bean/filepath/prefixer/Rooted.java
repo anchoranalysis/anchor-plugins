@@ -36,7 +36,7 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate
@@ -56,7 +56,7 @@ public class Rooted extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerParams context)
+            NamedPath path, String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
 
         FilePathPrefix fpp =
@@ -83,7 +83,7 @@ public class Rooted extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context)
+    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
         FilePathPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
         fpp.setFolderPath(folderPathOut(fpp.getFolderPath(), context.isDebugMode()));
