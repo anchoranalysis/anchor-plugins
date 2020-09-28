@@ -36,7 +36,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathPrefixerAvoidResolve;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
@@ -72,7 +72,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            NamedPath path, String experimentIdentifier, FilePathPrefixerParams context)
+            NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
 
         createDelegateIfNeeded();
@@ -82,7 +82,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix rootFolderPrefix(
-            String experimentIdentifier, FilePathPrefixerParams context)
+            String experimentIdentifier, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
 
         createDelegateIfNeeded();

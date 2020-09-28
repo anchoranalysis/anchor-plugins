@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean;
 
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -68,9 +70,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
 
     @Override
     public S beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, params);
     }
@@ -78,10 +78,10 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     @Override
     public void doJobOnInput(InputBound<T, S> input) throws JobExecutionException {
 
-        Class<? extends InputFromManager> inputObjClass = input.getInputObject().getClass();
+        Class<? extends InputFromManager> inputObjectClass = input.getInputObject().getClass();
 
         InputTypesExpected expectedFromDelegate = task.inputTypesExpected();
-        if (expectedFromDelegate.doesClassInheritFromAny(inputObjClass)) {
+        if (expectedFromDelegate.doesClassInheritFromAny(inputObjectClass)) {
             // All good, the delegate happily accepts our type without change
             doJobWithNamedChannelInput(input);
         } else if (expectedFromDelegate.doesClassInheritFromAny(MultiInput.class)) {
@@ -92,7 +92,7 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
             throw new JobExecutionException(
                     String.format(
                             "Cannot pass or convert the input-type (%s) to match the delegate's expected input-type:%n%s",
-                            inputObjClass, expectedFromDelegate));
+                            inputObjectClass, expectedFromDelegate));
         }
     }
 
@@ -118,6 +118,11 @@ public class ConvertNamedChannelsTask<T extends NamedChannelsInput, S, U extends
     @Override
     public void replaceTask(Task<U, S> taskToReplace) throws OperationFailedException {
         this.task = taskToReplace;
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        return task.defaultOutputs();
     }
 
     private void doJobWithNamedChannelInput(InputBound<T, S> input) throws JobExecutionException {

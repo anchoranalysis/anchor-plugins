@@ -39,6 +39,8 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -52,9 +54,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
 
     @Override
     public AggregateSharedState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new AggregateSharedState();
@@ -64,8 +64,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     }
 
     @Override
-    public void doJobOnInput(
-            InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
+    public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
             throws JobExecutionException {
 
         Optional<ImageAnnotation> ann = createFromInputObject(params.getInputObject());
@@ -73,7 +72,8 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     }
 
     @Override
-    public void afterAllJobsAreExecuted(AggregateSharedState sharedState, InputOutputContext context)
+    public void afterAllJobsAreExecuted(
+            AggregateSharedState sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
 
         context.getOutputter()
@@ -107,5 +107,12 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(AnnotationWithStrategy.class);
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 }

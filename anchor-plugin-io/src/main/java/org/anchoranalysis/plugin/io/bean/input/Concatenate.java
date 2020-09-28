@@ -50,7 +50,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
@@ -58,7 +58,7 @@ public class Concatenate<T extends InputFromManager> extends InputManager<T> {
             ArrayList<T> listOut = new ArrayList<>();
 
             for (InputManager<T> inputManager : list) {
-                listOut.addAll(inputManager.inputObjects(params));
+                listOut.addAll(inputManager.inputs(params));
 
                 prm.incrWorker();
             }

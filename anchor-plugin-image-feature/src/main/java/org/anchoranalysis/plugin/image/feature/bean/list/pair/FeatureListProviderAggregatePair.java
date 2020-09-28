@@ -81,8 +81,7 @@ public abstract class FeatureListProviderAggregatePair
                         new First(featExst.duplicateBean()),
                         new Second(featExst.duplicateBean()),
                         new Merged(featExst.duplicateBean()));
-        PrependName.setNewNameOnFeature(
-                featOut, featExst.getFriendlyName(), prependString);
+        PrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
         return featOut;
     }
 

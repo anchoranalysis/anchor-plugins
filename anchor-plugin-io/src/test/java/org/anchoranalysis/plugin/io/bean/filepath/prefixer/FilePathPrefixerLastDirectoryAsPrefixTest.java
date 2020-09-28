@@ -43,8 +43,7 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
 
         Path root = mock(Path.class);
 
-        NamedPath path =
-                new NamedPath(Paths.get("/a/b/c/d/e/somefile.tif"), "somefile");
+        NamedPath path = new NamedPath(Paths.get("/a/b/c/d/e/somefile.tif"), "somefile");
 
         LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
         prefixer.setFilePathPrefixer(createDelegate(path, root));

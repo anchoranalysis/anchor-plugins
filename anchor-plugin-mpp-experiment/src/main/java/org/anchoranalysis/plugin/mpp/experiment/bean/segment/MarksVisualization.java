@@ -53,12 +53,9 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 class MarksVisualization {
 
     public static void write(
-            MarkCollection marks,
-            Outputter outputter,
-            DisplayStack backgroundStack)
+            MarkCollection marks, Outputter outputter, DisplayStack backgroundStack)
             throws OperationFailedException {
-        ColorIndex colorIndex =
-                outputter.getSettings().defaultColorIndexFor(marks.size());
+        ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
 
         WriterRouterErrors writeIfAllowed = outputter.writerSelective();
         ColoredMarksWithDisplayStack marksWithStack =

@@ -44,6 +44,8 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -62,9 +64,7 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
@@ -94,8 +94,7 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
     }
 
     @Override
-    public void doJobOnInput(InputBound<FileInput, CSVWriter> params)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<FileInput, CSVWriter> params) throws JobExecutionException {
 
         FileInput inputObject = params.getInputObject();
         CSVWriter writer = params.getSharedState();
@@ -128,5 +127,12 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
         if (writer != null) {
             writer.close();
         }
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 }

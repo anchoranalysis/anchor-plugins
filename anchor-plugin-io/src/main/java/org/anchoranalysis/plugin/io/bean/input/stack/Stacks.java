@@ -60,10 +60,9 @@ public class Stacks extends InputManager<StackSequenceInput> {
     }
 
     @Override
-    public List<StackSequenceInput> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<StackSequenceInput> inputs(InputManagerParams params) throws AnchorIOException {
         return FunctionalList.mapToList(
-                fileInput.inputObjects(params),
+                fileInput.inputs(params),
                 file ->
                         new StackCollectionFromFilesInputObject(
                                 file, getRasterReader(), useLastSeriesIndexOnly));

@@ -48,8 +48,7 @@ class CSVComparisonGroup<T extends Assignment> {
         writer.writeRow(annotationGroup.createValues());
     }
 
-    public void writeGroupStats(Outputter outputter)
-            throws AnchorIOException {
+    public void writeGroupStats(Outputter outputter) throws AnchorIOException {
 
         Optional<CSVWriter> writer =
                 CSVWriter.createFromOutputter("byGroup", outputter.getChecked());

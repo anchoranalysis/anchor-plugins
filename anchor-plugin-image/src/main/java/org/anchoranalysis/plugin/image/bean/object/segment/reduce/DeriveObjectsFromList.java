@@ -103,7 +103,7 @@ class DeriveObjectsFromList {
 
         for (WithConfidence<ObjectMask> withConfidence : elements) {
             int confidenceAsInt = convertConfidence.applyAsInt(withConfidence.getConfidence());
-            
+
             // Assign a value to the voxels only if it is greater than the existing-value
             channel.assignValue(confidenceAsInt)
                     .toObjectIf(

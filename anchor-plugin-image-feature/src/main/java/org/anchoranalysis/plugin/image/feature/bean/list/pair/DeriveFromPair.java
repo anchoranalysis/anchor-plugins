@@ -71,8 +71,7 @@ public class DeriveFromPair extends FeatureListProvider<FeatureInputPairObjects>
         FeatureDeriveFromPair featDelegate = createNewDelegateFeature();
         featDelegate.setItem(featExstDup);
 
-        PrependName.setNewNameOnFeature(
-                featDelegate, featExstDup.getFriendlyName(), prependString);
+        PrependName.setNewNameOnFeature(featDelegate, featExstDup.getFriendlyName(), prependString);
         return featDelegate;
     }
 

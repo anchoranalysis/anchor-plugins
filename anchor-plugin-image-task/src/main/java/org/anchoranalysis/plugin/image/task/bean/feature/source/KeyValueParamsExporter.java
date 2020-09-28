@@ -47,8 +47,7 @@ class KeyValueParamsExporter {
         writeKeyValueParams(kvp, context.getOutputter());
     }
 
-    private static void writeKeyValueParams(
-            KeyValueParams kvp, Outputter outputter) {
+    private static void writeKeyValueParams(KeyValueParams kvp, Outputter outputter) {
         outputter
                 .writerSelective()
                 .write("keyValueParams", () -> new KeyValueParamsGenerator(kvp, "keyValueParams"));

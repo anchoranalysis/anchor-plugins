@@ -53,11 +53,11 @@ public class Limit<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
 
         int i = 0;
 
-        List<T> list = input.inputObjects(params);
+        List<T> list = input.inputs(params);
 
         ListIterator<T> itr = list.listIterator();
         while (itr.hasNext()) {

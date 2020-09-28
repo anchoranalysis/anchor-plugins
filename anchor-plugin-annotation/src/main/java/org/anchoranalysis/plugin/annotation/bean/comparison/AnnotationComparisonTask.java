@@ -51,6 +51,8 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
@@ -84,15 +86,12 @@ public class AnnotationComparisonTask<T extends Assignment>
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         try {
             CSVAssignment assignmentCSV =
-                    new CSVAssignment(
-                            outputter, "byImage", hasDescriptiveSplit(), maxSplitGroups);
+                    new CSVAssignment(outputter, "byImage", hasDescriptiveSplit(), maxSplitGroups);
             return new SharedState<>(
                     assignmentCSV, numLevelsGrouping, key -> assigner.groupForKey(key));
         } catch (AnchorIOException e) {
@@ -220,7 +219,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             Assignment assignment,
             DisplayStack background) {
 
-        if (!outputter.outputsEnabled().isOutputAllowed(outputName)) {
+        if (!outputter.outputsEnabled().isOutputEnabled(outputName)) {
             return;
         }
 
@@ -272,5 +271,12 @@ public class AnnotationComparisonTask<T extends Assignment>
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 }

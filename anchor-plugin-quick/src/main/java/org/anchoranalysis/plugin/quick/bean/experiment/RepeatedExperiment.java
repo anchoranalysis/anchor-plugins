@@ -77,7 +77,7 @@ class RepeatedExperiment<T extends InputFromManager, S> {
         delegate.setTaskProcessor(taskProcessor);
         checkConfiguration(defaultInstances);
 
-        delegate.doExperiment(expArgs);
+        delegate.executeExperiment(expArgs);
     }
 
     private void checkConfiguration(BeanInstanceMap defaultInstances)

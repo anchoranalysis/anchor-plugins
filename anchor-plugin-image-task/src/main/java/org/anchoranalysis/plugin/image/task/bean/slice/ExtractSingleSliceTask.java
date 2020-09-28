@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -53,6 +54,8 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -82,9 +85,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
 
     @Override
     public SharedStateSelectedSlice beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateSelectedSlice(outputter);
@@ -116,10 +117,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInputObject(),
-                    energyStack,
-                    optimaSliceIndex,
-                    params.getOutputter());
+                    params.getInputObject(), energyStack, optimaSliceIndex, params.getOutputter());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -131,6 +129,13 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
             SharedStateSelectedSlice sharedState, InputOutputContext context)
             throws ExperimentExecutionException {
         sharedState.close();
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     /**
@@ -189,8 +194,7 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
         return stackCollection;
     }
 
-    private void outputSlices(
-            Outputter outputter, NamedStacks stackCollection)
+    private void outputSlices(Outputter outputter, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
                 stackCollection, outputter, OUTPUT_STACK_KEY, false);

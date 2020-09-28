@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a
@@ -70,14 +70,14 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context)
+    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
         return new FilePathPrefix(resolveExperimentAbsoluteRootOut(expName, context));
     }
 
     @Override
     public FilePathPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerParams context)
+            NamedPath path, String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
@@ -107,8 +107,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * @return a prefixer
      * @throws FilePathPrefixerException
      */
-    public FilePathPrefix outFilePrefixAvoidResolve(
-            NamedPath path, String experimentIdentifier)
+    public FilePathPrefix outFilePrefixAvoidResolve(NamedPath path, String experimentIdentifier)
             throws FilePathPrefixerException {
         return outFilePrefixFromPath(
                 path, rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath());
@@ -125,7 +124,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
             throws FilePathPrefixerException;
 
     /** The root of the experiment for outputting files */
-    private Path resolveExperimentAbsoluteRootOut(String expName, FilePathPrefixerParams context) {
+    private Path resolveExperimentAbsoluteRootOut(String expName, FilePathPrefixerContext context) {
 
         if (resolvedRoot == null) {
             resolvedRoot = selectResolvedPath(context).resolve(expName);
@@ -133,7 +132,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
         return resolvedRoot;
     }
 
-    private Path selectResolvedPath(FilePathPrefixerParams context) {
+    private Path selectResolvedPath(FilePathPrefixerContext context) {
 
         if (outPathPrefix.isEmpty()) {
             // If there's an outPathPrefix specified, then use it, otherwise a temporary directory

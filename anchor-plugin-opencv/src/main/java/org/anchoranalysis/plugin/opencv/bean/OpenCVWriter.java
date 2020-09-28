@@ -37,13 +37,11 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  * Writes a stack to the filesystem using OpenCV and a specified extension.
- * 
- * <p>Note that as initialization of OpenCV can take many seconds, this writer
- * is not recommended as a default writer for anchor's command-line usage, which
- * may wish to very quickly execute jobs.
- * 
- * @author Owen Feehan
  *
+ * <p>Note that as initialization of OpenCV can take many seconds, this writer is not recommended as
+ * a default writer for anchor's command-line usage, which may wish to very quickly execute jobs.
+ *
+ * @author Owen Feehan
  */
 public class OpenCVWriter extends OneOrThreeChannelsWriter {
 
@@ -52,9 +50,10 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
     }
 
     @Override
-    protected synchronized void writeStackAfterCheck(Stack stack, Path filePath) throws RasterIOException {
+    protected synchronized void writeStackAfterCheck(Stack stack, Path filePath)
+            throws RasterIOException {
         CVInit.blockUntilLoaded();
-        
+
         try {
             Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
         } catch (CreateException e) {

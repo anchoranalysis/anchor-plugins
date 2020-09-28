@@ -58,9 +58,8 @@ public class ConvertNamedChannelsToStack extends InputManager<StackSequenceInput
     // END BEAN PROPERTIES
 
     @Override
-    public List<StackSequenceInput> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
-        return FunctionalList.mapToList(input.inputObjects(params), this::convert);
+    public List<StackSequenceInput> inputs(InputManagerParams params) throws AnchorIOException {
+        return FunctionalList.mapToList(input.inputs(params), this::convert);
     }
 
     private StackSequenceInput convert(NamedChannelsInput in) {

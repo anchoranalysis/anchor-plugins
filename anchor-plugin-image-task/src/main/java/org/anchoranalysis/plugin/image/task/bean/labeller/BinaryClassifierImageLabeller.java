@@ -73,7 +73,8 @@ public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
                             .calculatorSingleFromProvider(classifierProvider, "classifierProvider")
                             .calculate(new FeatureInputStack());
 
-            context.getMessageReporter().logFormatted("Classification value = %f", classificationValue);
+            context.getMessageReporter()
+                    .logFormatted("Classification value = %f", classificationValue);
 
             // If classification val is >= 0, then it is POSITIVE
             // If classification val is < 0, then it is NEGATIVE

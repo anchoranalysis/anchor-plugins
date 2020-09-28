@@ -60,6 +60,7 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      *
      * @param sharedState TODO
      */
-    public abstract String labelFor(T sharedState, ProvidesStackInput input, InputOutputContext context)
+    public abstract String labelFor(
+            T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;
 }

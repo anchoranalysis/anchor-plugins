@@ -55,7 +55,7 @@ public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends Fil
         List<File> filesOut = new ArrayList<>();
 
         try {
-            List<AnnotationWithStrategy<T>> list = annotationInputManager.inputObjects(params);
+            List<AnnotationWithStrategy<T>> list = annotationInputManager.inputs(params);
             for (AnnotationWithStrategy<T> inp : list) {
 
                 filesOut.addAll(inp.deriveAssociatedFiles());

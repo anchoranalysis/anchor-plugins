@@ -37,8 +37,7 @@ import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 class NamingUtilities {
 
     public static Path filePathDiff(Path baseFolderPath, Path filePath) throws AnchorIOException {
-        PathDifference filePathDiff =
-                PathDifference.differenceFrom(baseFolderPath, filePath);
+        PathDifference filePathDiff = PathDifference.differenceFrom(baseFolderPath, filePath);
         return filePathDiff.combined();
     }
 

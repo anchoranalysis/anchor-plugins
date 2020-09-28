@@ -49,7 +49,8 @@ import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
-class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack,List<Contour>> {
+class ContourListGenerator
+        extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack, List<Contour>> {
 
     private final DisplayStack background;
     private final ColorIndex colorIndex;
@@ -66,14 +67,16 @@ class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksW
         assignElement(contours);
     }
 
-    public ContourListGenerator(DrawObject drawObject, ColorIndex colorIndex, DisplayStack background) {
-        super( createDelegate(drawObject));
+    public ContourListGenerator(
+            DrawObject drawObject, ColorIndex colorIndex, DisplayStack background) {
+        super(createDelegate(drawObject));
         this.background = background;
         this.colorIndex = colorIndex;
     }
-    
+
     @Override
-    protected ColoredMarksWithDisplayStack convertBeforeAssign(List<Contour> element) throws OperationFailedException {
+    protected ColoredMarksWithDisplayStack convertBeforeAssign(List<Contour> element)
+            throws OperationFailedException {
         ColoredMarks marks =
                 new ColoredMarks(
                         createMarksFromContourList(element),
@@ -98,7 +101,7 @@ class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksW
     private static PointList createMarkForContour(Contour c, boolean round) {
         return PointListFactory.createMarkFromPoints3f(c.getPoints());
     }
-    
+
     private static MarkCollection createMarksFromContourList(List<Contour> contourList) {
 
         MarkCollection marks = new MarkCollection();
@@ -108,11 +111,10 @@ class ContourListGenerator extends RasterGeneratorDelegateToRaster<ColoredMarksW
         }
         return marks;
     }
-        
+
     private static MarksGenerator createDelegate(DrawObject drawObject) {
         MarksGenerator delegate = new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
         delegate.setManifestDescriptionFunction("contourRepresentationRGB");
         return delegate;
     }
-
 }

@@ -49,6 +49,8 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -70,8 +72,7 @@ public class MovieFromSlicesTask extends RasterTask {
     private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
 
     @Override
-    public void startSeries(
-            Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
             throws JobExecutionException {
 
         StackGenerator generator = new StackGenerator(false, "out", false);
@@ -97,13 +98,19 @@ public class MovieFromSlicesTask extends RasterTask {
         return false;
     }
 
-    private String formatIndex(int index) {
-        return String.format("%s_%08d", filePrefix, index);
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject, int seriesIndex, int numSeries, InputOutputContext context)
+            NamedChannelsInput inputObject,
+            int seriesIndex,
+            int numSeries,
+            InputOutputContext context)
             throws JobExecutionException {
 
         try {
@@ -151,8 +158,11 @@ public class MovieFromSlicesTask extends RasterTask {
     }
 
     @Override
-    public void endSeries(Outputter outputter)
-            throws JobExecutionException {
+    public void endSeries(Outputter outputter) throws JobExecutionException {
         generatorSeq.end();
+    }
+
+    private String formatIndex(int index) {
+        return String.format("%s_%08d", filePrefix, index);
     }
 }

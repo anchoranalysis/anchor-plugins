@@ -67,6 +67,8 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -159,9 +161,7 @@ public class SegmentInstanceWithModelTask<T>
 
     @Override
     public SharedStateSegmentInstance<T> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan plan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan plan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             initializeBeans(params.getContext());
@@ -176,8 +176,7 @@ public class SegmentInstanceWithModelTask<T>
     }
 
     @Override
-    public void doJobOnInput(
-            InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
+    public void doJobOnInput(InputBound<StackSequenceInput, SharedStateSegmentInstance<T>> input)
             throws JobExecutionException {
         try {
             initializeBeans(input.context());
@@ -191,10 +190,7 @@ public class SegmentInstanceWithModelTask<T>
 
             if (!segments.isEmpty() || !ignoreNoObjects) {
                 writeOutputsForImage(
-                        stack,
-                        segments.asObjects(),
-                        background,
-                        input.context().getOutputter());
+                        stack, segments.asObjects(), background, input.context().getOutputter());
 
                 calculateFeaturesForImage(input, stack, segments.asList());
             }
@@ -221,6 +217,13 @@ public class SegmentInstanceWithModelTask<T>
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        // assert(false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     private void calculateFeaturesForImage(
@@ -270,10 +273,7 @@ public class SegmentInstanceWithModelTask<T>
     }
 
     private void writeOutputsForImage(
-            Stack stack,
-            ObjectCollection objects,
-            DisplayStack background,
-            Outputter outputter) {
+            Stack stack, ObjectCollection objects, DisplayStack background, Outputter outputter) {
 
         WriterRouterErrors writer = outputter.writerSelective();
 

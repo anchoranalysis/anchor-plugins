@@ -40,8 +40,7 @@ public class SharedStateSelectedSlice {
 
     private Optional<FeatureCSVWriter> csvWriter;
 
-    public SharedStateSelectedSlice(Outputter baseOutputter)
-            throws CreateException {
+    public SharedStateSelectedSlice(Outputter baseOutputter) throws CreateException {
         super();
 
         try {

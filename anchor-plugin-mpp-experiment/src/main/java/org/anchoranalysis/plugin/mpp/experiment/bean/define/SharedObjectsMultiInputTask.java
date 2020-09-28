@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -44,6 +45,8 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedStacks;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
@@ -103,6 +106,13 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     private void outputFeatureTables(ImageInitParams so, InputOutputContext context) {

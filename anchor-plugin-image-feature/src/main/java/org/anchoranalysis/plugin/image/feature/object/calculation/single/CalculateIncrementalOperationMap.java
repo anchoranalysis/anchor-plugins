@@ -86,7 +86,7 @@ public abstract class CalculateIncrementalOperationMap
 
     protected abstract ObjectMask applyOperation(ObjectMask object, Extent extent, boolean do3D)
             throws OperationFailedException;
-    
+
     /** Lowest existing key. 0 if no key exists. */
     private int findHighestExistingKey(int max) {
         for (int i = max; i >= 1; i--) {

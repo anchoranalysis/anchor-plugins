@@ -40,11 +40,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
  * Generates a CSV-file that is a table of distances between objects.
- * 
- * <p>The distance is between objects is providerd via a {@link ObjectCollectionDistanceMatrix}.
- * 
- * @author Owen Feehan
  *
+ * <p>The distance is between objects is providerd via a {@link ObjectCollectionDistanceMatrix}.
+ *
+ * @author Owen Feehan
  */
 class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistanceMatrix> {
 
@@ -54,7 +53,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
 
     /**
      * Creates the generator.
-     * 
+     *
      * @param distanceMatrix a matrix defining distance between the objects
      * @param numberDecimalPlaces the number of decimal places to use for the distance
      */
@@ -70,48 +69,53 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
             throws OutputWriteFailedException {
 
         ObjectCollectionDistanceMatrix distanceMatrix = getElement();
-        
+
         try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 
-            csvWriter.writeHeaders( headers(distanceMatrix.getObjects2()) );
+            csvWriter.writeHeaders(headers(distanceMatrix.getObjects2()));
 
             // The descriptions of objects1 go in the first column
             List<String> descriptions = descriptionFromObjects(distanceMatrix.getObjects1());
 
             // Write each row
             for (int i = 0; i < distanceMatrix.sizeObjects1(); i++) {
-                csvWriter.writeRow( rowWithDescription(descriptions, i, distanceMatrix) );
+                csvWriter.writeRow(rowWithDescription(descriptions, i, distanceMatrix));
             }
-            
+
         } catch (AnchorIOException e) {
             throw new OutputWriteFailedException(e);
         }
     }
 
     /** A row including a description as first-column */
-    private List<TypedValue> rowWithDescription(List<String> descriptions, int index, ObjectCollectionDistanceMatrix distanceMatrix) {
+    private List<TypedValue> rowWithDescription(
+            List<String> descriptions, int index, ObjectCollectionDistanceMatrix distanceMatrix) {
         List<TypedValue> row = rowWithoutDescription(index, distanceMatrix);
 
         // Insert the description as first column
         row.add(0, new TypedValue(descriptions.get(index)));
-        
+
         return row;
     }
 
     /** A row excluding a description as first-column */
-    private List<TypedValue> rowWithoutDescription(int index1, ObjectCollectionDistanceMatrix distanceMatrix) {
-        return FunctionalList.mapRangeToList(0, distanceMatrix.sizeObjects2(), index2 ->
-            new TypedValue(distanceMatrix.getDistance(index1, index2), numberDecimalPlaces)
-        );
+    private List<TypedValue> rowWithoutDescription(
+            int index1, ObjectCollectionDistanceMatrix distanceMatrix) {
+        return FunctionalList.mapRangeToList(
+                0,
+                distanceMatrix.sizeObjects2(),
+                index2 ->
+                        new TypedValue(
+                                distanceMatrix.getDistance(index1, index2), numberDecimalPlaces));
     }
-    
+
     /** A sensible header string, bearing in the mind the first column has object descriptions. */
     private static List<String> headers(ObjectCollection objects) {
         List<String> headers = descriptionFromObjects(objects);
         headers.add(0, "Objects");
         return headers;
     }
-    
+
     /** A description of each object in a collection. */
     private static List<String> descriptionFromObjects(ObjectCollection objects) {
         return objects.stream().mapToList(objectMask -> objectMask.centerOfGravity().toString());

@@ -65,13 +65,13 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationComparisonInput<T>> inputObjects(InputManagerParams params)
+    public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
             throws AnchorIOException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            Iterator<T> itr = input.inputObjects(params).iterator();
+            Iterator<T> itr = input.inputs(params).iterator();
 
             prm.incrWorker();
 

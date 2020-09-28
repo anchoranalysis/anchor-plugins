@@ -62,6 +62,8 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -86,7 +88,8 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
 public class ExportObjectsFromCSVTask
         extends ExportObjectsBase<FromCSVInputObject, FromCSVSharedState> {
 
-    private class CSVRowRGBOutlineGenerator extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties,CSVRow> {
+    private class CSVRowRGBOutlineGenerator
+            extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties, CSVRow> {
 
         /** All objects associated with the image. */
         private ObjectCollectionRTree allObjects;
@@ -99,8 +102,7 @@ public class ExportObjectsFromCSVTask
                 RGBColor colorSecond) {
             super(
                     createRGBMaskGenerator(
-                            drawObject, background, new ColorList(colorFirst, colorSecond))
-            );
+                            drawObject, background, new ColorList(colorFirst, colorSecond)));
             this.allObjects = allObjects;
         }
 
@@ -109,7 +111,7 @@ public class ExportObjectsFromCSVTask
                 throws OperationFailedException {
             return element.findObjectsMatchingRow(allObjects);
         }
-        
+
         @Override
         protected Stack convertBeforeTransform(Stack stack) {
             return stack;
@@ -137,9 +139,7 @@ public class ExportObjectsFromCSVTask
 
     @Override
     public FromCSVSharedState beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new FromCSVSharedState();
     }
@@ -196,6 +196,13 @@ public class ExportObjectsFromCSVTask
         // NOTHING TO DO
     }
 
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
+    }
+
     private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
@@ -237,8 +244,13 @@ public class ExportObjectsFromCSVTask
             throw new OperationFailedException(e);
         }
     }
-    
-    private void processRows(Collection<CSVRow> rows, String groupName, ObjectCollectionRTree objects, DisplayStack background, InputOutputContext context) {
+
+    private void processRows(
+            Collection<CSVRow> rows,
+            String groupName,
+            ObjectCollectionRTree objects,
+            DisplayStack background,
+            InputOutputContext context) {
         if (rows != null && !rows.isEmpty()) {
             outputGroup(
                     String.format("group_%s", groupName),
@@ -247,8 +259,8 @@ public class ExportObjectsFromCSVTask
                     background,
                     context.getOutputter());
         } else {
-            context.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);                    
-        }        
+            context.getMessageReporter().logFormatted("No matching rows for group '%s'", groupName);
+        }
     }
 
     private void outputGroup(

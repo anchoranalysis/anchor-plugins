@@ -45,6 +45,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -63,15 +65,12 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
 
     @Override
     public CSVWriter beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
 
         Optional<CSVWriter> writer;
         try {
-            writer =
-                    CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
+            writer = CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
         } catch (AnchorIOException e) {
             throw new ExperimentExecutionException(e);
         }
@@ -95,8 +94,7 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     }
 
     @Override
-    public void doJobOnInput(InputBound<MultiInput, CSVWriter> input)
-            throws JobExecutionException {
+    public void doJobOnInput(InputBound<MultiInput, CSVWriter> input) throws JobExecutionException {
 
         CSVWriter writer = input.getSharedState();
 
@@ -130,7 +128,14 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
+    }
+
     private void writeFeaturesIntoReporter(
             MPPInitParams soMPP, CSVWriter writer, String inputDescriptiveName, Logger logger) {
         List<TypedValue> rowElements =

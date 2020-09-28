@@ -57,13 +57,20 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             InputOutputContext context)
             throws IOException {
         VoxelDataType outputType = channelChecker.getChannelType();
-        context.getOutputter().writerPermissive().write(outputName, () -> generatorWithMean(agg, outputType, outputName, context) );
+        context.getOutputter()
+                .writerPermissive()
+                .write(outputName, () -> generatorWithMean(agg, outputType, outputName, context));
     }
-    
-    private static ChannelGenerator generatorWithMean(RunningSumChannel agg, VoxelDataType outputType, String channelName, InputOutputContext context) throws OutputWriteFailedException {
+
+    private static ChannelGenerator generatorWithMean(
+            RunningSumChannel agg,
+            VoxelDataType outputType,
+            String channelName,
+            InputOutputContext context)
+            throws OutputWriteFailedException {
         try {
             Channel mean = agg.createMeanChannel(outputType);
-            
+
             context.getMessageReporter()
                     .logFormatted(
                             "Writing channel %s with %d items and numPixels>100=%d and outputType=%s",
@@ -71,7 +78,7 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
                             agg.count(),
                             mean.voxelsGreaterThan(100).count(),
                             outputType);
-            
+
             return new ChannelGenerator(MANIFEST_FUNCTION, mean);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);

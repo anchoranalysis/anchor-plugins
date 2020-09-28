@@ -168,10 +168,10 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
         populateDelegateIfNeeded();
-        delegate.doExperiment(arguments);
+        delegate.executeExperiment(arguments);
     }
 
     @Override

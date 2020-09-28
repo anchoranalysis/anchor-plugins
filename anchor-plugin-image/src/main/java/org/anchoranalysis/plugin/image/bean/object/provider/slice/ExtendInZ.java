@@ -72,7 +72,8 @@ public class ExtendInZ extends WithDimensionsBase {
 
     private static Voxels<UnsignedByteBuffer> createVoxelsOfDuplicatedPlanes(
             VoxelBuffer<UnsignedByteBuffer> planeIn, Extent extent) {
-        Voxels<UnsignedByteBuffer> voxels = VoxelsFactory.getUnsignedByte().createInitialized(extent);
+        Voxels<UnsignedByteBuffer> voxels =
+                VoxelsFactory.getUnsignedByte().createInitialized(extent);
         for (int z = 0; z < extent.z(); z++) {
             voxels.replaceSlice(z, planeIn);
         }

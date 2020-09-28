@@ -62,7 +62,7 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
     }
 
     @Override
-    public List<ManifestCouplingDefinition> inputObjects(InputManagerParams params)
+    public List<ManifestCouplingDefinition> inputs(InputManagerParams params)
             throws AnchorIOException {
 
         try {

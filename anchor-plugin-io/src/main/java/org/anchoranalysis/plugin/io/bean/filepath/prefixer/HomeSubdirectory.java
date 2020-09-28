@@ -39,7 +39,7 @@ import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
 import org.anchoranalysis.io.error.FilePathPrefixerException;
 import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
 
 //
 public class HomeSubdirectory extends FilePathPrefixer {
@@ -70,7 +70,7 @@ public class HomeSubdirectory extends FilePathPrefixer {
 
     @Override
     public FilePathPrefix outFilePrefix(
-            NamedPath path, String expName, FilePathPrefixerParams context)
+            NamedPath path, String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
         try {
             initIfPossible();
@@ -81,7 +81,7 @@ public class HomeSubdirectory extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context)
+    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
             throws FilePathPrefixerException {
         try {
             initIfPossible();

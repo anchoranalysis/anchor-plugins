@@ -118,16 +118,21 @@ class TaskSingleInputHelper {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
             OutputManager outputManager = OutputManagerFixture.createOutputManager(pathForOutputs);
-            
+
             Outputter outputter = OutputterFixture.outputter(outputManager);
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
             ParametersExperiment paramsExperiment =
-                    createParametersExperiment(pathForOutputs, outputter.getChecked(), outputManager.getFilePathPrefixer(), logger);
+                    createParametersExperiment(
+                            pathForOutputs,
+                            outputter.getChecked(),
+                            outputManager.getFilePathPrefixer(),
+                            logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
-            S sharedState = task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
+            S sharedState =
+                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
 
             boolean successful =
                     task.executeJob(
@@ -146,7 +151,10 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder, OutputterChecked outputter, FilePathPrefixer prefixer, StatefulMessageLogger logger)
+            Path pathTempFolder,
+            OutputterChecked outputter,
+            FilePathPrefixer prefixer,
+            StatefulMessageLogger logger)
             throws AnchorIOException {
         ParametersExperiment params =
                 new ParametersExperiment(

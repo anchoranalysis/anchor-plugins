@@ -103,7 +103,8 @@ public abstract class GroupMapByName<S, T> {
      * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
      *     one group-names exist
      */
-    public void outputGroupedData(ConsistentChannelChecker channelChecker, InputOutputContext context)
+    public void outputGroupedData(
+            ConsistentChannelChecker channelChecker, InputOutputContext context)
             throws IOException {
 
         // We wish to create a new output-manager only once for each primary key, so we store them

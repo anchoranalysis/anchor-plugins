@@ -90,9 +90,7 @@ public abstract class GroupedStackTask<S, T>
 
     @Override
     public GroupedSharedState<S, T> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return new GroupedSharedState<>(this::createGroupMap);
     }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -46,6 +47,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
+import org.anchoranalysis.io.output.bean.rules.Permissive;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
@@ -74,15 +77,20 @@ public class ImageAssignLabelTask<T>
 
     @Override
     public SharedStateFilteredImageOutput<T> beforeAnyJobIsExecuted(
-            Outputter outputter,
-            ConcurrencyPlan concurrencyPlan,
-            ParametersExperiment params)
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
             return new SharedStateFilteredImageOutput<>(outputter, imageLabeller);
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
         }
+    }
+
+    @Override
+    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+        assert (false);
+        // TODO change defaultOutputs()
+        return Optional.of(Permissive.INSTANCE);
     }
 
     @Override
@@ -147,7 +155,8 @@ public class ImageAssignLabelTask<T>
             SharedStateFilteredImageOutput<T> sharedState) {
 
         // Copies the file into the output
-        sharedState.getOutputterFor(groupIdentifier)
+        sharedState
+                .getOutputterFor(groupIdentifier)
                 .writerPermissive()
                 .write(outputName, () -> new StackGenerator(true, "raster", stack));
     }

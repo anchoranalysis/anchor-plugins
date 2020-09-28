@@ -46,7 +46,7 @@ public class ConvertTest {
     static {
         CVInit.alwaysExecuteBeforeCallingLibrary();
     }
-    
+
     private ImageLoader loader = new ImageLoader();
 
     @Test
@@ -68,7 +68,7 @@ public class ConvertTest {
             throws OperationFailedException {
         try {
             CVInit.blockUntilLoaded();
-            
+
             // Convert to Mat
             Mat mat = ConvertToMat.fromStack(stack);
 
