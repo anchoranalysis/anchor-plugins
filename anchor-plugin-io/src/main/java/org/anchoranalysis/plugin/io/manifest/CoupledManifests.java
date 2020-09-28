@@ -31,7 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
@@ -69,8 +69,8 @@ public class CoupledManifests implements InputFromManager {
             Path experimentRootFolder =
                     getExperimentManifest().get().getRootFolder().calculatePath();
 
-            PathDifferenceFromBase ff =
-                    PathDifferenceFromBase.differenceFrom(
+            PathDifference ff =
+                    PathDifference.differenceFrom(
                             experimentRootFolder, fileManifest.getRootPath());
             return ff.combined().toString();
 
