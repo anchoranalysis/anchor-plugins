@@ -31,14 +31,14 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+import org.anchoranalysis.io.filepath.prefixer.PathDifference;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamingUtilities {
 
     public static Path filePathDiff(Path baseFolderPath, Path filePath) throws AnchorIOException {
-        PathDifferenceFromBase filePathDiff =
-                PathDifferenceFromBase.differenceFrom(baseFolderPath, filePath);
+        PathDifference filePathDiff =
+                PathDifference.differenceFrom(baseFolderPath, filePath);
         return filePathDiff.combined();
     }
 

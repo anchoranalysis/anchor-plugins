@@ -49,11 +49,14 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
+import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.test.image.io.OutputManagerFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
@@ -114,16 +117,17 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            Outputter bom =
-                    OutputterFixture.outputter(pathForOutputs);
+            OutputManager outputManager = OutputManagerFixture.createOutputManager(pathForOutputs);
+            
+            Outputter outputter = OutputterFixture.outputter(outputManager);
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
             ParametersExperiment paramsExperiment =
-                    createParametersExperiment(pathForOutputs, bom.getChecked(), logger);
+                    createParametersExperiment(pathForOutputs, outputter.getChecked(), outputManager.getFilePathPrefixer(), logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
-            S sharedState = task.beforeAnyJobIsExecuted(bom, concurrencyPlan, paramsExperiment);
+            S sharedState = task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
 
             boolean successful =
                     task.executeJob(
@@ -142,7 +146,7 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder, OutputterChecked outputter, StatefulMessageLogger logger)
+            Path pathTempFolder, OutputterChecked outputter, FilePathPrefixer prefixer, StatefulMessageLogger logger)
             throws AnchorIOException {
         ParametersExperiment params =
                 new ParametersExperiment(
@@ -150,6 +154,7 @@ class TaskSingleInputHelper {
                         "arbitraryExperimentName",
                         Optional.empty(),
                         outputter,
+                        prefixer,
                         logger,
                         false);
         params.setLoggerTaskCreator(createLogReporterBean());
