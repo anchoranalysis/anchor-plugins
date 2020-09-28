@@ -137,7 +137,7 @@ public class ScaleTask extends RasterTask {
         StacksOutputter.output(
                 StacksOutputter.subset(
                         stackCollection,
-                        outputter.outputsEnabled().outputAllowedSecondLevel(outputSecondLevelKey)),
+                        outputter.outputsEnabled().second(outputSecondLevelKey)),
                 outputter.getChecked(),
                 outputName,
                 "",
@@ -158,7 +158,7 @@ public class ScaleTask extends RasterTask {
             // If this output is not allowed we simply skip
             if (!context.getOutputter()
                     .outputsEnabled()
-                    .outputAllowedSecondLevel(KEY_OUTPUT_STACK)
+                    .second(KEY_OUTPUT_STACK)
                     .isOutputAllowed(channelName)) {
                 continue;
             }

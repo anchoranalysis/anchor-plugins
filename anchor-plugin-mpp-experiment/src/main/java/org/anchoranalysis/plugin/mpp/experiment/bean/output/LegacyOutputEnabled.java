@@ -46,25 +46,31 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
 
     // BEAN PROPERTIES
     /** What's allowed or not - highest level outputs */
-    @BeanField @Getter @Setter private OutputAllowed outputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed outputEnabled = AllOutputAllowed.INSTANCE;
 
     /** What's allowed or not when outputting stacks */
-    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = AllOutputAllowed.INSTANCE;
 
     /** What's allowed or not when outputting configurations */
-    @BeanField @Getter @Setter private OutputAllowed marksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed marksOutputEnabled = AllOutputAllowed.INSTANCE;
 
     /** What's allowed or not when outputting object-collections */
-    @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed objects = AllOutputAllowed.INSTANCE;
 
     /** What's allowed or not when outputting histograms */
     @BeanField @Getter @Setter
-    private OutputAllowed histogramsOutputEnabled = new AllOutputAllowed();
+    private OutputAllowed histogramsOutputEnabled = AllOutputAllowed.INSTANCE;
     // END BEAN PROPERTIES
 
     @Override
-    public OutputAllowed outputAllowedSecondLevel(String key) {
-        switch (key) {
+    public OutputAllowed first() {
+        // TODO Auto-generated method stub
+        return outputEnabled;
+    }
+    
+    @Override
+    public OutputAllowed second(String outputName) {
+        switch (outputName) {
             case StackOutputKeys.STACK:
                 return getStacksOutputEnabled();
             case StackOutputKeys.MARKS:
@@ -76,10 +82,5 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
             default:
                 return new NoOutputAllowed();
         }
-    }
-
-    @Override
-    public boolean isOutputAllowed(String outputName) {
-        return outputEnabled.isOutputAllowed(outputName);
     }
 }

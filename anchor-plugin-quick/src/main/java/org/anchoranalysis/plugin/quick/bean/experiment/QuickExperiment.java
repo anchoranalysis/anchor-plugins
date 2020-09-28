@@ -82,11 +82,11 @@ public class QuickExperiment<S> extends Experiment {
 
     @BeanField @Getter @Setter private String inputName = "stackInput";
 
-    @BeanField @Getter @Setter private OutputAllowed outputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed outputEnabled = AllOutputAllowed.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed objects = AllOutputAllowed.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = AllOutputAllowed.INSTANCE;
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();

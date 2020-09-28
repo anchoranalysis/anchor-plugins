@@ -64,7 +64,7 @@ class SegmentHelper {
         StacksOutputter.output(
                 StacksOutputter.subset(
                         CreateCombinedStack.apply(so),
-                        outputter.outputsEnabled().outputAllowedSecondLevel(StackOutputKeys.STACK)),
+                        outputter.outputsEnabled().second(StackOutputKeys.STACK)),
                 outputter.getChecked(),
                 "stacks",
                 "stack_",
