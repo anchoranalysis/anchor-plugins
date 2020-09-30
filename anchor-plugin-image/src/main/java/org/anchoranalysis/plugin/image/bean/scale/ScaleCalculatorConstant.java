@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.scale.ScaleFactor;
 

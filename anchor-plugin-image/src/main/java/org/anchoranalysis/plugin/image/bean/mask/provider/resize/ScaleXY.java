@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.scale.ScaleFactor;
 

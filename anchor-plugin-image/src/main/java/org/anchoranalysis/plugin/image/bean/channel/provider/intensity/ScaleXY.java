@@ -36,7 +36,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.scale.ScaleFactor;

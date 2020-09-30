@@ -58,12 +58,12 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
- * <tr><td rowspan="3"><i>produced by a {@link DefineOutputter} in {@code define}</i></td></tr>
- * <tr><td rowspan="3"><i>produced by a {@link OutputFeatureTable} in {@code featureTables}</i></td></tr>
- * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs produced by a {@link DefineOutputter} in {@code define}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs produced by a {@link OutputFeatureTable} in {@code featureTables}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
  * 

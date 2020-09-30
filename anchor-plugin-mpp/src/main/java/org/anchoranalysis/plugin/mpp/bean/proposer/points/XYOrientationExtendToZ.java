@@ -42,7 +42,7 @@ import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
+import org.anchoranalysis.image.bean.unitvalue.distance.DistanceVoxels;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
@@ -80,7 +80,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 
     // If we reach this amount of slices without adding a point, we consider our job over
     @BeanField @Getter @Setter
-    private UnitValueDistance distanceZEndIfEmpty = new UnitValueDistanceVoxels(1000000);
+    private UnitValueDistance distanceZEndIfEmpty = new DistanceVoxels(1000000);
     // END BEAN PROPERTIES
 
     private List<Point3i> lastPointsAll;

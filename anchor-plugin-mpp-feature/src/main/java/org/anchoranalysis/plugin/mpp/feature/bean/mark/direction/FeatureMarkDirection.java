@@ -34,7 +34,7 @@ import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.bean.orientation.VectorInDirection;
+import org.anchoranalysis.image.bean.spatial.direction.VectorInDirection;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
