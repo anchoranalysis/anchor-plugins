@@ -45,6 +45,7 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
+import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.processor.DebugDependentProcessor;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -56,18 +57,16 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
-//
-
 /**
  * Makes a lot of assumptions, that allows us to reduce the number of inputs to an
- * InputOutputExperiment
+ * {@link InputOutputExperiment}.
  *
  * <p>Normally, runs an experiment on all data-sets in *datasets*.
  *
- * <p>However, in debug-mode datasetSpecific is used (if non-empty), otherwise the first dataset is
+ * <p>However, in debug-mode {@code datasetSpecific} is used (if non-empty), otherwise the first dataset is
  * used.
  *
- * @param <T> InputManagerType
+ * @param <T> input-object type
  * @param <S> shared-state
  */
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment
@@ -94,7 +93,8 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
     @BeanField @AllowEmpty @Getter @Setter private String identifierSuffix = "";
 
-    @BeanField @Getter @Setter private int maxNumProcessors = 100;
+    /** An upper limit on the number of the processors that can be simultaneously used in parallel, if they are available. */
+    @BeanField @Getter @Setter private int maxNumberProcessors = 100;
 
     @BeanField @Getter @Setter private boolean suppressExceptions = true;
 
@@ -128,7 +128,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     @Override
     public void localise(Path path) throws BeanMisconfiguredException {
         super.localise(path);
-
         delegate.firstLocalise(getLocalPath(), logExperimentPath, logTaskPath, output);
     }
 
@@ -233,7 +232,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
     private JobProcessor<T, S> createProcessor() {
         DebugDependentProcessor<T, S> processor = new DebugDependentProcessor<>();
-        processor.setMaxNumProcessors(maxNumProcessors);
+        processor.setMaxNumberProcessors(maxNumberProcessors);
         processor.setSuppressExceptions(suppressExceptions);
         processor.setTask(task.duplicateBean());
         return processor;

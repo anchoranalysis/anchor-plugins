@@ -40,10 +40,10 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 public class FeatureCalculatorRepeated {
 
     public static EnergyStack extractStack(
-            ProvidesStackInput inputObject, StackProvider stackEnergy, InputOutputContext context)
+            ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
             throws OperationFailedException {
         ImageInitParams paramsInit =
-                StackInputInitParamsCreator.createInitParams(inputObject, context);
+                StackInputInitParamsCreator.createInitParams(input, context);
         return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
     }
 }

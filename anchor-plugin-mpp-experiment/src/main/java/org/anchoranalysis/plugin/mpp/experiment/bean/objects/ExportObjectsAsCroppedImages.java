@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -57,8 +56,7 @@ import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -72,7 +70,7 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  *
  * @author Owen Feehan
  */
-public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInput, NoSharedState> {
+public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, NoSharedState> {
 
     private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
             new GeneratorSequenceFactory("extractedObjects", "object");
@@ -112,7 +110,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
             throws JobExecutionException {
         try {
             define.processInputImage(
-                    params.getInputObject(),
+                    params.getInput(),
                     params.context(),
                     paramsInit -> outputObjects(paramsInit, params.context()));
 
@@ -145,10 +143,9 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     private void outputGeneratorSequence(
@@ -186,7 +183,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
 
             outputGeneratorSequence(
                     createGenerator(dimensions, stacks, stacksProjected),
-                    maybeExtendZObjects(inputObjects(paramsInit, logger), dimensions.z()),
+                    maybeExtendZObjects(inputs(paramsInit, logger), dimensions.z()),
                     context);
         } catch (CreateException | InitException e) {
             throw new OperationFailedException(e);
@@ -207,7 +204,7 @@ public class ExportObjectsAsCroppedImagesTask extends ExportObjectsBase<MultiInp
                 // NB if we cannot create a particular channel provider, we simply skip.  We use
                 // this as a means to provide for channels
                 //  that might not always be present
-                logger.errorReporter().recordError(ExportObjectsAsCroppedImagesTask.class, e);
+                logger.errorReporter().recordError(ExportObjectsAsCroppedImages.class, e);
                 continue;
             }
 

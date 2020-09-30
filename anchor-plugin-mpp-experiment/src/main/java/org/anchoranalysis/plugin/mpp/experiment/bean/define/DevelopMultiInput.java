@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.define;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -38,6 +37,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
@@ -45,29 +45,44 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
-public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInput> {
+/**
+ * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.
+ * 
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>produced by a {@link DefineOutputter} in {@code define}</i></td></tr>
+ * <tr><td rowspan="3"><i>produced by a {@link OutputFeatureTable} in {@code featureTables}</i></td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
+    /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */ 
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
-    // Allows feature tables to be also outputted
+    /** Specifies a feature-table that can also be outputted. */
     @BeanField @Getter @Setter
-    private List<OutputFeatureTable> listOutputFeatureTable = new ArrayList<>();
+    private List<OutputFeatureTable> featureTables = new ArrayList<>();
 
     /** If non-empty, A keyValueParams is treated as part of the energyStack */
     @BeanField @AllowEmpty @Getter @Setter private String energyParamsName = "";
     // END BEAN PROPERTIES
-
-    @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(MultiInput.class);
-    }
 
     @Override
     public void doJobOnInput(InputBound<MultiInput, NoSharedState> params)
@@ -75,7 +90,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
         try {
             define.processInputImage(
-                    params.getInputObject(),
+                    params.getInput(),
                     params.context(),
                     imageInitParams ->
                             outputFeatureTablesMultiplex(imageInitParams, params.context()));
@@ -83,6 +98,24 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
         }
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
+    
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(MultiInput.class);
+    }
+
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        OutputEnabledMutable outputs = super.defaultOutputs();
+        define.addAllOutputs(outputs);
+        outputs.addEnabledOutput(OutputFeatureTable.OUTPUT_FEATURE_TABLE);
+        return outputs;
     }
 
     private void outputFeatureTablesMultiplex(
@@ -102,22 +135,10 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
         EnergyStackHelper.writeEnergyStackParams(
                 imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
-    }
-
-    @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
-    }
-
+    
     private void outputFeatureTables(ImageInitParams so, InputOutputContext context) {
 
-        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : featureTables) {
             try {
                 outputFeatureTable.initRecursive(so, context.getLogger());
                 outputFeatureTable.output(context);
@@ -129,7 +150,7 @@ public class SharedObjectsMultiInputTask extends TaskWithoutSharedState<MultiInp
 
     private void outputFeatureTablesWithException(ImageInitParams so, InputOutputContext context)
             throws IOException {
-        for (OutputFeatureTable outputFeatureTable : listOutputFeatureTable) {
+        for (OutputFeatureTable outputFeatureTable : featureTables) {
 
             try {
                 outputFeatureTable.initRecursive(so, context.getLogger());

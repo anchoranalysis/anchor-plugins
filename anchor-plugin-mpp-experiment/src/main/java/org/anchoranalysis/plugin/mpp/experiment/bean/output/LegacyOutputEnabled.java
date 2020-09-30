@@ -75,7 +75,7 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
                 return getMarksOutputEnabled();
             case StackOutputKeys.HISTOGRAM:
                 return getHistogramsOutputEnabled();
-            case StackOutputKeys.OBJECTS:
+            case StackOutputKeys.OBJECT:
                 return getObjects();
             default:
                 return new None();

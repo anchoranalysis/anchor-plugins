@@ -56,7 +56,7 @@ class StackAsProviderFixture implements ProvidesStackInput {
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         addToStoreWithName(name, stackCollection, 0, progressReporter);
@@ -65,11 +65,11 @@ class StackAsProviderFixture implements ProvidesStackInput {
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        stackCollection.add(name, () -> new TimeSequence(stack));
+        stacks.add(name, () -> new TimeSequence(stack));
     }
 
     @Override

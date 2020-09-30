@@ -46,6 +46,8 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  */
 public class SharedStateSegmentInstance<T> {
 
+    public static final String OUTPUT_SUMMARY_CSV = "summary";
+    
     private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>
             features;
     @Getter private final ConcurrentModelPool<T> modelPool;
@@ -59,7 +61,7 @@ public class SharedStateSegmentInstance<T> {
         this.modelPool = modelPool;
         this.features =
                 SharedStateExportFeatures.createForFeatures(
-                        new ResultsWriterOutputNames("summary", false, false),
+                        new ResultsWriterOutputNames(OUTPUT_SUMMARY_CSV, false, false),
                         featureTable,
                         identifierHeaders,
                         context);

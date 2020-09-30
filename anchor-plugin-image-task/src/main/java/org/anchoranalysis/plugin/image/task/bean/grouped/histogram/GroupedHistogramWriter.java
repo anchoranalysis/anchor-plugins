@@ -32,17 +32,27 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 class GroupedHistogramWriter {
 
+    /** 
+     * The output-name associated with <i>all</i> histograms written.
+     *
+     * <p>Note that this isn't actually used as part of the filenames outputted.
+     **/
+    private final String outputName;
+    
     private final HistogramCSVGenerator generator;
 
-    public GroupedHistogramWriter(boolean ignoreZeros) {
-        generator = new HistogramCSVGenerator();
-        generator.setIgnoreZeros(ignoreZeros);
+    public GroupedHistogramWriter(String outputName, boolean ignoreZeros) {
+        this.outputName = outputName;
+        this.generator = new HistogramCSVGenerator();
+        this.generator.setIgnoreZeros(ignoreZeros);
     }
 
     public void writeHistogramToFile(
-            Histogram histogram, String outputName, InputOutputContext context) {
+            Histogram histogram, String channelName, InputOutputContext context) {
         generator.assignElement(histogram);
 
-        context.getOutputter().writerSelective().write(outputName, () -> generator);
+        if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+            context.getOutputter().writerSecondLevel(outputName).write(channelName, () -> generator);
+        }
     }
 }

@@ -51,9 +51,7 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
 
 /**
- * Each image produces one row of features
- *
- * <p>*
+ * An image that produces one row of features.
  */
 public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInputStack> {
 
@@ -84,12 +82,12 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
 
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            ProvidesStackInput inputObject,
+            ProvidesStackInput input,
             InputProcessContext<FeatureList<FeatureInputStack>> context)
             throws NamedFeatureCalculateException {
 
         FeatureCalculatorFromProvider<FeatureInputStack> calculator =
-                createCalculator(inputObject, context.getContext());
+                createCalculator(input, context.getContext());
 
         // Calculate the results for the current stack
         ResultsVector results = calculateResults(calculator, context.getRowSource());
@@ -126,11 +124,11 @@ public class FromImage extends SingleRowPerInput<ProvidesStackInput, FeatureInpu
     }
 
     private FeatureCalculatorFromProvider<FeatureInputStack> createCalculator(
-            ProvidesStackInput inputObject, InputOutputContext context)
+            ProvidesStackInput input, InputOutputContext context)
             throws NamedFeatureCalculateException {
         try {
             return new FeatureCalculatorFromProvider<>(
-                    inputObject, Optional.ofNullable(getStackEnergy()), context);
+                    input, Optional.ofNullable(getStackEnergy()), context);
         } catch (OperationFailedException e) {
             throw new NamedFeatureCalculateException(e);
         }

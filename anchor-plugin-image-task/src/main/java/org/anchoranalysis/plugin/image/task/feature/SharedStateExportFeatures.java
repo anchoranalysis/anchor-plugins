@@ -62,11 +62,13 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * @author Owen Feehan
  */
 public class SharedStateExportFeatures<S> {
-
+    
+    public static final String OUTPUT_THUMBNAILS = "thumbnails";
+    
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
 
     private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
-            new GeneratorSequenceFactory("thumbnails", "thumbnail"); // NOSONAR
+            new GeneratorSequenceFactory(OUTPUT_THUMBNAILS, "thumbnail"); // NOSONAR
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();

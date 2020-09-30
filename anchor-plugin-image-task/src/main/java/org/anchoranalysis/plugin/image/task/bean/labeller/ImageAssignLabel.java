@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.labeller;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -47,8 +46,7 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
@@ -61,7 +59,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImage
  * @author Owen Feehan
  * @param <T> type of init-params associated with the filter
  */
-public class ImageAssignLabelTask<T>
+public class ImageAssignLabel<T>
         extends Task<ProvidesStackInput, SharedStateFilteredImageOutput<T>> {
 
     // START BEAN PROPERTIES
@@ -87,10 +85,9 @@ public class ImageAssignLabelTask<T>
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     @Override
@@ -105,17 +102,17 @@ public class ImageAssignLabelTask<T>
 
         try {
             String groupIdentifier =
-                    params.getSharedState().labelFor(params.getInputObject(), params.context());
+                    params.getSharedState().labelFor(params.getInput(), params.context());
 
             params.getSharedState()
-                    .writeRow(params.getInputObject().descriptiveName(), groupIdentifier);
+                    .writeRow(params.getInput().descriptiveName(), groupIdentifier);
 
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
-                                outputStackProvider, params.getInputObject(), params.context()),
-                        params.getInputObject().descriptiveName(),
+                                outputStackProvider, params.getInput(), params.context()),
+                        params.getInput().descriptiveName(),
                         params.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {

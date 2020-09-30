@@ -50,14 +50,14 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.input.FeatureInputResults;
+import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -68,14 +68,19 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * Calculates features and exports them as a CSV
  *
  * <p>Aggregated-features (based upon a certain grouping) can also be calculated.
- *
- * <p>Types of exports are:
- *
+ * 
+ * <p>The following outputs are produced:
  * <table>
- * <tr><td>features</td><td>a single csv file where each row is an object</td></tr>
- * <tr><td>featuresAggregated</td><td>a single csv file where each row is a group (with aggregated features of the objects within)</td></tr>
- * <tr><td>featuresGroup</td><td>a csv file per group, where each row is an object</td></tr>
- * <caption>summary of exports</caption>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>features</td><td>yes</td><td>a single csv file of feature-calculations where each row is an object.</td></tr>
+ * <tr><td>featuresAggregated</td><td>yes</td><td>a single csv file of feature-calculations where each row is a group (with aggregated features of the objects within).</td></tr>
+ * <tr><td>featuresGroup</td><td>yes</td><td>a csv file of feature-calculations per group, where each row is an object.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
  * </table>
  *
  * @author Owen Feehan
@@ -84,7 +89,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  *     concurrency issues)
  * @param <U> feature-input type for {@code features} bean-field
  */
-public class ExportFeaturesTask<T extends InputFromManager, S, U extends FeatureInput>
+public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInput>
         extends Task<T, SharedStateExportFeatures<S>> {
 
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
@@ -132,13 +137,13 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
         try {
             Optional<String> groupName =
                     extractGroupNameFromGenerator(
-                            input.getInputObject().pathForBindingRequired(),
+                            input.getInput().pathForBindingRequired(),
                             input.context().isDebugEnabled());
 
             InputProcessContext<S> inputProcessContext =
                     input.getSharedState().createInputProcessContext(groupName, input.context());
 
-            source.processInput(input.getInputObject(), inputProcessContext);
+            source.processInput(input.getInput(), inputProcessContext);
 
         } catch (OperationFailedException | AnchorIOException e) {
             throw new JobExecutionException(e);
@@ -162,10 +167,8 @@ public class ExportFeaturesTask<T extends InputFromManager, S, U extends Feature
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutput(SharedStateExportFeatures.OUTPUT_THUMBNAILS, ResultsWriterOutputNames.OUTPUT_DEFAULT_NON_AGGREGATED);
     }
 
     @Override

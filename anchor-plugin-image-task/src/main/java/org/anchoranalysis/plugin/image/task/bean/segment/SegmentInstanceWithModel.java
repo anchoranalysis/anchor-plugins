@@ -67,8 +67,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -78,6 +77,7 @@ import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectInd
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 
@@ -90,13 +90,30 @@ import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
  * <p>The task will output the segmentation results (in HDF5 form and as a mask) for each input,
  * together with visualizations of the outlines.
  *
- * <p>The task also provides a aggregated outputs (features, thumbnails) of extracted objects across
+ * <p>The task also provides aggregated outputs (features, thumbnails) of extracted objects across
  * all inputs.
+ * 
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>input</td><td>no</td><td>The input image for segmentation.</td></tr>
+ * <tr><td>objects</td><td>yes</td><td>Segmented object-masks encoded into HDF5.</td></tr>
+ * <tr><td>mask</td><td>yes</td><td>A binary-mask image that binary <i>or</i>s each voxel across the segmented object-masks.</td></tr>
+ * <tr><td>outline</td><td>yes</td><td>A RGB image showing the outline of segmented-objects on top of the input image.</td></tr>
+ * <tr><td>summary</td><td>yes</td><td>A CSV file showing basic feature of <i>all</i> segmented-objects across <i>all</i> input images.</td></tr>
+ * <tr><td>thumbnails</td><td>yes</td><td>A directory of thumbnails showing the outline of <i>all</i> segmented objects on top of an extracted portion of the respective input-image.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * @author Owen Feehan
  * @param <T> model-type in pool
  */
-public class SegmentInstanceWithModelTask<T>
+public class SegmentInstanceWithModel<T>
         extends Task<StackSequenceInput, SharedStateSegmentInstance<T>> {
 
     private static final EachObjectIndependently COMBINE_OBJECTS = new EachObjectIndependently();
@@ -218,12 +235,12 @@ public class SegmentInstanceWithModelTask<T>
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-
+    
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        // assert(false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutput(OUTPUT_H5, OUTPUT_MERGED_AS_MASK,
+                OUTPUT_OUTLINE, SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
     }
 
     private void calculateFeaturesForImage(
@@ -251,7 +268,7 @@ public class SegmentInstanceWithModelTask<T>
                 energyStack,
                 (featureInput, index) ->
                         identifierFor(
-                                input.getInputObject().descriptiveName(),
+                                input.getInput().descriptiveName(),
                                 featureInput,
                                 calculator,
                                 segments.get(index).getConfidence()));
@@ -305,7 +322,7 @@ public class SegmentInstanceWithModelTask<T>
             throws OperationFailedException {
         try {
             TimeSequence sequence =
-                    input.getInputObject()
+                    input.getInput()
                             .createStackSequenceForSeries(0)
                             .get(ProgressReporterNull.get());
             return sequence.get(0);

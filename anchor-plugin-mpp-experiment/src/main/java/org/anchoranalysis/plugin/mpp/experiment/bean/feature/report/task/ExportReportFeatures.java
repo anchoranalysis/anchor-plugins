@@ -45,8 +45,7 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -54,7 +53,7 @@ import org.anchoranalysis.mpp.io.bean.report.feature.ReportFeatureForSharedObjec
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
-public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
+public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -104,13 +103,13 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
 
         try {
             define.processInputMPP(
-                    input.getInputObject(),
+                    input.getInput(),
                     input.context(),
                     soMPP ->
                             writeFeaturesIntoReporter(
                                     soMPP,
                                     writer,
-                                    input.getInputObject().descriptiveName(),
+                                    input.getInput().descriptiveName(),
                                     input.getLogger()));
 
         } catch (OperationFailedException e) {
@@ -130,10 +129,9 @@ public class ReportFeaturesMultiTask extends Task<MultiInput, CSVWriter> {
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     private void writeFeaturesIntoReporter(

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-plugin-ij
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,70 +24,44 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.define;
+package org.anchoranalysis.plugin.imagej.bean.task;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
+import org.anchoranalysis.plugin.imagej.bean.channel.provider.BackgroundSubtractor;
 
-public class SharedObjectsFromChannelTask extends RasterTask {
+public class BackgroundSubtract extends RasterTask {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DefineOutputterMPP define;
+    @BeanField @Getter @Setter private int radius;
 
-    @BeanField @Getter @Setter private String outputNameOriginal = "original";
+    @BeanField @Getter @Setter private int scaleDownIntensityFactor = 1;
     // END BEAN PROPERTIES
 
     @Override
-    public void doStack(
-            NamedChannelsInput inputObject,
-            int seriesIndex,
-            int numSeries,
-            InputOutputContext context)
-            throws JobExecutionException {
-
-        NamedChannelsForSeries ncc;
-        try {
-            ncc = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
-        } catch (RasterIOException e1) {
-            throw new JobExecutionException(e1);
-        }
-
-        try {
-            Optional<Channel> inputImage =
-                    ncc.getChannelOptional(
-                            StackIdentifiers.INPUT_IMAGE, 0, ProgressReporterNull.get());
-            inputImage.ifPresent(
-                    image ->
-                            context.getOutputter()
-                                    .writerSelective()
-                                    .write(
-                                            outputNameOriginal,
-                                            () -> new ChannelGenerator("original", image)));
-
-            define.processInput(ncc, context);
-
-        } catch (GetOperationFailedException | OperationFailedException e) {
-            throw new JobExecutionException(e);
-        }
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
     }
 
     @Override
@@ -97,19 +71,53 @@ public class SharedObjectsFromChannelTask extends RasterTask {
     }
 
     @Override
+    public void doStack(
+            NamedChannelsInput input,
+            int seriesIndex,
+            int numberSeries,
+            InputOutputContext context)
+            throws JobExecutionException {
+
+        ProgressReporter progressReporter = ProgressReporterNull.get();
+
+        try {
+            NamedChannelsForSeries channels = input.createChannelsForSeries(0, progressReporter);
+
+            Channel inputImage = channels.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+
+            Channel bgSubOut = BackgroundSubtractor.subtractBackground(inputImage, radius, false);
+            Voxels<?> voxelsSubOut = bgSubOut.voxels().any();
+
+            double maxPixel = voxelsSubOut.extract().voxelWithMaxIntensity();
+
+            double scaleRatio = 255.0 / maxPixel;
+
+            // We go from 2048 to 256
+            if (scaleDownIntensityFactor != 1) {
+                voxelsSubOut.arithmetic().multiplyBy(scaleRatio);
+            }
+
+            ChannelConverter<UnsignedByteBuffer> converter = new ToUnsignedByte();
+            Channel channelOut =
+                    converter.convert(bgSubOut, ConversionPolicy.CHANGE_EXISTING_CHANNEL);
+
+            context.getOutputter()
+                    .writerSelective()
+                    .write("bgsub", () -> new ChannelGenerator("imgChannel", channelOut));
+
+        } catch (RasterIOException | GetOperationFailedException e) {
+            throw new JobExecutionException(e);
+        }
+    }
+
+    @Override
     public void endSeries(Outputter outputter) throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
+    public OutputEnabledMutable defaultOutputs() {
+        assert false;
+        return super.defaultOutputs();
     }
 }

@@ -90,20 +90,20 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        input.addToStoreInferNames(stackCollection, seriesNum, progressReporter);
+        input.addToStoreInferNames(stackCollection, seriesIndex, progressReporter);
     }
 
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        input.addToStoreWithName(name, stackCollection, seriesNum, progressReporter);
+        input.addToStoreWithName(name, stacks, seriesIndex, progressReporter);
     }
 
     @Override

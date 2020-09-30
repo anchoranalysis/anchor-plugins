@@ -44,13 +44,12 @@ import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 // At the moment, we don't check if the name number of rows/columns exist
-public class CombineCSVTask extends Task<FileInput, CSVWriter> {
+public class CombineCSV extends Task<FileInput, CSVWriter> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String seperator = ",";
@@ -96,18 +95,18 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
     @Override
     public void doJobOnInput(InputBound<FileInput, CSVWriter> params) throws JobExecutionException {
 
-        FileInput inputObject = params.getInputObject();
+        FileInput input = params.getInput();
         CSVWriter writer = params.getSharedState();
 
         if (writer == null || !writer.isOutputEnabled()) {
             return;
         }
 
-        Path inputPath = inputObject.getFile().toPath();
+        Path inputPath = input.getFile().toPath();
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
             String name =
-                    addName ? inputObject.descriptiveName() : null; // null means no-name is added
+                    addName ? input.descriptiveName() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {
@@ -130,9 +129,8 @@ public class CombineCSVTask extends Task<FileInput, CSVWriter> {
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 }

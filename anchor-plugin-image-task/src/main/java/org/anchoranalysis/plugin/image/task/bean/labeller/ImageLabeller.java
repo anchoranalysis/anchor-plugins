@@ -35,6 +35,11 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
+ * Associates a label with an image.
+ * 
+ * <p>e.g. this can be used to associate labels with images for training or evaluation in
+ * a machine-learning problem.
+ * 
  * @author Owen Feehan
  * @param <T> shared-state
  */

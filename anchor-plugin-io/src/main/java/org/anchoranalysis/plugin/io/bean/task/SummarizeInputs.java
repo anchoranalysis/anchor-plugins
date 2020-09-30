@@ -26,12 +26,10 @@
 
 package org.anchoranalysis.plugin.io.bean.task;
 
-import java.util.Optional;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
 
-public class SummarizeInputsTask<T extends InputFromManager> extends SummarizeTask<T, T> {
+public class SummarizeInputs<T extends InputFromManager> extends SummarizeBase<T, T> {
 
     @Override
     protected T extractObjectForSummary(T input) {
@@ -41,10 +39,5 @@ public class SummarizeInputsTask<T extends InputFromManager> extends SummarizeTa
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(InputFromManager.class);
-    }
-
-    @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        return Optional.empty();
     }
 }

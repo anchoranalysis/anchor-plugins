@@ -44,7 +44,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.bean.summarizer.Summarizer;
 import org.anchoranalysis.plugin.io.bean.summarizer.SummarizerCount;
 
-public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
+public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<T, Summarizer<S>> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Summarizer<S> summarizer = new SummarizerCount<>();
@@ -66,10 +66,10 @@ public abstract class SummarizeTask<T extends InputFromManager, S> extends Task<
     @Override
     public void doJobOnInput(InputBound<T, Summarizer<S>> params) throws JobExecutionException {
         try {
-            params.getSharedState().add(extractObjectForSummary(params.getInputObject()));
+            params.getSharedState().add(extractObjectForSummary(params.getInput()));
         } catch (OperationFailedException e) {
             throw new JobExecutionException(
-                    String.format("Cannot summarize %s", params.getInputObject().pathForBinding()),
+                    String.format("Cannot summarize %s", params.getInput().pathForBinding()),
                     e);
         }
     }

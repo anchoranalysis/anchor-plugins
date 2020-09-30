@@ -98,12 +98,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
+            FileInput input, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculateException {
 
         // Reads histogram from filesystem
         try {
-            Histogram histogramRead = readHistogramFromCsv(inputObject);
+            Histogram histogramRead = readHistogramFromCsv(input);
 
             if (histogram != null) {
                 histogramRead = filterHistogramFromProvider(histogramRead, context.getContext());

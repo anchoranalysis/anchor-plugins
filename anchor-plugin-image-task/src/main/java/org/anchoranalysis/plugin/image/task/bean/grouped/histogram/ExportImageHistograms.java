@@ -31,16 +31,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
+import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
@@ -48,34 +46,59 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 
 /**
- * Calculates feature on a 'grouped' set of images
+ * Exports a histogram of voxel intensities as a CSV file for each channel of an image.
  *
- * <p>1. All files are aggregated into groups 2. For each image file, a histogram is calculated 3.
- * The histogram is added to the group histogram 4. The histograms are written to the filesystem
+ * <p>Additionally, a histogram with the summation of voxel intensities for all channels in each image is produced.
+ * 
+ * <p>Optionally, one channel can be used as a mask, to restrict which voxels are included in the histogram.
+ * 
+ * <p>These steps occur:
+ * <ol>
+ * <li>All files are aggregated into groups.
+ * <li>For each image file, a histogram is calculated.
+ * <li>The histogram is added to the group histogram.
+ * <li>The histograms are written to the filesystem.
+ * </ol>
+ * 
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>channels</td><td>yes</td><td>A separate CSV histogram for each channel's voxels intensity.</td></tr>
+ * <tr><td>sum</td><td>yes</td><td>A histogram for the sum of each voxel's intensity across all channels.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
  */
-public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Histogram> {
+public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram> {
 
+    /** 
+     * The histograms written out for each channel (further filtered by a second-level check on the channel name).
+     * 
+     * <p>Note that the output-name does not feature in the filenames of outputted histograms.
+     */
+    private static final String OUTPUT_HISTOGRAMS = "channels";
+    
+    /** Summed CSV histograms of the selected channels in a sub-directory. */
+    private static final String OUTPUT_SUM = "sum";
+    
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private boolean writeImageHistograms =
-            true; // If enabled writes a histogram for each image, as well as the group
+    /** If defined, this is the name of channel used as a mask over the values which are fed into the histogram */
+    @BeanField @AllowEmpty @Getter @Setter private String channelMask = "";
 
-    @BeanField @OptionalBean @Getter @Setter private ObjectCollectionProvider objects; // Optional
-
-    /** If defined, this stack is used as a mask over the values which are fed into the histogram */
-    @BeanField @AllowEmpty @Getter @Setter private String keyMask = "";
-
-    /** What pixel value to read as "On" in the mask above */
+    /** What voxel value to read as "On" in the mask above */
     @BeanField @Getter @Setter private int maskValue = 255;
 
+    /** Iff true, bins with zero-counts are not written as a row in the CSV file. */ 
     @BeanField @Getter @Setter private boolean csvIgnoreZeros = false;
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutput(OUTPUT_HISTOGRAMS, OUTPUT_SUM);
     }
 
     @Override
@@ -85,7 +108,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
     }
 
     @Override
-    protected void processKeys(
+    protected void processStacks(
             NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<Histogram, Histogram> sharedState,
@@ -95,7 +118,7 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
         ChannelSource source =
                 new ChannelSource(store, sharedState.getChannelChecker(), Optional.empty());
 
-        HistogramExtracter histogramExtracter = new HistogramExtracter(source, keyMask, maskValue);
+        HistogramExtracter histogramExtracter = new HistogramExtracter(source, channelMask, maskValue);
 
         try {
             for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {
@@ -109,6 +132,11 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
         }
     }
 
+    @Override
+    protected Optional<String> subdirectoryForGroupOutputs() {
+        return Optional.of(OUTPUT_SUM);
+    }
+
     private void addHistogramFromChannel(
             NamedChannel channel,
             HistogramExtracter histogramExtracter,
@@ -117,22 +145,15 @@ public class GroupedHistogramExportTask extends GroupedStackTask<Histogram, Hist
             InputOutputContext context)
             throws JobExecutionException {
 
+        // Histogram is local to this function to keep it thread-safe.
         Histogram histogram = histogramExtracter.extractFrom(channel.getChannel());
 
-        if (writeImageHistograms) {
-            // We keep histogram as private member variable so it is thread-safe
-            createWriter().writeHistogramToFile(histogram, channel.getName(), context);
-        }
+        createWriter().writeHistogramToFile(histogram, channel.getName(), context);
 
         groupMap.add(groupName, channel.getName(), histogram);
     }
 
     private GroupedHistogramWriter createWriter() {
-        return new GroupedHistogramWriter(csvIgnoreZeros);
-    }
-
-    @Override
-    protected Optional<String> subdirectoryForGroupOutputs() {
-        return Optional.of("sum");
+        return new GroupedHistogramWriter(OUTPUT_HISTOGRAMS, csvIgnoreZeros);
     }
 }

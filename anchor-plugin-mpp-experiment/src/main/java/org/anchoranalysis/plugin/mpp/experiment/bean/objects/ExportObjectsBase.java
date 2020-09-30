@@ -52,7 +52,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     @BeanField @Getter @Setter private Padding padding;
     // END BEAN PROPERTIES
 
-    protected ObjectCollection inputObjects(ImageInitParams so, Logger logger)
+    protected ObjectCollection inputs(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
         objectsDuplicated.initRecursive(so, logger);
