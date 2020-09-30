@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * @author Owen Feehan
  * @param <T> input-type from which one or more rows of features are derived
  * @param <S> row-source that is duplicated for each new thread (to prevent any concurrency issues)
- * @param <U> feature-input type for @{code features} bean-field
+ * @param <U> feature-input type for {@code features} bean-field
  */
 public abstract class FeatureSource<T extends InputFromManager, S, U extends FeatureInput>
         extends AnchorBean<FeatureSource<T, S, U>> {
@@ -60,7 +60,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
 
     /**
      * Iff true, group columns are added to the CSV exports, and other group exports may occur in
-     * sub-directories
+     * sub-directories.
      *
      * @param groupGeneratorDefined has a group-generator been defined for this experiment?
      * @return true iff a group-generator has been defined
@@ -70,7 +70,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
     public abstract GenerateLabelHeadersForCSV headers();
 
     /**
-     * Processes one input to generate features
+     * Processes one input to generate features.
      *
      * @param input one particular input that will creates one or more "rows" in a feature-table
      * @param context io-context
