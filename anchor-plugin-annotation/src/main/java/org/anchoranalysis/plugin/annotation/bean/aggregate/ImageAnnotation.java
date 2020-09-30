@@ -26,22 +26,12 @@
 
 package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
+@AllArgsConstructor @Value
 class ImageAnnotation {
 
     private String identifier;
     private String label;
-
-    public ImageAnnotation(String identifier, String label) {
-        super();
-        this.identifier = identifier;
-        this.label = label;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public String getLabel() {
-        return label;
-    }
 }

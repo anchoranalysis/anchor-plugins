@@ -39,7 +39,7 @@ import org.anchoranalysis.core.text.TypedValue;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AnnotationGroup<T extends Assignment> implements IAddAnnotation<T> {
+public class AnnotationGroup<T extends Assignment> implements AddAnnotation<T> {
 
     // START REQUIRED ARGUMENTS
     @Getter @EqualsAndHashCode.Include private final String identifier;

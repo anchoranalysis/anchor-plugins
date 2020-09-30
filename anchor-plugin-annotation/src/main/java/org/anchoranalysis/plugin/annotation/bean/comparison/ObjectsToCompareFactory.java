@@ -40,7 +40,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
-import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
+import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,7 +48,7 @@ class ObjectsToCompareFactory {
 
     public static Optional<ObjectsToCompare> create(
             AnnotationComparisonInput<ProvidesStackInput> input,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             Dimensions dimensions,
             InputOutputContext context)
             throws JobExecutionException {
@@ -63,7 +63,7 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> createObjects(
             boolean left,
             String objName,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
             InputOutputContext context)
@@ -76,7 +76,7 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> foundOrLogAddUnnannotated(
             Findable<ObjectCollection> objects,
             String objName,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             Logger logger) {
         Optional<ObjectCollection> found = objects.getFoundOrLog(objName, logger);
         if (!found.isPresent()) {

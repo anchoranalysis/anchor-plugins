@@ -24,73 +24,47 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.annotation.bean.fileprovider;
+package org.anchoranalysis.plugin.annotation.bean.file;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
-import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
+import org.anchoranalysis.annotation.io.bean.AnnotationInputManager;
+import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
+import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.provider.file.FileProvider;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.error.FileProviderException;
 
-/**
- * Only considers annotations that have been accepted.
- *
- * @author Owen Feehan
- * @param <T> rejection-reason
- */
-public class FilterForAcceptedAnnotations<T> extends FileProvider {
+public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProvider fileProvider;
-
     @BeanField @Getter @Setter
-    private List<FilePathGenerator> listFilePathGenerator = new ArrayList<>();
+    private AnnotationInputManager<NamedChannelsInputPart, T> annotationInputManager;
     // END BEAN PROPERTIES
-
-    private MarkAnnotationReader<T> annotationReader = new MarkAnnotationReader<>(false);
 
     @Override
     public Collection<File> create(InputManagerParams params) throws FileProviderException {
+
+        List<File> filesOut = new ArrayList<>();
+
         try {
-            Collection<File> filesIn = fileProvider.create(params);
+            List<AnnotationWithStrategy<T>> list = annotationInputManager.inputs(params);
+            for (AnnotationWithStrategy<T> inp : list) {
 
-            List<File> filesOut = new ArrayList<>();
-
-            for (File f : filesIn) {
-
-                if (isFileAccepted(f)) {
-                    filesOut.add(f);
-                }
+                filesOut.addAll(inp.deriveAssociatedFiles());
             }
 
-            return filesOut;
         } catch (AnchorIOException e) {
             throw new FileProviderException(e);
         }
-    }
 
-    private boolean isFileAccepted(File file) throws AnchorIOException {
-
-        for (FilePathGenerator fpg : listFilePathGenerator) {
-            Path annotationPath = fpg.outFilePath(file.toPath(), false);
-
-            Optional<DualMarksAnnotation<T>> annotation = annotationReader.read(annotationPath);
-
-            if (!annotation.isPresent() || !annotation.get().isAccepted()) {
-                return false;
-            }
-        }
-        return true;
+        return filesOut;
     }
 }
