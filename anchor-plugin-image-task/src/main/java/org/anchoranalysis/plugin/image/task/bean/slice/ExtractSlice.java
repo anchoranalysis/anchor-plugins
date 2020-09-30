@@ -69,8 +69,6 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  */
 public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
-    private static final String OUTPUT_STACK_KEY = "stack";
-
     // START BEAN PROPERTIES
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> scoreProvider;
@@ -194,7 +192,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
     private void outputSlices(Outputter outputter, NamedStacks stackCollection)
             throws OutputWriteFailedException {
         StacksOutputter.outputSubsetWithException(
-                stackCollection, outputter, OUTPUT_STACK_KEY, false);
+                stackCollection, outputter, false);
     }
 
     private int findOptimalSlice(double[] scores) {
