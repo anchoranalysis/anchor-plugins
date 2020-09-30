@@ -97,7 +97,7 @@ import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>input</td><td>no</td><td>The input image for segmentation.</td></tr>

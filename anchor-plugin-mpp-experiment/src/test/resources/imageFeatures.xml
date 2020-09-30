@@ -32,7 +32,7 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent" axis="x"/>
-				<direction x="1" y="0" z="0" config-class="org.anchoranalysis.image.bean.orientation.VectorInDirection"/>
+				<direction x="1" y="0" z="0" config-class="org.anchoranalysis.image.bean.spatial.direction.VectorInDirection"/>
 			</item>
 		</item>
 	</item>
@@ -41,7 +41,7 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent" axis="y"/>
-				<direction x="0" y="1" z="0" config-class="org.anchoranalysis.image.bean.orientation.VectorInDirection"/>
+				<direction x="0" y="1" z="0" config-class="org.anchoranalysis.image.bean.spatial.direction.VectorInDirection"/>
 			</item>
 		</item>
 	</item>
@@ -50,7 +50,7 @@
 		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item unitType="µm" config-class="org.anchoranalysis.image.feature.bean.physical.convert.ConvertToPhysicalDistance">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent" axis="z"/>
-				<direction x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.orientation.VectorInDirection"/>
+				<direction x="0" y="0" z="1" config-class="org.anchoranalysis.image.bean.spatial.direction.VectorInDirection"/>
 			</item>
 		</item>
 	</item>

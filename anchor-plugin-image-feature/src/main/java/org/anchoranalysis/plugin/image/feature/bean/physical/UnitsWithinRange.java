@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
@@ -59,7 +59,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      *
      * <p>We default to volume as units, but it could also be area. It's arbitrary for 0-value.
      */
-    @BeanField @Getter @Setter private UnitValueAreaOrVolume min = new UnitValueVolumeVoxels(0);
+    @BeanField @Getter @Setter private UnitValueAreaOrVolume min = new VolumeVoxels(0);
 
     /**
      * Maximum-boundary for acceptable range
@@ -68,7 +68,7 @@ public class UnitsWithinRange<T extends FeatureInputWithResolution> extends With
      * infinity-value.
      */
     @BeanField @Getter @Setter
-    private UnitValueAreaOrVolume max = new UnitValueVolumeVoxels(Double.MAX_VALUE);
+    private UnitValueAreaOrVolume max = new VolumeVoxels(Double.MAX_VALUE);
     // END BEAN PROPERTIES
 
     @Override

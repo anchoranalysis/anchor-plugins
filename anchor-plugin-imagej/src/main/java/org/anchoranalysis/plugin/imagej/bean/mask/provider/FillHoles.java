@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
 import org.anchoranalysis.image.binary.mask.combine.MaskOr;

@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;

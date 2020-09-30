@@ -145,9 +145,7 @@ public abstract class GroupedStackBase<S, T>
     }
 
     /**
-     * An optional sub-directory where the group outputs are placed, to avoid placing them in the.
-     * 
-     * top-level output
+     * An optional sub-directory where the group outputs are placed.
      */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 

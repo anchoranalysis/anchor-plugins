@@ -64,7 +64,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  * <table>
  * <caption></caption>
  * <thead>
- * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
  * </thead>
  * <tbody>
  * <tr><td>channels</td><td>yes</td><td>A separate CSV histogram for each channel's voxels intensity.</td></tr>
@@ -89,7 +89,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
     /** If defined, this is the name of channel used as a mask over the values which are fed into the histogram */
     @BeanField @AllowEmpty @Getter @Setter private String channelMask = "";
 
-    /** What voxel value to read as "On" in the mask above */
+    /** What voxel value to read as "On" in the mask above. */
     @BeanField @Getter @Setter private int maskValue = 255;
 
     /** Iff true, bins with zero-counts are not written as a row in the CSV file. */ 

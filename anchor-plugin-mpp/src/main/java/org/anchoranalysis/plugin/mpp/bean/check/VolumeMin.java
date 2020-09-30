@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
