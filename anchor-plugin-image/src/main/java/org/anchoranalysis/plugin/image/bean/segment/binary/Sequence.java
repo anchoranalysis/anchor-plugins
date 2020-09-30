@@ -36,7 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;

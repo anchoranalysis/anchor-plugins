@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
+import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -123,7 +123,7 @@ public class OutlinePreserveRelativeSizeTest {
         outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
         outline.setOutlineWidth(1);
         outline.setSize(SIZE);
-        outline.setInterpolator(new InterpolatorBeanLanczos());
+        outline.setInterpolator(new ImgLib2Lanczos());
         return outline;
     }
 }

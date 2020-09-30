@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.binary.mask.Mask;
