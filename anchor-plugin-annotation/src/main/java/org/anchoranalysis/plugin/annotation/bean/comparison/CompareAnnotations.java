@@ -56,10 +56,17 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
-import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
+import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
-public class AnnotationComparison<T extends Assignment>
+/**
+ * Task to compare a set of annotations to a segmentation or other set of annotations.
+ * 
+ * @author Owen Feehan
+ *
+ * @param <T>
+ */
+public class CompareAnnotations<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
 
     // START BEAN PROPERTIES
@@ -137,7 +144,7 @@ public class AnnotationComparison<T extends Assignment>
             throws JobExecutionException {
 
         // Get a matching set of groups for this image
-        IAddAnnotation<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
+        AddAnnotation<T> addAnnotation = sharedState.groupsForImage(descriptiveSplit);
 
         Optional<ObjectsToCompare> objectsToCompare =
                 ObjectsToCompareFactory.create(
@@ -180,7 +187,7 @@ public class AnnotationComparison<T extends Assignment>
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
             ObjectsToCompare objectsToCompare,
-            IAddAnnotation<T> addAnnotation,
+            AddAnnotation<T> addAnnotation,
             SharedState<T> sharedStateC,
             SplitString descriptiveSplit,
             InputOutputContext context)

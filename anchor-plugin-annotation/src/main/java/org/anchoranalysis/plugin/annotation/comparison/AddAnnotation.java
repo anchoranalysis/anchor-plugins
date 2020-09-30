@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.comparison;
 
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 
-public interface IAddAnnotation<T extends Assignment> {
+public interface AddAnnotation<T extends Assignment> {
 
     void addSkippedAnnotationImage();
 
