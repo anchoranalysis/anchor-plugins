@@ -211,12 +211,12 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
         delegate.setDatasets(datasets);
     }
 
-    public int getMaxNumProcessors() {
-        return delegate.getMaxNumProcessors();
+    public int getMaxNumberProcessors() {
+        return delegate.getMaxNumberProcessors();
     }
 
-    public void setMaxNumProcessors(int maxNumProcessors) {
-        delegate.setMaxNumProcessors(maxNumProcessors);
+    public void setMaxNumberProcessors(int maxNumProcessors) {
+        delegate.setMaxNumberProcessors(maxNumProcessors);
     }
 
     public boolean isSuppressExceptions() {

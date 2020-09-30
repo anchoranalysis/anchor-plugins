@@ -91,7 +91,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         throw new OperationFailedException("Not supported");
@@ -100,16 +100,16 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
 
-        stackCollection.add(
+        stacks.add(
                 name,
                 () -> {
                     try {
-                        return createStackSequenceForSeries(seriesNum).get(progressReporter);
+                        return createStackSequenceForSeries(seriesIndex).get(progressReporter);
                     } catch (RasterIOException e) {
                         throw new OperationFailedException(e);
                     }

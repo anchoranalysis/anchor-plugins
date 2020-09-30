@@ -51,8 +51,7 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.color.list.ColorListFactory;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
@@ -60,7 +59,7 @@ import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput
 import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
-public class AnnotationComparisonTask<T extends Assignment>
+public class AnnotationComparison<T extends Assignment>
         extends Task<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> {
 
     // START BEAN PROPERTIES
@@ -104,7 +103,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             InputBound<AnnotationComparisonInput<ProvidesStackInput>, SharedState<T>> params)
             throws JobExecutionException {
 
-        AnnotationComparisonInput<ProvidesStackInput> input = params.getInputObject();
+        AnnotationComparisonInput<ProvidesStackInput> input = params.getInput();
 
         // Create the background
         DisplayStack background = createBackground(input);
@@ -162,13 +161,13 @@ public class AnnotationComparisonTask<T extends Assignment>
                 : null;
     }
 
-    private DisplayStack createBackground(AnnotationComparisonInput<ProvidesStackInput> inputObject)
+    private DisplayStack createBackground(AnnotationComparisonInput<ProvidesStackInput> input)
             throws JobExecutionException {
 
         try {
-            NamedStacks stackCollection = new NamedStacks();
-            inputObject.getInputObject().addToStoreInferNames(stackCollection);
-            return DisplayStack.create(stackCollection.getException(backgroundChannelName));
+            NamedStacks stacks = new NamedStacks();
+            input.getInput().addToStoreInferNames(stacks);
+            return DisplayStack.create(stacks.getException(backgroundChannelName));
 
         } catch (CreateException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -178,7 +177,7 @@ public class AnnotationComparisonTask<T extends Assignment>
     }
 
     private Assignment processAcceptedAnnotation(
-            AnnotationComparisonInput<ProvidesStackInput> inputObject,
+            AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
             ObjectsToCompare objectsToCompare,
             IAddAnnotation<T> addAnnotation,
@@ -199,7 +198,7 @@ public class AnnotationComparisonTask<T extends Assignment>
             // Statistics row in file
             sharedStateC
                     .getAssignmentCSV()
-                    .writeStatisticsForImage(assignment, descriptiveSplit, inputObject);
+                    .writeStatisticsForImage(assignment, descriptiveSplit, input);
 
             return assignment;
 
@@ -215,7 +214,7 @@ public class AnnotationComparisonTask<T extends Assignment>
     private void writeRGBOutlineStack(
             String outputName,
             Outputter outputter,
-            AnnotationComparisonInput<ProvidesStackInput> inputObject,
+            AnnotationComparisonInput<ProvidesStackInput> input,
             Assignment assignment,
             DisplayStack background) {
 
@@ -240,7 +239,7 @@ public class AnnotationComparisonTask<T extends Assignment>
                                         assignment,
                                         colorPool,
                                         useMIP,
-                                        inputObject.getNames(),
+                                        input.getNames(),
                                         outlineWidth,
                                         assigner.moreThanOneObj()));
     }
@@ -274,9 +273,8 @@ public class AnnotationComparisonTask<T extends Assignment>
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 }

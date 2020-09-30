@@ -46,7 +46,7 @@ import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.PairNeighbors;
-import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.plugin.mpp.experiment.bean.feature.source.FromObjects;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.EnergyStackFixture;
@@ -92,11 +92,11 @@ class TaskFixture {
     }
 
     public <T extends FeatureInput>
-            ExportFeaturesTask<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject>
+            ExportFeatures<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject>
                     createTask() throws CreateException {
 
-        ExportFeaturesTask<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> task =
-                new ExportFeaturesTask<>();
+        ExportFeatures<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> task =
+                new ExportFeatures<>();
         task.setSource(createSource());
         task.setFeatures(featureLoader.single());
         task.setFeaturesAggregate(featureLoader.aggregated());

@@ -62,15 +62,14 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MPPInitParamsFactory;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
-import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
+import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVSharedState;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
@@ -85,8 +84,8 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
  *
  * @author Owen Feehan
  */
-public class ExportObjectsFromCSVTask
-        extends ExportObjectsBase<FromCSVInputObject, FromCSVSharedState> {
+public class ExportObjectsFromCSV
+        extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
 
     private class CSVRowRGBOutlineGenerator
             extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties, CSVRow> {
@@ -134,7 +133,7 @@ public class ExportObjectsFromCSVTask
 
     @Override
     public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(FromCSVInputObject.class);
+        return new InputTypesExpected(FromCSVInput.class);
     }
 
     @Override
@@ -150,20 +149,20 @@ public class ExportObjectsFromCSVTask
     }
 
     @Override
-    public void doJobOnInput(InputBound<FromCSVInputObject, FromCSVSharedState> input)
+    public void doJobOnInput(InputBound<FromCSVInput, FromCSVSharedState> inputBound)
             throws JobExecutionException {
 
-        FromCSVInputObject inputObject = input.getInputObject();
-        InputOutputContext context = input.context();
+        FromCSVInput input = inputBound.getInput();
+        InputOutputContext context = inputBound.context();
 
         try {
             IndexedCSVRows groupedRows =
-                    input.getSharedState()
-                            .getIndexedRowsOrCreate(inputObject.getCsvFilePath(), columnDefinition);
+                    inputBound.getSharedState()
+                            .getIndexedRowsOrCreate(input.getCsvFilePath(), columnDefinition);
 
             // We look for rows that match our File ID
             String fileID =
-                    idStringForPath(inputObject.pathForBinding(), context.isDebugEnabled())
+                    idStringForPath(input.pathForBinding(), context.isDebugEnabled())
                             .toString();
             MapGroupToRow mapGroup = groupedRows.get(fileID);
 
@@ -171,12 +170,12 @@ public class ExportObjectsFromCSVTask
                 context.getMessageReporter()
                         .logFormatted(
                                 "No matching rows in CSV file for id '%s' from '%s'",
-                                fileID, inputObject.pathForBinding());
+                                fileID, input.pathForBinding());
                 return;
             }
 
             processFileWithMap(
-                    MPPInitParamsFactory.create(context, Optional.empty(), Optional.of(inputObject))
+                    MPPInitParamsFactory.create(context, Optional.empty(), Optional.of(input))
                             .getImage(),
                     mapGroup,
                     groupedRows.groupNameSet(),
@@ -197,12 +196,11 @@ public class ExportObjectsFromCSVTask
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+    public OutputEnabledMutable defaultOutputs() {
+        assert false;
+        return super.defaultOutputs();
     }
-
+    
     private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         // Get our background-stack and objects. We duplicate to avoid threading issues
@@ -231,7 +229,7 @@ public class ExportObjectsFromCSVTask
             DisplayStack background = createBackgroundStack(imageInit, context.getLogger());
 
             ObjectCollectionRTree objects =
-                    new ObjectCollectionRTree(inputObjects(imageInit, context.getLogger()));
+                    new ObjectCollectionRTree(inputs(imageInit, context.getLogger()));
 
             // Loop through each group, and output a series of TIFFs, where set of objects is shown
             // on a successive image, cropped appropriately

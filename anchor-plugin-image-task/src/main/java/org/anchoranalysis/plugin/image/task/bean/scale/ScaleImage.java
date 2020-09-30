@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,8 +52,7 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
@@ -66,7 +64,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
  *
  * @author Owen Feehan
  */
-public class ScaleTask extends RasterTask {
+public class ScaleImage extends RasterTask {
 
     private static final String KEY_OUTPUT_STACK = "stack";
 
@@ -84,16 +82,16 @@ public class ScaleTask extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject,
+            NamedChannelsInput input,
             int seriesIndex,
-            int numSeries,
+            int numberSeries,
             InputOutputContext context)
             throws JobExecutionException {
 
         // Input
-        NamedChannelsForSeries nccfs;
+        NamedChannelsForSeries namedChannels;
         try {
-            nccfs = inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
+            namedChannels = input.createChannelsForSeries(0, ProgressReporterNull.get());
         } catch (RasterIOException e1) {
             throw new JobExecutionException(e1);
         }
@@ -103,13 +101,29 @@ public class ScaleTask extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            nccfs.addAsSeparateChannels(new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
+            namedChannels.addAsSeparateChannels(new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
             throw new JobExecutionException(e);
         }
 
         populateAndOutputCollections(soImage, context);
+    }
+
+    @Override
+    public void endSeries(Outputter outputter) throws JobExecutionException {
+        // NOTHING TO DO
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
+
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        assert (false);
+        return super.defaultOutputs();
     }
 
     private void populateAndOutputCollections(ImageInitParams soImage, InputOutputContext context)
@@ -126,12 +140,7 @@ public class ScaleTask extends RasterTask {
         outputStackCollection(
                 stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
     }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
-    }
-
+    
     private static void outputStackCollection(
             NamedProvider<Stack> stackCollection,
             String outputSecondLevelKey,
@@ -163,7 +172,7 @@ public class ScaleTask extends RasterTask {
             if (!context.getOutputter()
                     .outputsEnabled()
                     .second(KEY_OUTPUT_STACK)
-                    .isOutputAllowed(channelName)) {
+                    .isOutputEnabled(channelName)) {
                 continue;
             }
 
@@ -195,17 +204,5 @@ public class ScaleTask extends RasterTask {
                 throw new JobExecutionException(e.summarize());
             }
         }
-    }
-
-    @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
-        // NOTHING TO DO
-    }
-
-    @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
     }
 }

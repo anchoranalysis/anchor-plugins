@@ -42,7 +42,7 @@ import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Extracts features from some kind of inputs.
+ * Extracts features from some kind of inputs to produce one or more rows in a feature-table.
  *
  * @author Owen Feehan
  * @param <T> input-type from which one or more rows of features are derived

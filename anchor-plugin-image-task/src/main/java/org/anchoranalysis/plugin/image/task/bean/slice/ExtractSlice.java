@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.slice;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -54,8 +53,7 @@ import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -69,7 +67,7 @@ import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice
  *
  * @author Owen Feehan
  */
-public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
+public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
     private static final String OUTPUT_STACK_KEY = "stack";
 
@@ -107,17 +105,17 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
             // Create an energy stack
             EnergyStack energyStack =
                     FeatureCalculatorRepeated.extractStack(
-                            params.getInputObject(), stackEnergy, params.context());
+                            params.getInput(), stackEnergy, params.context());
 
             int optimaSliceIndex =
                     selectSlice(
                             energyStack,
                             params.getLogger(),
-                            params.getInputObject().descriptiveName(),
+                            params.getInput().descriptiveName(),
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInputObject(), energyStack, optimaSliceIndex, params.getOutputter());
+                    params.getInput(), energyStack, optimaSliceIndex, params.getOutputter());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -132,12 +130,11 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
-
+    
     /**
      * Returns the index of the selected slice
      *
@@ -167,13 +164,13 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
     }
 
     private void deriveSlicesAndOutput(
-            NamedChannelsInput inputObject,
+            NamedChannelsInput input,
             EnergyStack energyStack,
             int optimaSliceIndex,
             Outputter outputter)
             throws OperationFailedException {
 
-        NamedStacks stacks = collectionFromInput(inputObject);
+        NamedStacks stacks = collectionFromInput(input);
 
         // Extract slices
         NamedStacks slices =
@@ -187,10 +184,10 @@ public class ExtractSingleSliceTask extends Task<NamedChannelsInput, SharedState
         }
     }
 
-    private static NamedStacks collectionFromInput(NamedChannelsInput inputObject)
+    private static NamedStacks collectionFromInput(NamedChannelsInput input)
             throws OperationFailedException {
         NamedStacks stackCollection = new NamedStacks();
-        inputObject.addToStoreInferNames(stackCollection);
+        input.addToStoreInferNames(stackCollection);
         return stackCollection;
     }
 

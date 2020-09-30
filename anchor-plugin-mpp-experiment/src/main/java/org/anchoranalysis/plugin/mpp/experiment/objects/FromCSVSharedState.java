@@ -37,7 +37,7 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
 
 /**
  * Shared-state for {@link
- * org.anchoranalysis.plugin.mpp.experiment.bean.objects.ExportObjectsFromCSVTask}
+ * org.anchoranalysis.plugin.mpp.experiment.bean.objects.ExportObjectsFromCSV}
  *
  * <p>Mantains an index of the CSV rows, that is initialized first time it's requested.
  *

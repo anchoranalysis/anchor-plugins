@@ -40,19 +40,19 @@ import org.anchoranalysis.io.input.InputFromManager;
 @AllArgsConstructor
 public class AnnotationComparisonInput<T extends InputFromManager> implements InputFromManager {
 
-    private final T inputObject;
+    private final T input;
     private final Tuple2<Comparer, Comparer> comparers;
     private final Tuple2<String, String> names;
     private final RasterReader rasterReader;
 
     @Override
     public String descriptiveName() {
-        return inputObject.descriptiveName();
+        return input.descriptiveName();
     }
 
     @Override
     public Optional<Path> pathForBinding() {
-        return inputObject.pathForBinding();
+        return input.pathForBinding();
     }
 
     // Uses a boolean flag to multiplex between comparerLeft and comparerRight
@@ -66,6 +66,6 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
 
     @Override
     public void close(ErrorReporter errorReporter) {
-        inputObject.close(errorReporter);
+        input.close(errorReporter);
     }
 }

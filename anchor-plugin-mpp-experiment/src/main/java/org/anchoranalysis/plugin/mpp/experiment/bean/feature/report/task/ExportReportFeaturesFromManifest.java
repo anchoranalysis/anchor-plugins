@@ -44,13 +44,12 @@ import org.anchoranalysis.io.bean.report.feature.ReportFeature;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
-public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestCouplingDefinition> {
+public class ExportReportFeaturesFromManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
@@ -58,10 +57,9 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     @Override
@@ -74,7 +72,7 @@ public class ReportFeaturesManifestTask extends TaskWithoutSharedState<ManifestC
             throws JobExecutionException {
 
         Logger logger = params.getLogger();
-        ManifestCouplingDefinition input = params.getInputObject();
+        ManifestCouplingDefinition input = params.getInput();
         Outputter outputter = params.getOutputter();
 
         Optional<CSVWriter> writer;

@@ -39,7 +39,7 @@ import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.plugin.image.feature.bean.dimensions.Extent;
-import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeaturesTask;
+import org.anchoranalysis.plugin.image.task.bean.feature.ExportFeatures;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.mockfeature.MockFeatureWithCalculationFixture;
 import org.junit.Before;
@@ -229,7 +229,7 @@ public class ExportFeaturesTaskTest {
     }
 
     /**
-     * Runs a test to check if the results of {@link ExportFeaturesTask} correspond to saved-values
+     * Runs a test to check if the results of {@link ExportFeatures} correspond to saved-values
      *
      * @param suffixPathDirSaved a suffix to identify where to find the saved-output to compare
      *     against

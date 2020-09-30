@@ -40,6 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
@@ -49,7 +50,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
  * Base class for exporting features, where features are calculated per-image using a
- * NamedFeatureStore
+ * {@link NamedFeatureStore}.
  *
  * @author Owen Feehan
  * @param <T> input-manager type
@@ -92,7 +93,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     protected abstract ResultsVectorWithThumbnail calculateResultsForInput(
-            T inputObject, InputProcessContext<FeatureList<S>> context)
+            T input, InputProcessContext<FeatureList<S>> context)
             throws NamedFeatureCalculateException;
 
     private static RowLabels identifierFor(

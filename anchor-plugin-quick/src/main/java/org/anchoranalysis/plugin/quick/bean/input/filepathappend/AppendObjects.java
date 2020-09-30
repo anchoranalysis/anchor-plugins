@@ -44,6 +44,6 @@ public class AppendObjects extends FilePathBaseAppendToManagerWithFileID {
     @Override
     protected String createOutPathString() throws BeanMisconfiguredException {
         return String.format(
-                "%s/%s/%s/", firstPartWithFilename(), OutputterDirectories.OBJECT, getFileId());
+                "%s/%s/%s/", firstPartWithFilename(), OutputterDirectories.OBJECTS, getFileId());
     }
 }

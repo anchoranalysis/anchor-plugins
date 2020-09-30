@@ -60,7 +60,7 @@ class CSVAssignment {
     }
 
     public synchronized void writeStatisticsForImage(
-            Assignment assignment, SplitString descriptiveSplit, InputFromManager inputObject)
+            Assignment assignment, SplitString descriptiveSplit, InputFromManager input)
             throws OperationFailedException {
 
         if (!writer.isPresent() || !writer.get().isOutputEnabled()) {
@@ -73,7 +73,7 @@ class CSVAssignment {
             writer.get().writeHeaders(createHeaders(assignment));
         }
 
-        writer.get().writeRow(createValues(assignment, inputObject, descriptiveSplit)); // NOSONAR
+        writer.get().writeRow(createValues(assignment, input, descriptiveSplit)); // NOSONAR
     }
 
     private List<String> createHeaders(Assignment assignment) {
@@ -97,22 +97,22 @@ class CSVAssignment {
     }
 
     private List<TypedValue> createValues(
-            Assignment assignment, InputFromManager inputObject, SplitString descriptiveSplit)
+            Assignment assignment, InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
-        List<TypedValue> base = createBaseValues(inputObject, descriptiveSplit);
+        List<TypedValue> base = createBaseValues(input, descriptiveSplit);
         base.addAll(assignment.createStatistics());
         return base;
     }
 
     private List<TypedValue> createBaseValues(
-            InputFromManager inputObject, SplitString descriptiveSplit)
+            InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
 
         Elements rowElements = new Elements();
 
         try {
-            rowElements.add(inputObject.descriptiveName());
-            rowElements.add(inputObject.pathForBindingRequired().toString());
+            rowElements.add(input.descriptiveName());
+            rowElements.add(input.pathForBindingRequired().toString());
         } catch (AnchorIOException e) {
             throw new OperationFailedException(e);
         }

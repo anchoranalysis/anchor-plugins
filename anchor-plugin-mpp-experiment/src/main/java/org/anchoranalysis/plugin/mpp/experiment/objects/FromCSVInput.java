@@ -35,17 +35,13 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import lombok.AllArgsConstructor;
 
-public class FromCSVInputObject implements InputFromManager, InputForMPPBean {
+@AllArgsConstructor
+public class FromCSVInput implements InputFromManager, InputForMPPBean {
 
     private MultiInput input;
     private Path csvFilePath;
-
-    public FromCSVInputObject(MultiInput input, Path csvFilePath) {
-        super();
-        this.input = input;
-        this.csvFilePath = csvFilePath;
-    }
 
     @Override
     public String descriptiveName() {

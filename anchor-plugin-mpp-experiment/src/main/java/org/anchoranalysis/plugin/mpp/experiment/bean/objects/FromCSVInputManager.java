@@ -39,10 +39,10 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
+import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
 
 // An input stack
-public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
+public class FromCSVInputManager extends InputManager<FromCSVInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MultiInputManager input;
@@ -51,11 +51,11 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<FromCSVInputObject> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<FromCSVInput> inputs(InputManagerParams params) throws AnchorIOException {
 
         Iterator<MultiInput> itr = input.inputs(params).iterator();
 
-        List<FromCSVInputObject> out = new ArrayList<>();
+        List<FromCSVInput> out = new ArrayList<>();
 
         while (itr.hasNext()) {
             MultiInput inputObj = itr.next();
@@ -63,7 +63,7 @@ public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
             Path csvFilePathOut =
                     appendCSV.outFilePath(
                             inputObj.pathForBindingRequired(), params.isDebugModeActivated());
-            out.add(new FromCSVInputObject(inputObj, csvFilePathOut));
+            out.add(new FromCSVInput(inputObj, csvFilePathOut));
         }
 
         return out;

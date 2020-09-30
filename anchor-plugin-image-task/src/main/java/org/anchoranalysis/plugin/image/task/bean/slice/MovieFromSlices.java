@@ -49,12 +49,11 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
-public class MovieFromSlicesTask extends RasterTask {
+public class MovieFromSlices extends RasterTask {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int delaySizeAtEnd = 0;
@@ -99,29 +98,28 @@ public class MovieFromSlicesTask extends RasterTask {
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     @Override
     public void doStack(
-            NamedChannelsInput inputObject,
+            NamedChannelsInput input,
             int seriesIndex,
-            int numSeries,
+            int numberSeries,
             InputOutputContext context)
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries ncc =
-                    inputObject.createChannelsForSeries(0, ProgressReporterNull.get());
+            NamedChannelsForSeries namedChannels =
+                    input.createChannelsForSeries(0, ProgressReporterNull.get());
 
             ProgressReporter progressReporter = ProgressReporterNull.get();
 
-            Channel red = ncc.getChannel("red", 0, progressReporter);
-            Channel blue = ncc.getChannel("blue", 0, progressReporter);
-            Channel green = ncc.getChannel("green", 0, progressReporter);
+            Channel red = namedChannels.getChannel("red", 0, progressReporter);
+            Channel blue = namedChannels.getChannel("blue", 0, progressReporter);
+            Channel green = namedChannels.getChannel("green", 0, progressReporter);
 
             //
             if (!red.dimensions().equals(blue.dimensions())

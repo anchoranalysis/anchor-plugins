@@ -39,17 +39,16 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
- * Aggregates many per-image annotations together in form of a CSV file
+ * Aggregates many per-image annotations together in form of a CSV file.
  *
  * @author Owen Feehan
  */
-public class AnnotationAggregateTask<S extends AnnotatorStrategy>
+public class AggregateAnnotations<S extends AnnotatorStrategy>
         extends Task<AnnotationWithStrategy<S>, AggregateSharedState> {
 
     @Override
@@ -67,7 +66,7 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     public void doJobOnInput(InputBound<AnnotationWithStrategy<S>, AggregateSharedState> params)
             throws JobExecutionException {
 
-        Optional<ImageAnnotation> ann = createFromInputObject(params.getInputObject());
+        Optional<ImageAnnotation> ann = createFromInput(params.getInput());
         ann.ifPresent(annotation -> params.getSharedState().getAnnotations().add(annotation));
     }
 
@@ -88,12 +87,12 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
         return generator;
     }
 
-    private Optional<ImageAnnotation> createFromInputObject(AnnotationWithStrategy<S> inputObject)
+    private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)
             throws JobExecutionException {
         try {
-            return inputObject
+            return input
                     .labelForAggregation()
-                    .map(label -> new ImageAnnotation(inputObject.descriptiveName(), label));
+                    .map(label -> new ImageAnnotation(input.descriptiveName(), label));
         } catch (AnchorIOException exc) {
             throw new JobExecutionException(exc);
         }
@@ -110,9 +109,8 @@ public class AnnotationAggregateTask<S extends AnnotatorStrategy>
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 }

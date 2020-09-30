@@ -95,13 +95,13 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     }
 
     private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath(
-            List<T> listInputObjects, ProgressReporter progressReporter) throws CreateException {
+            List<T> listInputs, ProgressReporter progressReporter) throws CreateException {
         return FunctionalProgress.mapList(
-                listInputObjects,
+                listInputs,
                 progressReporter,
-                inputObject ->
+                input ->
                         new AnnotationComparisonInput<>(
-                                inputObject,
+                                input,
                                 Tuple.of(comparerLeft, comparerRight),
                                 Tuple.of(nameLeft, nameRight),
                                 rasterReader));

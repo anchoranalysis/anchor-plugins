@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.image.task.bean.path;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
@@ -43,12 +42,11 @@ import org.anchoranalysis.io.bean.root.RootPathMap;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
-public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, StringBuilder> {
+public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringBuilder> {
 
     // START BEAN PROPERTIES
     /** The name of the RootPath to associate with this fileset. If empty, it is ignored. */
@@ -72,7 +70,7 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
 
         Path path;
         try {
-            path = params.getInputObject().pathForBindingRequired();
+            path = params.getInput().pathForBindingRequired();
         } catch (AnchorIOException e) {
             throw new JobExecutionException(e);
         }
@@ -105,10 +103,9 @@ public class RecordFilepathsTask<T extends InputFromManager> extends Task<T, Str
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
     @Override

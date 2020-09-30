@@ -38,6 +38,7 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -53,36 +54,54 @@ import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
- * Converts the input-image to the default output format, optionally changing the bit depth
+ * Converts each input-image to the default output format, optionally changing the bit depth.
+ * 
+ * <p>Stacks containing multiple series (i.e. multiple images in a single file) are supported.
+ * 
+ * <p>If it looks like an RGB image, channels are written together. Otherwise they are written.
+ * independently.
  *
- * <p>If it looks like an RGB image, channels are written together. Otherwise they are written
- * independently
- *
+ * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Enabled by default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td>converted</td><td>yes</td><td>An image written in the default output format.</td></tr>
+ * <tr><td rowspan="3"><i>inherited from {@link Task}</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
  * @author Owen Feehan
  */
-public class FormatConverterTask extends RasterTask {
+public class ConvertImageFormat extends RasterTask {
 
+    private static final String OUTPUT_COPY = "converted";
+    
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
     @BeanField @Getter @Setter private ChannelConvertStyle channelConversionStyle = null;
 
+    /** If true, the series index is not included in the outputted file-names. */
     @BeanField @Getter @Setter private boolean suppressSeries = false;
 
+    /** Optionally, includes only certain channels when converting. */
     @BeanField @OptionalBean @Getter @Setter private ChannelFilter channelFilter = null;
 
+    /** Optionally, how to convert from one bit-depth to another (scaling, clipping etc.) */
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
-    private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSeq;
+    private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSequence;
 
     @Override
     public void startSeries(Outputter outputter, ErrorReporter errorReporter)
@@ -90,27 +109,25 @@ public class FormatConverterTask extends RasterTask {
 
         StackGenerator generator = new StackGenerator(false, "out", false);
 
-        generatorSeq =
+        generatorSequence =
                 new GeneratorSequenceNonIncrementalRerouterErrors<>(
                         new GeneratorSequenceNonIncremental<>(
                                 outputter.getChecked(),
                                 Optional.empty(),
                                 // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
-                                new StringSuffixOutputNameStyle("", "%s"),
+                                new StringSuffixOutputNameStyle(OUTPUT_COPY, "%s"),
                                 generator,
                                 true),
                         errorReporter);
 
         // TODO it would be nicer to reflect the real sequence type, than just using a set of
         // indexes
-        generatorSeq.start(new SetSequenceType());
+        generatorSequence.start(new SetSequenceType());
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
-        assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutput(OUTPUT_COPY);
     }
 
     @Override
@@ -118,22 +135,17 @@ public class FormatConverterTask extends RasterTask {
         return false;
     }
 
-    public NamedChannelsForSeries createChannelCollection(
-            NamedChannelsInput inputObject, int seriesIndex) throws RasterIOException {
-        return inputObject.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
-    }
-
     @Override
     public void doStack(
-            NamedChannelsInput inputObjectUntyped,
+            NamedChannelsInput inputUntyped,
             int seriesIndex,
-            int numSeries,
+            int numberSeries,
             InputOutputContext context)
             throws JobExecutionException {
 
         try {
             NamedChannelsForSeries channelCollection =
-                    createChannelCollection(inputObjectUntyped, seriesIndex);
+                    createChannelCollection(inputUntyped, seriesIndex);
 
             ChannelGetter channelGetter = maybeAddFilter(channelCollection, context);
 
@@ -144,7 +156,7 @@ public class FormatConverterTask extends RasterTask {
             convertEachTimepoint(
                     seriesIndex,
                     channelCollection.channelNames(),
-                    numSeries,
+                    numberSeries,
                     channelCollection.sizeT(ProgressReporterNull.get()),
                     channelGetter,
                     context.getLogger());
@@ -152,6 +164,11 @@ public class FormatConverterTask extends RasterTask {
         } catch (RasterIOException | CreateException | AnchorIOException e) {
             throw new JobExecutionException(e);
         }
+    }
+    
+    @Override
+    public void endSeries(Outputter outputter) throws JobExecutionException {
+        generatorSequence.end();
     }
 
     private void convertEachTimepoint(
@@ -183,9 +200,14 @@ public class FormatConverterTask extends RasterTask {
         }
     }
 
+    private NamedChannelsForSeries createChannelCollection(
+            NamedChannelsInput input, int seriesIndex) throws RasterIOException {
+        return input.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
+    }
+    
     private void addStackToOutput(
             String name, Stack stack, CalculateOutputName calculateOutputName) {
-        generatorSeq.add(stack, calculateOutputName.outputName(name));
+        generatorSequence.add(stack, calculateOutputName.outputName(name));
     }
 
     private ChannelGetter maybeAddConverter(ChannelGetter channelGetter) throws CreateException {
@@ -209,10 +231,5 @@ public class FormatConverterTask extends RasterTask {
         } else {
             return channelCollection;
         }
-    }
-
-    @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
-        generatorSeq.end();
     }
 }

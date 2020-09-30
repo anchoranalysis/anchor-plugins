@@ -52,20 +52,26 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.MultiLevelOutputEnabled;
-import org.anchoranalysis.io.output.bean.rules.Permissive;
+import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
+import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 
-public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
+/**
+ * Segments an image into a collection of {@link Mark}s.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private SegmentIntoMarks segment = null;
+    @BeanField @Getter @Setter private SegmentIntoMarks segment;
 
     @BeanField @Getter @Setter private String outputNameOriginal = "original";
 
@@ -73,22 +79,22 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     // END BEAN PROPERTIES
 
     @Override
-    public void doJobOnInput(InputBound<MultiInput, ExperimentState> params)
+    public void doJobOnInput(InputBound<MultiInput, ExperimentState> inputBound)
             throws JobExecutionException {
 
-        MultiInput inputObject = params.getInputObject();
+        MultiInput input = inputBound.getInput();
 
         try {
-            NamedStacks stackCollection = stacksFromInput(inputObject);
+            NamedStacks stackCollection = stacksFromInput(input);
 
-            NamedProviderStore<ObjectCollection> objects = objectsFromInput(inputObject);
+            NamedProviderStore<ObjectCollection> objects = objectsFromInput(input);
 
-            Optional<KeyValueParams> paramsCreated = keyValueParamsFromInput(inputObject);
+            Optional<KeyValueParams> paramsCreated = keyValueParamsFromInput(input);
 
             MarkCollection marks =
                     segment.duplicateBean()
-                            .segment(stackCollection, objects, paramsCreated, params.context());
-            writeVisualization(marks, params.getOutputter(), stackCollection, params.getLogger());
+                            .segment(stackCollection, objects, paramsCreated, inputBound.context());
+            writeVisualization(marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);
@@ -105,24 +111,23 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
     }
 
     @Override
-    public Optional<MultiLevelOutputEnabled> defaultOutputs() {
+    public OutputEnabledMutable defaultOutputs() {
         assert (false);
-        // TODO change defaultOutputs()
-        return Optional.of(Permissive.INSTANCE);
+        return super.defaultOutputs();
     }
 
-    private NamedStacks stacksFromInput(MultiInput inputObject) throws OperationFailedException {
+    private NamedStacks stacksFromInput(MultiInput input) throws OperationFailedException {
         NamedStacks stackCollection = new NamedStacks();
-        inputObject.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
+        input.stack().addToStore(new WrapStackAsTimeSequenceStore(stackCollection));
         return stackCollection;
     }
 
-    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput inputObject)
+    private Optional<KeyValueParams> keyValueParamsFromInput(MultiInput input)
             throws JobExecutionException {
         NamedProviderStore<KeyValueParams> paramsCollection =
                 new LazyEvaluationStore<>("keyValueParams");
         try {
-            inputObject.keyValueParams().addToStore(paramsCollection);
+            input.keyValueParams().addToStore(paramsCollection);
         } catch (OperationFailedException e1) {
             throw new JobExecutionException("Cannot retrieve key-value-params from input-object");
         }
@@ -140,11 +145,11 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
         }
     }
 
-    private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput inputObject)
+    private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput input)
             throws OperationFailedException {
         NamedProviderStore<ObjectCollection> objectsStore =
                 new LazyEvaluationStore<>("object-colelctions");
-        inputObject.objects().addToStore(objectsStore);
+        input.objects().addToStore(objectsStore);
         return objectsStore;
     }
 
@@ -161,7 +166,7 @@ public class SegmentIntoMarksTask extends Task<MultiInput, ExperimentState> {
 
             MarksVisualization.write(marks, outputter, backgroundStack);
         } catch (OperationFailedException | CreateException e) {
-            logger.errorReporter().recordError(SegmentIntoMarksTask.class, e);
+            logger.errorReporter().recordError(SegmentMarksFromImage.class, e);
         }
     }
 
