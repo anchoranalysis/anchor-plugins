@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.image.task.feature;
+package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
@@ -40,6 +40,9 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
+import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
+import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
+import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 
 public class CalculateFeaturesForObjects<T extends FeatureInput> {

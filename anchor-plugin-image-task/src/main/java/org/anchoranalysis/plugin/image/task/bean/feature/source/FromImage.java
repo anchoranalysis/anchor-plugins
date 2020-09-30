@@ -48,7 +48,7 @@ import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ScaleToSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.stack.ThumbnailFromStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
+import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
 /**
  * An image that produces one row of features.

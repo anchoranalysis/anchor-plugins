@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
+package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import java.util.Optional;
 import lombok.Getter;
@@ -56,8 +56,9 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
- * Calculates feature or feature values, adding a energyStack (optionally) from either provider or
- * the input-stack
+ * Calculates feature or feature values.
+ * 
+ * <p>Optionally, an energy-stack is added from either provider or the input-stack.
  *
  * @author Owen Feehan
  * @param <T> feature-input-type

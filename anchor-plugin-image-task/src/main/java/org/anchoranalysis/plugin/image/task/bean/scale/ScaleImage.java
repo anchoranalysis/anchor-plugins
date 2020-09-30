@@ -60,9 +60,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
- * Scales many rasters
+ * Task to scale an image.
  *
- * <p>Expects a second-level output "stack" to determine which stacks get ouputted or not
+ * <p>Expects a second-level output "stack" to determine which stacks get outputted or not.
  *
  * @author Owen Feehan
  */

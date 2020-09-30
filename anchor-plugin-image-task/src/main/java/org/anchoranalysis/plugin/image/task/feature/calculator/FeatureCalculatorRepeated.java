@@ -24,34 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.sharedstate;
+package org.anchoranalysis.plugin.image.task.feature.calculator;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.outputter.Outputter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.feature.energy.EnergyStack;
+import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.image.bean.provider.stack.StackProvider;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.image.io.input.StackInputInitParamsCreator;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
-/** A set of outputters, one for each group */
-class GroupedMultiplexOutputters {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class FeatureCalculatorRepeated {
 
-    private static final ManifestFolderDescription MANIFEST_DESCRIPTION =
-            new ManifestFolderDescription("groupOutput", "outputManager", new SetSequenceType());
-
-    private Map<String, Outputter> map;
-
-    public GroupedMultiplexOutputters(Outputter baseOutputter, Set<String> groups) {
-
-        map = new TreeMap<>();
-
-        for (String key : groups) {
-            map.put(key, baseOutputter.deriveSubdirectory(key, MANIFEST_DESCRIPTION));
-        }
-    }
-
-    // Returns null if no object exists
-    public Outputter getOutputterFor(String key) {
-        return map.get(key);
+    public static EnergyStack extractStack(
+            ProvidesStackInput input, StackProvider stackEnergy, InputOutputContext context)
+            throws OperationFailedException {
+        ImageInitParams paramsInit =
+                StackInputInitParamsCreator.createInitParams(input, context);
+        return ExtractFromProvider.extractStack(stackEnergy, paramsInit, context.getLogger());
     }
 }
