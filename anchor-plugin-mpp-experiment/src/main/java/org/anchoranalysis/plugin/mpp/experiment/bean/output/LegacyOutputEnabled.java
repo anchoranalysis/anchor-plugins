@@ -28,12 +28,13 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.output;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.None;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
-import org.anchoranalysis.mpp.io.output.StackOutputKeys;
+import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
  * Legacy rules for whether outputs are enabled or not.
@@ -61,24 +62,23 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
     // END BEAN PROPERTIES
 
     @Override
-    public OutputEnabled first() {
-        // TODO Auto-generated method stub
+    public SingleLevelOutputEnabled first() {
         return outputEnabled;
     }
 
     @Override
-    public OutputEnabled second(String outputName) {
+    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
         switch (outputName) {
-            case StackOutputKeys.STACK:
-                return getStacksOutputEnabled();
-            case StackOutputKeys.MARKS:
-                return getMarksOutputEnabled();
-            case StackOutputKeys.HISTOGRAM:
-                return getHistogramsOutputEnabled();
-            case StackOutputKeys.OBJECT:
-                return getObjects();
+            case OutputterDirectories.STACKS:
+                return Optional.of( getStacksOutputEnabled() );
+            case OutputterDirectories.MARKS:
+                return Optional.of(getMarksOutputEnabled() );
+            case OutputterDirectories.HISTOGRAMS:
+                return Optional.of(getHistogramsOutputEnabled() );
+            case OutputterDirectories.OBJECTS:
+                return Optional.of(getObjects() );
             default:
-                return new None();
+                return Optional.empty();
         }
     }
 }
