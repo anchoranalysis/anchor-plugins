@@ -31,7 +31,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
+import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.stack.DisplayStack;
@@ -52,7 +52,7 @@ public class ScaleToSize extends ThumbnailFromStack {
     @BeanField @Getter @Setter private SizeXY size = new SizeXY(200, 200);
 
     @BeanField @Getter @Setter
-    private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
+    private InterpolatorBean interpolator = new ImgLib2Lanczos();
     // END BEAN PROPERTIES
 
     private Interpolator interpolatorCreated;

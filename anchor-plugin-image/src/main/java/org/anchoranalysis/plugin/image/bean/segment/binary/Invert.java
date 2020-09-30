@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.segment.binary;
 
 import java.util.Optional;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentationOne;
 import org.anchoranalysis.image.binary.values.BinaryValuesByte;
