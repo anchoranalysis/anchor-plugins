@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.sharedstate;
+package org.anchoranalysis.plugin.image.task.labeller;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -127,7 +127,6 @@ public class SharedStateFilteredImageOutput<T> {
     }
 
     private void initFilterOutputters(Path pathForBinding) throws InitException {
-
         this.outputters =
                 new GroupedMultiplexOutputters(
                         baseOutputter, filter.allLabels(getFilterInitParams(pathForBinding)));

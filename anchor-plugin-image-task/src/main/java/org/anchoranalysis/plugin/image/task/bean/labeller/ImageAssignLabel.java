@@ -49,7 +49,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateFilteredImageOutput;
+import org.anchoranalysis.plugin.image.task.labeller.SharedStateFilteredImageOutput;
 
 /**
  * Assigns a label to each image and optionally 1. copies each image into directory corresponding to

@@ -54,11 +54,11 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 
 /**

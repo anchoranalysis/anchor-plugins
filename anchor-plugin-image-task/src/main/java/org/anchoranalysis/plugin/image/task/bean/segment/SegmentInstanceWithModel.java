@@ -75,9 +75,9 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackInt
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.EachObjectIndependently;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.segment.SharedStateSegmentInstance;
 import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
 

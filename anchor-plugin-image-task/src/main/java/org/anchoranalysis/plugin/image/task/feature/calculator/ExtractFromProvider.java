@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.imagefeature.calculator;
+package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

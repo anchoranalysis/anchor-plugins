@@ -43,7 +43,7 @@ import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorFromProvider;
+import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorFromProvider;
 
 public class BinaryClassifierImageLabeller extends BinaryOutcomeImageLabeller {
 

@@ -34,7 +34,7 @@ import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**
- * Creates certain hard-coded features
+ * Creates certain hard-coded features to describe a segmented-object.
  *
  * @author Owen Feehan
  */

@@ -57,8 +57,8 @@ import org.anchoranalysis.io.output.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
-import org.anchoranalysis.plugin.image.task.imagefeature.calculator.FeatureCalculatorRepeated;
-import org.anchoranalysis.plugin.image.task.sharedstate.SharedStateSelectedSlice;
+import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorRepeated;
+import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
 
 /**
  * Reduces a z-stack to a single-slice by taking the optima of a feature calculated for each slice

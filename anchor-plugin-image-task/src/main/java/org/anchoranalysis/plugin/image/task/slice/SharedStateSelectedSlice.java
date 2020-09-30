@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.task.sharedstate;
+package org.anchoranalysis.plugin.image.task.slice;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,11 +38,9 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 
 public class SharedStateSelectedSlice {
 
-    private Optional<FeatureCSVWriter> csvWriter;
+    private final Optional<FeatureCSVWriter> csvWriter;
 
     public SharedStateSelectedSlice(Outputter baseOutputter) throws CreateException {
-        super();
-
         try {
             this.csvWriter =
                     FeatureCSVWriter.create(
