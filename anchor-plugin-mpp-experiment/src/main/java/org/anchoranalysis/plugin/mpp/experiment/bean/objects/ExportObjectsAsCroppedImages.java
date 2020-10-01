@@ -56,7 +56,7 @@ import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;

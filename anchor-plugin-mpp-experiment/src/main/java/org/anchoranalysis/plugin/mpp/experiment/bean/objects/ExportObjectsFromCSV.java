@@ -62,7 +62,7 @@ import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;

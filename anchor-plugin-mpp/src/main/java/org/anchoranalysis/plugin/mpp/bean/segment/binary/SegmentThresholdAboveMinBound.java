@@ -66,7 +66,7 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
 
         setUpDelegate(
                 voxels.any().extent(),
-                params.getRes()
+                params.getResolution()
                         .orElseThrow(
                                 () ->
                                         new SegmentationFailedException(

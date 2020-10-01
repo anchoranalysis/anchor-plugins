@@ -67,7 +67,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
@@ -238,7 +238,7 @@ public class SegmentInstanceWithModel<T>
     
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutput(OUTPUT_H5, OUTPUT_MERGED_AS_MASK,
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_H5, OUTPUT_MERGED_AS_MASK,
                 OUTPUT_OUTLINE, SharedStateExportFeatures.OUTPUT_THUMBNAILS,
                 SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
     }
