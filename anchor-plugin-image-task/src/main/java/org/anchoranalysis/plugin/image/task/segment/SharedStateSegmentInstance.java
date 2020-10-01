@@ -48,6 +48,8 @@ public class SharedStateSegmentInstance<T> {
 
     public static final String OUTPUT_SUMMARY_CSV = "summary";
     
+    private static final ResultsWriterOutputNames OUTPUT_RESULTS = new ResultsWriterOutputNames(OUTPUT_SUMMARY_CSV, false, false);
+    
     private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>
             features;
     @Getter private final ConcurrentModelPool<T> modelPool;
@@ -61,7 +63,7 @@ public class SharedStateSegmentInstance<T> {
         this.modelPool = modelPool;
         this.features =
                 SharedStateExportFeatures.createForFeatures(
-                        new ResultsWriterOutputNames(OUTPUT_SUMMARY_CSV, false, false),
+                        OUTPUT_RESULTS,
                         featureTable,
                         identifierHeaders,
                         context);

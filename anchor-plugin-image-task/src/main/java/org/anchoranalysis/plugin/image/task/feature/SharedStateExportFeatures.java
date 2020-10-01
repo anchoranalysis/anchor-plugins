@@ -117,10 +117,11 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     List<NamedBean<FeatureListProvider<T>>> features,
                     LabelHeaders metadataHeaders,
+                    ResultsWriterOutputNames outputNames,
                     InputOutputContext context)
                     throws CreateException {
         return createForFeatures(
-                STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, context);
+                STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, outputNames, context);
     }
 
     /**
@@ -137,11 +138,12 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     NamedFeatureStore<T> featureStore,
                     LabelHeaders metadataHeaders,
+                    ResultsWriterOutputNames outputNames,
                     InputOutputContext context)
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames()),
+                    new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames(), outputNames),
                     featureStore.deepCopy()::listFeatures,
                     context);
         } catch (AnchorIOException e) {
@@ -171,7 +173,7 @@ public class SharedStateExportFeatures<S> {
         try {
             return new SharedStateExportFeatures<>(
                     new ResultsWriterMetadata(
-                            outputNames, identifierHeaders, features.createFeatureNames()),
+                            identifierHeaders, features.createFeatureNames(), outputNames),
                     features::duplicateForNewThread,
                     context);
         } catch (AnchorIOException e) {

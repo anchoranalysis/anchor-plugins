@@ -86,7 +86,7 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  */
 public class FromObjects<T extends FeatureInput>
         extends FeatureSource<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> {
-
+            
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();
 
@@ -116,13 +116,13 @@ public class FromObjects<T extends FeatureInput>
     public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
-            InputOutputContext context)
+            ResultsWriterOutputNames outputNames, InputOutputContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return SharedStateExportFeatures.createForFeatures(
-                    new ResultsWriterOutputNames("features", true, true),
+                    outputNames,
                     tableCalculator,
                     metadataHeaders,
                     context);
