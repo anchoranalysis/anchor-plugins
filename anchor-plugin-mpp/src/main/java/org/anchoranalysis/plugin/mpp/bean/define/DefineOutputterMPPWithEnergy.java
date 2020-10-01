@@ -27,11 +27,13 @@
 package org.anchoranalysis.plugin.mpp.bean.define;
 
 import java.util.Optional;
+import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;
@@ -42,8 +44,26 @@ import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
+/**
+ * Like a {@link Define} but outputs also MPP-related data objects and an energy-stack.
+ * 
+ * <p>The following outputs are produced:
+ * 
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>outputs from {@link EnergyStackWriter}</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
-
+    
     /**
      * @author Owen Feehan
      * @param <T> init-params-type
