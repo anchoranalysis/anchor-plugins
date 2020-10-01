@@ -30,10 +30,10 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.SingleLevelOutputEnabled;
 import org.anchoranalysis.io.output.bean.enabled.All;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.io.output.bean.rules.OutputEnabledRules;
+import org.anchoranalysis.io.output.enabled.single.SingleLevelOutputEnabled;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 /**
@@ -67,7 +67,11 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
     }
 
     @Override
-    protected Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
+    public SingleLevelOutputEnabled second(String outputName) {
+        return selectSecond(outputName).orElse(All.INSTANCE);
+    }
+
+    private Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
         switch (outputName) {
             case OutputterDirectories.STACKS:
                 return Optional.of( getStacksOutputEnabled() );

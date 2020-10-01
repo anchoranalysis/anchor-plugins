@@ -130,7 +130,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                     Optional.of(objects),
                     keyValueParams,
                     (mppInit, energyStack) ->
-                            sgmnAndWrite(
+                            segmentAndWrite(
                                     mppInit,
                                     energyStack,
                                     updatableMarkSetCollection,
@@ -142,7 +142,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private MarkCollection sgmnAndWrite(
+    private MarkCollection segmentAndWrite(
             MPPInitParams mppInit,
             EnergyStack energyStack,
             ListUpdatableMarkSetCollection updatableMarkSetCollection,

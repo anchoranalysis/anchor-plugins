@@ -45,7 +45,7 @@ import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
@@ -114,7 +114,7 @@ public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
     public OutputEnabledMutable defaultOutputs() {
         OutputEnabledMutable outputs = super.defaultOutputs();
         define.addAllOutputs(outputs);
-        outputs.addEnabledOutput(OutputFeatureTable.OUTPUT_FEATURE_TABLE);
+        outputs.addEnabledOutputFirst(OutputFeatureTable.OUTPUT_FEATURE_TABLE);
         return outputs;
     }
 

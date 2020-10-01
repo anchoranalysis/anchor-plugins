@@ -42,7 +42,6 @@ import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
 import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -66,9 +65,9 @@ class SegmentHelper {
         StacksOutputter.output(
                 StacksOutputter.subset(
                         CreateCombinedStack.apply(imageInit),
-                        outputter.outputsEnabled().second(OUTPUT_STACK,IgnoreUnderscorePrefix.INSTANCE)),
+                        outputter.outputsEnabled().second(OUTPUT_STACK)),
                 outputter.getChecked(),
-                "stacks",
+                OUTPUT_STACK,
                 "stack_",
                 context.getErrorReporter(),
                 false);

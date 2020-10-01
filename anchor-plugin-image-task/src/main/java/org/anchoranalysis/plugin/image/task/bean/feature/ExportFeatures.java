@@ -57,7 +57,7 @@ import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -168,7 +168,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutput(SharedStateExportFeatures.OUTPUT_THUMBNAILS, ResultsWriterOutputNames.OUTPUT_DEFAULT_NON_AGGREGATED);
+        return super.defaultOutputs().addEnabledOutputFirst(SharedStateExportFeatures.OUTPUT_THUMBNAILS, ResultsWriterOutputNames.OUTPUT_DEFAULT_NON_AGGREGATED);
     }
 
     @Override

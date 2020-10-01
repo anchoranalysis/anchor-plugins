@@ -36,7 +36,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
@@ -98,7 +98,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutput(OUTPUT_HISTOGRAMS, OUTPUT_SUM);
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_HISTOGRAMS, OUTPUT_SUM);
     }
 
     @Override

@@ -52,9 +52,7 @@ import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
-import org.anchoranalysis.io.output.OutputEnabledMutable;
-import org.anchoranalysis.io.output.bean.enabled.All;
-import org.anchoranalysis.io.output.bean.enabled.IgnoreUnderscorePrefix;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
@@ -152,7 +150,7 @@ public class ScaleImage extends RasterTask {
 
         StacksOutputter.output(
                 StacksOutputter.subset(
-                        stackCollection, outputter.outputsEnabled().second(outputSecondLevelKey, IgnoreUnderscorePrefix.INSTANCE)),
+                        stackCollection, outputter.outputsEnabled().second(outputSecondLevelKey)),
                 outputter.getChecked(),
                 outputName,
                 "",
@@ -173,7 +171,7 @@ public class ScaleImage extends RasterTask {
             // If this output is not allowed we simply skip
             if (!context.getOutputter()
                     .outputsEnabled()
-                    .second(KEY_OUTPUT_STACK, All.INSTANCE)
+                    .second(KEY_OUTPUT_STACK)
                     .isOutputEnabled(channelName)) {
                 continue;
             }
