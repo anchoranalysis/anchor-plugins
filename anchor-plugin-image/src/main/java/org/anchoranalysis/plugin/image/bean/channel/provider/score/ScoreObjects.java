@@ -31,6 +31,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
@@ -58,7 +59,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int valueNoObject = 0;
 
-    @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> feature;
+    /** Feature that calculates the score for an object. */
+    @BeanField @Getter @Setter @SkipInit private Feature<FeatureInputSingleObject> feature;
 
     @BeanField @Getter @Setter
     private List<ChannelProvider> listAdditionalChannelProviders = new ArrayList<>();
@@ -70,13 +72,10 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
             throws CreateException {
 
-        Feature<FeatureInputSingleObject> featureCreated = feature.create();
-
         try {
             EnergyStack energyStack = new EnergyStack(createEnergyStack(channel));
 
-            FeatureCalculatorSingle<FeatureInputSingleObject> calculator =
-                    createSession(featureCreated);
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(feature);
 
             return createOutputChannel(
                     channel.dimensions(),
