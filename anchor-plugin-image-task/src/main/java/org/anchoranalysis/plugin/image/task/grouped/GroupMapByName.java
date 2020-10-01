@@ -38,7 +38,7 @@ import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.IntputOutputContextSubdirectoryCache;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -60,11 +60,12 @@ public abstract class GroupMapByName<S, T> {
     private final ManifestFolderDescription manifestFolderDescription;
 
     /**
+     * Creates a group-map.
+     * 
      * @param nounT a word to describe a single instance of T in user error messages
      * @param createEmpty
      */
     public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
-        super();
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;
         this.manifestFolderDescription =
@@ -109,8 +110,8 @@ public abstract class GroupMapByName<S, T> {
 
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
-        IntputOutputContextSubdirectoryCache subdirectoryCache =
-                new IntputOutputContextSubdirectoryCache(context, manifestFolderDescription);
+        InputOutputContextSubdirectoryCache subdirectoryCache =
+                new InputOutputContextSubdirectoryCache(context, manifestFolderDescription, false);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory

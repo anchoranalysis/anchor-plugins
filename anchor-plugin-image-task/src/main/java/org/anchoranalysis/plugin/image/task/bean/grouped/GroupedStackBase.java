@@ -136,7 +136,8 @@ public abstract class GroupedStackBase<S, T>
                                 sharedState.getChannelChecker(),
                                 context.maybeSubdirectory(
                                         subdirectoryName,
-                                        MANIFEST_DESCRIPTION_GROUP_FOLDER));
+                                        MANIFEST_DESCRIPTION_GROUP_FOLDER,
+                                        false));
             }
 
         } catch (IOException e) {

@@ -120,7 +120,7 @@ public class SegmentInstanceWithModel<T>
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
-
+    
     /** Output-name for the input-image for the segmentation */
     private static final String OUTPUT_INPUT_IMAGE = "input";
 

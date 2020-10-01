@@ -46,7 +46,7 @@ class GroupedMultiplexOutputters {
         map = new TreeMap<>();
 
         for (String key : groups) {
-            map.put(key, baseOutputter.deriveSubdirectory(key, MANIFEST_DESCRIPTION));
+            map.put(key, baseOutputter.deriveSubdirectory(key, MANIFEST_DESCRIPTION, false));
         }
     }
 

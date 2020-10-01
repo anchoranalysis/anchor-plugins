@@ -78,7 +78,7 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * <tbody>
  * <tr><td>features</td><td>yes</td><td>a single csv file of feature-calculations where each row is an object.</td></tr>
  * <tr><td>featuresAggregated</td><td>yes</td><td>a single csv file of feature-calculations where each row is a group (with aggregated features of the objects within).</td></tr>
- * <tr><td>featuresGroup</td><td>yes</td><td>a csv file of feature-calculations per group, where each row is an object.</td></tr>
+ * <tr><td>featuresGroup</td><td>no</td><td>a csv file of feature-calculations per group, where each row is an object.</td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
@@ -94,6 +94,8 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
+        
+    public static final ResultsWriterOutputNames OUTPUT_RESULTS = new ResultsWriterOutputNames();
 
     // START BEAN PROPERTIES
     /** Source of feature-values to be exported */
@@ -125,6 +127,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
             return source.createSharedState(
                     source.headers().createHeaders(isGroupGeneratorDefined()),
                     features,
+                    OUTPUT_RESULTS,
                     params.getContext());
         } catch (CreateException e) {
             throw new ExperimentExecutionException(e);
@@ -168,7 +171,9 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(SharedStateExportFeatures.OUTPUT_THUMBNAILS, ResultsWriterOutputNames.OUTPUT_DEFAULT_NON_AGGREGATED);
+        return super.defaultOutputs().addEnabledOutputFirst(
+                SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                OUTPUT_RESULTS.getCsvFeaturesNonAggregated());
     }
 
     @Override
