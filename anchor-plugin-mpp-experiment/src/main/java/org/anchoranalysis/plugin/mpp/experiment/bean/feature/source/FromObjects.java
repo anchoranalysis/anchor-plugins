@@ -36,6 +36,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -79,6 +80,17 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  * group</code> generator in the super-class, but also includes the name of the {@link
  * ObjectCollectionProvider} if there is more than one.
  *
+ * * <p>The following outputs are produced:
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>outputs from a sub-class of {@link DefineOutputterMPPWithEnergy} as used in {@code define}.</i></td></tr>
+ * </tbody>
+ * </table>
+ * 
  * <p>TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to
  * anchor-plugin-image-task??
  *
