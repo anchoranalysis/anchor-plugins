@@ -33,7 +33,6 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.object.ObjectCollection;

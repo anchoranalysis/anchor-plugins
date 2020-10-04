@@ -88,12 +88,12 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 object,
                 channel.voxels().asByte(),
                 channelLookup.voxels().asByte(),
-                (point, buffer, bufferLookup, offset) -> {
+                (point, buffer, bufferLookup, offset, offsetLookup) -> {
                     int valueToAssign =
                             clipValue(
                                     buffer.getUnsigned(offset)
                                             - medianFromObject
-                                            + bufferLookup.getUnsigned(offset));
+                                            + bufferLookup.getUnsigned(offsetLookup));
 
                     buffer.putUnsigned(offset, valueToAssign);
                 });

@@ -111,6 +111,11 @@ public abstract class CombineObjectsForFeatures<T extends FeatureInput>
             throws CreateException {
 
         List<T> inputs = startBatchDeriveInputs(objects, energyStack, logger);
+        
+        if (inputs.isEmpty()) {
+            return new ListWithThumbnails<>(inputs);
+        }
+        
         if (thumbnailsEnabled) {
             try {
                 return new ListWithThumbnails<>(
