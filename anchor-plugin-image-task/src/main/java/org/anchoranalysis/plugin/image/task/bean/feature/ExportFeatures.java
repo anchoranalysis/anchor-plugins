@@ -176,7 +176,8 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(
                 SharedStateExportFeatures.OUTPUT_THUMBNAILS,
-                OUTPUT_RESULTS.getCsvFeaturesNonAggregated());
+                OUTPUT_RESULTS.getCsvFeaturesNonAggregated(),
+                OUTPUT_RESULTS.getCsvFeaturesAggregated().get());   // NOSONAR
     }
 
     @Override
