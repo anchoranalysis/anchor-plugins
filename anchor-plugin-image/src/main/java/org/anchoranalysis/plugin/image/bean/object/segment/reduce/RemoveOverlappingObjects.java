@@ -30,9 +30,9 @@ import com.google.common.base.Predicate;
 import java.util.List;
 import java.util.Set;
 import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
+import org.anchoranalysis.image.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.OverlapCalculator;
-import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 

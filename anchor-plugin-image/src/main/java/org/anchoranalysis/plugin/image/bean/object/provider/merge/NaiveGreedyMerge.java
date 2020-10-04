@@ -44,9 +44,9 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.UnitConverter;
 import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
 import org.anchoranalysis.plugin.image.object.merge.condition.AfterCondition;
 import org.anchoranalysis.plugin.image.object.merge.condition.BeforeCondition;
 
