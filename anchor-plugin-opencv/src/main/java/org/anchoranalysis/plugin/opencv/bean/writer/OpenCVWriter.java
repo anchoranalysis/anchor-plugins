@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.opencv.bean;
+package org.anchoranalysis.plugin.opencv.bean.writer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;

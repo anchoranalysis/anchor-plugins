@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.rasterreader;
 
 import static org.junit.Assert.*;
 

@@ -82,7 +82,7 @@ public class OutlinePreserveRelativeSizeTest {
 
         DualComparer comparer =
                 DualComparerFactory.compareTemporaryFolderToTest(
-                        writer.getFolder(), "thumbnails", "thumbnails01");
+                        writer.getFolder(), Optional.of("thumbnails"), "thumbnails01");
         assertTrue(
                 "thumbnails are identical to saved copy", comparer.compareTwoSubdirectories("."));
     }

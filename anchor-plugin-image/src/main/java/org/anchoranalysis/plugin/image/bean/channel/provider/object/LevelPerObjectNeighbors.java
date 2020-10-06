@@ -45,8 +45,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborGraph;
 
 /**
  * Calculates a threshold-level for each object collectively based on other objects
@@ -141,15 +140,12 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             throws OperationFailedException {
 
         try {
-            CreateNeighborGraph<ObjectWithHistogram> graphCreator =
-                    new CreateNeighborGraph<>(new EdgeAdderParameters(false));
-
             GraphWithPayload<ObjectWithHistogram, Integer> graph =
-                    graphCreator.createGraph(
+                    NeighborGraph.create(
                             objectsWithHistograms(objects, channelIntensity),
                             ObjectWithHistogram::getObject,
-                            (v1, v2, numberVoxels) -> numberVoxels,
                             channelIntensity.extent(),
+                            false,
                             true);
 
             Voxels<?> voxelsOutput = channelOutput.voxels().any();
