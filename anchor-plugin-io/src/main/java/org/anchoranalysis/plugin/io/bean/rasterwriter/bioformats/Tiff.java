@@ -63,7 +63,7 @@ public class Tiff extends BioformatsWriter {
     @Override
     protected IFormatWriter createWriter() throws RasterIOException {
         try {
-            TiffWriter writer = new TiffWriter();
+            TiffWriter writer = new TiffWriter();   // NOSONAR
             // COMPRESSION CURRENTLY DISABLED
             writer.setCompression("LZW");
             writer.setBigTiff(false);
