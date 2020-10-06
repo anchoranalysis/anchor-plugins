@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterwriter;
+package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
@@ -59,55 +59,55 @@ class MetadataUtilities {
 
         meta.createRoot();
 
-        int seriesNum = 0;
+        int seriesIndex = 0;
 
-        meta.setImageID(String.format("Image:%d", seriesNum), seriesNum);
-        meta.setPixelsID(String.format("Pixels:%d", seriesNum), seriesNum);
-        meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesNum, 0);
-        meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesNum);
-        meta.setPixelsType(pixelType, seriesNum);
-        meta.setPixelsSizeC(new PositiveInteger(numberChannels), seriesNum);
-
-        meta.setPixelsSizeX(new PositiveInteger(dimensions.x()), seriesNum);
-        meta.setPixelsSizeY(new PositiveInteger(dimensions.y()), seriesNum);
+        meta.setImageID(String.format("Image:%d", seriesIndex), seriesIndex);
+        meta.setPixelsID(String.format("Pixels:%d", seriesIndex), seriesIndex);
+        meta.setPixelsBinDataBigEndian(Boolean.TRUE, seriesIndex, 0);
+        meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesIndex);
+        meta.setPixelsType(pixelType, seriesIndex);
+        meta.setPixelsSizeC(new PositiveInteger(numberChannels), seriesIndex);
+        
+        meta.setPixelsSizeX(new PositiveInteger(dimensions.x()), seriesIndex);
+        meta.setPixelsSizeY(new PositiveInteger(dimensions.y()), seriesIndex);
 
         // We pretend Z-stacks are Time frames as it makes it easier to
         //   view in other software if they are a series
         if (pretendSeries) {
-            meta.setPixelsSizeT(new PositiveInteger(dimensions.z()), seriesNum);
-            meta.setPixelsSizeZ(new PositiveInteger(1), seriesNum);
+            meta.setPixelsSizeT(new PositiveInteger(dimensions.z()), seriesIndex);
+            meta.setPixelsSizeZ(new PositiveInteger(1), seriesIndex);
         } else {
-            meta.setPixelsSizeT(new PositiveInteger(1), seriesNum);
-            meta.setPixelsSizeZ(new PositiveInteger(dimensions.z()), seriesNum);
+            meta.setPixelsSizeT(new PositiveInteger(1), seriesIndex);
+            meta.setPixelsSizeZ(new PositiveInteger(dimensions.z()), seriesIndex);
         }
 
         meta.setPixelsPhysicalSizeX(createLength(dimensions.resolution().x() * dimensions.x()), 0);
         meta.setPixelsPhysicalSizeY(createLength(dimensions.resolution().y() * dimensions.y()), 0);
         meta.setPixelsPhysicalSizeZ(createLength(dimensions.resolution().z() * dimensions.z()), 0);
 
-        addNumberChannels(
+        addChannels(
                 meta,
-                calculateNumberChannels(makeRGB),
-                calculateSamplesPerPixel(makeRGB),
-                seriesNum);
+                calculateNumberChannels(makeRGB, numberChannels),
+                calculateSamplesPerPixel(makeRGB, numberChannels),
+                seriesIndex);
 
         return meta;
     }
 
-    private static int calculateNumberChannels(boolean makeRGB) {
-        return makeRGB ? 1 : 3;
+    private static int calculateNumberChannels(boolean makeRGB, int numberChannels) {
+        return makeRGB ? 1 : numberChannels;
     }
 
-    private static int calculateSamplesPerPixel(boolean makeRGB) {
+    private static int calculateSamplesPerPixel(boolean makeRGB, int numberChannels) {
         // We do the opposite of calculateNumChannels
-        return calculateNumberChannels(!makeRGB);
+        return calculateNumberChannels(!makeRGB, numberChannels);
     }
 
-    private static void addNumberChannels(
-            IMetadata meta, int numChannel, int samplesPerPixel, int seriesNum) {
-        for (int i = 0; i < numChannel; i++) {
-            meta.setChannelID(String.format("Channel:%d:%d", seriesNum, i), seriesNum, i);
-            meta.setChannelSamplesPerPixel(new PositiveInteger(samplesPerPixel), seriesNum, i);
+    private static void addChannels(
+            IMetadata meta, int numberChannels, int samplesPerPixel, int seriesIndex) {
+        for (int i = 0; i < numberChannels; i++) {
+            meta.setChannelID(String.format("Channel:%d:%d", seriesIndex, i), seriesIndex, i);
+            meta.setChannelSamplesPerPixel(new PositiveInteger(samplesPerPixel), seriesIndex, i);
         }
     }
 

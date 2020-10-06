@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.xml;
+package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Creator="OME Bio-Formats 6.4.0" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+<Image ID="Image:0">
+<Pixels DimensionOrder="XYZTC" ID="Pixels:0" PhysicalSizeX="0.08" PhysicalSizeXUnit="m" PhysicalSizeY="0.11" PhysicalSizeYUnit="m" PhysicalSizeZ="0.025" PhysicalSizeZUnit="m" SizeC="4" SizeT="1" SizeX="8" SizeY="11" SizeZ="1" Type="uint8">
+<Channel ID="Channel:0:0" SamplesPerPixel="1">
+<LightPath></LightPath></Channel>
+<Channel ID="Channel:0:1" SamplesPerPixel="1">
+<LightPath></LightPath></Channel>
+<Channel ID="Channel:0:2" SamplesPerPixel="1">
+<LightPath></LightPath></Channel>
+<Channel ID="Channel:0:3" SamplesPerPixel="1">
+<LightPath></LightPath></Channel>
+<BinData xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" Length="88" BigEndian="false">AAECAwQFBgcBAgMEBQYHCAIDBAUGBwgJAwQFBgcICQoEBQYHCAkKCwUGBwgJCgsMBgcICQoLDA0HCAkKCwwNDggJCgsMDQ4PCQoLDA0ODxAKCwwNDg8QEQ==</BinData>
+<BinData xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" Length="88" BigEndian="false">AAECAwQFBgf/AAECAwQFBv7/AAECAwQF/f7/AAECAwT8/f7/AAECA/v8/f7/AAEC+vv8/f7/AAH5+vv8/f7/APj5+vv8/f7/9/j5+vv8/f729/j5+vv8/Q==</BinData>
+<BinData xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" Length="88" BigEndian="false">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</BinData>
+<BinData xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" Length="88" BigEndian="false">AAECAwQFBgcBAgMEBQYHCAIDBAUGBwgJAwQFBgcICQoEBQYHCAkKCwUGBwgJCgsMBgcICQoLDA0HCAkKCwwNDggJCgsMDQ4PCQoLDA0ODxAKCwwNDg8QEQ==</BinData></Pixels></Image></OME>
