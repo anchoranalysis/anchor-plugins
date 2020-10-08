@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,18 +25,18 @@
  */
 package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
+import loci.formats.IFormatWriter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
-import loci.formats.IFormatWriter;
 
 abstract class RGBWriter {
-    
+
     protected IFormatWriter writer;
     protected Channel channelRed;
     protected Channel channelBlue;
     protected Channel channelGreen;
-    
+
     public RGBWriter(IFormatWriter writer, Stack stack) {
         this.writer = writer;
         this.channelRed = stack.getChannel(0);
@@ -48,11 +48,8 @@ abstract class RGBWriter {
 
         int capacity = channelRed.voxels().any().extent().volumeXY();
 
-        channelRed
-                .extent()
-                .iterateOverZ(
-                        z -> mergeSliceAsRGB(z, capacity));
+        channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
     }
-    
+
     protected abstract void mergeSliceAsRGB(int z, int capacity) throws RasterIOException;
 }

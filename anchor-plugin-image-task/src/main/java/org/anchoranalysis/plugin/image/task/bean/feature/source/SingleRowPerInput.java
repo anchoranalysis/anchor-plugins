@@ -50,8 +50,8 @@ import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Base class for exporting features, where features are calculated per-image using a
- * {@link NamedFeatureStore}.
+ * Base class for exporting features, where features are calculated per-image using a {@link
+ * NamedFeatureStore}.
  *
  * @author Owen Feehan
  * @param <T> input-manager type
@@ -71,7 +71,8 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsWriterOutputNames outputNames,
             InputOutputContext context)
             throws CreateException {
-        return SharedStateExportFeatures.createForFeatures(features, metadataHeaders, outputNames, context);
+        return SharedStateExportFeatures.createForFeatures(
+                features, metadataHeaders, outputNames, context);
     }
 
     @Override

@@ -132,7 +132,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         assert (false);
         return super.defaultOutputs();
     }
-    
+
     /**
      * Returns the index of the selected slice
      *
@@ -191,8 +191,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     private void outputSlices(Outputter outputter, NamedStacks stackCollection)
             throws OutputWriteFailedException {
-        StacksOutputter.outputSubsetWithException(
-                stackCollection, outputter, false);
+        StacksOutputter.outputSubsetWithException(stackCollection, outputter, false);
     }
 
     private int findOptimalSlice(double[] scores) {

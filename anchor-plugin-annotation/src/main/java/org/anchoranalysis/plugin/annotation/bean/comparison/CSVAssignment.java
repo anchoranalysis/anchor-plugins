@@ -104,8 +104,7 @@ class CSVAssignment {
         return base;
     }
 
-    private List<TypedValue> createBaseValues(
-            InputFromManager input, SplitString descriptiveSplit)
+    private List<TypedValue> createBaseValues(InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
 
         Elements rowElements = new Elements();

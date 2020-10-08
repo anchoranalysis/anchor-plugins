@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.channel.Channel;
@@ -51,8 +51,7 @@ public class ScaleXY extends ChannelProviderUnary {
     // Start BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField @Getter @Setter
-    private InterpolatorBean interpolator = new ImgLib2Lanczos();
+    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
     // End BEAN PROPERTIES
 
     @Override

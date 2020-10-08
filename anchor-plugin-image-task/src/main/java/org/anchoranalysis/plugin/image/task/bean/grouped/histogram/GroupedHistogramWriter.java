@@ -32,13 +32,13 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 class GroupedHistogramWriter {
 
-    /** 
+    /**
      * The output-name associated with <i>all</i> histograms written.
      *
      * <p>Note that this isn't actually used as part of the filenames outputted.
-     **/
+     */
     private final String outputName;
-    
+
     private final HistogramCSVGenerator generator;
 
     public GroupedHistogramWriter(String outputName, boolean ignoreZeros) {
@@ -52,7 +52,9 @@ class GroupedHistogramWriter {
         generator.assignElement(histogram);
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
-            context.getOutputter().writerSecondLevel(outputName).write(channelName, () -> generator);
+            context.getOutputter()
+                    .writerSecondLevel(outputName)
+                    .write(channelName, () -> generator);
         }
     }
 }

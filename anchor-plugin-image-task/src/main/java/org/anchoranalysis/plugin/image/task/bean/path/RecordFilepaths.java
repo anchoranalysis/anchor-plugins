@@ -48,9 +48,8 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 
 /**
  * Task to print the paths associated with each input to the log.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringBuilder> {

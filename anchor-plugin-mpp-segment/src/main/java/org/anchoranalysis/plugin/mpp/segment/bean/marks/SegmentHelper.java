@@ -57,7 +57,7 @@ import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 class SegmentHelper {
 
     public static final String OUTPUT_STACK = "stacks";
-    
+
     public static void writeStacks(
             ImageInitParams imageInit, EnergyStack energyStack, InputOutputContext context) {
         Outputter outputter = context.getOutputter();

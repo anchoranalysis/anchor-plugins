@@ -55,15 +55,14 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
-import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
+import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 /**
  * Task to compare a set of annotations to a segmentation or other set of annotations.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  * @param <T>
  */
 public class CompareAnnotations<T extends Assignment>

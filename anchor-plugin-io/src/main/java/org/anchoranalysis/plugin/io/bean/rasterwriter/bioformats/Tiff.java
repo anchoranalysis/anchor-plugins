@@ -50,7 +50,7 @@ public class Tiff extends BioformatsWriter {
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new RasterIOException("Stack must have 1 or 3 channels");
         }
-        
+
         super.writeStack(stack, filePath, makeRGB, writeOptions);
     }
 
@@ -59,11 +59,11 @@ public class Tiff extends BioformatsWriter {
     public String fileExtension(RasterWriteOptions writeOptions) {
         return "tif";
     }
-  
+
     @Override
     protected IFormatWriter createWriter() throws RasterIOException {
         try {
-            TiffWriter writer = new TiffWriter();   // NOSONAR
+            TiffWriter writer = new TiffWriter(); // NOSONAR
             // COMPRESSION CURRENTLY DISABLED
             writer.setCompression("LZW");
             writer.setBigTiff(false);

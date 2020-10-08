@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
-import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 
 class SharedState<T extends Assignment> {
 

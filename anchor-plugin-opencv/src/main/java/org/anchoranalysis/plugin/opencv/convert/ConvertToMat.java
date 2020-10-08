@@ -91,7 +91,8 @@ public class ConvertToMat {
         } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
             return fromRGBShort(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
         } else {
-            throw new CreateException("Only unsigned 8- and unsigned 16-bit channels are supported for RGB");
+            throw new CreateException(
+                    "Only unsigned 8- and unsigned 16-bit channels are supported for RGB");
         }
     }
 
@@ -139,14 +140,15 @@ public class ConvertToMat {
         UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
         UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        extent.iterateOverXY( point -> {
-         // Note BGR format in OpenCV
-            byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
-            mat.put(point.y(), point.x(), colArr);
-        });
+        extent.iterateOverXY(
+                point -> {
+                    // Note BGR format in OpenCV
+                    byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
+                    mat.put(point.y(), point.x(), colArr);
+                });
         return mat;
     }
-    
+
     private static Mat fromRGBShort(Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
         Extent extent = channelRed.extent();
@@ -158,11 +160,12 @@ public class ConvertToMat {
         UnsignedShortBuffer green = BufferHelper.extractShort(channelGreen);
         UnsignedShortBuffer blue = BufferHelper.extractShort(channelBlue);
 
-        extent.iterateOverXY( point -> {
-            // Note BGR format in OpenCV
-               short[] colArr = new short[] {blue.getRaw(), green.getRaw(), red.getRaw()};
-               mat.put(point.y(), point.x(), colArr);
-           });
+        extent.iterateOverXY(
+                point -> {
+                    // Note BGR format in OpenCV
+                    short[] colArr = new short[] {blue.getRaw(), green.getRaw(), red.getRaw()};
+                    mat.put(point.y(), point.x(), colArr);
+                });
 
         return mat;
     }

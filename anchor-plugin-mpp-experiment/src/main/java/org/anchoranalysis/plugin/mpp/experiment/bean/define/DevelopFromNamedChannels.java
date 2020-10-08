@@ -57,10 +57,7 @@ public class DevelopFromNamedChannels extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput input,
-            int seriesIndex,
-            int numberSeries,
-            InputOutputContext context)
+            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException {
 
         NamedChannelsForSeries channels;

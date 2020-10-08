@@ -154,14 +154,20 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
     public List<FeatureInputPairObjects> startBatchDeriveInputs(
             ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException {
-        
-        // We create a neighbor-graph of our input objects
-        GraphWithPayload<ObjectMask, Integer> graphNeighbors = 
-                NeighborGraph.create(objects, energyStack.withoutParams().extent(), avoidOverlappingObjects, do3D);
 
-        return FunctionalList.mapToList(graphNeighbors.edgesUnique(), edge ->
-            new FeatureInputPairObjects(edge.getFrom(), edge.getTo(), Optional.of(energyStack))
-        );
+        // We create a neighbor-graph of our input objects
+        GraphWithPayload<ObjectMask, Integer> graphNeighbors =
+                NeighborGraph.create(
+                        objects,
+                        energyStack.withoutParams().extent(),
+                        avoidOverlappingObjects,
+                        do3D);
+
+        return FunctionalList.mapToList(
+                graphNeighbors.edgesUnique(),
+                edge ->
+                        new FeatureInputPairObjects(
+                                edge.getFrom(), edge.getTo(), Optional.of(energyStack)));
     }
 
     @Override

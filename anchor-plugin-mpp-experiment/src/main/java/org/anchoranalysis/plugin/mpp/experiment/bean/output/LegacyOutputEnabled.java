@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.output;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.output.bean.enabled.All;
 import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
@@ -65,29 +65,29 @@ public class LegacyOutputEnabled extends OutputEnabledRules {
     @Override
     public MultiLevelOutputEnabled create(Optional<MultiLevelOutputEnabled> defaultRules) {
         return new MultiLevelOutputEnabled() {
-            
+
             @Override
             public boolean isOutputEnabled(String outputName) {
                 return outputEnabled.isOutputEnabled(outputName);
             }
-            
+
             @Override
             public SingleLevelOutputEnabled second(String outputName) {
                 return selectSecond(outputName).orElse(All.INSTANCE);
             }
         };
     }
-    
+
     private Optional<SingleLevelOutputEnabled> selectSecond(String outputName) {
         switch (outputName) {
             case OutputterDirectories.STACKS:
-                return Optional.of( getStacksOutputEnabled() );
+                return Optional.of(getStacksOutputEnabled());
             case OutputterDirectories.MARKS:
-                return Optional.of(getMarksOutputEnabled() );
+                return Optional.of(getMarksOutputEnabled());
             case OutputterDirectories.HISTOGRAMS:
-                return Optional.of(getHistogramsOutputEnabled() );
+                return Optional.of(getHistogramsOutputEnabled());
             case OutputterDirectories.OBJECTS:
-                return Optional.of(getObjects() );
+                return Optional.of(getObjects());
             default:
                 return Optional.empty();
         }

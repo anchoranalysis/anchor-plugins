@@ -139,8 +139,7 @@ public class ConvertNamedChannels<T extends NamedChannelsInput, S, U extends Nam
     private void doJobWithConvertedInput(
             InputBound<T, S> input, Function<T, InputFromManager> deriveChangedInput)
             throws JobExecutionException {
-        doJobWithInputCast(
-                input.changeInput(deriveChangedInput.apply(input.getInput())));
+        doJobWithInputCast(input.changeInput(deriveChangedInput.apply(input.getInput())));
     }
 
     @SuppressWarnings("unchecked")

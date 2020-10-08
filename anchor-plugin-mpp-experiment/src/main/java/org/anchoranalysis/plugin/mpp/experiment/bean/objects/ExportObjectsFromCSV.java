@@ -84,8 +84,7 @@ import org.anchoranalysis.plugin.mpp.experiment.objects.csv.MapGroupToRow;
  *
  * @author Owen Feehan
  */
-public class ExportObjectsFromCSV
-        extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
+public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCSVSharedState> {
 
     private class CSVRowRGBOutlineGenerator
             extends RasterGeneratorDelegateToRaster<ObjectCollectionWithProperties, CSVRow> {
@@ -157,13 +156,13 @@ public class ExportObjectsFromCSV
 
         try {
             IndexedCSVRows groupedRows =
-                    inputBound.getSharedState()
+                    inputBound
+                            .getSharedState()
                             .getIndexedRowsOrCreate(input.getCsvFilePath(), columnDefinition);
 
             // We look for rows that match our File ID
             String fileID =
-                    idStringForPath(input.pathForBinding(), context.isDebugEnabled())
-                            .toString();
+                    idStringForPath(input.pathForBinding(), context.isDebugEnabled()).toString();
             MapGroupToRow mapGroup = groupedRows.get(fileID);
 
             if (mapGroup == null) {
@@ -200,7 +199,7 @@ public class ExportObjectsFromCSV
         assert false;
         return super.defaultOutputs();
     }
-    
+
     private DisplayStack createBackgroundStack(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         // Get our background-stack and objects. We duplicate to avoid threading issues

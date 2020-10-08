@@ -37,7 +37,7 @@ class BufferHelper {
     public static UnsignedByteBuffer extractByte(Channel channel) {
         return channel.voxels().asByte().sliceBuffer(0);
     }
-    
+
     public static UnsignedShortBuffer extractShort(Channel channel) {
         return channel.voxels().asShort().sliceBuffer(0);
     }

@@ -67,7 +67,7 @@ class MetadataUtilities {
         meta.setPixelsDimensionOrder(DimensionOrder.XYZTC, seriesIndex);
         meta.setPixelsType(pixelType, seriesIndex);
         meta.setPixelsSizeC(new PositiveInteger(numberChannels), seriesIndex);
-        
+
         meta.setPixelsSizeX(new PositiveInteger(dimensions.x()), seriesIndex);
         meta.setPixelsSizeY(new PositiveInteger(dimensions.y()), seriesIndex);
 

@@ -49,7 +49,8 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
-public class ExportReportFeaturesFromManifest extends TaskWithoutSharedState<ManifestCouplingDefinition> {
+public class ExportReportFeaturesFromManifest
+        extends TaskWithoutSharedState<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
