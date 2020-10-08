@@ -39,6 +39,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.object.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.image.object.morphological.SelectDimensionsFactory;
 
@@ -70,13 +71,11 @@ public class Dilate extends MorphologicalOperatorBase {
             BinaryVoxels<UnsignedByteBuffer> out =
                     MorphologicalDilation.dilate(
                             source.binaryVoxels(),
-                            SelectDimensionsFactory.of(do3D, zOnly),
                             getIterations(),
                             background(),
                             getMinIntensityValue(),
-                            false,
                             Optional.empty(),
-                            bigNeighborhood);
+                            new DilationKernelFactory(SelectDimensionsFactory.of(do3D, zOnly), false, bigNeighborhood));
 
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {
