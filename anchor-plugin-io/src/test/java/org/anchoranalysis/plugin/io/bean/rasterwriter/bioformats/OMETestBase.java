@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.bioformats.ConfigureBioformatsLogging;
 import org.anchoranalysis.test.image.rasterwriter.RasterWriterTestBase;
 import org.junit.Test;
@@ -16,6 +19,8 @@ import org.junit.Test;
  */
 public abstract class OMETestBase extends RasterWriterTestBase {
 
+    private static final VoxelDataType[] SUPPORTED_VOXEL_TYPES = RasterWriterTestBase.ALL_SUPPORTED_VOXEL_TYPES;
+    
     static {
         ConfigureBioformatsLogging.instance().makeSureConfigured();
     }
@@ -33,26 +38,31 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     
     @Test
     public void testSingleChannel() throws RasterIOException, IOException {
-        tester.testSingleChannel();
+        tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
     
     @Test
     public void testTwoChannels() throws RasterIOException, IOException {
-        tester.testTwoChannels();
+        tester.testTwoChannels(SUPPORTED_VOXEL_TYPES);
     }
     
     @Test
     public void testThreeChannelsSeparate() throws RasterIOException, IOException {
-        tester.testThreeChannelsSeparate();
+        tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
     }
     
     @Test
-    public void testThreeChannelsRGB() throws RasterIOException, IOException {
-        tester.testThreeChannelsRGB();
+    public void testThreeChannelsRGBUnsignedByte() throws RasterIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
+    }
+    
+    @Test
+    public void testThreeChannelsRGBUnsignedShort() throws RasterIOException, IOException {
+        tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
     
     @Test
     public void testFourChannels() throws RasterIOException, IOException {
-        tester.testFourChannels();
+        tester.testFourChannels(SUPPORTED_VOXEL_TYPES);
     }
 }

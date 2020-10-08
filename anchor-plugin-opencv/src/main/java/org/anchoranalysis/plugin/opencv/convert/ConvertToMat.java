@@ -40,6 +40,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -84,7 +85,14 @@ public class ConvertToMat {
         if (stack.getNumberChannels() != 3) {
             throw new CreateException("Stack must have 3 channels for RGB conversion");
         }
-        return fromRGB(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        VoxelDataType dataType = stack.getChannel(0).getVoxelDataType();
+        if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
+            return fromRGBByte(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
+            return fromRGBShort(stack.getChannel(0), stack.getChannel(1), stack.getChannel(2));
+        } else {
+            throw new CreateException("Only unsigned 8- and unsigned 16-bit channels are supported for RGB");
+        }
     }
 
     public static Mat createEmptyMat(Extent extent, int type) {
@@ -120,25 +128,41 @@ public class ConvertToMat {
         return mat;
     }
 
-    private static Mat fromRGB(Channel channelRed, Channel channelGreen, Channel channelBlue) {
+    private static Mat fromRGBByte(Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
         Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_8UC3);
 
-        UnsignedByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
-        UnsignedByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
-        UnsignedByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
+        UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
+        UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
+        UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
-        for (int y = 0; y < extent.y(); y++) {
-            for (int x = 0; x < extent.x(); x++) {
+        extent.iterateOverXY( point -> {
+         // Note BGR format in OpenCV
+            byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
+            mat.put(point.y(), point.x(), colArr);
+        });
+        return mat;
+    }
+    
+    private static Mat fromRGBShort(Channel channelRed, Channel channelGreen, Channel channelBlue) {
 
-                // Note BGR format in OpenCV
-                byte[] colArr = new byte[] {blue.getRaw(), green.getRaw(), red.getRaw()};
-                mat.put(y, x, colArr);
-            }
-        }
+        Extent extent = channelRed.extent();
+        Preconditions.checkArgument(extent.z() == 1);
+
+        Mat mat = createEmptyMat(channelRed.extent(), CvType.CV_16UC3);
+
+        UnsignedShortBuffer red = BufferHelper.extractShort(channelRed);
+        UnsignedShortBuffer green = BufferHelper.extractShort(channelGreen);
+        UnsignedShortBuffer blue = BufferHelper.extractShort(channelBlue);
+
+        extent.iterateOverXY( point -> {
+            // Note BGR format in OpenCV
+               short[] colArr = new short[] {blue.getRaw(), green.getRaw(), red.getRaw()};
+               mat.put(point.y(), point.x(), colArr);
+           });
 
         return mat;
     }
