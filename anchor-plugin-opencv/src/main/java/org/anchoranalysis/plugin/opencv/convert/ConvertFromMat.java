@@ -101,9 +101,9 @@ public class ConvertFromMat {
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        UnsignedByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
-        UnsignedByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
-        UnsignedByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
+        UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
+        UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
+        UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
         byte[] arr = new byte[3];
 
