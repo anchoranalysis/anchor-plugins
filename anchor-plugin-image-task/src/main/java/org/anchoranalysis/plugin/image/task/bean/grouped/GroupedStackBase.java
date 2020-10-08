@@ -65,13 +65,13 @@ import org.anchoranalysis.plugin.image.task.grouped.GroupedSharedState;
 public abstract class GroupedStackBase<S, T>
         extends Task<ProvidesStackInput, GroupedSharedState<S, T>> {
 
-    /** 
+    /**
      * A fallback output-name for the grouped directory if nothing else is specified.
-     * 
-     * <p>This is specified by {@link #subdirectoryForGroupOutputs()}. 
+     *
+     * <p>This is specified by {@link #subdirectoryForGroupOutputs()}.
      */
     private static final String OUTPUT_FALLBACK_GROUPED = "grouped";
-    
+
     private static final ManifestFolderDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
             new ManifestFolderDescription("groupedFolder", "groupedStack", new SetSequenceType());
 
@@ -82,9 +82,7 @@ public abstract class GroupedStackBase<S, T>
      */
     @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
 
-    /**
-     * Selects which channels are included, optionally renaming.
-     */
+    /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
     // END BEAN PROPERTIES
 
@@ -120,7 +118,7 @@ public abstract class GroupedStackBase<S, T>
 
         processStacks(channels, groupName, params.getSharedState(), context);
     }
-    
+
     @Override
     public void afterAllJobsAreExecuted(
             GroupedSharedState<S, T> sharedState, InputOutputContext context)
@@ -145,22 +143,21 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
-    /**
-     * An optional sub-directory where the group outputs are placed.
-     */
+    /** An optional sub-directory where the group outputs are placed. */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
     /**
      * Creates a map for the storing an aggregate-data-object for each group.
-     * 
-     * @param channelChecker checks that the channels of all relevant stacks have the same size and data-type.
+     *
+     * @param channelChecker checks that the channels of all relevant stacks have the same size and
+     *     data-type.
      * @return a newly created map
      */
     protected abstract GroupMapByName<S, T> createGroupMap(ConsistentChannelChecker channelChecker);
 
     /**
      * Processes one set of named-stacks.
-     * 
+     *
      * @param stacks the named-stacks (usually each channel from an image).
      * @param groupName the name of the group
      * @param sharedState shared-state

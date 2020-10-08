@@ -90,8 +90,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
     private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)
             throws JobExecutionException {
         try {
-            return input
-                    .labelForAggregation()
+            return input.labelForAggregation()
                     .map(label -> new ImageAnnotation(input.descriptiveName(), label));
         } catch (AnchorIOException exc) {
             throw new JobExecutionException(exc);

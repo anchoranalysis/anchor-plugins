@@ -79,7 +79,10 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  * group</code> generator in the super-class, but also includes the name of the {@link
  * ObjectCollectionProvider} if there is more than one.
  *
- * * <p>The following outputs are produced:
+ * <p>*
+ *
+ * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -89,7 +92,7 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  * <tr><td rowspan="3"><i>outputs from a sub-class of {@link DefineOutputterMPPWithEnergy} as used in {@code define}.</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * <p>TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to
  * anchor-plugin-image-task??
  *
@@ -97,7 +100,7 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  */
 public class FromObjects<T extends FeatureInput>
         extends FeatureSource<MultiInput, FeatureTableCalculator<T>, FeatureInputSingleObject> {
-            
+
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.bothNameAndParams();
 
@@ -127,16 +130,14 @@ public class FromObjects<T extends FeatureInput>
     public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
-            ResultsWriterOutputNames outputNames, InputOutputContext context)
+            ResultsWriterOutputNames outputNames,
+            InputOutputContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return SharedStateExportFeatures.createForFeatures(
-                    outputNames,
-                    tableCalculator,
-                    metadataHeaders,
-                    context);
+                    outputNames, tableCalculator, metadataHeaders, context);
         } catch (InitException e) {
             throw new CreateException(e);
         }

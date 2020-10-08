@@ -57,8 +57,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Provider<Mask> mask;
 
-    @BeanField @Getter @Setter
-    private UnitValueAreaOrVolume minVolume = new VolumeVoxels(1);
+    @BeanField @Getter @Setter private UnitValueAreaOrVolume minVolume = new VolumeVoxels(1);
 
     @BeanField @Getter @Setter private boolean bySlices = false;
 

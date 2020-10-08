@@ -64,9 +64,8 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 
 /**
  * Segments an image into a collection of {@link Mark}s.
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
@@ -94,7 +93,8 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             MarkCollection marks =
                     segment.duplicateBean()
                             .segment(stackCollection, objects, paramsCreated, inputBound.context());
-            writeVisualization(marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
+            writeVisualization(
+                    marks, inputBound.getOutputter(), stackCollection, inputBound.getLogger());
 
         } catch (SegmentationFailedException e) {
             throw new JobExecutionException("An error occurred segmenting a configuration", e);

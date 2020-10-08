@@ -62,13 +62,14 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts each input-image to the default output format, optionally changing the bit depth.
- * 
+ *
  * <p>Stacks containing multiple series (i.e. multiple images in a single file) are supported.
- * 
+ *
  * <p>If it looks like an RGB image, channels are written together. Otherwise they are written.
  * independently.
  *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -79,13 +80,13 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
+ *
  * @author Owen Feehan
  */
 public class ConvertImageFormat extends RasterTask {
 
     private static final String OUTPUT_COPY = "converted";
-    
+
     // START BEAN PROPERTIES
 
     /** To convert as RGB or independently or in another way */
@@ -165,7 +166,7 @@ public class ConvertImageFormat extends RasterTask {
             throw new JobExecutionException(e);
         }
     }
-    
+
     @Override
     public void endSeries(Outputter outputter) throws JobExecutionException {
         generatorSequence.end();
@@ -204,7 +205,7 @@ public class ConvertImageFormat extends RasterTask {
             NamedChannelsInput input, int seriesIndex) throws RasterIOException {
         return input.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
-    
+
     private void addStackToOutput(
             String name, Stack stack, CalculateOutputName calculateOutputName) {
         generatorSequence.add(stack, calculateOutputName.outputName(name));

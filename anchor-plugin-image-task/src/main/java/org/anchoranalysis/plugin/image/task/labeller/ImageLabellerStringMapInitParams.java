@@ -34,7 +34,8 @@ import lombok.Value;
  * @author Owen Feehan
  * @param <T> type of the initParams contained within (delegate
  */
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 public class ImageLabellerStringMapInitParams<T> {
     private Map<String, String> map;
     private T initParams;

@@ -57,7 +57,7 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * Calculates feature or feature values.
- * 
+ *
  * <p>Optionally, an energy-stack is added from either provider or the input-stack.
  *
  * @author Owen Feehan

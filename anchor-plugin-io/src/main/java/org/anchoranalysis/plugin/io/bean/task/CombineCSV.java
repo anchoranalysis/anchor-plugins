@@ -105,8 +105,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
         Path inputPath = input.getFile().toPath();
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
-            String name =
-                    addName ? input.descriptiveName() : null; // null means no-name is added
+            String name = addName ? input.descriptiveName() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {

@@ -61,7 +61,7 @@ public abstract class GroupMapByName<S, T> {
 
     /**
      * Creates a group-map.
-     * 
+     *
      * @param nounT a word to describe a single instance of T in user error messages
      * @param createEmpty
      */

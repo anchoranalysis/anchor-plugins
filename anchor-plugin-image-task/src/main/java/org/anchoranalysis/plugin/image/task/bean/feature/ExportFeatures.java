@@ -68,8 +68,9 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  * Calculates features and exports them as a CSV
  *
  * <p>Aggregated-features (based upon a certain grouping) can also be calculated.
- * 
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -97,7 +98,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     private static final NamedFeatureStoreFactory STORE_FACTORY_AGGREGATE =
             NamedFeatureStoreFactory.bothNameAndParams();
-        
+
     public static final ResultsWriterOutputNames OUTPUT_RESULTS = new ResultsWriterOutputNames();
 
     // START BEAN PROPERTIES
@@ -174,10 +175,11 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(
-                SharedStateExportFeatures.OUTPUT_THUMBNAILS,
-                OUTPUT_RESULTS.getCsvFeaturesNonAggregated(),
-                OUTPUT_RESULTS.getCsvFeaturesAggregated().get());   // NOSONAR
+        return super.defaultOutputs()
+                .addEnabledOutputFirst(
+                        SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                        OUTPUT_RESULTS.getCsvFeaturesNonAggregated(),
+                        OUTPUT_RESULTS.getCsvFeaturesAggregated().get()); // NOSONAR
     }
 
     @Override

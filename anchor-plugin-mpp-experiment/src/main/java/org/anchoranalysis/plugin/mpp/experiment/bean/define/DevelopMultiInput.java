@@ -53,8 +53,9 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 /**
  * Derives various types of outputs (images, histograms etc.) from {@link MultiInput}s.
- * 
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -66,19 +67,17 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
-    /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */ 
+    /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
     /** Specifies a feature-table that can also be outputted. */
-    @BeanField @Getter @Setter
-    private List<OutputFeatureTable> featureTables = new ArrayList<>();
+    @BeanField @Getter @Setter private List<OutputFeatureTable> featureTables = new ArrayList<>();
 
     /** If non-empty, A keyValueParams is treated as part of the energyStack */
     @BeanField @AllowEmpty @Getter @Setter private String energyParamsName = "";
@@ -104,7 +103,7 @@ public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(MultiInput.class);
@@ -135,7 +134,7 @@ public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
         EnergyStackHelper.writeEnergyStackParams(
                 imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
-    
+
     private void outputFeatureTables(ImageInitParams so, InputOutputContext context) {
 
         for (OutputFeatureTable outputFeatureTable : featureTables) {

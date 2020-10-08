@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,12 +26,12 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
 import java.io.IOException;
+import loci.formats.FormatException;
+import loci.formats.IFormatWriter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.stack.Stack;
-import loci.formats.FormatException;
-import loci.formats.IFormatWriter;
 
 class RGBWriterShort extends RGBWriter {
 
@@ -41,7 +41,7 @@ class RGBWriterShort extends RGBWriter {
 
     @Override
     protected void mergeSliceAsRGB(int z, int capacity) throws RasterIOException {
-        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity*3*2);
+        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3 * 2);
         putSliceShort(merged, channelRed, z);
         putSliceShort(merged, channelGreen, z);
         putSliceShort(merged, channelBlue, z);
@@ -49,10 +49,12 @@ class RGBWriterShort extends RGBWriter {
             writer.saveBytes(z, merged.array());
         } catch (FormatException | IOException e) {
             throw new RasterIOException(e);
-        }  
+        }
     }
-    
+
     private static void putSliceShort(UnsignedByteBuffer merged, Channel channel, int z) {
-        merged.getDelegate().asShortBuffer().put(channel.voxels().asShort().sliceBuffer(z).getDelegate());
-    }        
+        merged.getDelegate()
+                .asShortBuffer()
+                .put(channel.voxels().asShort().sliceBuffer(z).getDelegate());
+    }
 }

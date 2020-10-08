@@ -72,10 +72,7 @@ public class BackgroundSubtract extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput input,
-            int seriesIndex,
-            int numberSeries,
-            InputOutputContext context)
+            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException {
 
         ProgressReporter progressReporter = ProgressReporterNull.get();
@@ -83,7 +80,8 @@ public class BackgroundSubtract extends RasterTask {
         try {
             NamedChannelsForSeries channels = input.createChannelsForSeries(0, progressReporter);
 
-            Channel inputImage = channels.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
+            Channel inputImage =
+                    channels.getChannel(StackIdentifiers.INPUT_IMAGE, 0, progressReporter);
 
             Channel bgSubOut = BackgroundSubtractor.subtractBackground(inputImage, radius, false);
             Voxels<?> voxelsSubOut = bgSubOut.voxels().any();

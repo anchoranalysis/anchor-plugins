@@ -34,8 +34,8 @@ import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
+import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundedList;
@@ -90,8 +90,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
     /** Interpolator used when scaling the background */
-    @BeanField @Getter @Setter
-    private InterpolatorBean interpolator = new ImgLib2Lanczos();
+    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
 
     /**
      * The width of the outline. By default, it's 3 as it's nice to have a strongly easily-visible

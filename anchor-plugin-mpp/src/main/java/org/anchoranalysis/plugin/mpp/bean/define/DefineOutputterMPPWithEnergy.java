@@ -45,9 +45,9 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
 /**
  * Like a {@link Define} but outputs also MPP-related data objects and an energy-stack.
- * 
+ *
  * <p>The following outputs are produced:
- * 
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -57,12 +57,11 @@ import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
  * <tr><td rowspan="3"><i>outputs from {@link EnergyStackWriter}</i></td></tr>
  * </tbody>
  * </table>
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
 public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
-    
+
     /**
      * @author Owen Feehan
      * @param <T> init-params-type

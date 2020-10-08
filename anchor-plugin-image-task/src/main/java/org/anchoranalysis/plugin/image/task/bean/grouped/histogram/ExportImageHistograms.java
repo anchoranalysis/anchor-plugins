@@ -48,19 +48,23 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
 /**
  * Exports a histogram of voxel intensities as a CSV file for each channel of an image.
  *
- * <p>Additionally, a histogram with the summation of voxel intensities for all channels in each image is produced.
- * 
- * <p>Optionally, one channel can be used as a mask, to restrict which voxels are included in the histogram.
- * 
+ * <p>Additionally, a histogram with the summation of voxel intensities for all channels in each
+ * image is produced.
+ *
+ * <p>Optionally, one channel can be used as a mask, to restrict which voxels are included in the
+ * histogram.
+ *
  * <p>These steps occur:
+ *
  * <ol>
- * <li>All files are aggregated into groups.
- * <li>For each image file, a histogram is calculated.
- * <li>The histogram is added to the group histogram.
- * <li>The histograms are written to the filesystem.
+ *   <li>All files are aggregated into groups.
+ *   <li>For each image file, a histogram is calculated.
+ *   <li>The histogram is added to the group histogram.
+ *   <li>The histograms are written to the filesystem.
  * </ol>
- * 
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -75,24 +79,28 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  */
 public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram> {
 
-    /** 
-     * The histograms written out for each channel (further filtered by a second-level check on the channel name).
-     * 
+    /**
+     * The histograms written out for each channel (further filtered by a second-level check on the
+     * channel name).
+     *
      * <p>Note that the output-name does not feature in the filenames of outputted histograms.
      */
     private static final String OUTPUT_HISTOGRAMS = "channels";
-    
+
     /** Summed CSV histograms of the selected channels in a sub-directory. */
     private static final String OUTPUT_SUM = "sum";
-    
+
     // START BEAN PROPERTIES
-    /** If defined, this is the name of channel used as a mask over the values which are fed into the histogram */
+    /**
+     * If defined, this is the name of channel used as a mask over the values which are fed into the
+     * histogram
+     */
     @BeanField @AllowEmpty @Getter @Setter private String channelMask = "";
 
     /** What voxel value to read as "On" in the mask above. */
     @BeanField @Getter @Setter private int maskValue = 255;
 
-    /** Iff true, bins with zero-counts are not written as a row in the CSV file. */ 
+    /** Iff true, bins with zero-counts are not written as a row in the CSV file. */
     @BeanField @Getter @Setter private boolean csvIgnoreZeros = false;
     // END BEAN PROPERTIES
 
@@ -118,7 +126,8 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
         ChannelSource source =
                 new ChannelSource(store, sharedState.getChannelChecker(), Optional.empty());
 
-        HistogramExtracter histogramExtracter = new HistogramExtracter(source, channelMask, maskValue);
+        HistogramExtracter histogramExtracter =
+                new HistogramExtracter(source, channelMask, maskValue);
 
         try {
             for (NamedChannel channel : getSelectChannels().selectChannels(source, true)) {

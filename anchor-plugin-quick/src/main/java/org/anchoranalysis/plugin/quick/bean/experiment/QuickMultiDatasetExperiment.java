@@ -58,13 +58,13 @@ import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
 /**
- * Makes a lot of assumptions, that allows us to reduce the number of inputs to an
- * {@link InputOutputExperiment}.
+ * Makes a lot of assumptions, that allows us to reduce the number of inputs to an {@link
+ * InputOutputExperiment}.
  *
  * <p>Normally, runs an experiment on all data-sets in *datasets*.
  *
- * <p>However, in debug-mode {@code datasetSpecific} is used (if non-empty), otherwise the first dataset is
- * used.
+ * <p>However, in debug-mode {@code datasetSpecific} is used (if non-empty), otherwise the first
+ * dataset is used.
  *
  * @param <T> input-object type
  * @param <S> shared-state
@@ -93,7 +93,10 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
     @BeanField @AllowEmpty @Getter @Setter private String identifierSuffix = "";
 
-    /** An upper limit on the number of the processors that can be simultaneously used in parallel, if they are available. */
+    /**
+     * An upper limit on the number of the processors that can be simultaneously used in parallel,
+     * if they are available.
+     */
     @BeanField @Getter @Setter private int maxNumberProcessors = 100;
 
     @BeanField @Getter @Setter private boolean suppressExceptions = true;

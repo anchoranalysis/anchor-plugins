@@ -82,10 +82,7 @@ public class ScaleImage extends RasterTask {
 
     @Override
     public void doStack(
-            NamedChannelsInput input,
-            int seriesIndex,
-            int numberSeries,
-            InputOutputContext context)
+            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException {
 
         // Input
@@ -101,7 +98,8 @@ public class ScaleImage extends RasterTask {
         try {
             // We store each channel as a stack in our collection, in case they need to be
             // referenced by the scale calculator
-            namedChannels.addAsSeparateChannels(new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
+            namedChannels.addAsSeparateChannels(
+                    new WrapStackAsTimeSequenceStore(soImage.stacks()), 0);
             scaleCalculator.initRecursive(context.getLogger());
         } catch (InitException | OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -140,7 +138,7 @@ public class ScaleImage extends RasterTask {
         outputStackCollection(
                 stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
     }
-    
+
     private static void outputStackCollection(
             NamedProvider<Stack> stackCollection,
             String outputSecondLevelKey,

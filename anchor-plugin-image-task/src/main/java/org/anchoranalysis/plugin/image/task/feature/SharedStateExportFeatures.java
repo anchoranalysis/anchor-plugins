@@ -62,9 +62,9 @@ import org.anchoranalysis.io.output.outputter.InputOutputContext;
  * @author Owen Feehan
  */
 public class SharedStateExportFeatures<S> {
-    
+
     public static final String OUTPUT_THUMBNAILS = "thumbnails";
-    
+
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
 
     private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
@@ -121,7 +121,10 @@ public class SharedStateExportFeatures<S> {
                     InputOutputContext context)
                     throws CreateException {
         return createForFeatures(
-                STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, outputNames, context);
+                STORE_FACTORY.createNamedFeatureList(features),
+                metadataHeaders,
+                outputNames,
+                context);
     }
 
     /**
@@ -143,7 +146,8 @@ public class SharedStateExportFeatures<S> {
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames(), outputNames),
+                    new ResultsWriterMetadata(
+                            metadataHeaders, featureStore.createFeatureNames(), outputNames),
                     featureStore.deepCopy()::listFeatures,
                     context);
         } catch (AnchorIOException e) {

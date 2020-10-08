@@ -69,8 +69,7 @@ public abstract class SummarizeBase<T extends InputFromManager, S> extends Task<
             params.getSharedState().add(extractObjectForSummary(params.getInput()));
         } catch (OperationFailedException e) {
             throw new JobExecutionException(
-                    String.format("Cannot summarize %s", params.getInput().pathForBinding()),
-                    e);
+                    String.format("Cannot summarize %s", params.getInput().pathForBinding()), e);
         }
     }
 

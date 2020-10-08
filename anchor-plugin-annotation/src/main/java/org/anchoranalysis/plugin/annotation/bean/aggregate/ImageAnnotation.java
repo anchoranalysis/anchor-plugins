@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.annotation.bean.aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-@AllArgsConstructor @Value
+@AllArgsConstructor
+@Value
 class ImageAnnotation {
 
     private String identifier;

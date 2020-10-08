@@ -92,8 +92,9 @@ import org.anchoranalysis.plugin.io.bean.input.stack.StackSequenceInput;
  *
  * <p>The task also provides aggregated outputs (features, thumbnails) of extracted objects across
  * all inputs.
- * 
+ *
  * <p>The following outputs are produced:
+ *
  * <table>
  * <caption></caption>
  * <thead>
@@ -120,7 +121,7 @@ public class SegmentInstanceWithModel<T>
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
-    
+
     /** Output-name for the input-image for the segmentation */
     private static final String OUTPUT_INPUT_IMAGE = "input";
 
@@ -235,12 +236,16 @@ public class SegmentInstanceWithModel<T>
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_H5, OUTPUT_MERGED_AS_MASK,
-                OUTPUT_OUTLINE, SharedStateExportFeatures.OUTPUT_THUMBNAILS,
-                SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
+        return super.defaultOutputs()
+                .addEnabledOutputFirst(
+                        OUTPUT_H5,
+                        OUTPUT_MERGED_AS_MASK,
+                        OUTPUT_OUTLINE,
+                        SharedStateExportFeatures.OUTPUT_THUMBNAILS,
+                        SharedStateSegmentInstance.OUTPUT_SUMMARY_CSV);
     }
 
     private void calculateFeaturesForImage(
