@@ -87,7 +87,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
     @Override
     public int bitDepth() throws RasterIOException {
         MultiFile memo = getOrCreateMemo(ProgressReporterNull.get());
-        return memo.dataType().numBits();
+        return memo.dataType().numberBits();
     }
 
     @Override
