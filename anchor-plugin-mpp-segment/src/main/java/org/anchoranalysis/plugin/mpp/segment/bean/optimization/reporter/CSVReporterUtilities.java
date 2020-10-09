@@ -41,10 +41,10 @@ public class CSVReporterUtilities {
     public static Optional<TextFileOutput> createFileOutputFor(
             String outputName,
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams,
-            String manifestDscrFunction) {
+            String manifestFunction) {
         return TextFileOutputter.create(
                 "csv",
-                Optional.of(new ManifestDescription("csv", manifestDscrFunction)),
+                Optional.of(new ManifestDescription("csv", manifestFunction)),
                 initParams.getInitContext().getOutputter().getChecked(),
                 outputName);
     }

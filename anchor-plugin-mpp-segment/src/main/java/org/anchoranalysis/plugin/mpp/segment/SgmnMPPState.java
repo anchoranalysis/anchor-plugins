@@ -38,7 +38,11 @@ import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 // State that only needs to be initialized once can be shared across many calls to the algoritm
 @AllArgsConstructor
 public class SgmnMPPState implements ExperimentState {
-
+    
+    private static final String OUTPUT_SERIALIZED = "kernelProposer";
+    
+    private static final String MANIFEST_FUNCTION = OUTPUT_SERIALIZED;
+    
     private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
     private Define define;
 
@@ -56,9 +60,9 @@ public class SgmnMPPState implements ExperimentState {
         outputter
                 .writerSelective()
                 .write(
-                        "kernelProposer",
+                        OUTPUT_SERIALIZED,
                         () ->
                                 new XStreamGenerator<Object>(
-                                        kernelProposer, Optional.of("kernelProposer")));
+                                        kernelProposer, Optional.of(MANIFEST_FUNCTION)));
     }
 }

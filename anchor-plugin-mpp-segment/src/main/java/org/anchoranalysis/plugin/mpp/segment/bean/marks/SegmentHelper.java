@@ -37,43 +37,18 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.bean.nonbean.init.CreateCombinedStack;
-import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.image.io.stack.StacksOutputter;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergyScheme;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
-import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class SegmentHelper {
-
-    public static final String OUTPUT_STACK = "stacks";
-
-    public static void writeStacks(
-            ImageInitParams imageInit, EnergyStack energyStack, InputOutputContext context) {
-        Outputter outputter = context.getOutputter();
-
-        StacksOutputter.output(
-                StacksOutputter.subset(
-                        CreateCombinedStack.apply(imageInit),
-                        outputter.outputsEnabled().second(OUTPUT_STACK)),
-                outputter.getChecked(),
-                OUTPUT_STACK,
-                "stack_",
-                context.getErrorReporter(),
-                false);
-
-        EnergyStackWriter.writeEnergyStack(energyStack, context);
-    }
 
     public static EnergySchemeWithSharedFeatures initEnergy(
             EnergySchemeCreator energySchemeCreator,

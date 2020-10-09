@@ -52,6 +52,9 @@ import org.anchoranalysis.overlay.bean.DrawObject;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MarksVisualization {
 
+    public static final String OUTPUT_VISUALIZE_MARKS_SOLID = "solid";
+    public static final String OUTPUT_VISUALIZE_MARKS_OUTLINE = "outline";
+    
     public static void write(
             MarkCollection marks, Outputter outputter, DisplayStack backgroundStack)
             throws OperationFailedException {
@@ -63,8 +66,8 @@ class MarksVisualization {
                         new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>()),
                         backgroundStack);
 
-        writeMarksGenerator(writeIfAllowed, "solid", new Filled(), marksWithStack);
-        writeMarksGenerator(writeIfAllowed, "outline", new Outline(), marksWithStack);
+        writeMarksGenerator(writeIfAllowed, OUTPUT_VISUALIZE_MARKS_SOLID, new Filled(), marksWithStack);
+        writeMarksGenerator(writeIfAllowed, OUTPUT_VISUALIZE_MARKS_OUTLINE, new Outline(), marksWithStack);
     }
 
     private static void writeMarksGenerator(

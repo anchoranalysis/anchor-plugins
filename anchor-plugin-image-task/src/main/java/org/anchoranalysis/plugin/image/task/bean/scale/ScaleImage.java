@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.task.bean.scale;
 
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -34,6 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -60,13 +60,14 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 /**
  * Task to scale an image.
  *
- * <p>Expects a second-level output "stack" to determine which stacks get outputted or not.
+ * <p>Expects a second-level output "scaled" and "scaledFlattened" to determine which stacks get outputted or not.
  *
  * @author Owen Feehan
  */
 public class ScaleImage extends RasterTask {
 
-    private static final String KEY_OUTPUT_STACK = "stack";
+    private static final String OUTPUT_SCALED = "scaled";
+    private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
@@ -133,74 +134,84 @@ public class ScaleImage extends RasterTask {
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
 
-        outputStackCollection(
-                stackCollection, KEY_OUTPUT_STACK, "channelScaledCollection", context);
-        outputStackCollection(
-                stackCollectionMIP, KEY_OUTPUT_STACK, "channelScaledCollectionMIP", context);
+        outputStacks(
+                stackCollection, OUTPUT_SCALED, context);
+        outputStacks(
+                stackCollectionMIP, OUTPUT_SCALED_FLATTENED, context);
     }
 
-    private static void outputStackCollection(
-            NamedProvider<Stack> stackCollection,
-            String outputSecondLevelKey,
+    private static void outputStacks(
+            NamedProvider<Stack> stacks,
             String outputName,
             InputOutputContext context) {
-        Outputter outputter = context.getOutputter();
 
-        StacksOutputter.output(
-                StacksOutputter.subset(
-                        stackCollection, outputter.outputsEnabled().second(outputSecondLevelKey)),
-                outputter.getChecked(),
-                outputName,
-                "",
-                context.getErrorReporter(),
-                false);
+        StacksOutputter.output(stacks, outputName, false, context);
     }
 
     private void populateOutputCollectionsFromSharedObjects(
             ImageInitParams params,
-            NamedStacks stackCollection,
-            NamedStacks stackCollectionMIP,
+            NamedStacks stacksNotFlattened,
+            NamedStacks stacksFlattened,
             InputOutputContext context)
             throws JobExecutionException {
 
-        Set<String> channelNames = params.stacks().keys();
-        for (String channelName : channelNames) {
+        for (String key : params.stacks().keys()) {
 
-            // If this output is not allowed we simply skip
-            if (!context.getOutputter()
-                    .outputsEnabled()
-                    .second(KEY_OUTPUT_STACK)
-                    .isOutputEnabled(channelName)) {
+            // If neither output is allowed for this channel, we skip
+            if (!isEitherOutputEnabled(context, key)) {
                 continue;
             }
-
+            
             try {
-                Channel channelIn = params.stacks().getException(channelName).getChannel(0);
+                Channel channelIn = params.stacks().getException(key).getChannel(0);
 
-                Channel channelOut;
-                if (forceBinary) {
-                    Mask mask = new Mask(channelIn);
-                    Mask maskScaled =
-                            org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
-                                    mask, scaleCalculator);
-                    channelOut = maskScaled.channel();
-                } else {
-                    channelOut =
-                            ScaleXY.scale(
-                                    channelIn,
-                                    scaleCalculator,
-                                    InterpolatorFactory.getInstance().rasterResizing(),
-                                    context.getLogger().messageLogger());
+                Channel channelOut = scaleChannel(channelIn, context.getLogger().messageLogger());
+                
+                if (isNonFlattenedEnabled(context,key)) {
+                    stacksNotFlattened.add(key, new Stack(channelOut));
                 }
-
-                stackCollection.add(channelName, new Stack(channelOut));
-                stackCollectionMIP.add(channelName, new Stack(channelOut.projectMax()));
+                
+                if (isFlattenedEnabled(context,key)) {
+                    stacksFlattened.add(key, new Stack(channelOut.projectMax()));
+                }
 
             } catch (CreateException e) {
                 throw new JobExecutionException(e);
             } catch (NamedProviderGetException e) {
                 throw new JobExecutionException(e.summarize());
-            }
+            }    
+        }
+    }
+    
+    private boolean isEitherOutputEnabled(InputOutputContext context, String key) {
+        return isFlattenedEnabled(context, key) || isNonFlattenedEnabled(context, key); 
+    }
+    
+    private boolean isNonFlattenedEnabled(InputOutputContext context, String key) {
+        return isOutputEnabled(context, OUTPUT_SCALED, key);
+    }
+    
+    private boolean isFlattenedEnabled(InputOutputContext context, String key) {
+        return isOutputEnabled(context, OUTPUT_SCALED_FLATTENED, key);
+    }
+    
+    private static boolean isOutputEnabled(InputOutputContext context, String outputName, String key) {
+        return context.getOutputter().outputsEnabled().second(outputName).isOutputEnabled(key);
+    }
+    
+    private Channel scaleChannel(Channel channelIn, MessageLogger logger) throws CreateException {
+        if (forceBinary) {
+            Mask mask = new Mask(channelIn);
+            Mask maskScaled =
+                    org.anchoranalysis.plugin.image.bean.mask.provider.resize.ScaleXY.scale(
+                            mask, scaleCalculator);
+            return maskScaled.channel();
+        } else {
+            return ScaleXY.scale(
+                            channelIn,
+                            scaleCalculator,
+                            InterpolatorFactory.getInstance().rasterResizing(),
+                            logger);
         }
     }
 }

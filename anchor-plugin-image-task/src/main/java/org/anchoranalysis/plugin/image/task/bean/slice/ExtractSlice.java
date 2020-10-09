@@ -69,6 +69,8 @@ import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
  */
 public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
+    private static final String OUTPUT_SLICES = "slices";
+    
     // START BEAN PROPERTIES
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> scoreProvider;
@@ -129,8 +131,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_SLICES);
     }
 
     /**
@@ -176,7 +177,8 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            outputSlices(outputter, slices);
+            StacksOutputter.outputChecked(slices, OUTPUT_SLICES,
+                    false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
@@ -187,11 +189,6 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
         NamedStacks stackCollection = new NamedStacks();
         input.addToStoreInferNames(stackCollection);
         return stackCollection;
-    }
-
-    private void outputSlices(Outputter outputter, NamedStacks stackCollection)
-            throws OutputWriteFailedException {
-        StacksOutputter.outputSubsetWithException(stackCollection, outputter, false);
     }
 
     private int findOptimalSlice(double[] scores) {

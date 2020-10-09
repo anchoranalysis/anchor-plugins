@@ -45,6 +45,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -56,6 +57,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
+import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
@@ -70,29 +72,61 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 import org.anchoranalysis.plugin.mpp.segment.SgmnMPPState;
 
 /**
- * Segments a channel with marked pointed processes
+ * Segments a channel with marked pointed processes.
+ * 
+ * <p>Different operations occur on a set of marks (a <i>configuration</i>), with
+ * each operation termed a <i>kernel</i>. These operations can, for example:
+ * <ul>
+ * <li>create a new mark(s) (<i>birth</i>)
+ * <li>delete an existing mark(s) (<i>death</i>)
+ * <li>modify an existing mark(s).
+ * </ul>
+ * 
+ * <p>Each set of marks has an associated energy, a score determining how desirable
+ * it is for the optimization routine. Certain scores are retained according to
+ * an optimization-scheme, either deterministically or stochastically, either greedily
+ * or with some non-greedy steps.
  *
  * @author Owen Feehan
  */
 public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
 
     // START BEAN PROPERTIES
+    /** 
+     * The optimization-scheme that determines which configurations are accepted/rejected from one iteration to the next.
+     */
     @BeanField @Getter @Setter
     private OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optimization;
 
+    /** 
+     * Creates a new mark, before perhaps further manipulations by a kernel.
+     */
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
 
-    /** Creates an energy scheme that assigns an energy score to each collection of marks. */
+    /** 
+     * Creates an energy scheme that assigns an energy score to each collection of marks.
+     */
     @BeanField @Getter @Setter private EnergySchemeCreator energySchemeCreator;
 
+    /** 
+     * Proposes kernel-changes during iterations of hte marked-point-processes.
+     */
     @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
 
+    /** 
+     * Processes feedback from the segmentation algorithm for outputting / debugging.
+     */
     @BeanField @Getter @Setter
     private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
 
+    /** 
+     * Adds definitions of stacks/objects etc. to be used during segmentation.
+     */
     @BeanField @Getter @Setter private DefineOutputterMPPWithEnergy define;
 
-    /** Iff true the algorithm exits before optimization begins (useful for debugging). */
+    /**
+     * Iff true the algorithm exits before optimization begins (useful for debugging).
+     */
     @BeanField @Getter @Setter private boolean exitBeforeOptimization = false;
 
     /**
@@ -142,6 +176,11 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutputFirst( MarksOutputter.OUTPUT_OUTLINE_THIN, MarksOutputter.OUTPUT_MARKS_XML_SERIALIZED );
+    }
+    
     private MarkCollection segmentAndWrite(
             MPPInitParams mppInit,
             EnergyStack energyStack,
@@ -152,7 +191,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         try {
             init(mppInit, context.getLogger());
 
-            SegmentHelper.writeStacks(mppInit.getImage(), energyStack, context);
+            EnergyStackWriter.writeEnergyStack(energyStack, context);
 
             context.getMessageReporter()
                     .log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap());
@@ -214,7 +253,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                                     context)
                             .getMarks();
 
-            ResultsOutputter.outputResults(
+            MarksOutputter.outputResults(
                     marks,
                     context.getDualStack(),
                     energySchemeShared
