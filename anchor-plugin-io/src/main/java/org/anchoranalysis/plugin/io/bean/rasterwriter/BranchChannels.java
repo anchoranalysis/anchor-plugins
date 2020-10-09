@@ -37,14 +37,15 @@ import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
- * Uses different raster-writers under different sets of conditions.
+ * Uses different raster-writers depending on the number/type of channels.
  *
  * <p>If any optional condition does not have a writer, then {@code writer} is used in this case.
  *
  * @author Owen Feehan
  */
-public class MultiplexWriter extends RasterWriter {
+public class BranchChannels extends RasterWriterDelegateBase {
 
+    // START BEAN PROPERTIES
     /** Default writer, if a more specific writer is not specified for a condition. */
     @BeanField @Getter @Setter private RasterWriter writer;
 
@@ -56,40 +57,22 @@ public class MultiplexWriter extends RasterWriter {
 
     /** Writer employed if a stack is a three-channeled RGB image and is <b>not 3D</b>. */
     @BeanField @OptionalBean @Getter @Setter private RasterWriter whenRGB;
+    // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(RasterWriteOptions writeOptions) {
-        return selectDelegate(writeOptions).fileExtension(writeOptions);
+    protected RasterWriter selectDelegate(RasterWriteOptions writeOptions) {
+        if (writeOptions.isRgb()) {
+            return writerOrDefault(whenRGB);
+        } else if (writeOptions.isAlwaysOneOrThreeChannels()) {
+            return writerOrDefault(whenOneOrThreeChannels);
+        } else {
+            return writer;
+        }
     }
-
-    @Override
-    public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
-            throws RasterIOException {
-        selectDelegate(writeOptions).writeStack(stack, filePath, makeRGB, writeOptions);
-    }
-
-    @Override
-    public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            RasterWriteOptions writeOptions)
-            throws RasterIOException {
-        selectDelegate(writeOptions).writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
-    }
-
-    private RasterWriter selectDelegate(RasterWriteOptions writeOptions) {
-        if (writeOptions.isAlways2D()) {
-
-            if (writeOptions.isRgb()) {
-                return whenRGB;
-            } else if (writeOptions.isAlwaysOneOrThreeChannels()) {
-                return whenOneOrThreeChannels;
-            } else {
-                return writer;
-            }
-
+    
+    private RasterWriter writerOrDefault(RasterWriter writerMaybeNull) {
+        if (writerMaybeNull!=null) {
+            return writerMaybeNull;
         } else {
             return writer;
         }

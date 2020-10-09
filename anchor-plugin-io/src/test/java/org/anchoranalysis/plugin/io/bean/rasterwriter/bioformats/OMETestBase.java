@@ -93,4 +93,9 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     public void testFourChannels() throws RasterIOException, IOException {
         tester.testFourChannels(SUPPORTED_VOXEL_TYPES);
     }
+    
+    @Test
+    public void testThreeChannelsHeterogeneous() throws RasterIOException, IOException {
+        tester.testThreeChannelsHeterogeneous();
+    }
 }
