@@ -178,7 +178,6 @@ public abstract class BioformatsWriter extends RasterWriter {
             writer.setMetadataRetrieve(
                     MetadataUtilities.createMetadata(
                             stack.dimensions(), stack.getNumberChannels(), pixelType, makeRGB, false));
-            writer.setInterleaved(makeRGB);
         } catch (ServiceException | DependencyException e) {
             throw new RasterIOException(e);
         }

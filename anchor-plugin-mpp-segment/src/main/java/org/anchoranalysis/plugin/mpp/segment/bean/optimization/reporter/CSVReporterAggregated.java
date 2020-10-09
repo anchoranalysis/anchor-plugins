@@ -42,9 +42,19 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
+/**
+ * Outputs statistics on current energy / kernel acceptance etc. periodically at a particular interval.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
+    private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
+    
+    private static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
+    
     private Optional<TextFileOutput> csvOutput;
 
     private StopWatch timer = null;
@@ -73,7 +83,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
 
         this.csvOutput =
                 CSVReporterUtilities.createFileOutputFor(
-                        "csvStatsAgg", initParams, "interval_aggregate_stats");
+                        OUTPUT_CSV_STATISTICS, initParams, MANIFEST_FUNCTION);
 
         timer = new StopWatch();
         timer.start();

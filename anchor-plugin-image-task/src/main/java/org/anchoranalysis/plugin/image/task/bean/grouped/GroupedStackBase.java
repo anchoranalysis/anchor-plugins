@@ -114,9 +114,8 @@ public abstract class GroupedStackBase<S, T>
         Optional<String> groupName =
                 extractGroupName(input.pathForBinding(), context.isDebugEnabled());
 
-        NamedStacks channels = GroupedStackBase.extractInputStacks(input);
-
-        processStacks(channels, groupName, params.getSharedState(), context);
+        processStacks(GroupedStackBase.extractInputStacks(input), groupName,
+                params.getSharedState(), context);
     }
 
     @Override

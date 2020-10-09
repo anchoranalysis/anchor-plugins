@@ -69,14 +69,46 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
  */
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
+    private static final String OUTPUT_MARKS = "marks";
+    
+    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS = Optional.of(OUTPUT_MARKS);
+    
     // START BEAN PROPERTIES
+    /** How to perform the segmentation. */
     @BeanField @Getter @Setter private SegmentIntoMarks segment;
 
-    @BeanField @Getter @Setter private String outputNameOriginal = "original";
-
+    /** If non-empty, the identifier of a key-value-params collection that is passed to the segmentation procedure. */
     @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
     // END BEAN PROPERTIES
 
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
+    
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(MultiInput.class);
+    }
+
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        OutputEnabledMutable outputs = super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MARKS,
+                MarksVisualization.OUTPUT_VISUALIZE_MARKS_OUTLINE);
+        outputs.addEnabledOutputs(segment.defaultOutputs());
+        return outputs;
+    }
+    
+    @Override
+    public ExperimentState beforeAnyJobIsExecuted(
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            throws ExperimentExecutionException {
+        ExperimentState experimentState = segment.createExperimentState();
+        experimentState.outputBeforeAnyTasksAreExecuted(outputter);
+        return experimentState;
+    }
+    
     @Override
     public void doJobOnInput(InputBound<MultiInput, ExperimentState> inputBound)
             throws JobExecutionException {
@@ -106,14 +138,9 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
     }
 
     @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(MultiInput.class);
-    }
-
-    @Override
-    public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+    public void afterAllJobsAreExecuted(ExperimentState sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
+        sharedState.outputAfterAllTasksAreExecuted(context.getOutputter());
     }
 
     private NamedStacks stacksFromInput(MultiInput input) throws OperationFailedException {
@@ -148,7 +175,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
     private NamedProviderStore<ObjectCollection> objectsFromInput(MultiInput input)
             throws OperationFailedException {
         NamedProviderStore<ObjectCollection> objectsStore =
-                new LazyEvaluationStore<>("object-colelctions");
+                new LazyEvaluationStore<>("object-collections");
         input.objects().addToStore(objectsStore);
         return objectsStore;
     }
@@ -157,7 +184,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
         outputter
                 .writerSelective()
-                .write("marks", () -> new XStreamGenerator<Object>(marks, Optional.of("marks")));
+                .write(OUTPUT_MARKS, () -> new XStreamGenerator<Object>(marks, MANIFEST_FUNCTION_SERIALIZED_MARKS));
 
         try {
             DisplayStack backgroundStack =
@@ -168,25 +195,5 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         } catch (OperationFailedException | CreateException e) {
             logger.errorReporter().recordError(SegmentMarksFromImage.class, e);
         }
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
-    }
-
-    @Override
-    public ExperimentState beforeAnyJobIsExecuted(
-            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
-            throws ExperimentExecutionException {
-        ExperimentState experimentState = segment.createExperimentState();
-        experimentState.outputBeforeAnyTasksAreExecuted(outputter);
-        return experimentState;
-    }
-
-    @Override
-    public void afterAllJobsAreExecuted(ExperimentState sharedState, InputOutputContext context)
-            throws ExperimentExecutionException {
-        sharedState.outputAfterAllTasksAreExecuted(context.getOutputter());
     }
 }

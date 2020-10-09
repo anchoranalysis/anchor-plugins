@@ -53,7 +53,7 @@ public class UnchangingEnergy extends TerminationCondition {
     private int rep = 0;
 
     @Override
-    public boolean continueIterations(int crntIter, double score, int size, MessageLogger logger) {
+    public boolean continueIterations(int currentIteration, double score, int size, MessageLogger logger) {
 
         // We increase our repetition counter, if the energy total is identical to the last time
         if (Math.abs(score - prevEnergy) < this.tolerance) {
@@ -67,7 +67,7 @@ public class UnchangingEnergy extends TerminationCondition {
         if (rep < numRep) {
             return true;
         } else {
-            logger.logFormatted("ConstantEnergy returned false at iter=%d", crntIter);
+            logger.logFormatted("ConstantEnergy returned false at iter=%d", currentIteration);
             return false;
         }
     }

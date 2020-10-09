@@ -25,16 +25,12 @@
  */
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
-import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Uses different raster-writers depending on the number/type of channels.
