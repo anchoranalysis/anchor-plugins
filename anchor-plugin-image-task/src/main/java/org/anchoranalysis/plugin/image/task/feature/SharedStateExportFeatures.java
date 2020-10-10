@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -46,15 +47,13 @@ import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
 
 /**
  * Shared-state for an export-features class
@@ -209,10 +208,15 @@ public class SharedStateExportFeatures<S> {
     }
 
     public void closeAnyOpenIO() throws IOException {
-        if (thumbnailOutputSequence != null) {
-            thumbnailOutputSequence.end();
+        try {
+            if (thumbnailOutputSequence != null) {
+                thumbnailOutputSequence.end();
+            }
+        } catch (OutputWriteFailedException e) {
+            throw new IOException(e);
+        } finally {
+            groupedResults.close();
         }
-        groupedResults.close();
     }
 
     /**
@@ -232,17 +236,21 @@ public class SharedStateExportFeatures<S> {
                 groupedResults.addResultsFor(labels, results.getResultsVector());
 
                 // Write thumbnail, or empty image
-                results.getThumbnail().ifPresent(image -> addThumbnail(image, context));
+                if (results.getThumbnail().isPresent()) {
+                    try {
+                        addThumbnail(results.getThumbnail().get(), context);
+                    } catch (OutputWriteFailedException e) {
+                        throw new OperationFailedException(e);
+                    }
+                }
             }
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) {
+    private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) throws OutputWriteFailedException {
         if (thumbnailOutputSequence == null) {
-            Generator<Stack> generator = new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL, true);
-            thumbnailOutputSequence =
-                    OutputSequence.createIncremental(new OutputSequenceDirectory(OUTPUT_THUMBNAILS), generator, context);
-            thumbnailOutputSequence.start();
+            OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+            thumbnailOutputSequence = factory.incrementalSubdirectory(OUTPUT_THUMBNAILS, context);
         }
         thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }

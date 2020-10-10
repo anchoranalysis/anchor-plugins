@@ -96,15 +96,15 @@ class MapPart extends NamedChannelsInputPart {
     // Where most of our time is being taken up when opening a raster
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
+            int seriesIndex, ProgressReporter progressReporter) throws RasterIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
-            seriesNum = openedRaster().numberSeries() - 1;
+            seriesIndex = openedRaster().numberSeries() - 1;
         }
 
         NamedChannelsForSeriesConcatenate out = new NamedChannelsForSeriesConcatenate();
-        out.add(new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesNum));
+        out.add(new NamedChannelsForSeriesMap(openedRaster(), channelMap(), seriesIndex));
         return out;
     }
 

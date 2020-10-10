@@ -26,14 +26,15 @@
 
 package org.anchoranalysis.plugin.image.task.bean.format;
 
-import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -44,20 +45,18 @@ import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
+import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
 
 /**
  * Converts each input-image to the default output format, optionally changing the bit depth.
@@ -101,27 +100,16 @@ public class ConvertImageFormat extends RasterTask {
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
-    private OutputSequenceNonIncrementalLogged<Stack> generatorSequence;
+    private OutputSequenceNonIncremental<Stack> outputSequence;
 
     @Override
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
-
-        StackGenerator generator = new StackGenerator(false, "out", false);
-
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
-            Optional.empty(),
-            // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
-            new StringSuffixOutputNameStyle(OUTPUT_COPY, "%s"),
-            true,
-            Optional.empty()
-        );
-        
-        generatorSequence = OutputSequence.createNonIncrementalLogged(sequenceDirectory, generator, context);
-
-        // TODO it would be nicer to reflect the real sequence type, than just using a set of
-        // indexes
-        generatorSequence.start(new SetSequenceType());
+        try {
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.nonIncrementalCurrentDirectory(OUTPUT_COPY, context);
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
+        }
     }
 
     @Override
@@ -160,14 +148,18 @@ public class ConvertImageFormat extends RasterTask {
                     channelGetter,
                     context.getLogger());
 
-        } catch (RasterIOException | CreateException | AnchorIOException e) {
+        } catch (RasterIOException | CreateException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
-        generatorSequence.end();
+        try {
+            outputSequence.end();
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
+        }
     }
 
     private void convertEachTimepoint(
@@ -177,7 +169,7 @@ public class ConvertImageFormat extends RasterTask {
             int sizeT,
             ChannelGetter channelGetter,
             Logger logger)
-            throws AnchorIOException {
+            throws JobExecutionException {
 
         for (int t = 0; t < sizeT; t++) {
 
@@ -186,11 +178,16 @@ public class ConvertImageFormat extends RasterTask {
 
             logger.messageLogger().logFormatted("Starting time-point: %d", t);
 
-            channelConversionStyle.convert(
-                    channelNames,
-                    new ChannelGetterForTimepoint(channelGetter, t),
-                    (name, stack) -> addStackToOutput(name, stack, namer),
-                    logger);
+            try {
+                NamedStacks stacks = channelConversionStyle.convert(
+                        channelNames,
+                        new ChannelGetterForTimepoint(channelGetter, t),
+                        logger);
+            
+                stacks.forEach( (stackName,stack) -> addStackToOutput(stackName, stack, namer) );
+            } catch (AnchorIOException | OperationFailedException e) {
+                throw new JobExecutionException(e);
+            }
 
             logger.messageLogger().logFormatted("Ending time-point: %d", t);
         }
@@ -202,8 +199,12 @@ public class ConvertImageFormat extends RasterTask {
     }
 
     private void addStackToOutput(
-            String name, Stack stack, CalculateOutputName calculateOutputName) {
-        generatorSequence.add(stack, calculateOutputName.outputName(name));
+            String name, StoreSupplier<Stack> stack, CalculateOutputName calculateOutputName) throws OperationFailedException {
+        try {
+            outputSequence.add(stack.get(), calculateOutputName.outputName(name));
+        } catch (OutputWriteFailedException e) {
+            throw new OperationFailedException(e);
+        }
     }
 
     private ChannelGetter maybeAddConverter(ChannelGetter channelGetter) throws CreateException {

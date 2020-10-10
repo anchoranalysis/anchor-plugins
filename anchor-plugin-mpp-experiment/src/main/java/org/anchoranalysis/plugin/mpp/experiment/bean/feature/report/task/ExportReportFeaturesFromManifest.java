@@ -45,7 +45,6 @@ import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
@@ -72,45 +71,41 @@ public class ExportReportFeaturesFromManifest
     public void doJobOnInput(InputBound<ManifestCouplingDefinition, NoSharedState> params)
             throws JobExecutionException {
 
-        Logger logger = params.getLogger();
-        ManifestCouplingDefinition input = params.getInput();
-        Outputter outputter = params.getOutputter();
-
-        Optional<CSVWriter> writer;
         try {
-            writer = CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
+            Optional<CSVWriter> writer = CSVWriter.createFromOutputter("featureReport", params.getOutputter().getChecked());
+
+            if (writer.isPresent()) {
+                writeCSV(writer.get(), params.getInput(), params.getLogger());
+            }
+            
         } catch (AnchorIOException e1) {
             throw new JobExecutionException(e1);
         }
-
+    }
+    
+    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger) throws JobExecutionException {
         try {
-
-            if (!writer.isPresent()) {
-                return;
-            }
-
-            writer.get()
-                    .writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
+            writer.writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
 
             Iterator<CoupledManifests> itr = input.iteratorCoupledManifests();
             while (itr.hasNext()) {
 
-                CoupledManifests mr = itr.next();
+                CoupledManifests coupledManifests = itr.next();
 
                 List<TypedValue> rowElements =
                         ReportFeatureUtilities.elementList(
-                                listReportFeatures, mr.getFileManifest(), logger);
+                                listReportFeatures, coupledManifests.getFileManifest(), logger);
 
                 try {
-                    writer.get().writeRow(rowElements);
+                    writer.writeRow(rowElements);
                 } catch (NumberFormatException e) {
                     throw new JobExecutionException(e);
                 }
             }
 
         } finally {
-            writer.get().close();
-        }
+            writer.close();
+        }        
     }
 
     @Override

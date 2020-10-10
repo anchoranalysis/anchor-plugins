@@ -27,19 +27,38 @@
 package org.anchoranalysis.plugin.image.task.bean.format.convertstyle;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
+/**
+ * Converts a channel(s) at a particular timepoint into a stack(s).
+ * 
+ * <p>Whether each channel becomes its own single-channeled stack, or is combined to form
+ * multi-channeled stacks can vary by sub-class implementation.
+ * 
+ * <p>A unique-name (the channel-name) is assigned for each stack created, including
+ * possibly an empty string.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public abstract class ChannelConvertStyle extends AnchorBean<ChannelConvertStyle> {
 
-    public abstract void convert(
+    /**
+     * Converts a particular set of channels.
+     * 
+     * @param channelNames a set of names of the channels to convert.
+     * @param channelGetter gets a particular channel at a particualr time-point
+     * @param logger the logger
+     * @return the results of the conversion
+     * @throws AnchorIOException
+     */
+    public abstract NamedStacks convert(
             Set<String> channelNames,
             ChannelGetterForTimepoint channelGetter,
-            BiConsumer<String, Stack> stacksOut,
             Logger logger)
             throws AnchorIOException;
 }

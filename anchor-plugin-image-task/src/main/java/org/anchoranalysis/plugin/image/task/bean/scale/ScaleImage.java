@@ -52,6 +52,7 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
@@ -141,9 +142,13 @@ public class ScaleImage extends RasterTask {
     private static void outputStacks(
             NamedProvider<Stack> stacks,
             String outputName,
-            InputOutputContext context) {
-
-        StacksOutputter.output(stacks, outputName, false, context);
+            InputOutputContext context) throws JobExecutionException {
+        try {
+            StacksOutputter.output(stacks, outputName, false, context);
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(
+               "Failed to write a particular stack in: " + outputName, e);
+        }
     }
 
     private void populateOutputCollectionsFromSharedObjects(

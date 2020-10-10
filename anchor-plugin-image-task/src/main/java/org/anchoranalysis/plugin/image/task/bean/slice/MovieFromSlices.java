@@ -40,17 +40,14 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
 
 public class MovieFromSlices extends RasterTask {
 
@@ -67,27 +64,16 @@ public class MovieFromSlices extends RasterTask {
     // END BEAN PROPERTIES
 
     private int index = 0;
-    private OutputSequenceNonIncrementalLogged<Stack> generatorSeq;
+    private OutputSequenceNonIncremental<Stack> outputSequence;
 
     @Override
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
-
-        StackGenerator generator = new StackGenerator(false, "out", false);
-
-        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
-            Optional.empty(),
-            // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
-            new StringSuffixOutputNameStyle("", "%s"),
-            true,
-            Optional.empty()
-        );
-                
-        generatorSeq = OutputSequence.createNonIncrementalLogged(sequenceDirectory, generator, context);
-
-        // TODO it would be nicer to reflect the real sequence type, than just using a set of
-        // indexes
-        generatorSeq.start(new SetSequenceType());
+        try {
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.nonIncrementalCurrentDirectory("", context);
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
+        }
     }
 
     @Override
@@ -132,7 +118,7 @@ public class MovieFromSlices extends RasterTask {
                 sliceOut = extract.extractAndProjectStack(red, green, blue, z);
 
                 for (int i = 0; i < repeat; i++) {
-                    generatorSeq.add(sliceOut, formatIndex(index));
+                    outputSequence.add(sliceOut, formatIndex(index));
                     index++;
                 }
             }
@@ -140,19 +126,23 @@ public class MovieFromSlices extends RasterTask {
             // Just
             if (delaySizeAtEnd > 0 && sliceOut != null) {
                 for (int i = 0; i < delaySizeAtEnd; i++) {
-                    generatorSeq.add(sliceOut, formatIndex(index));
+                    outputSequence.add(sliceOut, formatIndex(index));
                     index++;
                 }
             }
 
-        } catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException e) {
+        } catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException | OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
-        generatorSeq.end();
+        try {
+            outputSequence.end();
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
+        }
     }
 
     private String formatIndex(int index) {

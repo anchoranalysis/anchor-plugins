@@ -133,6 +133,6 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
         super.outputSharedObjects(initParams, context);
 
-        EnergyStackWriter.writeEnergyStack(energyStack, context);
+        new EnergyStackWriter(energyStack, context).writeEnergyStack();
     }
 }

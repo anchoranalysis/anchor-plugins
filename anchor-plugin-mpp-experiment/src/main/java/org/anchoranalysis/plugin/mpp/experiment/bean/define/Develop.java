@@ -44,7 +44,6 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
-import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -70,7 +69,7 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  *
  * @author Owen Feehan
  */
-public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
+public class Develop extends TaskWithoutSharedState<MultiInput> {
 
     // START BEAN PROPERTIES
     /** Defines entities (chanels, stacks etc.) that are derived from inputs and other entities. */
@@ -122,11 +121,7 @@ public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
             throws OperationFailedException {
 
         try {
-            if (define.isSuppressOutputExceptions()) {
-                outputFeatureTables(imageInitParams, context);
-            } else {
-                outputFeatureTablesWithException(imageInitParams, context);
-            }
+            outputFeatureTables(imageInitParams, context);
         } catch (IOException e) {
             throw new OperationFailedException(e);
         }
@@ -135,19 +130,7 @@ public class DevelopMultiInput extends TaskWithoutSharedState<MultiInput> {
                 imageInitParams, OptionalUtilities.create(energyParamsName), context);
     }
 
-    private void outputFeatureTables(ImageInitParams so, InputOutputContext context) {
-
-        for (OutputFeatureTable outputFeatureTable : featureTables) {
-            try {
-                outputFeatureTable.initRecursive(so, context.getLogger());
-                outputFeatureTable.output(context);
-            } catch (IOException | InitException e) {
-                context.getErrorReporter().recordError(NamedStacks.class, e);
-            }
-        }
-    }
-
-    private void outputFeatureTablesWithException(ImageInitParams so, InputOutputContext context)
+    private void outputFeatureTables(ImageInitParams so, InputOutputContext context)
             throws IOException {
         for (OutputFeatureTable outputFeatureTable : featureTables) {
 
