@@ -47,6 +47,7 @@ import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
+import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
@@ -56,7 +57,6 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
-import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
 
 /**
  * Converts each input-image to the default output format, optionally changing the bit depth.

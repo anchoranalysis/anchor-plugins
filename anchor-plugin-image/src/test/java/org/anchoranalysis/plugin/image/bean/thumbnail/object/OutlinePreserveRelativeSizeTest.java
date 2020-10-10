@@ -43,6 +43,7 @@ import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.DualComparer;
@@ -101,7 +102,7 @@ public class OutlinePreserveRelativeSizeTest {
             List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
             writer.writeList("thumbnails", thumbnails, true);
             return thumbnails;
-        } catch (CreateException e) {
+        } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }
