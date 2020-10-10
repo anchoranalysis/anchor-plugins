@@ -30,14 +30,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
 /** A set of outputters, one for each group */
 class GroupedMultiplexOutputters {
 
     private static final ManifestFolderDescription MANIFEST_DESCRIPTION =
-            new ManifestFolderDescription("groupOutput", "outputManager", new SetSequenceType());
+            new ManifestFolderDescription("groupOutput", "outputManager", new StringsWithoutOrder());
 
     private Map<String, Outputter> map;
 

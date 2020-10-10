@@ -67,7 +67,7 @@ public final class OptimizationStepLogReporter extends ReporterAgg<VoxelizedMark
 
         logger.logFormatted(
                 "*** itr=%d  size=%d  best_energy=%e  kernel=%s",
-                reporting.getIter(),
+                reporting.getIteration(),
                 reporting.getMarksAfter().size(),
                 reporting.getMarksAfter().getEnergyTotal(),
                 reporting.kernelDescription());
@@ -78,9 +78,9 @@ public final class OptimizationStepLogReporter extends ReporterAgg<VoxelizedMark
 
         logger.logFormatted(
                 "itr=%d  time=%e  tpi=%e  %s",
-                reporting.getIter(),
+                reporting.getIteration(),
                 ((double) timer.getTime()) / 1000,
-                ((double) timer.getTime()) / (reporting.getIter() * 1000),
+                ((double) timer.getTime()) / (reporting.getIteration() * 1000),
                 agg.toString());
     }
 

@@ -89,9 +89,9 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                     .getWriter()
                     .printf(
                             "itr=%d  time=%e  tpi=%e   %s%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             ((double) timer.getTime()) / 1000,
-                            ((double) timer.getTime()) / (reporting.getIter() * 1000),
+                            ((double) timer.getTime()) / (reporting.getIteration() * 1000),
                             agg.toString());
         }
     }
@@ -106,7 +106,7 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                     .getWriter()
                     .printf(
                             "*** itr=%d  size=%d  best_energy=%e  kernel=%s%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             reporting.getMarksAfter().size(),
                             reporting.getMarksAfter().getEnergyTotal(),
                             reporting.kernelDescription());

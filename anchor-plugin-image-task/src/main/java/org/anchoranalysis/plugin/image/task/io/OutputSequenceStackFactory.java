@@ -4,10 +4,10 @@ import java.util.Optional;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
+import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(access=AccessLevel.PRIVATE)
 public class OutputSequenceStackFactory {
 
-    /** A factory with no restictions on what kind of stacks can be outputted. */
+    /** A factory with no restrictions on what kind of stacks can be outputted. */
     public static final OutputSequenceStackFactory NO_RESTRICTIONS = new OutputSequenceStackFactory(
        new StackGenerator(false, Optional.empty(), false)
     );
@@ -42,25 +42,36 @@ public class OutputSequenceStackFactory {
     private final StackGenerator generator;
     
     /**
-     * Creates an sequence of stacks in a subdirectory that has an incremental integer pattern in filename.
+     * Creates an sequence of stacks in a subdirectory with a number in the outputted file name that increments each time by one.
      * 
      * @param subdirectoryName the name of the sub-directory in which stacks will be written (relative to {@code context}.
      * @param context the current directory in which subdirectory will be created.
      * @return the created output-sequence (and started)
      * @throws OutputWriteFailedException
      */
-    public OutputSequenceIncremental<Stack> incrementalSubdirectory(String subdirectoryName, InputOutputContext context) throws OutputWriteFailedException {
-        return new OutputSequenceFactory<>(generator, context).incremental(new OutputSequenceDirectory(subdirectoryName));
+    public OutputSequenceIncrementing<Stack> incrementingByOne(String subdirectoryName, InputOutputContext context) throws OutputWriteFailedException {
+        return new OutputSequenceFactory<>(generator, context).incrementingByOne(new OutputPatternIntegerSuffix(subdirectoryName,true));
     }
 
     /**
-     * Creates a sequence of stacks in the current context's directory that has no incremental pattern in filenames.
+     * Creates a sequence of stacks in the current context's directory that has no pattern.
      * 
      * @param context the current directory in which output is occurring.
      * @return the created output-sequence (and started)
      * @throws OutputWriteFailedException
      */
-    public OutputSequenceNonIncremental<Stack> nonIncrementalCurrentDirectory(String prefix, InputOutputContext context) throws OutputWriteFailedException {
-        return new OutputSequenceFactory<>(generator, context).nonIncrementalCurrentDirectory(prefix);
+    public OutputSequenceIndexed<Stack,String> withoutOrderCurrentDirectory(String outputName, InputOutputContext context) throws OutputWriteFailedException {
+        return new OutputSequenceFactory<>(generator, context).withoutOrderCurrentDirectory(outputName);
+    }
+    
+    /**
+     * Creates a sequence of stacks in the current context's directory with a number in the outputted file name that increments each time by one.
+     * 
+     * @param context the current directory in which output is occurring.
+     * @return the created output-sequence (and started)
+     * @throws OutputWriteFailedException
+     */
+    public OutputSequenceIncrementing<Stack> incrementingByOneCurrentDirectory(String outputName, String prefix, int numberDigits, InputOutputContext context) throws OutputWriteFailedException {
+        return new OutputSequenceFactory<>(generator, context).incrementingByOneCurrentDirectory(outputName, prefix, numberDigits);
     }
 }

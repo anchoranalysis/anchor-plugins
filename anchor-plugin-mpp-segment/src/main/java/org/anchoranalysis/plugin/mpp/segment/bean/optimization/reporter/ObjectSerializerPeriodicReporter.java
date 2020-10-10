@@ -64,12 +64,12 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
         try {
             super.reportBegin(initParams);
 
-            SequenceType sequenceType =
+            SequenceType<?> sequenceType =
                     init(
                             new BundledObjectOutputStreamGenerator<T>(
                                     bundleParams,
                                     getOutputName(),
-                                    numberDigitsInOutputName(),
+                                    NUMBER_DIGITS_IN_OUTPUT,
                                     getParentContext(),
                                     manifestFunction));
 

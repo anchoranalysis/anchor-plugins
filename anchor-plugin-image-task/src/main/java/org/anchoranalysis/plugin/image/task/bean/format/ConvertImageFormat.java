@@ -50,7 +50,7 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -100,13 +100,13 @@ public class ConvertImageFormat extends RasterTask {
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
-    private OutputSequenceNonIncremental<Stack> outputSequence;
+    private OutputSequenceIndexed<Stack,String> outputSequence;
 
     @Override
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.nonIncrementalCurrentDirectory(OUTPUT_COPY, context);
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context);
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
@@ -156,7 +156,7 @@ public class ConvertImageFormat extends RasterTask {
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
         try {
-            outputSequence.end();
+            outputSequence.close();
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }

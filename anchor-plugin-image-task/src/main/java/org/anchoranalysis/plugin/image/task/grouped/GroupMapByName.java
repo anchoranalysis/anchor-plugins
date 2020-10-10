@@ -36,7 +36,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
@@ -70,7 +70,7 @@ public abstract class GroupMapByName<S, T> {
         this.nounT = nounT;
         this.manifestFolderDescription =
                 new ManifestFolderDescription(
-                        "groupedFolder", manifestFunction, new SetSequenceType());
+                        "groupedFolder", manifestFunction, new StringsWithoutOrder());
     }
 
     /**

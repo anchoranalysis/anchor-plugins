@@ -66,7 +66,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
                     .getWriter()
                     .printf(
                             "%d,%d,%e%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             reporting.getMarksAfter().size(),
                             reporting.getMarksAfter().getEnergyTotal());
         }

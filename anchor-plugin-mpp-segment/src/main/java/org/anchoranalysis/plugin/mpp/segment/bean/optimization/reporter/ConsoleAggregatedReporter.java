@@ -67,9 +67,9 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
     public void aggReport(Reporting<VoxelizedMarksWithEnergy> reporting, Aggregator agg) {
         System.out.printf( // NOSONAR
                 "itr=%d  time=%e  tpi=%e   %s%n",
-                reporting.getIter(),
+                reporting.getIteration(),
                 ((double) timer.getTime()) / 1000,
-                ((double) timer.getTime()) / (reporting.getIter() * 1000),
+                ((double) timer.getTime()) / (reporting.getIteration() * 1000),
                 agg.toString());
     }
 
@@ -78,7 +78,7 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
             throws ReporterException {
         System.out.printf( // NOSONAR
                 "*** itr=%d  size=%d  best_energy=%e  kernel=%s%n",
-                reporting.getIter(),
+                reporting.getIteration(),
                 reporting.getMarksAfter().size(),
                 reporting.getMarksAfter().getEnergyTotal(),
                 reporting.kernelDescription());

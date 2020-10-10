@@ -43,7 +43,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -51,6 +51,8 @@ import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
 
 public class MovieFromSlices extends RasterTask {
 
+    private static final String OUTPUT_FRAME = "frames";
+    
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int delaySizeAtEnd = 0;
 
@@ -63,14 +65,13 @@ public class MovieFromSlices extends RasterTask {
     @BeanField @Getter @Setter private int repeat = 1;
     // END BEAN PROPERTIES
 
-    private int index = 0;
-    private OutputSequenceNonIncremental<Stack> outputSequence;
+    private OutputSequenceIncrementing<Stack> outputSequence;
 
     @Override
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.nonIncrementalCurrentDirectory("", context);
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, context);
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
@@ -83,8 +84,7 @@ public class MovieFromSlices extends RasterTask {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+        return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_FRAME);
     }
 
     @Override
@@ -118,16 +118,14 @@ public class MovieFromSlices extends RasterTask {
                 sliceOut = extract.extractAndProjectStack(red, green, blue, z);
 
                 for (int i = 0; i < repeat; i++) {
-                    outputSequence.add(sliceOut, formatIndex(index));
-                    index++;
+                    outputSequence.add(sliceOut);
                 }
             }
 
             // Just
             if (delaySizeAtEnd > 0 && sliceOut != null) {
                 for (int i = 0; i < delaySizeAtEnd; i++) {
-                    outputSequence.add(sliceOut, formatIndex(index));
-                    index++;
+                    outputSequence.add(sliceOut);
                 }
             }
 
@@ -139,13 +137,9 @@ public class MovieFromSlices extends RasterTask {
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
         try {
-            outputSequence.end();
+            outputSequence.close();
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
-    }
-
-    private String formatIndex(int index) {
-        return String.format("%s_%08d", filePrefix, index);
     }
 }
