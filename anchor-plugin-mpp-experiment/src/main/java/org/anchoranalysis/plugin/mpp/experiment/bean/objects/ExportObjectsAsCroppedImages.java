@@ -161,7 +161,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                         object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
                         );
         
-        new OutputSequenceFactory<>(generator, context).incrementalStream(
+        new OutputSequenceFactory<>(generator, context).incrementingByOneStream(
                new OutputPatternIntegerSuffix(OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
                sequence
         );

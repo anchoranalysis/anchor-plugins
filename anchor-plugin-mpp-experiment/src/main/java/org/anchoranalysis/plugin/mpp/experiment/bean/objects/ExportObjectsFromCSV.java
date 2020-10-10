@@ -60,7 +60,7 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.object.writer.Outline;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.collection.SubfolderGenerator;
+import org.anchoranalysis.io.generator.collection.CollectionAsSubdirectoryGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -280,7 +280,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                         });
     }
 
-    private SubfolderGenerator<CSVRow, Collection<CSVRow>> createGenerator(
+    private CollectionAsSubdirectoryGenerator<CSVRow, Collection<CSVRow>> createGenerator(
             String label,
             Collection<CSVRow> rows,
             ObjectCollectionRTree objects,
@@ -302,8 +302,8 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                                 new SimpleNameValue<>("idXML", new CSVRowXMLGenerator())));
 
         // Output the group
-        SubfolderGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
-                new SubfolderGenerator<>(listGenerator, "pair");
+        CollectionAsSubdirectoryGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
+                new CollectionAsSubdirectoryGenerator<>(listGenerator, "pair");
         subFolderGenerator.assignElement(rows);
         return subFolderGenerator;
     }

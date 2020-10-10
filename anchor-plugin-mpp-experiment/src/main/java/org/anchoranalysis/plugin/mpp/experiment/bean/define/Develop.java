@@ -47,6 +47,7 @@ import org.anchoranalysis.image.io.bean.feature.OutputFeatureTable;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
+import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
@@ -63,6 +64,7 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * <tbody>
  * <tr><td rowspan="3"><i>outputs produced by a {@link DefineOutputter} in {@code define}</i></td></tr>
  * <tr><td rowspan="3"><i>outputs produced by a {@link OutputFeatureTable} in {@code featureTables}</i></td></tr>
+ * <tr><td rowspan="3"><i>outputs produced by a {@link EnergyStackWriter}</i></td></tr>
  * <tr><td rowspan="3"><i>outputs from {@link Task}</i></td></tr>
  * </tbody>
  * </table>
@@ -91,7 +93,7 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
                     params.getInput(),
                     params.context(),
                     imageInitParams ->
-                            outputFeatureTablesMultiplex(imageInitParams, params.context()));
+                            outputFeaturesAndEnergyStack(imageInitParams, params.context()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -111,12 +113,12 @@ public class Develop extends TaskWithoutSharedState<MultiInput> {
     @Override
     public OutputEnabledMutable defaultOutputs() {
         OutputEnabledMutable outputs = super.defaultOutputs();
-        define.addAllOutputs(outputs);
+        define.addAllOutputNamesTo(outputs);
         outputs.addEnabledOutputFirst(OutputFeatureTable.OUTPUT_FEATURE_TABLE);
         return outputs;
     }
 
-    private void outputFeatureTablesMultiplex(
+    private void outputFeaturesAndEnergyStack(
             ImageInitParams imageInitParams, InputOutputContext context)
             throws OperationFailedException {
 
