@@ -56,6 +56,7 @@ import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -71,9 +72,6 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  * @author Owen Feehan
  */
 public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, NoSharedState> {
-
-    private static final OutputSequence GENERATOR_SEQUENCE_FACTORY =
-            new OutputSequence("extractedObjects", "object");
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
@@ -158,7 +156,12 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                         object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
                         );
         
-        GENERATOR_SEQUENCE_FACTORY.writeStreamAsSubdirectory(sequence, generator, context);
+        OutputSequence.writeStreamAsSubdirectory(
+               new OutputSequenceDirectory("extractedObjects", "object"),
+               sequence,
+               generator,
+               context
+        );
     }
 
     private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)

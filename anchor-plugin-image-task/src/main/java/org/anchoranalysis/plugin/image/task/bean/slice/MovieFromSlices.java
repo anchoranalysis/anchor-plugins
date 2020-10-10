@@ -31,7 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -45,13 +44,13 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 
 public class MovieFromSlices extends RasterTask {
 
@@ -71,22 +70,20 @@ public class MovieFromSlices extends RasterTask {
     private OutputSequenceNonIncrementalLogged<Stack> generatorSeq;
 
     @Override
-    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(InputOutputContext context)
             throws JobExecutionException {
 
         StackGenerator generator = new StackGenerator(false, "out", false);
 
-        generatorSeq =
-                new OutputSequenceNonIncrementalLogged<>(
-                        new OutputSequenceNonIncrementalChecked<>(
-                                outputter.getChecked(),
-                                Optional.empty(),
-                                // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
-                                new StringSuffixOutputNameStyle("", "%s"),
-                                generator,
-                                true,
-                                Optional.empty()),
-                        errorReporter);
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            Optional.empty(),
+            // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
+            new StringSuffixOutputNameStyle("", "%s"),
+            true,
+            Optional.empty()
+        );
+                
+        generatorSeq = OutputSequence.createNonIncrementalLogged(sequenceDirectory, generator, context);
 
         // TODO it would be nicer to reflect the real sequence type, than just using a set of
         // indexes
@@ -154,7 +151,7 @@ public class MovieFromSlices extends RasterTask {
     }
 
     @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
+    public void endSeries(InputOutputContext context) throws JobExecutionException {
         generatorSeq.end();
     }
 
