@@ -50,8 +50,8 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncrementalRerouterErrors;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalLogged;
 import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
 import org.anchoranalysis.io.namestyle.StringSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -102,7 +102,7 @@ public class ConvertImageFormat extends RasterTask {
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
-    private GeneratorSequenceNonIncrementalRerouterErrors<Stack> generatorSequence;
+    private OutputSequenceNonIncrementalLogged<Stack> generatorSequence;
 
     @Override
     public void startSeries(Outputter outputter, ErrorReporter errorReporter)
@@ -111,14 +111,15 @@ public class ConvertImageFormat extends RasterTask {
         StackGenerator generator = new StackGenerator(false, "out", false);
 
         generatorSequence =
-                new GeneratorSequenceNonIncrementalRerouterErrors<>(
-                        new GeneratorSequenceNonIncremental<>(
+                new OutputSequenceNonIncrementalLogged<>(
+                        new OutputSequenceNonIncrementalChecked<>(
                                 outputter.getChecked(),
                                 Optional.empty(),
                                 // NOTE WE ARE NOT ASSIGNING A NAME TO THE OUTPUT
                                 new StringSuffixOutputNameStyle(OUTPUT_COPY, "%s"),
                                 generator,
-                                true),
+                                true,
+                                Optional.empty()),
                         errorReporter);
 
         // TODO it would be nicer to reflect the real sequence type, than just using a set of

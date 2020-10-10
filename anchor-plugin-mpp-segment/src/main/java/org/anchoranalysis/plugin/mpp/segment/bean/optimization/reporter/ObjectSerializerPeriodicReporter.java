@@ -68,8 +68,8 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
                     init(
                             new BundledObjectOutputStreamGenerator<T>(
                                     bundleParams,
-                                    this.generateOutputNameStyle(),
-                                    getParentOutputter().getChecked(),
+                                    outputSequence(),
+                                    getParentContext(),
                                     manifestFunction));
 
             bundleParams.setSequenceType(sequenceType);

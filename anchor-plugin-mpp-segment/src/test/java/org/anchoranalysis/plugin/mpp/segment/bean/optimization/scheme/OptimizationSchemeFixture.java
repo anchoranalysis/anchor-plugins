@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter.ConsoleA
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter.NullReporter;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination.NumberIterations;
 import org.anchoranalysis.test.experiment.BeanTestChecker;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptimizationSchemeFixture {
@@ -97,7 +97,7 @@ class OptimizationSchemeFixture {
                         markFactory,
                         energyScheme,
                         energyStack,
-                        BoundIOContextFixture.withSuppressedLogger()));
+                        InputOutputContextFixture.withSuppressedLogger()));
     }
 
     private static OptimizationContext createContext(

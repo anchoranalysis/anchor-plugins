@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.K
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.KernelDeathPixelized;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.proposer.KernelProposerOptionSingle;
 import org.anchoranalysis.test.experiment.BeanTestChecker;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 class KernelProposerFixture {
 
@@ -59,7 +59,7 @@ class KernelProposerFixture {
     public static KernelProposer<VoxelizedMarksWithEnergy> createBirthAndDeath(
             MarkProposer markProposer) throws CreateException, InitException {
 
-        InputOutputContext context = BoundIOContextFixture.withSuppressedLogger();
+        InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
         MPPInitParams initParams =
                 MPPInitParamsFactory.create(context, Optional.empty(), Optional.empty());

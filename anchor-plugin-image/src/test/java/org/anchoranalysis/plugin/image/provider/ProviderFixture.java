@@ -48,7 +48,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.test.LoggingFixture;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProviderFixture {
@@ -111,7 +111,7 @@ public class ProviderFixture {
             provider.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
             provider.init(
-                    ImageInitParamsFactory.create(BoundIOContextFixture.withLogger(logger)),
+                    ImageInitParamsFactory.create(InputOutputContextFixture.withLogger(logger)),
                     logger);
 
         } catch (BeanMisconfiguredException | InitException e) {

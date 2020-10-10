@@ -50,8 +50,8 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
@@ -67,8 +67,8 @@ public class SharedStateExportFeatures<S> {
 
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
 
-    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
-            new GeneratorSequenceFactory(OUTPUT_THUMBNAILS, "thumbnail"); // NOSONAR
+    private static final OutputSequence GENERATOR_SEQUENCE_FACTORY =
+            new OutputSequence(OUTPUT_THUMBNAILS, "thumbnail"); // NOSONAR
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
@@ -80,7 +80,7 @@ public class SharedStateExportFeatures<S> {
     private final Supplier<S> rowSource;
 
     // Generates thumbnails, lazily if needed.
-    private GeneratorSequenceIncrementalRerouteErrors<Stack> thumbnailGenerator;
+    private OutputSequenceIncremental<Stack> thumbnailGenerator;
 
     private InputOutputContext context;
 

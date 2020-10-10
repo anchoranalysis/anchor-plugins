@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
@@ -54,8 +55,7 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -72,8 +72,8 @@ import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
  */
 public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, NoSharedState> {
 
-    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
-            new GeneratorSequenceFactory("extractedObjects", "object");
+    private static final OutputSequence GENERATOR_SEQUENCE_FACTORY =
+            new OutputSequence("extractedObjects", "object");
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
@@ -152,16 +152,13 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
             InputOutputContext context) {
-        GeneratorSequenceIncrementalRerouteErrors<BoundedList<ObjectMask>> sequence =
-                GENERATOR_SEQUENCE_FACTORY.createIncremental(generator, context);
 
-        sequence.start();
-        objects.streamStandardJava()
-                .forEach(
-                        object ->
-                                sequence.add(
-                                        BoundedList.createSingle(object, ObjectMask::boundingBox)));
-        sequence.end();
+        Stream<BoundedList<ObjectMask>> sequence = objects.streamStandardJava()
+                .map(
+                        object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
+                        );
+        
+        GENERATOR_SEQUENCE_FACTORY.writeStreamAsSubdirectory(sequence, generator, context);
     }
 
     private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)
