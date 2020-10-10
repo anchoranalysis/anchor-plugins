@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
 import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
@@ -71,22 +72,23 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
         sequenceType = new ChangeSequenceType();
 
         BundleParameters bundleParams = createBundleParameters();
-
+        
         Generator<MarksWithEnergyBreakdown> generator =
                 new BundledObjectOutputStreamGenerator<>(
                         bundleParams,
-                        this.generateOutputNameStyle(),
+                        outputName,
+                        10,
                         initParams.getInitContext().getInputOutputContext(),
                         manifestFunction);
 
-        sequenceWriter =
-                new OutputSequenceNonIncrementalChecked<>(
-                        initParams.getInitContext().getOutputter().getChecked(),
-                        Optional.of(outputName),
-                        generateOutputNameStyle().outputNameStyle(),
-                        generator,
-                        true,
-                        Optional.of(new ManifestDescription("serialized", manifestFunction)));
+        OutputSequenceDirectory sequenceDirectory = new OutputSequenceDirectory(
+            outputName,
+            10,
+            true,
+            Optional.of(new ManifestDescription("serialized", manifestFunction))
+        );
+        
+        sequenceWriter = OutputSequence.createNonIncrementalChecked(sequenceDirectory, generator, initParams.getInitContext().getInputOutputContext());
 
         try {
             sequenceWriter.start(sequenceType);
@@ -131,11 +133,6 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     @Override
     public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) {
         // NOTHING TO DO
-    }
-
-    // We generate an OutputName class from the outputName string
-    private OutputSequence generateOutputNameStyle() {
-        return new OutputSequence(outputName, 10);
     }
 
     private BundleParameters createBundleParameters() {

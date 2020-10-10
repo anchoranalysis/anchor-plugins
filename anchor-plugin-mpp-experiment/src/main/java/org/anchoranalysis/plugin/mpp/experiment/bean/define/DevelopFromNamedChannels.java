@@ -31,7 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -44,7 +43,6 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
 public class DevelopFromNamedChannels extends RasterTask {
@@ -87,13 +85,13 @@ public class DevelopFromNamedChannels extends RasterTask {
     }
 
     @Override
-    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
+    public void endSeries(InputOutputContext context) throws JobExecutionException {
         // NOTHING TO DO
     }
 

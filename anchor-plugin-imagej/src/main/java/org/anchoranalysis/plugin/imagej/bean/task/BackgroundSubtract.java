@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.imagej.bean.task;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
@@ -48,7 +47,6 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.BackgroundSubtractor;
 
 public class BackgroundSubtract extends RasterTask {
@@ -65,7 +63,7 @@ public class BackgroundSubtract extends RasterTask {
     }
 
     @Override
-    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         // NOTHING TO DO
     }
@@ -109,7 +107,7 @@ public class BackgroundSubtract extends RasterTask {
     }
 
     @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
+    public void endSeries(InputOutputContext context) throws JobExecutionException {
         // NOTHING TO DO
     }
 

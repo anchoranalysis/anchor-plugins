@@ -68,7 +68,8 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
                     init(
                             new BundledObjectOutputStreamGenerator<T>(
                                     bundleParams,
-                                    outputSequence(),
+                                    getOutputName(),
+                                    numberDigitsInOutputName(),
                                     getParentContext(),
                                     manifestFunction));
 

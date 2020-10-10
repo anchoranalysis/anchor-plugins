@@ -50,7 +50,9 @@ import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
@@ -67,9 +69,6 @@ public class SharedStateExportFeatures<S> {
 
     private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
 
-    private static final OutputSequence GENERATOR_SEQUENCE_FACTORY =
-            new OutputSequence(OUTPUT_THUMBNAILS, "thumbnail"); // NOSONAR
-
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
 
@@ -80,7 +79,7 @@ public class SharedStateExportFeatures<S> {
     private final Supplier<S> rowSource;
 
     // Generates thumbnails, lazily if needed.
-    private OutputSequenceIncremental<Stack> thumbnailGenerator;
+    private OutputSequenceIncremental<Stack> thumbnailOutputSequence;
 
     private InputOutputContext context;
 
@@ -210,8 +209,8 @@ public class SharedStateExportFeatures<S> {
     }
 
     public void closeAnyOpenIO() throws IOException {
-        if (thumbnailGenerator != null) {
-            thumbnailGenerator.end();
+        if (thumbnailOutputSequence != null) {
+            thumbnailOutputSequence.end();
         }
         groupedResults.close();
     }
@@ -239,12 +238,12 @@ public class SharedStateExportFeatures<S> {
     }
 
     private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) {
-        if (thumbnailGenerator == null) {
-            thumbnailGenerator =
-                    GENERATOR_SEQUENCE_FACTORY.createIncremental(
-                            new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL, true), context);
-            thumbnailGenerator.start();
+        if (thumbnailOutputSequence == null) {
+            Generator<Stack> generator = new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL, true);
+            thumbnailOutputSequence =
+                    OutputSequence.createIncremental(new OutputSequenceDirectory(OUTPUT_THUMBNAILS), generator, context);
+            thumbnailOutputSequence.start();
         }
-        thumbnailGenerator.add(thumbnail.deriveStack(false));
+        thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }
 }

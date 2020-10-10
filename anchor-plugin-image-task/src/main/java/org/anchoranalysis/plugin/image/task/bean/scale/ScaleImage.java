@@ -32,7 +32,6 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
@@ -54,7 +53,6 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
 /**
@@ -76,7 +74,7 @@ public class ScaleImage extends RasterTask {
     // END BEAN PROPERTIES
 
     @Override
-    public void startSeries(Outputter outputter, ErrorReporter errorReporter)
+    public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         // NOTHING TO DO
     }
@@ -110,7 +108,7 @@ public class ScaleImage extends RasterTask {
     }
 
     @Override
-    public void endSeries(Outputter outputter) throws JobExecutionException {
+    public void endSeries(InputOutputContext context) throws JobExecutionException {
         // NOTHING TO DO
     }
 
