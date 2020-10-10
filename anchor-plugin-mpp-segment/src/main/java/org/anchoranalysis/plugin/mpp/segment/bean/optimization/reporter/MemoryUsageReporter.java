@@ -67,7 +67,7 @@ public class MemoryUsageReporter extends ReporterAgg<VoxelizedMarksWithEnergy> {
                 }
 
                 MemoryUtilities.logMemoryUsage(
-                        String.format("MemoryUsageReporter AGG step=%d", reporting.getIter()),
+                        String.format("MemoryUsageReporter AGG step=%d", reporting.getIteration()),
                         logger);
             }
 
@@ -86,6 +86,6 @@ public class MemoryUsageReporter extends ReporterAgg<VoxelizedMarksWithEnergy> {
         }
 
         MemoryUtilities.logMemoryUsage(
-                String.format("MemoryUsageReporter BEST step=%d", reporting.getIter()), logger);
+                String.format("MemoryUsageReporter BEST step=%d", reporting.getIteration()), logger);
     }
 }

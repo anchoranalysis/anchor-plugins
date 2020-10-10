@@ -58,7 +58,7 @@ public class Log4JReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
         String out =
                 String.format(
                         "*** itr=%d  size=%d  best_energy=%e  kernel=%s",
-                        reporting.getIter(),
+                        reporting.getIteration(),
                         reporting.getMarksAfter().size(),
                         reporting.getMarksAfter().getEnergyTotal(),
                         reporting.kernelDescription());
@@ -73,7 +73,7 @@ public class Log4JReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
 
     @Override
     public void aggReport(Reporting<VoxelizedMarksWithEnergy> reporting, Aggregator agg) {
-        log.info(String.format("itr=%d  %s", reporting.getIter(), agg.toString()));
+        log.info(String.format("itr=%d  %s", reporting.getIteration(), agg.toString()));
     }
 
     @Override

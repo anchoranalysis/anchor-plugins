@@ -50,7 +50,7 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.OutputSequenceIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.io.OutputSequenceStackFactory;
@@ -78,7 +78,7 @@ public class SharedStateExportFeatures<S> {
     private final Supplier<S> rowSource;
 
     // Generates thumbnails, lazily if needed.
-    private OutputSequenceIncremental<Stack> thumbnailOutputSequence;
+    private OutputSequenceIncrementing<Stack> thumbnailOutputSequence;
 
     private InputOutputContext context;
 
@@ -210,7 +210,7 @@ public class SharedStateExportFeatures<S> {
     public void closeAnyOpenIO() throws IOException {
         try {
             if (thumbnailOutputSequence != null) {
-                thumbnailOutputSequence.end();
+                thumbnailOutputSequence.close();
             }
         } catch (OutputWriteFailedException e) {
             throw new IOException(e);
@@ -250,7 +250,7 @@ public class SharedStateExportFeatures<S> {
     private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) throws OutputWriteFailedException {
         if (thumbnailOutputSequence == null) {
             OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
-            thumbnailOutputSequence = factory.incrementalSubdirectory(OUTPUT_THUMBNAILS, context);
+            thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, context);
         }
         thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }
