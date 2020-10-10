@@ -31,15 +31,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceNonIncremental;
+import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceNonIncrementalChecked;
 import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.manifest.sequencetype.ChangeSequenceType;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
-import org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
-import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
@@ -60,7 +58,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     @BeanField @Getter @Setter private boolean best = false;
     // END BEAN PARAMETERS
 
-    private GeneratorSequenceNonIncremental<MarksWithEnergyBreakdown> sequenceWriter;
+    private OutputSequenceNonIncrementalChecked<MarksWithEnergyBreakdown> sequenceWriter;
 
     private ChangeSequenceType sequenceType;
 
@@ -70,8 +68,6 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
             throws ReporterException {
 
-        Outputter outputter = initParams.getInitContext().getOutputter();
-
         sequenceType = new ChangeSequenceType();
 
         BundleParameters bundleParams = createBundleParameters();
@@ -80,18 +76,17 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
                 new BundledObjectOutputStreamGenerator<>(
                         bundleParams,
                         this.generateOutputNameStyle(),
-                        outputter.getChecked(),
+                        initParams.getInitContext().getInputOutputContext(),
                         manifestFunction);
 
-        IndexableOutputNameStyle outputNameStyle = generateOutputNameStyle();
         sequenceWriter =
-                new GeneratorSequenceNonIncremental<>(
-                        outputter.getChecked(),
-                        Optional.of(outputNameStyle.getOutputName()),
-                        outputNameStyle,
+                new OutputSequenceNonIncrementalChecked<>(
+                        initParams.getInitContext().getOutputter().getChecked(),
+                        Optional.of(outputName),
+                        generateOutputNameStyle().outputNameStyle(),
                         generator,
                         true,
-                        new ManifestDescription("serialized", manifestFunction));
+                        Optional.of(new ManifestDescription("serialized", manifestFunction)));
 
         try {
             sequenceWriter.start(sequenceType);
@@ -139,8 +134,8 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     }
 
     // We generate an OutputName class from the outputName string
-    private IndexableOutputNameStyle generateOutputNameStyle() {
-        return new IntegerSuffixOutputNameStyle(outputName, 10);
+    private OutputSequence generateOutputNameStyle() {
+        return new OutputSequence(outputName, 10);
     }
 
     private BundleParameters createBundleParameters() {

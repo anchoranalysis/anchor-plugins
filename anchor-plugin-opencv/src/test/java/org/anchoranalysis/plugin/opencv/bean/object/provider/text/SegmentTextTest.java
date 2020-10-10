@@ -39,7 +39,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObject
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Before;
 import org.junit.Rule;
@@ -91,7 +91,7 @@ public class SegmentTextTest {
 
     private void initSegmenter() throws InitException {
         InputOutputContext context =
-                BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory());
+                InputOutputContextFixture.withSuppressedLogger(loader.modelDirectory());
         segmenter.initRecursive(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }
