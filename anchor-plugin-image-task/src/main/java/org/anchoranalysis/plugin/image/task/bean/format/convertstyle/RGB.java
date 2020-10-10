@@ -27,7 +27,6 @@
 package org.anchoranalysis.plugin.image.task.bean.format.convertstyle;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -38,12 +37,31 @@ import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
+/**
+ * Converts a set of channels to a single RGB-stack.
+ * 
+ * <p>Exactly three channels must be passed to {@link #convert} with names
+ * <i>red</i>, <i>green</i> and <i>blue</i> (in any order).
+ * 
+ * <p>If the above condition is not fulfilled, {@link #fallback} is called
+ * instead to process the stack.
+ * 
+ * <p>If the RGB-stack is created, it is assigned an empty-string as a name.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class RGB extends ChannelConvertStyle {
 
+    private static final String CHANNEL_NAME_RED = "red";
+    private static final String CHANNEL_NAME_GREEN = "green";
+    private static final String CHANNEL_NAME_BLUE = "blue";
+    
     // START BEAN PROPERTIES
     /**
      * If a channel doesn't match an RGB pattern, this conversion-style can be used instead.
@@ -54,42 +72,42 @@ public class RGB extends ChannelConvertStyle {
     // END BEAN PROPERTIES
 
     @Override
-    public void convert(
+    public NamedStacks convert(
             Set<String> channelNames,
             ChannelGetterForTimepoint channelGetter,
-            BiConsumer<String, Stack> stacksOut,
             Logger logger)
             throws AnchorIOException {
 
         if (!channelNamesAreRGB(channelNames)) {
             // Not compatable with RGB
             if (fallback != null) {
-                fallback.convert(channelNames, channelGetter, stacksOut, logger);
-                return;
+                return fallback.convert(channelNames, channelGetter, logger);
             } else {
                 throw new AnchorIOException("Cannot convert as its channels do not look like RGB");
             }
         }
 
+        NamedStacks out = new NamedStacks();
+        
         try {
             Stack stack = createRGBStack(channelGetter, logger.messageLogger());
 
             // The name is blank as there is a single channel
-            stacksOut.accept("", stack);
+            out.add("", stack);
         } catch (CreateException e) {
             throw new AnchorIOException("Incorrect image size", e);
         }
+        
+        return out;
     }
 
     private static Stack createRGBStack(
             ChannelGetterForTimepoint channelGetter, MessageLogger logger) throws CreateException {
 
         Stack stackRearranged = new Stack();
-
-        addChannelOrBlank("red", channelGetter, stackRearranged, logger);
-        addChannelOrBlank("green", channelGetter, stackRearranged, logger);
-        addChannelOrBlank("blue", channelGetter, stackRearranged, logger);
-
+        addChannelOrBlank(CHANNEL_NAME_RED, channelGetter, stackRearranged, logger);
+        addChannelOrBlank(CHANNEL_NAME_GREEN, channelGetter, stackRearranged, logger);
+        addChannelOrBlank(CHANNEL_NAME_BLUE, channelGetter, stackRearranged, logger);
         return stackRearranged;
     }
 
@@ -114,13 +132,14 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static boolean channelNamesAreRGB(Set<String> channelNames) {
+        
         if (channelNames.size() > 3) {
             return false;
         }
 
         for (String key : channelNames) {
             // If a key doesn't match one of the expected red-green-blue names
-            if (!(key.equals("red") || key.equals("green") || key.equals("blue"))) {
+            if (!(key.equals(CHANNEL_NAME_RED) || key.equals(CHANNEL_NAME_GREEN) || key.equals(CHANNEL_NAME_BLUE))) {
                 return false;
             }
         }

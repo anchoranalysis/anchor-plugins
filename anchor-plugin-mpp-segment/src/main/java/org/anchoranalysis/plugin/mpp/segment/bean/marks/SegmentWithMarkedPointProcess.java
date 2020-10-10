@@ -46,6 +46,7 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -191,7 +192,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         try {
             init(mppInit, context.getLogger());
 
-            EnergyStackWriter.writeEnergyStack(energyStack, context);
+            new EnergyStackWriter(energyStack, context).writeEnergyStack();
 
             context.getMessageReporter()
                     .log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap());
@@ -225,7 +226,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MarksWithTotalEnergy marks = findOptimum(updatableMarkSetCollection, initContext);
             return marks.getMarks().deepCopy();
 
-        } catch (InitException | CreateException | SegmentationFailedException e) {
+        } catch (InitException | CreateException | SegmentationFailedException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }

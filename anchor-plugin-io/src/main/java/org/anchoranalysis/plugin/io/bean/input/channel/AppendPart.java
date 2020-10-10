@@ -90,9 +90,9 @@ class AppendPart extends NamedChannelsInputPart {
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
+            int seriesIndex, ProgressReporter progressReporter) throws RasterIOException {
 
-        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesNum, progressReporter);
+        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesIndex, progressReporter);
 
         openRasterIfNecessary();
 
@@ -100,7 +100,7 @@ class AppendPart extends NamedChannelsInputPart {
         out.add(exst);
         out.add(
                 new NamedChannelsForSeriesMap(
-                        openedRasterMemo, additionalChannel.createChannelMap(), seriesNum));
+                        openedRasterMemo, additionalChannel.createChannelMap(), seriesIndex));
         return out;
     }
 

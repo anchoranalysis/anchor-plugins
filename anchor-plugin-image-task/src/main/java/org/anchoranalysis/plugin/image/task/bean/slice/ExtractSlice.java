@@ -177,7 +177,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            StacksOutputter.outputChecked(slices, OUTPUT_SLICES,
+            StacksOutputter.output(slices, OUTPUT_SLICES,
                     false, context);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);

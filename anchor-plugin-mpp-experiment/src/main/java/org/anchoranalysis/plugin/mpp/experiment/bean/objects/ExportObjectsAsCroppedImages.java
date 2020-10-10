@@ -55,9 +55,10 @@ import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.NamedStacksUniformSize;
 import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.sequence.OutputSequence;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceDirectory;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.io.input.MultiInput;
@@ -149,18 +150,16 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private void outputGeneratorSequence(
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
-            InputOutputContext context) {
+            InputOutputContext context) throws OutputWriteFailedException {
 
         Stream<BoundedList<ObjectMask>> sequence = objects.streamStandardJava()
                 .map(
                         object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
                         );
         
-        OutputSequence.writeStreamAsSubdirectory(
+        new OutputSequenceFactory<>(generator, context).incrementalStream(
                new OutputSequenceDirectory("extractedObjects", "object"),
-               sequence,
-               generator,
-               context
+               sequence
         );
     }
 
@@ -185,7 +184,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputs(paramsInit, logger), dimensions.z()),
                     context);
-        } catch (CreateException | InitException e) {
+        } catch (CreateException | InitException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }

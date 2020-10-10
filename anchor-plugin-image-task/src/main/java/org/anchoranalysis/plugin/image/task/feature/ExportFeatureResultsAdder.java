@@ -25,6 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 
 /**
@@ -40,6 +41,7 @@ public interface ExportFeatureResultsAdder {
      *
      * @param labels labels for results
      * @param results the results
+     * @throws OperationFailedException if anything goes wrong while adding results.
      */
-    void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results);
+    void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) throws OperationFailedException;
 }

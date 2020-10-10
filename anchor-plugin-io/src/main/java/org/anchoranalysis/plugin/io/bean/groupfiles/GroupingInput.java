@@ -77,9 +77,9 @@ class GroupingInput extends NamedChannelsInput {
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
+            int seriesIndex, ProgressReporter progressReporter) throws RasterIOException {
         ensureChannelMapExists();
-        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesNum);
+        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
     }
 
     @Override

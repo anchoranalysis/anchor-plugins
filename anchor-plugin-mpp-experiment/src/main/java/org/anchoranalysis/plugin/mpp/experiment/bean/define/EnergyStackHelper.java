@@ -34,6 +34,7 @@ import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
@@ -59,12 +60,13 @@ class EnergyStackHelper {
                                                         .getOptional(paramsName))
                                 .orElseGet(KeyValueParams::new);
 
-                EnergyStackWriter.writeEnergyStack(
-                        new EnergyStack(soImage.stacks().getException("energyStack"), params),
-                        context);
+                EnergyStack energyStack = new EnergyStack(soImage.stacks().getException("energyStack"), params); 
+                new EnergyStackWriter(energyStack, context).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {
             context.getLogger().errorReporter().recordError(EnergyStackHelper.class, e.summarize());
+        } catch (OutputWriteFailedException e) {
+            context.getLogger().errorReporter().recordError(EnergyStackHelper.class, e);
         }
     }
 }
