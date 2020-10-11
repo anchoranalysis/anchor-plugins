@@ -27,15 +27,16 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
+import org.anchoranalysis.plugin.io.bean.stack.writer.ImageIOWriter;
 import org.anchoranalysis.test.image.rasterwriter.PNGTestBase;
 import org.junit.Test;
 
 public class ImageIOWriterTest extends PNGTestBase {
 
     @Override
-    protected RasterWriter createWriter() {
+    protected StackWriter createWriter() {
         return new ImageIOWriter();
     }
 

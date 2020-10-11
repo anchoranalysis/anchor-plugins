@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
@@ -49,12 +49,12 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 // Expects to be passed one file per set
 // Then finds all channels and stacks from an associated regular expression
 //   that is matched against files in the directory
-public class MultiFileReader extends RasterReader {
+public class MultiFileReader extends StackReader {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private FilePathParser filePathParser;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean recurseSubfolders = false;
 
@@ -93,7 +93,7 @@ public class MultiFileReader extends RasterReader {
             }
         }
 
-        return new MultiFileReaderOpenedRaster(rasterReader, bag);
+        return new MultiFileReaderOpenedRaster(stackReader, bag);
     }
 
     private File folderFromFile(Path filePath) {

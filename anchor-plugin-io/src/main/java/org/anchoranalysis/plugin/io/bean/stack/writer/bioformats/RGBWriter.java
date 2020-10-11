@@ -23,38 +23,33 @@
  * THE SOFTWARE.
  * #L%
  */
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
-
-import java.nio.file.Path;
-import java.util.Optional;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.extent.Resolution;
+import loci.formats.IFormatWriter;
+import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.stack.Stack;
 
-public class ImposeResolution extends RasterReader {
+abstract class RGBWriter {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RasterReader rasterReader;
+    protected IFormatWriter writer;
+    protected Channel channelRed;
+    protected Channel channelBlue;
+    protected Channel channelGreen;
 
-    @BeanField @Getter @Setter private double resX;
-
-    @BeanField @Getter @Setter private double resY;
-
-    @BeanField @Getter @Setter private double resZ = 0.0;
-
-    /** Keep the z-resolution */
-    @BeanField @Getter @Setter private boolean keepZ = false;
-    // END BEAN PROPERTIES
-
-    @Override
-    public OpenedRaster openFile(Path filepath) throws RasterIOException {
-        return new OpenedRasterAlterDimensions(
-                rasterReader.openFile(filepath),
-                res -> Optional.of(new Resolution(resX, resY, keepZ ? res.z() : resZ)));
+    public RGBWriter(IFormatWriter writer, Stack stack) {
+        this.writer = writer;
+        this.channelRed = stack.getChannel(0);
+        this.channelGreen = stack.getChannel(1);
+        this.channelBlue = stack.getChannel(2);
     }
+
+    public void writeAsRGB() throws RasterIOException {
+
+        int capacity = channelRed.voxels().any().extent().volumeXY();
+
+        channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
+    }
+
+    protected abstract void mergeSliceAsRGB(int z, int capacity) throws RasterIOException;
 }

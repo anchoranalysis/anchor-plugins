@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;

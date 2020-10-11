@@ -1,8 +1,8 @@
-package org.anchoranalysis.plugin.io.bean.rasterwriter;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,14 +17,14 @@ public class BranchStack extends RasterWriterDelegateBase {
 
     // START BEAN PROPERTIES
     /** Writer to use if it is guaranteed that the image will always be 2D. */
-    @BeanField @Getter @Setter private RasterWriter writerAlways2D;
+    @BeanField @Getter @Setter private StackWriter writerAlways2D;
     
     /** Otherwise the writer to use. */
-    @BeanField @Getter @Setter private RasterWriter writerElse;
+    @BeanField @Getter @Setter private StackWriter writerElse;
     // END BEAN PROPERTIES
     
     @Override
-    protected RasterWriter selectDelegate(RasterWriteOptions writeOptions) {
+    protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
         if (writeOptions.isAlways2D()) {
             return writerAlways2D;
         } else {

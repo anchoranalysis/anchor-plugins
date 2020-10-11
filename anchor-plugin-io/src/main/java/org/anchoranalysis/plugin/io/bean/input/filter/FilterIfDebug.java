@@ -31,11 +31,11 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.bean.input.DebugModeParams;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.params.DebugModeParams;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
 /**

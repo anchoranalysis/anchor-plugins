@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterwriter;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
@@ -49,20 +49,20 @@ import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
  *
  * @author Owen Feehan
  */
-public class WriteResolutionXml extends RasterWriter {
+public class WriteResolutionXml extends StackWriter {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RasterWriter writer;
+    @BeanField @Getter @Setter private StackWriter writer;
     // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(RasterWriteOptions writeOptions) {
+    public String fileExtension(StackWriteOptions writeOptions) {
         return writer.fileExtension(writeOptions);
     }
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws RasterIOException {
         writer.writeStack(stack, filePath, makeRGB, writeOptions);
         writeResolutionXml(filePath, stack.resolution());
@@ -73,7 +73,7 @@ public class WriteResolutionXml extends RasterWriter {
             StackSeries stackSeries,
             Path filePath,
             boolean makeRGB,
-            RasterWriteOptions writeOptions)
+            StackWriteOptions writeOptions)
             throws RasterIOException {
         writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
 

@@ -23,36 +23,25 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.io.IOException;
-import loci.formats.FormatException;
-import loci.formats.IFormatWriter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import java.nio.file.Path;
+import javax.imageio.ImageIO;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
 import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 
-class RGBWriterByte extends RGBWriter {
-
-    public RGBWriterByte(IFormatWriter writer, Stack stack) {
-        super(writer, stack);
-    }
+public class ImageIOWriter extends OneOrThreeChannelsWriter {
 
     @Override
-    protected void mergeSliceAsRGB(int z, int capacity) throws RasterIOException {
-        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3);
-        putSlice(merged, channelRed, z);
-        putSlice(merged, channelGreen, z);
-        putSlice(merged, channelBlue, z);
+    protected void writeStackAfterCheck(Stack stack, Path filePath) throws RasterIOException {
         try {
-            writer.saveBytes(z, merged.array());
-        } catch (FormatException | IOException e) {
+            ImageIO.write(BufferedImageFactory.create(stack), getExtension(), filePath.toFile());
+        } catch (CreateException | IOException e) {
             throw new RasterIOException(e);
         }
-    }
-
-    private static void putSlice(UnsignedByteBuffer merged, Channel channel, int z) {
-        merged.put(channel.voxels().asByte().sliceBuffer(z));
     }
 }

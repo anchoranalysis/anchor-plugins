@@ -40,7 +40,7 @@ import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.AnchorIOException;
@@ -61,7 +61,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
     @BeanField @Getter @Setter private Comparer comparerRight;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
     @Override
@@ -104,6 +104,6 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                                 input,
                                 Tuple.of(comparerLeft, comparerRight),
                                 Tuple.of(nameLeft, nameRight),
-                                rasterReader));
+                                stackReader));
     }
 }

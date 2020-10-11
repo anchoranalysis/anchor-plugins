@@ -23,33 +23,31 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import loci.formats.IFormatWriter;
-import org.anchoranalysis.image.channel.Channel;
+import loci.formats.out.OMEXMLWriter;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
-abstract class RGBWriter {
+/**
+ * Writes a stack to the filesystem as a OME-XML using the <a
+ * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
+ *
+ * <p>This is particularly useful for stacks of images that have an unusual number of channels
+ * (neither 1 or 3 channels), and which most other file formats cannot support.
+ *
+ * @author Owen Feehan
+ */
+public class OMEXML extends BioformatsWriter {
 
-    protected IFormatWriter writer;
-    protected Channel channelRed;
-    protected Channel channelBlue;
-    protected Channel channelGreen;
-
-    public RGBWriter(IFormatWriter writer, Stack stack) {
-        this.writer = writer;
-        this.channelRed = stack.getChannel(0);
-        this.channelGreen = stack.getChannel(1);
-        this.channelBlue = stack.getChannel(2);
+    @Override
+    public String fileExtension(StackWriteOptions writeOptions) {
+        return "ome.xml";
     }
 
-    public void writeAsRGB() throws RasterIOException {
-
-        int capacity = channelRed.voxels().any().extent().volumeXY();
-
-        channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
+    @Override
+    protected IFormatWriter createWriter() throws RasterIOException {
+        return new OMEXMLWriter();
     }
-
-    protected abstract void mergeSliceAsRGB(int z, int capacity) throws RasterIOException;
 }

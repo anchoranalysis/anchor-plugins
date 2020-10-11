@@ -38,13 +38,13 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.input.FileInput;
 
 /**
@@ -59,7 +59,7 @@ class MapPart extends NamedChannelsInputPart {
 
     // START REQUIRED ARGUMENTS
     private final FileInput delegate;
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
     private final ChannelMap channelMapCreator;
 
     /**
@@ -148,7 +148,7 @@ class MapPart extends NamedChannelsInputPart {
     private OpenedRaster openedRaster() throws RasterIOException {
         if (openedRasterMemo == null) {
             openedRasterMemo =
-                    rasterReader.openFile(
+                    stackReader.openFile(
                             delegate.pathForBinding()
                                     .orElseThrow(
                                             () ->

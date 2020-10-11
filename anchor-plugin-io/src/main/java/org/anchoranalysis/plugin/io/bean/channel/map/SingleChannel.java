@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 /** For an image with a single channel */
 @NoArgsConstructor

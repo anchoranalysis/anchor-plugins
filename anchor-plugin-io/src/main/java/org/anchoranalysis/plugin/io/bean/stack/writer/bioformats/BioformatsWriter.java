@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,9 +37,9 @@ import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.FindCommonVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
@@ -67,22 +67,22 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
  *
  * @author Owen Feehan
  */
-public abstract class BioformatsWriter extends RasterWriter {
+public abstract class BioformatsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
             StackSeries stackSeries,
             Path filePath,
             boolean makeRGB,
-            RasterWriteOptions writeOptions)
+            StackWriteOptions writeOptions)
             throws RasterIOException {
         throw new RasterIOException(
-                "Writing time-series is unsupported by this " + RasterWriter.class.getSimpleName());
+                "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
     }
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws RasterIOException {
 
         if (stack.getNumberChannels() == 0) {

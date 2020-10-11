@@ -24,33 +24,37 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
-/**
- * Combines all series and frames returned by a reader by converting them into multiple channels in
- * the same image
- *
- * <p>It assumes that the underlying rasterReader will only return images with: 1. a constant number
- * of channels 2. a constant number of frames
- *
- * @author Owen Feehan
- */
-public class FlattenAsChannel extends RasterReader {
+public class ImposeResolution extends StackReader {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RasterReader rasterReader;
+    @BeanField @Getter @Setter private StackReader stackReader;
+
+    @BeanField @Getter @Setter private double resX;
+
+    @BeanField @Getter @Setter private double resY;
+
+    @BeanField @Getter @Setter private double resZ = 0.0;
+
+    /** Keep the z-resolution */
+    @BeanField @Getter @Setter private boolean keepZ = false;
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path filepath) throws RasterIOException {
-        return new FlattenAsChannelOpenedRaster(rasterReader.openFile(filepath));
+    public OpenedRaster openFile(Path path) throws RasterIOException {
+        return new OpenedRasterAlterDimensions(
+                stackReader.openFile(path),
+                res -> Optional.of(new Resolution(resX, resY, keepZ ? res.z() : resZ)));
     }
 }

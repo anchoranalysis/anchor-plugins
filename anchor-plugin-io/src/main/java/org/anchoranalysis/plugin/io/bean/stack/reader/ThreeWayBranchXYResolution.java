@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import lombok.Getter;
@@ -32,31 +32,31 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 /**
- * Takes the XY-resolution determined by rasterReaderInput. Partitions this into three ranges, based
+ * Takes the XY-resolution determined by stackReaderInput. Partitions this into three ranges, based
  * on two thresholds.
  *
  * <p>{@literal LOW_RANGE <= thresholdLow < MIDDLE_RANGE < thresholdHigh <= HIGH_RANGE}
  *
- * <p>Then selects the corresponding rasterReader for further reading
+ * <p>Then selects the corresponding stackReader for further reading
  *
  * <p>Assumes X resolution and Y resolution are the same.
  *
  * @author Owen Feehan
  */
-public class ThreeWayBranchXYResolution extends RasterReader {
+public class ThreeWayBranchXYResolution extends StackReader {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RasterReader rasterReaderInput;
+    @BeanField @Getter @Setter private StackReader stackReaderInput;
 
-    @BeanField @Getter @Setter private RasterReader rasterReaderLow;
+    @BeanField @Getter @Setter private StackReader stackReaderLow;
 
-    @BeanField @Getter @Setter private RasterReader rasterReaderMiddle;
+    @BeanField @Getter @Setter private StackReader stackReaderMiddle;
 
-    @BeanField @Getter @Setter private RasterReader rasterReaderHigh;
+    @BeanField @Getter @Setter private StackReader stackReaderHigh;
 
     @BeanField @Getter @Setter private double thresholdLow;
 
@@ -64,9 +64,9 @@ public class ThreeWayBranchXYResolution extends RasterReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path filepath) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws RasterIOException {
 
-        OpenedRaster orInput = rasterReaderInput.openFile(filepath);
+        OpenedRaster orInput = stackReaderInput.openFile(path);
 
         Dimensions dimensions = orInput.dimensionsForSeries(0);
 
@@ -80,11 +80,11 @@ public class ThreeWayBranchXYResolution extends RasterReader {
         double xyRes = dimensions.resolution().x();
 
         if (xyRes < thresholdLow) {
-            return rasterReaderLow.openFile(filepath);
+            return stackReaderLow.openFile(path);
         } else if (xyRes < thresholdHigh) {
-            return rasterReaderMiddle.openFile(filepath);
+            return stackReaderMiddle.openFile(path);
         } else {
-            return rasterReaderHigh.openFile(filepath);
+            return stackReaderHigh.openFile(path);
         }
     }
 }

@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.object.writer.Outline;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;

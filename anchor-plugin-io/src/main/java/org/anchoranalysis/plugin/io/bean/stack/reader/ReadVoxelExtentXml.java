@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -34,14 +34,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
-public class ReadVoxelExtentXml extends RasterReader {
+public class ReadVoxelExtentXml extends StackReader {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private RasterReader rasterReader;
+    @BeanField @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean acceptNoResolution = true;
     // END BEAN PROPERTIES
@@ -50,7 +50,7 @@ public class ReadVoxelExtentXml extends RasterReader {
      * Looks for a metadata file describing the resolution
      *
      * <p>Given an existing image filepath, the filePath.xml is checked e.g. given
-     * /somePath/rasterReader.tif it will look for /somePath/RasterRader.tif.xml
+     * /somePath/stackReader.tif it will look for /somePath/RasterRader.tif.xml
      *
      * @param filepath the filepath of the image
      * @param acceptNoResolution
@@ -76,11 +76,11 @@ public class ReadVoxelExtentXml extends RasterReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path filepath) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws RasterIOException {
 
-        OpenedRaster delegate = rasterReader.openFile(filepath);
+        OpenedRaster delegate = stackReader.openFile(path);
 
-        Optional<Resolution> sr = readMetadata(filepath, acceptNoResolution);
+        Optional<Resolution> sr = readMetadata(path, acceptNoResolution);
 
         return new OpenedRasterAlterDimensions(delegate, res -> sr);
     }

@@ -35,8 +35,8 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.io.input.FileInput;
 
@@ -46,7 +46,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     /** The root object that is used to provide the descriptiveName and pathForBinding */
     private final FileInput delegate;
 
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
 
     /**
      * Uses the last series (from all series) only, and ignores any other series-numbers
@@ -137,8 +137,8 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return delegate.pathForBinding();
     }
 
-    public RasterReader getRasterReader() {
-        return rasterReader;
+    public StackReader getStackReader() {
+        return stackReader;
     }
 
     public File getFile() {
@@ -148,7 +148,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     private OpenedRaster getOpenedRaster() throws RasterIOException {
         if (openedRasterMemo == null) {
             openedRasterMemo =
-                    rasterReader.openFile(
+                    stackReader.openFile(
                             delegate.pathForBinding()
                                     .orElseThrow(
                                             () ->

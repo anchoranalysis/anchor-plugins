@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -78,7 +78,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Files fileInput;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private FilePathParser filePathParser;
 
@@ -145,7 +145,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
             }
 
             files.add(Paths.get(key).toFile());
-            openedRasters.add(new MultiFileReaderOpenedRaster(rasterReader, bag));
+            openedRasters.add(new MultiFileReaderOpenedRaster(stackReader, bag));
         }
 
         return zipIntoGrouping(

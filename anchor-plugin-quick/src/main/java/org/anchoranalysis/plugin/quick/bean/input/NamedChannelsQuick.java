@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -87,7 +87,7 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     @BeanField @Getter @Setter private List<AppendStack> appendChannels = new ArrayList<>();
 
     /** The raster-reader to use for opening any adjacent-channels */
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReaderAdjacent;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReaderAdjacent;
     // END BEAN PROPERTIES
 
     private InputManager<NamedChannelsInputPart> append;
@@ -147,13 +147,13 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
                         mainChannelName,
                         mainChannelIndex,
                         additionalChannels,
-                        getRasterReader());
+                        getStackReader());
 
         channels =
-                appendChannels(channels, pathsAdjacent(), rasterReaderAdjacent);
+                appendChannels(channels, pathsAdjacent(), stackReaderAdjacent);
 
         channels =
-                appendChannels(channels, pathsAppend(), getRasterReaderAppend());
+                appendChannels(channels, pathsAppend(), getStackReaderAppend());
 
         return channels;
     }
@@ -161,13 +161,13 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     private static NamedChannelsAppend appendChannels(
             InputManager<NamedChannelsInputPart> input,
             List<NamedBean<DerivePath>> derivePaths,
-            RasterReader rasterReader) {
+            StackReader stackReader) {
         NamedChannelsAppend append = new NamedChannelsAppend();
         append.setIgnoreFileNotFoundAppend(false);
         append.setForceEagerEvaluation(false);
         append.setInput(input);
         append.setListAppend(derivePaths);
-        append.setRasterReader(rasterReader);
+        append.setStackReader(stackReader);
         return append;
     }
 

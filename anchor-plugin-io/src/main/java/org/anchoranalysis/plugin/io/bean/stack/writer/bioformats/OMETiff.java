@@ -23,38 +23,31 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
-import java.io.IOException;
-import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import loci.formats.out.OMETiffWriter;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
-class RGBWriterShort extends RGBWriter {
+/**
+ * Writes a stack to the filesystem as a OME-XML using the <a
+ * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
+ *
+ * <p>This is particularly useful for stacks of images that have an unusual number of channels
+ * (neither 1 or 3 channels), and which most other file formats cannot support.
+ *
+ * @author Owen Feehan
+ */
+public class OMETiff extends BioformatsWriter {
 
-    public RGBWriterShort(IFormatWriter writer, Stack stack) {
-        super(writer, stack);
+    @Override
+    public String fileExtension(StackWriteOptions writeOptions) {
+        return "ome.tif";
     }
 
     @Override
-    protected void mergeSliceAsRGB(int z, int capacity) throws RasterIOException {
-        UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3 * 2);
-        putSliceShort(merged, channelRed, z);
-        putSliceShort(merged, channelGreen, z);
-        putSliceShort(merged, channelBlue, z);
-        try {
-            writer.saveBytes(z, merged.array());
-        } catch (FormatException | IOException e) {
-            throw new RasterIOException(e);
-        }
-    }
-
-    private static void putSliceShort(UnsignedByteBuffer merged, Channel channel, int z) {
-        merged.getDelegate()
-                .asShortBuffer()
-                .put(channel.voxels().asShort().sliceBuffer(z).getDelegate());
+    protected IFormatWriter createWriter() throws RasterIOException {
+        return new OMETiffWriter();
     }
 }
