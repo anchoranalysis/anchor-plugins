@@ -32,11 +32,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.PathDifference;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -56,7 +56,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author Owen Feehan
  */
-public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
+public class DirectoryStructure extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
     /** If false, the folders are ignored, and only the file-name is used in the output */
@@ -66,12 +66,12 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws FilePathPrefixerException {
+    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+            throws DerivePathException {
 
         PathDifference difference = differenceToPrefix(removeExtension(path.getPath()));
 
-        return new FilePathPrefix(buildOutPath(root, difference));
+        return new DirectoryWithPrefix(buildOutPath(root, difference));
     }
 
     private static Path removeExtension(Path withExtension) {
@@ -79,11 +79,11 @@ public class DirectoryStructure extends FilePathPrefixerAvoidResolve {
         return Paths.get(FilenameUtils.removeExtension(pathWithExtension));
     }
 
-    private PathDifference differenceToPrefix(Path pathInRemoved) throws FilePathPrefixerException {
+    private PathDifference differenceToPrefix(Path pathInRemoved) throws DerivePathException {
         try {
             return PathDifference.differenceFrom(Paths.get(inPathPrefix), pathInRemoved);
         } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
+            throw new DerivePathException(e);
         }
     }
 

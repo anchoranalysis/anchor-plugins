@@ -61,6 +61,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
 
@@ -154,14 +155,14 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private void outputGeneratorSequence(
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
-            InputOutputContext context) throws OutputWriteFailedException {
+            OutputterChecked outputter) throws OutputWriteFailedException {
 
         Stream<BoundedList<ObjectMask>> sequence = objects.streamStandardJava()
                 .map(
                         object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
                         );
         
-        new OutputSequenceFactory<>(generator, context).incrementingByOneStream(
+        new OutputSequenceFactory<>(generator, outputter).incrementingByOneStream(
                new OutputPatternIntegerSuffix(OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
                sequence
         );
@@ -187,7 +188,7 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
             outputGeneratorSequence(
                     createGenerator(dimensions, stacks, stacksProjected),
                     maybeExtendZObjects(inputs(paramsInit, logger), dimensions.z()),
-                    context);
+                    context.getOutputter().getChecked());
         } catch (CreateException | InitException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

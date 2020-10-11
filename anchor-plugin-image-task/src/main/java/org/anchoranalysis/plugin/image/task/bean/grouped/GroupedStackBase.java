@@ -43,8 +43,8 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -80,7 +80,7 @@ public abstract class GroupedStackBase<S, T>
      * If defined, translates a file-path into a group. If not-defined, all images are treated as
      * part of the same group
      */
-    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath group;
 
     /** Selects which channels are included, optionally renaming. */
     @BeanField @Getter @Setter private FromStacks selectChannels = new All();
@@ -142,7 +142,7 @@ public abstract class GroupedStackBase<S, T>
         }
     }
 
-    /** An optional sub-directory where the group outputs are placed. */
+    /** An optional subdirectory where the group outputs are placed. */
     protected abstract Optional<String> subdirectoryForGroupOutputs();
 
     /**
@@ -180,7 +180,7 @@ public abstract class GroupedStackBase<S, T>
         }
 
         try {
-            return Optional.of(group.outFilePath(path.get(), debugEnabled).toString());
+            return Optional.of(group.deriveFrom(path.get(), debugEnabled).toString());
         } catch (AnchorIOException e) {
             throw new JobExecutionException(
                     String.format("Cannot establish a group-identifier for: %s", path), e);

@@ -27,30 +27,15 @@
 package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Collection;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryUnary;
+import org.anchoranalysis.io.exception.FilesProviderException;
 
-public class SortAlphabeticallyWithDirectory extends FileProviderWithDirectory {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
-    // END BEAN PROPERTIES
+public class SortAlphabeticallyWithDirectory extends FilesProviderWithDirectoryUnary {
 
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
-            throws FileProviderException {
-        return SortUtilities.sortFiles(fileProvider.matchingFilesForDirectory(directory, params));
-    }
-
-    @Override
-    public Path getDirectoryAsPath(InputContextParams inputContext) {
-        return fileProvider.getDirectoryAsPath(inputContext);
+    protected Collection<File> transform(Collection<File> source)
+            throws FilesProviderException {
+        return SortUtilities.sortFiles(source);
     }
 }

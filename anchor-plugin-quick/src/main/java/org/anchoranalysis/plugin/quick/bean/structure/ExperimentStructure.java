@@ -32,12 +32,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
-import org.anchoranalysis.plugin.io.bean.filepath.prefixer.FilePathPrefixerAvoidResolve;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathPrefixerAvoidResolve;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.PathRegEx;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
 
@@ -47,7 +47,7 @@ import org.anchoranalysis.plugin.io.bean.filepath.prefixer.Rooted;
  * <p>A convenience method for commonly used prefixer settings when the output occurs in an
  * experiment/$1/ filesystem structure where $1 is the experimentType
  */
-public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
+public class ExperimentStructure extends PathPrefixer {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String experimentType;
@@ -59,7 +59,7 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
     @BeanField @Getter @Setter private String prefix;
     // END BEAN PROPERTIES
 
-    private FilePathPrefixer delegate;
+    private PathPrefixer delegate;
 
     private BeanInstanceMap defaultInstances;
 
@@ -71,9 +71,9 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix outFilePrefix(
+    public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
-            throws FilePathPrefixerException {
+            throws DerivePathException {
 
         createDelegateIfNeeded();
 
@@ -81,16 +81,16 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(
+    public DirectoryWithPrefix rootFolderPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
-            throws FilePathPrefixerException {
+            throws DerivePathException {
 
         createDelegateIfNeeded();
 
         return delegate.rootFolderPrefix(experimentIdentifier, context);
     }
 
-    private void createDelegateIfNeeded() throws FilePathPrefixerException {
+    private void createDelegateIfNeeded() throws DerivePathException {
 
         if (delegate != null) {
             // Nothing to do
@@ -102,18 +102,18 @@ public class FilePathPrefixerExperimentStructure extends FilePathPrefixer {
         try {
             this.delegate.checkMisconfigured(defaultInstances);
         } catch (BeanMisconfiguredException e) {
-            throw new FilePathPrefixerException(e);
+            throw new DerivePathException(e);
         }
     }
 
-    private FilePathPrefixerAvoidResolve createResolver() {
+    private PathPrefixerAvoidResolve createResolver() {
         PathRegEx resolver = new PathRegEx();
         resolver.setOutPathPrefix(prefix + experimentType);
         resolver.setRegEx(regEx);
         return resolver;
     }
 
-    private Rooted wrapWithRoot(FilePathPrefixerAvoidResolve in) {
+    private Rooted wrapWithRoot(PathPrefixerAvoidResolve in) {
         Rooted out = new Rooted();
         out.setRootName(rootName);
         out.setFilePathPrefixer(in);

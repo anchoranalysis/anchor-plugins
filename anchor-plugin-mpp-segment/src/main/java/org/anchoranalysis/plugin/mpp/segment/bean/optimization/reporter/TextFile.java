@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import java.io.PrintWriter;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;

@@ -49,10 +49,10 @@ import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
@@ -65,7 +65,7 @@ import org.apache.commons.io.FileUtils;
 public class CopyFilesExperiment extends Experiment {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProvider fileProvider;
+    @BeanField @Getter @Setter private FilesProvider filesProvider;
 
     @BeanField @Getter @Setter private FilePath sourceFolderPath;
 
@@ -211,13 +211,13 @@ public class CopyFilesExperiment extends Experiment {
     private Collection<File> findMatchingFiles(ExperimentExecutionArguments expArgs)
             throws ExperimentExecutionException {
         try {
-            return fileProvider.create(
+            return filesProvider.create(
                     new InputManagerParams(
                             expArgs.createInputContext(),
                             new ProgressReporterConsole(5),
                             new Logger(new ConsoleMessageLogger()) // Print errors to the screen
                             ));
-        } catch (FileProviderException e) {
+        } catch (FilesProviderException e) {
             throw new ExperimentExecutionException("Cannot find input files", e);
         } catch (IOException e) {
             throw new ExperimentExecutionException("Cannot create input context", e);

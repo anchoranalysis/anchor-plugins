@@ -29,14 +29,14 @@ package org.anchoranalysis.plugin.quick.bean.input.filepathappend;
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.segment.define.OutputterDirectories;
 
 public class AppendObjects extends FilePathBaseAppendToManagerWithFileID {
 
     @Override
-    protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
+    protected List<NamedBean<DerivePath>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
         return inputManager.getAppendObjects();
     }

@@ -70,7 +70,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
                                     bundleParams,
                                     getOutputName(),
                                     NUMBER_DIGITS_IN_OUTPUT,
-                                    getParentContext(),
+                                    getParentOutputter(),
                                     manifestFunction));
 
             bundleParams.setSequenceType(sequenceType);

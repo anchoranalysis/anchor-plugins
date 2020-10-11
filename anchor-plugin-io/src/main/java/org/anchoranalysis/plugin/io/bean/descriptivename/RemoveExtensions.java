@@ -41,8 +41,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.DescriptiveFile;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -74,10 +74,10 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
     }
 
     @Override
-    public List<DescriptiveFile> descriptiveNamesFor(
+    public List<DescriptiveFile> describe(
             Collection<File> files, String elseName, Logger logger) {
 
-        List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName, logger);
+        List<DescriptiveFile> df = descriptiveName.describe(files, elseName, logger);
 
         if (preserveExtensionIfDuplicate) {
             return considerDuplicates(df, elseName);

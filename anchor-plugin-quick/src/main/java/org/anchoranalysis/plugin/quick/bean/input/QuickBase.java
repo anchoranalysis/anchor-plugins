@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
@@ -56,10 +56,10 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
 
     /** A path to the main channel of each file */
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
+    @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
 
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders();
+    private DescriptiveNameFromFile descriptiveName = new LastFolders();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
@@ -81,6 +81,6 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
 
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {
         return InputManagerFactory.createFiles(
-                rootName, fileProvider, descriptiveNameFromFile, regex, filterFilesCsv);
+                rootName, filesProvider, descriptiveName, regex, filterFilesCsv);
     }
 }

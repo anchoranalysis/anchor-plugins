@@ -35,11 +35,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
@@ -53,27 +53,27 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
 public class Files extends InputManager<FileInput> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProvider fileProvider;
+    /** The files to use as inputs. */
+    @BeanField @Getter @Setter private FilesProvider filesProvider;
 
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveNameFromFile =
-            new RemoveExtensions(new PatternSpan());
+    private DescriptiveNameFromFile descriptiveName = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
 
-    public Files(FileProvider fileProvider) {
-        this.fileProvider = fileProvider;
+    public Files(FilesProvider filesProvider) {
+        this.filesProvider = filesProvider;
     }
 
     @Override
     public List<FileInput> inputs(InputManagerParams params) throws AnchorIOException {
         try {
-            Collection<File> files = getFileProvider().create(params);
+            Collection<File> files = filesProvider.create(params);
 
             return FunctionalList.mapToList(
-                    descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(
+                    descriptiveName.describeCheckUnique(
                             files, params.getLogger()),
                     FileInput::new);
-        } catch (FileProviderException e) {
+        } catch (FilesProviderException e) {
             throw new AnchorIOException("Cannot find files", e);
         }
     }

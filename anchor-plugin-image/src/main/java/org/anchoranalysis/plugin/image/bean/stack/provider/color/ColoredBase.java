@@ -42,7 +42,7 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.image.provider.ProviderAsStack;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.ColorScheme;
 import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Filled;
@@ -58,7 +58,7 @@ import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
  */
 public abstract class ColoredBase extends StackProvider {
 
-    protected static final ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
+    protected static final ColorScheme DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     // START BEAN PROPERTIES
     /**
@@ -129,7 +129,7 @@ public abstract class ColoredBase extends StackProvider {
 
         try {
             if (colors == null) {
-                colors = DEFAULT_COLOR_SET_GENERATOR.create(objects.size());
+                colors = DEFAULT_COLOR_SET_GENERATOR.createList(objects.size());
             }
 
             DrawObjectsGenerator generator =

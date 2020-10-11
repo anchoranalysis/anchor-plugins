@@ -30,11 +30,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifference;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 
 // A file manifest together with the overall manifest for the experiment
@@ -82,7 +82,7 @@ public class CoupledManifests implements InputFromManager {
         LastFolders dnff = new LastFolders();
         dnff.setNumFoldersInDescription(numFoldersInDescription);
         dnff.setRemoveExtensionInDescription(false);
-        return dnff.descriptiveNameFor(fileManifest.getRootPath().toFile(), "<unknown>", logger)
+        return dnff.describe(fileManifest.getRootPath().toFile(), "<unknown>", logger)
                 .getDescriptiveName();
     }
 

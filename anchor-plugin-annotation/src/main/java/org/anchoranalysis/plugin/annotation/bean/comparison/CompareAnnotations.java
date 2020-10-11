@@ -48,9 +48,9 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.ColorScheme;
 import org.anchoranalysis.io.bean.color.list.VeryBright;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -87,7 +87,7 @@ public class CompareAnnotations<T extends Assignment>
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
     // END BEAN PROPERTIES
 
-    private ColorListFactory colorSetGeneratorUnpaired = new VeryBright();
+    private ColorScheme colorSetGeneratorUnpaired = new VeryBright();
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(

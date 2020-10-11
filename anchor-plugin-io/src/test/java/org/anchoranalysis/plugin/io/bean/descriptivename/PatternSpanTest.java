@@ -32,8 +32,8 @@ import java.io.File;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.input.DescriptiveFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
@@ -89,7 +89,7 @@ public class PatternSpanTest {
         List<File> files = filesFromStrs(paths);
 
         PatternSpan ps = new PatternSpan();
-        List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown", LOGGER);
+        List<DescriptiveFile> ret = ps.describe(files, "unknown", LOGGER);
 
         for (int i = 0; i < expected.length; i++) {
             assertIndexEquals(ret, i, expected[i]);

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 /**
  * Removes any whitespace characters from the path

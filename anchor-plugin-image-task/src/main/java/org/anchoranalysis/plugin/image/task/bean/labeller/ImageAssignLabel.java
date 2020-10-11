@@ -67,7 +67,7 @@ public class ImageAssignLabel<T>
     @BeanField @Getter @Setter private ImageLabeller<T> imageLabeller;
 
     /**
-     * If it's set, a stack is generated that is outputted into sub-directory corresponding to the
+     * If it's set, a stack is generated that is outputted into subdirectory corresponding to the
      * groupIdentifier.
      */
     @BeanField @OptionalBean @SkipInit @Getter @Setter private StackProvider outputStackProvider;

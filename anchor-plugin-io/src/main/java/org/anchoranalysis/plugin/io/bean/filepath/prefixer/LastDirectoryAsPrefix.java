@@ -30,9 +30,9 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 /**
  * Looks for the last directory-name, and removes it in favour of using it as a prefix on a filename
@@ -47,28 +47,28 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  *
  * * @author Owen Feehan
  */
-public class LastDirectoryAsPrefix extends FilePathPrefixerAvoidResolve {
+public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixerAvoidResolve filePathPrefixer;
 
     @BeanField @Getter @Setter private String delimiter = "_";
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws FilePathPrefixerException {
+    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+            throws DerivePathException {
 
-        FilePathPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
+        DirectoryWithPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
 
-        Path dir = prefix.getFolderPath();
+        Path dir = prefix.getDirectory();
 
         if (dir.getNameCount() > 0) {
 
             String finalDirName = dir.getName(dir.getNameCount() - 1).toString();
 
             // Remove the final directory from the output
-            prefix.setFolderPath(prefix.getFolderPath().resolve("..").normalize());
+            prefix.setDirectory(prefix.getDirectory().resolve("..").normalize());
 
             if (prefix.getFilenamePrefix() != null) {
                 prefix.setFilenamePrefix(finalDirName + delimiter + prefix.getFilenamePrefix());

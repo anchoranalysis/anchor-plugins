@@ -39,7 +39,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**

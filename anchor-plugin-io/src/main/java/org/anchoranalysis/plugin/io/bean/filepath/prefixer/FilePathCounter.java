@@ -31,11 +31,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 @NoArgsConstructor
-public class FilePathCounter extends FilePathPrefixerAvoidResolve {
+public class FilePathCounter extends PathPrefixerAvoidResolve {
 
     // TODO this counter should be initialized in a proper way, and not using a bean-wide variable
     private int count = 0;
@@ -49,9 +49,9 @@ public class FilePathCounter extends FilePathPrefixerAvoidResolve {
     }
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root) {
+    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
         Path combinedDir = root.resolve(identifier(count++));
-        return new FilePathPrefix(combinedDir);
+        return new DirectoryWithPrefix(combinedDir);
     }
 
     private String identifier(int index) {

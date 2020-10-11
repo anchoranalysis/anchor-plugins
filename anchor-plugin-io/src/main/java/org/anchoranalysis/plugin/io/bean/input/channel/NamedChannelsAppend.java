@@ -43,10 +43,10 @@ import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.io.input.PathSupplier;
 
@@ -57,7 +57,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
-    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<FilePathGenerator>> listAppend;
+    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<DerivePath>> listAppend;
 
     @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
 
@@ -127,7 +127,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             return out;
         }
 
-        for (final NamedBean<FilePathGenerator> ni : listAppend) {
+        for (final NamedBean<DerivePath> ni : listAppend) {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items

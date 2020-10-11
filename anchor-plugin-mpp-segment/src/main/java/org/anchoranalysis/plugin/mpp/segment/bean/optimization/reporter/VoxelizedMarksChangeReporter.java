@@ -38,6 +38,7 @@ import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGener
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
@@ -120,15 +121,17 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     
     private OutputSequenceFactory<MarksWithEnergyBreakdown> createSequenceFactory(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) throws OutputWriteFailedException {
         
+        OutputterChecked outputter = initParams.getInitContext().getOutputter().getChecked();
+        
         Generator<MarksWithEnergyBreakdown> generator =
                 new BundledObjectOutputStreamGenerator<>(
                         createBundleParameters(),
                         outputName,
                         10,
-                        initParams.getInitContext().getInputOutputContext(),
+                        outputter,
                         manifestFunction);
 
-        return new OutputSequenceFactory<>(generator, initParams.getInitContext().getInputOutputContext());
+        return new OutputSequenceFactory<>(generator, outputter);
     }
     
     private BundleParameters createBundleParameters() {

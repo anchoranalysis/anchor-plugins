@@ -43,7 +43,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
     private static final int MINIMUM_NUMBER_VOXELS = 12;
 
     // START BEAN PROPERTIES
-    /** Iff true, supresses covariance in the z-direction. */
+    /** Iff true, surpresses covariance in the z-direction. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
     // END BEAN PROPERTIES
 

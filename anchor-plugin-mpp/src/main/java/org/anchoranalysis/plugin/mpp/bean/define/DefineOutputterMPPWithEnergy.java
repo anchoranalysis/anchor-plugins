@@ -39,6 +39,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
@@ -117,7 +118,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
             S result = operation.process(initParams, energyStack);
 
-            outputSharedObjects(mppParams, energyStack, context);
+            outputSharedObjects(mppParams, energyStack, context.getOutputter());
 
             return result;
 
@@ -128,11 +129,11 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     // General objects can be outputted
     private void outputSharedObjects(
-            MPPInitParams initParams, EnergyStack energyStack, InputOutputContext context)
+            MPPInitParams initParams, EnergyStack energyStack, Outputter outputter)
             throws OutputWriteFailedException {
 
-        super.outputSharedObjects(initParams, context);
+        super.outputSharedObjects(initParams, outputter.getChecked());
 
-        new EnergyStackWriter(energyStack, context).writeEnergyStack();
+        new EnergyStackWriter(energyStack, outputter).writeEnergyStack();
     }
 }

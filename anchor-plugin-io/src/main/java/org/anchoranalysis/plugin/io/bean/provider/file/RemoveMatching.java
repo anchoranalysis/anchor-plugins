@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-annotation
+ * anchor-plugin-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,26 +24,39 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.annotation.bean.strategy;
+package org.anchoranalysis.plugin.io.bean.provider.file;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.util.Collection;
+import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.bean.shared.regex.RegEx;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderUnary;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 
-public abstract class SingleFilePathGeneratorStrategy extends AnnotatorStrategy {
+// Removes one or more files if they match a regex
+public class RemoveMatching extends FilesProviderUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator annotationFilePathGenerator;
+    /** If a path matches a regular expression it is removed. */
+    @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERTIES
 
     @Override
-    public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
-        return PathFromGenerator.derivePath(
-                annotationFilePathGenerator, item.pathForBindingRequired());
+    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+
+        // Loop through each file and see if it's in our has map
+        Iterator<File> itr = source.iterator();
+        while (itr.hasNext()) {
+            File f = itr.next();
+
+            String normalizedPath = FilePathToUnixStyleConverter.toStringUnixStyle(f.toPath());
+            if (regEx.hasMatch(normalizedPath)) {
+                itr.remove();
+            }
+        }
+        return source;
     }
 }

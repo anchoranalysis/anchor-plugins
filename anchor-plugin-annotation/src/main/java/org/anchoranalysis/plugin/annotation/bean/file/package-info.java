@@ -23,5 +23,5 @@
  * THE SOFTWARE.
  * #L%
  */
-/** {@link org.anchoranalysis.io.bean.provider.file.FileProvider}s for providing annotations. */
+/** {@link org.anchoranalysis.io.bean.files.provider.FilesProvider}s for providing annotations. */
 package org.anchoranalysis.plugin.annotation.bean.file;

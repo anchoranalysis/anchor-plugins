@@ -27,41 +27,39 @@
 package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.regex.RegEx;
+import org.anchoranalysis.core.progress.ProgressReporterMultiple;
+import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.exception.FilesProviderException;
 
-// Removes one or more files if they match a regex
-public class FileProviderRemove extends FileProvider {
+public class Combine extends FilesProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProvider fileProvider;
-
-    @BeanField @Getter @Setter private RegEx regEx; // Paths to remove
+    @BeanField @Getter @Setter private List<FilesProvider> list = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
+    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
 
-        Collection<File> files = fileProvider.create(params);
+        try (ProgressReporterMultiple prm =
+                new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
 
-        // Loop through each file and see if it's in our has map
-        Iterator<File> itr = files.iterator();
-        while (itr.hasNext()) {
-            File f = itr.next();
+            List<File> combined = new ArrayList<>();
 
-            String normalizedPath = FilePathToUnixStyleConverter.toStringUnixStyle(f.toPath());
-            if (regEx.hasMatch(normalizedPath)) {
-                itr.remove();
+            for (FilesProvider fp : list) {
+
+                ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
+                combined.addAll(fp.create(params.withProgressReporter(prLocal)));
+                prm.incrWorker();
             }
+            return combined;
         }
-        return files;
     }
 }

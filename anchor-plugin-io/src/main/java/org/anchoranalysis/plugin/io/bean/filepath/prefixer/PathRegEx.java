@@ -31,10 +31,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
 
 ///
 
@@ -45,7 +45,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
  *
  * @author Owen Feehan
  */
-public class PathRegEx extends FilePathPrefixerAvoidResolve {
+public class PathRegEx extends PathPrefixerAvoidResolve {
 
     // START BEAN PROPERTIES
     /** Regular expression to use to match path with at least one group in it. */
@@ -53,20 +53,20 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
     // END BEAN PROPERTIES
 
     @Override
-    protected FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws FilePathPrefixerException {
+    protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+            throws DerivePathException {
         String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
     }
 
-    private String[] componentsFromPath(Path pathIn) throws FilePathPrefixerException {
+    private String[] componentsFromPath(Path pathIn) throws DerivePathException {
 
         String pathInForwardSlashes = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
 
         return regEx.match(pathInForwardSlashes)
                 .orElseThrow(
                         () ->
-                                new FilePathPrefixerException(
+                                new DerivePathException(
                                         String.format(
                                                 "Cannot successfully match the %s against '%s'",
                                                 regEx, pathInForwardSlashes)));
@@ -79,7 +79,7 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
      * @param components ordered array of string components
      * @return the file-path-prefix
      */
-    private static FilePathPrefix createPrefix(Path outFolderPath, String[] components) {
+    private static DirectoryWithPrefix createPrefix(Path outFolderPath, String[] components) {
 
         Path path = outFolderPath;
 
@@ -87,6 +87,6 @@ public class PathRegEx extends FilePathPrefixerAvoidResolve {
             path = path.resolve(components[g]);
         }
 
-        return new FilePathPrefix(path);
+        return new DirectoryWithPrefix(path);
     }
 }

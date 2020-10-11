@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-io
+ * anchor-plugin-quick
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,42 +24,42 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.provider.file;
+package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.progress.ProgressReporterMultiple;
-import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.apache.commons.io.FilenameUtils;
 
-public class FileProviderMultiple extends FileProvider {
+/**
+ * Takes a file-path of form somedir/somename.ext and converts to somedir.ext
+ *
+ * @author Owen Feehan
+ */
+public class CollapseFileName extends DerivePath {
 
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private List<FileProvider> list = new ArrayList<>();
-    // END BEAN PROPERTIES
+    // START BEAN FIELDS
+    @BeanField @Getter @Setter private DerivePath derivePath;
+    // END BEAN FIELDS
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
+    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+        Path path = derivePath.deriveFrom(source, debugMode);
+        return collapse(path);
+    }
 
-        try (ProgressReporterMultiple prm =
-                new ProgressReporterMultiple(params.getProgressReporter(), list.size())) {
+    private static Path collapse(Path path) throws AnchorIOException {
 
-            List<File> combined = new ArrayList<>();
+        PathTwoParts pathDir = new PathTwoParts(path);
 
-            for (FileProvider fp : list) {
-
-                ProgressReporterOneOfMany prLocal = new ProgressReporterOneOfMany(prm);
-                combined.addAll(fp.create(params.withProgressReporter(prLocal)));
-                prm.incrWorker();
-            }
-            return combined;
+        String ext = FilenameUtils.getExtension(pathDir.getSecond().toString());
+        if (ext.isEmpty()) {
+            return pathDir.getFirst();
         }
+        return Paths.get(String.format("%s.%s", pathDir.getFirst().toString(), ext));
     }
 }

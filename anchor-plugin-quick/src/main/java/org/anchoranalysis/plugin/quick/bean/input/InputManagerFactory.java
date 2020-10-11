@@ -30,9 +30,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
@@ -45,14 +45,14 @@ class InputManagerFactory {
     // Like createFiles, but maybe also wraps it in a filter
     public static InputManager<FileInput> createFiles(
             String rootName,
-            FileProviderWithDirectory fileProvider,
-            DescriptiveNameFromFile descriptiveNameFromFile,
+            FilesProviderWithDirectory filesProvider,
+            DescriptiveNameFromFile descriptiveName,
             String regex,
             MatchedAppendCsv filterFilesCsv)
             throws BeanMisconfiguredException {
 
         InputManager<FileInput> files =
-                createFiles(rootName, fileProvider, descriptiveNameFromFile);
+                createFiles(rootName, filesProvider, descriptiveName);
 
         if (filterFilesCsv == null) {
             return files;
@@ -62,42 +62,42 @@ class InputManagerFactory {
         filterManager.setInput(files);
         filterManager.setMatch(filterFilesCsv.getMatch());
         filterManager.setCsvFilePath(
-                filterFilesCsv.getAppendCsv().createFilePathGenerator(rootName, regex).getItem());
+                filterFilesCsv.getAppendCsv().createPathDeriver(rootName, regex).getItem());
         return filterManager;
     }
 
     /**
-     * Creates a Files
+     * Creates an input-manager of type {@link FileInput}.
      *
-     * @param rootName if non-empty a RootedFileProvier is used
-     * @param fileProvider fileProvider
-     * @param descriptiveNameFromFile descriptiveName
+     * @param rootName if non-empty a {@link Rooted} is used
+     * @param filesProvider provider of files
+     * @param descriptiveName descriptiveName
      * @return
      */
     private static InputManager<FileInput> createFiles(
             String rootName,
-            FileProviderWithDirectory fileProvider,
-            DescriptiveNameFromFile descriptiveNameFromFile) {
+            FilesProviderWithDirectory filesProvider,
+            DescriptiveNameFromFile descriptiveName) {
         Files files = new Files();
-        files.setFileProvider(createMaybeRootedFileProvider(rootName, fileProvider));
-        files.setDescriptiveNameFromFile(descriptiveNameFromFile);
+        files.setFilesProvider(createMaybeRootedFileProvider(rootName, filesProvider));
+        files.setDescriptiveName(descriptiveName);
         return files;
     }
 
-    private static FileProvider createMaybeRootedFileProvider(
-            String rootName, FileProviderWithDirectory fileProvider) {
+    private static FilesProvider createMaybeRootedFileProvider(
+            String rootName, FilesProviderWithDirectory provider) {
         if (rootName != null && !rootName.isEmpty()) {
-            return createRootedFileProvider(rootName, fileProvider);
+            return createRootedFileProvider(rootName, provider);
         } else {
-            return fileProvider;
+            return provider;
         }
     }
 
-    private static FileProvider createRootedFileProvider(
-            String rootName, FileProviderWithDirectory fileProvider) {
+    private static FilesProvider createRootedFileProvider(
+            String rootName, FilesProviderWithDirectory provider) {
         Rooted fileSet = new Rooted();
         fileSet.setRootName(rootName);
-        fileSet.setFileProvider(fileProvider);
+        fileSet.setFilesProvider(provider);
         fileSet.setDisableDebugMode(true);
         return fileSet;
     }

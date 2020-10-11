@@ -32,43 +32,55 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.MultipleComparer;
+import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.mpp.bean.points.fitter.PointsFitter;
+import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.bean.mark.MarkEvaluator;
 
 /** Annotates each image with a mark */
-public class MarkProposerStrategy extends SingleFilePathGeneratorStrategy {
+public class MarkProposerStrategy extends SinglePathStrategy {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private String markProposerName;
+    /**
+     * Name of the {@link MarkProposer} to use.
+     */
+    @BeanField @Getter @Setter private String markProposer;
 
-    @BeanField @Getter @Setter private String pointsFitterName;
-
-    @BeanField @Getter @Setter private String markEvaluatorName;
-
-    @BeanField @OptionalBean @Getter @Setter
-    private FilePathGenerator defaultMarksFilePathGenerator;
-
-    @BeanField @OptionalBean @Getter @Setter
-    private FilePathGenerator keyValueParamsFilePathGenerator;
+    /**
+     * Name of the {@link PointsFitter} to use.
+     */
+    @BeanField @Getter @Setter private String pointsFitter;
 
     @BeanField @OptionalBean @Getter @Setter
-    private List<FilePathGenerator> listDisplayRasters = new ArrayList<>();
+    private DerivePath pathDefaultMarks;
+
+    @BeanField @OptionalBean @Getter @Setter
+    private DerivePath pathParams;
+
+    /**
+     * Additional background-stacks that are possible to use while annotating.
+     * 
+     * <p>These must have the same dimensions as the energy-stack.
+     */
+    @BeanField @OptionalBean @Getter @Setter
+    private List<DerivePath> additionalBackgrounds = new ArrayList<>();
 
     @BeanField @OptionalBean @Getter @Setter private MultipleComparer multipleComparer;
 
-    /** If-defined, mark-evaluator that is added to the GUI to support this annotation */
-    @BeanField @OptionalBean @Getter @Setter private MarkEvaluator markEvaluator;
+    /** A mark-evaluator that is added to the GUI to support this annotation */
+    @BeanField @Getter @Setter private NamedBean<MarkEvaluator> markEvaluator;
     // END BEAN PROPERTIES
 
-    public Optional<FilePathGenerator> paramsFilePathGenerator() {
-        return Optional.ofNullable(keyValueParamsFilePathGenerator);
+    public Optional<DerivePath> paramsDeriver() {
+        return Optional.ofNullable(pathParams);
     }
 
-    public Optional<FilePathGenerator> marksFilePathGenerator() {
-        return Optional.ofNullable(defaultMarksFilePathGenerator);
+    public Optional<DerivePath> marksDeriver() {
+        return Optional.ofNullable(pathDefaultMarks);
     }
 
     @Override

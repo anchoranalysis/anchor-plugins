@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;

@@ -32,7 +32,7 @@ import org.anchoranalysis.annotation.io.assignment.ObjectCollectionDistanceMatri
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;

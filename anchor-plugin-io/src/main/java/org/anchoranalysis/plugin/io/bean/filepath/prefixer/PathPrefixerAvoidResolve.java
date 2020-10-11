@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.NamedPath;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
+import org.anchoranalysis.io.path.DerivePathException;
+import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a
@@ -50,7 +50,7 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerContext;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
+public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
 
     // START BEAN PROPERTIES
     /**
@@ -65,20 +65,20 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
     // Caches the calculation
     private Path resolvedRoot = null;
 
-    public FilePathPrefixerAvoidResolve(String outPathPrefix) {
+    public PathPrefixerAvoidResolve(String outPathPrefix) {
         this.outPathPrefix = outPathPrefix;
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
-            throws FilePathPrefixerException {
-        return new FilePathPrefix(resolveExperimentAbsoluteRootOut(expName, context));
+    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+            throws DerivePathException {
+        return new DirectoryWithPrefix(resolveExperimentAbsoluteRootOut(expName, context));
     }
 
     @Override
-    public FilePathPrefix outFilePrefix(
+    public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String expName, FilePathPrefixerContext context)
-            throws FilePathPrefixerException {
+            throws DerivePathException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
         return outFilePrefixFromPath(path, root);
@@ -93,9 +93,9 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
      */
-    public FilePathPrefix rootFolderPrefixAvoidResolve(String experimentIdentifier) {
+    public DirectoryWithPrefix rootFolderPrefixAvoidResolve(String experimentIdentifier) {
         String folder = getOutPathPrefix() + File.separator + experimentIdentifier + File.separator;
-        return new FilePathPrefix(Paths.get(folder));
+        return new DirectoryWithPrefix(Paths.get(folder));
     }
 
     /**
@@ -105,12 +105,12 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * @param path an input-path to match against
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
-     * @throws FilePathPrefixerException
+     * @throws DerivePathException
      */
-    public FilePathPrefix outFilePrefixAvoidResolve(NamedPath path, String experimentIdentifier)
-            throws FilePathPrefixerException {
+    public DirectoryWithPrefix outFilePrefixAvoidResolve(NamedPath path, String experimentIdentifier)
+            throws DerivePathException {
         return outFilePrefixFromPath(
-                path, rootFolderPrefixAvoidResolve(experimentIdentifier).getFolderPath());
+                path, rootFolderPrefixAvoidResolve(experimentIdentifier).getDirectory());
     }
 
     /**
@@ -120,8 +120,8 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
      * @param root root of prefix
      * @return folder/filename for prefixing
      */
-    protected abstract FilePathPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws FilePathPrefixerException;
+    protected abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
+            throws DerivePathException;
 
     /** The root of the experiment for outputting files */
     private Path resolveExperimentAbsoluteRootOut(String expName, FilePathPrefixerContext context) {
@@ -136,7 +136,7 @@ public abstract class FilePathPrefixerAvoidResolve extends FilePathPrefixer {
 
         if (outPathPrefix.isEmpty()) {
             // If there's an outPathPrefix specified, then use it, otherwise a temporary directory
-            return context.getOutputDirectory().orElseGet(FilePathPrefixerAvoidResolve::tempDir);
+            return context.getOutputDirectory().orElseGet(PathPrefixerAvoidResolve::tempDir);
         }
 
         return resolvePath(outPathPrefix);

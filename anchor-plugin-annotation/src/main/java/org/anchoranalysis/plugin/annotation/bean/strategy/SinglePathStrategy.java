@@ -24,47 +24,26 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.annotation.bean.file;
+package org.anchoranalysis.plugin.annotation.bean.strategy;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
-import org.anchoranalysis.annotation.io.bean.AnnotationInputManager;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.image.io.input.ProvidesStackInput;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
-public class FileProviderFromAnnotation<T extends AnnotatorStrategy> extends FileProvider {
+public abstract class SinglePathStrategy extends AnnotatorStrategy {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter
-    private AnnotationInputManager<NamedChannelsInputPart, T> annotationInputManager;
+    @BeanField @Getter @Setter private DerivePath pathAnnotation;
     // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
-
-        List<File> filesOut = new ArrayList<>();
-
-        try {
-            List<AnnotationWithStrategy<T>> list = annotationInputManager.inputs(params);
-            for (AnnotationWithStrategy<T> inp : list) {
-
-                filesOut.addAll(inp.deriveAssociatedFiles());
-            }
-
-        } catch (AnchorIOException e) {
-            throw new FileProviderException(e);
-        }
-
-        return filesOut;
+    public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
+        return PathFromGenerator.derivePath(
+                pathAnnotation, item.pathForBindingRequired());
     }
 }
