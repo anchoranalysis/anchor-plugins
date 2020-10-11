@@ -51,7 +51,7 @@ import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -178,7 +178,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            StacksOutputter.output(slices, OUTPUT_SLICES,
+            NamedStacksOutputter.output(slices, OUTPUT_SLICES,
                     false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);

@@ -47,7 +47,7 @@ import org.anchoranalysis.image.io.RasterIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.io.stack.StacksOutputter;
+import org.anchoranalysis.image.io.stack.NamedStacksOutputter;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
@@ -145,7 +145,7 @@ public class ScaleImage extends RasterTask {
             String outputName,
             OutputterChecked outputter) throws JobExecutionException {
         try {
-            StacksOutputter.output(stacks, outputName, false, outputter);
+            NamedStacksOutputter.output(stacks, outputName, false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(
                "Failed to write a particular stack in: " + outputName, e);

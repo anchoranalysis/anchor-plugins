@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.bean.filepath.prefixer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.NamedPath;
 
 /**
  * The prefixer uses a combination of a out-path-prefix and the descriptive-name of inputs to create

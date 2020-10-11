@@ -33,10 +33,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
@@ -105,7 +105,7 @@ public class Rooted extends FilesProvider {
 
             return filesProvider.matchingFilesForDirectory(dirNew, params);
 
-        } catch (BeanDuplicateException | AnchorIOException e) {
+        } catch (BeanDuplicateException | PathDifferenceException e) {
             throw new FilesProviderException(e);
         }
     }

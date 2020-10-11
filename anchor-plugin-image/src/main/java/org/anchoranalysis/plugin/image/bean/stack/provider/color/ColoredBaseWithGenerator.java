@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**

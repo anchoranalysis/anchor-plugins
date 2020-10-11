@@ -38,6 +38,7 @@ import lombok.Setter;
 import lombok.Value;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
@@ -86,7 +87,11 @@ public class Anonymize implements CopyFilesNaming {
         String fileNameNew = createNumericString(iter) + "." + ext;
 
         if (optionalMappings.isPresent()) {
-            addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
+            try {
+                addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
+            } catch (PathDifferenceException e) {
+                throw new AnchorIOException(e);
+            }
         }
 
         return Optional.of(Paths.get(fileNameNew));
@@ -103,11 +108,11 @@ public class Anonymize implements CopyFilesNaming {
 
     private void addMapping(
             List<FileMapping> mapping, Path sourceDir, File file, int iter, String fileNameNew)
-            throws AnchorIOException {
+            throws PathDifferenceException {
         synchronized (this) {
             mapping.add( // NOSONAR
                     new FileMapping(
-                            NamingUtilities.filePathDiff(sourceDir, file.toPath()),
+                            NamingUtilities.filePathDifference(sourceDir, file.toPath()),
                             fileNameNew,
                             iter));
         }

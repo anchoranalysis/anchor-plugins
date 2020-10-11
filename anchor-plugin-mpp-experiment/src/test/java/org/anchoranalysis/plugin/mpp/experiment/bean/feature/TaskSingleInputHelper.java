@@ -49,13 +49,13 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 

@@ -30,13 +30,13 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
-import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
+import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 import org.anchoranalysis.io.path.RootPathMap;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate
@@ -77,7 +77,7 @@ public class Rooted extends PathPrefixer {
                             .split(path.getPath(), rootName, debugMode)
                             .getRemainder();
             return new NamedPath(pathWithoutRoot, path.getDescriptiveName());
-        } catch (AnchorIOException e) {
+        } catch (PathDifferenceException e) {
             throw new DerivePathException(e);
         }
     }
@@ -93,7 +93,7 @@ public class Rooted extends PathPrefixer {
     private Path folderPathOut(Path pathIn, boolean debugMode) throws DerivePathException {
         try {
             return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve(pathIn);
-        } catch (AnchorIOException e) {
+        } catch (PathDifferenceException e) {
             throw new DerivePathException(e);
         }
     }

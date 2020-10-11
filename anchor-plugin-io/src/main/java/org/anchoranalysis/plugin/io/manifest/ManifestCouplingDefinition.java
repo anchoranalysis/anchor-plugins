@@ -34,11 +34,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.finder.FinderExperimentFileFolders;
 import org.anchoranalysis.io.manifest.folder.FolderWrite;
@@ -105,7 +105,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
                     cm =
                             new CoupledManifests(
                                     manifestExperimentRecorder, manifestRecorderFile, logger);
-                } catch (AnchorIOException e) {
+                } catch (PathDifferenceException e) {
                     throw new DeserializationFailedException(e);
                 }
                 listCoupledManifests.add(cm);

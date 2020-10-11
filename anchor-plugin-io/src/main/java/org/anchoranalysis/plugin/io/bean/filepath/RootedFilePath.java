@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
 
@@ -48,7 +49,11 @@ public class RootedFilePath extends FilePath {
 
     @Override
     public Path path(boolean debugMode) throws AnchorIOException {
-        return RootedFilePathUtilities.deriveRootedPath(
-                Paths.get(path), rootName, debugMode, disableDebugMode);
+        try {
+            return RootedFilePathUtilities.deriveRootedPath(
+                    Paths.get(path), rootName, debugMode, disableDebugMode);
+        } catch (PathDifferenceException e) {
+            throw new AnchorIOException(e);
+        }
     }
 }

@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.image.bean.color.provider;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
 
 /**
  * Generates colors to match the size of an object-collection
