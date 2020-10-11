@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.FromEntries;
@@ -48,13 +48,13 @@ class NamedChannelsCreator {
             String mainChannelName,
             int mainChannelIndex,
             List<ChannelEntry> additionalChannels,
-            RasterReader rasterReader)
+            StackReader stackReader)
             throws BeanMisconfiguredException {
         NamedChannels namedChannels = new NamedChannels();
         namedChannels.setChannelMap(
                 createChannelMap(mainChannelName, mainChannelIndex, additionalChannels));
         namedChannels.setFileInput(files);
-        namedChannels.setRasterReader(rasterReader);
+        namedChannels.setStackReader(stackReader);
         return namedChannels;
     }
 

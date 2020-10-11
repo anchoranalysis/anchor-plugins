@@ -41,7 +41,7 @@ import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -55,7 +55,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInputPart> input;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @OptionalBean @Getter @Setter private List<NamedBean<DerivePath>> listAppend;
 
@@ -148,7 +148,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                 }
             }
 
-            out = new AppendPart(out, ni.getName(), 0, outPath, rasterReader);
+            out = new AppendPart(out, ni.getName(), 0, outPath, stackReader);
         }
 
         return out;

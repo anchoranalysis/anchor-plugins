@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 import java.io.IOException;
 import java.util.Optional;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -37,7 +37,7 @@ import org.anchoranalysis.test.image.rasterwriter.RasterWriterTestBase;
 import org.junit.Test;
 
 /**
- * Base class for {@link RasterWriter}s that output the OME file formats.
+ * Base class for {@link StackWriter}s that output the OME file formats.
  *
  * @author Owen Feehan
  */

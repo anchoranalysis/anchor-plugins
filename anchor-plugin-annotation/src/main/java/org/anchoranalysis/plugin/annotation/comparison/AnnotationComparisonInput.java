@@ -33,7 +33,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
 
 @Value
@@ -43,7 +43,7 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
     private final T input;
     private final Tuple2<Comparer, Comparer> comparers;
     private final Tuple2<String, String> names;
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
 
     @Override
     public String descriptiveName() {

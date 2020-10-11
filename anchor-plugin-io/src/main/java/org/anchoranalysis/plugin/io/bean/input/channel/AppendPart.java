@@ -35,12 +35,12 @@ import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.PathSupplier;
 
@@ -53,7 +53,7 @@ class AppendPart extends NamedChannelsInputPart {
 
     private NamedChannelsInputPart delegate;
     private AdditionalChannel additionalChannel;
-    private RasterReader rasterReader;
+    private StackReader stackReader;
 
     private OpenedRaster openedRasterMemo;
 
@@ -62,11 +62,11 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            RasterReader rasterReader) {
+            StackReader stackReader) {
         super();
         this.delegate = delegate;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
-        this.rasterReader = rasterReader;
+        this.stackReader = stackReader;
     }
 
     @Override
@@ -109,7 +109,7 @@ class AppendPart extends NamedChannelsInputPart {
             Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedRasterMemo == null) {
-                openedRasterMemo = rasterReader.openFile(filePathAdditional);
+                openedRasterMemo = stackReader.openFile(filePathAdditional);
             }
 
         } catch (AnchorIOException e) {

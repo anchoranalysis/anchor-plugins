@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -37,8 +37,8 @@ import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 // If the XY resolution of an opened-image meets a certain condition
 //  then the resolution is scaled by a factor
@@ -47,10 +47,10 @@ import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
 //  mixup by the reader
 //
 // Assumes the X and Y resolution are equal. Throws an error otherwise.
-public class RejectIfConditionXYResolution extends RasterReader {
+public class RejectIfConditionXYResolution extends StackReader {
 
     // START BEAN PROPERTIES
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private RelationBean relation;
 
@@ -88,8 +88,8 @@ public class RejectIfConditionXYResolution extends RasterReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path filepath) throws RasterIOException {
-        OpenedRaster or = rasterReader.openFile(filepath);
+    public OpenedRaster openFile(Path path) throws RasterIOException {
+        OpenedRaster or = stackReader.openFile(path);
         return new OpenedRasterAlterDimensions(
                 or, new MaybeRejectProcessor(relation.create(), value));
     }

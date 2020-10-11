@@ -23,14 +23,14 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter;
+package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
 /**
  * Uses different raster-writers depending on the number/type of channels.
@@ -43,20 +43,20 @@ public class BranchChannels extends RasterWriterDelegateBase {
 
     // START BEAN PROPERTIES
     /** Default writer, if a more specific writer is not specified for a condition. */
-    @BeanField @Getter @Setter private RasterWriter writer;
+    @BeanField @Getter @Setter private StackWriter writer;
 
     /**
      * Writer employed if a stack is a one or three-channeled image, that is <b>not 3D</b>, and not
      * RGB.
      */
-    @BeanField @OptionalBean @Getter @Setter private RasterWriter whenOneOrThreeChannels;
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenOneOrThreeChannels;
 
     /** Writer employed if a stack is a three-channeled RGB image and is <b>not 3D</b>. */
-    @BeanField @OptionalBean @Getter @Setter private RasterWriter whenRGB;
+    @BeanField @OptionalBean @Getter @Setter private StackWriter whenRGB;
     // END BEAN PROPERTIES
 
     @Override
-    protected RasterWriter selectDelegate(RasterWriteOptions writeOptions) {
+    protected StackWriter selectDelegate(StackWriteOptions writeOptions) {
         if (writeOptions.isRgb()) {
             return writerOrDefault(whenRGB);
         } else if (writeOptions.isAlwaysOneOrThreeChannels()) {
@@ -66,7 +66,7 @@ public class BranchChannels extends RasterWriterDelegateBase {
         }
     }
     
-    private RasterWriter writerOrDefault(RasterWriter writerMaybeNull) {
+    private StackWriter writerOrDefault(StackWriter writerMaybeNull) {
         if (writerMaybeNull!=null) {
             return writerMaybeNull;
         } else {

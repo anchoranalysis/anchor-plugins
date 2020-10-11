@@ -26,7 +26,8 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
 import java.util.Optional;
-import org.anchoranalysis.image.io.bean.rasterwriter.RasterWriter;
+import org.anchoranalysis.image.io.bean.stack.StackWriter;
+import org.anchoranalysis.plugin.io.bean.stack.writer.bioformats.OMETiff;
 
 public class OMETiffTest extends OMETestBase {
 
@@ -37,7 +38,7 @@ public class OMETiffTest extends OMETestBase {
     }
 
     @Override
-    protected RasterWriter createWriter() {
+    protected StackWriter createWriter() {
         return new OMETiff();
     }
 }

@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterreader;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 
@@ -125,7 +125,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
         if (ts.size() != expectedNumberFrames) {
             throw new RasterIOException(
                     String.format(
-                            "This bean expects %d frames to always be returned from the rasterReader to only return images with a single time-frame, but it returned an image with %d frames",
+                            "This bean expects %d frames to always be returned from the stackReader to only return images with a single time-frame, but it returned an image with %d frames",
                             expectedNumberFrames, ts.size()));
         }
 
@@ -138,7 +138,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
             if (stack.getNumberChannels() != expectedNumberChannels) {
                 throw new RasterIOException(
                         String.format(
-                                "This bean expects %d channels to always be returned from the rasterReader to only return images with a single time-frame, but it returned an image with %d channels",
+                                "This bean expects %d channels to always be returned from the stackReader to only return images with a single time-frame, but it returned an image with %d channels",
                                 expectedNumberChannels, stack.getNumberChannels()));
             }
 

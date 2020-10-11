@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.opencv.bean.writer;
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterwriter.OneOrThreeChannelsWriter;
+import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;

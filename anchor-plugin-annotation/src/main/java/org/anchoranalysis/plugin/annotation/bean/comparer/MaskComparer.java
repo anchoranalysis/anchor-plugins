@@ -40,8 +40,8 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.MaskReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
@@ -52,7 +52,7 @@ public class MaskComparer extends Comparer {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DerivePath derivePath;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean invert = false;
     // END BEAN PROPERTIES
@@ -69,7 +69,7 @@ public class MaskComparer extends Comparer {
             }
 
             Mask mask =
-                    RasterReaderUtilities.openMask(rasterReader, maskPath, createBinaryValues());
+                    MaskReader.openMask(stackReader, maskPath, createBinaryValues());
 
             return new Found<>(convertToObjects(mask));
 

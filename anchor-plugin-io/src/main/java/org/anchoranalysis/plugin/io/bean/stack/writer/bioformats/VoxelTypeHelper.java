@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import org.anchoranalysis.core.functional.function.CheckedRunnable;
 import org.anchoranalysis.image.io.RasterIOException;

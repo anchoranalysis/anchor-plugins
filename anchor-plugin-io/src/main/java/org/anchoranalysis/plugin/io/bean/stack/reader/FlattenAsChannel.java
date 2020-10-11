@@ -23,31 +23,34 @@
  * THE SOFTWARE.
  * #L%
  */
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
-import loci.formats.IFormatWriter;
-import loci.formats.out.OMETiffWriter;
+package org.anchoranalysis.plugin.io.bean.stack.reader;
+
+import java.nio.file.Path;
+import lombok.Getter;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 
 /**
- * Writes a stack to the filesystem as a OME-XML using the <a
- * href="https://www.openmicroscopy.org/bio-formats/">Bioformats</a> library.
+ * Combines all series and frames returned by a reader by converting them into multiple channels in
+ * the same image
  *
- * <p>This is particularly useful for stacks of images that have an unusual number of channels
- * (neither 1 or 3 channels), and which most other file formats cannot support.
+ * <p>It assumes that the underlying stackReader will only return images with: 1. a constant number
+ * of channels 2. a constant number of frames
  *
  * @author Owen Feehan
  */
-public class OMETiff extends BioformatsWriter {
+public class FlattenAsChannel extends StackReader {
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private StackReader stackReader;
+    // END BEAN PROPERTIES
 
     @Override
-    public String fileExtension(RasterWriteOptions writeOptions) {
-        return "ome.tif";
-    }
-
-    @Override
-    protected IFormatWriter createWriter() throws RasterIOException {
-        return new OMETiffWriter();
+    public OpenedRaster openFile(Path path) throws RasterIOException {
+        return new FlattenAsChannelOpenedRaster(stackReader.openFile(path));
     }
 }

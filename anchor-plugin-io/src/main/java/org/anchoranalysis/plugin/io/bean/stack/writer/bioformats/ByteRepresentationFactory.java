@@ -1,4 +1,4 @@
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

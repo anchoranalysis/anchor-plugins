@@ -63,7 +63,7 @@ class HelperReadWriteObjects {
 
     public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {
 
-        TestReaderWriterUtilities.ensureRasterReader();
+        TestReaderWriterUtilities.ensureStackReader();
 
         return ObjectCollectionReader.createFromPath(path);
     }

@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.AnchorIOException;
@@ -50,7 +50,7 @@ public class Stacks extends InputManager<StackSequenceInput> {
     // START BEANS
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean useLastSeriesIndexOnly;
     // END BEANS
@@ -65,6 +65,6 @@ public class Stacks extends InputManager<StackSequenceInput> {
                 fileInput.inputs(params),
                 file ->
                         new StackCollectionFromFilesInputObject(
-                                file, getRasterReader(), useLastSeriesIndexOnly));
+                                file, getStackReader(), useLastSeriesIndexOnly));
     }
 }

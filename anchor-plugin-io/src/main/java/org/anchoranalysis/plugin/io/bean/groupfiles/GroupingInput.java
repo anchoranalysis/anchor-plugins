@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 class GroupingInput extends NamedChannelsInput {

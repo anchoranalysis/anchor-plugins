@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import java.nio.file.Path;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Test;

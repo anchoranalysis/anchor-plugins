@@ -33,8 +33,8 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
 
 // Ignores multiple series
@@ -42,7 +42,7 @@ import org.anchoranalysis.image.stack.TimeSequence;
 public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
     // START REQUIRED ARGUMENTS
-    private final RasterReader rasterReader;
+    private final StackReader stackReader;
     private final ParsedFilePathBag fileBag;
     // END REQUIRED ARGUMENTS
 
@@ -123,7 +123,7 @@ public class MultiFileReaderOpenedRaster implements OpenedRaster {
 
         for (FileDetails fd : fileBag) {
 
-            OpenedRaster or = rasterReader.openFile(fd.getFilePath());
+            OpenedRaster or = stackReader.openFile(fd.getFilePath());
             try {
                 TimeSequence ts = or.open(seriesIndex, progressReporter);
                 multiFile.add(

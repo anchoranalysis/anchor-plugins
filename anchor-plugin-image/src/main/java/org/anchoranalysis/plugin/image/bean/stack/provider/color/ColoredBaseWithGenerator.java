@@ -33,7 +33,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.list.ColorScheme;
+import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
 /**

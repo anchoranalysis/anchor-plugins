@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ColorProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.color.list.ColorScheme;
+import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
 
 /**
  * Generates colors to match the size of an object-collection

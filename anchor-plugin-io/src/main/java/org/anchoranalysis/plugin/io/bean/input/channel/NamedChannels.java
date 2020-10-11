@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
@@ -52,7 +52,7 @@ public class NamedChannels extends NamedChannelsBase {
     // START BEANS
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
 
@@ -69,7 +69,7 @@ public class NamedChannels extends NamedChannelsBase {
             out.add(
                     new MapPart(
                             iteratorFiles.next(),
-                            getRasterReader(),
+                            getStackReader(),
                             channelMap,
                             useLastSeriesIndexOnly));
         }

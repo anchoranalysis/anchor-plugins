@@ -24,14 +24,14 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
+package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.nio.file.Path;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
 import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.rasterwriter.RasterWriteOptions;
+import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 
 /**
@@ -44,7 +44,7 @@ public class Tiff extends BioformatsWriter {
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, RasterWriteOptions writeOptions)
+            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws RasterIOException {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
@@ -56,7 +56,7 @@ public class Tiff extends BioformatsWriter {
 
     // A default extension
     @Override
-    public String fileExtension(RasterWriteOptions writeOptions) {
+    public String fileExtension(StackWriteOptions writeOptions) {
         return "tif";
     }
 

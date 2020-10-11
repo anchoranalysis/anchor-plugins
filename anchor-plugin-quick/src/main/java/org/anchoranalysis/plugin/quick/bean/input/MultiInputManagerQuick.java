@@ -104,7 +104,7 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
         MultiInputManager input = new MultiInputManager();
         input.setInputName(inputName);
         input.setInput(createStacks());
-        input.setRasterReader(getRasterReaderAppend());
+        input.setStackReader(getStackReaderAppend());
 
         // Add all the various types of items that can be appended
         for (FilePathBaseAppendToManager append : listAppend) {
@@ -125,12 +125,12 @@ public class MultiInputManagerQuick extends QuickBase<MultiInput> {
             // Channel 0 always takes the inputName
             // The other channels are defined by the contents of the ImgChannelMapEntry
             return NamedChannelsCreator.create(
-                    files, inputName, channelIndex, additionalChannels, getRasterReader());
+                    files, inputName, channelIndex, additionalChannels, getStackReader());
 
         } else {
             // Normal mode, where we simply wrap the FileProvider in a Stacks
             Stacks stacks = new Stacks(files);
-            stacks.setRasterReader(getRasterReader());
+            stacks.setStackReader(getStackReader());
             return stacks;
         }
     }
