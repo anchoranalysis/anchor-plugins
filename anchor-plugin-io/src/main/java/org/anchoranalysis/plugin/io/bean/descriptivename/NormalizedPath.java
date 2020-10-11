@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import java.io.File;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
-import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 
 /**
  * Uses the normalized path (always with forward slashes) of each file as it's descriptive-name

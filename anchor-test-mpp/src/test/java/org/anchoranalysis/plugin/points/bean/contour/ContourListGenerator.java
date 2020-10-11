@@ -28,6 +28,9 @@ package org.anchoranalysis.plugin.points.bean.contour;
 
 import java.util.Iterator;
 import java.util.List;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
+import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
@@ -37,9 +40,6 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRas
 import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.scheme.ColorScheme;
-import org.anchoranalysis.io.bean.color.scheme.HSB;
-import org.anchoranalysis.io.bean.color.scheme.Shuffle;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;

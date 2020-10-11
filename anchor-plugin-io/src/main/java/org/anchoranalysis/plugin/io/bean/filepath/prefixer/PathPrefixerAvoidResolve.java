@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.path.PathPrefixer;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a

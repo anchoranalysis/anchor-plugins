@@ -31,8 +31,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.NamedPath;
 
 @NoArgsConstructor
 public class FilePathCounter extends PathPrefixerAvoidResolve {

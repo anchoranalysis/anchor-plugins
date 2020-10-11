@@ -31,9 +31,9 @@ import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.NamedPath;
 import org.junit.Test;
 
 public class FilePathPrefixerLastDirectoryAsPrefixTest {

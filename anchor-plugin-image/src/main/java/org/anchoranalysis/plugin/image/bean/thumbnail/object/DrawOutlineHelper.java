@@ -26,13 +26,13 @@
 package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import lombok.AllArgsConstructor;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 @AllArgsConstructor

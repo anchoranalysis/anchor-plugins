@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.io.filepath;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.bean.path.RootPath;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.path.RootPathMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,7 +38,7 @@ public class RootedFilePathUtilities {
 
     public static Path deriveRootedPath(
             Path source, String rootName, boolean debugMode, boolean disableDebugMode)
-            throws AnchorIOException {
+            throws PathDifferenceException {
 
         // If forceServer is selected, we disable debug-mode
         boolean effectiveDebugMode = debugMode;

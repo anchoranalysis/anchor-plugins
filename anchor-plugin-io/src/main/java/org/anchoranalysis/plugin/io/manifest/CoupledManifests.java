@@ -30,11 +30,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.core.path.PathDifference;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.ManifestRecorder;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.io.path.prefixer.PathDifference;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 
 // A file manifest together with the overall manifest for the experiment
@@ -48,7 +48,7 @@ public class CoupledManifests implements InputFromManager {
 
     public CoupledManifests(
             ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, Logger logger)
-            throws AnchorIOException {
+            throws PathDifferenceException {
         super();
         this.experimentManifest = Optional.of(experimentManifest);
         this.fileManifest = fileManifest;
@@ -63,7 +63,7 @@ public class CoupledManifests implements InputFromManager {
         name = generateNameFromFolders(numFoldersInDescription, logger);
     }
 
-    private String generateName(Logger logger) throws AnchorIOException {
+    private String generateName(Logger logger) throws PathDifferenceException {
 
         if (experimentManifest.isPresent()) {
             Path experimentRootFolder =

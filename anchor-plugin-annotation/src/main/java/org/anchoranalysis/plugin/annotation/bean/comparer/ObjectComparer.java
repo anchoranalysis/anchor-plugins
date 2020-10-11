@@ -40,7 +40,7 @@ import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 
 /**
  * An object-collection to be used to compare against something

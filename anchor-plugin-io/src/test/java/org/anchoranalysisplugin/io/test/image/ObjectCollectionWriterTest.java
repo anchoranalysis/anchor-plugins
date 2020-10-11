@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.junit.Before;
 import org.junit.Rule;

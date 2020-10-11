@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;

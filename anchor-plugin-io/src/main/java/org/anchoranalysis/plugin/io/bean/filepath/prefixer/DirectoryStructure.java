@@ -32,11 +32,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.path.DerivePathException;
-import org.anchoranalysis.io.path.NamedPath;
-import org.anchoranalysis.io.path.prefixer.DirectoryWithPrefix;
-import org.anchoranalysis.io.path.prefixer.PathDifference;
+import org.anchoranalysis.core.path.PathDifference;
+import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.NamedPath;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -82,7 +82,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
     private PathDifference differenceToPrefix(Path pathInRemoved) throws DerivePathException {
         try {
             return PathDifference.differenceFrom(Paths.get(inPathPrefix), pathInRemoved);
-        } catch (AnchorIOException e) {
+        } catch (PathDifferenceException e) {
             throw new DerivePathException(e);
         }
     }

@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
@@ -89,7 +90,7 @@ public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringB
                         RootPathMap.instance()
                                 .split(path, rootName, params.context().isDebugEnabled())
                                 .getRemainder();
-            } catch (AnchorIOException e) {
+            } catch (PathDifferenceException e) {
                 throw new JobExecutionException(e);
             }
         }

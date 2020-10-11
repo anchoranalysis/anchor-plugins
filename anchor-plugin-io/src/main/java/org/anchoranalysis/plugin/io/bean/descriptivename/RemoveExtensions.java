@@ -40,9 +40,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.input.DescriptiveFile;
-import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
