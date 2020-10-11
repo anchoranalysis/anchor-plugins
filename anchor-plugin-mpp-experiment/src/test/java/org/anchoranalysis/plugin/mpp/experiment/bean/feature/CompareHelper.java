@@ -32,10 +32,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
-import org.anchoranalysis.io.csv.comparer.CSVComparer;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
+import org.anchoranalysis.test.image.csv.CSVComparer;
 
 class CompareHelper {
 

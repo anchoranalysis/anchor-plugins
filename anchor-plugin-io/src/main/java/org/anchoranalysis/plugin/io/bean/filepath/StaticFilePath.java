@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public class StaticFilePath extends FilePath {
 

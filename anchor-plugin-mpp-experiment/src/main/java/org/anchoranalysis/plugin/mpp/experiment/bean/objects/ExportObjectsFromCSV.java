@@ -57,10 +57,10 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRas
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.collection.CollectionAsSubdirectoryGenerator;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -118,7 +118,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
     // START BEAN PROPERTIES
     @BeanField @OptionalBean @Getter @Setter
-    private FilePathGenerator idGenerator; // Translates an input file name to a unique ID
+    private DerivePath idGenerator; // Translates an input file name to a unique ID
 
     /** The stack that is the background for our objects */
     @BeanField @Getter @Setter private StackProvider stack;
@@ -214,7 +214,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                     "A binding-path is not present for the input, but is required");
         }
 
-        return idGenerator != null ? idGenerator.outFilePath(path.get(), debugMode) : path.get();
+        return idGenerator != null ? idGenerator.deriveFrom(path.get(), debugMode) : path.get();
     }
 
     private void processFileWithMap(
@@ -280,7 +280,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                         });
     }
 
-    private CollectionAsSubdirectoryGenerator<CSVRow, Collection<CSVRow>> createGenerator(
+    private CollectionGenerator<CSVRow, Collection<CSVRow>> createGenerator(
             String label,
             Collection<CSVRow> rows,
             ObjectCollectionRTree objects,
@@ -302,8 +302,8 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                                 new SimpleNameValue<>("idXML", new CSVRowXMLGenerator())));
 
         // Output the group
-        CollectionAsSubdirectoryGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
-                new CollectionAsSubdirectoryGenerator<>(listGenerator, "pair");
+        CollectionGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
+                new CollectionGenerator<>(listGenerator, "pair");
         subFolderGenerator.assignElement(rows);
         return subFolderGenerator;
     }

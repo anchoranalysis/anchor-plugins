@@ -29,15 +29,15 @@ package org.anchoranalysis.plugin.io.filepath;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.bean.root.RootPath;
-import org.anchoranalysis.io.bean.root.RootPathMap;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.RootPath;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.path.RootPathMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RootedFilePathUtilities {
 
-    public static Path determineNewPath(
-            Path pathOrig, String rootName, boolean debugMode, boolean disableDebugMode)
+    public static Path deriveRootedPath(
+            Path source, String rootName, boolean debugMode, boolean disableDebugMode)
             throws AnchorIOException {
 
         // If forceServer is selected, we disable debug-mode
@@ -47,6 +47,6 @@ public class RootedFilePathUtilities {
         }
 
         RootPath root = RootPathMap.instance().findRoot(rootName, effectiveDebugMode);
-        return root.asPath().resolve(pathOrig);
+        return root.asPath().resolve(source);
     }
 }

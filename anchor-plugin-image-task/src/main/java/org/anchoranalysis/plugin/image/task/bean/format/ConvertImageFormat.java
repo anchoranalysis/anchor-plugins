@@ -50,7 +50,7 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -106,7 +106,7 @@ public class ConvertImageFormat extends RasterTask {
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context);
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context.getOutputter().getChecked());
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }

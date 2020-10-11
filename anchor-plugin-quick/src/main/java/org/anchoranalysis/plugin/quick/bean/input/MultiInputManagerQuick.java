@@ -37,7 +37,7 @@ import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;

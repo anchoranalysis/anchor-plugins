@@ -41,8 +41,8 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 /**
  * @author Owen Feehan
@@ -51,7 +51,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class AnnotationMarksComparer<T> extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,7 +60,7 @@ public class AnnotationMarksComparer<T> extends Comparer {
 
         Path filePath;
         try {
-            filePath = filePathGenerator.outFilePath(filePathSource, false);
+            filePath = derivePath.deriveFrom(filePathSource, false);
         } catch (AnchorIOException e1) {
             throw new CreateException(e1);
         }

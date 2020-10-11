@@ -71,7 +71,7 @@ public class MovieFromSlices extends RasterTask {
     public void startSeries(InputOutputContext context)
             throws JobExecutionException {
         try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, context);
+            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, context.getOutputter().getChecked());
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }

@@ -57,6 +57,7 @@ import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.image.task.feature.calculator.FeatureCalculatorRepeated;
 import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
 
@@ -115,7 +116,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInput(), energyStack, optimaSliceIndex, params.context());
+                    params.getInput(), energyStack, optimaSliceIndex, params.getOutputter().getChecked());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -166,7 +167,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
             NamedChannelsInput input,
             EnergyStack energyStack,
             int optimaSliceIndex,
-            InputOutputContext context)
+            OutputterChecked outputter)
             throws OperationFailedException {
 
         NamedStacks stacks = collectionFromInput(input);
@@ -178,7 +179,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
 
         try {
             StacksOutputter.output(slices, OUTPUT_SLICES,
-                    false, context);
+                    false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

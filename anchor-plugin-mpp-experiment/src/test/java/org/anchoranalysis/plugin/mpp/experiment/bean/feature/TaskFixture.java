@@ -40,7 +40,7 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorConstant;
+import org.anchoranalysis.io.bean.path.derive.Constant;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.bean.object.provider.Reference;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
@@ -100,7 +100,7 @@ class TaskFixture {
         task.setSource(createSource());
         task.setFeatures(featureLoader.single());
         task.setFeaturesAggregate(featureLoader.aggregated());
-        task.setGroup(new FilePathGeneratorConstant("arbitraryGroup"));
+        task.setGroup(new Constant("arbitraryGroup"));
 
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());

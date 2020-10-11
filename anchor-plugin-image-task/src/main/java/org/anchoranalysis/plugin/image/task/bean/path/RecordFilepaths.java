@@ -38,13 +38,13 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.bean.root.RootPathMap;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.path.RootPathMap;
 
 /**
  * Task to print the paths associated with each input to the log.
@@ -55,7 +55,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringBuilder> {
 
     // START BEAN PROPERTIES
-    /** The name of the RootPath to associate with this fileset. If empty, it is ignored. */
+    /** The name of the root-path to associate with this fileset. If empty, it is ignored. */
     @BeanField @AllowEmpty @Getter @Setter private String rootName = "";
     // END BEAN PROPERTIES
 

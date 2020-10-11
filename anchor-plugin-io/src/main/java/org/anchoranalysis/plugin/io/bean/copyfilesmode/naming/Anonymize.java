@@ -39,7 +39,7 @@ import lombok.Value;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.apache.commons.io.FilenameUtils;
 

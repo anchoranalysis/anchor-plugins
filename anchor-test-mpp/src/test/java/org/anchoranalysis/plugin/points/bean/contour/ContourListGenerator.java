@@ -36,7 +36,7 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRas
 import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
+import org.anchoranalysis.io.bean.color.list.ColorScheme;
 import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
@@ -55,7 +55,7 @@ class ContourListGenerator
     private final DisplayStack background;
     private final ColorIndex colorIndex;
 
-    public static ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
+    public static ColorScheme DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     public ContourListGenerator(DisplayStack background) {
         this(new Outline(1, false), null, background);
@@ -94,7 +94,7 @@ class ContourListGenerator
         if (colorIndex != null) {
             return colorIndex;
         } else {
-            return DEFAULT_COLOR_SET_GENERATOR.create(size);
+            return DEFAULT_COLOR_SET_GENERATOR.createList(size);
         }
     }
 

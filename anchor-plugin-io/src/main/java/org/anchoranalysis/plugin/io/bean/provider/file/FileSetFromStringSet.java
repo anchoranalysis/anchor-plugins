@@ -35,17 +35,17 @@ import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryString;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectoryString;
 
-public class FileSetFromStringSet extends FileProviderWithDirectoryString {
+public class FileSetFromStringSet extends FilesProviderWithDirectoryString {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private StringSet filePaths;
+    @BeanField @Getter @Setter private StringSet paths;
     // END BEAN PROPERTIES
 
     public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params) {
-        return FunctionalList.mapToList(filePaths.set(), path -> resolvePath(directory, path));
+        return FunctionalList.mapToList(paths.set(), path -> resolvePath(directory, path));
     }
 
     private File resolvePath(Path directory, String path) {

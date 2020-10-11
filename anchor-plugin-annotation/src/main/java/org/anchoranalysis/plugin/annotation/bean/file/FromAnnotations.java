@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-quick
+ * anchor-plugin-annotation
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,49 +24,35 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.filepath;
+package org.anchoranalysis.plugin.annotation.bean.file;
 
-import java.nio.file.Path;
+import java.io.File;
+import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
+import org.anchoranalysis.annotation.io.bean.AnnotationInputManager;
+import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.core.functional.FunctionalList;
+import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
+import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.FilesProviderException;
 
-public class FilePathGeneratorRemoveTrailingDir extends FilePathGenerator {
+public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
-
-    // If non-zero, n trailing directories are removed from the end
-    @BeanField @Getter @Setter private int trimTrailingDirectory = 0;
-
-    // Do not apply the trim operation to the first n dirs
-    @BeanField @Getter @Setter private int skipFirstTrim = 0;
+    @BeanField @Getter @Setter
+    private AnnotationInputManager<NamedChannelsInputPart, T> annotations;
     // END BEAN PROPERTIES
 
     @Override
-    public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
-        Path path = filePathGenerator.outFilePath(pathIn, debugMode);
-
-        if (trimTrailingDirectory > 0) {
-            return removeNTrailingDirs(path, trimTrailingDirectory, skipFirstTrim);
-        } else {
-            return path;
+    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
+        try {
+            return FunctionalList.flatMapToList(annotations.inputs(params), input -> input.deriveAssociatedFiles().stream() );
+        } catch (AnchorIOException e) {
+            throw new FilesProviderException(e);
         }
-    }
-
-    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim) throws AnchorIOException {
-        PathTwoParts pathDir = new PathTwoParts(path);
-
-        for (int i = 0; i < skipFirstTrim; i++) {
-            pathDir.moveLastDirectoryToRest();
-        }
-
-        for (int i = 0; i < n; i++) {
-            pathDir.removeLastDirectory();
-        }
-
-        return pathDir.combine();
     }
 }

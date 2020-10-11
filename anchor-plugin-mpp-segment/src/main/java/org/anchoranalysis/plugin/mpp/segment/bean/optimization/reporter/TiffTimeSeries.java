@@ -37,7 +37,6 @@ import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.io.bean.color.list.HSB;
 import org.anchoranalysis.io.bean.color.list.Shuffle;
 import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.color.HashedColorSet;
 import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.GeneratorBridge;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
@@ -58,7 +57,7 @@ import org.anchoranalysis.overlay.id.IDGetterOverlayID;
 public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBreakdown> {
 
     // START Bean Properties
-    @BeanField @Getter @Setter private int numColors = 20;
+    @BeanField @Getter @Setter private int numberColors = 20;
     // END Bean Properties
 
     private ColorIndex colorIndex;
@@ -68,7 +67,7 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
             throws ReporterException {
 
         try {
-            colorIndex = new HashedColorSet(new Shuffle(new HSB()), numColors);
+            colorIndex = new Shuffle(new HSB()).colorForEachIndex(numberColors);
         } catch (OperationFailedException e1) {
             throw new ReporterException(e1);
         }

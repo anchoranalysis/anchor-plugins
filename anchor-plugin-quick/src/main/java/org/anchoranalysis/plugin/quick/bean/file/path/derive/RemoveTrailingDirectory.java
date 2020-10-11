@@ -24,42 +24,49 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.filepath;
+package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.apache.commons.io.FilenameUtils;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
-/**
- * Takes a file-path of form somedir/somename.ext and converts to somedir.ext
- *
- * @author Owen Feehan
- */
-public class FilePathGeneratorCollapseFileName extends FilePathGenerator {
+public class RemoveTrailingDirectory extends DerivePath {
 
-    // START BEAN FIELDS
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
-    // END BEAN FIELDS
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private DerivePath derivePath;
+
+    // If non-zero, n trailing directories are removed from the end
+    @BeanField @Getter @Setter private int trimTrailingDirectory = 0;
+
+    // Do not apply the trim operation to the first n dirs
+    @BeanField @Getter @Setter private int skipFirstTrim = 0;
+    // END BEAN PROPERTIES
 
     @Override
-    public Path outFilePath(Path pathIn, boolean debugMode) throws AnchorIOException {
-        Path path = filePathGenerator.outFilePath(pathIn, debugMode);
-        return collapse(path);
+    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+        Path path = derivePath.deriveFrom(source, debugMode);
+
+        if (trimTrailingDirectory > 0) {
+            return removeNTrailingDirs(path, trimTrailingDirectory, skipFirstTrim);
+        } else {
+            return path;
+        }
     }
 
-    private static Path collapse(Path path) throws AnchorIOException {
-
+    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim) throws AnchorIOException {
         PathTwoParts pathDir = new PathTwoParts(path);
 
-        String ext = FilenameUtils.getExtension(pathDir.getSecond().toString());
-        if (ext.isEmpty()) {
-            return pathDir.getFirst();
+        for (int i = 0; i < skipFirstTrim; i++) {
+            pathDir.moveLastDirectoryToRest();
         }
-        return Paths.get(String.format("%s.%s", pathDir.getFirst().toString(), ext));
+
+        for (int i = 0; i < n; i++) {
+            pathDir.removeLastDirectory();
+        }
+
+        return pathDir.combine();
     }
 }

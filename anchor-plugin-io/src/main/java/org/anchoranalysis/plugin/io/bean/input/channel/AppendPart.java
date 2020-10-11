@@ -41,7 +41,7 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.PathSupplier;
 
 /**

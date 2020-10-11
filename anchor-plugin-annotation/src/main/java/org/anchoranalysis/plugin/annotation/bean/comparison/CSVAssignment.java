@@ -32,7 +32,7 @@ import java.util.Optional;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.outputter.Outputter;

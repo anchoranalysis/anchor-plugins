@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.io.marks.MarkCollectionDeserializer;
@@ -49,7 +49,7 @@ import org.anchoranalysis.mpp.mark.MarkCollection;
 public class MarksComparer extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
     private static final RegionMembershipWithFlags REGION_MEMBERSHIP =
@@ -72,7 +72,7 @@ public class MarksComparer extends Comparer {
 
     private Path path(Path filePathSource) throws CreateException {
         try {
-            return filePathGenerator.outFilePath(filePathSource, false);
+            return derivePath.deriveFrom(filePathSource, false);
         } catch (AnchorIOException e1) {
             throw new CreateException(e1);
         }

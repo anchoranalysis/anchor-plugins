@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.experiment.label.FileLabelMap;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
@@ -50,14 +50,14 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
      * <p>The CSV file should have two columns: first column = image id (to match the
      * descriptiveName() of an image) second column = a label string
      */
-    @BeanField @Getter @Setter private FilePathGenerator csvLabelFilePathGenerator;
+    @BeanField @Getter @Setter private DerivePath pathLabel;
     // END BEAN PROPERTIES
 
     @Override
     public ImageCSVLabellerInitParams init(Path pathForBinding) throws InitException {
 
         try {
-            Path csvPath = csvLabelFilePathGenerator.outFilePath(pathForBinding, false);
+            Path csvPath = pathLabel.deriveFrom(pathForBinding, false);
 
             return new ImageCSVLabellerInitParams(FileLabelMap.readFromCSV(csvPath, false));
 

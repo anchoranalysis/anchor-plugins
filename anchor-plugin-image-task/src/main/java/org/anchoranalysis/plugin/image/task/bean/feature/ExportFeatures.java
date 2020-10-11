@@ -53,13 +53,13 @@ import org.anchoranalysis.feature.input.FeatureInputResults;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
@@ -109,10 +109,10 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
      * If non-null this file-path is used to determine the group of the file If null, no group is
      * included.
      */
-    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator group;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath group;
 
     /** Translates an input file name to a unique ID */
-    @BeanField @OptionalBean @Getter @Setter private FilePathGenerator id;
+    @BeanField @OptionalBean @Getter @Setter private DerivePath id;
 
     /** The features to be exported (after possibly some manipulation or augmentation) */
     @BeanField @NonEmpty @Getter @Setter
@@ -197,13 +197,13 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     }
 
     private static Optional<String> filePathAsIdentifier(
-            Optional<FilePathGenerator> generator, Path path, boolean debugMode)
+            Optional<DerivePath> generator, Path path, boolean debugMode)
             throws AnchorIOException {
         return OptionalUtilities.map(
                 generator,
                 gen ->
                         FilePathToUnixStyleConverter.toStringUnixStyle(
-                                gen.outFilePath(path, debugMode)));
+                                gen.deriveFrom(path, debugMode)));
     }
 
     /** Determines the group name corresponding to an inputPath and the group-generator */

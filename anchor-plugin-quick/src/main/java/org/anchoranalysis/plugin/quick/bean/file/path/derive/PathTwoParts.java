@@ -24,10 +24,10 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.quick.bean.filepath;
+package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 /** Separates a path into two parts */
 class PathTwoParts {

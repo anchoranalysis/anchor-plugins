@@ -87,7 +87,7 @@ public class ExportImageHistograms extends GroupedStackBase<Histogram, Histogram
      */
     private static final String OUTPUT_HISTOGRAMS = "channels";
 
-    /** Summed CSV histograms of the selected channels in a sub-directory. */
+    /** Summed CSV histograms of the selected channels in a subdirectory. */
     private static final String OUTPUT_SUM = "sum";
 
     // START BEAN PROPERTIES

@@ -36,7 +36,7 @@ import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.DescriptiveFile;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
@@ -49,7 +49,7 @@ import org.apache.commons.io.IOCase;
 public class PatternSpan extends DescriptiveNameFromFile {
 
     @Override
-    public List<DescriptiveFile> descriptiveNamesFor(
+    public List<DescriptiveFile> describe(
             Collection<File> files, String elseName, Logger logger) {
 
         // Convert to list

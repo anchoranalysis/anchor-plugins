@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {
@@ -38,8 +38,8 @@ public class PathFromGenerator {
     /** The debug-mode for everything that isn't the main input */
     private static final boolean DEBUG_MODE_NON_INPUT = false;
 
-    public static Path derivePath(FilePathGenerator generator, Path pathForBinding)
+    public static Path derivePath(DerivePath generator, Path pathForBinding)
             throws AnchorIOException {
-        return generator.outFilePath(pathForBinding, DEBUG_MODE_NON_INPUT);
+        return generator.deriveFrom(pathForBinding, DEBUG_MODE_NON_INPUT);
     }
 }

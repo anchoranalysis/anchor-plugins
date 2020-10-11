@@ -32,8 +32,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.input.DescriptiveFile;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
 
@@ -84,7 +84,7 @@ public class RemoveExtensionsTest {
         re.setDescriptiveName(new NormalizedPath());
 
         re.setPreserveExtensionIfDuplicate(preserveExtension);
-        return re.descriptiveNamesForCheckUniqueness(files, LOGGER);
+        return re.describeCheckUnique(files, LOGGER);
     }
 
     private static List<File> listOfFiles() {

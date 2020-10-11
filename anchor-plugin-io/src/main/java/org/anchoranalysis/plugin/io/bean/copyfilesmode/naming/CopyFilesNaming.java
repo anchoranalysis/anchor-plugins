@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public interface CopyFilesNaming {
 

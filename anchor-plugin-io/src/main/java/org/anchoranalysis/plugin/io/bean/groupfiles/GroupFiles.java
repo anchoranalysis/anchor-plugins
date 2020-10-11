@@ -43,9 +43,9 @@ import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.input.DescriptiveFile;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
@@ -87,7 +87,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveNameFromFile = new LastFolders(2);
+    private DescriptiveNameFromFile descriptiveName = new LastFolders(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
@@ -149,7 +149,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
         }
 
         return zipIntoGrouping(
-                descriptiveNameFromFile.descriptiveNamesForCheckUniqueness(files, logger),
+                descriptiveName.describeCheckUnique(files, logger),
                 openedRasters);
     }
 

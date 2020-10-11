@@ -27,45 +27,32 @@
 package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryUnary;
+import org.anchoranalysis.io.exception.FilesProviderException;
 
-public class SampleWithDirectory extends FileProviderWithDirectory {
+public class SampleWithDirectory extends FilesProviderWithDirectoryUnary {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
-
     @BeanField @Getter @Setter private int sampleEvery;
     // END BEAN PROPERTIES
 
     @Override
-    public Path getDirectoryAsPath(InputContextParams inputContext) {
-        return fileProvider.getDirectoryAsPath(inputContext);
-    }
-
-    @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
-            throws FileProviderException {
-
+    protected Collection<File> transform(Collection<File> source)
+            throws FilesProviderException {
         List<File> listSampled = new ArrayList<>();
 
-        Collection<File> list = fileProvider.create(params);
-
-        int cnt = -1; // So the first item becomes 0
-        for (File f : list) {
-            cnt++;
-            if (cnt == sampleEvery) {
-                listSampled.add(f);
-                cnt = 0;
+        int count = -1; // So the first item becomes 0
+        for (File file : source) {
+            count++;
+            if (count == sampleEvery) {
+                listSampled.add(file);
+                count = 0;
             }
         }
 

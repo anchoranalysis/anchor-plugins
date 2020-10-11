@@ -49,8 +49,8 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.PathPrefixer;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -153,7 +153,7 @@ class TaskSingleInputHelper {
     private static ParametersExperiment createParametersExperiment(
             Path pathTempFolder,
             OutputterChecked outputter,
-            FilePathPrefixer prefixer,
+            PathPrefixer prefixer,
             StatefulMessageLogger logger)
             throws AnchorIOException {
         ParametersExperiment params =

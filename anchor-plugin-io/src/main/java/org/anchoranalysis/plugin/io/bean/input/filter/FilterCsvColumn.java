@@ -33,11 +33,11 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -56,7 +56,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<T> input;
 
-    @BeanField @Getter @Setter private FilePathGenerator csvFilePath;
+    @BeanField @Getter @Setter private DerivePath csvFilePath;
 
     @BeanField @Getter @Setter private String match;
     // END BEAN PROPERTIES
@@ -84,7 +84,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
     private Set<String> matchingNames(Path pathForGenerator, boolean doDebug, int numRowsExpected)
             throws AnchorIOException {
         // Read CSV file using the path of the first object
-        Path csvPath = csvFilePath.outFilePath(pathForGenerator, doDebug);
+        Path csvPath = csvFilePath.deriveFrom(pathForGenerator, doDebug);
 
         try {
             return CsvMatcher.rowsFromCsvThatMatch(csvPath, match, numRowsExpected);

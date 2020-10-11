@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.filepath.prefixer.PathDifference;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.path.prefixer.PathDifference;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamingUtilities {

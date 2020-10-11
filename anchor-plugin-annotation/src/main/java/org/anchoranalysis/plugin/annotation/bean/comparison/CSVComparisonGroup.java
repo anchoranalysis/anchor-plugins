@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;

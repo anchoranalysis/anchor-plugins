@@ -31,20 +31,16 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.bean.files.provider.FilesProviderUnary;
 
-public class Limit extends FileProvider {
+public class Limit extends FilesProviderUnary {
 
     // START BEANS
-    @BeanField @Getter @Setter private FileProvider fileProvider;
-
-    @BeanField @Getter @Setter private int maxNumItems = 0;
+    @BeanField @Getter @Setter private int maxNumberItems = 0;
     // END BEANS
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
-        return LimitUtilities.apply(fileProvider.create(params), maxNumItems);
+    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+        return LimitUtilities.apply(source, maxNumberItems);
     }
 }

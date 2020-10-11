@@ -41,6 +41,6 @@ public class FromOutputName extends DescriptiveNameFromFileIndependent {
 
     @Override
     protected String createDescriptiveName(File file, int index) {
-        return outputNameStyle.getPhysicalName(index);
+        return outputNameStyle.getFilenameWithoutExtension(index);
     }
 }

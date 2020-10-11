@@ -44,13 +44,13 @@ import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.exception.AnchorIOException;
 
 public class MaskComparer extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
 
     @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
 
@@ -62,7 +62,7 @@ public class MaskComparer extends Comparer {
             Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         try {
-            Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
+            Path maskPath = derivePath.deriveFrom(filePathSource, debugMode);
 
             if (!maskPath.toFile().exists()) {
                 return new NotFound<>(maskPath, "No mask exists");

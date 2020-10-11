@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;

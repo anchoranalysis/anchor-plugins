@@ -50,10 +50,11 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Shared-state for an export-features class
@@ -87,7 +88,7 @@ public class SharedStateExportFeatures<S> {
      *
      * @param outputMetadata headers and output-name for the feature CSV file that is written
      * @param rowSource source of rows in the feature-table (called independently for each thread)
-     * @param context IO-context including directory in which grouped/thumbnails sub-directorys may
+     * @param context IO-context including directory in which grouped/thumbnails subdirectorys may
      *     be created
      * @throws AnchorIOException
      */
@@ -238,7 +239,7 @@ public class SharedStateExportFeatures<S> {
                 // Write thumbnail, or empty image
                 if (results.getThumbnail().isPresent()) {
                     try {
-                        addThumbnail(results.getThumbnail().get(), context);
+                        addThumbnail(results.getThumbnail().get(), context.getOutputter().getChecked());
                     } catch (OutputWriteFailedException e) {
                         throw new OperationFailedException(e);
                     }
@@ -247,10 +248,10 @@ public class SharedStateExportFeatures<S> {
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, InputOutputContext context) throws OutputWriteFailedException {
+    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter) throws OutputWriteFailedException {
         if (thumbnailOutputSequence == null) {
             OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
-            thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, context);
+            thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, outputter);
         }
         thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }

@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DeserializationFailedException;
+import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
@@ -48,9 +48,9 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 public class CoupledManifestsInputManager extends InputManager<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private FileProvider manifestInputFileSet;
+    @BeanField @OptionalBean @Getter @Setter private FilesProvider manifestInputFileSet;
 
-    @BeanField @OptionalBean @Getter @Setter private FileProvider manifestExperimentInputFileSet;
+    @BeanField @OptionalBean @Getter @Setter private FilesProvider manifestExperimentInputFileSet;
 
     @BeanField @Getter @Setter private ManifestDeserializer manifestDeserializer;
     // END BEAN PROPERTIES
@@ -107,7 +107,7 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
             }
 
             return definition;
-        } catch (FileProviderException e) {
+        } catch (FilesProviderException e) {
             throw new DeserializationFailedException("Cannot find files to deserialize", e);
         }
     }

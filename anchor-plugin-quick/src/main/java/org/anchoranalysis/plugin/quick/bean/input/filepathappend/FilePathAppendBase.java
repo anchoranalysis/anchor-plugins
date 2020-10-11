@@ -32,11 +32,12 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorRegEx;
-import org.anchoranalysis.io.bean.filepath.generator.Rooted;
-import org.anchoranalysis.plugin.quick.bean.filepath.FilePathGeneratorCollapseFileName;
-import org.anchoranalysis.plugin.quick.bean.filepath.FilePathGeneratorRemoveTrailingDir;
+import org.anchoranalysis.bean.shared.regex.RegExSimple;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.bean.path.derive.InsertRegExGroups;
+import org.anchoranalysis.io.bean.path.derive.Rooted;
+import org.anchoranalysis.plugin.quick.bean.file.path.derive.CollapseFileName;
+import org.anchoranalysis.plugin.quick.bean.file.path.derive.RemoveTrailingDirectory;
 
 public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> {
 
@@ -98,61 +99,56 @@ public abstract class FilePathAppendBase extends AnchorBean<FilePathAppendBase> 
      * correspond to the unique name of the dataset. The third group should correspond to the unique
      * name of the experiment.
      *
-     * @param rootName if non-empty (and non-null) a rooted filePathGenerator is created instead of
+     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of
      *     a non rooted
      * @param regEx
      * @return
      * @throws BeanMisconfiguredException
      */
-    public NamedBean<FilePathGenerator> createFilePathGenerator(String rootName, String regEx)
+    public NamedBean<DerivePath> createPathDeriver(String rootName, String regEx)
             throws BeanMisconfiguredException {
 
-        FilePathGenerator fpg = createRegEx(regEx);
+        DerivePath derivePath = createRegEx(regEx);
 
         if (rootName != null && !rootName.isEmpty()) {
-            fpg = addRoot(fpg, rootName);
+            derivePath = addRoot(derivePath, rootName);
         }
 
         if (trimTrailingDirectory > 0 || skipFileName) {
-            fpg = addRemoveTrailing(fpg);
+            derivePath = addRemoveTrailing(derivePath);
         }
 
         if (collapseFilename) {
-            fpg = addCollapse(fpg);
+            derivePath = addCollapse(derivePath);
         }
 
         // Wrap in a named bean
-        return new NamedBean<>(name, fpg);
+        return new NamedBean<>(name, derivePath);
     }
 
-    private FilePathGenerator addCollapse(FilePathGenerator fpg) {
-        FilePathGeneratorCollapseFileName fpgCollapse = new FilePathGeneratorCollapseFileName();
-        fpgCollapse.setFilePathGenerator(fpg);
-        return fpgCollapse;
+    private DerivePath addCollapse(DerivePath deriver) {
+        CollapseFileName collapse = new CollapseFileName();
+        collapse.setDerivePath(deriver);
+        return collapse;
     }
 
-    private FilePathGenerator addRemoveTrailing(FilePathGenerator fpg) {
-        FilePathGeneratorRemoveTrailingDir remove = new FilePathGeneratorRemoveTrailingDir();
-        remove.setFilePathGenerator(fpg);
+    private DerivePath addRemoveTrailing(DerivePath deriver) {
+        RemoveTrailingDirectory remove = new RemoveTrailingDirectory();
+        remove.setDerivePath(deriver);
         remove.setTrimTrailingDirectory(trimTrailingDirectory);
         remove.setSkipFirstTrim(skipFirstTrim);
         return remove;
     }
 
-    private static FilePathGenerator addRoot(FilePathGenerator fpg, String rootName) {
+    private static DerivePath addRoot(DerivePath deriver, String rootName) {
         // Rooted File-Path
         Rooted delegate = new Rooted();
         delegate.setRootName(rootName);
-        delegate.setItem(fpg);
+        delegate.setItem(deriver);
         return delegate;
     }
 
-    private FilePathGenerator createRegEx(String regEx) throws BeanMisconfiguredException {
-
-        // File path generator
-        FilePathGeneratorRegEx fpg = new FilePathGeneratorRegEx();
-        fpg.setRegEx(regEx);
-        fpg.setOutPath(createOutPathString());
-        return fpg;
+    private DerivePath createRegEx(String regEx) throws BeanMisconfiguredException {
+        return new InsertRegExGroups( new RegExSimple(regEx), createOutPathString() );
     }
 }

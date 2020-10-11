@@ -40,11 +40,11 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGeneratorReplace;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.bean.path.derive.DerivePath;
+import org.anchoranalysis.io.bean.path.derive.Replace;
+import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.AppendStack;
 
@@ -63,8 +63,8 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     /**
      * This needs to be set if there is at least one adjacentChannel.
      *
-     * <p>This should be a regex (with a single group that is replaced) that is searched for in the
-     * path returned by fileProvider This only needs to be set if at least one adjacentChannel is
+     * <p>This should be a regex (with a single group that is replaced) that is searched for among
+     * the input-paths. This only needs to be set if at least one adjacentChannel is.
      * specified
      */
     @BeanField @AllowEmpty @Getter @Setter private String regexAdjacent = "";
@@ -150,35 +150,35 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
                         getRasterReader());
 
         channels =
-                appendChannels(channels, createFilePathGeneratorsAdjacent(), rasterReaderAdjacent);
+                appendChannels(channels, pathsAdjacent(), rasterReaderAdjacent);
 
         channels =
-                appendChannels(channels, createFilePathGeneratorsAppend(), getRasterReaderAppend());
+                appendChannels(channels, pathsAppend(), getRasterReaderAppend());
 
         return channels;
     }
 
     private static NamedChannelsAppend appendChannels(
             InputManager<NamedChannelsInputPart> input,
-            List<NamedBean<FilePathGenerator>> filePathGenerators,
+            List<NamedBean<DerivePath>> derivePaths,
             RasterReader rasterReader) {
         NamedChannelsAppend append = new NamedChannelsAppend();
         append.setIgnoreFileNotFoundAppend(false);
         append.setForceEagerEvaluation(false);
         append.setInput(input);
-        append.setListAppend(filePathGenerators);
+        append.setListAppend(derivePaths);
         append.setRasterReader(rasterReader);
         return append;
     }
 
-    private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAdjacent() {
+    private List<NamedBean<DerivePath>> pathsAdjacent() {
         return FunctionalList.mapToList(adjacentChannels, this::convertAdjacentFile);
     }
 
-    private List<NamedBean<FilePathGenerator>> createFilePathGeneratorsAppend()
+    private List<NamedBean<DerivePath>> pathsAppend()
             throws BeanMisconfiguredException {
 
-        List<NamedBean<FilePathGenerator>> out = new ArrayList<>();
+        List<NamedBean<DerivePath>> out = new ArrayList<>();
 
         for (AppendStack stack : appendChannels) {
             try {
@@ -195,15 +195,15 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
         return out;
     }
 
-    private NamedBean<FilePathGenerator> convertAdjacentFile(AdjacentFile file) {
-        FilePathGeneratorReplace generator = new FilePathGeneratorReplace();
+    private NamedBean<DerivePath> convertAdjacentFile(AdjacentFile file) {
+        Replace generator = new Replace();
         generator.setRegex(regexAdjacent);
         generator.setReplacement(file.getReplacement());
         return new NamedBean<>(file.getName(), generator);
     }
 
-    private NamedBean<FilePathGenerator> convertAppendStack(AppendStack stack)
+    private NamedBean<DerivePath> convertAppendStack(AppendStack stack)
             throws BeanMisconfiguredException {
-        return stack.createFilePathGenerator(getRootName(), getRegex());
+        return stack.createPathDeriver(getRootName(), getRegex());
     }
 }
