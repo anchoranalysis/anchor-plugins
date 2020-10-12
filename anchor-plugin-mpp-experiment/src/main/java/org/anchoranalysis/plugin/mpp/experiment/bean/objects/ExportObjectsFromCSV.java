@@ -59,7 +59,7 @@ import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -182,7 +182,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
 
         } catch (GetOperationFailedException
                 | OperationFailedException
-                | AnchorIOException
+                | DerivePathException
                 | CreateException e) {
             throw new JobExecutionException(e);
         }
@@ -208,9 +208,9 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         return DisplayStack.create(providerCopy.create());
     }
 
-    private Path idStringForPath(Optional<Path> path, boolean debugMode) throws AnchorIOException {
+    private Path idStringForPath(Optional<Path> path, boolean debugMode) throws DerivePathException {
         if (!path.isPresent()) {
-            throw new AnchorIOException(
+            throw new DerivePathException(
                     "A binding-path is not present for the input, but is required");
         }
 

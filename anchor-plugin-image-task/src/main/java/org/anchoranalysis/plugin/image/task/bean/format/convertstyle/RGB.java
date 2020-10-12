@@ -39,7 +39,6 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
@@ -76,14 +75,14 @@ public class RGB extends ChannelConvertStyle {
             Set<String> channelNames,
             ChannelGetterForTimepoint channelGetter,
             Logger logger)
-            throws AnchorIOException {
+            throws OperationFailedException {
 
         if (!channelNamesAreRGB(channelNames)) {
             // Not compatable with RGB
             if (fallback != null) {
                 return fallback.convert(channelNames, channelGetter, logger);
             } else {
-                throw new AnchorIOException("Cannot convert as its channels do not look like RGB");
+                throw new OperationFailedException("Cannot convert as its channels do not look like RGB");
             }
         }
 
@@ -95,7 +94,7 @@ public class RGB extends ChannelConvertStyle {
             // The name is blank as there is a single channel
             out.add("", stack);
         } catch (CreateException e) {
-            throw new AnchorIOException("Incorrect image size", e);
+            throw new OperationFailedException("Incorrect image size", e);
         }
         
         return out;
@@ -110,7 +109,7 @@ public class RGB extends ChannelConvertStyle {
         addChannelOrBlank(CHANNEL_NAME_BLUE, channelGetter, stackRearranged, logger);
         return stackRearranged;
     }
-
+    
     private static void addChannelOrBlank(
             String channelName,
             ChannelGetterForTimepoint channelGetter,
@@ -119,7 +118,7 @@ public class RGB extends ChannelConvertStyle {
             throws CreateException {
         try {
             if (channelGetter.hasChannel(channelName)) {
-                stackRearranged.addChannel(channelGetter.getChannel(channelName));
+                stackRearranged.addChannel( channelGetter.getChannel(channelName) );
             } else {
                 logger.logFormatted(String.format("Adding a blank channel for %s", channelName));
                 stackRearranged.addBlankChannel();

@@ -152,7 +152,7 @@ public class FromObjects<T extends FeatureInput>
                 context.getContext(),
                 (initParams, energyStack) ->
                         calculateFeaturesForImage(
-                                input.descriptiveName(),
+                                input.name(),
                                 new InitParamsWithEnergyStack(initParams, energyStack),
                                 context));
     }
@@ -178,7 +178,7 @@ public class FromObjects<T extends FeatureInput>
     }
 
     private int calculateFeaturesForImage(
-            String descriptiveName,
+            String inputName,
             InitParamsWithEnergyStack initParams,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
@@ -189,7 +189,7 @@ public class FromObjects<T extends FeatureInput>
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
         processAllProviders(
-                descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
+                inputName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;

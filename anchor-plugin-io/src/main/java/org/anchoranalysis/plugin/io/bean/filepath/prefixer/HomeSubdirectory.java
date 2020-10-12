@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -71,22 +71,22 @@ public class HomeSubdirectory extends PathPrefixer {
     @Override
     public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
         return delegate.outFilePrefix(path, expName, context);
     }
 
     @Override
     public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
         return delegate.rootFolderPrefix(expName, context);
     }

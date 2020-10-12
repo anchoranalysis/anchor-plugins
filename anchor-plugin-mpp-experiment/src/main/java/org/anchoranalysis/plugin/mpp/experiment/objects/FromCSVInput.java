@@ -44,8 +44,8 @@ public class FromCSVInput implements InputFromManager, InputForMPPBean {
     private Path csvFilePath;
 
     @Override
-    public String descriptiveName() {
-        return input.descriptiveName();
+    public String name() {
+        return input.name();
     }
 
     @Override

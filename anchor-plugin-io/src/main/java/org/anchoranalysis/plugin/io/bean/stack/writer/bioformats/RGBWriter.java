@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import loci.formats.IFormatWriter;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 
 abstract class RGBWriter {
@@ -36,7 +36,7 @@ abstract class RGBWriter {
     protected Channel channelRed;
     protected Channel channelBlue;
     protected Channel channelGreen;
-
+    
     public RGBWriter(IFormatWriter writer, Stack stack) {
         this.writer = writer;
         this.channelRed = stack.getChannel(0);
@@ -44,12 +44,12 @@ abstract class RGBWriter {
         this.channelBlue = stack.getChannel(2);
     }
 
-    public void writeAsRGB() throws RasterIOException {
+    public void writeAsRGB() throws ImageIOException {
 
         int capacity = channelRed.voxels().any().extent().volumeXY();
 
         channelRed.extent().iterateOverZ(z -> mergeSliceAsRGB(z, capacity));
     }
 
-    protected abstract void mergeSliceAsRGB(int z, int capacity) throws RasterIOException;
+    protected abstract void mergeSliceAsRGB(int z, int capacity) throws ImageIOException;
 }

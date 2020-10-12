@@ -31,11 +31,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
+import org.anchoranalysis.io.bean.descriptivename.FileNamerIndependent;
 import org.apache.commons.io.FilenameUtils;
 
 @NoArgsConstructor
-public class LastFolders extends DescriptiveNameFromFileIndependent {
+public class LastFolders extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int numFoldersInDescription = 0;
@@ -52,7 +52,7 @@ public class LastFolders extends DescriptiveNameFromFileIndependent {
     }
 
     @Override
-    protected String createDescriptiveName(File file, int index) {
+    protected String deriveName(File file, int index) {
 
         String nameOut = "";
         if (!skipFileName) {

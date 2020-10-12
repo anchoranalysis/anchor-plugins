@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
@@ -57,7 +57,7 @@ public class Files extends InputManager<FileInput> {
     @BeanField @Getter @Setter private FilesProvider filesProvider;
 
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveName = new RemoveExtensions(new PatternSpan());
+    private FileNamer namer = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
 
     public Files(FilesProvider filesProvider) {
@@ -65,16 +65,16 @@ public class Files extends InputManager<FileInput> {
     }
 
     @Override
-    public List<FileInput> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<FileInput> inputs(InputManagerParams params) throws InputReadFailedException {
         try {
             Collection<File> files = filesProvider.create(params);
 
             return FunctionalList.mapToList(
-                    descriptiveName.describeCheckUnique(
+                    namer.deriveNameUnique(
                             files, params.getLogger()),
                     FileInput::new);
         } catch (FilesProviderException e) {
-            throw new AnchorIOException("Cannot find files", e);
+            throw new InputReadFailedException("Cannot find files", e);
         }
     }
 }

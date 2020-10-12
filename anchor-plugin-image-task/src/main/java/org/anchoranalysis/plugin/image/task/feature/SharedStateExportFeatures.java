@@ -50,7 +50,6 @@ import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
 import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -90,11 +89,11 @@ public class SharedStateExportFeatures<S> {
      * @param rowSource source of rows in the feature-table (called independently for each thread)
      * @param context IO-context including directory in which grouped/thumbnails subdirectorys may
      *     be created
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     public SharedStateExportFeatures(
             ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, InputOutputContext context)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
         this.context = context;
@@ -149,7 +148,7 @@ public class SharedStateExportFeatures<S> {
                             metadataHeaders, featureStore.createFeatureNames(), outputNames),
                     featureStore.deepCopy()::listFeatures,
                     context);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -179,7 +178,7 @@ public class SharedStateExportFeatures<S> {
                             identifierHeaders, features.createFeatureNames(), outputNames),
                     features::duplicateForNewThread,
                     context);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -198,26 +197,19 @@ public class SharedStateExportFeatures<S> {
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @param context io-context
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     public void writeGroupedResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
             InputOutputContext context)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         groupedResults.writeResultsForAllGroups(featuresAggregate, includeGroups, context);
     }
 
     public void closeAnyOpenIO() throws IOException {
-        try {
-            if (thumbnailOutputSequence != null) {
-                thumbnailOutputSequence.close();
-            }
-        } catch (OutputWriteFailedException e) {
-            throw new IOException(e);
-        } finally {
-            groupedResults.close();
-        }
+        thumbnailOutputSequence = null;
+        groupedResults.close();
     }
 
     /**

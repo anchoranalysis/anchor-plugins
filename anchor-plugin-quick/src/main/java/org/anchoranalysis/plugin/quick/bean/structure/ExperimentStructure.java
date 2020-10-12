@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -73,7 +73,7 @@ public class ExperimentStructure extends PathPrefixer {
     @Override
     public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String experimentIdentifier, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         createDelegateIfNeeded();
 
@@ -83,14 +83,14 @@ public class ExperimentStructure extends PathPrefixer {
     @Override
     public DirectoryWithPrefix rootFolderPrefix(
             String experimentIdentifier, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         createDelegateIfNeeded();
 
         return delegate.rootFolderPrefix(experimentIdentifier, context);
     }
 
-    private void createDelegateIfNeeded() throws DerivePathException {
+    private void createDelegateIfNeeded() throws PathPrefixerException {
 
         if (delegate != null) {
             // Nothing to do
@@ -102,7 +102,7 @@ public class ExperimentStructure extends PathPrefixer {
         try {
             this.delegate.checkMisconfigured(defaultInstances);
         } catch (BeanMisconfiguredException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
     }
 

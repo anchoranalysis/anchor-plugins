@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.mask.provider;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -104,7 +103,7 @@ public class FillHoles extends MaskProviderUnary {
     private double determineMaxVolume(Dimensions dimensions) throws CreateException {
         if (maxVolume != null) {
             try {
-                return maxVolume.resolveToVoxels(Optional.of(dimensions.unitConvert()));
+                return maxVolume.resolveToVoxels(dimensions.unitConvert());
             } catch (UnitValueException e) {
                 throw new CreateException(e);
             }

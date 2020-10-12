@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
@@ -58,7 +59,7 @@ class EastObjectsExtracter {
     public static SegmentedObjects apply(
             ConcurrentModelPool<Net> modelPool,
             Mat image,
-            Resolution resolution,
+            Optional<Resolution> resolution,
             double minConfidence)
             throws Throwable {
         List<WithConfidence<Mark>> listMarks =
@@ -75,7 +76,7 @@ class EastObjectsExtracter {
                 listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
-    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
+    private static Dimensions dimensionsForMatrix(Mat matrix, Optional<Resolution> resolution) {
         Extent extent = new Extent((int) matrix.size().width, (int) matrix.size().height);
         return new Dimensions(extent, resolution);
     }

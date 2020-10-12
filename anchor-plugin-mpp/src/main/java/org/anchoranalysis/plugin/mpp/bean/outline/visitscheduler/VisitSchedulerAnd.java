@@ -47,7 +47,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution)
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution)
             throws OperationFailedException {
 
         Optional<Tuple3i> maxDistance = Optional.empty();
@@ -73,7 +73,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 
     @Override
     public void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws InitException {
 
         for (VisitScheduler vs : list) {
@@ -83,7 +83,7 @@ public class VisitSchedulerAnd extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
 
         for (VisitScheduler vs : list) {

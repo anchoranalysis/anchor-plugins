@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.rasterwriter;
 
 import java.io.IOException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.plugin.io.bean.stack.writer.ImageIOWriter;
@@ -40,8 +40,8 @@ public class ImageIOWriterTest extends PNGTestBase {
         return new ImageIOWriter();
     }
 
-    @Test(expected = RasterIOException.class)
-    public void testThreeChannelsRGBUnsignedShort() throws RasterIOException, IOException {
+    @Test(expected = ImageIOException.class)
+    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 }

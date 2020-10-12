@@ -46,7 +46,8 @@ import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.OperationOutFilePath;
 import org.anchoranalysis.io.input.PathSupplier;
 
@@ -67,7 +68,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
@@ -97,18 +98,22 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             List<NamedChannelsInputPart> listTemp,
             ProgressReporter progressReporter,
             boolean debugMode)
-            throws AnchorIOException {
-        return FunctionalProgress.mapListOptional(
-                listTemp, progressReporter, ncc -> maybeAppend(ncc, debugMode));
+            throws InputReadFailedException {
+        try {
+            return FunctionalProgress.mapListOptional(
+                    listTemp, progressReporter, ncc -> maybeAppend(ncc, debugMode));
+        } catch (DerivePathException e) {
+            throw new InputReadFailedException(e);
+        }
     }
 
     private Optional<NamedChannelsInputPart> maybeAppend(
-            final NamedChannelsInputPart ncc, boolean debugMode) throws AnchorIOException {
+            final NamedChannelsInputPart ncc, boolean debugMode) throws DerivePathException {
         if (ignoreFileNotFoundAppend) {
 
             try {
                 return Optional.of(append(ncc, debugMode));
-            } catch (AnchorIOException e) {
+            } catch (DerivePathException e) {
                 return Optional.empty();
             }
 
@@ -119,7 +124,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     // We assume all the input files are single channel images
     private NamedChannelsInputPart append(final NamedChannelsInputPart ncc, boolean debugMode)
-            throws AnchorIOException {
+            throws DerivePathException {
 
         NamedChannelsInputPart out = ncc;
 
@@ -142,7 +147,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
                     if (skipMissingChannels) {
                         continue;
                     } else {
-                        throw new AnchorIOException(
+                        throw new DerivePathException(
                                 String.format("Append path: %s does not exist", path));
                     }
                 }

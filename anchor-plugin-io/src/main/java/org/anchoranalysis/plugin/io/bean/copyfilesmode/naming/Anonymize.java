@@ -40,8 +40,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -82,7 +82,7 @@ public class Anonymize implements CopyFilesNaming {
 
     @Override
     public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         String ext = FilenameUtils.getExtension(file.toString());
         String fileNameNew = createNumericString(iter) + "." + ext;
 
@@ -90,7 +90,7 @@ public class Anonymize implements CopyFilesNaming {
             try {
                 addMapping(optionalMappings.get(), sourceDir, file, iter, fileNameNew);
             } catch (PathDifferenceException e) {
-                throw new AnchorIOException(e);
+                throw new OutputWriteFailedException(e);
             }
         }
 
@@ -98,7 +98,7 @@ public class Anonymize implements CopyFilesNaming {
     }
 
     @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
 
         if (optionalMappings.isPresent() && !dummyMode) {
             writeOutputCSV(optionalMappings.get(), destDir);
@@ -119,7 +119,7 @@ public class Anonymize implements CopyFilesNaming {
     }
 
     private void writeOutputCSV(List<FileMapping> listMappings, Path destDir)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         Path csvOut = destDir.resolve(OUTPUT_CSV_FILENAME);
 

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.multifile;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
@@ -56,7 +56,7 @@ class MultiFile {
             Optional<Integer> sliceNum,
             Optional<Integer> timeIndex,
             Path filePath)
-            throws RasterIOException {
+            throws ImageIOException {
 
         dataTypeChecker.check(stackForFile);
 
@@ -76,34 +76,34 @@ class MultiFile {
     }
 
     private void checkSliceNum(Stack stackForFile, Optional<Integer> sliceNum, Path filePath)
-            throws RasterIOException {
+            throws ImageIOException {
         if (sliceNum.isPresent()) {
             if (stackForFile.dimensions().z() != 1) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format(
                                 "A sliceNum %d is specified, but the file '%s' has more than one slice",
                                 sliceNum.get(), filePath));
             }
         } else {
             if (stackForFile.dimensions().z() != size.getRangeZ().getSize()) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format("File '%s' has an incorrect number of slices", filePath));
             }
         }
     }
 
     private void checkChannelNum(Stack stackForFile, Optional<Integer> channelNum, Path filePath)
-            throws RasterIOException {
+            throws ImageIOException {
         if (channelNum.isPresent()) {
             if (stackForFile.getNumberChannels() != 1) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format(
                                 "A channelNum %d is specified, but the file '%s' has more than one channel",
                                 channelNum.get(), filePath));
             }
         } else {
             if (stackForFile.getNumberChannels() != size.getRangeC().getSize()) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format("File '%s' has an incorrect number of channels", filePath));
             }
         }

@@ -50,8 +50,8 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationComparisonAssigner;
@@ -99,7 +99,7 @@ public class CompareAnnotations<T extends Assignment>
                     new CSVAssignment(outputter, "byImage", hasDescriptiveSplit(), maxSplitGroups);
             return new SharedState<>(
                     assignmentCSV, numLevelsGrouping, key -> assigner.groupForKey(key));
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -163,7 +163,7 @@ public class CompareAnnotations<T extends Assignment>
 
     private SplitString createSplitString(AnnotationComparisonInput<ProvidesStackInput> input) {
         return hasDescriptiveSplit()
-                ? new SplitString(input.descriptiveName(), splitDescriptiveNameRegex)
+                ? new SplitString(input.name(), splitDescriptiveNameRegex)
                 : null;
     }
 
@@ -268,7 +268,7 @@ public class CompareAnnotations<T extends Assignment>
         try {
             new CSVComparisonGroup<>(sharedStateC.allGroups())
                     .writeGroupStats(context.getOutputter());
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }

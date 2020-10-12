@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -71,14 +71,14 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
 
     @Override
     public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
         return new DirectoryWithPrefix(resolveExperimentAbsoluteRootOut(expName, context));
     }
 
     @Override
     public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         Path root = resolveExperimentAbsoluteRootOut(expName, context);
         return outFilePrefixFromPath(path, root);
@@ -105,10 +105,10 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @param path an input-path to match against
      * @param experimentIdentifier an identifier for the experiment
      * @return a prefixer
-     * @throws DerivePathException
+     * @throws PathPrefixerException
      */
     public DirectoryWithPrefix outFilePrefixAvoidResolve(NamedPath path, String experimentIdentifier)
-            throws DerivePathException {
+            throws PathPrefixerException {
         return outFilePrefixFromPath(
                 path, rootFolderPrefixAvoidResolve(experimentIdentifier).getDirectory());
     }
@@ -121,7 +121,7 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @return folder/filename for prefixing
      */
     protected abstract DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws DerivePathException;
+            throws PathPrefixerException;
 
     /** The root of the experiment for outputting files */
     private Path resolveExperimentAbsoluteRootOut(String expName, FilePathPrefixerContext context) {

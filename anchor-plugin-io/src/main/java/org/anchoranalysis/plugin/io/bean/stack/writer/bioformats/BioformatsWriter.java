@@ -36,7 +36,7 @@ import loci.formats.IFormatWriter;
 import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -75,18 +75,18 @@ public abstract class BioformatsWriter extends StackWriter {
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException {
-        throw new RasterIOException(
+            throws ImageIOException {
+        throw new ImageIOException(
                 "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
     }
 
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
 
         if (stack.getNumberChannels() == 0) {
-            throw new RasterIOException("This stack has no channels to write.");
+            throw new ImageIOException("This stack has no channels to write.");
         }
 
         if (stack.allChannelsHaveIdenticalType()) {
@@ -97,10 +97,10 @@ public abstract class BioformatsWriter extends StackWriter {
     }
 
     /** Creates or gets an instance of {@link IFormatWriter} which dictates the file format to use for writing. */
-    protected abstract IFormatWriter createWriter() throws RasterIOException;
+    protected abstract IFormatWriter createWriter() throws ImageIOException;
     
     /** When channels all have the same type. */
-    private void writeHomogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
+    private void writeHomogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws ImageIOException {
         VoxelDataType channelType = stack.getChannel(0).getVoxelDataType();
         
         VoxelTypeHelper.checkChannelTypeSupported("Channels in stack the are an ", channelType, () -> 
@@ -109,7 +109,7 @@ public abstract class BioformatsWriter extends StackWriter {
     }
 
     /** When channels have varying types. */
-    private void writeHeterogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws RasterIOException {
+    private void writeHeterogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws ImageIOException {
         // Find common type to represent all channels
         Stream<VoxelDataType> stream = stack.asListChannels().stream().map(Channel::getVoxelDataType);
         VoxelDataType commonType = FindCommonVoxelType.commonType(stream).get(); // NOSONAR
@@ -121,7 +121,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     private void writeStackInternal(
             Stack stack, Path filePath, boolean makeRGB, VoxelDataType voxelDataTypeToWrite)
-            throws RasterIOException {
+            throws ImageIOException {
                 
         try (IFormatWriter writer = createWriter()) {
 
@@ -130,18 +130,18 @@ public abstract class BioformatsWriter extends StackWriter {
             writer.setId(filePath.toString());
 
             if (!writer.canDoStacks() && stack.dimensions().z() > 1) {
-                throw new RasterIOException("The writer must support stacks for Z > 1");
+                throw new ImageIOException("The writer must support stacks for Z > 1");
             }
 
             writeStack(writer, stack, makeRGB, voxelDataTypeToWrite);
 
         } catch (IOException | FormatException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
     private static void writeStack(IFormatWriter writer, Stack stack, boolean makeRGB, VoxelDataType voxelDataTypeToWrite)
-            throws RasterIOException {
+            throws ImageIOException {
         if (makeRGB) {
             writeRGB(writer,stack);
         } else {
@@ -153,9 +153,9 @@ public abstract class BioformatsWriter extends StackWriter {
         }
     }
     
-    private static void writeRGB(IFormatWriter writer, Stack stack) throws RasterIOException {
+    private static void writeRGB(IFormatWriter writer, Stack stack) throws ImageIOException {
         if (stack.getNumberChannels() != 3) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     "If makeRGB==true, then a stack must have exactly 3 channels, but it actually has: "
                             + stack.getNumberChannels());
         } else if (stack.allChannelsHaveType(UnsignedByteVoxelType.INSTANCE)) {
@@ -163,14 +163,14 @@ public abstract class BioformatsWriter extends StackWriter {
         } else if (stack.allChannelsHaveType(UnsignedShortVoxelType.INSTANCE)) {
             new RGBWriterShort(writer, stack).writeAsRGB();
         } else {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     "If makeRGB==true, then only unsigned 8-bit or unsigned 16-bit voxels are supported");
         }
     }
 
     private static void prepareWriter(
             IFormatWriter writer, Stack stack, VoxelDataType voxelDataTypeToWrite, boolean makeRGB)
-            throws RasterIOException {
+            throws ImageIOException {
 
         try {
             PixelType pixelType = VoxelTypeHelper.pixelTypeFor(voxelDataTypeToWrite);
@@ -179,12 +179,12 @@ public abstract class BioformatsWriter extends StackWriter {
                     MetadataUtilities.createMetadata(
                             stack.dimensions(), stack.getNumberChannels(), pixelType, makeRGB, false));
         } catch (ServiceException | DependencyException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
     
     private static void writeAsSeparateChannels(IFormatWriter writer, List<ByteRepresentationForChannel> channels, int numberSlices)
-            throws RasterIOException {
+            throws ImageIOException {
         try {
             int sliceIndex = 0;
             for (int channelIndex = 0; channelIndex < channels.size(); channelIndex++) {
@@ -196,7 +196,7 @@ public abstract class BioformatsWriter extends StackWriter {
                 }
             }
         } catch (IOException | FormatException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 }

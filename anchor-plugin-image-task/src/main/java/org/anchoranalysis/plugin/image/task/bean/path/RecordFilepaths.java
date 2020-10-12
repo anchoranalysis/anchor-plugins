@@ -39,7 +39,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
@@ -78,7 +78,7 @@ public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringB
         Path path;
         try {
             path = params.getInput().pathForBindingRequired();
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             throw new JobExecutionException(e);
         }
 

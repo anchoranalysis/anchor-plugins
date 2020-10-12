@@ -56,7 +56,7 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.StackGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.collection.ObjectsMergedAsMaskGenerator;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
@@ -273,7 +273,7 @@ public class SegmentInstanceWithModel<T>
                 energyStack,
                 (featureInput, index) ->
                         identifierFor(
-                                input.getInput().descriptiveName(),
+                                input.getInput().name(),
                                 featureInput,
                                 calculator,
                                 segments.get(index).getConfidence()));
@@ -331,7 +331,7 @@ public class SegmentInstanceWithModel<T>
                             .createStackSequenceForSeries(0)
                             .get(ProgressReporterNull.get());
             return sequence.get(0);
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 
@@ -57,7 +57,7 @@ public class LastDirectoryAsPrefix extends PathPrefixerAvoidResolve {
 
     @Override
     protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         DirectoryWithPrefix prefix = filePathPrefixer.outFilePrefixFromPath(path, root);
 

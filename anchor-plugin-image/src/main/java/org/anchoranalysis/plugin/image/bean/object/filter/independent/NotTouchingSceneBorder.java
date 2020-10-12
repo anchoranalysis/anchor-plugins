@@ -55,14 +55,14 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
-        if (!dim.isPresent()) {
+        if (!dimensions.isPresent()) {
             throw new OperationFailedException("Image-dimensions are required for this operation");
         }
 
-        if (object.boundingBox().atBorderXY(dim.get())) {
+        if (object.boundingBox().atBorderXY(dimensions.get())) {
             return false;
         }
 
@@ -73,7 +73,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             }
 
             ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
-            if (cornerMax.z() == (dim.get().z() - 1)) {
+            if (cornerMax.z() == (dimensions.get().z() - 1)) {
                 return false;
             }
         }

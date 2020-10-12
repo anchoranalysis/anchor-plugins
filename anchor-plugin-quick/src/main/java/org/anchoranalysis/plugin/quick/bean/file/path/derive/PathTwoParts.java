@@ -27,14 +27,15 @@
 package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
 import java.nio.file.Path;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.core.error.CreateException;
+import lombok.Getter;
 
 /** Separates a path into two parts */
 class PathTwoParts {
-    private Path first;
-    private Path second;
+    @Getter private Path first;
+    @Getter private Path second;
 
-    public PathTwoParts(Path path) throws AnchorIOException {
+    public PathTwoParts(Path path) throws CreateException {
         checkPathHasParent(path);
 
         if (path.endsWith("/")) {
@@ -62,18 +63,10 @@ class PathTwoParts {
         return first.resolve(second);
     }
 
-    private static void checkPathHasParent(Path path) throws AnchorIOException {
+    private static void checkPathHasParent(Path path) throws CreateException {
 
         if (path.getParent() == null) {
-            throw new AnchorIOException(String.format("No parent exists for %s", path));
+            throw new CreateException(String.format("No parent exists for %s", path));
         }
-    }
-
-    public Path getFirst() {
-        return first;
-    }
-
-    public Path getSecond() {
-        return second;
     }
 }

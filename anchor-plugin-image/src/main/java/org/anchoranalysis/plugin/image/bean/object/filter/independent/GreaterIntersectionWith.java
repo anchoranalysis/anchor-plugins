@@ -58,9 +58,9 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
     private ObjectCollection intersectionLesser;
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
+        super.start(dimensions, objectsToFilter);
         try {
             intersectionGreater = objectsGreater.create();
             intersectionLesser = objectsLesser.create();
@@ -76,7 +76,7 @@ public class GreaterIntersectionWith extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
         int cntGreater = intersectionGreater.countIntersectingVoxels(object);

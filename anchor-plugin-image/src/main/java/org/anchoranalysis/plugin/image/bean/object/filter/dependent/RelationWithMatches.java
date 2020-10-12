@@ -74,9 +74,9 @@ public class RelationWithMatches extends ObjectFilterRelation {
     private Map<ObjectMask, ObjectCollection> matches;
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
+        super.start(dimensions, objectsToFilter);
 
         setupEvaluators();
 

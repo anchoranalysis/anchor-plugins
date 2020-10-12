@@ -28,11 +28,12 @@ package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -40,12 +41,14 @@ import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 
 /**
- * When writing a Raster, an additional file is written to indicate the physical voxel sizes.
+ * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this information is known.
  *
  * <p>The path of this file is the raster-path with .xml appended, e.g. {@code
  * rasterFilename.tif.xml}.
  *
- * <p>It contans physical extents of a single voxel (the resolution).
+ * <p>It contains physical extents of a single voxel (the resolution).
+ * 
+ * <p>This file will only be present if the physical voxel sizes are known, otherwise no file is written.
  *
  * @author Owen Feehan
  */
@@ -63,7 +66,7 @@ public class WriteResolutionXml extends StackWriter {
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
         writer.writeStack(stack, filePath, makeRGB, writeOptions);
         writeResolutionXml(filePath, stack.resolution());
     }
@@ -74,7 +77,7 @@ public class WriteResolutionXml extends StackWriter {
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
         writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
 
         // We assume all the stacks in the series have the same dimension, and write only one
@@ -82,8 +85,10 @@ public class WriteResolutionXml extends StackWriter {
         writeResolutionXml(filePath, stackSeries.get(0).resolution());
     }
 
-    private void writeResolutionXml(Path filePath, Resolution resolution) throws RasterIOException {
-        Path pathOut = Paths.get(filePath.toString() + ".xml");
-        AnchorMetadataXml.writeResolutionXml(resolution, pathOut);
+    private void writeResolutionXml(Path filePath, Optional<Resolution> resolution) throws ImageIOException {
+        if (resolution.isPresent()) {
+            Path pathOut = Paths.get(filePath.toString() + ".xml");
+            AnchorMetadataXml.writeResolutionXml(resolution.get(), pathOut);
+        }
     }
 }

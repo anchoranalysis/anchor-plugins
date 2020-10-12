@@ -33,7 +33,7 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.plugin.annotation.bean.label.AnnotationLabel;
 import org.anchoranalysis.plugin.annotation.bean.label.GroupedAnnotationLabels;
 
@@ -46,7 +46,7 @@ public class WholeImageLabelStrategy extends SinglePathStrategy {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<String> annotationLabelFor(ProvidesStackInput item) throws AnchorIOException {
+    public Optional<String> annotationLabelFor(ProvidesStackInput item) throws InputReadFailedException {
         return ReadAnnotationFromFile.readCheckExists(annotationPathFor(item))
                 .map(ImageLabelAnnotation::getLabel);
     }

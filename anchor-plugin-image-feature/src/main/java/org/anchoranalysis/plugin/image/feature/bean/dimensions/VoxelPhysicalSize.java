@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
 import org.anchoranalysis.core.axis.AxisType;
+import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.extent.Dimensions;
 
@@ -39,7 +40,11 @@ import org.anchoranalysis.image.extent.Dimensions;
 public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecificAxis<T> {
 
     @Override
-    protected double calculateForAxis(Dimensions dimensions, AxisType axis) {
-        return dimensions.resolution().valueByDimension(axis);
+    protected double calculateForAxis(Dimensions dimensions, AxisType axis) throws FeatureCalculationException {
+        if (dimensions.resolution().isPresent()) {
+            return dimensions.resolution().get().valueByDimension(axis);    // NOSONAR
+        } else {
+            throw new FeatureCalculationException("No image-resolution is present, so physical voxel size is not specified.");
+        }
     }
 }

@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.quick.bean.input;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManager;
@@ -46,13 +46,13 @@ class InputManagerFactory {
     public static InputManager<FileInput> createFiles(
             String rootName,
             FilesProviderWithDirectory filesProvider,
-            DescriptiveNameFromFile descriptiveName,
+            FileNamer namer,
             String regex,
             MatchedAppendCsv filterFilesCsv)
             throws BeanMisconfiguredException {
 
         InputManager<FileInput> files =
-                createFiles(rootName, filesProvider, descriptiveName);
+                createFiles(rootName, filesProvider, namer);
 
         if (filterFilesCsv == null) {
             return files;
@@ -71,16 +71,16 @@ class InputManagerFactory {
      *
      * @param rootName if non-empty a {@link Rooted} is used
      * @param filesProvider provider of files
-     * @param descriptiveName descriptiveName
+     * @param namer assigns each file a unique compact name
      * @return
      */
     private static InputManager<FileInput> createFiles(
             String rootName,
             FilesProviderWithDirectory filesProvider,
-            DescriptiveNameFromFile descriptiveName) {
+            FileNamer namer) {
         Files files = new Files();
         files.setFilesProvider(createMaybeRootedFileProvider(rootName, filesProvider));
-        files.setDescriptiveName(descriptiveName);
+        files.setNamer(namer);
         return files;
     }
 

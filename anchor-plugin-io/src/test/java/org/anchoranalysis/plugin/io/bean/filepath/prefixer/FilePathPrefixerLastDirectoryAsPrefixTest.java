@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.junit.Test;
@@ -39,11 +39,11 @@ import org.junit.Test;
 public class FilePathPrefixerLastDirectoryAsPrefixTest {
 
     @Test
-    public void test() throws DerivePathException {
+    public void test() throws PathPrefixerException {
 
         Path root = mock(Path.class);
 
-        NamedPath path = new NamedPath(Paths.get("/a/b/c/d/e/somefile.tif"), "somefile");
+        NamedPath path = new NamedPath("somefile", Paths.get("/a/b/c/d/e/somefile.tif"));
 
         LastDirectoryAsPrefix prefixer = new LastDirectoryAsPrefix();
         prefixer.setFilePathPrefixer(createDelegate(path, root));
@@ -55,7 +55,7 @@ public class FilePathPrefixerLastDirectoryAsPrefixTest {
     }
 
     private PathPrefixerAvoidResolve createDelegate(NamedPath path, Path root)
-            throws DerivePathException {
+            throws PathPrefixerException {
         PathPrefixerAvoidResolve prefixer = mock(PathPrefixerAvoidResolve.class);
         when(prefixer.outFilePrefixFromPath(path, root))
                 .thenReturn(new DirectoryWithPrefix(Paths.get("/g/h/i/"), "outprefix"));

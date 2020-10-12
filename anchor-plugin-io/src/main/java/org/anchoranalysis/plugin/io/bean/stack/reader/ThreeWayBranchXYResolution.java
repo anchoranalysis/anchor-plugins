@@ -31,7 +31,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 
@@ -64,20 +65,28 @@ public class ThreeWayBranchXYResolution extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path path) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws ImageIOException {
 
         OpenedRaster orInput = stackReaderInput.openFile(path);
 
         Dimensions dimensions = orInput.dimensionsForSeries(0);
 
-        if (Math.abs(dimensions.resolution().x() - dimensions.resolution().y()) > 1e-12) {
-            throw new RasterIOException(
+        if (dimensions.resolution().isPresent()) {
+            return openWithResolution(path, dimensions.resolution().get()); // NOSONAR
+        } else {
+            throw new ImageIOException("No image-resolution is present, so cannot perform this check.");
+        }
+    }
+    
+    private OpenedRaster openWithResolution(Path path, Resolution resolution) throws ImageIOException {
+        if (Math.abs(resolution.x() - resolution.y()) > 1e-12) {
+            throw new ImageIOException(
                     String.format(
                             "X-Res (%f) must be equal to Y-Res (%f).",
-                            dimensions.resolution().x(), dimensions.resolution().y()));
+                            resolution.x(), resolution.y()));
         }
 
-        double xyRes = dimensions.resolution().x();
+        double xyRes = resolution.x();
 
         if (xyRes < thresholdLow) {
             return stackReaderLow.openFile(path);

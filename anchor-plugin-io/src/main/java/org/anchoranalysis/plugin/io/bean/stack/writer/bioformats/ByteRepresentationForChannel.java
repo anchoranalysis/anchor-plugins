@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 
 /**
  * Creates or retrieves a byte representation of the voxels for a particular slice.
@@ -41,7 +41,7 @@ public interface ByteRepresentationForChannel {
      * 
      * @param sliceIndex the index of the slice (z coordinate)
      * @return an existing (if possible preferably) or newly created byte-array representing a particular channel.
-     * @throws RasterIOException if an unsupported source or destination data-type exists for conversion
+     * @throws ImageIOException if an unsupported source or destination data-type exists for conversion
      */
-    public byte[] bytesForSlice(int sliceIndex) throws RasterIOException;
+    public byte[] bytesForSlice(int sliceIndex) throws ImageIOException;
 }

@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import loci.formats.IFormatWriter;
 import loci.formats.out.OMETiffWriter;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 
 /**
@@ -47,7 +47,7 @@ public class OMETiff extends BioformatsWriter {
     }
 
     @Override
-    protected IFormatWriter createWriter() throws RasterIOException {
+    protected IFormatWriter createWriter() throws ImageIOException {
         return new OMETiffWriter();
     }
 }

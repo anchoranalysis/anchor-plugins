@@ -30,8 +30,9 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 public class RemoveTrailingDirectory extends DerivePath {
 
@@ -46,7 +47,7 @@ public class RemoveTrailingDirectory extends DerivePath {
     // END BEAN PROPERTIES
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
         Path path = derivePath.deriveFrom(source, debugMode);
 
         if (trimTrailingDirectory > 0) {
@@ -56,17 +57,21 @@ public class RemoveTrailingDirectory extends DerivePath {
         }
     }
 
-    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim) throws AnchorIOException {
-        PathTwoParts pathDir = new PathTwoParts(path);
-
-        for (int i = 0; i < skipFirstTrim; i++) {
-            pathDir.moveLastDirectoryToRest();
+    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim) throws DerivePathException {
+        try {
+            PathTwoParts pathDir = new PathTwoParts(path);
+    
+            for (int i = 0; i < skipFirstTrim; i++) {
+                pathDir.moveLastDirectoryToRest();
+            }
+    
+            for (int i = 0; i < n; i++) {
+                pathDir.removeLastDirectory();
+            }
+    
+            return pathDir.combine();
+        } catch (CreateException e) {
+            throw new DerivePathException(e);
         }
-
-        for (int i = 0; i < n; i++) {
-            pathDir.removeLastDirectory();
-        }
-
-        return pathDir.combine();
     }
 }

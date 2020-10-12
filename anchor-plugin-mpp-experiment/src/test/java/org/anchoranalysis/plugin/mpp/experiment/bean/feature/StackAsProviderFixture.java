@@ -44,7 +44,7 @@ class StackAsProviderFixture implements ProvidesStackInput {
     private String name;
 
     @Override
-    public String descriptiveName() {
+    public String name() {
         return "arbitraryName";
     }
 

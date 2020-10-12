@@ -27,10 +27,12 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
 
@@ -42,13 +44,25 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class Tiff extends BioformatsWriter {
 
+    private static HashSet<Channel> alreadySeen = new HashSet<>();
+    
+    private static void checkChannel(Channel c) {
+        synchronized(alreadySeen) {
+            assert( !alreadySeen.contains(c) );
+            alreadySeen.add(c);
+        }
+    }
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
-            throw new RasterIOException("Stack must have 1 or 3 channels");
+            throw new ImageIOException("Stack must have 1 or 3 channels");
+        }
+        
+        for (Channel c : stack) {
+            checkChannel(c);
         }
 
         super.writeStack(stack, filePath, makeRGB, writeOptions);
@@ -61,7 +75,7 @@ public class Tiff extends BioformatsWriter {
     }
 
     @Override
-    protected IFormatWriter createWriter() throws RasterIOException {
+    protected IFormatWriter createWriter() throws ImageIOException {
         try {
             TiffWriter writer = new TiffWriter(); // NOSONAR
             // COMPRESSION CURRENTLY DISABLED
@@ -71,7 +85,7 @@ public class Tiff extends BioformatsWriter {
             writer.setWriteSequentially(true);
             return writer;
         } catch (FormatException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 }

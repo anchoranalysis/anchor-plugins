@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.io.bean.rasterwriter.bioformats;
 
 import java.io.IOException;
 import java.util.Optional;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -65,37 +65,37 @@ public abstract class OMETestBase extends RasterWriterTestBase {
     }
 
     @Test
-    public void testSingleChannel() throws RasterIOException, IOException {
+    public void testSingleChannel() throws ImageIOException, IOException {
         tester.testSingleChannel(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testTwoChannels() throws RasterIOException, IOException {
+    public void testTwoChannels() throws ImageIOException, IOException {
         tester.testTwoChannels(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testThreeChannelsSeparate() throws RasterIOException, IOException {
+    public void testThreeChannelsSeparate() throws ImageIOException, IOException {
         tester.testThreeChannelsSeparate(SUPPORTED_VOXEL_TYPES);
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedByte() throws RasterIOException, IOException {
+    public void testThreeChannelsRGBUnsignedByte() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedByteVoxelType.INSTANCE);
     }
 
     @Test
-    public void testThreeChannelsRGBUnsignedShort() throws RasterIOException, IOException {
+    public void testThreeChannelsRGBUnsignedShort() throws ImageIOException, IOException {
         tester.testThreeChannelsRGB(UnsignedShortVoxelType.INSTANCE);
     }
 
     @Test
-    public void testFourChannels() throws RasterIOException, IOException {
+    public void testFourChannels() throws ImageIOException, IOException {
         tester.testFourChannels(SUPPORTED_VOXEL_TYPES);
     }
     
     @Test
-    public void testThreeChannelsHeterogeneous() throws RasterIOException, IOException {
+    public void testThreeChannelsHeterogeneous() throws ImageIOException, IOException {
         tester.testThreeChannelsHeterogeneous();
     }
 }

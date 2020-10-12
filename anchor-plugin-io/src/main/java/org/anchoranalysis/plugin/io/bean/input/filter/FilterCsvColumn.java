@@ -37,11 +37,12 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
- * Finds a CSV file with the descriptiveNames of an input as the first-column
+ * Finds a CSV file with the names of an input as the first-column.
  *
  * <p>Filters against the value of the second-column of the CSV so that only inputs that match this
  * value are accepted.
@@ -62,7 +63,7 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
         // Existing collection
         List<T> in = input.inputs(params);
@@ -71,36 +72,40 @@ public class FilterCsvColumn<T extends InputFromManager> extends InputManager<T>
             return in;
         }
 
-        Set<String> matching =
-                matchingNames(
-                        in.get(0).pathForBindingRequired(),
-                        params.isDebugModeActivated(),
-                        in.size());
-
-        applyFilter(in, matching);
-        return in;
+        try {
+            Set<String> matching =
+                    matchingNames(
+                            in.get(0).pathForBindingRequired(),
+                            params.isDebugModeActivated(),
+                            in.size());
+    
+            applyFilter(in, matching);
+            return in;
+        } catch (DerivePathException e) {
+            throw new InputReadFailedException(e);
+        }
     }
 
     private Set<String> matchingNames(Path pathForGenerator, boolean doDebug, int numRowsExpected)
-            throws AnchorIOException {
+            throws DerivePathException {
         // Read CSV file using the path of the first object
         Path csvPath = csvFilePath.deriveFrom(pathForGenerator, doDebug);
 
         try {
             return CsvMatcher.rowsFromCsvThatMatch(csvPath, match, numRowsExpected);
         } catch (CSVReaderException e) {
-            throw new AnchorIOException("Cannot match rows from csv", e);
+            throw new DerivePathException("Cannot match rows from csv", e);
         }
     }
 
-    // Removes all items from the inputList whose descriptiveName is NOT found in mustContain
+    /** Removes all items from the inputList whose input-name is NOT found in {@code mustContain}. */
     private void applyFilter(List<T> in, Set<String> mustContain) {
 
         ListIterator<T> itr = in.listIterator();
         while (itr.hasNext()) {
             T item = itr.next();
 
-            if (!mustContain.contains(item.descriptiveName())) {
+            if (!mustContain.contains(item.name())) {
                 itr.remove();
             }
         }

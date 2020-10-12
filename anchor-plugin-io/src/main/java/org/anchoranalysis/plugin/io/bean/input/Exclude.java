@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 
 /**
@@ -52,14 +52,14 @@ public class Exclude<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
         List<T> list = input.inputs(params);
 
         ListIterator<T> itr = list.listIterator();
         while (itr.hasNext()) {
 
-            if (regEx.hasMatch(itr.next().descriptiveName())) {
+            if (regEx.hasMatch(itr.next().name())) {
                 itr.remove();
             }
         }

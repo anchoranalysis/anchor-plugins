@@ -26,9 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
+import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
@@ -56,9 +58,17 @@ public class BBoxRatio extends FeatureSingleMemo {
         int[] extent = bb.extent().asOrderedArray();
 
         // Let's change the z-dimension to include the relative-resolution
-        extent[2] = (int) (bb.extent().z() * dimensions.resolution().zRelative());
+        extent[2] = zExtent(bb.extent().z(), dimensions.resolution());
 
         return extent;
+    }
+    
+    private static int zExtent(int zVoxelExtent, Optional<Resolution> resolution) {
+        if (resolution.isPresent()) {
+            return (int) (zVoxelExtent * resolution.get().zRelative());
+        } else {
+            return zVoxelExtent;
+        }
     }
 
     private static double calculateRatio(int[] extent) {

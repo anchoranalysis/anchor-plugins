@@ -40,11 +40,11 @@ import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
@@ -78,8 +78,8 @@ public class ExportReportFeaturesFromManifest
                 writeCSV(writer.get(), params.getInput(), params.getLogger());
             }
             
-        } catch (AnchorIOException e1) {
-            throw new JobExecutionException(e1);
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
         }
     }
     

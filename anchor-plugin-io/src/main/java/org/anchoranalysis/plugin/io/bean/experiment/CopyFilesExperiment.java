@@ -51,8 +51,9 @@ import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod.CopyFilesMethod;
@@ -107,7 +108,7 @@ public class CopyFilesExperiment extends Experiment {
                     destination,
                     logger);
             logger.close(true);
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             logger.close(false);
             throw new ExperimentExecutionException(e);
         }
@@ -116,7 +117,7 @@ public class CopyFilesExperiment extends Experiment {
     private Path determineDestination(boolean debugEnabled) throws ExperimentExecutionException {
         try {
             return destinationFolderPath.path(debugEnabled);
-        } catch (AnchorIOException exc) {
+        } catch (InputReadFailedException exc) {
             throw new ExperimentExecutionException("Cannot determine destination directory", exc);
         }
     }
@@ -160,7 +161,7 @@ public class CopyFilesExperiment extends Experiment {
 
             copyFilesNaming.afterCopying(destPath, dummyMode);
 
-        } catch (AnchorIOException | OperationFailedException e) {
+        } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new ExperimentExecutionException(e);
         } finally {
             progressReporter.close();
@@ -201,7 +202,7 @@ public class CopyFilesExperiment extends Experiment {
             } else {
                 copyFilesMethod.createDestinationFile(file.toPath(), destination.get());
             }
-        } catch (AnchorIOException | CreateException e) {
+        } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         } finally {
             progressReporter.update(iter);

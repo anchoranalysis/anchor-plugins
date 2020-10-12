@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 
@@ -50,7 +50,7 @@ public class FlattenAsChannel extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path path) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws ImageIOException {
         return new FlattenAsChannelOpenedRaster(stackReader.openFile(path));
     }
 }

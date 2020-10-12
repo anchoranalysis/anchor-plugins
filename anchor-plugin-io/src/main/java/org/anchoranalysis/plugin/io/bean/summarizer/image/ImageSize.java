@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 
 /**
@@ -47,7 +47,7 @@ public class ImageSize extends SummarizerNamedChannels<WrappedImageDim> {
                 incrCount(new WrappedImageDim(img.dimensions(0)));
             }
 
-        } catch (RasterIOException exc) {
+        } catch (ImageIOException exc) {
             throw new OperationFailedException(exc);
         }
     }

@@ -61,7 +61,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         try {
             return resolveDistance(
                     box,
-                    Optional.of(dimensions.resolution()),
+                    dimensions.resolution(),
                     AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e);

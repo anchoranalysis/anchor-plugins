@@ -161,7 +161,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         }
     }
 
-    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
         int maxZDistance =
                 (int) Math.round(maxDistanceZ.propose(randomNumberGenerator, resolution));
@@ -169,11 +169,11 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return maxZDistance;
     }
 
-    private int skipZDistance(Resolution resolution) throws OperationFailedException {
+    private int skipZDistance(Optional<Resolution> resolution) throws OperationFailedException {
         return (int)
                 Math.round(
                         distanceZEndIfEmpty.resolveForAxis(
-                                Optional.of(resolution.unitConvert()), AxisType.Z));
+                                resolution.map(Resolution::unitConvert), AxisType.Z));
     }
 
     private Optional<Mask> channelFilled() throws CreateException {

@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
@@ -129,17 +129,13 @@ public class MovieFromSlices extends RasterTask {
                 }
             }
 
-        } catch (RasterIOException | IncorrectImageSizeException | GetOperationFailedException | OutputWriteFailedException e) {
+        } catch (ImageIOException | IncorrectImageSizeException | GetOperationFailedException | OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
-        try {
-            outputSequence.close();
-        } catch (OutputWriteFailedException e) {
-            throw new JobExecutionException(e);
-        }
+        
     }
 }

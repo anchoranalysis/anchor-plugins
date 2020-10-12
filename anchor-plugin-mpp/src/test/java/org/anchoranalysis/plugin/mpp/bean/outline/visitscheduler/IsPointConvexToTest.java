@@ -33,7 +33,7 @@ import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.image.io.TestLoaderImageIO;
@@ -42,7 +42,7 @@ import org.junit.Test;
 public class IsPointConvexToTest {
 
     @Test
-    public void test() throws RasterIOException, CreateException, URISyntaxException {
+    public void test() throws ImageIOException, CreateException, URISyntaxException {
 
         TestLoaderImageIO loader =
                 new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());

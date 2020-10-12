@@ -99,7 +99,7 @@ public abstract class MergeBase extends WithContainerBase {
 
     private Optional<Resolution> resolutionOptional() throws OperationFailedException {
         try {
-            return OptionalFactory.create(dimensions).map(Dimensions::resolution);
+            return OptionalFactory.create(dimensions).flatMap(Dimensions::resolution);
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

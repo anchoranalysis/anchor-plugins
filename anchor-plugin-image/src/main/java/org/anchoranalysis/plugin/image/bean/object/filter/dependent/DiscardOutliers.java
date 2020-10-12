@@ -79,9 +79,9 @@ public class DiscardOutliers extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
+        super.start(dimensions, objectsToFilter);
 
         // Now we calculate feature values for each object, and a standard deviation
         featureVals = calculateFeatures(objectsToFilter, featureEvaluator.createFeatureSession());
@@ -100,7 +100,7 @@ public class DiscardOutliers extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
         double featureVal = featureMap.get(object);

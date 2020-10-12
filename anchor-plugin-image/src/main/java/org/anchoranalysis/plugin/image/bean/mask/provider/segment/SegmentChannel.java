@@ -95,7 +95,7 @@ public class SegmentChannel extends FromChannelBase {
     private BinarySegmentationParameters createParams(Dimensions dimensions)
             throws CreateException {
         return new BinarySegmentationParameters(
-                dimensions.resolution(), OptionalFactory.create(histogram));
+                OptionalFactory.create(histogram), dimensions.resolution());
     }
 
     private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {

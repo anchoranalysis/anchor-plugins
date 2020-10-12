@@ -76,7 +76,7 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 
     private ObjectCollection createFromVoxels(
             BinaryVoxels<UnsignedByteBuffer> bvb,
-            Resolution resolution,
+            Optional<Resolution> resolution,
             Optional<ReadableTuple3i> maskShiftBy) {
         Mask mask = new Mask(bvb, resolution);
 

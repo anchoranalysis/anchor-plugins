@@ -41,7 +41,7 @@ public class FromDescriptiveName extends PathPrefixerAvoidResolve {
 
     @Override
     protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root) {
-        Path combined = root.resolve(Paths.get(path.getDescriptiveName()));
+        Path combined = root.resolve(Paths.get(path.getName()));
         return new DirectoryWithPrefix(combined);
     }
 }

@@ -28,7 +28,6 @@ package org.anchoranalysis.plugin.image.feature;
 
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
-import java.util.Optional;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
@@ -180,7 +179,7 @@ public class FeatureListImageTest {
     }
 
     private static FeatureInputHistogram createParams(Histogram histogram) throws CreateException {
-        return new FeatureInputHistogram(histogram, Optional.of(ENERGY_STACK.resolution()));
+        return new FeatureInputHistogram(histogram, ENERGY_STACK.resolution());
     }
 
     private static FeatureInputSingleObject createInput(ObjectMask object) throws CreateException {

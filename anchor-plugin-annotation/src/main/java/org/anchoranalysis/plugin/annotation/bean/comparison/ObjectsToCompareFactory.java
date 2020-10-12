@@ -37,7 +37,7 @@ import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
@@ -94,7 +94,7 @@ class ObjectsToCompareFactory {
         try {
             return input.getComparerMultiplex(left)
                     .createObjects(input.pathForBindingRequired(), dimensions, debugMode);
-        } catch (CreateException | AnchorIOException e) {
+        } catch (CreateException | InputReadFailedException e) {
             throw new JobExecutionException(e);
         }
     }

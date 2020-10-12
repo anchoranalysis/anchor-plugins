@@ -34,6 +34,6 @@ public class ExtractDescriptiveName<T extends InputFromManager>
 
     @Override
     protected Optional<String> extractFrom(T input) {
-        return Optional.of(input.descriptiveName());
+        return Optional.of(input.name());
     }
 }

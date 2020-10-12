@@ -37,7 +37,7 @@ import org.anchoranalysis.image.experiment.label.FileLabelMap;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.labeller.ImageCSVLabellerInitParams;
 
@@ -48,7 +48,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
      * Path to a CSV label file (comma-separated, with header, no quotes)
      *
      * <p>The CSV file should have two columns: first column = image id (to match the
-     * descriptiveName() of an image) second column = a label string
+     * input-name of an image) second column = a label string
      */
     @BeanField @Getter @Setter private DerivePath pathLabel;
     // END BEAN PROPERTIES
@@ -61,7 +61,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 
             return new ImageCSVLabellerInitParams(FileLabelMap.readFromCSV(csvPath, false));
 
-        } catch (CSVReaderException | AnchorIOException e) {
+        } catch (CSVReaderException | DerivePathException e) {
             throw new InitException(e);
         }
     }
@@ -77,13 +77,13 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
             ProvidesStackInput input,
             InputOutputContext context)
             throws OperationFailedException {
-        String label = sharedState.getLabelMap().get(input.descriptiveName());
+        String label = sharedState.getLabelMap().get(input.name());
 
         if (label == null) {
             throw new OperationFailedException(
                     String.format(
-                            "No label can be found for the descriptive-name: %s",
-                            input.descriptiveName()));
+                            "No label can be found for the name: %s",
+                            input.name()));
         }
 
         return label;

@@ -61,9 +61,9 @@ public class ThresholdedFeature extends ObjectFilterRelation {
     private FeatureCalculatorSingle<FeatureInputSingleObject> featureSession = null;
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
+        super.start(dimensions, objectsToFilter);
 
         // This could be called many times, so we create a new feature session only on the first
         // occasion

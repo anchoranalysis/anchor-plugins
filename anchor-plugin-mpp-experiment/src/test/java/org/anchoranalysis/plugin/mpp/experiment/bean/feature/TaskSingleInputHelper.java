@@ -49,7 +49,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
@@ -141,7 +141,7 @@ class TaskSingleInputHelper {
             task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 
             return successful;
-        } catch (AnchorIOException
+        } catch (InputReadFailedException
                 | ExperimentExecutionException
                 | JobExecutionException
                 | BeanMisconfiguredException
@@ -155,7 +155,7 @@ class TaskSingleInputHelper {
             OutputterChecked outputter,
             PathPrefixer prefixer,
             StatefulMessageLogger logger)
-            throws AnchorIOException {
+            throws InputReadFailedException {
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExperimentExecutionArguments(Paths.get(".")),

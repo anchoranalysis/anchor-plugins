@@ -30,7 +30,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class PreserveName implements CopyFilesNaming {
 
@@ -40,17 +40,17 @@ public class PreserveName implements CopyFilesNaming {
     }
 
     @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
         // NOTHING TO DO
     }
 
     @Override
     public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         try {
             return Optional.of(NamingUtilities.filePathDifference(sourceDir, file.toPath()));
         } catch (PathDifferenceException e) {
-            throw new AnchorIOException(e);
+            throw new OutputWriteFailedException(e);
         }
     }
 }

@@ -31,8 +31,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 
@@ -47,14 +48,23 @@ public class ImposeResolution extends StackReader {
 
     @BeanField @Getter @Setter private double resZ = 0.0;
 
-    /** Keep the z-resolution */
+    /** Keep the z-resolution if it is already defined */
     @BeanField @Getter @Setter private boolean keepZ = false;
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path path) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws ImageIOException {
         return new OpenedRasterAlterDimensions(
                 stackReader.openFile(path),
-                res -> Optional.of(new Resolution(resX, resY, keepZ ? res.z() : resZ)));
+                existing -> Optional.of(resolutionToAssign(existing)));
+    }
+    
+    private Resolution resolutionToAssign(Optional<Resolution> existing) throws ImageIOException {
+        double z = keepZ && existing.isPresent() ? existing.get().z() : resZ;
+        try {
+            return new Resolution(resX, resY, z);
+        } catch (CreateException e) {
+            throw new ImageIOException(e);
+        }
     }
 }

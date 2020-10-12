@@ -36,7 +36,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.stack.Stack;
@@ -67,8 +67,8 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
     }
 
     @Override
-    public String descriptiveName() {
-        return input.descriptiveName();
+    public String name() {
+        return input.name();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
 
     @Override
     public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
-            throws RasterIOException {
+            throws ImageIOException {
         return progressReporter -> convert(progressReporter, input, seriesNum);
     }
 
@@ -123,7 +123,7 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
 
             return new TimeSequence(stackFromNamedChannels(namedChannels, prm));
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

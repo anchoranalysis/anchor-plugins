@@ -32,7 +32,7 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -44,7 +44,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     private int expectedNumberChannels;
     private int expectedNumberFrames;
 
-    public FlattenAsChannelOpenedRaster(OpenedRaster delegate) throws RasterIOException {
+    public FlattenAsChannelOpenedRaster(OpenedRaster delegate) throws ImageIOException {
         super();
         this.delegate = delegate;
 
@@ -63,7 +63,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
 
     @Override
     public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
-            throws RasterIOException {
+            throws ImageIOException {
         // We open each-series, verify assumptions, and combine the channels
 
         try {
@@ -79,7 +79,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
             return new TimeSequence(out);
 
         } catch (IncorrectImageSizeException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
@@ -90,7 +90,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public int bitDepth() throws RasterIOException {
+    public int bitDepth() throws ImageIOException {
         return delegate.bitDepth();
     }
 
@@ -106,24 +106,24 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
     }
 
     @Override
-    public boolean isRGB() throws RasterIOException {
+    public boolean isRGB() throws ImageIOException {
         return false;
     }
 
     @Override
-    public void close() throws RasterIOException {
+    public void close() throws ImageIOException {
         delegate.close();
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
         return delegate.dimensionsForSeries(seriesIndex);
     }
 
-    private List<Stack> extractStacksAndVerify(TimeSequence ts) throws RasterIOException {
+    private List<Stack> extractStacksAndVerify(TimeSequence ts) throws ImageIOException {
 
         if (ts.size() != expectedNumberFrames) {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format(
                             "This bean expects %d frames to always be returned from the stackReader to only return images with a single time-frame, but it returned an image with %d frames",
                             expectedNumberFrames, ts.size()));
@@ -136,7 +136,7 @@ class FlattenAsChannelOpenedRaster implements OpenedRaster {
             Stack stack = ts.get(i);
 
             if (stack.getNumberChannels() != expectedNumberChannels) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format(
                                 "This bean expects %d channels to always be returned from the stackReader to only return images with a single time-frame, but it returned an image with %d channels",
                                 expectedNumberChannels, stack.getNumberChannels()));

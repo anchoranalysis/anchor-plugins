@@ -40,6 +40,7 @@ import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
@@ -142,10 +143,22 @@ public class LineBoundCalculator extends BoundCalculator {
 
             if (arr.getUnsigned(index) > 0) {
                 // We calculate how far we have travelled in total
-                return extra + normZMag(runningDouble, channel.resolution().zRelative());
+                return extra + normZMag(runningDouble, zRelative(channel.resolution()));
             }
         }
         return -1;
+    }
+    
+    /**
+     * Calculates the resolution of z relative to xy and resolutions.
+     * 
+     * <p>If there is no resolution defined, an isotropic assumption occurs that z dimension has equal resolution to XY.
+     * 
+     * @param resolution
+     * @return z as a ratio to the xy resolution (assumed identical) or 1.0 if resolution is not defined
+     */
+    private double zRelative(Optional<Resolution> resolution) {
+        return resolution.map(Resolution::zRelative).orElse(1.0);
     }
 
     private double normZMag(Point3d point, double zMult) {

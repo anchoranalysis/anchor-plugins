@@ -44,7 +44,7 @@ import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.manifest.ManifestFolderDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -181,7 +181,7 @@ public abstract class GroupedStackBase<S, T>
 
         try {
             return Optional.of(group.deriveFrom(path.get(), debugEnabled).toString());
-        } catch (AnchorIOException e) {
+        } catch (DerivePathException e) {
             throw new JobExecutionException(
                     String.format("Cannot establish a group-identifier for: %s", path), e);
         }

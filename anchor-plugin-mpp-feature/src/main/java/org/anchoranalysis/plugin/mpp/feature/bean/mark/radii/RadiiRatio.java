@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
@@ -44,16 +45,13 @@ public class RadiiRatio extends FeatureMark {
     @BeanField @Getter @Setter private boolean suppressRes = false;
     // END BEAN PROPERTIES
 
-    private Resolution uniformRes = new Resolution();
-
     @Override
     public double calculate(SessionInput<FeatureInputMark> input)
             throws FeatureCalculationException {
 
         ConicBase markCast = (ConicBase) input.get().getMark();
 
-        Resolution resolution = suppressRes ? uniformRes : input.get().getResolutionRequired();
-        double[] radiiOrdered = markCast.radiiOrderedResolved(resolution);
+        double[] radiiOrdered = markCast.radiiOrderedResolved(resolution(input));
 
         int len = radiiOrdered.length;
         assert (len >= 2);
@@ -67,5 +65,9 @@ public class RadiiRatio extends FeatureMark {
                 return radiiOrdered[2] / radiiOrdered[0];
             }
         }
+    }
+    
+    private Optional<Resolution> resolution(SessionInput<FeatureInputMark> input) {
+        return suppressRes ? Optional.empty() : input.get().getResolutionOptional();
     }
 }

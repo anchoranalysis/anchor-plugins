@@ -40,11 +40,11 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
-import org.anchoranalysis.io.input.DescriptiveFile;
+import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.NamedFile;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
@@ -87,7 +87,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveName = new LastFolders(2);
+    private FileNamer namer = new LastFolders(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
@@ -97,7 +97,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInput> inputs(InputManagerParams params) throws InputReadFailedException {
 
         GroupFilesMap map = new GroupFilesMap();
 
@@ -120,7 +120,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
                 map.add(filePathParser.getKey(), fd);
             } else {
                 if (requireAllFilesMatch) {
-                    throw new AnchorIOException(
+                    throw new InputReadFailedException(
                             String.format("File %s did not match parser", path));
                 }
             }
@@ -129,7 +129,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     }
 
     private List<NamedChannelsInput> listFromMap(GroupFilesMap map, Logger logger)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         List<File> files = new ArrayList<>();
         List<MultiFileReaderOpenedRaster> openedRasters = new ArrayList<>();
@@ -149,19 +149,19 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
         }
 
         return zipIntoGrouping(
-                descriptiveName.describeCheckUnique(files, logger),
+                namer.deriveNameUnique(files, logger),
                 openedRasters);
     }
 
     private List<NamedChannelsInput> zipIntoGrouping(
-            List<DescriptiveFile> df, List<MultiFileReaderOpenedRaster> or) {
+            List<NamedFile> df, List<MultiFileReaderOpenedRaster> or) {
 
-        Iterator<DescriptiveFile> it1 = df.iterator();
+        Iterator<NamedFile> it1 = df.iterator();
         Iterator<MultiFileReaderOpenedRaster> it2 = or.iterator();
 
         List<NamedChannelsInput> result = new ArrayList<>();
         while (it1.hasNext() && it2.hasNext()) {
-            DescriptiveFile d = it1.next();
+            NamedFile d = it1.next();
             result.add(new GroupingInput(d.getFile().toPath(), it2.next(), imgChannelMapCreator));
         }
         return result;

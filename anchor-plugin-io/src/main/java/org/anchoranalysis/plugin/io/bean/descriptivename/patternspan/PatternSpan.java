@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.input.DescriptiveFile;
+import org.anchoranalysis.io.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.NamedFile;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 
@@ -46,10 +46,10 @@ import org.apache.commons.io.IOCase;
  *
  * @author Owen Feehan
  */
-public class PatternSpan extends DescriptiveNameFromFile {
+public class PatternSpan extends FileNamer {
 
     @Override
-    public List<DescriptiveFile> describe(
+    public List<NamedFile> deriveName(
             Collection<File> files, String elseName, Logger logger) {
 
         // Convert to list
@@ -79,9 +79,9 @@ public class PatternSpan extends DescriptiveNameFromFile {
         return false;
     }
 
-    private static List<DescriptiveFile> listExtractFileName(Collection<File> files) {
+    private static List<NamedFile> listExtractFileName(Collection<File> files) {
         return FunctionalList.mapToList(
-                files, file -> new DescriptiveFile(file, extensionlessNameFromFile(file)));
+                files, file -> new NamedFile(extensionlessNameFromFile(file), file));
     }
 
     // Convert all Files to Path

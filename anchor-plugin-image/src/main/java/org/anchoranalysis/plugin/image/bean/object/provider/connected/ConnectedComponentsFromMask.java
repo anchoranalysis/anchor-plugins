@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -78,7 +77,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(maskCreated.dimensions().unitConvert())));
+                                            maskCreated.dimensions().unitConvert()));
 
             if (bySlices) {
                 return createObjectsBySlice(maskCreated, minNumberVoxels);

@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {
@@ -39,7 +39,7 @@ public class PathFromGenerator {
     private static final boolean DEBUG_MODE_NON_INPUT = false;
 
     public static Path derivePath(DerivePath generator, Path pathForBinding)
-            throws AnchorIOException {
+            throws DerivePathException {
         return generator.deriveFrom(pathForBinding, DEBUG_MODE_NON_INPUT);
     }
 }

@@ -31,22 +31,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
+import org.anchoranalysis.io.bean.descriptivename.FileNamerIndependent;
 
-public class RegExMatcher extends DescriptiveNameFromFileIndependent {
+public class RegExMatcher extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private RegEx regEx;
     // END BEAN PROPERTIES
 
     @Override
-    protected String createDescriptiveName(File file, int index) {
+    protected String deriveName(File file, int index) {
 
         String filePath = file.getPath().replace('\\', '/');
 
         return regEx.match(filePath)
                 .map(RegExMatcher::buildStrFromComponents)
-                .orElse(String.format("descriptive-name regEx match failed on %s", filePath));
+                .orElse(String.format("name regEx match failed on %s", filePath));
     }
 
     private static String buildStrFromComponents(String[] components) {

@@ -36,8 +36,9 @@ import javax.xml.transform.TransformerException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.XmlUtilities;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.xml.XmlOutputter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,6 +49,9 @@ import org.xml.sax.SAXException;
 
 /**
  * Reads and writes a metadata XML file specifying the image-resolution.
+ * 
+ * <p>If a particualar dimension is missing from the XML file, 1 is supplied
+ * as a replacement value.
  *
  * @author Owen Feehan
  */
@@ -64,9 +68,9 @@ public class AnchorMetadataXml {
      *
      * @param file the file to open
      * @return a resolution read from the file
-     * @throws RasterIOException if file I/O or parsing errors occur.
+     * @throws ImageIOException if file I/O or parsing errors occur.
      */
-    public static Resolution readResolutionXml(File file) throws RasterIOException {
+    public static Resolution readResolutionXml(File file) throws ImageIOException {
 
         try {
             DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
@@ -76,13 +80,13 @@ public class AnchorMetadataXml {
             NodeList allResolutionElements = document.getElementsByTagName("resolution");
 
             if (allResolutionElements.getLength() != 1) {
-                throw new RasterIOException("There must be only one resolution tag.");
+                throw new ImageIOException("There must be only one resolution tag.");
             }
 
             return resolutionFromNodes(allResolutionElements.item(0).getChildNodes());
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new RasterIOException(e);
+        } catch (ParserConfigurationException | SAXException | IOException | CreateException e) {
+            throw new ImageIOException(e);
         }
     }
 
@@ -91,10 +95,10 @@ public class AnchorMetadataXml {
      *
      * @param path path to write to
      * @param resolution the resolution to write
-     * @throws RasterIOException if any file I/O or parser errors occur
+     * @throws ImageIOException if any file I/O or parser errors occur
      */
     public static void writeResolutionXml(Resolution resolution, Path path)
-            throws RasterIOException {
+            throws ImageIOException {
 
         try {
             DocumentBuilder builder = XmlUtilities.createDocumentBuilder();
@@ -114,7 +118,7 @@ public class AnchorMetadataXml {
             XmlOutputter.writeXmlToFile(document, path);
 
         } catch (TransformerException | ParserConfigurationException | IOException e) {
-            throw new RasterIOException(e.toString());
+            throw new ImageIOException(e.toString());
         }
     }
 
@@ -136,7 +140,7 @@ public class AnchorMetadataXml {
         return document.createTextNode(Double.toString(extractDimension.applyAsDouble(resolution)));
     }
 
-    private static Resolution resolutionFromNodes(NodeList nodes) {
+    private static Resolution resolutionFromNodes(NodeList nodes) throws CreateException {
 
         // Initialize to defaults
         Resolution resolution = new Resolution();

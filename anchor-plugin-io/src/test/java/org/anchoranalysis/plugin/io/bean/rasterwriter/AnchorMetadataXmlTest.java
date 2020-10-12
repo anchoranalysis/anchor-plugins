@@ -33,8 +33,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
+import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
@@ -49,7 +51,7 @@ public class AnchorMetadataXmlTest {
 
     @Test
     public void test()
-            throws RasterIOException, ParserConfigurationException, SAXException, IOException,
+            throws ImageIOException, ParserConfigurationException, SAXException, IOException,
                     URISyntaxException {
 
         Resolution resolution = createMockResolution();
@@ -72,6 +74,10 @@ public class AnchorMetadataXmlTest {
     }
 
     private static Resolution createMockResolution() {
-        return new Resolution(1.0, 2.0, 3.0);
+        try {
+            return new Resolution(1.0, 2.0, 3.0);
+        } catch (CreateException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 }

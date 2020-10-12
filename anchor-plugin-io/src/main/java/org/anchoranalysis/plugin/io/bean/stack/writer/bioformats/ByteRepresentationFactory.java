@@ -30,7 +30,7 @@ import java.nio.FloatBuffer;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
 import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -57,7 +57,7 @@ class ByteRepresentationFactory {
         return sliceIndex -> convertTo(channel.voxels().slice(sliceIndex), sourceDataType, destinationType);
     }
     
-    private static byte[] convertTo( VoxelBuffer<?> buffer, VoxelDataType sourceDataType, VoxelDataType destinationType) throws RasterIOException {
+    private static byte[] convertTo( VoxelBuffer<?> buffer, VoxelDataType sourceDataType, VoxelDataType destinationType) throws ImageIOException {
         
         if (sourceDataType.equals(destinationType)) {
             return buffer.underlyingBytes();
@@ -70,7 +70,7 @@ class ByteRepresentationFactory {
         } else if (destinationType.equals(FloatVoxelType.INSTANCE)) {
             return toFloat(buffer);            
         } else {
-            throw new RasterIOException("Unsupported destination-type for representation in bytes: " + destinationType);
+            throw new ImageIOException("Unsupported destination-type for representation in bytes: " + destinationType);
         }
     }
     

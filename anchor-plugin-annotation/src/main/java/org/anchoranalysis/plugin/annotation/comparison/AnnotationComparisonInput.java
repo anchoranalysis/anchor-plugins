@@ -46,8 +46,8 @@ public class AnnotationComparisonInput<T extends InputFromManager> implements In
     private final StackReader stackReader;
 
     @Override
-    public String descriptiveName() {
-        return input.descriptiveName();
+    public String name() {
+        return input.name();
     }
 
     @Override

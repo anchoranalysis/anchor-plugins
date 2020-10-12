@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
+import org.anchoranalysis.io.bean.descriptivename.FileNamer;
 import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
@@ -58,8 +58,9 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
     /** A path to the main channel of each file */
     @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
 
+    /** Assigns each input a unique compact name. */
     @BeanField @Getter @Setter
-    private DescriptiveNameFromFile descriptiveName = new LastFolders();
+    private FileNamer namer = new LastFolders();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
@@ -81,6 +82,6 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
 
     protected InputManager<FileInput> fileInputManager() throws BeanMisconfiguredException {
         return InputManagerFactory.createFiles(
-                rootName, filesProvider, descriptiveName, regex, filterFilesCsv);
+                rootName, filesProvider, namer, regex, filterFilesCsv);
     }
 }

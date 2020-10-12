@@ -26,11 +26,12 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.io.IOException;
+import java.nio.ShortBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 
 class RGBWriterShort extends RGBWriter {
@@ -40,7 +41,7 @@ class RGBWriterShort extends RGBWriter {
     }
 
     @Override
-    protected void mergeSliceAsRGB(int z, int capacity) throws RasterIOException {
+    protected void mergeSliceAsRGB(int z, int capacity) throws ImageIOException {
         UnsignedByteBuffer merged = UnsignedByteBuffer.allocate(capacity * 3 * 2);
         putSliceShort(merged, channelRed, z);
         putSliceShort(merged, channelGreen, z);
@@ -48,13 +49,15 @@ class RGBWriterShort extends RGBWriter {
         try {
             writer.saveBytes(z, merged.array());
         } catch (FormatException | IOException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 
     private static void putSliceShort(UnsignedByteBuffer merged, Channel channel, int z) {
+        ShortBuffer source = channel.voxels().asShort().sliceBuffer(z).getDelegate();
+        source.rewind();
         merged.getDelegate()
                 .asShortBuffer()
-                .put(channel.voxels().asShort().sliceBuffer(z).getDelegate());
+                .put(source);
     }
 }

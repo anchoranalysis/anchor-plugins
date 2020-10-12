@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 
 public class NumberChannels extends SummarizerNamedChannelsSimple<Integer> {
 
     @Override
-    protected Integer extractKey(NamedChannelsInput element) throws RasterIOException {
+    protected Integer extractKey(NamedChannelsInput element) throws ImageIOException {
         return element.numberChannels();
     }
 

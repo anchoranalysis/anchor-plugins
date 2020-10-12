@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
@@ -69,7 +69,7 @@ public class MultiFileReader extends StackReader {
     // END BEAN PROPERTIES
 
     @Override
-    public OpenedRaster openFile(Path filePath) throws RasterIOException {
+    public OpenedRaster openFile(Path filePath) throws ImageIOException {
 
         // We look at all other files in the same folder as our filepath to match our expression
 

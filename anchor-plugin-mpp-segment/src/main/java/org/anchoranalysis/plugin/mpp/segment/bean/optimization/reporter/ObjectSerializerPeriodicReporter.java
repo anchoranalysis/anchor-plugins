@@ -31,9 +31,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
-import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
-import org.anchoranalysis.io.manifest.sequencetype.SequenceType;
+import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubfolderReporter;
@@ -58,22 +56,13 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
     @Override
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
             throws ReporterException {
-        BundleParameters bundleParams = new BundleParameters();
-        bundleParams.setBundleSize(bundleSize);
 
         try {
             super.reportBegin(initParams);
+            init(
+               new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction))
+            );
 
-            SequenceType<?> sequenceType =
-                    init(
-                            new BundledObjectOutputStreamGenerator<T>(
-                                    bundleParams,
-                                    getOutputName(),
-                                    NUMBER_DIGITS_IN_OUTPUT,
-                                    getParentOutputter(),
-                                    manifestFunction));
-
-            bundleParams.setSequenceType(sequenceType);
 
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);

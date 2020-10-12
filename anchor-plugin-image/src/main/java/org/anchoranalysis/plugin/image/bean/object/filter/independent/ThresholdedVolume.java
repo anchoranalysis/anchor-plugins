@@ -55,10 +55,10 @@ public class ThresholdedVolume extends ObjectFilterRelation {
     private int thresholdResolved;
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
-        thresholdResolved = resolveThreshold(dim);
+        super.start(dimensions, objectsToFilter);
+        thresholdResolved = resolveThreshold(dimensions);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ThresholdedVolume extends ObjectFilterRelation {
 
     private int resolveThreshold(Optional<Dimensions> dim) throws OperationFailedException {
         try {
-            return (int) Math.floor(threshold.resolveToVoxels(dim.map(Dimensions::unitConvert)));
+            return (int) Math.floor(threshold.resolveToVoxels(dim.flatMap(Dimensions::unitConvert)));
         } catch (UnitValueException e) {
             throw new OperationFailedException(e);
         }
