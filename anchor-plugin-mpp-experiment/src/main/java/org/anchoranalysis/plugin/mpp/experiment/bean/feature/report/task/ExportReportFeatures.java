@@ -43,9 +43,9 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
@@ -70,7 +70,7 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
         Optional<CSVWriter> writer;
         try {
             writer = CSVWriter.createFromOutputter("featureReport", outputter.getChecked());
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
 
@@ -109,7 +109,7 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
                             writeFeaturesIntoReporter(
                                     soMPP,
                                     writer,
-                                    input.getInput().descriptiveName(),
+                                    input.getInput().name(),
                                     input.getLogger()));
 
         } catch (OperationFailedException e) {

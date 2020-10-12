@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
@@ -73,8 +73,8 @@ public class MarksComparer extends Comparer {
     private Path path(Path filePathSource) throws CreateException {
         try {
             return derivePath.deriveFrom(filePathSource, false);
-        } catch (AnchorIOException e1) {
-            throw new CreateException(e1);
+        } catch (DerivePathException e) {
+            throw new CreateException(e);
         }
     }
 

@@ -48,9 +48,9 @@ public class ScaleCalculatorMinXYRes extends ScaleCalculator {
 
         Resolution resolution =
                 sourceDimensions
-                        .map(Dimensions::resolution)
+                        .flatMap(Dimensions::resolution)
                         .orElseThrow(
-                                () -> new OperationFailedException("No source dimensions exist"));
+                                () -> new OperationFailedException("No source resolution exists"));
 
         // If there is no resolution information we cannot scale
         if (resolution.x() == 0 || resolution.y() == 0) {

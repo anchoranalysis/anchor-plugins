@@ -44,7 +44,7 @@ import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.bean.path.derive.Replace;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.AppendStack;
 
@@ -122,18 +122,18 @@ public class NamedChannelsQuick extends QuickBase<NamedChannelsInputPart> {
     }
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
         createAppendedChannelsIfNecessary();
         return append.inputs(params);
     }
 
-    private void createAppendedChannelsIfNecessary() throws AnchorIOException {
+    private void createAppendedChannelsIfNecessary() throws InputReadFailedException {
         if (this.append == null) {
             try {
                 this.append = createAppendedChannels();
                 append.checkMisconfigured(defaultInstances);
             } catch (BeanMisconfiguredException e) {
-                throw new AnchorIOException("defaultInstances bean is misconfigured", e);
+                throw new InputReadFailedException("defaultInstances bean is misconfigured", e);
             }
         }
     }

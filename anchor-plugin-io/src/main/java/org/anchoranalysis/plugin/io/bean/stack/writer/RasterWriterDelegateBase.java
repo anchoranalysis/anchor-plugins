@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
@@ -48,7 +48,7 @@ public abstract class RasterWriterDelegateBase extends StackWriter {
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
         selectDelegate(writeOptions).writeStack(stack, filePath, makeRGB, writeOptions);
     }
 
@@ -58,7 +58,7 @@ public abstract class RasterWriterDelegateBase extends StackWriter {
             Path filePath,
             boolean makeRGB,
             StackWriteOptions writeOptions)
-            throws RasterIOException {
+            throws ImageIOException {
         selectDelegate(writeOptions).writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
     }
 

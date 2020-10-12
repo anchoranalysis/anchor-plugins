@@ -138,7 +138,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
     }
 
     @Override
-    public String descriptiveName() {
+    public String name() {
         return "manifestCouplingDefinition";
     }
 

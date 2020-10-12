@@ -35,6 +35,7 @@ import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.mpp.bean.mark.MarkDistance;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.mpp.feature.addcriteria.IncludeMarksFailureException;
@@ -68,7 +69,7 @@ public class AddCriteriaDistanceTo extends AddCriteriaPair {
         try {
             double thresholdVal =
                     threshold.resolve(
-                            Optional.of(dimensions.unitConvert()),
+                            dimensions.resolution().map(Resolution::unitConvert),
                             mark1.getMark().centerPoint(),
                             mark2.getMark().centerPoint());
             return d < thresholdVal;

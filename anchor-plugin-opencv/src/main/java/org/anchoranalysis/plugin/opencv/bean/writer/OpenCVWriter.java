@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.opencv.bean.writer;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
@@ -51,13 +51,13 @@ public class OpenCVWriter extends OneOrThreeChannelsWriter {
 
     @Override
     protected synchronized void writeStackAfterCheck(Stack stack, Path filePath)
-            throws RasterIOException {
+            throws ImageIOException {
         CVInit.blockUntilLoaded();
 
         try {
             Imgcodecs.imwrite(filePath.toString(), ConvertToMat.fromStack(stack));
         } catch (CreateException e) {
-            throw new RasterIOException(e);
+            throw new ImageIOException(e);
         }
     }
 }

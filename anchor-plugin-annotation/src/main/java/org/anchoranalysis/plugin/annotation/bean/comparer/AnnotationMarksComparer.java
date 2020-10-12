@@ -42,7 +42,8 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 
 /**
  * @author Owen Feehan
@@ -61,7 +62,7 @@ public class AnnotationMarksComparer<T> extends Comparer {
         Path filePath;
         try {
             filePath = derivePath.deriveFrom(filePathSource, false);
-        } catch (AnchorIOException e1) {
+        } catch (DerivePathException e1) {
             throw new CreateException(e1);
         }
 
@@ -69,7 +70,7 @@ public class AnnotationMarksComparer<T> extends Comparer {
         Optional<DualMarksAnnotation<T>> annotation;
         try {
             annotation = annotationReader.read(filePath);
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             throw new CreateException(e);
         }
 

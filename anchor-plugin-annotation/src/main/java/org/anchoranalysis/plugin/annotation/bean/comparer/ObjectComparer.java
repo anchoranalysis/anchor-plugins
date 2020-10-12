@@ -39,7 +39,7 @@ import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 
 /**
@@ -66,7 +66,7 @@ public class ObjectComparer extends Comparer {
 
             return new Found<>(ObjectCollectionReader.createFromPath(objectsPath));
 
-        } catch (AnchorIOException | DeserializationFailedException e) {
+        } catch (DerivePathException | DeserializationFailedException e) {
             throw new CreateException(e);
         }
     }

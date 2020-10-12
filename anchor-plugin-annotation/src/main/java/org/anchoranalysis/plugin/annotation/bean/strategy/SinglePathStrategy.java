@@ -33,7 +33,8 @@ import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 
 public abstract class SinglePathStrategy extends AnnotatorStrategy {
 
@@ -42,8 +43,12 @@ public abstract class SinglePathStrategy extends AnnotatorStrategy {
     // END BEAN PROPERTIES
 
     @Override
-    public Path annotationPathFor(ProvidesStackInput item) throws AnchorIOException {
-        return PathFromGenerator.derivePath(
-                pathAnnotation, item.pathForBindingRequired());
+    public Path annotationPathFor(ProvidesStackInput item) throws InputReadFailedException {
+        try {
+            return PathFromGenerator.derivePath(
+                    pathAnnotation, item.pathForBindingRequired());
+        } catch (DerivePathException e) {
+            throw new InputReadFailedException(e);
+        }
     }
 }

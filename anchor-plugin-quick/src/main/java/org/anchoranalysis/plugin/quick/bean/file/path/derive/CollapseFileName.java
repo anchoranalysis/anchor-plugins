@@ -31,8 +31,9 @@ import java.nio.file.Paths;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -47,12 +48,16 @@ public class CollapseFileName extends DerivePath {
     // END BEAN FIELDS
 
     @Override
-    public Path deriveFrom(Path source, boolean debugMode) throws AnchorIOException {
+    public Path deriveFrom(Path source, boolean debugMode) throws DerivePathException {
         Path path = derivePath.deriveFrom(source, debugMode);
-        return collapse(path);
+        try {
+            return collapse(path);
+        } catch (CreateException e) {
+            throw new DerivePathException(e);
+        }
     }
 
-    private static Path collapse(Path path) throws AnchorIOException {
+    private static Path collapse(Path path) throws CreateException {
 
         PathTwoParts pathDir = new PathTwoParts(path);
 

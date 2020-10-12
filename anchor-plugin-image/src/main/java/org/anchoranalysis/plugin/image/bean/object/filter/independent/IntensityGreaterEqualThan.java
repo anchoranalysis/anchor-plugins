@@ -68,7 +68,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
 
         Channel channelSingleRegion;
@@ -82,10 +82,10 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
-        int thresholdResolved = threshold(dim);
+        int thresholdResolved = threshold(dimensions);
 
         Extent extent = object.extent();
 
@@ -122,7 +122,7 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<Dimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.map(Dimensions::unitConvert), AxisType.X));
+                Math.ceil(threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
     }
 
     @Override

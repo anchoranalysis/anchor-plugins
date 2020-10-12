@@ -104,14 +104,14 @@ public class ImageAssignLabel<T>
             String groupIdentifier =
                     params.getSharedState().labelFor(params.getInput(), params.context());
 
-            params.getSharedState().writeRow(params.getInput().descriptiveName(), groupIdentifier);
+            params.getSharedState().writeRow(params.getInput().name(), groupIdentifier);
 
             if (outputStackProvider != null) {
                 outputStack(
                         groupIdentifier,
                         createFromProviderWith(
                                 outputStackProvider, params.getInput(), params.context()),
-                        params.getInput().descriptiveName(),
+                        params.getInput().name(),
                         params.getSharedState());
             }
         } catch (OperationFailedException | CreateException e) {

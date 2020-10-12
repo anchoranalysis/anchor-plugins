@@ -43,7 +43,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
@@ -90,7 +90,7 @@ public class ScaleImage extends RasterTask {
         NamedChannelsForSeries namedChannels;
         try {
             namedChannels = input.createChannelsForSeries(0, ProgressReporterNull.get());
-        } catch (RasterIOException e1) {
+        } catch (ImageIOException e1) {
             throw new JobExecutionException(e1);
         }
 

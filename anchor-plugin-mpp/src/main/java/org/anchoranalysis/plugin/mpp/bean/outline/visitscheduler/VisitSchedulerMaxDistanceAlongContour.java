@@ -50,7 +50,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws InitException {
         try {
             maxDistance = maxDistanceProposer.propose(randomNumberGenerator, resolution);
@@ -62,7 +62,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
     }
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution) {
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution) {
         int maxDistanceInt = (int) Math.ceil(this.maxDistance);
         assert (maxDistanceInt > 0);
         return Optional.of(new Point3i(maxDistanceInt, maxDistanceInt, maxDistanceInt));
@@ -70,7 +70,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         // NOTHING TO DO
     }

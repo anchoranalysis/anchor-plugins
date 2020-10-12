@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.apache.commons.io.FilenameUtils;
@@ -67,7 +67,7 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
 
     @Override
     protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         PathDifference difference = differenceToPrefix(removeExtension(path.getPath()));
 
@@ -79,11 +79,11 @@ public class DirectoryStructure extends PathPrefixerAvoidResolve {
         return Paths.get(FilenameUtils.removeExtension(pathWithExtension));
     }
 
-    private PathDifference differenceToPrefix(Path pathInRemoved) throws DerivePathException {
+    private PathDifference differenceToPrefix(Path pathInRemoved) throws PathPrefixerException {
         try {
             return PathDifference.differenceFrom(Paths.get(inPathPrefix), pathInRemoved);
         } catch (PathDifferenceException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
     }
 

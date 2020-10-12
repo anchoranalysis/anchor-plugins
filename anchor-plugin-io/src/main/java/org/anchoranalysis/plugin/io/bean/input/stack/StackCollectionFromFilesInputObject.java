@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -43,7 +43,7 @@ import org.anchoranalysis.io.input.FileInput;
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
-    /** The root object that is used to provide the descriptiveName and pathForBinding */
+    /** The root object that is used to provide the input-name and pathForBinding */
     private final FileInput delegate;
 
     private final StackReader stackReader;
@@ -60,7 +60,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
     // We cache a certain amount of stacks read for particular series
     private OpenedRaster openedRasterMemo = null;
 
-    public int numberSeries() throws RasterIOException {
+    public int numberSeries() throws ImageIOException {
         if (useLastSeriesIndexOnly) {
             return 1;
         } else {
@@ -73,13 +73,13 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
 
         try {
             return getOpenedRaster().numberFrames();
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }
 
     public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
-            throws RasterIOException {
+            throws ImageIOException {
 
         // We always use the last one
         if (useLastSeriesIndexOnly) {
@@ -110,7 +110,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
                 () -> {
                     try {
                         return createStackSequenceForSeries(seriesIndex).get(progressReporter);
-                    } catch (RasterIOException e) {
+                    } catch (ImageIOException e) {
                         throw new OperationFailedException(e);
                     }
                 });
@@ -121,15 +121,15 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return progressReporter -> {
             try {
                 return openedRaster.open(seriesNum, progressReporter);
-            } catch (RasterIOException e) {
+            } catch (ImageIOException e) {
                 throw new OperationFailedException(e);
             }
         };
     }
 
     @Override
-    public String descriptiveName() {
-        return delegate.descriptiveName();
+    public String name() {
+        return delegate.name();
     }
 
     @Override
@@ -145,14 +145,14 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         return delegate.getFile();
     }
 
-    private OpenedRaster getOpenedRaster() throws RasterIOException {
+    private OpenedRaster getOpenedRaster() throws ImageIOException {
         if (openedRasterMemo == null) {
             openedRasterMemo =
                     stackReader.openFile(
                             delegate.pathForBinding()
                                     .orElseThrow(
                                             () ->
-                                                    new RasterIOException(
+                                                    new ImageIOException(
                                                             "A binding-path must be associated with this file")));
         }
         return openedRasterMemo;
@@ -163,7 +163,7 @@ class StackCollectionFromFilesInputObject implements StackSequenceInput {
         if (openedRasterMemo != null) {
             try {
                 openedRasterMemo.close();
-            } catch (RasterIOException e) {
+            } catch (ImageIOException e) {
                 errorReporter.recordError(StackSequenceInput.class, e);
             }
         }

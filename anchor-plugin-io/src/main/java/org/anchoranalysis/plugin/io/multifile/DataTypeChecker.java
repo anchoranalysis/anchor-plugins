@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.multifile;
 
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
@@ -35,11 +35,11 @@ class DataTypeChecker {
 
     private VoxelDataType dataType = null; // The data type. All files must have the same.
 
-    public void check(Stack stackForFile) throws RasterIOException {
+    public void check(Stack stackForFile) throws ImageIOException {
 
         VoxelDataType stackDataType = stackForFile.getChannel(0).getVoxelDataType();
         if (!stackForFile.allChannelsHaveType(stackDataType)) {
-            throw new RasterIOException("Channels have different data types");
+            throw new ImageIOException("Channels have different data types");
         }
 
         checkSetDataType(stackDataType);
@@ -49,14 +49,14 @@ class DataTypeChecker {
         return dataType;
     }
 
-    private void checkSetDataType(VoxelDataType stackDataType) throws RasterIOException {
+    private void checkSetDataType(VoxelDataType stackDataType) throws ImageIOException {
         if (dataType == null) {
             // If first-time, then we record the data-type
             dataType = stackDataType;
         } else {
             // if subsequent time, then we check it matches
             if (!stackDataType.equals(dataType)) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format(
                                 "File has type %s. Other files have type %s",
                                 stackDataType, dataType));

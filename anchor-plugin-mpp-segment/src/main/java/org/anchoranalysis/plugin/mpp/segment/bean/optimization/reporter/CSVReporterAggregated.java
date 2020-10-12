@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -109,7 +109,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
                         writer.print(",Time,TimePerIter,IntervalTimePerIter");
                         writer.println();
                     });
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new AggregatorException(e);
         }
     }

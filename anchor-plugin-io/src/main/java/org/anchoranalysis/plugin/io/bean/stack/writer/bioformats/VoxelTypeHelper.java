@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import org.anchoranalysis.core.functional.function.CheckedRunnable;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
@@ -39,7 +39,7 @@ import ome.xml.model.enums.PixelType;
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 class VoxelTypeHelper {
     
-    public static PixelType pixelTypeFor(VoxelDataType dataType) throws RasterIOException {
+    public static PixelType pixelTypeFor(VoxelDataType dataType) throws ImageIOException {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return PixelType.UINT8;
         } else if (dataType.equals(UnsignedShortVoxelType.INSTANCE)) {
@@ -49,16 +49,16 @@ class VoxelTypeHelper {
         } else if (dataType.equals(FloatVoxelType.INSTANCE)) {
             return PixelType.FLOAT;
         } else {
-            throw new RasterIOException(
+            throw new ImageIOException(
                     String.format("%s is an unsupported data-type for this writer", dataType));
         }
     }
     
-    public static void checkChannelTypeSupported(String messagePrefix, VoxelDataType channelType, CheckedRunnable<RasterIOException> runnable) throws RasterIOException {
+    public static void checkChannelTypeSupported(String messagePrefix, VoxelDataType channelType, CheckedRunnable<ImageIOException> runnable) throws ImageIOException {
         if (isChannelTypeSupported(channelType)) {
             runnable.run();
         } else {
-            throw new RasterIOException(messagePrefix + "an unsupported type: " + messagePrefix);
+            throw new ImageIOException(messagePrefix + "an unsupported type: " + messagePrefix);
         }  
     }
     

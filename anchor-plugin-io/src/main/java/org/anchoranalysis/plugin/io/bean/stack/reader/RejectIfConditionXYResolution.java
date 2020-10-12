@@ -36,17 +36,22 @@ import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 
-// If the XY resolution of an opened-image meets a certain condition
-//  then the resolution is scaled by a factor
-//
-// This is useful for correcting situations where there has been a unit
-//  mixup by the reader
-//
-// Assumes the X and Y resolution are equal. Throws an error otherwise.
+/**
+ * If the XY resolution of an opened-image meets a certain condition then the resolution is scaled by a factor.
+ * 
+ * <p>This is useful for correcting situations where there has been a unit mixup by the {@link StackReader}.
+ * 
+ * <p>It assumes the X and Y resolution are equal. Throws an error otherwise.
+ * 
+ * <p>If no image-resolution is known, an error will be thrown.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class RejectIfConditionXYResolution extends StackReader {
 
     // START BEAN PROPERTIES
@@ -70,16 +75,20 @@ public class RejectIfConditionXYResolution extends StackReader {
         }
 
         @Override
-        public Optional<Resolution> maybeUpdatedResolution(Resolution resolution)
-                throws RasterIOException {
+        public Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution)
+                throws ImageIOException {
 
-            if (resolution.x() != resolution.y()) {
-                throw new RasterIOException(
+            if (!resolution.isPresent()) {
+                throw new ImageIOException("No image-resolution is present, so cannot perform this check.");
+            }
+            
+            if (!resolution.get().hasEqualXAndY()) {
+                throw new ImageIOException(
                         "X and Y pixel-sizes are different. They must be equal");
             }
 
-            if (relation.isRelationToValueTrue(resolution.x(), value)) {
-                throw new RasterIOException(
+            if (relation.isRelationToValueTrue(resolution.get().x(), value)) {
+                throw new ImageIOException(
                         "XY-resolution fufills condition, and is thus rejected");
             } else {
                 return Optional.empty();
@@ -88,7 +97,7 @@ public class RejectIfConditionXYResolution extends StackReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path path) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws ImageIOException {
         OpenedRaster or = stackReader.openFile(path);
         return new OpenedRasterAlterDimensions(
                 or, new MaybeRejectProcessor(relation.create(), value));

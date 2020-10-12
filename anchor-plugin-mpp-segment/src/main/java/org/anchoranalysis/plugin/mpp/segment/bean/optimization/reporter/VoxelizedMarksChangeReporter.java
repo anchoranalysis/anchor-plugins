@@ -34,9 +34,8 @@ import org.anchoranalysis.io.generator.Generator;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceFactory;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.generator.sequence.pattern.OutputPatternIntegerSuffix;
-import org.anchoranalysis.io.generator.serialized.BundledObjectOutputStreamGenerator;
+import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.manifest.deserializer.bundle.BundleParameters;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -106,12 +105,6 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
         if (outputSequence.isOn() && lastOptimizationStep != null) {
             outputSequence.getSequenceType().assignMaximumIndex(lastOptimizationStep.getIteration());
         }
-
-        try {
-            outputSequence.close();
-        } catch (OutputWriteFailedException e) {
-            throw new ReporterException(e);
-        }
     }
 
     @Override
@@ -124,23 +117,11 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
         OutputterChecked outputter = initParams.getInitContext().getOutputter().getChecked();
         
         Generator<MarksWithEnergyBreakdown> generator =
-                new BundledObjectOutputStreamGenerator<>(
-                        createBundleParameters(),
-                        outputName,
-                        10,
-                        outputter,
-                        manifestFunction);
-
+                new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction));
+        
         return new OutputSequenceFactory<>(generator, outputter);
     }
     
-    private BundleParameters createBundleParameters() {
-        BundleParameters bundleParams = new BundleParameters();
-        bundleParams.setBundleSize(bundleSize);
-        bundleParams.setSequenceType(outputSequence.getSequenceType());
-        return bundleParams;
-    }
-
     private void addToSequenceWriter(Optional<VoxelizedMarksWithEnergy> marks, int iteration)
             throws OutputWriteFailedException {
         if (marks.isPresent()) {

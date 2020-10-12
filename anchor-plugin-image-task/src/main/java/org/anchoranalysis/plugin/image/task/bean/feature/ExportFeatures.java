@@ -55,9 +55,11 @@ import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
@@ -152,7 +154,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
 
             source.processInput(input.getInput(), inputProcessContext);
 
-        } catch (OperationFailedException | AnchorIOException e) {
+        } catch (OperationFailedException | InputReadFailedException | DerivePathException e) {
             throw new JobExecutionException(e);
         }
     }
@@ -168,7 +170,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
                     featuresAggregateAsStore(),
                     source.includeGroupInExperiment(isGroupGeneratorDefined()),
                     context);
-        } catch (AnchorIOException | CreateException | IOException e) {
+        } catch (OutputWriteFailedException | CreateException | IOException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -196,26 +198,26 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
         return group != null;
     }
 
-    private static Optional<String> filePathAsIdentifier(
-            Optional<DerivePath> generator, Path path, boolean debugMode)
-            throws AnchorIOException {
-        return OptionalUtilities.map(
-                generator,
-                gen ->
-                        FilePathToUnixStyleConverter.toStringUnixStyle(
-                                gen.deriveFrom(path, debugMode)));
-    }
-
-    /** Determines the group name corresponding to an inputPath and the group-generator */
-    private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
-            throws AnchorIOException {
-        return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);
-    }
-
     private Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregateAsStore()
             throws CreateException {
         return OptionalUtilities.map(
                 Optional.ofNullable(featuresAggregate),
                 STORE_FACTORY_AGGREGATE::createNamedFeatureList);
+    }
+
+    /** Determines the group name corresponding to an inputPath and the group-generator */
+    private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
+            throws DerivePathException {
+        return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);
+    }    
+
+    private static Optional<String> filePathAsIdentifier(
+            Optional<DerivePath> generator, Path path, boolean debugMode)
+            throws DerivePathException {
+        return OptionalUtilities.map(
+                generator,
+                gen ->
+                        FilePathToUnixStyleConverter.toStringUnixStyle(
+                                gen.deriveFrom(path, debugMode)));
     }
 }

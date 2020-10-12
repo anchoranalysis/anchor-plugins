@@ -43,6 +43,7 @@ import org.anchoranalysis.image.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.math.rotation.RotationMatrix;
 
@@ -170,15 +171,23 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             throws OperationFailedException {
         // We do check
         if (maxDistance != null) {
-            double distance = maskCreated.resolution().distanceZRelative(centerPoint, pointDouble);
+            double distance = distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(maskCreated.dimensions().unitConvert()),
+                            maskCreated.dimensions().resolution().map(Resolution::unitConvert),
                             centerPoint,
                             pointDouble);
             return distance > maxDistanceResolved;
         } else {
             return false;
+        }
+    }
+    
+    private static double distanceZBetweenPoints(Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
+        if (resolution.isPresent()) {
+            return resolution.get().distanceZRelative(centerPoint, pointDouble);
+        } else {
+            return Math.abs(centerPoint.z() - pointDouble.z());
         }
     }
 }

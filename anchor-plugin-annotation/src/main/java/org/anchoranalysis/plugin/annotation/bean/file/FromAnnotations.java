@@ -37,7 +37,7 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 
 public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider {
@@ -51,7 +51,7 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider 
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         try {
             return FunctionalList.flatMapToList(annotations.inputs(params), input -> input.deriveAssociatedFiles().stream() );
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }
     }

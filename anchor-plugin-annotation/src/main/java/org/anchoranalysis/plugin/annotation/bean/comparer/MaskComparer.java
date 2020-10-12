@@ -39,13 +39,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.MaskReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 
 public class MaskComparer extends Comparer {
 
@@ -73,7 +73,7 @@ public class MaskComparer extends Comparer {
 
             return new Found<>(convertToObjects(mask));
 
-        } catch (AnchorIOException | RasterIOException e) {
+        } catch (DerivePathException | ImageIOException e) {
             throw new CreateException(e);
         }
     }

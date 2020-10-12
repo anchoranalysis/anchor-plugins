@@ -37,7 +37,7 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
 import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
@@ -63,14 +63,14 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 
     @Override
     public List<ManifestCouplingDefinition> inputs(InputManagerParams params)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         try {
             if (mcd == null) {
                 mcd = createDeserializedList(params);
             }
         } catch (DeserializationFailedException e) {
-            throw new AnchorIOException("Deserialization failed", e);
+            throw new InputReadFailedException("Deserialization failed", e);
         }
 
         return Collections.singletonList(mcd);

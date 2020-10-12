@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.input.PathSupplier;
 
 @AllArgsConstructor
@@ -56,9 +56,9 @@ class AdditionalChannel {
      * A file-path associated with the additional channel
      *
      * @return the file-path
-     * @throws AnchorIOException
+     * @throws DerivePathException
      */
-    public Path getFilePath() throws AnchorIOException {
+    public Path getFilePath() throws DerivePathException {
         return filePath.get();
     }
 }

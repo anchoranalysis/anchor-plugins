@@ -57,9 +57,9 @@ public class IntersectsWith extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
-        super.start(dim, objectsToFilter);
+        super.start(dimensions, objectsToFilter);
         try {
             intersectWithAnyOneObject = objects.create();
         } catch (CreateException e) {
@@ -68,7 +68,7 @@ public class IntersectsWith extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask objectToIntersectWith, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask objectToIntersectWith, Optional<Dimensions> dimensions)
             throws OperationFailedException {
         return intersectWithAnyOneObject.stream()
                 .anyMatch(objectMask -> objectMask.hasIntersectingVoxels(objectToIntersectWith));

@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
@@ -55,10 +55,10 @@ public class ReadVoxelExtentXml extends StackReader {
      * @param filepath the filepath of the image
      * @param acceptNoResolution
      * @return the scene res if the metadata file exists and was parsed. null otherwise.
-     * @throws RasterIOException
+     * @throws ImageIOException
      */
     public static Optional<Resolution> readMetadata(Path filepath, boolean acceptNoResolution)
-            throws RasterIOException {
+            throws ImageIOException {
 
         // How we try to open the metadata
         Optional<Resolution> res = null;
@@ -68,7 +68,7 @@ public class ReadVoxelExtentXml extends StackReader {
             res = Optional.of(AnchorMetadataXml.readResolutionXml(fileMeta));
         } else {
             if (!acceptNoResolution) {
-                throw new RasterIOException(
+                throw new ImageIOException(
                         String.format("Resolution metadata is required for '%s'", filepath));
             }
         }
@@ -76,7 +76,7 @@ public class ReadVoxelExtentXml extends StackReader {
     }
 
     @Override
-    public OpenedRaster openFile(Path path) throws RasterIOException {
+    public OpenedRaster openFile(Path path) throws ImageIOException {
 
         OpenedRaster delegate = stackReader.openFile(path);
 

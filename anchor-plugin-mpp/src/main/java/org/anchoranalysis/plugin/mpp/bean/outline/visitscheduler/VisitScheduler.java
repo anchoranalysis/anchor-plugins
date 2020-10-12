@@ -38,15 +38,15 @@ import org.anchoranalysis.image.object.ObjectMask;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-    public abstract Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution)
+    public abstract Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution)
             throws OperationFailedException;
 
     public abstract void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws InitException;
 
     public abstract void afterCreateObject(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException;
 
     public abstract boolean considerVisit(

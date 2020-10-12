@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.channel.NamedEntries;
@@ -72,7 +72,7 @@ public class Autoname extends ChannelMap {
                 map.add(new ChannelEntry(nameFor(c, names, rgb), c));
             }
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new CreateException(e);
         }
 

@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.mpp.bean.check;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -60,7 +59,7 @@ public class VolumeMin extends CheckMark {
 
         double volMin;
         try {
-            volMin = minVolume.resolveToVoxels(Optional.of(energyStack.dimensions().unitConvert()));
+            volMin = minVolume.resolveToVoxels(energyStack.dimensions().unitConvert());
         } catch (UnitValueException e) {
             throw new CheckException(
                     "The volume-min check, had a unit Value Exception: " + e.toString());

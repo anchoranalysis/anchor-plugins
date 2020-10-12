@@ -38,7 +38,8 @@ import org.anchoranalysis.core.text.TypedValue;
 import org.anchoranalysis.feature.io.csv.FeatureCSVMetadata;
 import org.anchoranalysis.feature.io.csv.FeatureCSVWriter;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.labeller.ImageLabeller;
@@ -77,7 +78,7 @@ public class SharedStateFilteredImageOutput<T> {
                     FeatureCSVWriter.create(
                             new FeatureCSVMetadata("group", Arrays.asList("name", "group")),
                             baseOutputter);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -104,7 +105,7 @@ public class SharedStateFilteredImageOutput<T> {
             //  to give to the filter.
             try {
                 initFilterOutputters(input.pathForBindingRequired());
-            } catch (InitException | AnchorIOException e) {
+            } catch (InitException | InputReadFailedException e) {
                 throw new OperationFailedException(e);
             }
             groupIdentifierForCalled = true;

@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
 import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 
@@ -54,19 +54,19 @@ public class PathRegEx extends PathPrefixerAvoidResolve {
 
     @Override
     protected DirectoryWithPrefix outFilePrefixFromPath(NamedPath path, Path root)
-            throws DerivePathException {
+            throws PathPrefixerException {
         String[] components = componentsFromPath(path.getPath());
         return createPrefix(root, components);
     }
 
-    private String[] componentsFromPath(Path pathIn) throws DerivePathException {
+    private String[] componentsFromPath(Path pathIn) throws PathPrefixerException {
 
         String pathInForwardSlashes = FilePathToUnixStyleConverter.toStringUnixStyle(pathIn);
 
         return regEx.match(pathInForwardSlashes)
                 .orElseThrow(
                         () ->
-                                new DerivePathException(
+                                new PathPrefixerException(
                                         String.format(
                                                 "Cannot successfully match the %s against '%s'",
                                                 regEx, pathInForwardSlashes)));

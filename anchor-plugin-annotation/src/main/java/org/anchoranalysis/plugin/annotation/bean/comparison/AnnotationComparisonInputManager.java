@@ -43,7 +43,7 @@ import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
@@ -66,7 +66,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
     @Override
     public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
-            throws AnchorIOException {
+            throws InputReadFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
@@ -86,7 +86,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                         createListInputWithAnnotationPath(
                                 tempList, new ProgressReporterOneOfMany(prm));
             } catch (CreateException e) {
-                throw new AnchorIOException("Cannot create inputs (with annotation path)", e);
+                throw new InputReadFailedException("Cannot create inputs (with annotation path)", e);
             }
             prm.incrWorker();
 

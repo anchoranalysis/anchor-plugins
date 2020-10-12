@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
@@ -60,7 +60,7 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEANS
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
 
         List<NamedChannelsInputPart> out = new ArrayList<>();
 

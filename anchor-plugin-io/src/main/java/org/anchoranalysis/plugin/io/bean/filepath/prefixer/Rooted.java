@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.DerivePathException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
@@ -57,7 +57,7 @@ public class Rooted extends PathPrefixer {
     @Override
     public DirectoryWithPrefix outFilePrefix(
             NamedPath path, String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
 
         DirectoryWithPrefix fpp =
                 filePathPrefixer.outFilePrefixAvoidResolve(
@@ -70,31 +70,31 @@ public class Rooted extends PathPrefixer {
     }
 
     private NamedPath removeRoot(NamedPath path, boolean debugMode)
-            throws DerivePathException {
+            throws PathPrefixerException {
         try {
             Path pathWithoutRoot =
                     RootPathMap.instance()
                             .split(path.getPath(), rootName, debugMode)
                             .getRemainder();
-            return new NamedPath(pathWithoutRoot, path.getDescriptiveName());
+            return new NamedPath(path.getName(), pathWithoutRoot);
         } catch (PathDifferenceException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
     }
 
     @Override
     public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
-            throws DerivePathException {
+            throws PathPrefixerException {
         DirectoryWithPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
         fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
         return fpp;
     }
 
-    private Path folderPathOut(Path pathIn, boolean debugMode) throws DerivePathException {
+    private Path folderPathOut(Path pathIn, boolean debugMode) throws PathPrefixerException {
         try {
             return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve(pathIn);
         } catch (PathDifferenceException e) {
-            throw new DerivePathException(e);
+            throw new PathPrefixerException(e);
         }
     }
 }

@@ -31,7 +31,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.exception.AnchorIOException;
 
 public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
 
@@ -40,10 +39,9 @@ public abstract class CopyFilesNamingOneRegEx extends CopyFilesNamingOne {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<Path> destinationPathRelative(Path pathDelegate) throws AnchorIOException {
+    public Optional<Path> destinationPathRelative(Path pathDelegate) {
         return destinationPathRelative(pathDelegate, regex);
     }
 
-    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex)
-            throws AnchorIOException;
+    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate, String regex);
 }

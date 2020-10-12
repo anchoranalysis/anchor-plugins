@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
@@ -48,7 +48,7 @@ class CSVComparisonGroup<T extends Assignment> {
         writer.writeRow(annotationGroup.createValues());
     }
 
-    public void writeGroupStats(Outputter outputter) throws AnchorIOException {
+    public void writeGroupStats(Outputter outputter) throws OutputWriteFailedException {
 
         Optional<CSVWriter> writer =
                 CSVWriter.createFromOutputter("byGroup", outputter.getChecked());

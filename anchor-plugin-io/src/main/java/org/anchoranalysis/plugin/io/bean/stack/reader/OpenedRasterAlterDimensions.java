@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -48,9 +48,9 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
          *
          * @param resolution the existing image resolution
          * @return a new image resolution or empty if no change should occur
-         * @throws RasterIOException
+         * @throws ImageIOException
          */
-        Optional<Resolution> maybeUpdatedResolution(Resolution resolution) throws RasterIOException;
+        Optional<Resolution> maybeUpdatedResolution(Optional<Resolution> resolution) throws ImageIOException;
     }
 
     private OpenedRaster delegate;
@@ -63,14 +63,14 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
 
     @Override
     public TimeSequence open(int seriesIndex, ProgressReporter progressReporter)
-            throws RasterIOException {
-        TimeSequence ts = delegate.open(seriesIndex, progressReporter);
+            throws ImageIOException {
+        TimeSequence sequence = delegate.open(seriesIndex, progressReporter);
 
-        for (Stack stack : ts) {
+        for (Stack stack : sequence) {
             Optional<Resolution> res = processor.maybeUpdatedResolution(stack.resolution());
             res.ifPresent(stack::updateResolution);
         }
-        return ts;
+        return sequence;
     }
 
     @Override
@@ -79,41 +79,41 @@ class OpenedRasterAlterDimensions implements OpenedRaster {
     }
 
     @Override
-    public int numberChannels() throws RasterIOException {
+    public int numberChannels() throws ImageIOException {
         return delegate.numberChannels();
     }
 
     @Override
-    public Dimensions dimensionsForSeries(int seriesIndex) throws RasterIOException {
+    public Dimensions dimensionsForSeries(int seriesIndex) throws ImageIOException {
 
         Dimensions dimensions = delegate.dimensionsForSeries(seriesIndex);
 
         Optional<Resolution> res = processor.maybeUpdatedResolution(dimensions.resolution());
 
         if (res.isPresent()) {
-            return dimensions.duplicateChangeResolution(res.get());
+            return dimensions.duplicateChangeResolution(res);
         } else {
             return dimensions;
         }
     }
 
     @Override
-    public int numberFrames() throws RasterIOException {
+    public int numberFrames() throws ImageIOException {
         return delegate.numberFrames();
     }
 
     @Override
-    public boolean isRGB() throws RasterIOException {
+    public boolean isRGB() throws ImageIOException {
         return delegate.isRGB();
     }
 
     @Override
-    public int bitDepth() throws RasterIOException {
+    public int bitDepth() throws ImageIOException {
         return delegate.bitDepth();
     }
 
     @Override
-    public void close() throws RasterIOException {
+    public void close() throws ImageIOException {
         delegate.close();
     }
 }

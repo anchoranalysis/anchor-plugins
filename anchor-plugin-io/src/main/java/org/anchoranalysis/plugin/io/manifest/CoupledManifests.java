@@ -82,12 +82,12 @@ public class CoupledManifests implements InputFromManager {
         LastFolders dnff = new LastFolders();
         dnff.setNumFoldersInDescription(numFoldersInDescription);
         dnff.setRemoveExtensionInDescription(false);
-        return dnff.describe(fileManifest.getRootPath().toFile(), "<unknown>", logger)
-                .getDescriptiveName();
+        return dnff.deriveName(fileManifest.getRootPath().toFile(), "<unknown>", logger)
+                .getName();
     }
 
     @Override
-    public String descriptiveName() {
+    public String name() {
         return name;
     }
 

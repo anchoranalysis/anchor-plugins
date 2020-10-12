@@ -40,7 +40,7 @@ import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
 import org.anchoranalysis.image.experiment.identifiers.StackIdentifiers;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
@@ -101,7 +101,7 @@ public class BackgroundSubtract extends RasterTask {
                     .writerSelective()
                     .write("bgsub", () -> new ChannelGenerator("imgChannel", channelOut));
 
-        } catch (RasterIOException | GetOperationFailedException e) {
+        } catch (ImageIOException | GetOperationFailedException e) {
             throw new JobExecutionException(e);
         }
     }

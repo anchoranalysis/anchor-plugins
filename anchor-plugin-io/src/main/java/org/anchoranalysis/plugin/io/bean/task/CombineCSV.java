@@ -40,11 +40,11 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
 import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.csv.reader.CSVReaderException;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
@@ -77,7 +77,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
 
             return writer.get();
 
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
@@ -105,7 +105,7 @@ public class CombineCSV extends Task<FileInput, CSVWriter> {
         Path inputPath = input.getFile().toPath();
         try (ReadByLine readByLine = CSVReaderByLine.open(inputPath, seperator, firstLineHeaders)) {
 
-            String name = addName ? input.descriptiveName() : null; // null means no-name is added
+            String name = addName ? input.name() : null; // null means no-name is added
             AddWithName addWithName = new AddWithName(writer, firstLineHeaders, name);
 
             if (transposed) {

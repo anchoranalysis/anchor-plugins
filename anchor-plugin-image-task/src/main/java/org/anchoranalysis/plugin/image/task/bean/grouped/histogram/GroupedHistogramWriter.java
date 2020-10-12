@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
+import org.anchoranalysis.image.io.generator.histogram.HistogramCSVGenerator;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 class GroupedHistogramWriter {

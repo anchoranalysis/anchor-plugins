@@ -42,7 +42,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.ChannelFilter;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
@@ -50,7 +50,6 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -131,10 +130,10 @@ public class ConvertImageFormat extends RasterTask {
             throws JobExecutionException {
 
         try {
-            NamedChannelsForSeries channelCollection =
+            NamedChannelsForSeries channels =
                     createChannelCollection(inputUntyped, seriesIndex);
-
-            ChannelGetter channelGetter = maybeAddFilter(channelCollection, context);
+            
+            ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
             if (channelConverter != null) {
                 channelGetter = maybeAddConverter(channelGetter);
@@ -142,24 +141,20 @@ public class ConvertImageFormat extends RasterTask {
 
             convertEachTimepoint(
                     seriesIndex,
-                    channelCollection.channelNames(),
+                    channels.channelNames(),
                     numberSeries,
-                    channelCollection.sizeT(ProgressReporterNull.get()),
+                    channels.sizeT(ProgressReporterNull.get()),
                     channelGetter,
                     context.getLogger());
 
-        } catch (RasterIOException | CreateException e) {
+        } catch (ImageIOException | CreateException e) {
             throw new JobExecutionException(e);
         }
     }
 
     @Override
     public void endSeries(InputOutputContext context) throws JobExecutionException {
-        try {
-            outputSequence.close();
-        } catch (OutputWriteFailedException e) {
-            throw new JobExecutionException(e);
-        }
+
     }
 
     private void convertEachTimepoint(
@@ -185,7 +180,7 @@ public class ConvertImageFormat extends RasterTask {
                         logger);
             
                 stacks.forEach( (stackName,stack) -> addStackToOutput(stackName, stack, namer) );
-            } catch (AnchorIOException | OperationFailedException e) {
+            } catch (OperationFailedException e) {
                 throw new JobExecutionException(e);
             }
 
@@ -194,10 +189,10 @@ public class ConvertImageFormat extends RasterTask {
     }
 
     private NamedChannelsForSeries createChannelCollection(
-            NamedChannelsInput input, int seriesIndex) throws RasterIOException {
+            NamedChannelsInput input, int seriesIndex) throws ImageIOException {
         return input.createChannelsForSeries(seriesIndex, new ProgressReporterConsole(1));
     }
-
+    
     private void addStackToOutput(
             String name, StoreSupplier<Stack> stack, CalculateOutputName calculateOutputName) throws OperationFailedException {
         try {

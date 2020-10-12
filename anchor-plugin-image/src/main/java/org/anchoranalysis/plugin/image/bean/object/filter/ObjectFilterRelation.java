@@ -57,15 +57,15 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         relationResolved = relation.create();
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
-        return match(object, dim, relationResolved);
+        return match(object, dimensions, relationResolved);
     }
 
     protected abstract boolean match(

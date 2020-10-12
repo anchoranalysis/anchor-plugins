@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.rasterreader;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.io.bioformats.bean.BioformatsReader;
 import org.anchoranalysis.test.TestLoader;
@@ -49,10 +49,10 @@ public class FlexFormatTest {
      *
      * <p>Otherwise the FlexReader will be used, and its exact behaviour has yet to be established.
      *
-     * @throws RasterIOException
+     * @throws ImageIOException
      */
     @Test
-    public void testSizeCAndT() throws RasterIOException {
+    public void testSizeCAndT() throws ImageIOException {
 
         Path path = loader.resolveTestPath("exampleFormats/001001007.flex");
 

@@ -40,6 +40,8 @@ import ome.xml.model.enums.DimensionOrder;
 import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.Resolution;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MetadataUtilities {
@@ -81,9 +83,9 @@ class MetadataUtilities {
             meta.setPixelsSizeZ(new PositiveInteger(dimensions.z()), seriesIndex);
         }
 
-        meta.setPixelsPhysicalSizeX(createLength(dimensions.resolution().x() * dimensions.x()), 0);
-        meta.setPixelsPhysicalSizeY(createLength(dimensions.resolution().y() * dimensions.y()), 0);
-        meta.setPixelsPhysicalSizeZ(createLength(dimensions.resolution().z() * dimensions.z()), 0);
+        if (dimensions.resolution().isPresent()) {
+            assignResolution(meta, dimensions.resolution().get(), dimensions.extent()); // NOSONAR
+        }
 
         addChannels(
                 meta,
@@ -92,6 +94,12 @@ class MetadataUtilities {
                 seriesIndex);
 
         return meta;
+    }
+    
+    private static void assignResolution(IMetadata meta, Resolution resolution, Extent extent) {
+        meta.setPixelsPhysicalSizeX(createLength(resolution.x() * extent.x()), 0);
+        meta.setPixelsPhysicalSizeY(createLength(resolution.y() * extent.y()), 0);
+        meta.setPixelsPhysicalSizeZ(createLength(resolution.z() * extent.z()), 0);
     }
 
     private static int calculateNumberChannels(boolean makeRGB, int numberChannels) {

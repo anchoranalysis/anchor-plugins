@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.outline;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -111,7 +112,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void callBefore(Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+    private void callBefore(Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
@@ -127,7 +128,7 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     }
 
     private void callAfter(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());

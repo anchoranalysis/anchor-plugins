@@ -31,12 +31,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.exception.AnchorIOException;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
@@ -59,7 +59,7 @@ public class IndependentChannels extends ChannelConvertStyle {
             Set<String> channelNames,
             ChannelGetterForTimepoint channelGetter,
             Logger logger)
-            throws AnchorIOException {
+            throws OperationFailedException {
 
         NamedStacks out = new NamedStacks();
         
@@ -72,7 +72,7 @@ public class IndependentChannels extends ChannelConvertStyle {
         return out;
     }
     
-    private Optional<Stack> convertChannel(String key, ChannelGetterForTimepoint channelGetter, Logger logger) throws AnchorIOException {
+    private Optional<Stack> convertChannel(String key, ChannelGetterForTimepoint channelGetter, Logger logger) throws OperationFailedException {
         try {
             Channel channel = channelGetter.getChannel(key);
             return Optional.of( new Stack(channel) );
@@ -82,7 +82,7 @@ public class IndependentChannels extends ChannelConvertStyle {
                 logger.messageLogger().logFormatted("Cannot open channel '%s'. Ignoring.", key);
                 return Optional.empty();
             } else {
-                throw new AnchorIOException(String.format("Cannot open channel '%s'.", key), e);
+                throw new OperationFailedException(String.format("Cannot open channel '%s'.", key), e);
             }
         } 
     }

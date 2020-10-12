@@ -36,7 +36,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
@@ -51,7 +52,7 @@ public class FromCSVInputManager extends InputManager<FromCSVInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<FromCSVInput> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<FromCSVInput> inputs(InputManagerParams params) throws InputReadFailedException {
 
         Iterator<MultiInput> itr = input.inputs(params).iterator();
 
@@ -60,10 +61,14 @@ public class FromCSVInputManager extends InputManager<FromCSVInput> {
         while (itr.hasNext()) {
             MultiInput inputObj = itr.next();
 
-            Path csvFilePathOut =
-                    appendCSV.deriveFrom(
-                            inputObj.pathForBindingRequired(), params.isDebugModeActivated());
-            out.add(new FromCSVInput(inputObj, csvFilePathOut));
+            try {
+                Path csvFilePathOut =
+                        appendCSV.deriveFrom(
+                                inputObj.pathForBindingRequired(), params.isDebugModeActivated());
+                out.add(new FromCSVInput(inputObj, csvFilePathOut));
+            } catch (DerivePathException e) {
+                throw new InputReadFailedException(e);
+            }
         }
 
         return out;

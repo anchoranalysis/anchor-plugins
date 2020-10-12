@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.AnchorIOException;
+import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.plugin.io.input.filter.FilterDescriptiveNameEqualsContains;
 
@@ -60,7 +60,7 @@ public class FilterDescriptiveName<T extends InputFromManager> extends InputMana
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputs(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
         FilterDescriptiveNameEqualsContains filter =
                 new FilterDescriptiveNameEqualsContains(equals, contains);

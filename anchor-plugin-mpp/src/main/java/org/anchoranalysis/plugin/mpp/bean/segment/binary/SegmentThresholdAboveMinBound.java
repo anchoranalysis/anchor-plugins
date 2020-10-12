@@ -64,18 +64,12 @@ public class SegmentThresholdAboveMinBound extends BinarySegmentation {
             Optional<ObjectMask> objectMask)
             throws SegmentationFailedException {
 
-        setUpDelegate(
-                voxels.any().extent(),
-                params.getResolution()
-                        .orElseThrow(
-                                () ->
-                                        new SegmentationFailedException(
-                                                "Image-resolution is required but missing")));
+        setUpDelegate(voxels.any().extent(), params.getResolution());
 
         return delegate.segment(voxels, params, objectMask);
     }
 
-    private void setUpDelegate(Extent extent, Resolution resolution) {
+    private void setUpDelegate(Extent extent, Optional<Resolution> resolution) {
         double minBound = markBounds.getMinResolved(resolution, extent.z() > 1 && !suppress3D);
 
         int threshold = (int) Math.floor(minBound);
