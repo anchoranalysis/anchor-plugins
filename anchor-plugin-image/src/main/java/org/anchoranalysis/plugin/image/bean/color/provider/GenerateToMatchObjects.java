@@ -45,7 +45,7 @@ import org.anchoranalysis.image.object.ObjectCollection;
 public class GenerateToMatchObjects extends ColorProvider {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private ColorScheme colorSetGenerator;
+    @BeanField @Getter @Setter private ColorScheme colorScheme;
 
     @BeanField @Getter @Setter private ObjectCollectionProvider objects;
     // END BEAN PROPERTIES
@@ -61,7 +61,7 @@ public class GenerateToMatchObjects extends ColorProvider {
         }
 
         try {
-            return colorSetGenerator.createList(objectsCreated.size());
+            return colorScheme.createList(objectsCreated.size());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

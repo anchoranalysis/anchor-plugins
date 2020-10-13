@@ -31,10 +31,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -48,8 +53,9 @@ import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
-public class MovieFromSlices extends RasterTask {
+public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack>,NoSharedState> {
 
     private static final String OUTPUT_FRAME = "frames";
     
@@ -65,21 +71,32 @@ public class MovieFromSlices extends RasterTask {
     @BeanField @Getter @Setter private int repeat = 1;
     // END BEAN PROPERTIES
 
-    private OutputSequenceIncrementing<Stack> outputSequence;
-
-    @Override
-    public void startSeries(InputOutputContext context)
-            throws JobExecutionException {
-        try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, context.getOutputter().getChecked());
-        } catch (OutputWriteFailedException e) {
-            throw new JobExecutionException(e);
-        }
-    }
-
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
+    }
+    
+    @Override
+    public OutputSequenceIncrementing<Stack> beforeAnyJobIsExecuted(Outputter outputter,
+            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            throws ExperimentExecutionException {
+        try {
+            return OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, outputter.getChecked());
+        } catch (OutputWriteFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+    
+    @Override
+    protected NoSharedState createSharedStateJob(InputOutputContext context)
+            throws JobExecutionException {
+        return NoSharedState.INSTANCE;
+    }
+
+    @Override
+    public void startSeries(OutputSequenceIncrementing<Stack> sharedStateTask,
+            NoSharedState sharedStateJob, InputOutputContext context) throws JobExecutionException {
+        // NOTHING TO DO
     }
 
     @Override
@@ -88,13 +105,13 @@ public class MovieFromSlices extends RasterTask {
     }
 
     @Override
-    public void doStack(
-            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
-            throws JobExecutionException {
+    public void doStack(InputBound<NamedChannelsInput, OutputSequenceIncrementing<Stack>> input,
+            NoSharedState sharedStateJob, int seriesIndex, int numberSeries,
+            InputOutputContext context) throws JobExecutionException {
 
         try {
             NamedChannelsForSeries namedChannels =
-                    input.createChannelsForSeries(0, ProgressReporterNull.get());
+                    input.getInput().createChannelsForSeries(0, ProgressReporterNull.get());
 
             ProgressReporter progressReporter = ProgressReporterNull.get();
 
@@ -102,7 +119,6 @@ public class MovieFromSlices extends RasterTask {
             Channel blue = namedChannels.getChannel("blue", 0, progressReporter);
             Channel green = namedChannels.getChannel("green", 0, progressReporter);
 
-            //
             if (!red.dimensions().equals(blue.dimensions())
                     || !blue.dimensions().equals(green.dimensions())) {
                 throw new JobExecutionException("Scene dimensions do not match");
@@ -118,14 +134,14 @@ public class MovieFromSlices extends RasterTask {
                 sliceOut = extract.extractAndProjectStack(red, green, blue, z);
 
                 for (int i = 0; i < repeat; i++) {
-                    outputSequence.add(sliceOut);
+                    input.getSharedState().add(sliceOut);
                 }
             }
 
             // Just
             if (delaySizeAtEnd > 0 && sliceOut != null) {
                 for (int i = 0; i < delaySizeAtEnd; i++) {
-                    outputSequence.add(sliceOut);
+                    input.getSharedState().add(sliceOut);
                 }
             }
 
@@ -133,9 +149,16 @@ public class MovieFromSlices extends RasterTask {
             throw new JobExecutionException(e);
         }
     }
+    
+    @Override
+    public void endSeries(OutputSequenceIncrementing<Stack> sharedStateTask,
+            NoSharedState sharedStateJob, InputOutputContext context) throws JobExecutionException {
+        // NOTHING TO DO        
+    }
 
     @Override
-    public void endSeries(InputOutputContext context) throws JobExecutionException {
-        
+    public void afterAllJobsAreExecuted(OutputSequenceIncrementing<Stack> sharedState,
+            InputOutputContext context) throws ExperimentExecutionException {
+        // NOTHING TO DO
     }
 }

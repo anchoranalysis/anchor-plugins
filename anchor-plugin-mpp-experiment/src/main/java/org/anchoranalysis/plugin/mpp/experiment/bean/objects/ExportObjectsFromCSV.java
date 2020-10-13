@@ -270,19 +270,20 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         outputter
                 .writerPermissive()
                 .write(
-                        label,
-                        () -> {
-                            try {
-                                return createGenerator(label, rows, objects, background);
-                            } catch (SetOperationFailedException e) {
-                                throw new OutputWriteFailedException(e);
-                            }
-                        });
+                    label,
+                    () -> {
+                        try {
+                            return createGenerator(label, objects, background);
+                        } catch (SetOperationFailedException e) {
+                            throw new OutputWriteFailedException(e);
+                        }
+                    },
+                    () -> rows
+                );
     }
 
     private CollectionGenerator<CSVRow, Collection<CSVRow>> createGenerator(
             String label,
-            Collection<CSVRow> rows,
             ObjectCollectionRTree objects,
             DisplayStack background)
             throws SetOperationFailedException {
@@ -302,9 +303,6 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                                 new SimpleNameValue<>("idXML", new CSVRowXMLGenerator())));
 
         // Output the group
-        CollectionGenerator<CSVRow, Collection<CSVRow>> subFolderGenerator =
-                new CollectionGenerator<>(listGenerator, "pair");
-        subFolderGenerator.assignElement(rows);
-        return subFolderGenerator;
+        return new CollectionGenerator<>(listGenerator, "pair");
     }
 }

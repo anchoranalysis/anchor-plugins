@@ -49,12 +49,11 @@ class GroupedHistogramWriter {
 
     public void writeHistogramToFile(
             Histogram histogram, String channelName, InputOutputContext context) {
-        generator.assignElement(histogram);
 
         if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
             context.getOutputter()
                     .writerSecondLevel(outputName)
-                    .write(channelName, () -> generator);
+                    .write(channelName, () -> generator, () -> histogram);
         }
     }
 }

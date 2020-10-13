@@ -37,6 +37,7 @@ import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
 import org.anchoranalysis.io.generator.text.StringGenerator;
 import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.io.output.writer.WriterRouterErrors;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembershipWithFlags;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
@@ -93,35 +94,35 @@ class MarksOutputter {
         writeOutline(OUTPUT_OUTLINE_THIN, coloredMarksDisplayStack, regionMembership, writer, 1);
         writeOutline(OUTPUT_OUTLINE_THICK, coloredMarksDisplayStack, regionMembership, writer, 3);
 
-        writeMarksMaskCollection(coloredMarksDisplayStack, writer, regionMembership);
+        writeMarksAsRaster(coloredMarksDisplayStack, writer, regionMembership);
 
-        writeFinalMarks(marks.getMarks(), writer);
+        writeFinalMarks(marks::getMarks, writer);
         outputMarksSize(marks.getMarksWithTotalEnergy(), writer, logger);
     }
 
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
         writer.write(
                 OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
+                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS), () -> marks);
     }
 
-    private static void writeMarksMaskCollection(
+    private static void writeMarksAsRaster(
             ColoredMarksWithDisplayStack coloredMarksDisplayStack,
             WriterRouterErrors writer,
-            RegionMembershipWithFlags rm) {
+            RegionMembershipWithFlags regionMembership) {
         writer.write(
                 "finalMarksRaster",
                 () ->
                         new MarksAsUniqueValueGenerator(
                                 coloredMarksDisplayStack.getStack().dimensions(),
-                                rm,
-                                coloredMarksDisplayStack.getMarksColored().getMarks()));
+                                regionMembership),
+                                coloredMarksDisplayStack.getMarksColored()::getMarks);
     }
 
     private static void writeOutline(
             String outputNamePrefix,
             ColoredMarksWithDisplayStack coloredMarksDisplayStack,
-            RegionMembershipWithFlags rm,
+            RegionMembershipWithFlags regionMembership,
             WriterRouterErrors writer,
             int outlineWidth) {
 
@@ -131,31 +132,29 @@ class MarksOutputter {
                 () ->
                         new MarksGenerator(
                                 outlineWriter,
-                                coloredMarksDisplayStack,
                                 new IDGetterIter<Overlay>(),
-                                rm));
+                                regionMembership), () -> coloredMarksDisplayStack );
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
                                 outlineWriter,
-                                coloredMarksDisplayStack,
                                 new IDGetterIter<Overlay>(),
-                                rm));
+                                regionMembership), () -> coloredMarksDisplayStack);
     }
 
-    private static void writeFinalMarks(MarkCollection marks, WriterRouterErrors writer) {
+    private static void writeFinalMarks(ElementSupplier<MarkCollection> marks, WriterRouterErrors writer) {
         writer.write(
                 OUTPUT_MARKS_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
+                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS), marks);
         writer.write(
                 "finalMarksBinary",
-                () -> new ObjectOutputStreamGenerator<>(marks, MANIFEST_FUNCTION_MARKS));
+                () -> new ObjectOutputStreamGenerator<>(MANIFEST_FUNCTION_MARKS), marks);
     }
 
     private static void outputMarksSize(
             MarksWithTotalEnergy marks, WriterRouterErrors writer, Logger logger) {
-        writer.write("marksSize", () -> new StringGenerator(String.format("%d", marks.size())));
+        writer.write("marksSize", StringGenerator::new, () -> String.format("%d", marks.size()) );
         logger.messageLogger().log("Marks size = " + marks.size());
     }
 }

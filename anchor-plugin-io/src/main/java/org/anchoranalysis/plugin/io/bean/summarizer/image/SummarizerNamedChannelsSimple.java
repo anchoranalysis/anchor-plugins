@@ -36,7 +36,7 @@ public abstract class SummarizerNamedChannelsSimple<T> extends SummarizerNamedCh
     @Override
     public void add(NamedChannelsInput element) throws OperationFailedException {
         try {
-            incrCount(extractKey(element));
+            incrementCount(extractKey(element));
         } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }

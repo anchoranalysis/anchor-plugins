@@ -106,7 +106,7 @@ public class RecordFilepaths<T extends InputFromManager> extends Task<T, StringB
 
         context.getOutputter()
                 .writerPermissive()
-                .write("list", () -> new StringGenerator(sharedState.toString()));
+                .write("list", StringGenerator::new, sharedState::toString);
     }
 
     @Override

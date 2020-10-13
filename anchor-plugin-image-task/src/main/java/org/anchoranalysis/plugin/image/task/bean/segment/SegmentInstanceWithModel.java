@@ -64,6 +64,7 @@ import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
 import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.stack.TimeSequence;
@@ -301,22 +302,23 @@ public class SegmentInstanceWithModel<T>
 
         writer.write(
                 OUTPUT_INPUT_IMAGE,
-                () -> new StackGenerator(true, MANIFEST_FUNCTION_INPUT_IMAGE, stack));
-        writer.write(OUTPUT_H5, () -> new HDF5ObjectsGenerator(objects));
+                () -> new StackGenerator(true, MANIFEST_FUNCTION_INPUT_IMAGE),
+                () -> stack);
+        writer.write(OUTPUT_H5, HDF5ObjectsGenerator::new, () -> objects);
         writer.write(
                 OUTPUT_MERGED_AS_MASK,
-                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions(), objects));
+                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()), () -> objects);
 
-        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects, background));
+        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects.size(), background), () -> new ObjectCollectionWithProperties(objects) );
     }
 
     private DrawObjectsGenerator outlineGenerator(
-            ObjectCollection objects, DisplayStack background) {
+            int objectsSize, DisplayStack background) {
         if (varyColors) {
-            return DrawObjectsGenerator.outlineVariedColors(objects, outlineWidth, background);
+            return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
         } else {
             return DrawObjectsGenerator.outlineSingleColor(
-                    objects, outlineWidth, background, outlineColor.rgbColor());
+                    outlineWidth, background, outlineColor.rgbColor());
         }
     }
 

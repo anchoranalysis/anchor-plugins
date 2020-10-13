@@ -31,14 +31,19 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.name.store.StoreSupplier;
 import org.anchoranalysis.core.progress.ProgressReporterConsole;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.experiment.bean.task.RasterTask;
@@ -54,6 +59,7 @@ import org.anchoranalysis.io.generator.sequence.OutputSequenceIndexed;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.plugin.image.task.bean.format.convertstyle.ChannelConvertStyle;
 import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
@@ -80,7 +86,7 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
  *
  * @author Owen Feehan
  */
-public class ConvertImageFormat extends RasterTask {
+public class ConvertImageFormat extends RasterTask<NoSharedState,OutputSequenceIndexed<Stack,String>> {
 
     private static final String OUTPUT_COPY = "converted";
 
@@ -99,18 +105,6 @@ public class ConvertImageFormat extends RasterTask {
     @BeanField @OptionalBean @Getter @Setter private ConvertChannelTo channelConverter = null;
     // END BEAN PROPERTIES
 
-    private OutputSequenceIndexed<Stack,String> outputSequence;
-
-    @Override
-    public void startSeries(InputOutputContext context)
-            throws JobExecutionException {
-        try {
-            outputSequence = OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context.getOutputter().getChecked());
-        } catch (OutputWriteFailedException e) {
-            throw new JobExecutionException(e);
-        }
-    }
-
     @Override
     public OutputEnabledMutable defaultOutputs() {
         return super.defaultOutputs().addEnabledOutputFirst(OUTPUT_COPY);
@@ -120,18 +114,45 @@ public class ConvertImageFormat extends RasterTask {
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
+    
+    @Override
+    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
+            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            throws ExperimentExecutionException {
+        return NoSharedState.INSTANCE;
+    }
+    
+    /**
+     * Sets a new output-sequence for the series
+     * 
+     * <p>It's important to do this here rather than in {@link #beforeAnyJobIsExecuted(Outputter, ConcurrencyPlan, ParametersExperiment)}
+     * as {@code context} is now bound with the directory/prefix related to the input.
+     */
+    @Override
+    protected OutputSequenceIndexed<Stack, String> createSharedStateJob(InputOutputContext context)
+            throws JobExecutionException {
+        try {
+            return OutputSequenceStackFactory.NO_RESTRICTIONS.withoutOrderCurrentDirectory(OUTPUT_COPY, context.getOutputter().getChecked());
+        } catch (OutputWriteFailedException e) {
+            throw new JobExecutionException(e);
+        }
+    }
 
     @Override
-    public void doStack(
-            NamedChannelsInput inputUntyped,
-            int seriesIndex,
-            int numberSeries,
-            InputOutputContext context)
+    public void startSeries(NoSharedState sharedStateTask,
+            OutputSequenceIndexed<Stack, String> sharedStateJob, InputOutputContext context)
             throws JobExecutionException {
+        // NOTHING TO DO
+    }
+    
+    @Override
+    public void doStack(InputBound<NamedChannelsInput, NoSharedState> input,
+            OutputSequenceIndexed<Stack, String> sharedStateJob, int seriesIndex, int numberSeries,
+            InputOutputContext context) throws JobExecutionException {
 
         try {
             NamedChannelsForSeries channels =
-                    createChannelCollection(inputUntyped, seriesIndex);
+                    createChannelCollection(input.getInput(), seriesIndex);
             
             ChannelGetter channelGetter = maybeAddFilter(channels, context);
 
@@ -145,16 +166,25 @@ public class ConvertImageFormat extends RasterTask {
                     numberSeries,
                     channels.sizeT(ProgressReporterNull.get()),
                     channelGetter,
+                    sharedStateJob,
                     context.getLogger());
 
         } catch (ImageIOException | CreateException e) {
             throw new JobExecutionException(e);
         }
     }
+    
+    @Override
+    public void endSeries(NoSharedState sharedStateTask,
+            OutputSequenceIndexed<Stack, String> sharedStateJob, InputOutputContext context)
+            throws JobExecutionException {
+        // NOTHING TO DO        
+    }
 
     @Override
-    public void endSeries(InputOutputContext context) throws JobExecutionException {
-
+    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
+        // NOTHING TO DO
     }
 
     private void convertEachTimepoint(
@@ -163,6 +193,7 @@ public class ConvertImageFormat extends RasterTask {
             int numSeries,
             int sizeT,
             ChannelGetter channelGetter,
+            OutputSequenceIndexed<Stack,String> outputSequence,
             Logger logger)
             throws JobExecutionException {
 
@@ -179,7 +210,7 @@ public class ConvertImageFormat extends RasterTask {
                         new ChannelGetterForTimepoint(channelGetter, t),
                         logger);
             
-                stacks.forEach( (stackName,stack) -> addStackToOutput(stackName, stack, namer) );
+                stacks.forEach( (stackName,stack) -> addStackToOutput(outputSequence, stackName, stack, namer) );
             } catch (OperationFailedException e) {
                 throw new JobExecutionException(e);
             }
@@ -194,7 +225,7 @@ public class ConvertImageFormat extends RasterTask {
     }
     
     private void addStackToOutput(
-            String name, StoreSupplier<Stack> stack, CalculateOutputName calculateOutputName) throws OperationFailedException {
+            OutputSequenceIndexed<Stack,String> outputSequence, String name, StoreSupplier<Stack> stack, CalculateOutputName calculateOutputName) throws OperationFailedException {
         try {
             outputSequence.add(stack.get(), calculateOutputName.outputName(name));
         } catch (OutputWriteFailedException e) {

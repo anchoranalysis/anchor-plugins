@@ -54,11 +54,10 @@ class HelperReadWriteObjects {
     public static void writeObjects(
             ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
             throws SetOperationFailedException, BindFailedException {
-        generator.assignElement(objects);
 
         Outputter outputter = OutputterFixture.outputter(path);
 
-        outputter.writerPermissive().write("objects", () -> generator);
+        outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }
 
     public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {
