@@ -34,7 +34,6 @@ import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRaster;
 import org.anchoranalysis.image.object.Contour;
@@ -59,12 +58,6 @@ class ContourListGenerator
 
     public ContourListGenerator(DisplayStack background) {
         this(new Outline(1, false), null, background);
-    }
-
-    public ContourListGenerator(DisplayStack background, List<Contour> contours)
-            throws SetOperationFailedException {
-        this(background);
-        assignElement(contours);
     }
 
     public ContourListGenerator(

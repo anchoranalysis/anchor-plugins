@@ -45,7 +45,7 @@ import org.w3c.dom.Element;
 class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(CSVRow element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
         try {
@@ -56,7 +56,7 @@ class CSVRowXMLGenerator extends XMLGenerator<CSVRow> {
             Element root = doc.createElement("identify");
             doc.appendChild(root);
 
-            getElement().writeToXML(root, doc);
+            element.writeToXML(root, doc);
 
             XmlOutputter.writeXmlToFile(doc, filePath);
 
