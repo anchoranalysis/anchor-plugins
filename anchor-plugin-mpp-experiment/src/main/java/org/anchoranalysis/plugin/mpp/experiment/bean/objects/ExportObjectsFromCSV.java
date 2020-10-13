@@ -282,7 +282,7 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
                 );
     }
 
-    private CollectionGenerator<CSVRow, Collection<CSVRow>> createGenerator(
+    private CollectionGenerator<CSVRow> createGenerator(
             String label,
             ObjectCollectionRTree objects,
             DisplayStack background)

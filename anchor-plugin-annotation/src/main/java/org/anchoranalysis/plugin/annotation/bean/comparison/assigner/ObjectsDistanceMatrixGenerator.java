@@ -61,10 +61,10 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
     }
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(ObjectCollectionDistanceMatrix element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        ObjectCollectionDistanceMatrix distanceMatrix = getElement();
+        ObjectCollectionDistanceMatrix distanceMatrix = element;
 
         try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 

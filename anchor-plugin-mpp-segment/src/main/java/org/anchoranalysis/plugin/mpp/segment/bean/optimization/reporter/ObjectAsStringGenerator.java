@@ -40,22 +40,14 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 @NoArgsConstructor
 class ObjectAsStringGenerator<T> extends OneStageGenerator<T> {
 
-    public ObjectAsStringGenerator(T object) {
-        super(object);
-    }
-
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-
-        if (getElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
 
         try (FileWriter outFile = new FileWriter(filePath.toFile())) {
 
             PrintWriter out = new PrintWriter(outFile);
-            out.println(getElement().toString());
+            out.println(element.toString());
 
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
