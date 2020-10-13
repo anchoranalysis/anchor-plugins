@@ -285,7 +285,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         if (keyValueParams.isPresent()) {
             outputter
                     .writerSelective()
-                    .write("groupParams", () -> new GroupParamsGenerator(keyValueParams.get()));
+                    .write("groupParams", GroupParamsGenerator::new, keyValueParams::get);
         }
     }
 }

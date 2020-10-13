@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.annotation.io.assignment.AssignmentOverlapFromPairs;
-import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGeneratorFactory;
+import org.anchoranalysis.annotation.io.assignment.generator.AssignmentGenerator;
 import org.anchoranalysis.annotation.io.assignment.generator.ColorPool;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
@@ -58,6 +58,7 @@ import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationC
 import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
+import io.vavr.Tuple2;
 
 /**
  * Task to compare a set of annotations to a segmentation or other set of annotations.
@@ -85,9 +86,9 @@ public class CompareAnnotations<T extends Assignment>
     @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
 
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
+    
+    @BeanField @Getter @Setter private ColorScheme colorsUnpaired = new VeryBright();
     // END BEAN PROPERTIES
-
-    private ColorScheme colorSetGeneratorUnpaired = new VeryBright();
 
     @Override
     public SharedState<T> beforeAnyJobIsExecuted(
@@ -134,6 +135,41 @@ public class CompareAnnotations<T extends Assignment>
                 "rgbOutline", params.getOutputter(), input, assignment.get(), background);
     }
 
+
+    @Override
+    public InputTypesExpected inputTypesExpected() {
+        return new InputTypesExpected(AnnotationComparisonInput.class);
+    }
+
+    @Override
+    public void afterAllJobsAreExecuted(SharedState<T> sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
+
+        @SuppressWarnings("unchecked")
+        SharedState<AssignmentOverlapFromPairs> sharedStateC =
+                (SharedState<AssignmentOverlapFromPairs>) sharedState;
+        sharedStateC.getAssignmentCSV().end();
+
+        // Write group statistics
+        try {
+            new CSVComparisonGroup<>(sharedStateC.allGroups())
+                    .writeGroupStats(context.getOutputter());
+        } catch (OutputWriteFailedException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    @Override
+    public boolean hasVeryQuickPerInputExecution() {
+        return false;
+    }
+
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        assert (false);
+        return super.defaultOutputs();
+    }
+    
     private Optional<Assignment> compareAndUpdate(
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
@@ -228,59 +264,32 @@ public class CompareAnnotations<T extends Assignment>
             return;
         }
 
-        ColorPool colorPool =
-                new ColorPool(
-                        assignment.numberPaired(),
-                        outputter.getSettings().getDefaultColorSetGenerator(),
-                        colorSetGeneratorUnpaired,
-                        replaceMatchesWithSolids);
-
         outputter
                 .writerSelective()
                 .write(
                         "rgbOutline",
-                        () ->
-                                AssignmentGeneratorFactory.createAssignmentGenerator(
+                        () -> createAssignmentGenerator(
                                         background,
-                                        assignment,
-                                        colorPool,
-                                        useMIP,
-                                        input.getNames(),
-                                        outlineWidth,
-                                        assigner.moreThanOneObj()));
+                                        outputter.getSettings().getDefaultColors(),
+                                        input.getNames()),
+                        () -> assignment);
     }
-
-    @Override
-    public InputTypesExpected inputTypesExpected() {
-        return new InputTypesExpected(AnnotationComparisonInput.class);
+    
+    private AssignmentGenerator createAssignmentGenerator(DisplayStack background, ColorScheme colorSchemeFromSettings, Tuple2<String, String> names) {
+        return new AssignmentGenerator(
+                background,
+                numberPaired -> createColorPool(numberPaired, colorSchemeFromSettings),
+                useMIP,
+                names,
+                assigner.moreThanOneObj(),
+                outlineWidth);
     }
-
-    @Override
-    public void afterAllJobsAreExecuted(SharedState<T> sharedState, InputOutputContext context)
-            throws ExperimentExecutionException {
-
-        @SuppressWarnings("unchecked")
-        SharedState<AssignmentOverlapFromPairs> sharedStateC =
-                (SharedState<AssignmentOverlapFromPairs>) sharedState;
-        sharedStateC.getAssignmentCSV().end();
-
-        // Write group statistics
-        try {
-            new CSVComparisonGroup<>(sharedStateC.allGroups())
-                    .writeGroupStats(context.getOutputter());
-        } catch (OutputWriteFailedException e) {
-            throw new ExperimentExecutionException(e);
-        }
-    }
-
-    @Override
-    public boolean hasVeryQuickPerInputExecution() {
-        return false;
-    }
-
-    @Override
-    public OutputEnabledMutable defaultOutputs() {
-        assert (false);
-        return super.defaultOutputs();
+    
+    private ColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
+        return new ColorPool(
+                numberPaired,
+                colorSchemeFromSettings,
+                colorsUnpaired,
+                replaceMatchesWithSolids);
     }
 }

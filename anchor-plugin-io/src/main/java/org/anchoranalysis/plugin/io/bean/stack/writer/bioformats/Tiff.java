@@ -27,11 +27,9 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import java.nio.file.Path;
-import java.util.HashSet;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
-import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
@@ -44,14 +42,6 @@ import org.anchoranalysis.image.stack.Stack;
  */
 public class Tiff extends BioformatsWriter {
 
-    private static HashSet<Channel> alreadySeen = new HashSet<>();
-    
-    private static void checkChannel(Channel c) {
-        synchronized(alreadySeen) {
-            assert( !alreadySeen.contains(c) );
-            alreadySeen.add(c);
-        }
-    }
     @Override
     public void writeStack(
             Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
@@ -59,10 +49,6 @@ public class Tiff extends BioformatsWriter {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new ImageIOException("Stack must have 1 or 3 channels");
-        }
-        
-        for (Channel c : stack) {
-            checkChannel(c);
         }
 
         super.writeStack(stack, filePath, makeRGB, writeOptions);

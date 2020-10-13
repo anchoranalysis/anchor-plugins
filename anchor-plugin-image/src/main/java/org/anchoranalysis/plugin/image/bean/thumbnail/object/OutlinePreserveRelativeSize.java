@@ -154,9 +154,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 assert centeredBox.extent().equals(size.asExtent());
                 assert sceneExtentScaled.contains(centeredBox);
 
-                generator.assignElement(determineObjectsForGenerator(objectsScaled, centeredBox));
-
-                return DisplayStack.create(generator.transform());
+                Stack transformed = generator.transform(determineObjectsForGenerator(objectsScaled, centeredBox));
+                return DisplayStack.create(transformed);
 
             } catch (OutputWriteFailedException | OperationFailedException e) {
                 throw new CreateException(e);

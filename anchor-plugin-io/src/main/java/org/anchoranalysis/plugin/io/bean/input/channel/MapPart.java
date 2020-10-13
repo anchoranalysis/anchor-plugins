@@ -75,8 +75,8 @@ class MapPart extends NamedChannelsInputPart {
     private NamedEntries channelMap = null;
 
     @Override
-    public Dimensions dimensions(int seriesIndex) throws ImageIOException {
-        return openedRaster().dimensionsForSeries(seriesIndex);
+    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
+        return openedRaster().dimensionsForSeries(stackIndexInSeries);
     }
 
     @Override

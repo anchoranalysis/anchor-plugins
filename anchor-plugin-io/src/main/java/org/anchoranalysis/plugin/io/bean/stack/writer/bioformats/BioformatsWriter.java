@@ -124,7 +124,6 @@ public abstract class BioformatsWriter extends StackWriter {
             throws ImageIOException {
                 
         try (IFormatWriter writer = createWriter()) {
-
             prepareWriter(writer, stack, voxelDataTypeToWrite, makeRGB);
 
             writer.setId(filePath.toString());
@@ -132,7 +131,6 @@ public abstract class BioformatsWriter extends StackWriter {
             if (!writer.canDoStacks() && stack.dimensions().z() > 1) {
                 throw new ImageIOException("The writer must support stacks for Z > 1");
             }
-
             writeStack(writer, stack, makeRGB, voxelDataTypeToWrite);
 
         } catch (IOException | FormatException e) {

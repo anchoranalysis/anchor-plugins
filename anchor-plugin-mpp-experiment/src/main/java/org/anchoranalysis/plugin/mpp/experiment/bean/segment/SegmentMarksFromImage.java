@@ -184,15 +184,15 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
         outputter
                 .writerSelective()
-                .write(OUTPUT_MARKS, () -> new XStreamGenerator<Object>(marks, MANIFEST_FUNCTION_SERIALIZED_MARKS));
+                .write(OUTPUT_MARKS, () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS), () -> marks);
 
         try {
             DisplayStack backgroundStack =
                     BackgroundCreator.createBackground(
                             stackCollection, segment.getBackgroundStackName());
 
-            MarksVisualization.write(marks, outputter, backgroundStack);
-        } catch (OperationFailedException | CreateException e) {
+            new MarksVisualization(marks, outputter, backgroundStack).write();
+        } catch (CreateException e) {
             logger.errorReporter().recordError(SegmentMarksFromImage.class, e);
         }
     }

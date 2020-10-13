@@ -135,11 +135,9 @@ public abstract class ColoredBase extends StackProvider {
             DrawObjectsGenerator generator =
                     DrawObjectsGenerator.withBackgroundAndColors(
                             createDrawer(),
-                            new ObjectCollectionWithProperties(objects),
                             background,
                             colors);
-
-            return generator.transform();
+            return generator.transform( new ObjectCollectionWithProperties(objects) );
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);

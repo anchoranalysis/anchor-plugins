@@ -75,8 +75,8 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public Dimensions dimensions(int seriesIndex) throws ImageIOException {
-        return delegate.dimensions(seriesIndex);
+    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
+        return delegate.dimensions(stackIndexInSeries);
     }
 
     @Override

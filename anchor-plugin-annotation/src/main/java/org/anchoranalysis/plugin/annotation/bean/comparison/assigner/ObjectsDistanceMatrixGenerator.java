@@ -40,7 +40,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Generates a CSV-file that is a table of distances between objects.
  *
- * <p>The distance is between objects is providerd via a {@link ObjectCollectionDistanceMatrix}.
+ * <p>The distance is between objects is provided via a {@link ObjectCollectionDistanceMatrix}.
  *
  * @author Owen Feehan
  */
@@ -53,13 +53,10 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
     /**
      * Creates the generator.
      *
-     * @param distanceMatrix a matrix defining distance between the objects
      * @param numberDecimalPlaces the number of decimal places to use for the distance
      */
-    public ObjectsDistanceMatrixGenerator(
-            ObjectCollectionDistanceMatrix distanceMatrix, int numberDecimalPlaces) {
+    public ObjectsDistanceMatrixGenerator(int numberDecimalPlaces) {
         super(MANIFEST_FUNCTION);
-        assignElement(distanceMatrix);
         this.numberDecimalPlaces = numberDecimalPlaces;
     }
 

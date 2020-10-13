@@ -31,6 +31,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
 import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
@@ -57,9 +58,8 @@ class DrawOutlineHelper {
 
             DrawObjectsGenerator drawOthers =
                     DrawObjectsGenerator.outlineSingleColor(
-                            objects, outlineWidth, displayStack, color.rgbColor());
-
-            return drawOthers.transform();
+                            outlineWidth, displayStack, color.rgbColor());
+            return drawOthers.transform( new ObjectCollectionWithProperties(objects) );
         } catch (OutputWriteFailedException | CreateException e) {
             throw new OperationFailedException(e);
         }

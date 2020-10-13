@@ -87,9 +87,8 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
                     .writerSelective()
                     .write(
                             "costMatrix",
-                            () ->
-                                    new ObjectsDistanceMatrixGenerator(
-                                            assignmentCreator.getCost(), numDecimalPlaces));
+                            () -> new ObjectsDistanceMatrixGenerator(numDecimalPlaces),
+                            assignmentCreator::getCost);
 
             return assignment;
         } catch (FeatureCalculationException | InitException e1) {

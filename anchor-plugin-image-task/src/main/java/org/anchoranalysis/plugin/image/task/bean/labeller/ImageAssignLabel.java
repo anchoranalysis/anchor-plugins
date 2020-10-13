@@ -154,6 +154,6 @@ public class ImageAssignLabel<T>
         sharedState
                 .getOutputterFor(groupIdentifier)
                 .writerPermissive()
-                .write(outputName, () -> new StackGenerator(true, "raster", stack));
+                .write(outputName, () -> new StackGenerator(true, "raster"), () -> stack);
     }
 }

@@ -51,7 +51,7 @@ public class SgmnMPPState implements ExperimentState {
 
         outputter
                 .writerSelective()
-                .write("define", () -> new XStreamGenerator<Object>(define, Optional.of("define")));
+                .write("define", () -> new XStreamGenerator<Object>(Optional.of("define")), () -> define);
     }
 
     // We just need any single kernel proposer to write out
@@ -60,9 +60,9 @@ public class SgmnMPPState implements ExperimentState {
         outputter
                 .writerSelective()
                 .write(
-                        OUTPUT_SERIALIZED,
-                        () ->
-                                new XStreamGenerator<Object>(
-                                        kernelProposer, Optional.of(MANIFEST_FUNCTION)));
+                    OUTPUT_SERIALIZED,
+                    () -> new XStreamGenerator<Object>(Optional.of(MANIFEST_FUNCTION)),
+                    () -> kernelProposer
+                 );
     }
 }

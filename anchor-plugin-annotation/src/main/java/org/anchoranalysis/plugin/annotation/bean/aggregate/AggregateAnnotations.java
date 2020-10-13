@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
-import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
@@ -77,14 +76,7 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
         context.getOutputter()
                 .writerSelective()
-                .write("annotationsAgg", () -> createGenerator(sharedState.getAnnotations()));
-    }
-
-    private static AnnotationAggregateCSVGenerator createGenerator(
-            List<ImageAnnotation> annotations) {
-        AnnotationAggregateCSVGenerator generator = new AnnotationAggregateCSVGenerator();
-        generator.assignElement(annotations);
-        return generator;
+                .write("annotationsAgg", AnnotationAggregateCSVGenerator::new, sharedState::getAnnotations);
     }
 
     private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)

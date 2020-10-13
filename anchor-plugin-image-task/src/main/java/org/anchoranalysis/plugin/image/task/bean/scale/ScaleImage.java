@@ -29,6 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.scale;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -36,7 +37,11 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.progress.ProgressReporterNull;
+import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
+import org.anchoranalysis.experiment.task.InputBound;
+import org.anchoranalysis.experiment.task.NoSharedState;
+import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.binary.mask.Mask;
@@ -54,6 +59,7 @@ import org.anchoranalysis.image.stack.wrap.WrapStackAsTimeSequenceStore;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 
@@ -64,7 +70,7 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
  *
  * @author Owen Feehan
  */
-public class ScaleImage extends RasterTask {
+public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
 
     private static final String OUTPUT_SCALED = "scaled";
     private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
@@ -76,22 +82,35 @@ public class ScaleImage extends RasterTask {
     // END BEAN PROPERTIES
 
     @Override
-    public void startSeries(InputOutputContext context)
+    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
+            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+            throws ExperimentExecutionException {
+        return NoSharedState.INSTANCE;
+    }
+    
+    @Override
+    protected NoSharedState createSharedStateJob(InputOutputContext context)
             throws JobExecutionException {
+        return NoSharedState.INSTANCE;
+    }
+
+    @Override
+    public void startSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
+            InputOutputContext context) throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
     public void doStack(
-            NamedChannelsInput input, int seriesIndex, int numberSeries, InputOutputContext context)
+            InputBound<NamedChannelsInput, NoSharedState> input, NoSharedState sharedStateJob, int seriesIndex, int numberSeries, InputOutputContext context)
             throws JobExecutionException {
 
         // Input
         NamedChannelsForSeries namedChannels;
         try {
-            namedChannels = input.createChannelsForSeries(0, ProgressReporterNull.get());
-        } catch (ImageIOException e1) {
-            throw new JobExecutionException(e1);
+            namedChannels = input.getInput().createChannelsForSeries(0, ProgressReporterNull.get());
+        } catch (ImageIOException e) {
+            throw new JobExecutionException(e);
         }
 
         ImageInitParams soImage = ImageInitParamsFactory.create(context);
@@ -110,7 +129,14 @@ public class ScaleImage extends RasterTask {
     }
 
     @Override
-    public void endSeries(InputOutputContext context) throws JobExecutionException {
+    public void endSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
+            InputOutputContext context) throws JobExecutionException {
+        // NOTHING TO DO        
+    }
+
+    @Override
+    public void afterAllJobsAreExecuted(NoSharedState sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
         // NOTHING TO DO
     }
 
@@ -199,10 +225,6 @@ public class ScaleImage extends RasterTask {
         return isOutputEnabled(context, OUTPUT_SCALED_FLATTENED, key);
     }
     
-    private static boolean isOutputEnabled(InputOutputContext context, String outputName, String key) {
-        return context.getOutputter().outputsEnabled().second(outputName).isOutputEnabled(key);
-    }
-    
     private Channel scaleChannel(Channel channelIn, MessageLogger logger) throws CreateException {
         if (forceBinary) {
             Mask mask = new Mask(channelIn);
@@ -217,5 +239,9 @@ public class ScaleImage extends RasterTask {
                             InterpolatorFactory.getInstance().rasterResizing(),
                             logger);
         }
+    }
+    
+    private static boolean isOutputEnabled(InputOutputContext context, String outputName, String key) {
+        return context.getOutputter().outputsEnabled().second(outputName).isOutputEnabled(key);
     }
 }

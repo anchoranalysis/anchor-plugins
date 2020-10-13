@@ -95,6 +95,6 @@ public class MinimalExecutionTimeStatsReporter
                         outputName,
                         () ->
                                 new XStreamGenerator<>(
-                                        stats, Optional.of("minimalExecutionTimeStats")));
+                                        Optional.of("minimalExecutionTimeStats")), () -> stats);
     }
 }

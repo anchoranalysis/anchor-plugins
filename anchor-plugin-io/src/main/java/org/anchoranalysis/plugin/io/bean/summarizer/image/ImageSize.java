@@ -41,10 +41,8 @@ public class ImageSize extends SummarizerNamedChannels<WrappedImageDim> {
     public void add(NamedChannelsInput img) throws OperationFailedException {
 
         try {
-            int numSeries = img.numberSeries();
-            for (int i = 0; i < numSeries; i++) {
-
-                incrCount(new WrappedImageDim(img.dimensions(0)));
+            for (int i = 0; i < img.numberSeries(); i++) {
+                incrementCount(new WrappedImageDim(img.dimensions(i)));
             }
 
         } catch (ImageIOException exc) {
