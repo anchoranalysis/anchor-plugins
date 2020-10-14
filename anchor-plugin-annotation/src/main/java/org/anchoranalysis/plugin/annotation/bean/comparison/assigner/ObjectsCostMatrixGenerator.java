@@ -38,24 +38,26 @@ import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 /**
- * Generates a CSV-file that is a table of distances between objects.
+ * Generates a CSV-file that is a table of costs between objects.
  *
+ * <p>Note that costs are often distances (symmetric) but not necessarily.
+ * 
  * <p>The distance is between objects is provided via a {@link CostMatrix}.
  *
  * @author Owen Feehan
  */
-class ObjectsDistanceMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
+class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
 
-    private static final String MANIFEST_FUNCTION = "objectCollectionDistanceMatrix";
+    private static final String MANIFEST_FUNCTION = "objectsCostMatrix";
 
     private final int numberDecimalPlaces;
-
+    
     /**
      * Creates the generator.
      *
-     * @param numberDecimalPlaces the number of decimal places to use for the distance
+     * @param numberDecimalPlaces the number of decimal places to use for the cost in the CSV file.
      */
-    public ObjectsDistanceMatrixGenerator(int numberDecimalPlaces) {
+    public ObjectsCostMatrixGenerator(int numberDecimalPlaces) {
         super(MANIFEST_FUNCTION);
         this.numberDecimalPlaces = numberDecimalPlaces;
     }
@@ -64,18 +66,16 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>
     public void writeToFile(CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        CostMatrix<ObjectMask> distanceMatrix = element;
-
         try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 
-            csvWriter.writeHeaders(headers(distanceMatrix.getSecond()));
+            csvWriter.writeHeaders(headers(element.getSecond()));
 
             // The descriptions of objects1 go in the first column
-            List<String> descriptions = descriptionFromObjects(distanceMatrix.getFirst());
+            List<String> descriptions = descriptionFromObjects(element.getFirst());
 
             // Write each row
-            for (int i = 0; i < distanceMatrix.sizeFirst(); i++) {
-                csvWriter.writeRow(rowWithDescription(descriptions, i, distanceMatrix));
+            for (int i = 0; i < element.sizeFirst(); i++) {
+                csvWriter.writeRow(rowWithDescription(descriptions, i, element));
             }
 
         } catch (OutputWriteFailedException e) {
@@ -85,8 +85,8 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>
 
     /** A row including a description as first-column */
     private List<TypedValue> rowWithDescription(
-            List<String> descriptions, int index, CostMatrix<ObjectMask> distanceMatrix) {
-        List<TypedValue> row = rowWithoutDescription(index, distanceMatrix);
+            List<String> descriptions, int index, CostMatrix<ObjectMask> element) {
+        List<TypedValue> row = rowWithoutDescription(index, element);
 
         // Insert the description as first column
         row.add(0, new TypedValue(descriptions.get(index)));
@@ -96,13 +96,13 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>
 
     /** A row excluding a description as first-column */
     private List<TypedValue> rowWithoutDescription(
-            int index1, CostMatrix<ObjectMask> distanceMatrix) {
+            int index1, CostMatrix<ObjectMask> element) {
         return FunctionalList.mapRangeToList(
                 0,
-                distanceMatrix.sizeSecond(),
+                element.sizeSecond(),
                 index2 ->
                         new TypedValue(
-                                distanceMatrix.getCost(index1, index2), numberDecimalPlaces));
+                                element.getCost(index1, index2), numberDecimalPlaces));
     }
 
     /** A sensible header string, bearing in the mind the first column has object descriptions. */
