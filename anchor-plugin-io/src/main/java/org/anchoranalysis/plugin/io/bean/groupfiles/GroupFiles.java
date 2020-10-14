@@ -46,7 +46,7 @@ import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.NamedFile;
 import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
 import org.anchoranalysis.plugin.io.bean.input.file.Files;
@@ -87,7 +87,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
     @BeanField @Getter @Setter
-    private FileNamer namer = new LastFolders(2);
+    private FileNamer namer = new LastDirectories(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be

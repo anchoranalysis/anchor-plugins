@@ -34,13 +34,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.bean.files.provider.FilesProvider;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.bean.input.InputManagerParams;
 import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
-import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
@@ -93,7 +92,7 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 
             // Uncoupled file manifests
             if (manifestInputFileSet != null) {
-                definition.addUncoupledFiles(
+                definition.addUncoupledJobs(
                         manifestInputFileSet.create(params),
                         manifestDeserializer,
                         params.getLogger());

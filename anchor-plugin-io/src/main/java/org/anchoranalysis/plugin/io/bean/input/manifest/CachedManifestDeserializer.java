@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-mpp-experiment
+ * anchor-io-manifest
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,29 +24,31 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
+package org.anchoranalysis.plugin.io.bean.input.manifest;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.log.Logger;
+import java.io.File;
+import org.anchoranalysis.core.cache.LRUCache;
+import org.anchoranalysis.core.index.GetOperationFailedException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.io.manifest.Manifest;
-import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
-import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
+import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
-public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileBase {
+class CachedManifestDeserializer implements ManifestDeserializer {
+
+    private LRUCache<File, Manifest> cachedItems;
+
+    // Cache, last-used gets deleted when the cacheSize is reached
+    public CachedManifestDeserializer(final ManifestDeserializer delegate, int cacheSize) {
+        super();
+        cachedItems = new LRUCache<>(cacheSize, delegate::deserializeManifest);
+    }
 
     @Override
-    public String featureDescription(DeserializedManifest object, Logger logger)
-            throws OperationFailedException {
-
-        FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
-
-        Manifest manifest = object.get();
-
-        if (!finder.doFind(manifest)) {
-            throw new OperationFailedException(
-                    String.format("Cannot find '%s' in manifest", getFileName()));
+    public Manifest deserializeManifest(File file) throws DeserializationFailedException {
+        try {
+            return cachedItems.get(file);
+        } catch (GetOperationFailedException e) {
+            throw new DeserializationFailedException(e);
         }
-
-        return finder.get().trim().trim();
     }
 }

@@ -41,11 +41,11 @@ import org.anchoranalysis.experiment.task.InputBound;
 import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.bean.ReportFeature;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.io.manifest.CoupledManifests;
+import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 
 public class ExportReportFeaturesFromManifest
@@ -53,7 +53,7 @@ public class ExportReportFeaturesFromManifest
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter
-    private List<ReportFeature<ManifestRecorderFile>> listReportFeatures = new ArrayList<>();
+    private List<ReportFeature<DeserializedManifest>> listReportFeatures = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
@@ -94,7 +94,7 @@ public class ExportReportFeaturesFromManifest
 
                 List<TypedValue> rowElements =
                         ReportFeatureUtilities.elementList(
-                                listReportFeatures, coupledManifests.getFileManifest(), logger);
+                                listReportFeatures, coupledManifests.getJobManifest(), logger);
 
                 try {
                     writer.writeRow(rowElements);

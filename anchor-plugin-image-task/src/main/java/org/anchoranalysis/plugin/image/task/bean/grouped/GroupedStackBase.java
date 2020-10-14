@@ -45,7 +45,7 @@ import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.image.stack.NamedStacks;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.exception.DerivePathException;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
@@ -72,8 +72,8 @@ public abstract class GroupedStackBase<S, T>
      */
     private static final String OUTPUT_FALLBACK_GROUPED = "grouped";
 
-    private static final ManifestFolderDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
-            new ManifestFolderDescription("groupedFolder", "groupedStack", new StringsWithoutOrder());
+    private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
+            new ManifestDirectoryDescription("groupedFolder", "groupedStack", new StringsWithoutOrder());
 
     // START BEAN PROPERTIES
     /**

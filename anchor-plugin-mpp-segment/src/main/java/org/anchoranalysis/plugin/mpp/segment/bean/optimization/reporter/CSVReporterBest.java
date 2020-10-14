@@ -45,9 +45,9 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
  */
 public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
-    private static final String OUTPUT_CSV_STATISTICS = "statisticsBest";
+    public static final String MANIFEST_FUNCTION = "event_aggregate_stats";
     
-    private static final String MANIFEST_FUNCTION = "event_aggregate_stats";
+    private static final String OUTPUT_CSV_STATISTICS = "statisticsBest";
     
     private Optional<TextFileOutput> csvOutput;
 
