@@ -66,16 +66,16 @@ class ObjectsCostMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
     public void writeToFile(CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
+        try (CSVWriter writer = CSVWriter.create(filePath)) {
 
-            csvWriter.writeHeaders(headers(element.getSecond()));
+            writer.writeHeaders(headers(element.getSecond()));
 
             // The descriptions of objects1 go in the first column
             List<String> descriptions = descriptionFromObjects(element.getFirst());
 
             // Write each row
             for (int i = 0; i < element.sizeFirst(); i++) {
-                csvWriter.writeRow(rowWithDescription(descriptions, i, element));
+                writer.writeRow(rowWithDescription(descriptions, i, element));
             }
 
         } catch (OutputWriteFailedException e) {
