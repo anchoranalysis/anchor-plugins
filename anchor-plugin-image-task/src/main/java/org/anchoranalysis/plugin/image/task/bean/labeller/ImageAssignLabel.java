@@ -28,6 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.annotation.SkipInit;
@@ -154,6 +155,6 @@ public class ImageAssignLabel<T>
         sharedState
                 .getOutputterFor(groupIdentifier)
                 .writerPermissive()
-                .write(outputName, () -> new StackGenerator(true, "raster"), () -> stack);
+                .write(outputName, () -> new StackGenerator(true, Optional.of("raster"), false), () -> stack);
     }
 }

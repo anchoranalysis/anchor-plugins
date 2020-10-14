@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
 import org.anchoranalysis.io.output.bean.ReportFeature;
+import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
-public abstract class ReportFeatureForManifest extends ReportFeature<ManifestRecorderFile> {}
+public abstract class ReportFeatureForManifest extends ReportFeature<DeserializedManifest> {}

@@ -33,35 +33,35 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 
 // A file manifest together with the overall manifest for the experiment
 public class CoupledManifests implements InputFromManager {
 
-    @Getter private final Optional<ManifestRecorder> experimentManifest;
+    @Getter private final Optional<Manifest> experimentManifest;
 
-    @Getter private final ManifestRecorderFile fileManifest;
+    @Getter private final DeserializedManifest jobManifest;
 
     private final String name;
 
     public CoupledManifests(
-            ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, Logger logger)
-            throws PathDifferenceException {
+            DeserializedManifest jobManifest, int numberDirectoriesInDescription, Logger logger) {
         super();
-        this.experimentManifest = Optional.of(experimentManifest);
-        this.fileManifest = fileManifest;
-        name = generateName(logger);
+        this.experimentManifest = Optional.empty();
+        this.jobManifest = jobManifest;
+        name = generateNameFromDirectories(numberDirectoriesInDescription, logger);
     }
 
     public CoupledManifests(
-            ManifestRecorderFile fileManifest, int numFoldersInDescription, Logger logger) {
+            Manifest experimentManifest, DeserializedManifest jobManifest, Logger logger)
+            throws PathDifferenceException {
         super();
-        this.experimentManifest = Optional.empty();
-        this.fileManifest = fileManifest;
-        name = generateNameFromFolders(numFoldersInDescription, logger);
+        this.experimentManifest = Optional.of(experimentManifest);
+        this.jobManifest = jobManifest;
+        name = generateName(logger);
     }
+
 
     private String generateName(Logger logger) throws PathDifferenceException {
 
@@ -70,19 +70,18 @@ public class CoupledManifests implements InputFromManager {
                     getExperimentManifest().get().getRootFolder().calculatePath();
 
             PathDifference ff =
-                    PathDifference.differenceFrom(experimentRootFolder, fileManifest.getRootPath());
+                    PathDifference.differenceFrom(experimentRootFolder, jobManifest.getRootPath());
             return ff.combined().toString();
 
         } else {
-            return generateNameFromFolders(0, logger);
+            return generateNameFromDirectories(0, logger);
         }
     }
 
-    private String generateNameFromFolders(int numFoldersInDescription, Logger logger) {
-        LastFolders dnff = new LastFolders();
-        dnff.setNumFoldersInDescription(numFoldersInDescription);
+    private String generateNameFromDirectories(int numberDirectoriesInDescription, Logger logger) {
+        LastDirectories dnff = new LastDirectories(numberDirectoriesInDescription);
         dnff.setRemoveExtensionInDescription(false);
-        return dnff.deriveName(fileManifest.getRootPath().toFile(), "<unknown>", logger)
+        return dnff.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
                 .getName();
     }
 
@@ -93,6 +92,6 @@ public class CoupledManifests implements InputFromManager {
 
     @Override
     public Optional<Path> pathForBinding() {
-        return Optional.of(fileManifest.getRootPath());
+        return Optional.of(jobManifest.getRootPath());
     }
 }

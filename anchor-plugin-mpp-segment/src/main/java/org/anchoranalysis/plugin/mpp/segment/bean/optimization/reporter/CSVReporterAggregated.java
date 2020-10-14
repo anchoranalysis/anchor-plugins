@@ -50,10 +50,10 @@ import org.apache.commons.lang.time.StopWatch;
  */
 public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
-
-    private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
     
-    private static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
+    public static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
+    
+    private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
     
     private Optional<TextFileOutput> csvOutput;
 

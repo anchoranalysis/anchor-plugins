@@ -35,12 +35,12 @@ import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.io.bean.path.derive.DerivePath;
 import org.anchoranalysis.io.exception.DerivePathException;
-import org.anchoranalysis.io.manifest.deserializer.DeserializationFailedException;
 
 /**
  * An object-collection to be used to compare against something

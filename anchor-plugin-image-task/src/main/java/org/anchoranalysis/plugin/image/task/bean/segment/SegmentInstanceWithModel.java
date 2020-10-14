@@ -302,7 +302,7 @@ public class SegmentInstanceWithModel<T>
 
         writer.write(
                 OUTPUT_INPUT_IMAGE,
-                () -> new StackGenerator(true, MANIFEST_FUNCTION_INPUT_IMAGE),
+                () -> new StackGenerator(true, Optional.of(MANIFEST_FUNCTION_INPUT_IMAGE), false),
                 () -> stack);
         writer.write(OUTPUT_H5, HDF5ObjectsGenerator::new, () -> objects);
         writer.write(

@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
 import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
@@ -57,7 +57,7 @@ public abstract class GroupMapByName<S, T> {
 
     private String nounT;
 
-    private final ManifestFolderDescription manifestFolderDescription;
+    private final ManifestDirectoryDescription manifestFolderDescription;
 
     /**
      * Creates a group-map.
@@ -69,7 +69,7 @@ public abstract class GroupMapByName<S, T> {
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;
         this.manifestFolderDescription =
-                new ManifestFolderDescription(
+                new ManifestDirectoryDescription(
                         "groupedFolder", manifestFunction, new StringsWithoutOrder());
     }
 

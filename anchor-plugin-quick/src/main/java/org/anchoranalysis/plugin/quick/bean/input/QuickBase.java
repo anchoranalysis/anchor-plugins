@@ -38,7 +38,7 @@ import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
 import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 
 /**
@@ -60,7 +60,7 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
 
     /** Assigns each input a unique compact name. */
     @BeanField @Getter @Setter
-    private FileNamer namer = new LastFolders();
+    private FileNamer namer = new LastDirectories();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;
