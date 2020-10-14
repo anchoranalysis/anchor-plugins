@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
 import java.util.Collection;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderUnary;
+import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 
 public class SortAlphabetically extends FilesProviderUnary {
 

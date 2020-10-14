@@ -48,7 +48,6 @@ public class FromMetadata extends ChannelMap {
         for (int index = 0; index < names.get().size(); index++) {
             map.add(new ChannelEntry(names.get().get(index), index));
         }
-
         return map;
     }
 }

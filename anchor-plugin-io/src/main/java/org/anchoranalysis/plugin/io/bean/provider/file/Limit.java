@@ -31,7 +31,7 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderUnary;
+import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 
 public class Limit extends FilesProviderUnary {
 

@@ -24,7 +24,7 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.bean.input.file;
+package org.anchoranalysis.plugin.io.bean.input.files;
 
 import java.io.File;
 import java.util.Collection;
@@ -34,13 +34,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.io.bean.descriptivename.FileNamer;
-import org.anchoranalysis.io.bean.files.provider.FilesProvider;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.InputReadFailedException;
-import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.plugin.io.bean.descriptivename.RemoveExtensions;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 
@@ -50,7 +50,7 @@ import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class Files extends InputManager<FileInput> {
+public class NamedFiles extends InputManager<FileInput> {
 
     // START BEAN PROPERTIES
     /** The files to use as inputs. */
@@ -60,7 +60,7 @@ public class Files extends InputManager<FileInput> {
     private FileNamer namer = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
 
-    public Files(FilesProvider filesProvider) {
+    public NamedFiles(FilesProvider filesProvider) {
         this.filesProvider = filesProvider;
     }
 

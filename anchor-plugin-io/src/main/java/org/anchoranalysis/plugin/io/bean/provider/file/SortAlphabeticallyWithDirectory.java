@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
 import java.util.Collection;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryUnary;
-import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryUnary;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 
 public class SortAlphabeticallyWithDirectory extends FilesProviderWithDirectoryUnary {
 

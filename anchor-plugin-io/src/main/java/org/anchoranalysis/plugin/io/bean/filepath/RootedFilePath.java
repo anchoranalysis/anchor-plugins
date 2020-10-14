@@ -32,8 +32,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.exception.InputReadFailedException;
-import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.plugin.io.input.path.RootedFilePathUtilities;
 
 public class RootedFilePath extends FilePath {
 

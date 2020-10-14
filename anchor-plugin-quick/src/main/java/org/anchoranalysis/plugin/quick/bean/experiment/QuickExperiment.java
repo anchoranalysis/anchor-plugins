@@ -44,8 +44,8 @@ import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
 import org.anchoranalysis.experiment.bean.task.Task;
-import org.anchoranalysis.io.bean.files.provider.SearchDirectory;
-import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.bean.enabled.All;
@@ -53,7 +53,7 @@ import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
-import org.anchoranalysis.plugin.io.bean.input.file.Files;
+import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
 import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
 
@@ -178,7 +178,7 @@ public class QuickExperiment<S> extends Experiment {
     }
 
     private InputManager<MultiInput> createInputManagerImageFile(SearchDirectory fs) {
-        return new MultiInputManager(inputName, new Stacks(new Files(fs)));
+        return new MultiInputManager(inputName, new Stacks(new NamedFiles(fs)));
     }
 
     private OutputManager createOutputManager(Path inPathBaseDir) {

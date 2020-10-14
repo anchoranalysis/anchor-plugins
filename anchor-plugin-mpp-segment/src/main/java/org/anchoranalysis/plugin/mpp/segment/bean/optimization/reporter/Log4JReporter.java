@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.AggregateReceiver;
@@ -36,7 +36,7 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class Log4JReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
+public class Log4JReporter extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
     private static Log log = LogFactory.getLog(Log4JReporter.class);

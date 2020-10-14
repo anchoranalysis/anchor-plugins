@@ -33,11 +33,11 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.io.bean.descriptivename.FileNamer;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.input.FileInput;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.files.FileInput;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
 

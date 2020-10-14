@@ -30,7 +30,7 @@ import java.io.File;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.descriptivename.FileNamerIndependent;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
 import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
 public class FromOutputName extends FileNamerIndependent {

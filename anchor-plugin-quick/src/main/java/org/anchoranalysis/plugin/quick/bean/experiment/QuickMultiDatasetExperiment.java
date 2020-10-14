@@ -53,8 +53,8 @@ import org.anchoranalysis.experiment.io.ReplaceInputManager;
 import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
-import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
 /**

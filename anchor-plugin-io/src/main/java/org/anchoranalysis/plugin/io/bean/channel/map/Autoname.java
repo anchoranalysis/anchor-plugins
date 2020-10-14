@@ -51,11 +51,7 @@ import org.anchoranalysis.image.io.stack.OpenedRaster;
 public class Autoname extends ChannelMap {
 
     private static final String[] RGB_CHANNEL_NAMES = {"red", "green", "blue"};
-
-    public Autoname() {
-        super();
-    }
-
+    
     @Override
     public NamedEntries createMap(OpenedRaster openedRaster) throws CreateException {
 

@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.files.provider.FilesProvider;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
-import org.anchoranalysis.io.bean.files.provider.SearchDirectory;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.path.matcher.MatchGlob;
-import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.bean.files.SearchDirectory;
+import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
 /**

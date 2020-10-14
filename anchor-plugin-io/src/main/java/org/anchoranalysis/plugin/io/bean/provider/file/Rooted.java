@@ -34,11 +34,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.bean.files.provider.FilesProvider;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.FilesProviderException;
-import org.anchoranalysis.plugin.io.filepath.RootedFilePathUtilities;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.files.FilesProviderException;
+import org.anchoranalysis.plugin.io.input.path.RootedFilePathUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

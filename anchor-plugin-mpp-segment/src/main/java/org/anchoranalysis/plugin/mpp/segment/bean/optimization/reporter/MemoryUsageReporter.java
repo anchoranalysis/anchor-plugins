@@ -32,13 +32,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.core.memory.MemoryUtilities;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.AggregateReceiver;
 import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
-public class MemoryUsageReporter extends ReporterAgg<VoxelizedMarksWithEnergy> {
+public class MemoryUsageReporter extends ReporterAggregate<VoxelizedMarksWithEnergy> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private boolean showBest = true;

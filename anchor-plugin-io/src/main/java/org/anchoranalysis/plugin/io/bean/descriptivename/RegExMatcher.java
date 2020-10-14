@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.io.bean.descriptivename.FileNamerIndependent;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
 
 public class RegExMatcher extends FileNamerIndependent {
 

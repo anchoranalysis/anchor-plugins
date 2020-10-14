@@ -45,9 +45,7 @@ public class FromEntries extends ChannelMap {
     @Override
     public NamedEntries createMap(OpenedRaster openedRaster) {
         NamedEntries out = new NamedEntries();
-        for (ChannelEntry entry : list) {
-            out.add(entry);
-        }
+        list.stream().forEach(out::add);
         return out;
     }
 }

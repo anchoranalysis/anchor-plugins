@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.annotation.bean.strategy;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PathFromGenerator {

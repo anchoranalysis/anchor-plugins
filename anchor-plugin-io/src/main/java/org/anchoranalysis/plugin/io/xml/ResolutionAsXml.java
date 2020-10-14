@@ -32,14 +32,13 @@ import java.nio.file.Path;
 import java.util.function.ToDoubleFunction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.XmlUtilities;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.io.xml.XmlOutputter;
+import org.anchoranalysis.io.output.xml.XMLWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,7 +55,7 @@ import org.xml.sax.SAXException;
  * @author Owen Feehan
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AnchorMetadataXml {
+public class ResolutionAsXml {
 
     private static final String ELEMENT_NAME_X = "xres";
     private static final String ELEMENT_NAME_Y = "yres";
@@ -115,9 +114,9 @@ public class AnchorMetadataXml {
             appendDimension(document, ELEMENT_NAME_Y, resolution, Resolution::y, elementResolution);
             appendDimension(document, ELEMENT_NAME_Z, resolution, Resolution::z, elementResolution);
 
-            XmlOutputter.writeXmlToFile(document, path);
+            XMLWriter.writeXmlToFile(document, path);
 
-        } catch (TransformerException | ParserConfigurationException | IOException e) {
+        } catch (ParserConfigurationException | IOException e) {
             throw new ImageIOException(e.toString());
         }
     }

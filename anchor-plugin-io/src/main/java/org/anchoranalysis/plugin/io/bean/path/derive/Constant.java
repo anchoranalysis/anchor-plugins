@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-task
+ * anchor-io
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -23,5 +23,29 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Task(s) that process only the file-paths associated with inputs. */
-package org.anchoranalysis.plugin.image.task.bean.path;
+
+package org.anchoranalysis.plugin.io.bean.path.derive;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+
+/** Always generates a constant path irrespective of the the input */
+@NoArgsConstructor
+@AllArgsConstructor
+public class Constant extends DerivePath {
+
+    // START BEAN PROPERTIES
+    @BeanField @Getter @Setter private String value;
+    // END BEAN PROPERTIES
+
+    @Override
+    public Path deriveFrom(Path source, boolean debugMode) {
+        return Paths.get(value);
+    }
+}

@@ -31,8 +31,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.channel.NamedEntries;
-import org.anchoranalysis.io.exception.DerivePathException;
-import org.anchoranalysis.io.input.PathSupplier;
+import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.input.path.PathSupplier;
 
 @AllArgsConstructor
 class AdditionalChannel {

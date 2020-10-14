@@ -33,9 +33,9 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.shared.regex.RegExSimple;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.bean.path.derive.InsertRegExGroups;
-import org.anchoranalysis.io.bean.path.derive.Rooted;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.plugin.io.bean.path.derive.InsertRegExGroups;
+import org.anchoranalysis.plugin.io.bean.path.derive.Rooted;
 import org.anchoranalysis.plugin.quick.bean.file.path.derive.CollapseFileName;
 import org.anchoranalysis.plugin.quick.bean.file.path.derive.RemoveTrailingDirectory;
 

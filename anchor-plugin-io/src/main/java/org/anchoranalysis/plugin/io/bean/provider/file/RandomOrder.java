@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderUnary;
+import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 
 public class RandomOrder extends FilesProviderUnary {
 

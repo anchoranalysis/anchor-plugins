@@ -24,14 +24,13 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.io.filepath;
+package org.anchoranalysis.plugin.io.input.path;
 
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.bean.shared.path.RootPath;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.bean.path.RootPath;
-import org.anchoranalysis.io.path.RootPathMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RootedFilePathUtilities {

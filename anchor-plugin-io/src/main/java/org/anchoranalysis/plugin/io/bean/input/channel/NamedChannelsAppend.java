@@ -31,25 +31,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.DerivePathException;
-import org.anchoranalysis.io.exception.InputReadFailedException;
-import org.anchoranalysis.io.input.OperationOutFilePath;
-import org.anchoranalysis.io.input.PathSupplier;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.input.path.PathSupplier;
 
 public class NamedChannelsAppend extends NamedChannelsBase {
 
@@ -132,30 +133,36 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             return out;
         }
 
-        for (final NamedBean<DerivePath> ni : listAppend) {
+        for (NamedBean<DerivePath> namedPath : listAppend) {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
             PathSupplier outPath =
-                    OperationOutFilePath.cachedOutPathFor(
-                            ni.getValue(), ncc::pathForBinding, debugMode);
+                    cachedOutPathFor(
+                            namedPath.getValue(), ncc::pathForBinding, debugMode);
 
-            if (forceEagerEvaluation) {
-                Path path = outPath.get();
+            if (forceEagerEvaluation && !skipMissingChannels) {
+                Path path = outPath.get();        
                 if (!path.toFile().exists()) {
-
-                    if (skipMissingChannels) {
-                        continue;
-                    } else {
-                        throw new DerivePathException(
-                                String.format("Append path: %s does not exist", path));
-                    }
+                    throw new DerivePathException(
+                            String.format("Append path: %s does not exist", path));
                 }
             }
 
-            out = new AppendPart(out, ni.getName(), 0, outPath, stackReader);
+            out = new AppendPart(out, namedPath.getName(), 0, outPath, stackReader);
         }
 
         return out;
+    }
+    
+    private static PathSupplier cachedOutPathFor(
+            DerivePath outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode) {
+        return cachePathSupplier(() -> outputPathGenerator.deriveFrom(pathInput, debugMode));
+    }
+    
+    private static PathSupplier cachePathSupplier(PathSupplier supplier) {
+        return CachedSupplier.cache(supplier::get)::get;
     }
 }

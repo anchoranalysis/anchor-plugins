@@ -34,7 +34,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.input.NamedFile;
+import org.anchoranalysis.io.input.files.NamedFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
