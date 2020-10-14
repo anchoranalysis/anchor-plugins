@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import java.nio.file.Path;
 import java.util.List;
-import org.anchoranalysis.annotation.io.assignment.ObjectCollectionDistanceMatrix;
+import org.anchoranalysis.annotation.io.assignment.CostMatrix;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
@@ -40,11 +40,11 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 /**
  * Generates a CSV-file that is a table of distances between objects.
  *
- * <p>The distance is between objects is provided via a {@link ObjectCollectionDistanceMatrix}.
+ * <p>The distance is between objects is provided via a {@link CostMatrix}.
  *
  * @author Owen Feehan
  */
-class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistanceMatrix> {
+class ObjectsDistanceMatrixGenerator extends CSVGenerator<CostMatrix<ObjectMask>> {
 
     private static final String MANIFEST_FUNCTION = "objectCollectionDistanceMatrix";
 
@@ -61,20 +61,20 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
     }
 
     @Override
-    public void writeToFile(ObjectCollectionDistanceMatrix element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(CostMatrix<ObjectMask> element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
 
-        ObjectCollectionDistanceMatrix distanceMatrix = element;
+        CostMatrix<ObjectMask> distanceMatrix = element;
 
         try (CSVWriter csvWriter = CSVWriter.create(filePath)) {
 
-            csvWriter.writeHeaders(headers(distanceMatrix.getObjects2()));
+            csvWriter.writeHeaders(headers(distanceMatrix.getSecond()));
 
             // The descriptions of objects1 go in the first column
-            List<String> descriptions = descriptionFromObjects(distanceMatrix.getObjects1());
+            List<String> descriptions = descriptionFromObjects(distanceMatrix.getFirst());
 
             // Write each row
-            for (int i = 0; i < distanceMatrix.sizeObjects1(); i++) {
+            for (int i = 0; i < distanceMatrix.sizeFirst(); i++) {
                 csvWriter.writeRow(rowWithDescription(descriptions, i, distanceMatrix));
             }
 
@@ -85,7 +85,7 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
 
     /** A row including a description as first-column */
     private List<TypedValue> rowWithDescription(
-            List<String> descriptions, int index, ObjectCollectionDistanceMatrix distanceMatrix) {
+            List<String> descriptions, int index, CostMatrix<ObjectMask> distanceMatrix) {
         List<TypedValue> row = rowWithoutDescription(index, distanceMatrix);
 
         // Insert the description as first column
@@ -96,24 +96,24 @@ class ObjectsDistanceMatrixGenerator extends CSVGenerator<ObjectCollectionDistan
 
     /** A row excluding a description as first-column */
     private List<TypedValue> rowWithoutDescription(
-            int index1, ObjectCollectionDistanceMatrix distanceMatrix) {
+            int index1, CostMatrix<ObjectMask> distanceMatrix) {
         return FunctionalList.mapRangeToList(
                 0,
-                distanceMatrix.sizeObjects2(),
+                distanceMatrix.sizeSecond(),
                 index2 ->
                         new TypedValue(
-                                distanceMatrix.getDistance(index1, index2), numberDecimalPlaces));
+                                distanceMatrix.getCost(index1, index2), numberDecimalPlaces));
     }
 
     /** A sensible header string, bearing in the mind the first column has object descriptions. */
-    private static List<String> headers(ObjectCollection objects) {
+    private static List<String> headers(List<ObjectMask> objects) {
         List<String> headers = descriptionFromObjects(objects);
         headers.add(0, "Objects");
         return headers;
     }
 
     /** A description of each object in a collection. */
-    private static List<String> descriptionFromObjects(ObjectCollection objects) {
-        return objects.stream().mapToList(objectMask -> objectMask.centerOfGravity().toString());
+    private static List<String> descriptionFromObjects(List<ObjectMask> objects) {
+        return FunctionalList.mapToList(objects, objectMask -> objectMask.centerOfGravity().toString());
     }
 }
