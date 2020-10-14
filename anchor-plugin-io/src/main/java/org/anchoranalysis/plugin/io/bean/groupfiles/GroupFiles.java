@@ -40,16 +40,16 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
-import org.anchoranalysis.io.bean.descriptivename.FileNamer;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.InputReadFailedException;
-import org.anchoranalysis.io.input.NamedFile;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 import org.anchoranalysis.plugin.io.bean.groupfiles.check.CheckParsedFilePathBag;
 import org.anchoranalysis.plugin.io.bean.groupfiles.parser.FilePathParser;
-import org.anchoranalysis.plugin.io.bean.input.file.Files;
+import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.multifile.FileDetails;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
@@ -76,7 +76,7 @@ import org.anchoranalysis.plugin.io.multifile.ParsedFilePathBag;
 public class GroupFiles extends InputManager<NamedChannelsInput> {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private Files fileInput;
+    @BeanField @Getter @Setter private NamedFiles fileInput;
 
     @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 

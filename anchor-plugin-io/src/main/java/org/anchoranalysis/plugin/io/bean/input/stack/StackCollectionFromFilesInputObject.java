@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.image.stack.TimeSequence;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.input.files.FileInput;
 
 @RequiredArgsConstructor
 class StackCollectionFromFilesInputObject implements StackSequenceInput {

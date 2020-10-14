@@ -48,13 +48,13 @@ import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdirectoryReporter;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.anchoranalysis.overlay.id.IDGetterOverlayID;
 
-public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBreakdown> {
+public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergyBreakdown> {
 
     // START Bean Properties
     @BeanField @Getter @Setter private int numberColors = 20;

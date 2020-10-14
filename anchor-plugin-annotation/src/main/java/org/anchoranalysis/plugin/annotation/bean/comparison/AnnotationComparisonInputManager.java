@@ -41,10 +41,10 @@ import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.InputReadFailedException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>

@@ -34,13 +34,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdirectoryReporter;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
 public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
-        extends PeriodicSubfolderReporter<T> {
+        extends PeriodicSubdirectoryReporter<T> {
 
     // BEAN PARAMETERS
     @BeanField @Getter @Setter private String manifestFunction;

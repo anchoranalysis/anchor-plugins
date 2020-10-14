@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.descriptivename.FileNamer;
-import org.anchoranalysis.io.input.NamedFile;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.files.NamedFile;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 

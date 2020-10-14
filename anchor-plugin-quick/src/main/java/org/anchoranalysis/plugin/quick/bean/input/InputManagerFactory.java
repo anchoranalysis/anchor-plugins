@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.quick.bean.input;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.descriptivename.FileNamer;
-import org.anchoranalysis.io.bean.files.provider.FilesProvider;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectory;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.plugin.io.bean.input.file.Files;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterCsvColumn;
 import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.MatchedAppendCsv;
@@ -78,7 +78,7 @@ class InputManagerFactory {
             String rootName,
             FilesProviderWithDirectory filesProvider,
             FileNamer namer) {
-        Files files = new Files();
+        NamedFiles files = new NamedFiles();
         files.setFilesProvider(createMaybeRootedFileProvider(rootName, filesProvider));
         files.setNamer(namer);
         return files;

@@ -69,9 +69,9 @@ public class CoupledManifests implements InputFromManager {
             Path experimentRootFolder =
                     getExperimentManifest().get().getRootFolder().calculatePath();
 
-            PathDifference ff =
+            PathDifference difference =
                     PathDifference.differenceFrom(experimentRootFolder, jobManifest.getRootPath());
-            return ff.combined().toString();
+            return difference.combined().toString();
 
         } else {
             return generateNameFromDirectories(0, logger);
@@ -79,9 +79,9 @@ public class CoupledManifests implements InputFromManager {
     }
 
     private String generateNameFromDirectories(int numberDirectoriesInDescription, Logger logger) {
-        LastDirectories dnff = new LastDirectories(numberDirectoriesInDescription);
-        dnff.setRemoveExtensionInDescription(false);
-        return dnff.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
+        LastDirectories lastDirectories = new LastDirectories(numberDirectoriesInDescription);
+        lastDirectories.setRemoveExtensionInDescription(false);
+        return lastDirectories.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
                 .getName();
     }
 

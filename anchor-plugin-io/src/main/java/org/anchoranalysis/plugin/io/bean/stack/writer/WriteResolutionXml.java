@@ -38,7 +38,7 @@ import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
+import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 /**
  * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this information is known.
@@ -88,7 +88,7 @@ public class WriteResolutionXml extends StackWriter {
     private void writeResolutionXml(Path filePath, Optional<Resolution> resolution) throws ImageIOException {
         if (resolution.isPresent()) {
             Path pathOut = Paths.get(filePath.toString() + ".xml");
-            AnchorMetadataXml.writeResolutionXml(resolution.get(), pathOut);
+            ResolutionAsXml.writeResolutionXml(resolution.get(), pathOut);
         }
     }
 }

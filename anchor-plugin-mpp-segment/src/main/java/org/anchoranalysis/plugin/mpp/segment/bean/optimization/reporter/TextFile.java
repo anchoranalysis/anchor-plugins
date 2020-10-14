@@ -33,7 +33,7 @@ import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -43,7 +43,7 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
+public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
     private Optional<TextFileOutput> fileOutput;

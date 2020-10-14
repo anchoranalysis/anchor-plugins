@@ -40,12 +40,12 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.bean.path.derive.Replace;
-import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.plugin.io.bean.input.channel.NamedChannelsAppend;
+import org.anchoranalysis.plugin.io.bean.path.derive.Replace;
 import org.anchoranalysis.plugin.quick.bean.input.filepathappend.AppendStack;
 
 /**

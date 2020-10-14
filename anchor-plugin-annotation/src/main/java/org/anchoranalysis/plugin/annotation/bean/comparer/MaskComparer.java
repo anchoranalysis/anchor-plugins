@@ -44,8 +44,8 @@ import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.MaskReader;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 public class MaskComparer extends Comparer {
 

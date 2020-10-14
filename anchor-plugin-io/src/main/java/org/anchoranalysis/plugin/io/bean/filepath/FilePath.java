@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.filepath;
 
 import java.nio.file.Path;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 public abstract class FilePath extends AnchorBean<FilePath> {
 

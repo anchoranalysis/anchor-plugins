@@ -35,8 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryString;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryString;
 
 public class FileSetFromStringSet extends FilesProviderWithDirectoryString {
 

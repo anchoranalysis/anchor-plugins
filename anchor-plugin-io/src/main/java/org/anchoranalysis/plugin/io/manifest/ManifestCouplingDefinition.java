@@ -40,7 +40,7 @@ import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
-import org.anchoranalysis.io.manifest.directory.DirectoryWrite;
+import org.anchoranalysis.io.manifest.directory.MutableDirectory;
 import org.anchoranalysis.io.manifest.finder.FinderExperimentFileDirectories;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
@@ -103,7 +103,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
             }
 
             // For each experiment folder, we look for a manifest
-            for (DirectoryWrite folderWrite : finderExperimentFileFolders.getList()) {
+            for (MutableDirectory folderWrite : finderExperimentFileFolders.getList()) {
                 CoupledManifests coupledManifests = readManifestsFromDirectory(folderWrite, experimentManifest, manifestDeserializer, logger);
                 listCoupledManifests.add(coupledManifests);
                 mapExperimentalToImages.put(experimentManifest, coupledManifests);
@@ -139,7 +139,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
     }
     
     private CoupledManifests readManifestsFromDirectory(
-            DirectoryWrite folderWrite, Manifest manifestExperimentRecorder,
+            MutableDirectory folderWrite, Manifest manifestExperimentRecorder,
             ManifestDeserializer manifestDeserializer, Logger logger) throws DeserializationFailedException {
 
         DeserializedManifest manifestExperiment =
@@ -152,7 +152,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
         }
     }
 
-    private static File experimentManifestFile(DirectoryWrite folderWrite) {
+    private static File experimentManifestFile(MutableDirectory folderWrite) {
         return new File(
                 String.format(
                         "%s%s%s", folderWrite.calculatePath(),

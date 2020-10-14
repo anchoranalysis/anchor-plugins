@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -37,7 +37,7 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public final class OptimizationStepLogReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
+public final class OptimizationStepLogReporter extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
     private StopWatch timer;

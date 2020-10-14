@@ -32,7 +32,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.image.ImageLabelAnnotation;
 import org.anchoranalysis.annotation.io.image.WholeImageLabelAnnotationReader;
-import org.anchoranalysis.io.exception.InputReadFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReadAnnotationFromFile {

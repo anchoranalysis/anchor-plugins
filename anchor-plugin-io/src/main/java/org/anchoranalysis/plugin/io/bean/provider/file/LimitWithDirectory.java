@@ -31,8 +31,8 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.files.provider.FilesProviderWithDirectoryUnary;
-import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryUnary;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 
 public class LimitWithDirectory extends FilesProviderWithDirectoryUnary {
 

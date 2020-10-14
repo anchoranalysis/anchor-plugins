@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.input.channel;
 
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 
 /*** Parent for all the {@code NamedChannels} classes */
 public abstract class NamedChannelsBase extends InputManager<NamedChannelsInputPart> {}

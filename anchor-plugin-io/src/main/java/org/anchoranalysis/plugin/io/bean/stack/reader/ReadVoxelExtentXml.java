@@ -36,7 +36,7 @@ import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
-import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
+import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 public class ReadVoxelExtentXml extends StackReader {
 
@@ -65,7 +65,7 @@ public class ReadVoxelExtentXml extends StackReader {
         File fileMeta = new File(filepath.toString() + ".xml");
 
         if (fileMeta.exists()) {
-            res = Optional.of(AnchorMetadataXml.readResolutionXml(fileMeta));
+            res = Optional.of(ResolutionAsXml.readResolutionXml(fileMeta));
         } else {
             if (!acceptNoResolution) {
                 throw new ImageIOException(

@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.mpp.experiment.objects;
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderByLine;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.ReadByLine;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.IndexedCSVRows;
 

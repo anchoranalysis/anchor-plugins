@@ -32,7 +32,7 @@ import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.io.generator.text.TextFileOutput;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -48,7 +48,7 @@ import org.apache.commons.lang.time.StopWatch;
  * @author Owen Feehan
  *
  */
-public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
+public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
     
     public static final String MANIFEST_FUNCTION = "interval_aggregate_stats";

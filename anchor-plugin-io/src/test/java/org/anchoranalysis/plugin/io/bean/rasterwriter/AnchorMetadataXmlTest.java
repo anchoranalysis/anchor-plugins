@@ -37,7 +37,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.extent.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.plugin.io.xml.AnchorMetadataXml;
+import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 import org.anchoranalysis.test.TestLoader;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class AnchorMetadataXmlTest {
 
         Path pathOut = folder.newFile("mockRes01.xml").toPath();
 
-        AnchorMetadataXml.writeResolutionXml(resolution, pathOut);
+        ResolutionAsXml.writeResolutionXml(resolution, pathOut);
 
         // basic test that the file exists, and nothing more
         assertTrue(Files.exists(pathOut));

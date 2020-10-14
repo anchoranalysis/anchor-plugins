@@ -39,8 +39,8 @@ import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.extent.Dimensions;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
 import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.DerivePathException;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * An object-collection to be used to compare against something

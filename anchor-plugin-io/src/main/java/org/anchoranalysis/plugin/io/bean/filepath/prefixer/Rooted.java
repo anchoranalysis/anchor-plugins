@@ -32,11 +32,11 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.plugin.io.input.path.RootPathMap;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.io.path.RootPathMap;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate

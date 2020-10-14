@@ -35,10 +35,10 @@ import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.files.provider.FilesProvider;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.exception.InputReadFailedException;
-import org.anchoranalysis.io.exception.FilesProviderException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 
 public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider {
 

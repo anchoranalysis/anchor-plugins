@@ -41,8 +41,8 @@ import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
-import org.anchoranalysis.io.exception.DerivePathException;
-import org.anchoranalysis.io.input.PathSupplier;
+import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.input.path.PathSupplier;
 
 /**
  * Appends another channel to an existing NamedChannelInputBase

@@ -58,10 +58,10 @@ import org.anchoranalysis.image.io.generator.raster.RasterGeneratorDelegateToRas
 import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.stack.DisplayStack;
 import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.path.derive.DerivePath;
-import org.anchoranalysis.io.exception.DerivePathException;
 import org.anchoranalysis.io.generator.collection.CollectionGenerator;
 import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
