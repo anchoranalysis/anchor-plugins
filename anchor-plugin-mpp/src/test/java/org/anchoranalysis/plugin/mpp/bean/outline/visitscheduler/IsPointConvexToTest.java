@@ -36,7 +36,7 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.junit.Test;
 
 public class IsPointConvexToTest {
@@ -44,8 +44,8 @@ public class IsPointConvexToTest {
     @Test
     public void test() throws ImageIOException, CreateException, URISyntaxException {
 
-        TestLoaderImageIO loader =
-                new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+        TestLoaderImage loader =
+                new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
         String testPath = "testData/binaryImage/000_zstack_nuclei.tif";
         Stack stack = loader.openStackFromTestPath(testPath);

@@ -24,33 +24,49 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.points.bean.contour;
+package org.anchoranalysis.plugin.opencv;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.index.SetOperationFailedException;
+import org.anchoranalysis.image.object.Contour;
 import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.plugin.points.contour.ContourList;
+import org.anchoranalysis.image.points.PointsNeighborChecker;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
-import org.anchoranalysis.test.mpp.LoadUtilities;
+import org.anchoranalysis.test.image.object.TestLoaderObjects;
 import org.junit.Test;
 
-public class SplitContourSmoothingSplineTest {
+public class CVFindContoursTest {
 
-    private TestLoaderImageIO loader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderObjects loader = new TestLoaderObjects(
+            TestLoader.createFromMavenWorkingDirectory());
 
     @Test
-    public void test()
+    public void test01()
             throws CreateException, OperationFailedException, SetOperationFailedException {
+        testFor("01");
+    }
 
-        ObjectMask contourIn = LoadUtilities.openLargestObjectFrom("01", loader);
+    private void testFor(String suffix) throws CreateException, OperationFailedException {
 
-        ContourList contours = SplitContourSmoothingSpline.apply(contourIn, 0.001, 0, 30);
+        ObjectMask object = loader.openLargestObjectFrom(suffix);
 
-        assertEquals(72, contours.size());
+        // Checks that first and last points are neighbors
+        for (Contour contour : CVFindContours.contoursForObject(object)) {
+            List<Point3i> points = contour.pointsDiscrete();
+            assertTrue(doesFirstNeighborLast(points));
+            assertTrue(PointsNeighborChecker.areNeighborsDistinct(points));
+            assertTrue(PointsNeighborChecker.areAllPointsInBigNeighborhood(points));
+        }
+    }
+
+    private static boolean doesFirstNeighborLast(List<Point3i> points) {
+        Point3i first = points.get(0);
+        Point3i last = points.get(points.size() - 1);
+        return PointsNeighborChecker.arePointsNeighbors(first, last);
     }
 }

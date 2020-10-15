@@ -1,6 +1,6 @@
 # anchor-test-mpp
 
-Tests for other packages involving image IO.
+Reusable test classes involving data-objects from the `anchor-mpp` module. 
 
 ## What is Anchor?
 

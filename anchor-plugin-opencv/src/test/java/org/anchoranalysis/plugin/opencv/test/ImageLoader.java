@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImage;
 
 /**
  * Loads images used in OpenCV tests and initializes openCV if needed.
@@ -44,8 +44,8 @@ public class ImageLoader {
 
     private static final String PATH_CAR_GRAYSCALE_16_BIT = "carGrayscale16bit.tif";
 
-    private TestLoaderImageIO loader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderImage loader =
+            new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
     public Stack carRGB() {
         return loader.openStackFromTestPath(PATH_CAR);
