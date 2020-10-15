@@ -38,7 +38,7 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong.WatershedYeong;
 import org.anchoranalysis.test.TestDataLoadException;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.junit.Test;
 
 public class WatershedYeongTest {
@@ -50,8 +50,8 @@ public class WatershedYeongTest {
             "blurredResult_noMasks_noSeeds.h5";
     private static final String PATH_EXPECTED_MASKS_NO_SEEDS = "blurredResult_masks_noSeeds.h5";
 
-    private TestLoaderImageIO loader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory("watershed01/"));
+    private TestLoaderImage loader =
+            new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory("watershed01/"));
 
     @Test
     public void test_noMasks_noSeeds()
