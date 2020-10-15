@@ -35,8 +35,8 @@ import org.anchoranalysis.feature.input.FeatureInputWithResolution;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
 import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 import org.anchoranalysis.image.feature.bean.physical.WithResolutionBase;
 
 /**

@@ -39,7 +39,8 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
 import org.anchoranalysis.image.binary.mask.combine.MaskOr;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.MaskFromObjects;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -88,7 +89,7 @@ public class FillHoles extends MaskProviderUnary {
         ObjectsFromConnectedComponentsFactory objectCreator =
                 new ObjectsFromConnectedComponentsFactory();
 
-        return filterObjects(objectCreator.createConnectedComponents(mask), mask.dimensions());
+        return filterObjects(objectCreator.createConnectedComponents(mask.binaryVoxels()), mask.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
@@ -97,7 +98,7 @@ public class FillHoles extends MaskProviderUnary {
         final double maxVolumeResolved = determineMaxVolume(dimensions);
 
         return objects.stream()
-                .filter(objectMask -> includeObject(objectMask, dimensions, maxVolumeResolved));
+                .filter(objectMask -> includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
     }
 
     private double determineMaxVolume(Dimensions dimensions) throws CreateException {
@@ -113,9 +114,9 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private boolean includeObject(
-            ObjectMask object, Dimensions dimensions, double maxVolumeResolved) {
+            ObjectMask object, Extent extent, double maxVolumeResolved) {
         // It's not allowed touch the border
-        if (skipAtBorder && object.boundingBox().atBorderXY(dimensions)) {
+        if (skipAtBorder && object.boundingBox().atBorderXY(extent)) {
             return false;
         }
 

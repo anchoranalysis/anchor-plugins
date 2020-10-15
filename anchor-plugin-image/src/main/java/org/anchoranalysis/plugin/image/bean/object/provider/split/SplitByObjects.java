@@ -37,7 +37,8 @@ import org.anchoranalysis.image.binary.values.BinaryValues;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
 import org.anchoranalysis.image.convert.UnsignedIntBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
@@ -71,11 +72,11 @@ public class SplitByObjects extends WithDimensionsBase {
                                         object,
                                         objectsSplitByCollection.findObjectsWithIntersectingBBox(
                                                 object),
-                                        dimensions));
+                                        dimensions.extent()));
     }
 
     private ObjectCollection splitObject(
-            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, Dimensions dimensions) {
+            ObjectMask objectToSplit, ObjectCollection objectsSplitBy, Extent extent) {
 
         // We create a voxel buffer of the same size as objectToSplit bounding box, and we write
         //  a number for each object in objectsSplitBy
@@ -89,7 +90,7 @@ public class SplitByObjects extends WithDimensionsBase {
         int count = 1;
         for (ObjectMask objectLocal : objectsSplitBy) {
 
-            Optional<ObjectMask> intersect = objectToSplit.intersect(objectLocal, dimensions);
+            Optional<ObjectMask> intersect = objectToSplit.intersect(objectLocal, extent);
 
             // If there's no intersection, there's nothing to do
             if (intersect.isPresent()) {

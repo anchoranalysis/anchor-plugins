@@ -49,6 +49,6 @@ public class FromMask extends ObjectCollectionProvider {
 
     @Override
     public ObjectCollection create() throws CreateException {
-        return ObjectCollectionFactory.of(mask.create());
+        return ObjectCollectionFactory.of(mask.create().binaryVoxels());
     }
 }

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
@@ -73,14 +73,14 @@ public class CalculateShellObjectMask
     protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        Dimensions dimensions = input.dimensionsRequired();
+        Extent extent = input.dimensionsRequired().extent();
 
         ObjectMask shell = createShellObject(input);
 
         if (inverse) {
             ObjectMask duplicated = input.getObject().duplicate();
 
-            Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, dimensions);
+            Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, extent);
             omShellIntersected.ifPresent(
                     shellIntersected -> assignOffTo(duplicated, shellIntersected));
 

@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.blur;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 
 /**

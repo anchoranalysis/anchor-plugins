@@ -30,7 +30,7 @@ import cern.colt.matrix.DoubleFactory2D;
 import cern.colt.matrix.DoubleMatrix2D;
 import java.util.List;
 import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
 import org.anchoranalysis.mpp.mark.Mark;
 

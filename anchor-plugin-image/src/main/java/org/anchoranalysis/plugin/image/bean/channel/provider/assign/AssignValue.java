@@ -48,6 +48,6 @@ public class AssignValue extends UnaryWithMaskBase {
     }
 
     private void assignScalar(Channel channelSrc, Mask mask, int value) {
-        channelSrc.assignValue(value).toObject(new ObjectMask(mask));
+        channelSrc.assignValue(value).toObject(new ObjectMask(mask.binaryVoxels()));
     }
 }

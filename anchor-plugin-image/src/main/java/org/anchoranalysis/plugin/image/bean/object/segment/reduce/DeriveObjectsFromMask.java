@@ -35,7 +35,7 @@ import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
@@ -79,7 +79,7 @@ class DeriveObjectsFromMask {
                 new ObjectsFromConnectedComponentsFactory(minNumberVoxels);
 
         // All the objects
-        ObjectCollection objects = creator.createConnectedComponents(mask);
+        ObjectCollection objects = creator.createConnectedComponents(mask.binaryVoxels());
 
         // Associate a confidence value, by the mean-intensity of all confidence voxels in the mask
         return objects.stream()
@@ -105,7 +105,7 @@ class DeriveObjectsFromMask {
     private static double confidenceForObject(
             ObjectMask object, Channel channel, DoubleUnaryOperator unscale)
             throws OperationFailedException {
-        Histogram histogram = HistogramFactory.createHistogramIgnoreZero(channel, object, false);
+        Histogram histogram = HistogramFromObjectsFactory.createHistogramIgnoreZero(channel, object, false);
         return unscale.applyAsDouble(histogram.mean());
     }
 }

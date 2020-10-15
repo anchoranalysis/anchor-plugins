@@ -63,7 +63,7 @@ public class AssignFromChannel extends UnaryWithMaskBase {
 
     private void assign(Channel assignTo, Channel assignFrom, Mask mask) {
 
-        ObjectMask object = new ObjectMask(mask);
+        ObjectMask object = new ObjectMask(mask.binaryVoxels());
 
         assignFrom
                 .voxels()

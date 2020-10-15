@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
@@ -70,7 +70,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
         try {
             for (ObjectMask object : objects) {
 
-                Histogram histogram = HistogramFactory.create(lookup.voxels(), Optional.of(object));
+                Histogram histogram = HistogramFromObjectsFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, channel, lookup, (int) Math.round(histogram.mean()));
             }
 

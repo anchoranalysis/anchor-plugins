@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 import cern.colt.matrix.DoubleMatrix2D;
 import lombok.Data;
 import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.image.orientation.OrientationRotationMatrix;

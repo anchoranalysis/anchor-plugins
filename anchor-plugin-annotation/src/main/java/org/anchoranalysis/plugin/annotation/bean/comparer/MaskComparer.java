@@ -38,7 +38,7 @@ import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.MaskReader;
@@ -87,6 +87,6 @@ public class MaskComparer extends Comparer {
     }
 
     private static ObjectCollection convertToObjects(Mask mask) {
-        return ObjectCollectionFactory.of(mask);
+        return ObjectCollectionFactory.of(mask.binaryVoxels());
     }
 }

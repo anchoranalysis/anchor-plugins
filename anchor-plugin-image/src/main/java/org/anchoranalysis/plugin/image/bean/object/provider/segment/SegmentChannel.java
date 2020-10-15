@@ -39,8 +39,9 @@ import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
+import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.seed.SeedCollection;
@@ -72,7 +73,7 @@ public class SegmentChannel extends WithChannelBase {
     }
 
     private Optional<ObjectMask> createObjectMask() throws CreateException {
-        return OptionalFactory.create(mask).map(ObjectMask::new);
+        return OptionalFactory.create(mask).map(Mask::binaryVoxels).map(ObjectMask::new);
     }
 
     private Optional<SeedCollection> createSeeds(

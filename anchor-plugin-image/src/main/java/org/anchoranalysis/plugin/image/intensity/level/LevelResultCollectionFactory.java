@@ -35,7 +35,7 @@ import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
@@ -73,7 +73,7 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel = objectMask;
             }
 
-            Histogram histogram = HistogramFactory.create(channel, objectForCalculateLevel);
+            Histogram histogram = HistogramFromObjectsFactory.create(channel, objectForCalculateLevel);
             int level;
             try {
                 level = calculateLevel.calculateLevel(histogram);

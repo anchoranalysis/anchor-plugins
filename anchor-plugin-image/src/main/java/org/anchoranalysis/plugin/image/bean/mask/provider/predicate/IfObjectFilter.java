@@ -53,7 +53,7 @@ public class IfObjectFilter extends IfPredicateBase {
     @Override
     protected boolean predicate(Mask mask) throws CreateException {
 
-        ObjectMask objectMask = new ObjectMask(mask);
+        ObjectMask objectMask = new ObjectMask(mask.binaryVoxels());
 
         try {
             ObjectCollection objects =

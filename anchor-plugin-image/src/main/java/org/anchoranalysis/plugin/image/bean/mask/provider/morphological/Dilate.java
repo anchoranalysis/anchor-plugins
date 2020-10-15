@@ -38,7 +38,7 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.object.morphological.DilationKernelFactory;
 import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.image.object.morphological.SelectDimensionsFactory;

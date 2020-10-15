@@ -32,11 +32,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.ScaledElements;
 import org.anchoranalysis.image.object.scale.Scaler;
-import org.anchoranalysis.image.scale.ScaleFactor;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**

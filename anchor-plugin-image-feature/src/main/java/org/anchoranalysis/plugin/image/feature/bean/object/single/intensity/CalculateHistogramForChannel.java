@@ -33,7 +33,7 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -55,7 +55,7 @@ class CalculateHistogramForChannel
     protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
 
         Histogram histogram =
-                HistogramFactory.createHistogramIgnoreZero(
+                HistogramFromObjectsFactory.createHistogramIgnoreZero(
                         channel, params.getObject(), excludeZero);
 
         return new FeatureInputHistogram(histogram, params.getResolutionOptional());

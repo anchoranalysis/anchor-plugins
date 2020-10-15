@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
