@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 
 /**
  * Calculates the volume (x, y and z dimensions) of the scene from the dimensions

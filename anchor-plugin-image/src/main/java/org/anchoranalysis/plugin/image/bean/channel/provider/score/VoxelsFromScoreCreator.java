@@ -39,7 +39,7 @@ import org.anchoranalysis.image.convert.UnsignedByteBuffer;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
@@ -88,7 +88,7 @@ class VoxelsFromScoreCreator {
         List<Histogram> out = new ArrayList<>();
 
         for (VoxelsWrapper voxels : listVoxels) {
-            out.add(HistogramFactory.create(voxels, object));
+            out.add(HistogramFromObjectsFactory.create(voxels, object));
         }
 
         for (Histogram histogram : listAdditionalHistograms) {

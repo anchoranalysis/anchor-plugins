@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.binary.mask.MaskFactory;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
 
 /**

@@ -122,7 +122,7 @@ public class ScoreVoxels extends ChannelProvider {
 
         return Optional.of(
                 new ObjectMask(
-                        new BoundingBox(channelMask.dimensions()),
+                        new BoundingBox(channelMask.extent()),
                         channelMask.voxels().asByte(),
                         createdMask.binaryValues()));
     }

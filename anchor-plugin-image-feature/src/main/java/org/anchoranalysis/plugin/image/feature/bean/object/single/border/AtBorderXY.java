@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 
 public class AtBorderXY extends AtBorderBase {
 
     @Override
-    protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, Dimensions dim) {
-        return boundingBox.atBorderXY(dim);
+    protected boolean isBoundingBoxAtBorder(BoundingBox boundingBox, Extent extent) {
+        return boundingBox.atBorderXY(extent);
     }
 }

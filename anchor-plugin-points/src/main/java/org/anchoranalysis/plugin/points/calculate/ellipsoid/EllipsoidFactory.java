@@ -35,7 +35,7 @@ import org.anchoranalysis.core.functional.function.CheckedSupplier;
 import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.points.PointsFromObject;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;

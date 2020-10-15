@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 import org.anchoranalysis.image.object.ObjectMask;
 
 /** Combines two UpdatableBeforeConditions as LOGICAL ANDs */

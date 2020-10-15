@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import javax.xml.parsers.ParserConfigurationException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 import org.anchoranalysis.test.TestLoader;

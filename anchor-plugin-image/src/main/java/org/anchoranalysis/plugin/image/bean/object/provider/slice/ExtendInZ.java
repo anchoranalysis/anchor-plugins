@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectCollection;

@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 
 public class Filter extends ObjectCollectionProviderFilterBase {

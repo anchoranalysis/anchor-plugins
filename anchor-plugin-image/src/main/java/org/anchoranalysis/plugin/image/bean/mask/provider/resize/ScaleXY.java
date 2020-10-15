@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 
 /**
  * Scales the mask in XY dimensions, but not in Z dimension.

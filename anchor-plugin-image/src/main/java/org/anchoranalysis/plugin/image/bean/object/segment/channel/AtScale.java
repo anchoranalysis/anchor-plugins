@@ -37,14 +37,15 @@ import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.interpolator.InterpolatorFactory;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.object.scale.Scaler;
 import org.anchoranalysis.image.seed.SeedCollection;
 
 /**
@@ -125,7 +126,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
             throws OperationFailedException {
         return ObjectCollectionFactory.of(
-                objects.scale(scaleFactor.invert(), originalExtent)
+                Scaler.scaleObjects(objects, scaleFactor.invert(), originalExtent)
                         .asCollectionOrderNotPreserved());
     }
 

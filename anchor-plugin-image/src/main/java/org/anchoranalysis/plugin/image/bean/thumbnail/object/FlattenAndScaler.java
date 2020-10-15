@@ -38,13 +38,14 @@ import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.object.scale.Scaler;
 import org.anchoranalysis.image.stack.Stack;
 
 @RequiredArgsConstructor
@@ -85,7 +86,7 @@ class FlattenAndScaler {
         this.interpolator = interpolator;
 
         this.objectsScaled =
-                allObjects.scale(scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
+                Scaler.scaleObjects(allObjects, scaleFactor, Optional.of(ObjectMask::flattenZ), Optional.empty());
         this.objectsIndexed =
                 new ObjectCollectionRTree(
                         ObjectCollectionFactory.of(objectsScaled.asCollectionOrderNotPreserved()));

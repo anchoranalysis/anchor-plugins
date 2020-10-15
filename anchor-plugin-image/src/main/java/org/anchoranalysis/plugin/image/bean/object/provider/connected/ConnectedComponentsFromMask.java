@@ -95,7 +95,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
-        return createFactory(minNumberVoxels).createConnectedComponents(mask);
+        return createFactory(minNumberVoxels).createConnectedComponents(mask.binaryVoxels());
     }
 
     private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)

@@ -37,7 +37,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListFactory;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.addcriteria.AddCriteriaPair;
 import org.anchoranalysis.mpp.feature.addcriteria.IncludeMarksFailureException;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;

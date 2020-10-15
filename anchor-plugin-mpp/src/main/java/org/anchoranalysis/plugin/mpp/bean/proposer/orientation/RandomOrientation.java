@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;

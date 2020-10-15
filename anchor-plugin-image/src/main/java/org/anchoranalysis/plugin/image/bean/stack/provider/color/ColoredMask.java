@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
 
@@ -53,7 +53,7 @@ public class ColoredMask extends ColoredBase {
     @Override
     protected ColoredObjectCollection coloredObjectsToDraw(Dimensions backgroundDimensions)
             throws CreateException {
-        ObjectMask maskAsObject = new ObjectMask(mask.create());
+        ObjectMask maskAsObject = new ObjectMask(mask.create().binaryVoxels());
         return new ColoredObjectCollection(maskAsObject, color.rgbColor());
     }
 }

@@ -29,7 +29,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.Padding;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.extent.box.BoundedList;
 import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -114,7 +114,7 @@ class AddPaddingToGenerator {
                             dimensions, collection.boundingBox()));
         }
 
-        BoundingBox boxToAssign = new BoundingBox(dimensions);
+        BoundingBox boxToAssign = new BoundingBox(dimensions.extent());
         return collection.assignBoundingBoxAndMap(
                 boxToAssign, object -> object.mapBoundingBoxChangeExtent(boxToAssign));
     }

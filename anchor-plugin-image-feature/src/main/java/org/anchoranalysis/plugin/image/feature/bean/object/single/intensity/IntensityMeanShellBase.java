@@ -114,7 +114,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private Optional<ObjectMask> intersectWithEnergyMask(
             ObjectMask object, EnergyStackWithoutParams energyStack) {
-        return object.intersect(createEnergyMask(energyStack), energyStack.dimensions());
+        return object.intersect(createEnergyMask(energyStack), energyStack.extent());
     }
 
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
@@ -122,7 +122,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private ObjectMask createEnergyMask(EnergyStackWithoutParams energyStack) {
         return new ObjectMask(
-                new BoundingBox(energyStack.dimensions()),
+                new BoundingBox(energyStack.extent()),
                 energyStack.getChannel(energyIndexMask).voxels().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()

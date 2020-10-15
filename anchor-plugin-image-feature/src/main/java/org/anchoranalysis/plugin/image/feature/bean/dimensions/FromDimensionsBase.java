@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.FeatureEnergy;
 
 /**

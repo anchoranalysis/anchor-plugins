@@ -35,7 +35,7 @@ import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.image.feature.object.calculation.CalculateInputFromPair.Extract;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.object.ObjectMask;
@@ -106,12 +106,12 @@ class CalculatePairIntersection
     protected Optional<ObjectMask> execute(FeatureInputPairObjects input)
             throws FeatureCalculationException {
 
-        Dimensions dimensions = input.dimensionsRequired();
+        Extent extent = input.dimensionsRequired().extent();
 
         ObjectMask object1Dilated = first.getOrCalculate(input);
         ObjectMask object2Dilated = second.getOrCalculate(input);
 
-        Optional<ObjectMask> omIntersection = object1Dilated.intersect(object2Dilated, dimensions);
+        Optional<ObjectMask> omIntersection = object1Dilated.intersect(object2Dilated, extent);
 
         if (!omIntersection.isPresent()) {
             return Optional.empty();
@@ -121,7 +121,7 @@ class CalculatePairIntersection
 
         try {
             if (iterationsErosion > 0) {
-                return erode(input, omIntersection.get(), dimensions);
+                return erode(input, omIntersection.get(), extent);
             } else {
                 return omIntersection;
             }
@@ -132,19 +132,19 @@ class CalculatePairIntersection
     }
 
     private Optional<ObjectMask> erode(
-            FeatureInputPairObjects input, ObjectMask intersection, Dimensions dimensions)
+            FeatureInputPairObjects input, ObjectMask intersection, Extent extent)
             throws CreateException {
 
         // We erode it, and use this as a mask on the input object
         ObjectMask eroded =
                 MorphologicalErosion.createErodedObject(
                         input.getMerged(),
-                        Optional.of(dimensions.extent()),
+                        Optional.of(extent),
                         do3D,
                         iterationsErosion,
                         true,
                         Optional.empty());
 
-        return intersection.intersect(eroded, dimensions);
+        return intersection.intersect(eroded, extent);
     }
 }

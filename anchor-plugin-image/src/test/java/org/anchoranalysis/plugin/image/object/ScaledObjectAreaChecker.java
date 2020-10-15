@@ -30,10 +30,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.scale.ScaleFactor;
 
 @RequiredArgsConstructor
 class ScaledObjectAreaChecker {

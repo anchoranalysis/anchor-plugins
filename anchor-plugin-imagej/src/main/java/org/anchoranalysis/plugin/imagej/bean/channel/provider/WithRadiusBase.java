@@ -34,8 +34,8 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.dimensions.Resolution;
+import org.anchoranalysis.image.dimensions.UnitConverter;
 
 /** A {@link ChannelProviderUnary} with a 'radius' parameter */
 public abstract class WithRadiusBase extends ChannelProviderUnary {

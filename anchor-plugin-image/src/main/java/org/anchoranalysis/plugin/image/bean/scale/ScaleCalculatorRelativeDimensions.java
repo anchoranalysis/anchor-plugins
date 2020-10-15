@@ -35,9 +35,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.scale.ScaleFactorUtilities;
+import org.anchoranalysis.image.dimensions.Dimensions;
+import org.anchoranalysis.image.extent.scale.ScaleFactor;
+import org.anchoranalysis.image.extent.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 

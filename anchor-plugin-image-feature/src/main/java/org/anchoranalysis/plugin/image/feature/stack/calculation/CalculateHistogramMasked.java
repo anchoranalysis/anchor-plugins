@@ -36,7 +36,7 @@ import org.anchoranalysis.image.binary.mask.Mask;
 import org.anchoranalysis.image.channel.Channel;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
 import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
 
 /**
  * Calculated a histogram for a specific region on a channel, as identified by a mask in another
@@ -58,7 +58,7 @@ public class CalculateHistogramMasked extends FeatureCalculation<Histogram, Feat
         try {
             EnergyStackWithoutParams energyStack = input.getEnergyStackRequired().withoutParams();
 
-            return HistogramFactory.create(extractChannel(energyStack), extractMask(energyStack));
+            return HistogramFromObjectsFactory.create(extractChannel(energyStack), extractMask(energyStack));
 
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);

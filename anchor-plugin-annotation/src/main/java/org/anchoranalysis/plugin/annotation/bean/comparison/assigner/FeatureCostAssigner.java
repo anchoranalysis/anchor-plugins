@@ -35,7 +35,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
@@ -80,7 +80,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
             // We remove any border items from the assignment
             if (removeTouchingBorderXY) {
-                assignment.removeTouchingBorderXY(dimensions);
+                assignment.removeTouchingBorderXY(dimensions.extent());
             }
 
             context.getOutputter()

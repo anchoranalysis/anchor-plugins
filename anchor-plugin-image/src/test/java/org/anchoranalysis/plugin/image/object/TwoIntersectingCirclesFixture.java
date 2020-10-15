@@ -31,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.dimensions.Dimensions;
 import org.anchoranalysis.image.object.ObjectCollection;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 

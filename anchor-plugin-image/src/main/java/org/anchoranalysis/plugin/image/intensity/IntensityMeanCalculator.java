@@ -51,7 +51,7 @@ public class IntensityMeanCalculator {
 
         RunningSum running = new RunningSum();
 
-        IterateVoxelsObjectMask.withBuffer(
+        IterateVoxelsObjectMask.withVoxelBuffer(
                 object,
                 channel.voxels().any(),
                 (buffer, offset) -> {
