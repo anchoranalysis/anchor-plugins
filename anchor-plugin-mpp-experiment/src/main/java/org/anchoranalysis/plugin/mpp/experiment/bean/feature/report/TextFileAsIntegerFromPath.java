@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
+import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
 public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase {
@@ -44,7 +44,7 @@ public class TextFileAsIntegerFromPath extends ReportFeatureForManifestFileBase 
         if (executionTimePath.toFile().exists()) {
             String execTime;
             try {
-                execTime = FinderFileAsText.readFile(executionTimePath);
+                execTime = TextFileReader.readFile(executionTimePath);
             } catch (IOException e) {
                 throw new OperationFailedException(e);
             }
