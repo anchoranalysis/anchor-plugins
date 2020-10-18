@@ -60,9 +60,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
 
         try {
             return resolveDistance(
-                    box,
-                    dimensions.resolution(),
-                    AxisTypeConverter.createFromString(axis));
+                    box, dimensions.resolution(), AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e);
         }

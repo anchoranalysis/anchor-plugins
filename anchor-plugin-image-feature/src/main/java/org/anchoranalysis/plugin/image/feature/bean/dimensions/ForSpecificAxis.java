@@ -57,7 +57,8 @@ public abstract class ForSpecificAxis<T extends FeatureInputEnergy> extends From
         }
     }
 
-    protected abstract double calculateForAxis(Dimensions dimensions, AxisType axis) throws FeatureCalculationException;
+    protected abstract double calculateForAxis(Dimensions dimensions, AxisType axis)
+            throws FeatureCalculationException;
 
     @Override
     public String describeParams() {

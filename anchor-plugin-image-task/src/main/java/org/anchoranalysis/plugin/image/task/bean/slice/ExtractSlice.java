@@ -71,7 +71,7 @@ import org.anchoranalysis.plugin.image.task.slice.SharedStateSelectedSlice;
 public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSlice> {
 
     private static final String OUTPUT_SLICES = "slices";
-    
+
     // START BEAN PROPERTIES
     @BeanField @SkipInit @Getter @Setter
     private FeatureListProvider<FeatureInputStack> scoreProvider;
@@ -116,7 +116,10 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                             params.getSharedState());
 
             deriveSlicesAndOutput(
-                    params.getInput(), energyStack, optimaSliceIndex, params.getOutputter().getChecked());
+                    params.getInput(),
+                    energyStack,
+                    optimaSliceIndex,
+                    params.getOutputter().getChecked());
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);
@@ -178,8 +181,7 @@ public class ExtractSlice extends Task<NamedChannelsInput, SharedStateSelectedSl
                         energyStack.dimensions(), stack -> stack.extractSlice(optimaSliceIndex));
 
         try {
-            NamedStacksOutputter.output(slices, OUTPUT_SLICES,
-                    false, outputter);
+            NamedStacksOutputter.output(slices, OUTPUT_SLICES, false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }

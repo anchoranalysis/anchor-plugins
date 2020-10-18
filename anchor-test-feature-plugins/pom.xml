@@ -17,9 +17,21 @@
 		</dependency>
 		
 		<dependency>
+		  <groupId>${project.groupId}</groupId>
+		  <artifactId>anchor-math</artifactId>
+		  <version>0.0.8-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
           <groupId>${project.groupId}</groupId>
           <artifactId>anchor-test-feature</artifactId>
           <version>0.0.4-SNAPSHOT</version>
+        </dependency>
+		
+	  <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>anchor-spatial</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>

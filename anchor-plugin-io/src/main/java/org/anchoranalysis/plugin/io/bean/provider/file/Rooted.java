@@ -43,18 +43,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Represents a set of files, with a different root depending on the operating-system and conditions.
- * 
- * <p>The following determines which root is used, and prepended to a copy of the FileSet:
- * 
- * <p>If the operating system is windows:
- * <ul>
- * <li>If the fileSet directory exists in localWindowsRootPath we use that
- * <li>Otherwise, TODO
- * </ul>
- * 
- * @author Owen Feehan
+ * Represents a set of files, with a different root depending on the operating-system and
+ * conditions.
  *
+ * <p>The following determines which root is used, and prepended to a copy of the FileSet:
+ *
+ * <p>If the operating system is windows:
+ *
+ * <ul>
+ *   <li>If the fileSet directory exists in localWindowsRootPath we use that
+ *   <li>Otherwise, TODO
+ * </ul>
+ *
+ * @author Owen Feehan
  */
 public class Rooted extends FilesProvider {
 

@@ -43,5 +43,6 @@ public interface ExportFeatureResultsAdder {
      * @param results the results
      * @throws OperationFailedException if anything goes wrong while adding results.
      */
-    void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) throws OperationFailedException;
+    void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results)
+            throws OperationFailedException;
 }

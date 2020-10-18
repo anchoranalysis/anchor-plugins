@@ -37,7 +37,8 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 class GroupedMultiplexOutputters {
 
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION =
-            new ManifestDirectoryDescription("groupOutput", "outputManager", new StringsWithoutOrder());
+            new ManifestDirectoryDescription(
+                    "groupOutput", "outputManager", new StringsWithoutOrder());
 
     private Map<String, Outputter> map;
 

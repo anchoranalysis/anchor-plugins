@@ -56,8 +56,6 @@ class RGBWriterShort extends RGBWriter {
     private static void putSliceShort(UnsignedByteBuffer merged, Channel channel, int z) {
         ShortBuffer source = channel.voxels().asShort().sliceBuffer(z).getDelegate();
         source.rewind();
-        merged.getDelegate()
-                .asShortBuffer()
-                .put(source);
+        merged.getDelegate().asShortBuffer().put(source);
     }
 }

@@ -47,12 +47,10 @@ public class BlurGaussian3D extends BlurStrategy {
         double sigma = calculateSigma(dimensions, logger);
 
         double divideZBy = dimensions.resolution().map(Resolution::zRelative).orElse(1.0);
-        
+
         GaussianBlurUtilities.applyBlur(
                 ConvertToImg.from(voxels),
-                new double[] {
-                    sigma, sigma, sigma / divideZBy
-                } // Sigma-array
+                new double[] {sigma, sigma, sigma / divideZBy} // Sigma-array
                 );
     }
 }

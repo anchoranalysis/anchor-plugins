@@ -73,7 +73,8 @@ public class LevelResultCollectionFactory {
                 objectForCalculateLevel = objectMask;
             }
 
-            Histogram histogram = HistogramFromObjectsFactory.create(channel, objectForCalculateLevel);
+            Histogram histogram =
+                    HistogramFromObjectsFactory.create(channel, objectForCalculateLevel);
             int level;
             try {
                 level = calculateLevel.calculateLevel(histogram);

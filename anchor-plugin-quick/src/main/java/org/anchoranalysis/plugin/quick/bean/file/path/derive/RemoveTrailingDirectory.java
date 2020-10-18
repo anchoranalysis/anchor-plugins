@@ -57,18 +57,19 @@ public class RemoveTrailingDirectory extends DerivePath {
         }
     }
 
-    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim) throws DerivePathException {
+    private Path removeNTrailingDirs(Path path, int n, int skipFirstTrim)
+            throws DerivePathException {
         try {
             PathTwoParts pathDir = new PathTwoParts(path);
-    
+
             for (int i = 0; i < skipFirstTrim; i++) {
                 pathDir.moveLastDirectoryToRest();
             }
-    
+
             for (int i = 0; i < n; i++) {
                 pathDir.removeLastDirectory();
             }
-    
+
             return pathDir.combine();
         } catch (CreateException e) {
             throw new DerivePathException(e);

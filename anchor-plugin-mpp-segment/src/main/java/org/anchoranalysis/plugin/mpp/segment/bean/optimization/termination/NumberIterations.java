@@ -43,7 +43,8 @@ public class NumberIterations extends TerminationCondition {
     // END BEAN PROPERTIES
 
     @Override
-    public boolean continueIterations(int currentIteration, double score, int size, MessageLogger logger) {
+    public boolean continueIterations(
+            int currentIteration, double score, int size, MessageLogger logger) {
         if (currentIteration < maxNumber) {
             return true;
         } else {

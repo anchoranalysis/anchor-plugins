@@ -142,7 +142,8 @@ public class RootPathMap {
 
         // We check both, as the behaviour is implementation-dependent in the multimap
         if (exst == null || exst.isEmpty()) {
-            throw new PathDifferenceException(String.format("Cannot find a root-path for '%s'", name));
+            throw new PathDifferenceException(
+                    String.format("Cannot find a root-path for '%s'", name));
         }
 
         // With the currently implementation there can be a maximum of two items with the same name

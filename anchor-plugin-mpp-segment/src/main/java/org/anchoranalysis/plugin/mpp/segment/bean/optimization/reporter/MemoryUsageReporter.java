@@ -86,6 +86,7 @@ public class MemoryUsageReporter extends ReporterAggregate<VoxelizedMarksWithEne
         }
 
         MemoryUtilities.logMemoryUsage(
-                String.format("MemoryUsageReporter BEST step=%d", reporting.getIteration()), logger);
+                String.format("MemoryUsageReporter BEST step=%d", reporting.getIteration()),
+                logger);
     }
 }

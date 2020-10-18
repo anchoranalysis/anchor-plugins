@@ -38,14 +38,13 @@ import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 
 /**
  * A manifest after being deserialized from the file-system.
- * 
- * <p>It performs caching and providers other utility functions.
- * 
- * <p>It is <b>not</b> the main data object-used in writing the manifest,
- * rather see {@link Manifest}.
- * 
- * @author Owen Feehan
  *
+ * <p>It performs caching and providers other utility functions.
+ *
+ * <p>It is <b>not</b> the main data object-used in writing the manifest, rather see {@link
+ * Manifest}.
+ *
+ * @author Owen Feehan
  */
 public class DeserializedManifest {
 

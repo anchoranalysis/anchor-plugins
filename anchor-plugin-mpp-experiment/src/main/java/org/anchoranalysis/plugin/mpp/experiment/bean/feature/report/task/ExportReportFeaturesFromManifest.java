@@ -72,18 +72,21 @@ public class ExportReportFeaturesFromManifest
             throws JobExecutionException {
 
         try {
-            Optional<CSVWriter> writer = CSVWriter.createFromOutputter("featureReport", params.getOutputter().getChecked());
+            Optional<CSVWriter> writer =
+                    CSVWriter.createFromOutputter(
+                            "featureReport", params.getOutputter().getChecked());
 
             if (writer.isPresent()) {
                 writeCSV(writer.get(), params.getInput(), params.getLogger());
             }
-            
+
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
-    
-    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger) throws JobExecutionException {
+
+    private void writeCSV(CSVWriter writer, ManifestCouplingDefinition input, Logger logger)
+            throws JobExecutionException {
         try {
             writer.writeHeaders(ReportFeatureUtilities.headerNames(listReportFeatures, logger));
 
@@ -105,7 +108,7 @@ public class ExportReportFeaturesFromManifest
 
         } finally {
             writer.close();
-        }        
+        }
     }
 
     @Override

@@ -76,7 +76,10 @@ public class AggregateAnnotations<S extends AnnotatorStrategy>
 
         context.getOutputter()
                 .writerSelective()
-                .write("annotationsAgg", AnnotationAggregateCSVGenerator::new, sharedState::getAnnotations);
+                .write(
+                        "annotationsAgg",
+                        AnnotationAggregateCSVGenerator::new,
+                        sharedState::getAnnotations);
     }
 
     private Optional<ImageAnnotation> createFromInput(AnnotationWithStrategy<S> input)

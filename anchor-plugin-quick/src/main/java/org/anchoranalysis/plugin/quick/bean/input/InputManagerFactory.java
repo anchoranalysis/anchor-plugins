@@ -51,8 +51,7 @@ class InputManagerFactory {
             MatchedAppendCsv filterFilesCsv)
             throws BeanMisconfiguredException {
 
-        InputManager<FileInput> files =
-                createFiles(rootName, filesProvider, namer);
+        InputManager<FileInput> files = createFiles(rootName, filesProvider, namer);
 
         if (filterFilesCsv == null) {
             return files;
@@ -75,9 +74,7 @@ class InputManagerFactory {
      * @return
      */
     private static InputManager<FileInput> createFiles(
-            String rootName,
-            FilesProviderWithDirectory filesProvider,
-            FileNamer namer) {
+            String rootName, FilesProviderWithDirectory filesProvider, FileNamer namer) {
         NamedFiles files = new NamedFiles();
         files.setFilesProvider(createMaybeRootedFileProvider(rootName, filesProvider));
         files.setNamer(namer);

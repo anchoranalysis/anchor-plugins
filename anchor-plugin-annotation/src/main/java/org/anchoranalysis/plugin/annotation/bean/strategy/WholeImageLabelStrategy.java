@@ -46,7 +46,8 @@ public class WholeImageLabelStrategy extends SinglePathStrategy {
     // END BEAN PROPERTIES
 
     @Override
-    public Optional<String> annotationLabelFor(ProvidesStackInput item) throws InputReadFailedException {
+    public Optional<String> annotationLabelFor(ProvidesStackInput item)
+            throws InputReadFailedException {
         return ReadAnnotationFromFile.readCheckExists(annotationPathFor(item))
                 .map(ImageLabelAnnotation::getLabel);
     }

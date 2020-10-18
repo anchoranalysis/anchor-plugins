@@ -59,10 +59,7 @@ public abstract class ObjectSerializerPeriodicReporter<T extends Serializable>
 
         try {
             super.reportBegin(initParams);
-            init(
-               new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction))
-            );
-
+            init(new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction)));
 
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);

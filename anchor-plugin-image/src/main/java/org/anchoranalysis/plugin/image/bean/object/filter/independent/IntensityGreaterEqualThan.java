@@ -122,7 +122,8 @@ public class IntensityGreaterEqualThan extends ObjectFilterPredicate {
 
     private int threshold(Optional<Dimensions> dim) throws OperationFailedException {
         return (int)
-                Math.ceil(threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
+                Math.ceil(
+                        threshold.resolveForAxis(dim.flatMap(Dimensions::unitConvert), AxisType.X));
     }
 
     @Override

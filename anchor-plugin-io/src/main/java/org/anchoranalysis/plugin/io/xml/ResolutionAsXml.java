@@ -48,9 +48,8 @@ import org.xml.sax.SAXException;
 
 /**
  * Reads and writes a metadata XML file specifying the image-resolution.
- * 
- * <p>If a particualar dimension is missing from the XML file, 1 is supplied
- * as a replacement value.
+ *
+ * <p>If a particualar dimension is missing from the XML file, 1 is supplied as a replacement value.
  *
  * @author Owen Feehan
  */

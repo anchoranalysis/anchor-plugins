@@ -92,7 +92,8 @@ class AppendPart extends NamedChannelsInputPart {
     public NamedChannelsForSeries createChannelsForSeries(
             int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
 
-        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesIndex, progressReporter);
+        NamedChannelsForSeries exst =
+                delegate.createChannelsForSeries(seriesIndex, progressReporter);
 
         openRasterIfNecessary();
 

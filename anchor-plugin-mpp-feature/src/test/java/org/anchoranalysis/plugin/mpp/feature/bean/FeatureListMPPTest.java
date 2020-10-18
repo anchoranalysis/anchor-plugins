@@ -54,8 +54,8 @@ import org.junit.Test;
 
 public class FeatureListMPPTest {
 
-    private static final EnergyStack energyStack = EnergyStackFixture.create(false, true);
-    private static final Dimensions DIM = energyStack.dimensions();
+    private static final EnergyStack ENERGY_STACK = EnergyStackFixture.create(false, true);
+    private static final Dimensions DIMENSIONS = ENERGY_STACK.dimensions();
 
     @Before
     public void setUp() {
@@ -73,11 +73,11 @@ public class FeatureListMPPTest {
     public void testArbitraryParams()
             throws InitException, NamedFeatureCalculateException, CreateException {
 
-        MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIM);
+        MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
 
         testConstantsInList(
-                new FeatureInputMarkCollection(marksFixture.createMarks1(), Optional.of(DIM)),
-                new FeatureInputMarkCollection(marksFixture.createMarks2(), Optional.of(DIM)));
+                new FeatureInputMarkCollection(marksFixture.createMarks1(), Optional.of(DIMENSIONS)),
+                new FeatureInputMarkCollection(marksFixture.createMarks2(), Optional.of(DIMENSIONS)));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class FeatureListMPPTest {
         FeatureCalculatorMulti<FeatureInputMark> session =
                 createAndStart(FeatureListFixtureMPP.mark());
 
-        MarkFixture markFixture = new MarkFixture(DIM);
+        MarkFixture markFixture = new MarkFixture(DIMENSIONS);
 
         assertMark(
                 session,
@@ -118,7 +118,7 @@ public class FeatureListMPPTest {
         FeatureCalculatorMulti<FeatureInputMarkCollection> session =
                 createAndStart(FeatureListFixtureMPP.marks());
 
-        MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIM);
+        MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
 
         assertMarks(session, marksFixture.createMarks1(), 2.0);
         assertMarks(session, marksFixture.createMarks2(), 3.0);
@@ -133,7 +133,7 @@ public class FeatureListMPPTest {
             double expected)
             throws CreateException, FeatureCalculationException, NamedFeatureCalculateException {
         assertCalc(
-                session.calculate(new FeatureInputMarkCollection(marks, Optional.of(DIM))),
+                session.calculate(new FeatureInputMarkCollection(marks, Optional.of(DIMENSIONS))),
                 expected);
     }
 
@@ -144,7 +144,7 @@ public class FeatureListMPPTest {
             double expected2,
             double expected3)
             throws CreateException, NamedFeatureCalculateException {
-        ResultsVector rv = session.calculate(new FeatureInputMark(mark, Optional.of(DIM)));
+        ResultsVector rv = session.calculate(new FeatureInputMark(mark, Optional.of(DIMENSIONS)));
         ResultsVectorTestUtilities.assertCalc(rv, expected1, expected2, expected3);
     }
 

@@ -307,13 +307,16 @@ public class SegmentInstanceWithModel<T>
         writer.write(OUTPUT_H5, HDF5ObjectsGenerator::new, () -> objects);
         writer.write(
                 OUTPUT_MERGED_AS_MASK,
-                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()), () -> objects);
+                () -> new ObjectsMergedAsMaskGenerator(stack.dimensions()),
+                () -> objects);
 
-        writer.write(OUTPUT_OUTLINE, () -> outlineGenerator(objects.size(), background), () -> new ObjectCollectionWithProperties(objects) );
+        writer.write(
+                OUTPUT_OUTLINE,
+                () -> outlineGenerator(objects.size(), background),
+                () -> new ObjectCollectionWithProperties(objects));
     }
 
-    private DrawObjectsGenerator outlineGenerator(
-            int objectsSize, DisplayStack background) {
+    private DrawObjectsGenerator outlineGenerator(int objectsSize, DisplayStack background) {
         if (varyColors) {
             return DrawObjectsGenerator.outlineVariedColors(objectsSize, outlineWidth, background);
         } else {

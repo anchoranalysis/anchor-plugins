@@ -54,7 +54,8 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
         start(dimensions, objectsToFilter);
 
         ObjectCollection dup =
-                objectsToFilter.stream().filter(object -> match(object, dimensions), objectsRejected);
+                objectsToFilter.stream()
+                        .filter(object -> match(object, dimensions), objectsRejected);
 
         end();
 

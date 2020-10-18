@@ -43,18 +43,18 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
- * Outputs statistics on current energy / kernel acceptance etc. periodically at a particular interval.
- * 
- * @author Owen Feehan
+ * Outputs statistics on current energy / kernel acceptance etc. periodically at a particular
+ * interval.
  *
+ * @author Owen Feehan
  */
 public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
-    
+
     public static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
-    
+
     private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
-    
+
     private Optional<TextFileOutput> csvOutput;
 
     private StopWatch timer = null;

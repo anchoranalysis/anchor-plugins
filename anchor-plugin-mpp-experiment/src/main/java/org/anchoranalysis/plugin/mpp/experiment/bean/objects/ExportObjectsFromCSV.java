@@ -208,7 +208,8 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         return DisplayStack.create(providerCopy.create());
     }
 
-    private Path idStringForPath(Optional<Path> path, boolean debugMode) throws DerivePathException {
+    private Path idStringForPath(Optional<Path> path, boolean debugMode)
+            throws DerivePathException {
         if (!path.isPresent()) {
             throw new DerivePathException(
                     "A binding-path is not present for the input, but is required");
@@ -270,22 +271,19 @@ public class ExportObjectsFromCSV extends ExportObjectsBase<FromCSVInput, FromCS
         outputter
                 .writerPermissive()
                 .write(
-                    label,
-                    () -> {
-                        try {
-                            return createGenerator(label, objects, background);
-                        } catch (SetOperationFailedException e) {
-                            throw new OutputWriteFailedException(e);
-                        }
-                    },
-                    () -> rows
-                );
+                        label,
+                        () -> {
+                            try {
+                                return createGenerator(label, objects, background);
+                            } catch (SetOperationFailedException e) {
+                                throw new OutputWriteFailedException(e);
+                            }
+                        },
+                        () -> rows);
     }
 
     private CollectionGenerator<CSVRow> createGenerator(
-            String label,
-            ObjectCollectionRTree objects,
-            DisplayStack background)
+            String label, ObjectCollectionRTree objects, DisplayStack background)
             throws SetOperationFailedException {
         Outline outlineWriter = new Outline(1, false);
 

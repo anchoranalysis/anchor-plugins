@@ -62,7 +62,7 @@ public class BBoxRatio extends FeatureSingleMemo {
 
         return extent;
     }
-    
+
     private static int zExtent(int zVoxelExtent, Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
             return (int) (zVoxelExtent * resolution.get().zRelative());

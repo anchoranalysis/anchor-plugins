@@ -59,11 +59,10 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEANS
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
-        return FunctionalList.mapToList(fileInput.inputs(params), input -> new MapPart(
-                input,
-                getStackReader(),
-                channelMap,
-                useLastSeriesIndexOnly) );
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params)
+            throws InputReadFailedException {
+        return FunctionalList.mapToList(
+                fileInput.inputs(params),
+                input -> new MapPart(input, getStackReader(), channelMap, useLastSeriesIndexOnly));
     }
 }

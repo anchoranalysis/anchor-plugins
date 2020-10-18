@@ -34,9 +34,9 @@ import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.path.PathDifference;
 import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.apache.commons.io.FilenameUtils;
 
 /**

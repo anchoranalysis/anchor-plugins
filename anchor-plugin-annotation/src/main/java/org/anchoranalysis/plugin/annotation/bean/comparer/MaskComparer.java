@@ -68,8 +68,7 @@ public class MaskComparer extends Comparer {
                 return new NotFound<>(maskPath, "No mask exists");
             }
 
-            Mask mask =
-                    MaskReader.openMask(stackReader, maskPath, createBinaryValues());
+            Mask mask = MaskReader.openMask(stackReader, maskPath, createBinaryValues());
 
             return new Found<>(convertToObjects(mask));
 

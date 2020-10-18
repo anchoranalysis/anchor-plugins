@@ -82,7 +82,8 @@ public class ConnectedComponentsFromBinarySegmentation extends SegmentChannelInt
 
         ObjectsFromConnectedComponentsFactory creator =
                 new ObjectsFromConnectedComponentsFactory(minNumberVoxels);
-        return maybeShiftObjects(creator.createConnectedComponents(mask.binaryVoxels()), maskShiftBy);
+        return maybeShiftObjects(
+                creator.createConnectedComponents(mask.binaryVoxels()), maskShiftBy);
     }
 
     private static ObjectCollection maybeShiftObjects(

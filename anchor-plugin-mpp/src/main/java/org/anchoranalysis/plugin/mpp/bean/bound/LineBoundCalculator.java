@@ -148,14 +148,16 @@ public class LineBoundCalculator extends BoundCalculator {
         }
         return -1;
     }
-    
+
     /**
      * Calculates the resolution of z relative to xy and resolutions.
-     * 
-     * <p>If there is no resolution defined, an isotropic assumption occurs that z dimension has equal resolution to XY.
-     * 
+     *
+     * <p>If there is no resolution defined, an isotropic assumption occurs that z dimension has
+     * equal resolution to XY.
+     *
      * @param resolution
-     * @return z as a ratio to the xy resolution (assumed identical) or 1.0 if resolution is not defined
+     * @return z as a ratio to the xy resolution (assumed identical) or 1.0 if resolution is not
+     *     defined
      */
     private double zRelative(Optional<Resolution> resolution) {
         return resolution.map(Resolution::zRelative).orElse(1.0);

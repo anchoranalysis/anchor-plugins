@@ -34,11 +34,11 @@ import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 
 class RGBWriterByte extends RGBWriter {
-    
+
     public RGBWriterByte(IFormatWriter writer, Stack stack) {
         super(writer, stack);
     }
-    
+
     @Override
     protected void mergeSliceAsRGB(int z, int capacity) throws ImageIOException {
 
@@ -54,7 +54,6 @@ class RGBWriterByte extends RGBWriter {
         }
     }
 
-    
     private static void putSlice(ByteBuffer merged, Channel channel, int z) {
         ByteBuffer source = channel.voxels().asByte().sliceBuffer(z).getDelegate();
         source.rewind();

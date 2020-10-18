@@ -39,21 +39,21 @@ import org.anchoranalysis.test.image.csv.CSVComparer;
 
 class CompareHelper {
 
-    /** 
-     * <p>Toggles a behaviour that replaces reference files with newly created onces in certain circumstances.
-     * 
-     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer
-     * (the newly created file) will be copied on top of the second path in the comparer
-     * (the reference file).
-     * 
+    /**
+     * Toggles a behaviour that replaces reference files with newly created onces in certain
+     * circumstances.
+     *
+     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer (the newly
+     * created file) will be copied on top of the second path in the comparer (the reference file).
+     *
      * <p>If false, no copying occurs.
-     * 
-     * <p>This is a powerful tool to update resources when they are out of sync with
-     * the tests, but should be used very <b>carefully</b> as it overrides existing
-     * files in the source-code directory.
+     *
+     * <p>This is a powerful tool to update resources when they are out of sync with the tests, but
+     * should be used very <b>carefully</b> as it overrides existing files in the source-code
+     * directory.
      */
     private static final boolean COPY_NOT_IDENTICAL = false;
-    
+
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
     public static void compareOutputWithSaved(
@@ -73,7 +73,7 @@ class CompareHelper {
     private static void assertIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
         boolean identical = compareForExtra(comparer, relativePath);
-        
+
         if (COPY_NOT_IDENTICAL && !identical) {
             try {
                 comparer.copyFromPath1ToPath2(relativePath);

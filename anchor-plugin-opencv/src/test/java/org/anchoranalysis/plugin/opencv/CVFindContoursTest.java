@@ -42,8 +42,8 @@ import org.junit.Test;
 
 public class CVFindContoursTest {
 
-    private TestLoaderObjects loader = new TestLoaderObjects(
-            TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderObjects loader =
+            new TestLoaderObjects(TestLoader.createFromMavenWorkingDirectory());
 
     @Test
     public void test01()

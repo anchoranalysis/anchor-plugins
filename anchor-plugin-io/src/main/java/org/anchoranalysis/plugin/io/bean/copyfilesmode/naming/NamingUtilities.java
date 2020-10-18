@@ -36,7 +36,8 @@ import org.anchoranalysis.core.path.PathDifferenceException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamingUtilities {
 
-    public static Path filePathDifference(Path baseFolderPath, Path filePath) throws PathDifferenceException {
+    public static Path filePathDifference(Path baseFolderPath, Path filePath)
+            throws PathDifferenceException {
         PathDifference filePathDiff = PathDifference.differenceFrom(baseFolderPath, filePath);
         return filePathDiff.combined();
     }

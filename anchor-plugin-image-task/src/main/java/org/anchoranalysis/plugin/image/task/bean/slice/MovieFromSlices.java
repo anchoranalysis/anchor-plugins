@@ -55,10 +55,10 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.io.output.outputter.Outputter;
 
-public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack>,NoSharedState> {
+public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack>, NoSharedState> {
 
     private static final String OUTPUT_FRAME = "frames";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int delaySizeAtEnd = 0;
 
@@ -75,18 +75,19 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
-    public OutputSequenceIncrementing<Stack> beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+    public OutputSequenceIncrementing<Stack> beforeAnyJobIsExecuted(
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         try {
-            return OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(OUTPUT_FRAME, filePrefix, 8, outputter.getChecked());
+            return OutputSequenceStackFactory.NO_RESTRICTIONS.incrementingByOneCurrentDirectory(
+                    OUTPUT_FRAME, filePrefix, 8, outputter.getChecked());
         } catch (OutputWriteFailedException e) {
             throw new ExperimentExecutionException(e);
         }
     }
-    
+
     @Override
     protected NoSharedState createSharedStateJob(InputOutputContext context)
             throws JobExecutionException {
@@ -94,8 +95,11 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
     }
 
     @Override
-    public void startSeries(OutputSequenceIncrementing<Stack> sharedStateTask,
-            NoSharedState sharedStateJob, InputOutputContext context) throws JobExecutionException {
+    public void startSeries(
+            OutputSequenceIncrementing<Stack> sharedStateTask,
+            NoSharedState sharedStateJob,
+            InputOutputContext context)
+            throws JobExecutionException {
         // NOTHING TO DO
     }
 
@@ -105,9 +109,13 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
     }
 
     @Override
-    public void doStack(InputBound<NamedChannelsInput, OutputSequenceIncrementing<Stack>> input,
-            NoSharedState sharedStateJob, int seriesIndex, int numberSeries,
-            InputOutputContext context) throws JobExecutionException {
+    public void doStack(
+            InputBound<NamedChannelsInput, OutputSequenceIncrementing<Stack>> input,
+            NoSharedState sharedStateJob,
+            int seriesIndex,
+            int numberSeries,
+            InputOutputContext context)
+            throws JobExecutionException {
 
         try {
             NamedChannelsForSeries namedChannels =
@@ -145,20 +153,27 @@ public class MovieFromSlices extends RasterTask<OutputSequenceIncrementing<Stack
                 }
             }
 
-        } catch (ImageIOException | IncorrectImageSizeException | GetOperationFailedException | OutputWriteFailedException e) {
+        } catch (ImageIOException
+                | IncorrectImageSizeException
+                | GetOperationFailedException
+                | OutputWriteFailedException e) {
             throw new JobExecutionException(e);
         }
     }
-    
+
     @Override
-    public void endSeries(OutputSequenceIncrementing<Stack> sharedStateTask,
-            NoSharedState sharedStateJob, InputOutputContext context) throws JobExecutionException {
-        // NOTHING TO DO        
+    public void endSeries(
+            OutputSequenceIncrementing<Stack> sharedStateTask,
+            NoSharedState sharedStateJob,
+            InputOutputContext context)
+            throws JobExecutionException {
+        // NOTHING TO DO
     }
 
     @Override
-    public void afterAllJobsAreExecuted(OutputSequenceIncrementing<Stack> sharedState,
-            InputOutputContext context) throws ExperimentExecutionException {
+    public void afterAllJobsAreExecuted(
+            OutputSequenceIncrementing<Stack> sharedState, InputOutputContext context)
+            throws ExperimentExecutionException {
         // NOTHING TO DO
     }
 }

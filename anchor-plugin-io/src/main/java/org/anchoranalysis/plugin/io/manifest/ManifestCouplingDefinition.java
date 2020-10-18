@@ -51,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
 public class ManifestCouplingDefinition implements InputFromManager {
 
     private static final String JOB_MANIFEST_FILENAME_TO_READ = Task.OUTPUT_NAME_MANIFEST + ".ser";
-            
+
     private List<CoupledManifests> listCoupledManifests = new ArrayList<>();
     private MultiMap mapExperimentalToImages = new MultiValueMap();
 
@@ -63,7 +63,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
 
     /**
      * Adds job-manifests that don't have corresponding experiment-manifests.
-     * 
+     *
      * @param jobFiles the files of the job manifests
      * @param manifestDeserializer the deserializer to use
      * @param logger the logger
@@ -76,7 +76,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
             if (file.exists()) {
                 DeserializedManifest deserializedManifest =
                         new DeserializedManifest(file, manifestDeserializer);
-                listCoupledManifests.add(new CoupledManifests(deserializedManifest, 3, logger));    
+                listCoupledManifests.add(new CoupledManifests(deserializedManifest, 3, logger));
             } else {
                 log.debug(String.format("File %s does not exist", file.getPath()));
             }
@@ -92,8 +92,7 @@ public class ManifestCouplingDefinition implements InputFromManager {
         for (File experimentFile : matchingFiles) {
             // We deserialize each experimental manifest
 
-            Manifest experimentManifest =
-                    manifestDeserializer.deserializeManifest(experimentFile);
+            Manifest experimentManifest = manifestDeserializer.deserializeManifest(experimentFile);
 
             // We look for all experimental files in the manifest
             FinderExperimentFileDirectories finderExperimentFileFolders =
@@ -104,15 +103,16 @@ public class ManifestCouplingDefinition implements InputFromManager {
 
             // For each experiment folder, we look for a manifest
             for (MutableDirectory folderWrite : finderExperimentFileFolders.getList()) {
-                CoupledManifests coupledManifests = readManifestsFromDirectory(folderWrite, experimentManifest, manifestDeserializer, logger);
+                CoupledManifests coupledManifests =
+                        readManifestsFromDirectory(
+                                folderWrite, experimentManifest, manifestDeserializer, logger);
                 listCoupledManifests.add(coupledManifests);
                 mapExperimentalToImages.put(experimentManifest, coupledManifests);
             }
         }
     }
 
-    public Iterator<CoupledManifests> iteratorCoupledManifestsFor(
-            Manifest experimentalRecorder) {
+    public Iterator<CoupledManifests> iteratorCoupledManifestsFor(Manifest experimentalRecorder) {
         @SuppressWarnings("unchecked")
         List<CoupledManifests> list =
                 (List<CoupledManifests>) mapExperimentalToImages.get(experimentalRecorder);
@@ -137,16 +137,18 @@ public class ManifestCouplingDefinition implements InputFromManager {
     public Optional<Path> pathForBinding() {
         return Optional.empty();
     }
-    
+
     private CoupledManifests readManifestsFromDirectory(
-            MutableDirectory folderWrite, Manifest manifestExperimentRecorder,
-            ManifestDeserializer manifestDeserializer, Logger logger) throws DeserializationFailedException {
+            MutableDirectory folderWrite,
+            Manifest manifestExperimentRecorder,
+            ManifestDeserializer manifestDeserializer,
+            Logger logger)
+            throws DeserializationFailedException {
 
         DeserializedManifest manifestExperiment =
                 new DeserializedManifest(experimentManifestFile(folderWrite), manifestDeserializer);
         try {
-            return new CoupledManifests(
-                            manifestExperimentRecorder, manifestExperiment, logger);
+            return new CoupledManifests(manifestExperimentRecorder, manifestExperiment, logger);
         } catch (PathDifferenceException e) {
             throw new DeserializationFailedException(e);
         }
@@ -155,7 +157,9 @@ public class ManifestCouplingDefinition implements InputFromManager {
     private static File experimentManifestFile(MutableDirectory folderWrite) {
         return new File(
                 String.format(
-                        "%s%s%s", folderWrite.calculatePath(),
-                        File.separator, JOB_MANIFEST_FILENAME_TO_READ));
+                        "%s%s%s",
+                        folderWrite.calculatePath(),
+                        File.separator,
+                        JOB_MANIFEST_FILENAME_TO_READ));
     }
 }

@@ -87,8 +87,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
 
             context.addResultsFor(
-                    identifierFor(input.name(), context.getGroupGeneratorName()),
-                    results);
+                    identifierFor(input.name(), context.getGroupGeneratorName()), results);
 
         } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
             throw new OperationFailedException(e);
@@ -99,11 +98,9 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             T input, InputProcessContext<FeatureList<S>> context)
             throws NamedFeatureCalculateException;
 
-    private static RowLabels identifierFor(
-            String inputName, Optional<String> groupGeneratorName)
+    private static RowLabels identifierFor(String inputName, Optional<String> groupGeneratorName)
             throws OperationFailedException {
         return new RowLabels(
-                Optional.of(new String[] {inputName}),
-                groupGeneratorName.map(SimpleName::new));
+                Optional.of(new String[] {inputName}), groupGeneratorName.map(SimpleName::new));
     }
 }

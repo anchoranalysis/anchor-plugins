@@ -64,7 +64,8 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
                                     reporting.getMarksAfterOptional(),
                                     MarksWithEnergyBreakdown::getEnergyTotal),
                             extractStatisticDouble(
-                                    reporting.getBestState(), MarksWithEnergyBreakdown::getEnergyTotal),
+                                    reporting.getBestState(),
+                                    MarksWithEnergyBreakdown::getEnergyTotal),
                             reporting.kernelDescription());
         }
     }

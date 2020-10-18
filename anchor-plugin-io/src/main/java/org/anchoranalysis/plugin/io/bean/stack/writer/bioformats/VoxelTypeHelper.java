@@ -10,10 +10,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,6 +25,9 @@
  */
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import ome.xml.model.enums.PixelType;
 import org.anchoranalysis.core.functional.function.CheckedRunnable;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
@@ -32,13 +35,10 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedIntVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import ome.xml.model.enums.PixelType;
 
-@NoArgsConstructor(access=AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class VoxelTypeHelper {
-    
+
     public static PixelType pixelTypeFor(VoxelDataType dataType) throws ImageIOException {
         if (dataType.equals(UnsignedByteVoxelType.INSTANCE)) {
             return PixelType.UINT8;
@@ -53,15 +53,19 @@ class VoxelTypeHelper {
                     String.format("%s is an unsupported data-type for this writer", dataType));
         }
     }
-    
-    public static void checkChannelTypeSupported(String messagePrefix, VoxelDataType channelType, CheckedRunnable<ImageIOException> runnable) throws ImageIOException {
+
+    public static void checkChannelTypeSupported(
+            String messagePrefix,
+            VoxelDataType channelType,
+            CheckedRunnable<ImageIOException> runnable)
+            throws ImageIOException {
         if (isChannelTypeSupported(channelType)) {
             runnable.run();
         } else {
             throw new ImageIOException(messagePrefix + "an unsupported type: " + messagePrefix);
-        }  
+        }
     }
-    
+
     private static boolean isChannelTypeSupported(VoxelDataType channelType) {
         return channelType.equals(UnsignedByteVoxelType.INSTANCE)
                 || channelType.equals(UnsignedShortVoxelType.INSTANCE)

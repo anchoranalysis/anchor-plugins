@@ -89,7 +89,8 @@ public class FillHoles extends MaskProviderUnary {
         ObjectsFromConnectedComponentsFactory objectCreator =
                 new ObjectsFromConnectedComponentsFactory();
 
-        return filterObjects(objectCreator.createConnectedComponents(mask.binaryVoxels()), mask.dimensions());
+        return filterObjects(
+                objectCreator.createConnectedComponents(mask.binaryVoxels()), mask.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
@@ -98,7 +99,9 @@ public class FillHoles extends MaskProviderUnary {
         final double maxVolumeResolved = determineMaxVolume(dimensions);
 
         return objects.stream()
-                .filter(objectMask -> includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
+                .filter(
+                        objectMask ->
+                                includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
     }
 
     private double determineMaxVolume(Dimensions dimensions) throws CreateException {
@@ -113,8 +116,7 @@ public class FillHoles extends MaskProviderUnary {
         }
     }
 
-    private boolean includeObject(
-            ObjectMask object, Extent extent, double maxVolumeResolved) {
+    private boolean includeObject(ObjectMask object, Extent extent, double maxVolumeResolved) {
         // It's not allowed touch the border
         if (skipAtBorder && object.boundingBox().atBorderXY(extent)) {
             return false;

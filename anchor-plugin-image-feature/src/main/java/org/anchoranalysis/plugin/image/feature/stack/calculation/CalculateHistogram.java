@@ -44,7 +44,8 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
     @Override
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-            return HistogramFromObjectsFactory.create(input.getEnergyStackRequired().getChannel(energyIndex));
+            return HistogramFromObjectsFactory.create(
+                    input.getEnergyStackRequired().getChannel(energyIndex));
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }

@@ -26,6 +26,7 @@
 
 package org.anchoranalysis.plugin.annotation.bean.comparison;
 
+import io.vavr.Tuple2;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +59,6 @@ import org.anchoranalysis.plugin.annotation.bean.comparison.assigner.AnnotationC
 import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
-import io.vavr.Tuple2;
 
 /**
  * Task to compare a set of annotations to a segmentation or other set of annotations.
@@ -86,7 +86,7 @@ public class CompareAnnotations<T extends Assignment>
     @BeanField @Getter @Setter private AnnotationComparisonAssigner<T> assigner;
 
     @BeanField @Getter @Setter private boolean replaceMatchesWithSolids = true;
-    
+
     @BeanField @Getter @Setter private ColorScheme colorsUnpaired = new VeryBright();
     // END BEAN PROPERTIES
 
@@ -135,7 +135,6 @@ public class CompareAnnotations<T extends Assignment>
                 "rgbOutline", params.getOutputter(), input, assignment.get(), background);
     }
 
-
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(AnnotationComparisonInput.class);
@@ -169,7 +168,7 @@ public class CompareAnnotations<T extends Assignment>
         assert (false);
         return super.defaultOutputs();
     }
-    
+
     private Optional<Assignment> compareAndUpdate(
             AnnotationComparisonInput<ProvidesStackInput> input,
             DisplayStack background,
@@ -268,14 +267,18 @@ public class CompareAnnotations<T extends Assignment>
                 .writerSelective()
                 .write(
                         "rgbOutline",
-                        () -> createAssignmentGenerator(
+                        () ->
+                                createAssignmentGenerator(
                                         background,
                                         outputter.getSettings().getDefaultColors(),
                                         input.getNames()),
                         () -> assignment);
     }
-    
-    private AssignmentGenerator createAssignmentGenerator(DisplayStack background, ColorScheme colorSchemeFromSettings, Tuple2<String, String> names) {
+
+    private AssignmentGenerator createAssignmentGenerator(
+            DisplayStack background,
+            ColorScheme colorSchemeFromSettings,
+            Tuple2<String, String> names) {
         return new AssignmentGenerator(
                 background,
                 numberPaired -> createColorPool(numberPaired, colorSchemeFromSettings),
@@ -284,12 +287,9 @@ public class CompareAnnotations<T extends Assignment>
                 assigner.moreThanOneObj(),
                 outlineWidth);
     }
-    
+
     private ColorPool createColorPool(int numberPaired, ColorScheme colorSchemeFromSettings) {
         return new ColorPool(
-                numberPaired,
-                colorSchemeFromSettings,
-                colorsUnpaired,
-                replaceMatchesWithSolids);
+                numberPaired, colorSchemeFromSettings, colorsUnpaired, replaceMatchesWithSolids);
     }
 }

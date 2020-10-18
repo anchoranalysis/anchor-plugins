@@ -66,11 +66,12 @@ import org.anchoranalysis.plugin.image.bean.channel.provider.intensity.ScaleXY;
 /**
  * Task to scale an image.
  *
- * <p>Expects a second-level output "scaled" and "scaledFlattened" to determine which stacks get outputted or not.
+ * <p>Expects a second-level output "scaled" and "scaledFlattened" to determine which stacks get
+ * outputted or not.
  *
  * @author Owen Feehan
  */
-public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
+public class ScaleImage extends RasterTask<NoSharedState, NoSharedState> {
 
     private static final String OUTPUT_SCALED = "scaled";
     private static final String OUTPUT_SCALED_FLATTENED = "scaledFlattened";
@@ -82,12 +83,12 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
     // END BEAN PROPERTIES
 
     @Override
-    public NoSharedState beforeAnyJobIsExecuted(Outputter outputter,
-            ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
+    public NoSharedState beforeAnyJobIsExecuted(
+            Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
             throws ExperimentExecutionException {
         return NoSharedState.INSTANCE;
     }
-    
+
     @Override
     protected NoSharedState createSharedStateJob(InputOutputContext context)
             throws JobExecutionException {
@@ -95,14 +96,19 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
     }
 
     @Override
-    public void startSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
-            InputOutputContext context) throws JobExecutionException {
+    public void startSeries(
+            NoSharedState sharedStateTask, NoSharedState sharedStateJob, InputOutputContext context)
+            throws JobExecutionException {
         // NOTHING TO DO
     }
 
     @Override
     public void doStack(
-            InputBound<NamedChannelsInput, NoSharedState> input, NoSharedState sharedStateJob, int seriesIndex, int numberSeries, InputOutputContext context)
+            InputBound<NamedChannelsInput, NoSharedState> input,
+            NoSharedState sharedStateJob,
+            int seriesIndex,
+            int numberSeries,
+            InputOutputContext context)
             throws JobExecutionException {
 
         // Input
@@ -129,9 +135,10 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
     }
 
     @Override
-    public void endSeries(NoSharedState sharedStateTask, NoSharedState sharedStateJob,
-            InputOutputContext context) throws JobExecutionException {
-        // NOTHING TO DO        
+    public void endSeries(
+            NoSharedState sharedStateTask, NoSharedState sharedStateJob, InputOutputContext context)
+            throws JobExecutionException {
+        // NOTHING TO DO
     }
 
     @Override
@@ -160,21 +167,19 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
         populateOutputCollectionsFromSharedObjects(
                 soImage, stackCollection, stackCollectionMIP, context);
 
-        outputStacks(
-                stackCollection, OUTPUT_SCALED, context.getOutputter().getChecked());
+        outputStacks(stackCollection, OUTPUT_SCALED, context.getOutputter().getChecked());
         outputStacks(
                 stackCollectionMIP, OUTPUT_SCALED_FLATTENED, context.getOutputter().getChecked());
     }
 
     private static void outputStacks(
-            NamedProvider<Stack> stacks,
-            String outputName,
-            OutputterChecked outputter) throws JobExecutionException {
+            NamedProvider<Stack> stacks, String outputName, OutputterChecked outputter)
+            throws JobExecutionException {
         try {
             NamedStacksOutputter.output(stacks, outputName, false, outputter);
         } catch (OutputWriteFailedException e) {
             throw new JobExecutionException(
-               "Failed to write a particular stack in: " + outputName, e);
+                    "Failed to write a particular stack in: " + outputName, e);
         }
     }
 
@@ -191,17 +196,17 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
             if (!isEitherOutputEnabled(context, key)) {
                 continue;
             }
-            
+
             try {
                 Channel channelIn = params.stacks().getException(key).getChannel(0);
 
                 Channel channelOut = scaleChannel(channelIn, context.getLogger().messageLogger());
-                
-                if (isNonFlattenedEnabled(context,key)) {
+
+                if (isNonFlattenedEnabled(context, key)) {
                     stacksNotFlattened.add(key, new Stack(channelOut));
                 }
-                
-                if (isFlattenedEnabled(context,key)) {
+
+                if (isFlattenedEnabled(context, key)) {
                     stacksFlattened.add(key, new Stack(channelOut.projectMax()));
                 }
 
@@ -209,22 +214,22 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
                 throw new JobExecutionException(e);
             } catch (NamedProviderGetException e) {
                 throw new JobExecutionException(e.summarize());
-            }    
+            }
         }
     }
-    
+
     private boolean isEitherOutputEnabled(InputOutputContext context, String key) {
-        return isFlattenedEnabled(context, key) || isNonFlattenedEnabled(context, key); 
+        return isFlattenedEnabled(context, key) || isNonFlattenedEnabled(context, key);
     }
-    
+
     private boolean isNonFlattenedEnabled(InputOutputContext context, String key) {
         return isOutputEnabled(context, OUTPUT_SCALED, key);
     }
-    
+
     private boolean isFlattenedEnabled(InputOutputContext context, String key) {
         return isOutputEnabled(context, OUTPUT_SCALED_FLATTENED, key);
     }
-    
+
     private Channel scaleChannel(Channel channelIn, MessageLogger logger) throws CreateException {
         if (forceBinary) {
             Mask mask = new Mask(channelIn);
@@ -234,14 +239,15 @@ public class ScaleImage extends RasterTask<NoSharedState,NoSharedState> {
             return maskScaled.channel();
         } else {
             return ScaleXY.scale(
-                            channelIn,
-                            scaleCalculator,
-                            InterpolatorFactory.getInstance().rasterResizing(),
-                            logger);
+                    channelIn,
+                    scaleCalculator,
+                    InterpolatorFactory.getInstance().rasterResizing(),
+                    logger);
         }
     }
-    
-    private static boolean isOutputEnabled(InputOutputContext context, String outputName, String key) {
+
+    private static boolean isOutputEnabled(
+            InputOutputContext context, String outputName, String key) {
         return context.getOutputter().outputsEnabled().second(outputName).isOutputEnabled(key);
     }
 }

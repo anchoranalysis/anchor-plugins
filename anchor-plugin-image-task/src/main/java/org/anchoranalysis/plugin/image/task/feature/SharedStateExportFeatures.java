@@ -231,7 +231,8 @@ public class SharedStateExportFeatures<S> {
                 // Write thumbnail, or empty image
                 if (results.getThumbnail().isPresent()) {
                     try {
-                        addThumbnail(results.getThumbnail().get(), context.getOutputter().getChecked());
+                        addThumbnail(
+                                results.getThumbnail().get(), context.getOutputter().getChecked());
                     } catch (OutputWriteFailedException e) {
                         throw new OperationFailedException(e);
                     }
@@ -240,9 +241,11 @@ public class SharedStateExportFeatures<S> {
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter) throws OutputWriteFailedException {
+    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter)
+            throws OutputWriteFailedException {
         if (thumbnailOutputSequence == null) {
-            OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+            OutputSequenceStackFactory factory =
+                    OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
             thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, outputter);
         }
         thumbnailOutputSequence.add(thumbnail.deriveStack(false));

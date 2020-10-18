@@ -95,7 +95,7 @@ class MetadataUtilities {
 
         return meta;
     }
-    
+
     private static void assignResolution(IMetadata meta, Resolution resolution, Extent extent) {
         meta.setPixelsPhysicalSizeX(createLength(resolution.x() * extent.x()), 0);
         meta.setPixelsPhysicalSizeY(createLength(resolution.y() * extent.y()), 0);

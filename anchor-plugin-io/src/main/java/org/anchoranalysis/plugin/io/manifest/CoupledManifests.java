@@ -62,7 +62,6 @@ public class CoupledManifests implements InputFromManager {
         name = generateName(logger);
     }
 
-
     private String generateName(Logger logger) throws PathDifferenceException {
 
         if (experimentManifest.isPresent()) {
@@ -81,7 +80,8 @@ public class CoupledManifests implements InputFromManager {
     private String generateNameFromDirectories(int numberDirectoriesInDescription, Logger logger) {
         LastDirectories lastDirectories = new LastDirectories(numberDirectoriesInDescription);
         lastDirectories.setRemoveExtensionInDescription(false);
-        return lastDirectories.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
+        return lastDirectories
+                .deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
                 .getName();
     }
 

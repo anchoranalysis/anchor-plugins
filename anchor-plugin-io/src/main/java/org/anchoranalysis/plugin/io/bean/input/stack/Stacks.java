@@ -60,7 +60,8 @@ public class Stacks extends InputManager<StackSequenceInput> {
     }
 
     @Override
-    public List<StackSequenceInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public List<StackSequenceInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
         return FunctionalList.mapToList(
                 fileInput.inputs(params),
                 file ->

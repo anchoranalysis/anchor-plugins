@@ -49,8 +49,7 @@ import org.apache.commons.io.IOCase;
 public class PatternSpan extends FileNamer {
 
     @Override
-    public List<NamedFile> deriveName(
-            Collection<File> files, String elseName, Logger logger) {
+    public List<NamedFile> deriveName(Collection<File> files, String elseName, Logger logger) {
 
         // Convert to list
         List<Path> paths = listConvertToPath(files);

@@ -41,14 +41,16 @@ import org.anchoranalysis.image.io.stack.StackWriteOptions;
 import org.anchoranalysis.plugin.io.xml.ResolutionAsXml;
 
 /**
- * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this information is known.
+ * When writing a stack, an additional file is written to indicate the physical voxel sizes, if this
+ * information is known.
  *
  * <p>The path of this file is the raster-path with .xml appended, e.g. {@code
  * rasterFilename.tif.xml}.
  *
  * <p>It contains physical extents of a single voxel (the resolution).
- * 
- * <p>This file will only be present if the physical voxel sizes are known, otherwise no file is written.
+ *
+ * <p>This file will only be present if the physical voxel sizes are known, otherwise no file is
+ * written.
  *
  * @author Owen Feehan
  */
@@ -73,10 +75,7 @@ public class WriteResolutionXml extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws ImageIOException {
         writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
 
@@ -85,7 +84,8 @@ public class WriteResolutionXml extends StackWriter {
         writeResolutionXml(filePath, stackSeries.get(0).resolution());
     }
 
-    private void writeResolutionXml(Path filePath, Optional<Resolution> resolution) throws ImageIOException {
+    private void writeResolutionXml(Path filePath, Optional<Resolution> resolution)
+            throws ImageIOException {
         if (resolution.isPresent()) {
             Path pathOut = Paths.get(filePath.toString() + ".xml");
             ResolutionAsXml.writeResolutionXml(resolution.get(), pathOut);
