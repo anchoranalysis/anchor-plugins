@@ -29,10 +29,10 @@ import java.io.IOException;
 import java.nio.ShortBuffer;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 class RGBWriterShort extends RGBWriter {
 

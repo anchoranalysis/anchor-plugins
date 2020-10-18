@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.image.bean.box;
 
 import com.google.common.base.Predicate;
 import java.util.List;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.NonMaximaSuppression;
 import org.anchoranalysis.plugin.image.box.IntersectionOverUnion;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Non-maxima suppression for axis-aligned bounding-boxes using an <a

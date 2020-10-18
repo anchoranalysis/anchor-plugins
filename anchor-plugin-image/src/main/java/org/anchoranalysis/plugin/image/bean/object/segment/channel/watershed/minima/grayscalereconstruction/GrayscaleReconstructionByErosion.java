@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.mi
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class GrayscaleReconstructionByErosion
         extends AnchorBean<GrayscaleReconstructionByErosion> {

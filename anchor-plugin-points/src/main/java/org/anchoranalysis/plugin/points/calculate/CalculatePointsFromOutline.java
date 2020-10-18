@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.points.calculate;
 
 import java.util.List;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @EqualsAndHashCode(callSuper = false)
 public class CalculatePointsFromOutline

@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatisticsCombined;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 @EqualsAndHashCode(callSuper = true)
 public class CenterSlice extends CenterSliceBase {

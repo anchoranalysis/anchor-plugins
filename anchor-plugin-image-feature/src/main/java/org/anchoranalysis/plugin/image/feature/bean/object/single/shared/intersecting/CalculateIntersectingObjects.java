@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
-import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 
 /**
  * Calculates the intersecting set of objects from a particular collection (represted by an id) and

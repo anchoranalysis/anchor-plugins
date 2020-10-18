@@ -31,13 +31,13 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.object.scale.Scaler;
+import org.anchoranalysis.image.core.object.scale.ScaledElements;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Objects that are a result of an instance-segmentation.

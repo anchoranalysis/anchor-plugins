@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.predicate;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 
 /**
  * The current {@code mask} is returned if it's non-empty (at least one ON voxel) otherwise {@code

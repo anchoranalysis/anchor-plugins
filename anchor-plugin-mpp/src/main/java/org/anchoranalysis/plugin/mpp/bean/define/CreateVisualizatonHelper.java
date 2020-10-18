@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.mpp.bean.define;
 
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.provider.ProviderAsStack;
+import org.anchoranalysis.image.core.stack.ProviderAsStack;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredBase;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredMask;
 import org.anchoranalysis.plugin.image.bean.stack.provider.color.ColoredObjects;

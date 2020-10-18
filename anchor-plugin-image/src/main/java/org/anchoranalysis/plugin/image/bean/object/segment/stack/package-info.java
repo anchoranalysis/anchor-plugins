@@ -24,7 +24,7 @@
  * #L%
  */
 /**
- * Instance-segmentation of a {@link org.anchoranalysis.image.stack.Stack}.
+ * Instance-segmentation of a {@link org.anchoranalysis.image.core.stack.Stack}.
  *
  * <p>i.e. a collection of object-masks is inferred from an image-stack.
  */

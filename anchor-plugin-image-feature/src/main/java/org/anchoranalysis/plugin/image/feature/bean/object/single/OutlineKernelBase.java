@@ -34,8 +34,8 @@ import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.kernel.outline.OutlineKernelParameters;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class OutlineKernelBase extends FeatureSingleObject {
 

@@ -28,15 +28,15 @@ package org.anchoranalysis.test.feature.plugins.objects;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.Circle;
+import org.anchoranalysis.spatial.point.Point2i;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CircleObjectFixture {

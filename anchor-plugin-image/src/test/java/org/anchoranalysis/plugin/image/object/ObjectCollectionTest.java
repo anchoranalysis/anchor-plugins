@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.image.object;
 import static org.junit.Assert.assertEquals;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.object.scale.Scaler;
+import org.anchoranalysis.image.core.object.scale.ScaledElements;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 import org.junit.Test;
 

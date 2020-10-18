@@ -26,9 +26,9 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 
 import loci.formats.IFormatWriter;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.stack.Stack;
 
 abstract class RGBWriter {
 

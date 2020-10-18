@@ -33,16 +33,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.mpp.bean.provider.SingleMarkProvider;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.points.bean.fitter.PointsFitterToMark;
 import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
+import org.anchoranalysis.spatial.point.Point2i;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3f;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 // Applies a points fitter on the convex hull of some objects
 // Only works in 2D for now

@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.bean.operator.FeatureUnaryGeneric;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
-import org.anchoranalysis.image.dimensions.SpatialUnits;
+import org.anchoranalysis.image.core.dimensions.SpatialUnits;
 
 //
 public class ConvertUnits<T extends FeatureInput> extends FeatureUnaryGeneric<T> {

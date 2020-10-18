@@ -30,7 +30,7 @@ import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.linalg.Algebra;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point2d;
+import org.anchoranalysis.spatial.point.Point2d;
 
 //
 // Extracts forms for 'standard form' representation of an ellipse

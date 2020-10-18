@@ -26,9 +26,9 @@
 package org.anchoranalysis.plugin.image.box;
 
 import java.util.Optional;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 
 /**
  * Calculates the intersection-over-union score a pair of bounding-boxes.

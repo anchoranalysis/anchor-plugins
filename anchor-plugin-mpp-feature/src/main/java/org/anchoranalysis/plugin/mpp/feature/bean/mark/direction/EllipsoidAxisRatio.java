@@ -27,14 +27,14 @@
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.direction;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver;
 import org.anchoranalysis.math.equation.QuadraticEquationSolver.QuadraticRoots;
-import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Vector3d;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 // Computes the axis ratio of the ellipse formed by a plane of an orientation relative to the
 // ellipsoid

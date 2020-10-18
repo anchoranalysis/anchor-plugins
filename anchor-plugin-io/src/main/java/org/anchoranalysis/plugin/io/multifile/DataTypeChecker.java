@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.io.multifile;
 
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 
 /** Stores a data-type and checks all other slices match */

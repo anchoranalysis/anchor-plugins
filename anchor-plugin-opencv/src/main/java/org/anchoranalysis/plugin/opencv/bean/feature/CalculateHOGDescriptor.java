@@ -34,10 +34,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 

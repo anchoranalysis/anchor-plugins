@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.io.IOException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
