@@ -41,7 +41,7 @@ public class VoxelizedMarksPeriodicReporter
     // BEAN PARAMETERS
     @BeanField @Getter @Setter private boolean proposal = false;
 
-    /** If proposal==true, this toggles between the primary and secondary proposal */
+    /** If {@code proposal} is true, this toggles between the primary and secondary proposal */
     @BeanField @Getter @Setter private boolean secondary = false;
     // END BEAN PARAMETERS
 

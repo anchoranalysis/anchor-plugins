@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
 import lombok.Value;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.conic.Ellipse;
 
 @Value

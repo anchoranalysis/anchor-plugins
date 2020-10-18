@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.annotation.bean.comparison;
 import java.util.HashMap;
 import java.util.function.Function;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
+import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupList;
-import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 
 class SharedState<T extends Assignment> {
 
@@ -46,7 +46,6 @@ class SharedState<T extends Assignment> {
             CSVAssignment assignmentCSV,
             int numLevelsGrouping,
             Function<String, AnnotationGroup<T>> funcCreateGroup) {
-        super();
         this.assignmentCSV = assignmentCSV;
         this.numLevelsGrouping = numLevelsGrouping;
         this.funcCreateGroup = funcCreateGroup;
@@ -81,7 +80,7 @@ class SharedState<T extends Assignment> {
     }
 
     // descriptiveSplit can be null
-    public IAddAnnotation<T> groupsForImage(SplitString descriptiveSplit) {
+    public AddAnnotation<T> groupsForImage(SplitString descriptiveSplit) {
         AnnotationGroupList<T> list = new AnnotationGroupList<>();
         list.add(groupAll);
 

@@ -32,8 +32,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
 
@@ -42,49 +42,49 @@ public class RemoveExtensionsTest {
     private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 
     @Test
-    public void testPreserveExt() throws AnchorIOException {
+    public void testPreserveExt() throws InputReadFailedException {
 
-        List<DescriptiveFile> df = applyTest(true, listOfFiles());
+        List<NamedFile> df = applyTest(true, listOfFiles());
 
         assertEquals("a/b/c/d", nameFor(df, 0));
         assertEquals("a/b/c/e.txt", nameFor(df, 1));
         assertEquals("a/b/c/e.csv", nameFor(df, 2));
     }
 
-    @Test(expected = AnchorIOException.class)
-    public void testNonUnique() throws AnchorIOException {
+    @Test(expected = InputReadFailedException.class)
+    public void testNonUnique() throws InputReadFailedException {
         applyTest(false, listOfFiles());
     }
 
     @Test
-    public void testDoubleExt() throws AnchorIOException {
+    public void testDoubleExt() throws InputReadFailedException {
 
-        List<DescriptiveFile> df = applyTest(true, listOfFilesDoubleExt());
+        List<NamedFile> df = applyTest(true, listOfFilesDoubleExt());
 
         assertEquals(".picasaoriginals/2010-01-28 04.41.38", nameFor(df, 0));
         assertEquals(".picasaoriginals/2010-01-28 04.41.38.1", nameFor(df, 1));
     }
 
     @Test
-    public void testOneEmpty() throws AnchorIOException {
+    public void testOneEmpty() throws InputReadFailedException {
 
-        List<DescriptiveFile> df = applyTest(true, listOfFilesOneEmpty());
+        List<NamedFile> df = applyTest(true, listOfFilesOneEmpty());
 
         assertEquals("unknownName", nameFor(df, 0));
         assertEquals("Gray", nameFor(df, 1));
     }
 
-    private List<DescriptiveFile> applyTest(boolean preserveExtension, List<File> files)
-            throws AnchorIOException {
-        RemoveExtensions re = new RemoveExtensions();
+    private List<NamedFile> applyTest(boolean preserveExtension, List<File> files)
+            throws InputReadFailedException {
+        RemoveExtensions remove = new RemoveExtensions();
 
         // The normalize-path is a simple descriptive-name that reuses the existing
         //  path, only making sure it has forward-slashes. So it's good for testing
         //  RemoveExtensions in (almost) isolation.
-        re.setDescriptiveName(new NormalizedPath());
+        remove.setNamer(new NormalizedPath());
 
-        re.setPreserveExtensionIfDuplicate(preserveExtension);
-        return re.descriptiveNamesForCheckUniqueness(files, LOGGER);
+        remove.setPreserveExtensionIfDuplicate(preserveExtension);
+        return remove.deriveNameUnique(files, LOGGER);
     }
 
     private static List<File> listOfFiles() {
@@ -109,7 +109,7 @@ public class RemoveExtensionsTest {
         return Arrays.asList(file1, file2);
     }
 
-    private static String nameFor(List<DescriptiveFile> df, int index) {
-        return df.get(index).getDescriptiveName();
+    private static String nameFor(List<NamedFile> df, int index) {
+        return df.get(index).getName();
     }
 }

@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.imagej.bean.interpolator;
 
 import ij.process.ImageProcessor;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.Interpolator;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 import org.anchoranalysis.io.imagej.convert.ConvertToVoxelBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
 
 class InterpolatorImageJ implements Interpolator {
 

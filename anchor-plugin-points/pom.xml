@@ -26,7 +26,7 @@
 	</dependency>
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
-	  <artifactId>anchor-image</artifactId>
+	  <artifactId>anchor-image-core</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
 	<dependency>
@@ -44,7 +44,7 @@
 	  <artifactId>anchor-mpp</artifactId>
 	  <version>0.0.8-SNAPSHOT</version>
 	</dependency>
-		
+	
 	<dependency>
 	  <groupId>${project.groupId}</groupId>
 	  <artifactId>anchor-overlay</artifactId>
@@ -62,7 +62,21 @@
 	  <artifactId>anchor-plugin-opencv</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
 	</dependency>
-		
+	
+	<dependency>
+		<groupId>${project.groupId}</groupId>
+		<artifactId>anchor-test-image</artifactId>
+  		<version>0.0.8-SNAPSHOT</version>
+		<scope>test</scope>
+	</dependency>
+	
+	<dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>anchor-mpp-io</artifactId>
+	  <version>0.0.8-SNAPSHOT</version>
+	  <scope>test</scope>
+	</dependency>
+	
 	<dependency>
 		<groupId>org.georegression</groupId>
 		<artifactId>georegression</artifactId>

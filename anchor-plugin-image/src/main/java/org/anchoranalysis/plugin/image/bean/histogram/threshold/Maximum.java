@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.histogram.threshold;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * The maximum value of one or more {#link org.anchoranalysis.image.bean.threshold.CalculateLevel}

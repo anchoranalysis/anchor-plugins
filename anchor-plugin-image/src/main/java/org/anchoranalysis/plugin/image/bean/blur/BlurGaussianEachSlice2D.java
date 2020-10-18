@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.bean.blur;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
  * Performs a Gaussian-blur in 2D on each slice independently
@@ -52,8 +52,6 @@ public class BlurGaussianEachSlice2D extends BlurStrategy {
                 .iterateOverZ(
                         z ->
                                 GaussianBlurUtilities.applyBlur(
-                                        ConvertToImg.fromSlice(voxels, z),
-                                        dimensions.resolution(),
-                                        sigmaArr));
+                                        ConvertToImg.fromSlice(voxels, z), sigmaArr));
     }
 }

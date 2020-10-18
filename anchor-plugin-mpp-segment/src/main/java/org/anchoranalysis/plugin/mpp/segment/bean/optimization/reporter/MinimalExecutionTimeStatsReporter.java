@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -47,14 +47,14 @@ public class MinimalExecutionTimeStatsReporter
     @BeanField @Getter @Setter private String outputName = "minimalExecutionTimeStats";
     // END BEAN PROPERTIES
 
-    private BoundOutputManagerRouteErrors outputManager = null;
+    private Outputter outputter;
     private KernelExecutionStats stats;
     private StopWatch stopWatch;
 
     @Override
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
             throws ReporterException {
-        outputManager = initParams.getInitContext().getOutputManager();
+        outputter = initParams.getInitContext().getOutputter();
         stats = new KernelExecutionStats(initParams.getKernelFactoryList().size());
         stopWatch = new StopWatch();
         stopWatch.start();
@@ -89,12 +89,12 @@ public class MinimalExecutionTimeStatsReporter
         stats.setTotalExecutionTime(stopWatch.getTime());
         stopWatch.stop();
 
-        outputManager
-                .getWriterCheckIfAllowed()
+        outputter
+                .writerSelective()
                 .write(
                         outputName,
                         () ->
                                 new XStreamGenerator<>(
-                                        stats, Optional.of("minimalExecutionTimeStats")));
+                                        Optional.of("minimalExecutionTimeStats")), () -> stats);
     }
 }

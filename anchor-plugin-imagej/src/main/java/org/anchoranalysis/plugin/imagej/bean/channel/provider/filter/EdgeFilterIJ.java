@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter;
 import ij.process.ImageProcessor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 
 public class EdgeFilterIJ extends ChannelProviderUnary {

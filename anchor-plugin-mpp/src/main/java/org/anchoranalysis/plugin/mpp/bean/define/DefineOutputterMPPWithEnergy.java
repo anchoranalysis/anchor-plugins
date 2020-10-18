@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.define;
 
 import java.util.Optional;
+import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
@@ -34,14 +35,32 @@ import org.anchoranalysis.core.name.provider.NamedProvider;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.io.input.InputForMPPBean;
 import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 
+/**
+ * Like a {@link Define} but outputs also MPP-related data objects and an energy-stack.
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>outputs from {@link EnergyStackWriter}</i></td></tr>
+ * </tbody>
+ * </table>
+ *
+ * @author Owen Feehan
+ */
 public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     /**
@@ -56,7 +75,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     public <S> S processInput(
             InputForMPPBean input,
-            BoundIOContext context,
+            InputOutputContext context,
             OperationWithEnergyStack<ImageInitParams, S> operation)
             throws OperationFailedException {
 
@@ -70,7 +89,7 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
     }
 
     public <S> S processInput(
-            BoundIOContext context,
+            InputOutputContext context,
             Optional<NamedProvider<Stack>> stacks,
             Optional<NamedProvider<ObjectCollection>> objects,
             Optional<KeyValueParams> keyValueParams,
@@ -92,14 +111,14 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
             ImageInitParams imageParams,
             MPPInitParams mppParams,
             OperationWithEnergyStack<T, S> operation,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         try {
             EnergyStack energyStack = super.createEnergyStack(imageParams, context.getLogger());
 
             S result = operation.process(initParams, energyStack);
 
-            outputSharedObjects(mppParams, energyStack, context);
+            outputSharedObjects(mppParams, energyStack, context.getOutputter());
 
             return result;
 
@@ -110,11 +129,11 @@ public class DefineOutputterMPPWithEnergy extends DefineOutputterWithEnergy {
 
     // General objects can be outputted
     private void outputSharedObjects(
-            MPPInitParams initParams, EnergyStack energyStack, BoundIOContext context)
+            MPPInitParams initParams, EnergyStack energyStack, Outputter outputter)
             throws OutputWriteFailedException {
 
-        super.outputSharedObjects(initParams, context);
+        super.outputSharedObjects(initParams, outputter.getChecked());
 
-        EnergyStackWriter.writeEnergyStack(energyStack, context);
+        new EnergyStackWriter(energyStack, outputter).writeEnergyStack();
     }
 }

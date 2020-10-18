@@ -30,9 +30,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 import org.junit.Test;
 
@@ -80,7 +80,7 @@ public class ObjectMaskTest {
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objects, "");
 
         Optional<ObjectMask> intersection =
-                objects.get(0).intersect(objects.get(1), TwoIntersectingCirclesFixture.DIMENSIONS);
+                objects.get(0).intersect(objects.get(1), TwoIntersectingCirclesFixture.DIMENSIONS.extent());
 
         // Check the circular objects have the same volume as before
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objects, "");

@@ -38,15 +38,13 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
+import org.anchoranalysis.image.bean.unitvalue.distance.DistanceVoxels;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistanceVoxels;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
@@ -58,6 +56,8 @@ import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization
 import org.anchoranalysis.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class XYOrientationExtendToZ extends PointsProposer {
 
@@ -80,7 +80,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
 
     // If we reach this amount of slices without adding a point, we consider our job over
     @BeanField @Getter @Setter
-    private UnitValueDistance distanceZEndIfEmpty = new UnitValueDistanceVoxels(1000000);
+    private UnitValueDistance distanceZEndIfEmpty = new DistanceVoxels(1000000);
     // END BEAN PROPERTIES
 
     private List<Point3i> lastPointsAll;
@@ -161,7 +161,7 @@ public class XYOrientationExtendToZ extends PointsProposer {
         }
     }
 
-    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    private int maxZDistance(RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
         int maxZDistance =
                 (int) Math.round(maxDistanceZ.propose(randomNumberGenerator, resolution));
@@ -169,11 +169,11 @@ public class XYOrientationExtendToZ extends PointsProposer {
         return maxZDistance;
     }
 
-    private int skipZDistance(Resolution resolution) throws OperationFailedException {
+    private int skipZDistance(Optional<Resolution> resolution) throws OperationFailedException {
         return (int)
                 Math.round(
                         distanceZEndIfEmpty.resolveForAxis(
-                                Optional.of(resolution.unitConvert()), AxisType.Z));
+                                resolution.map(Resolution::unitConvert), AxisType.Z));
     }
 
     private Optional<Mask> channelFilled() throws CreateException {

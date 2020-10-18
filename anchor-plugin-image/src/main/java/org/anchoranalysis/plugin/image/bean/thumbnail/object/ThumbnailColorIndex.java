@@ -77,7 +77,7 @@ class ThumbnailColorIndex implements ColorIndex {
     }
 
     @Override
-    public int numUniqueColors() {
+    public int numberUniqueColors() {
         return 3;
     }
 

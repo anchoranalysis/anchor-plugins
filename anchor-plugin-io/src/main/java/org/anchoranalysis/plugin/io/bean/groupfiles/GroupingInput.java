@@ -31,14 +31,14 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
 import org.anchoranalysis.image.io.channel.NamedEntries;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
 import org.anchoranalysis.plugin.io.multifile.MultiFileReaderOpenedRaster;
 
 class GroupingInput extends NamedChannelsInput {
@@ -53,9 +53,9 @@ class GroupingInput extends NamedChannelsInput {
 
     private NamedEntries channelMap = null;
 
-    private String descriptiveName;
+    private String inputName;
 
-    // The root object that is used to provide the descriptiveName and pathForBinding
+    // The root object that is used to provide the inputName and pathForBinding
     //
     public GroupingInput(
             Path virtualPath, MultiFileReaderOpenedRaster mfor, ChannelMap channelMapCreator) {
@@ -66,25 +66,25 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public int numberSeries() throws RasterIOException {
+    public int numberSeries() throws ImageIOException {
         return openedRaster.numberSeries();
     }
 
     @Override
-    public Dimensions dimensions(int seriesIndex) throws RasterIOException {
-        return openedRaster.dimensionsForSeries(seriesIndex);
+    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
+        return openedRaster.dimensionsForSeries(stackIndexInSeries);
     }
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
+            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
         ensureChannelMapExists();
-        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesNum);
+        return new NamedChannelsForSeriesMap(openedRaster, channelMap, seriesIndex);
     }
 
     @Override
-    public String descriptiveName() {
-        return descriptiveName;
+    public String name() {
+        return inputName;
     }
 
     @Override
@@ -93,7 +93,7 @@ class GroupingInput extends NamedChannelsInput {
     }
 
     @Override
-    public int numberChannels() throws RasterIOException {
+    public int numberChannels() throws ImageIOException {
         ensureChannelMapExists();
         return channelMap.keySet().size();
     }
@@ -102,24 +102,24 @@ class GroupingInput extends NamedChannelsInput {
     public void close(ErrorReporter errorReporter) {
         try {
             openedRaster.close();
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             errorReporter.recordError(GroupingInput.class, e);
         }
     }
 
-    private void ensureChannelMapExists() throws RasterIOException {
+    private void ensureChannelMapExists() throws ImageIOException {
         // Lazy creation
         if (channelMap == null) {
             try {
                 channelMap = channelMapCreator.createMap(openedRaster);
             } catch (CreateException e) {
-                throw new RasterIOException(e);
+                throw new ImageIOException(e);
             }
         }
     }
 
     @Override
-    public int bitDepth() throws RasterIOException {
+    public int bitDepth() throws ImageIOException {
         return openedRaster.bitDepth();
     }
 }

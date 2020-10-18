@@ -28,19 +28,19 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.finder.FinderFileAsText;
+import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
 public class TextFileAsIntegerFromManifest extends ReportFeatureForManifestFileBase {
 
     @Override
-    public String featureDescription(ManifestRecorderFile object, Logger logger)
+    public String featureDescription(DeserializedManifest object, Logger logger)
             throws OperationFailedException {
 
         FinderFileAsText finder = new FinderFileAsText(getFileName(), null);
 
-        ManifestRecorder manifest = object.get();
+        Manifest manifest = object.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException(

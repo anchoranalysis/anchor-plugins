@@ -26,13 +26,13 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.slice;
 
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.image.core.outline.FindOutline;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.outline.FindOutline;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Maximum number of voxels on any slice's contour (edge voxels) across all slices.

@@ -27,33 +27,23 @@
 package org.anchoranalysis.plugin.io.bean.provider.file;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.params.InputContextParams;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectoryUnary;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 
-public class LimitWithDirectory extends FileProviderWithDirectory {
+public class LimitWithDirectory extends FilesProviderWithDirectoryUnary {
 
-    // START BEANS
-    @BeanField @Getter @Setter private FileProviderWithDirectory fileProvider;
-
+    // START BEAN PROPERTIESS
     @BeanField @Getter @Setter private int maxNumItems = 0;
-    // END BEANS
+    // END BEAN PROPERTIES
 
     @Override
-    public Collection<File> matchingFilesForDirectory(Path directory, InputManagerParams params)
-            throws FileProviderException {
+    protected Collection<File> transform(Collection<File> source)
+            throws FilesProviderException {
         return LimitUtilities.apply(
-                fileProvider.matchingFilesForDirectory(directory, params), maxNumItems);
-    }
-
-    @Override
-    public Path getDirectoryAsPath(InputContextParams inputContext) {
-        return fileProvider.getDirectoryAsPath(inputContext);
+                source, maxNumItems);
     }
 }

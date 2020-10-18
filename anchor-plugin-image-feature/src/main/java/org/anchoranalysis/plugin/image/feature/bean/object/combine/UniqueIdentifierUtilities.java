@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * Generates unique identifiers for object-masks

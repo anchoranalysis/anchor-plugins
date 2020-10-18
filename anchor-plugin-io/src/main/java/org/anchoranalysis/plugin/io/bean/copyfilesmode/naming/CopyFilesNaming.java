@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public interface CopyFilesNaming {
 
@@ -43,10 +43,10 @@ public interface CopyFilesNaming {
      * @param file file to be copied
      * @param index an increasing sequence of numbers for each file beginning at 0
      * @return the absolute-path. if empty, the file should be skipped.
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     default Optional<Path> destinationPath(Path sourceDir, Path destDir, File file, int index)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
 
         Optional<Path> remainder = destinationPathRelative(sourceDir, destDir, file, index);
         return remainder.map(destDir::resolve);
@@ -60,10 +60,10 @@ public interface CopyFilesNaming {
      * @param file file to be copied
      * @param index an increasing sequence of numbers for each file beginning at 0
      * @return the relative-path. if empty, the file should be skipped.
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int index)
-            throws AnchorIOException;
+            throws OutputWriteFailedException;
 
-    void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException;
+    void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException;
 }

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.mask.combine.MaskIfHighLow;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.combine.MaskIfHighLow;
 
 /**
  * Outputs the logical operation {@code iff first==HIGH and second==LOW then LOW} voxelwise on both

@@ -32,16 +32,16 @@ import static org.junit.Assert.assertTrue;
 import java.nio.file.Path;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.output.bound.BindFailedException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Writes an object-collection to the file-system, then reads it back again, and makes sure it is
+ * Writes an object-collection to the filesystem, then reads it back again, and makes sure it is
  * identical
  *
  * @author feehano

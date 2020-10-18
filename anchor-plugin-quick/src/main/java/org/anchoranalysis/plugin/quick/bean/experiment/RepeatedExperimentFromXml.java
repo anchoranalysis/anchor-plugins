@@ -38,8 +38,8 @@ import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.plugin.io.bean.input.filter.FilterIfDebug;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -150,7 +150,7 @@ class RepeatedExperimentFromXml<T extends InputFromManager, S> {
         return filter;
     }
 
-    /*** Loads a bean from the file-system */
+    /*** Loads a bean from the filesystem */
     private InputManager<T> loadInputManagerFromXml(
             String datasetName, Path pathFolder, String beanExtension)
             throws ExperimentExecutionException {

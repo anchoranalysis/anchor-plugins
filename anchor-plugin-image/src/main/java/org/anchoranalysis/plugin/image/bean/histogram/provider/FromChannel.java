@@ -34,9 +34,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.math.histogram.Histogram;
 
 public class FromChannel extends HistogramProvider {
 
@@ -52,9 +52,9 @@ public class FromChannel extends HistogramProvider {
         Channel channelIn = channel.create();
 
         if (mask != null) {
-            return HistogramFactory.create(channelIn, mask.create());
+            return HistogramFromObjectsFactory.create(channelIn, mask.create());
         } else {
-            return HistogramFactory.create(channelIn);
+            return HistogramFromObjectsFactory.create(channelIn);
         }
     }
 }

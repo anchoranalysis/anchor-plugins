@@ -43,28 +43,27 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstan
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.log.ToConsole;
 import org.anchoranalysis.experiment.bean.processor.SequentialProcessor;
-import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.files.SearchDirectory;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
-import org.anchoranalysis.io.output.bean.allowed.AllOutputAllowed;
-import org.anchoranalysis.io.output.bean.allowed.OutputAllowed;
+import org.anchoranalysis.io.output.bean.enabled.All;
+import org.anchoranalysis.io.output.bean.enabled.OutputEnabled;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.io.bean.filepath.prefixer.DirectoryStructure;
-import org.anchoranalysis.plugin.io.bean.input.file.Files;
+import org.anchoranalysis.plugin.io.bean.input.files.NamedFiles;
 import org.anchoranalysis.plugin.io.bean.input.stack.Stacks;
-import org.anchoranalysis.plugin.mpp.experiment.bean.outputmanager.OutputManagerStack;
+import org.anchoranalysis.plugin.mpp.experiment.bean.output.LegacyOutputEnabled;
 
 /**
  * A quick way of defining an InputOutputExperiment where several assumptions are made.
  *
- * <p>TODO remove the explicit setting of setWriteRasterMetadata
- *
  * @author Owen Feehan
  * @param <S> shared-state
  */
+@SuppressWarnings("deprecation")
 public class QuickExperiment<S> extends Experiment {
 
     // START BEAN PROPERTIES
@@ -83,11 +82,11 @@ public class QuickExperiment<S> extends Experiment {
 
     @BeanField @Getter @Setter private String inputName = "stackInput";
 
-    @BeanField @Getter @Setter private OutputAllowed outputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputEnabled outputEnabled = All.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed objects = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputEnabled objects = All.INSTANCE;
 
-    @BeanField @Getter @Setter private OutputAllowed stacksOutputEnabled = new AllOutputAllowed();
+    @BeanField @Getter @Setter private OutputEnabled stacksOutputEnabled = All.INSTANCE;
 
     @BeanField @Getter @Setter
     private OutputWriteSettings outputWriteSettings = new OutputWriteSettings();
@@ -114,51 +113,8 @@ public class QuickExperiment<S> extends Experiment {
         this.defaultInstances = defaultInstances;
     }
 
-    private InputManager<MultiInput> createInputManagerBean(Path beanPath)
-            throws ExperimentExecutionException {
-        try {
-            return BeanXmlLoader.loadBean(beanPath);
-        } catch (BeanXmlException e) {
-            throw new ExperimentExecutionException(e);
-        }
-    }
-
-    private InputManager<MultiInput> createInputManagerImageFile(SearchDirectory fs) {
-        return new MultiInputManager(inputName, new Stacks(new Files(fs)));
-    }
-
-    private OutputManager createOutputManager(Path inPathBaseDir) {
-
-        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
-
-        OutputManagerStack outputManager = new OutputManagerStack();
-        outputManager.setSilentlyDeleteExisting(true);
-        outputManager.setOutputEnabled(outputEnabled);
-        outputManager.setObjects(objects);
-        outputManager.setStacksOutputEnabled(stacksOutputEnabled);
-        try {
-            outputManager.localise(getLocalPath());
-        } catch (BeanMisconfiguredException e) {
-            // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
-        }
-
-        DirectoryStructure filePathResolver = new DirectoryStructure();
-        filePathResolver.setInPathPrefix(inPathBaseDir.toString());
-        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
-        try {
-            filePathResolver.localise(getLocalPath());
-        } catch (BeanMisconfiguredException e) {
-            // Should never arise, as getLocalPath() should always be absolute
-            assert (false);
-        }
-        outputManager.setFilePathPrefixer(filePathResolver);
-        outputManager.setOutputWriteSettings(outputWriteSettings);
-        return outputManager;
-    }
-
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
         delegate.associateXml(getXMLConfiguration());
 
@@ -204,11 +160,61 @@ public class QuickExperiment<S> extends Experiment {
             throw new ExperimentExecutionException(e);
         }
 
-        delegate.doExperiment(arguments);
+        delegate.executeExperiment(arguments);
     }
 
     @Override
     public boolean useDetailedLogging() {
         return delegate.useDetailedLogging();
+    }
+
+    private InputManager<MultiInput> createInputManagerBean(Path beanPath)
+            throws ExperimentExecutionException {
+        try {
+            return BeanXmlLoader.loadBean(beanPath);
+        } catch (BeanXmlException e) {
+            throw new ExperimentExecutionException(e);
+        }
+    }
+
+    private InputManager<MultiInput> createInputManagerImageFile(SearchDirectory fs) {
+        return new MultiInputManager(inputName, new Stacks(new NamedFiles(fs)));
+    }
+
+    private OutputManager createOutputManager(Path inPathBaseDir) {
+
+        Path pathFolderOut = BeanPathUtilities.pathRelativeToBean(this, folderOutput);
+
+        OutputManager outputManager = new OutputManager();
+        outputManager.setSilentlyDeleteExisting(true);
+        outputManager.setOutputsEnabled(outputRules());
+
+        try {
+            outputManager.localise(getLocalPath());
+        } catch (BeanMisconfiguredException e) {
+            // Should never arise, as getLocalPath() should always be absolute
+            assert (false);
+        }
+
+        DirectoryStructure filePathResolver = new DirectoryStructure();
+        filePathResolver.setInPathPrefix(inPathBaseDir.toString());
+        filePathResolver.setOutPathPrefix(pathFolderOut.toString());
+        try {
+            filePathResolver.localise(getLocalPath());
+        } catch (BeanMisconfiguredException e) {
+            // Should never arise, as getLocalPath() should always be absolute
+            assert (false);
+        }
+        outputManager.setFilePathPrefixer(filePathResolver);
+        outputManager.setOutputWriteSettings(outputWriteSettings);
+        return outputManager;
+    }
+
+    private LegacyOutputEnabled outputRules() {
+        LegacyOutputEnabled rules = new LegacyOutputEnabled();
+        rules.setOutputEnabled(outputEnabled);
+        rules.setObjects(objects);
+        rules.setStacksOutputEnabled(stacksOutputEnabled);
+        return rules;
     }
 }

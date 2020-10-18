@@ -28,14 +28,14 @@ package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.core.geometry.Point2f;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.image.orientation.Orientation2D;
-import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.image.core.orientation.Orientation2D;
 import org.anchoranalysis.mpp.mark.points.RotatableBoundingBox;
+import org.anchoranalysis.spatial.point.Point2d;
+import org.anchoranalysis.spatial.point.Point2f;
+import org.anchoranalysis.spatial.point.Point2i;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /**
  * Extracts a bounding box from arrays returned by the EAST deep-CNN model.

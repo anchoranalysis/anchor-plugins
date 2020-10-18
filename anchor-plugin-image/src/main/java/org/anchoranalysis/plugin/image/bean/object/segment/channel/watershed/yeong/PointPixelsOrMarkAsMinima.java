@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @RequiredArgsConstructor
 final class PointPixelsOrMarkAsMinima implements ProcessPoint {

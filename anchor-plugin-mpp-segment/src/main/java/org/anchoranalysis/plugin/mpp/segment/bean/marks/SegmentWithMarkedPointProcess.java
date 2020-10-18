@@ -41,12 +41,14 @@ import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.feature.bean.energy.scheme.EnergySchemeCreator;
@@ -56,6 +58,7 @@ import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.feature.energy.scheme.EnergySchemeWithSharedFeatures;
 import org.anchoranalysis.mpp.feature.mark.ListUpdatableMarkSetCollection;
 import org.anchoranalysis.mpp.io.output.BackgroundCreator;
+import org.anchoranalysis.mpp.io.output.EnergyStackWriter;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
@@ -70,29 +73,61 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 import org.anchoranalysis.plugin.mpp.segment.SgmnMPPState;
 
 /**
- * Segments a channel with marked pointed processes
+ * Segments a channel with marked pointed processes.
+ * 
+ * <p>Different operations occur on a set of marks (a <i>configuration</i>), with
+ * each operation termed a <i>kernel</i>. These operations can, for example:
+ * <ul>
+ * <li>create a new mark(s) (<i>birth</i>)
+ * <li>delete an existing mark(s) (<i>death</i>)
+ * <li>modify an existing mark(s).
+ * </ul>
+ * 
+ * <p>Each set of marks has an associated energy, a score determining how desirable
+ * it is for the optimization routine. Certain scores are retained according to
+ * an optimization-scheme, either deterministically or stochastically, either greedily
+ * or with some non-greedy steps.
  *
  * @author Owen Feehan
  */
 public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
 
     // START BEAN PROPERTIES
+    /** 
+     * The optimization-scheme that determines which configurations are accepted/rejected from one iteration to the next.
+     */
     @BeanField @Getter @Setter
     private OptimizationScheme<VoxelizedMarksWithEnergy, VoxelizedMarksWithEnergy> optimization;
 
+    /** 
+     * Creates a new mark, before perhaps further manipulations by a kernel.
+     */
     @BeanField @Getter @Setter private MarkWithIdentifierFactory markFactory;
 
-    /** Creates an energy scheme that assigns an energy score to each collection of marks. */
+    /** 
+     * Creates an energy scheme that assigns an energy score to each collection of marks.
+     */
     @BeanField @Getter @Setter private EnergySchemeCreator energySchemeCreator;
 
+    /** 
+     * Proposes kernel-changes during iterations of hte marked-point-processes.
+     */
     @BeanField @Getter @Setter private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
 
+    /** 
+     * Processes feedback from the segmentation algorithm for outputting / debugging.
+     */
     @BeanField @Getter @Setter
     private FeedbackReceiverBean<VoxelizedMarksWithEnergy> feedbackReceiver;
 
+    /** 
+     * Adds definitions of stacks/objects etc. to be used during segmentation.
+     */
     @BeanField @Getter @Setter private DefineOutputterMPPWithEnergy define;
 
-    /** Iff true the algorithm exits before optimization begins (useful for debugging). */
+    /**
+     * Iff true the algorithm exits before optimization begins (useful for debugging).
+     */
     @BeanField @Getter @Setter private boolean exitBeforeOptimization = false;
 
     /**
@@ -116,13 +151,13 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             NamedStacks stacks,
             NamedProvider<ObjectCollection> objects,
             Optional<KeyValueParams> keyValueParams,
-            BoundIOContext context)
+            InputOutputContext context)
             throws SegmentationFailedException {
         ListUpdatableMarkSetCollection updatableMarkSetCollection =
                 new ListUpdatableMarkSetCollection();
 
         try {
-            MemoryUtilities.logMemoryUsage("Start of segment", context.getLogReporter());
+            MemoryUtilities.logMemoryUsage("Start of segment", context.getMessageReporter());
 
             return define.processInput(
                     context,
@@ -130,7 +165,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                     Optional.of(objects),
                     keyValueParams,
                     (mppInit, energyStack) ->
-                            sgmnAndWrite(
+                            segmentAndWrite(
                                     mppInit,
                                     energyStack,
                                     updatableMarkSetCollection,
@@ -142,25 +177,30 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
         }
     }
 
-    private MarkCollection sgmnAndWrite(
+    @Override
+    public OutputEnabledMutable defaultOutputs() {
+        return super.defaultOutputs().addEnabledOutputFirst( MarksOutputter.OUTPUT_OUTLINE_THIN, MarksOutputter.OUTPUT_MARKS_XML_SERIALIZED );
+    }
+    
+    private MarkCollection segmentAndWrite(
             MPPInitParams mppInit,
             EnergyStack energyStack,
             ListUpdatableMarkSetCollection updatableMarkSetCollection,
             Optional<KeyValueParams> keyValueParams,
-            BoundIOContext context)
+            InputOutputContext context)
             throws OperationFailedException {
         try {
             init(mppInit, context.getLogger());
 
-            SegmentHelper.writeStacks(mppInit.getImage(), energyStack, context);
+            new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
 
-            context.getLogReporter()
+            context.getMessageReporter()
                     .log("Distinct number of probMap = " + updatableMarkSetCollection.numProbMap());
 
             // We initialize the feedback receiver
             feedbackReceiver.initRecursive(mppInit, context.getLogger());
 
-            MemoryUtilities.logMemoryUsage("Before findOpt", context.getLogReporter());
+            MemoryUtilities.logMemoryUsage("Before findOpt", context.getMessageReporter());
 
             new UpdateMarkSet(mppInit, energyStack, updatableMarkSetCollection, context.getLogger())
                     .apply();
@@ -171,7 +211,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                 return new MarkCollection();
             }
 
-            maybeWriteGroupParams(keyValueParams, context.getOutputManager());
+            maybeWriteGroupParams(keyValueParams, context.getOutputter());
 
             OptimizationContext initContext =
                     new OptimizationContext(
@@ -186,7 +226,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
             MarksWithTotalEnergy marks = findOptimum(updatableMarkSetCollection, initContext);
             return marks.getMarks().deepCopy();
 
-        } catch (InitException | CreateException | SegmentationFailedException e) {
+        } catch (InitException | CreateException | SegmentationFailedException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -214,7 +254,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                                     context)
                             .getMarks();
 
-            Outputter.outputResults(
+            MarksOutputter.outputResults(
                     marks,
                     context.getDualStack(),
                     energySchemeShared
@@ -222,7 +262,7 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
                             .getRegionMap()
                             .membershipWithFlagsForIndex(GlobalRegionIdentifiers.SUBMARK_INSIDE),
                     context.getLogger(),
-                    context.getOutputManager());
+                    context.getOutputter());
 
             return marks.getMarksWithTotalEnergy();
 
@@ -241,11 +281,11 @@ public class SegmentWithMarkedPointProcess extends SegmentIntoMarks {
     }
 
     private void maybeWriteGroupParams(
-            Optional<KeyValueParams> keyValueParams, BoundOutputManagerRouteErrors outputManager) {
+            Optional<KeyValueParams> keyValueParams, Outputter outputter) {
         if (keyValueParams.isPresent()) {
-            outputManager
-                    .getWriterCheckIfAllowed()
-                    .write("groupParams", () -> new GroupParamsGenerator(keyValueParams.get()));
+            outputter
+                    .writerSelective()
+                    .write("groupParams", GroupParamsGenerator::new, keyValueParams::get);
         }
     }
 }

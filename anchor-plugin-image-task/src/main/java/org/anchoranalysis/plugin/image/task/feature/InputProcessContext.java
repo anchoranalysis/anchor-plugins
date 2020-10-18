@@ -28,10 +28,11 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
  * @author Owen Feehan
@@ -50,7 +51,7 @@ public class InputProcessContext<S> {
 
     @Getter Optional<String> groupGeneratorName;
 
-    @Getter BoundIOContext context;
+    @Getter InputOutputContext context;
     // END REQUIRED ARGUMENTS
 
     @Getter boolean thumbnailsEnabled;
@@ -60,7 +61,7 @@ public class InputProcessContext<S> {
             S rowSource,
             FeatureNameList featureNames,
             Optional<String> groupGeneratorName,
-            BoundIOContext context) {
+            InputOutputContext context) {
         super();
         this.adder = adder;
         this.rowSource = rowSource;
@@ -78,11 +79,11 @@ public class InputProcessContext<S> {
         return context.getLogger();
     }
 
-    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) {
+    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) throws OperationFailedException {
         adder.addResultsFor(labels, results);
     }
 
-    private boolean areThumbnailsEnabled(BoundIOContext context) {
-        return context.getOutputManager().isOutputAllowed(OUTPUT_THUMBNAILS);
+    private boolean areThumbnailsEnabled(InputOutputContext context) {
+        return context.getOutputter().outputsEnabled().isOutputEnabled(OUTPUT_THUMBNAILS);
     }
 }

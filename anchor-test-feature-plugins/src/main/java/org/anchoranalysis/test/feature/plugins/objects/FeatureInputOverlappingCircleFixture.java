@@ -29,8 +29,8 @@ package org.anchoranalysis.test.feature.plugins.objects;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2i;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
+import org.anchoranalysis.spatial.point.Point2i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureInputOverlappingCircleFixture {

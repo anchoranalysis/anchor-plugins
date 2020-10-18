@@ -33,19 +33,20 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.function.CheckedUnaryOperator;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjectsUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.interpolator.InterpolatorFactory;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.interpolator.InterpolatorFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Perform a segmentation at a different scale, and then fit the results back to the original scale.
@@ -86,7 +87,7 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
         // Segment and scale results back up to original-scale
         try {
             return scaleResultToOriginalScale(
-                            scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
+                    scaledSegmentationResult, scaleFactor, channel.dimensions().extent());
         } catch (OperationFailedException e) {
             throw new SegmentationFailedException(e);
         }
@@ -125,8 +126,8 @@ public class AtScale extends SegmentChannelIntoObjectsUnary {
             ObjectCollection objects, ScaleFactor scaleFactor, Extent originalExtent)
             throws OperationFailedException {
         return ObjectCollectionFactory.of(
-              objects.scale(scaleFactor.invert(), originalExtent).asCollectionOrderNotPreserved()
-          );
+                Scaler.scaleObjects(objects, scaleFactor.invert(), originalExtent)
+                        .asCollectionOrderNotPreserved());
     }
 
     /**

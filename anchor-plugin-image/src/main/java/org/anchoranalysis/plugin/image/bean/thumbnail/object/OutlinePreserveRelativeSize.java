@@ -30,27 +30,27 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
+import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundedList;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.DrawObjectOnStackGenerator;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Create a thumbnail by drawing an outline of an object at a particular-scale, and placing it
@@ -90,8 +90,7 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     @BeanField @Getter @Setter private int backgroundChannelIndex = -1;
 
     /** Interpolator used when scaling the background */
-    @BeanField @Getter @Setter
-    private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
+    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
 
     /**
      * The width of the outline. By default, it's 3 as it's nice to have a strongly easily-visible
@@ -139,7 +138,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
             // For now only work with the first object in the collection
             try {
                 BoundedList<ObjectMask> objectsScaled =
-                        new BoundedList<>(scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
+                        BoundedList.createFromList(
+                                scaler.scaleObjects(element).asList(), ObjectMask::boundingBox);
 
                 assert (!objectsScaled
                         .boundingBox()
@@ -154,10 +154,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
                 assert centeredBox.extent().equals(size.asExtent());
                 assert sceneExtentScaled.contains(centeredBox);
 
-                generator.setIterableElement(
-                        determineObjectsForGenerator(objectsScaled, centeredBox));
-
-                return DisplayStack.create(generator.generate());
+                Stack transformed = generator.transform(determineObjectsForGenerator(objectsScaled, centeredBox));
+                return DisplayStack.create(transformed);
 
             } catch (OutputWriteFailedException | OperationFailedException e) {
                 throw new CreateException(e);
@@ -165,18 +163,17 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
         }
 
         private BoundedList<ObjectMask> determineObjectsForGenerator(
-                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox)
-                throws OperationFailedException {
-            BoundedList<ObjectMask> objectsMapped =
-                    objectsScaled.mapBoundingBoxToBigger(centeredBox);
+                BoundedList<ObjectMask> objectsScaled, BoundingBox centeredBox) {
+            BoundedList<ObjectMask> objectsMapped = objectsScaled.assignBoundingBox(centeredBox);
 
             // Add any other objects which intersect with the scaled-bounding box, excluding
             //  the object themselves
             if (colorUnselectedObjects != null) {
                 return objectsMapped.addObjectsNoBoundingBoxChange(
                         scaler.objectsThatIntersectWith(
-                                objectsMapped.boundingBox(),
-                                ObjectCollectionFactory.of(objectsScaled.list())).asList());
+                                        objectsMapped.boundingBox(),
+                                        ObjectCollectionFactory.of(objectsScaled.list()))
+                                .asList());
             } else {
                 return objectsMapped;
             }

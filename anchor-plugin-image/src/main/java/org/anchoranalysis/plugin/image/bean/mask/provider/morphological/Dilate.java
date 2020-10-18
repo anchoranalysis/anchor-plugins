@@ -33,12 +33,15 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.morphological.DilationKernelFactory;
+import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.image.voxel.object.morphological.SelectDimensionsFactory;
 
 /** Performs an dilation morphological operation on a binary-image */
 public class Dilate extends MorphologicalOperatorBase {
@@ -64,22 +67,21 @@ public class Dilate extends MorphologicalOperatorBase {
     @Override
     protected void applyMorphologicalOperation(Mask source, boolean do3D) throws CreateException {
 
-        BinaryVoxels<UnsignedByteBuffer> out =
-                MorphologicalDilation.dilate(
-                        source.binaryVoxels(),
-                        do3D,
-                        getIterations(),
-                        background(),
-                        getMinIntensityValue(),
-                        zOnly,
-                        false,
-                        Optional.empty(),
-                        bigNeighborhood);
-
         try {
+            BinaryVoxels<UnsignedByteBuffer> out =
+                    MorphologicalDilation.dilate(
+                            source.binaryVoxels(),
+                            getIterations(),
+                            background(),
+                            getMinIntensityValue(),
+                            Optional.empty(),
+                            new DilationKernelFactory(SelectDimensionsFactory.of(do3D, zOnly), false, bigNeighborhood));
+
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {
             throw new AnchorImpossibleSituationException();
+        } catch (OperationFailedException e) {
+            throw new CreateException(e);
         }
     }
 }

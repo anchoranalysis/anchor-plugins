@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
 public class RootFilePathRegEx extends ReportFeatureForManifest {
 
@@ -44,7 +44,7 @@ public class RootFilePathRegEx extends ReportFeatureForManifest {
     // END BEAN PROPERTIES
 
     @Override
-    public String featureDescription(ManifestRecorderFile object, Logger logger)
+    public String featureDescription(DeserializedManifest object, Logger logger)
             throws OperationFailedException {
 
         // We get the last three

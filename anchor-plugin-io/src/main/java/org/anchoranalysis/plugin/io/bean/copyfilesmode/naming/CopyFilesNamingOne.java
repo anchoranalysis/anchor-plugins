@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 
@@ -48,17 +48,16 @@ public abstract class CopyFilesNamingOne implements CopyFilesNaming {
 
     @Override
     public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         Optional<Path> pathDelegate =
                 copyFilesNaming.destinationPathRelative(sourceDir, destDir, file, iter);
         return OptionalUtilities.flatMap(pathDelegate, this::destinationPathRelative);
     }
 
-    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate)
-            throws AnchorIOException;
+    protected abstract Optional<Path> destinationPathRelative(Path pathDelegate);
 
     @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
         copyFilesNaming.afterCopying(destDir, dummyMode);
     }
 }

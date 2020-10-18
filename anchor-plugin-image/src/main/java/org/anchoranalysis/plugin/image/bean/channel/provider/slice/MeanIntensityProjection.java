@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.slice;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 
 public class MeanIntensityProjection extends ChannelProviderUnary {
 

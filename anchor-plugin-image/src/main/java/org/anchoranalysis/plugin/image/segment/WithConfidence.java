@@ -49,15 +49,15 @@ public class WithConfidence<T> implements Comparable<WithConfidence<T>> {
     public int compareTo(WithConfidence<T> other) {
         return Double.compare(other.confidence, confidence);
     }
-    
+
     /**
      * Maps the existing object to another object, while retaining an identical confidence score.
-     * 
+     *
      * @param <S> type to map to
      * @param transform
      * @return
      */
-    public <S> WithConfidence<S> map( Function<T,S> transform ) {
-        return new WithConfidence<>( transform.apply(element), confidence );
+    public <S> WithConfidence<S> map(Function<T, S> transform) {
+        return new WithConfidence<>(transform.apply(element), confidence);
     }
 }

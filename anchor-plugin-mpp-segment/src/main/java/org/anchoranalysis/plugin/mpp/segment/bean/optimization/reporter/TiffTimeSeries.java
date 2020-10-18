@@ -30,17 +30,16 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
+import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.color.list.HSB;
-import org.anchoranalysis.io.bean.color.list.Shuffle;
-import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.color.HashedColorSet;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
-import org.anchoranalysis.io.generator.combined.IterableCombinedListGenerator;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
+import org.anchoranalysis.io.generator.combined.CombinedListGenerator;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -49,16 +48,16 @@ import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdirectoryReporter;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.anchoranalysis.overlay.id.IDGetterOverlayID;
 
-public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBreakdown> {
+public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergyBreakdown> {
 
     // START Bean Properties
-    @BeanField @Getter @Setter private int numColors = 20;
+    @BeanField @Getter @Setter private int numberColors = 20;
     // END Bean Properties
 
     private ColorIndex colorIndex;
@@ -68,19 +67,19 @@ public class TiffTimeSeries extends PeriodicSubfolderReporter<MarksWithEnergyBre
             throws ReporterException {
 
         try {
-            colorIndex = new HashedColorSet(new Shuffle(new HSB()), numColors);
+            colorIndex = new Shuffle(new HSB()).colorForEachIndex(numberColors);
         } catch (OperationFailedException e1) {
             throw new ReporterException(e1);
         }
 
-        IterableGenerator<ColoredMarksWithDisplayStack> iterableRaster =
+        Generator<ColoredMarksWithDisplayStack> iterableRaster =
                 new MarksGenerator(new Outline(), new IDGetterOverlayID());
 
         // This no longer needs to be combined, it's a legacy of when a HTML reporter was attached
         //   cleaning up woould be nice
-        IterableCombinedListGenerator<MarksWithEnergyBreakdown> iterableCombined =
-                new IterableCombinedListGenerator<>(
-                        IterableGeneratorBridge.createOneToOne(
+        CombinedListGenerator<MarksWithEnergyBreakdown> iterableCombined =
+                new CombinedListGenerator<>(
+                        GeneratorBridge.createOneToOne(
                                 iterableRaster,
                                 sourceObject -> addColor(sourceObject.getMarks(), initParams)));
 

@@ -34,8 +34,8 @@ import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifier;
 import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.apache.commons.configuration.XMLConfiguration;
 
@@ -77,7 +77,7 @@ class RepeatedExperiment<T extends InputFromManager, S> {
         delegate.setTaskProcessor(taskProcessor);
         checkConfiguration(defaultInstances);
 
-        delegate.doExperiment(expArgs);
+        delegate.executeExperiment(expArgs);
     }
 
     private void checkConfiguration(BeanInstanceMap defaultInstances)

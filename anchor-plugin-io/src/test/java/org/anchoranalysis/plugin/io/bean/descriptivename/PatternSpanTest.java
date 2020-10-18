@@ -32,8 +32,8 @@ import java.io.File;
 import java.util.List;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.files.NamedFile;
 import org.anchoranalysis.plugin.io.bean.descriptivename.patternspan.PatternSpan;
 import org.anchoranalysis.test.LoggingFixture;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class PatternSpanTest {
     private static final Logger LOGGER = LoggingFixture.suppressedLogErrorReporter();
 
     @Test
-    public void testSimple() throws AnchorIOException {
+    public void testSimple() throws InputReadFailedException {
 
         String inputs[] = {"/a/b/c.txt", "/a/d/c.txt", "/a/e/c.txt"};
 
@@ -52,7 +52,7 @@ public class PatternSpanTest {
     }
 
     @Test
-    public void testPaths() throws AnchorIOException {
+    public void testPaths() throws InputReadFailedException {
         String inputs[] = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/Klosters (Feb 2020)/P1210904.JPG"
@@ -64,7 +64,7 @@ public class PatternSpanTest {
     }
 
     @Test
-    public void testEmptyStr() throws AnchorIOException {
+    public void testEmptyStr() throws InputReadFailedException {
         String inputs[] = {
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG",
             "D:/Users/owen/Pictures/To Integrate/Feb 2020/P1210940.JPG.TXT"
@@ -77,7 +77,7 @@ public class PatternSpanTest {
 
     // When there is no extension, the right-side should be kept
     @Test
-    public void testWithoutExtension() throws AnchorIOException {
+    public void testWithoutExtension() throws InputReadFailedException {
 
         String inputs[] = {"/a/b/c", "/a/d/c", "/a/e/c"};
 
@@ -89,7 +89,7 @@ public class PatternSpanTest {
         List<File> files = filesFromStrs(paths);
 
         PatternSpan ps = new PatternSpan();
-        List<DescriptiveFile> ret = ps.descriptiveNamesFor(files, "unknown", LOGGER);
+        List<NamedFile> ret = ps.deriveName(files, "unknown", LOGGER);
 
         for (int i = 0; i < expected.length; i++) {
             assertIndexEquals(ret, i, expected[i]);
@@ -100,7 +100,7 @@ public class PatternSpanTest {
         return FunctionalList.mapToList(paths, File::new);
     }
 
-    private static void assertIndexEquals(List<DescriptiveFile> ret, int index, String expected) {
-        assertEquals(expected, ret.get(index).getDescriptiveName());
+    private static void assertIndexEquals(List<NamedFile> ret, int index, String expected) {
+        assertEquals(expected, ret.get(index).getName());
     }
 }

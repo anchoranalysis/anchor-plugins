@@ -31,11 +31,11 @@ import io.vavr.Tuple2;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.scale.ScaleFactorUtilities;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -55,25 +55,11 @@ class CreateScaledInput {
     public static Tuple2<Mat, ScaleFactor> apply(Stack stack, Extent targetExtent)
             throws CreateException {
 
-        // try {
-        // Stack stackRescaled = stack.mapChannel( channel -> channel.resizeXY(targetExtent, new
-        // InterpolatorImgLib2Linear()) );
-
-        // TODO Better to scale before openCV conversion, so less bytes to process for RGB
-        // conversion
+        // TODO consider scaling before if it it is quicker
         Mat original = ConvertToMat.makeRGBStack(stack);
 
         Mat input = resizeMatToTarget(original, targetExtent);
         return Tuple.of(input, relativeScale(original, input));
-
-        /*Mat matResized = ConvertToMat.makeRGBStack(stackRescaled);
-
-        ScaleFactor scaleFactorToReverse = ScaleFactorUtilities.relativeScale(stackRescaled.extent(), stack.extent());
-        return Tuple.of(matResized, scaleFactorToReverse);*/
-
-        /*} catch (OperationFailedException e) {
-            throw new CreateException(e);
-        }*/
     }
 
     private static ScaleFactor relativeScale(Mat original, Mat resized) {
@@ -85,9 +71,9 @@ class CreateScaledInput {
     }
 
     private static Mat resizeMatToTarget(Mat src, Extent targetExtent) {
-        Mat dst = new Mat();
-        Size sz = new Size(targetExtent.x(), targetExtent.y());
-        Imgproc.resize(src, dst, sz);
-        return dst;
+        Mat destination = new Mat();
+        Size size = new Size(targetExtent.x(), targetExtent.y());
+        Imgproc.resize(src, destination, size);
+        return destination;
     }
 }

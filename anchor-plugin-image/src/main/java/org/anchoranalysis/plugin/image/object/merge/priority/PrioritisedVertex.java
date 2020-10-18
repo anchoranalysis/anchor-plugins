@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
 import lombok.Getter;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 
 /**

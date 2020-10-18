@@ -36,10 +36,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelToWithHistogram;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.attached.ChannelConverterAttached;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.attached.ChannelConverterAttached;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Converts a channel to a different voxel data-type by applying a converter with an associated
@@ -77,6 +77,6 @@ public class ConvertWithHistogram extends ConvertBase {
 
     private Histogram createHistogram(Channel channel) throws CreateException {
         return OptionalUtilities.orElseGet(
-                OptionalFactory.create(histogram), () -> HistogramFactory.create(channel));
+                OptionalFactory.create(histogram), () -> HistogramFromObjectsFactory.create(channel));
     }
 }

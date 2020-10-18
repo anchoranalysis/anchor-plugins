@@ -34,21 +34,21 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.file.matcher.MatchGlob;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.bean.provider.file.FileProviderWithDirectory;
-import org.anchoranalysis.io.bean.provider.file.SearchDirectory;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;
+import org.anchoranalysis.io.input.bean.files.SearchDirectory;
+import org.anchoranalysis.io.input.bean.path.matcher.MatchGlob;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.plugin.io.bean.provider.file.Rooted;
 
 /**
  * Finds some files produced in a previous experiment assuming a certain structure
  *
  * <p>A convenience method for commonly used prefixer settings when the output occurs in an
- * experiment/$1/ file-system structure where $1 is the experimentType
+ * experiment/$1/ filesystem structure where $1 is the experimentType
  */
-public class ExperimentResultsExperimentStructure extends FileProvider {
+public class ExperimentResultsExperimentStructure extends FilesProvider {
 
     // START BEAN PROPERTIES
     /** The name of the experiment including version suffix */
@@ -84,13 +84,13 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
     @BeanField @AllowEmpty @Getter @Setter private String rootNameForStructure = "";
 
     /**
-     * If non-empty than an additional sub-directory is appended as a suffix
+     * If non-empty than an additional subdirectory is appended as a suffix
      * ${DATASET_NAME}_${DATASET_SUFFIX}/${SUBDIRECTORY}/
      */
     @BeanField @AllowEmpty @Getter @Setter private String subdirectory = "";
 
     /**
-     * If true the datasetName is appended as a sub-directory e.g.
+     * If true the datasetName is appended as a subdirectory e.g.
      * ${DATASET_NAME}_${DATASET_SUFFIX}/${DATASET_NAME}
      */
     @BeanField @Getter @Setter private boolean datasetNameSubdirectory = false;
@@ -121,11 +121,11 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
         Rooted out = new Rooted();
         out.setDisableDebugMode(true);
         out.setRootName(rootName);
-        out.setFileProvider(createFiles());
+        out.setFilesProvider(createFiles());
         return out;
     }
 
-    private FileProviderWithDirectory createFiles() {
+    private FilesProviderWithDirectory createFiles() {
         SearchDirectory out = new SearchDirectory();
         out.setDirectory(new DirectoryCreator().apply());
         out.setMatcher(new MatchGlob(fileFilter));
@@ -182,7 +182,7 @@ public class ExperimentResultsExperimentStructure extends FileProvider {
     }
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
+    public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         return delegate.create(params);
     }
 }

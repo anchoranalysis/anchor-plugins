@@ -30,17 +30,17 @@ import java.io.File;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
-import org.anchoranalysis.io.namestyle.IndexableOutputNameStyle;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
+import org.anchoranalysis.io.output.namestyle.IndexableOutputNameStyle;
 
-public class FromOutputName extends DescriptiveNameFromFileIndependent {
+public class FromOutputName extends FileNamerIndependent {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private IndexableOutputNameStyle outputNameStyle;
     // END BEAN PROPERTIES
 
     @Override
-    protected String createDescriptiveName(File file, int index) {
-        return outputNameStyle.getPhysicalName(index);
+    protected String deriveName(File file, int index) {
+        return outputNameStyle.getFilenameWithoutExtension(index);
     }
 }

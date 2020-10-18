@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public abstract class UnaryWithChannelBase extends ObjectCollectionProviderUnary {
 

@@ -33,13 +33,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
+import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.interpolator.Interpolator;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Scales the channel in the X and Y dimensions.
@@ -51,8 +51,7 @@ public class ScaleXY extends ChannelProviderUnary {
     // Start BEAN PROPERTIES
     @BeanField @Getter @Setter private ScaleCalculator scaleCalculator;
 
-    @BeanField @Getter @Setter
-    private InterpolatorBean interpolator = new InterpolatorBeanLanczos();
+    @BeanField @Getter @Setter private InterpolatorBean interpolator = new ImgLib2Lanczos();
     // End BEAN PROPERTIES
 
     @Override

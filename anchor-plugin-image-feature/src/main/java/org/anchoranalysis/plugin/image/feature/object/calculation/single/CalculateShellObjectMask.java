@@ -30,17 +30,17 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological.CalculateErosion;
+import org.anchoranalysis.spatial.extent.Extent;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -73,14 +73,14 @@ public class CalculateShellObjectMask
     protected ObjectMask execute(FeatureInputSingleObject input)
             throws FeatureCalculationException {
 
-        Dimensions dimensions = input.dimensionsRequired();
+        Extent extent = input.dimensionsRequired().extent();
 
         ObjectMask shell = createShellObject(input);
 
         if (inverse) {
             ObjectMask duplicated = input.getObject().duplicate();
 
-            Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, dimensions);
+            Optional<ObjectMask> omShellIntersected = shell.intersect(duplicated, extent);
             omShellIntersected.ifPresent(
                     shellIntersected -> assignOffTo(duplicated, shellIntersected));
 

@@ -32,8 +32,8 @@ import cern.colt.matrix.DoubleMatrix2D;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3f;
 import org.anchoranalysis.mpp.bean.points.fitter.PointsFitterException;
+import org.anchoranalysis.spatial.point.Point3f;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MatrixCreator {

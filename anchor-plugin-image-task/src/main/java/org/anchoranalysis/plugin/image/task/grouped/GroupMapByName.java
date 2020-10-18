@@ -35,10 +35,10 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.feature.io.name.MultiName;
 import org.anchoranalysis.feature.io.name.MultiNameFactory;
-import org.anchoranalysis.io.manifest.ManifestFolderDescription;
-import org.anchoranalysis.io.manifest.sequencetype.SetSequenceType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.CacheSubdirectoryContext;
+import org.anchoranalysis.io.manifest.ManifestDirectoryDescription;
+import org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContextSubdirectoryCache;
 
 /**
  * Adds items to aggregate structures identified uniquely by a name, and allows these items to be
@@ -57,19 +57,20 @@ public abstract class GroupMapByName<S, T> {
 
     private String nounT;
 
-    private final ManifestFolderDescription manifestFolderDescription;
+    private final ManifestDirectoryDescription manifestFolderDescription;
 
     /**
+     * Creates a group-map.
+     *
      * @param nounT a word to describe a single instance of T in user error messages
      * @param createEmpty
      */
     public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
-        super();
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;
         this.manifestFolderDescription =
-                new ManifestFolderDescription(
-                        "groupedFolder", manifestFunction, new SetSequenceType());
+                new ManifestDirectoryDescription(
+                        "groupedFolder", manifestFunction, new StringsWithoutOrder());
     }
 
     /**
@@ -96,24 +97,25 @@ public abstract class GroupMapByName<S, T> {
     }
 
     /**
-     * Outputs the "grouped" data to the file-system
+     * Outputs the "grouped" data to the filesystem
      *
      * @param channelChecker channel checker
      * @param context
      * @throws IOException if something goes wrong, or if includeGroupName is false, but more than
      *     one group-names exist
      */
-    public void outputGroupedData(ConsistentChannelChecker channelChecker, BoundIOContext context)
+    public void outputGroupedData(
+            ConsistentChannelChecker channelChecker, InputOutputContext context)
             throws IOException {
 
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
-        CacheSubdirectoryContext subdirectoryCache =
-                new CacheSubdirectoryContext(context, manifestFolderDescription);
+        InputOutputContextSubdirectoryCache subdirectoryCache =
+                new InputOutputContextSubdirectoryCache(context, manifestFolderDescription, false);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory
-        // If there are two parts, it is assumed that the first-part is a group-name (a seperate
+        // If there are two parts, it is assumed that the first-part is a group-name (a separate
         // subdirectory) and the second-part is written without a subdirectory
         for (Entry<MultiName, T> entry : map.entrySet()) {
 
@@ -133,6 +135,6 @@ public abstract class GroupMapByName<S, T> {
             String outputName,
             T agg,
             ConsistentChannelChecker channelChecker,
-            BoundIOContext context)
+            InputOutputContext context)
             throws IOException;
 }

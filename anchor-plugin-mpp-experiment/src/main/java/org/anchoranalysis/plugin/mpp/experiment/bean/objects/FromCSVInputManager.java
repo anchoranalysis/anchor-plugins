@@ -33,38 +33,42 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 import org.anchoranalysis.mpp.io.input.MultiInput;
-import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInputObject;
+import org.anchoranalysis.plugin.mpp.experiment.objects.FromCSVInput;
 
 // An input stack
-public class FromCSVInputManager extends InputManager<FromCSVInputObject> {
+public class FromCSVInputManager extends InputManager<FromCSVInput> {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private MultiInputManager input;
 
-    @BeanField @Getter @Setter private FilePathGenerator appendCSV;
+    @BeanField @Getter @Setter private DerivePath appendCSV;
     // END BEAN PROPERTIES
 
     @Override
-    public List<FromCSVInputObject> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<FromCSVInput> inputs(InputManagerParams params) throws InputReadFailedException {
 
-        Iterator<MultiInput> itr = input.inputObjects(params).iterator();
+        Iterator<MultiInput> itr = input.inputs(params).iterator();
 
-        List<FromCSVInputObject> out = new ArrayList<>();
+        List<FromCSVInput> out = new ArrayList<>();
 
         while (itr.hasNext()) {
             MultiInput inputObj = itr.next();
 
-            Path csvFilePathOut =
-                    appendCSV.outFilePath(
-                            inputObj.pathForBindingRequired(), params.isDebugModeActivated());
-            out.add(new FromCSVInputObject(inputObj, csvFilePathOut));
+            try {
+                Path csvFilePathOut =
+                        appendCSV.deriveFrom(
+                                inputObj.pathForBindingRequired(), params.isDebugModeActivated());
+                out.add(new FromCSVInput(inputObj, csvFilePathOut));
+            } catch (DerivePathException e) {
+                throw new InputReadFailedException(e);
+            }
         }
 
         return out;

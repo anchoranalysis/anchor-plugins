@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import java.io.PrintWriter;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -43,10 +43,10 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
+public final class TextFile extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
-    private Optional<FileOutput> fileOutput;
+    private Optional<TextFileOutput> fileOutput;
 
     private StopWatch timer = null;
 
@@ -55,10 +55,10 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams, Aggregator agg)
             throws AggregatorException {
         fileOutput =
-                FileOutputFromManager.create(
+                TextFileOutputter.create(
                         "txt",
                         Optional.of(new ManifestDescription("text", "event_log")),
-                        initParams.getInitContext().getOutputManager().getDelegate(),
+                        initParams.getInitContext().getOutputter().getChecked(),
                         "eventLog");
     }
 
@@ -74,8 +74,7 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                 timer = new StopWatch();
                 timer.start();
             }
-
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
     }
@@ -89,9 +88,9 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                     .getWriter()
                     .printf(
                             "itr=%d  time=%e  tpi=%e   %s%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             ((double) timer.getTime()) / 1000,
-                            ((double) timer.getTime()) / (reporting.getIter() * 1000),
+                            ((double) timer.getTime()) / (reporting.getIteration() * 1000),
                             agg.toString());
         }
     }
@@ -106,7 +105,7 @@ public final class TextFile extends ReporterAgg<VoxelizedMarksWithEnergy>
                     .getWriter()
                     .printf(
                             "*** itr=%d  size=%d  best_energy=%e  kernel=%s%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             reporting.getMarksAfter().size(),
                             reporting.getMarksAfter().getEnergyTotal(),
                             reporting.kernelDescription());

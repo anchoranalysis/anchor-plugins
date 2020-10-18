@@ -30,7 +30,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
 import org.junit.Test;
 import org.opencv.core.Mat;
@@ -41,6 +42,10 @@ import org.opencv.core.Mat;
  * @author Owen Feehan
  */
 public class ConvertTest {
+
+    static {
+        CVInit.alwaysExecuteBeforeCallingLibrary();
+    }
 
     private ImageLoader loader = new ImageLoader();
 
@@ -62,6 +67,8 @@ public class ConvertTest {
     private void testConversion(Stack stack, boolean expectFinalStackDirect)
             throws OperationFailedException {
         try {
+            CVInit.blockUntilLoaded();
+
             // Convert to Mat
             Mat mat = ConvertToMat.fromStack(stack);
 

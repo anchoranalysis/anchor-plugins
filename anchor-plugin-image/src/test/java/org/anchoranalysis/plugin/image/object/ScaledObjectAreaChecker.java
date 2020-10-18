@@ -27,12 +27,13 @@ package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.core.object.scale.ScaledElements;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 @RequiredArgsConstructor
 class ScaledObjectAreaChecker {
@@ -61,7 +62,8 @@ class ScaledObjectAreaChecker {
     }
 
     public void assertExpectedArea(ObjectCollection unscaled, ScaledElements<ObjectMask> scaled) {
-        assertExpectedArea(totalArea(unscaled.asList()), totalArea(scaled.asCollectionOrderNotPreserved()));
+        assertExpectedArea(
+                totalArea(unscaled.asList()), totalArea(scaled.asCollectionOrderNotPreserved()));
     }
 
     public void assertExpectedArea(int sizeUnscaled, int sizeScaled) {

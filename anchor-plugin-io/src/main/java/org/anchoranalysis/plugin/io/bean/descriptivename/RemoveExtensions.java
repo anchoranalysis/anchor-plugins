@@ -40,9 +40,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFile;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamer;
+import org.anchoranalysis.io.input.files.NamedFile;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -58,10 +58,10 @@ import org.apache.commons.io.FilenameUtils;
  * @author Owen Feehan
  */
 @NoArgsConstructor
-public class RemoveExtensions extends DescriptiveNameFromFile {
+public class RemoveExtensions extends FileNamer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private DescriptiveNameFromFile descriptiveName;
+    @BeanField @Getter @Setter private FileNamer namer;
 
     /**
      * Keeps the extension if the file-name (without the extension) becomes duplicated with another
@@ -69,33 +69,33 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
     @BeanField @Getter @Setter private boolean preserveExtensionIfDuplicate = true;
     // END BEAN PROPERTIES
 
-    public RemoveExtensions(DescriptiveNameFromFile descriptiveName) {
-        this.descriptiveName = descriptiveName;
+    public RemoveExtensions(FileNamer namer) {
+        this.namer = namer;
     }
 
     @Override
-    public List<DescriptiveFile> descriptiveNamesFor(
+    public List<NamedFile> deriveName(
             Collection<File> files, String elseName, Logger logger) {
 
-        List<DescriptiveFile> df = descriptiveName.descriptiveNamesFor(files, elseName, logger);
+        List<NamedFile> df = namer.deriveName(files, elseName, logger);
 
         if (preserveExtensionIfDuplicate) {
             return considerDuplicates(df, elseName);
         } else {
-            return removeExt(df, elseName);
+            return removeExtension(df, elseName);
         }
     }
 
-    private static List<DescriptiveFile> considerDuplicates(
-            List<DescriptiveFile> df, String elseName) {
-        List<DescriptiveFile> dfWithoutExt = removeExt(df, elseName);
+    private static List<NamedFile> considerDuplicates(
+            List<NamedFile> df, String elseName) {
+        List<NamedFile> dfWithoutExt = removeExtension(df, elseName);
 
         // A count for each file, based upon the uniqueness of the description
         Map<String, Long> countedWithoutExt =
                 dfWithoutExt.stream()
                         .collect(
                                 Collectors.groupingBy(
-                                        DescriptiveFile::getDescriptiveName,
+                                        NamedFile::getName,
                                         Collectors.counting()));
 
         return listMaybeWithExtension(df, dfWithoutExt, countedWithoutExt);
@@ -111,41 +111,41 @@ public class RemoveExtensions extends DescriptiveNameFromFile {
      * @return a list in the same order, selecting either the corresponding entry from listWith or
      *     listWithout depending on the count value
      */
-    private static List<DescriptiveFile> listMaybeWithExtension(
-            List<DescriptiveFile> listWith,
-            List<DescriptiveFile> listWithout,
+    private static List<NamedFile> listMaybeWithExtension(
+            List<NamedFile> listWith,
+            List<NamedFile> listWithout,
             Map<String, Long> countWithout) {
 
-        List<DescriptiveFile> out = new ArrayList<>();
+        List<NamedFile> out = new ArrayList<>();
 
         // Now we iterate through both, and if the count is more than 1, then the extension is kept
         for (int i = 0; i < listWith.size(); i++) {
 
-            DescriptiveFile without = listWithout.get(i);
-            long count = countWithout.get(without.getDescriptiveName());
+            NamedFile without = listWithout.get(i);
+            long count = countWithout.get(without.getName());
 
             out.add(count > 1 ? listWith.get(i) : without);
         }
         return out;
     }
 
-    private static List<DescriptiveFile> removeExt(List<DescriptiveFile> files, String elseName) {
+    private static List<NamedFile> removeExtension(List<NamedFile> files, String elseName) {
         return FunctionalList.mapToList(
-                files, descriptiveName -> maybeRemoveExtension(descriptiveName, elseName));
+                files, file -> maybeRemoveExtension(file, elseName));
     }
 
-    private static DescriptiveFile maybeRemoveExtension(DescriptiveFile df, String elseName) {
-        String maybeExtRemoved =
-                maybeRemoveExtensionForwardSlashes(df.getDescriptiveName(), df.getPath());
-        if (maybeExtRemoved.isEmpty()) {
-            maybeExtRemoved = elseName;
+    private static NamedFile maybeRemoveExtension(NamedFile file, String elseName) {
+        String maybeExtensionRemoved =
+                maybeRemoveExtensionForwardSlashes(file.getName(), file.getPath());
+        if (maybeExtensionRemoved.isEmpty()) {
+            maybeExtensionRemoved = elseName;
         }
-        return new DescriptiveFile(df.getFile(), maybeExtRemoved);
+        return new NamedFile(maybeExtensionRemoved, file.getFile());
     }
 
     private static String maybeRemoveExtensionForwardSlashes(String nameLikePath, Path path) {
 
-        // If the path doesn't end with descriptiveName, we don't remove any extension
+        // If the path doesn't end with its derived name, we don't remove any extension
         //  as it's assumed that this has already occurred, and it could be dangerous
         //  to remove anything more.
         String pathForwardSlash = FilePathToUnixStyleConverter.toStringUnixStyle(path.normalize());

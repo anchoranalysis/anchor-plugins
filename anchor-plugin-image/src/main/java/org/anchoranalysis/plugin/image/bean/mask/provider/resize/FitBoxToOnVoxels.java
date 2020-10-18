@@ -32,13 +32,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.points.PointRange;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.PointRange;
 
 /**
  * Fits a box around the ON pixels.
@@ -50,14 +50,14 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 public class FitBoxToOnVoxels extends MaskProviderUnary {
 
     // START BEAN PROPERTIES
-    // If true, then each z slice is treated seperately
-    @BeanField @Getter @Setter private boolean slicesSeperately = false;
+    // If true, then each z slice is treated separately
+    @BeanField @Getter @Setter private boolean slicesSeparately = false;
     // END BEAN PROPERTIES
 
     @Override
     public Mask createFromMask(Mask mask) throws CreateException {
 
-        if (slicesSeperately) {
+        if (slicesSeparately) {
             mask.extent()
                     .iterateOverZ(
                             z -> {

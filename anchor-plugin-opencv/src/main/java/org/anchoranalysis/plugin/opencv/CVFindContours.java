@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.geometry.Point3f;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.object.Contour;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.opencv.convert.ConvertToMat;
+import org.anchoranalysis.spatial.point.Point3f;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
+import org.anchoranalysis.spatial.point.contour.Contour;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -54,6 +54,8 @@ public class CVFindContours {
 
     public static List<Contour> contoursForObject(ObjectMask object)
             throws OperationFailedException {
+
+        CVInit.blockUntilLoaded();
 
         try {
             // We clone ss the source image is modified by the algorithm according to OpenCV docs

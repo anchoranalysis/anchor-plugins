@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.image.feature.stack.calculation;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -44,7 +44,7 @@ public class CalculateHistogram extends FeatureCalculation<Histogram, FeatureInp
     @Override
     protected Histogram execute(FeatureInputStack input) throws FeatureCalculationException {
         try {
-            return HistogramFactory.create(input.getEnergyStackRequired().getChannel(energyIndex));
+            return HistogramFromObjectsFactory.create(input.getEnergyStackRequired().getChannel(energyIndex));
         } catch (CreateException e) {
             throw new FeatureCalculationException(e);
         }

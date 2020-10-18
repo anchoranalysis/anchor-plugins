@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;

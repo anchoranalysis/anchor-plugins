@@ -30,23 +30,23 @@ import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.Tuple3i;
 
 public abstract class VisitScheduler extends NullParamsBean<VisitScheduler> {
 
-    public abstract Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution)
+    public abstract Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution)
             throws OperationFailedException;
 
     public abstract void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws InitException;
 
     public abstract void afterCreateObject(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException;
 
     public abstract boolean considerVisit(

@@ -26,19 +26,13 @@
 
 package org.anchoranalysis.plugin.image.task.labeller;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.anchoranalysis.image.experiment.label.FileLabelMap;
 
+@AllArgsConstructor
+@Value
 public class ImageCSVLabellerInitParams {
 
     private FileLabelMap<String> labelMap;
-
-    public ImageCSVLabellerInitParams(FileLabelMap<String> labelMap) {
-        super();
-        assert (labelMap != null);
-        this.labelMap = labelMap;
-    }
-
-    public FileLabelMap<String> getLabelMap() {
-        return labelMap;
-    }
 }

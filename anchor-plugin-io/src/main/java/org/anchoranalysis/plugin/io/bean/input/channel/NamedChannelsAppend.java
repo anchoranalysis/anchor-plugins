@@ -31,33 +31,35 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.OptionalBean;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.OperationOutFilePath;
-import org.anchoranalysis.io.input.PathSupplier;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.input.path.PathSupplier;
 
 public class NamedChannelsAppend extends NamedChannelsBase {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private InputManager<NamedChannelsInputPart> input;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
-    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<FilePathGenerator>> listAppend;
+    @BeanField @OptionalBean @Getter @Setter private List<NamedBean<DerivePath>> listAppend;
 
     @BeanField @Getter @Setter private boolean forceEagerEvaluation = false;
 
@@ -67,13 +69,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            Iterator<NamedChannelsInputPart> itr = input.inputObjects(params).iterator();
+            Iterator<NamedChannelsInputPart> itr = input.inputs(params).iterator();
 
             prm.incrWorker();
 
@@ -98,18 +99,22 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             List<NamedChannelsInputPart> listTemp,
             ProgressReporter progressReporter,
             boolean debugMode)
-            throws AnchorIOException {
-        return FunctionalProgress.mapListOptional(
-                listTemp, progressReporter, ncc -> maybeAppend(ncc, debugMode));
+            throws InputReadFailedException {
+        try {
+            return FunctionalProgress.mapListOptional(
+                    listTemp, progressReporter, ncc -> maybeAppend(ncc, debugMode));
+        } catch (DerivePathException e) {
+            throw new InputReadFailedException(e);
+        }
     }
 
     private Optional<NamedChannelsInputPart> maybeAppend(
-            final NamedChannelsInputPart ncc, boolean debugMode) throws AnchorIOException {
+            final NamedChannelsInputPart ncc, boolean debugMode) throws DerivePathException {
         if (ignoreFileNotFoundAppend) {
 
             try {
                 return Optional.of(append(ncc, debugMode));
-            } catch (AnchorIOException e) {
+            } catch (DerivePathException e) {
                 return Optional.empty();
             }
 
@@ -120,7 +125,7 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
     // We assume all the input files are single channel images
     private NamedChannelsInputPart append(final NamedChannelsInputPart ncc, boolean debugMode)
-            throws AnchorIOException {
+            throws DerivePathException {
 
         NamedChannelsInputPart out = ncc;
 
@@ -128,30 +133,36 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             return out;
         }
 
-        for (final NamedBean<FilePathGenerator> ni : listAppend) {
+        for (NamedBean<DerivePath> namedPath : listAppend) {
 
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
             PathSupplier outPath =
-                    OperationOutFilePath.cachedOutPathFor(
-                            ni.getValue(), ncc::pathForBinding, debugMode);
+                    cachedOutPathFor(
+                            namedPath.getValue(), ncc::pathForBinding, debugMode);
 
-            if (forceEagerEvaluation) {
-                Path path = outPath.get();
+            if (forceEagerEvaluation && !skipMissingChannels) {
+                Path path = outPath.get();        
                 if (!path.toFile().exists()) {
-
-                    if (skipMissingChannels) {
-                        continue;
-                    } else {
-                        throw new AnchorIOException(
-                                String.format("Append path: %s does not exist", path));
-                    }
+                    throw new DerivePathException(
+                            String.format("Append path: %s does not exist", path));
                 }
             }
 
-            out = new AppendPart(out, ni.getName(), 0, outPath, rasterReader);
+            out = new AppendPart(out, namedPath.getName(), 0, outPath, stackReader);
         }
 
         return out;
+    }
+    
+    private static PathSupplier cachedOutPathFor(
+            DerivePath outputPathGenerator,
+            Supplier<Optional<Path>> pathInput,
+            boolean debugMode) {
+        return cachePathSupplier(() -> outputPathGenerator.deriveFrom(pathInput, debugMode));
+    }
+    
+    private static PathSupplier cachePathSupplier(PathSupplier supplier) {
+        return CachedSupplier.cache(supplier::get)::get;
     }
 }

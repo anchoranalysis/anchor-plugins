@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -55,7 +55,7 @@ class CalculateHistogramForChannel
     protected FeatureInputHistogram execute(FeatureInputSingleObject params) {
 
         Histogram histogram =
-                HistogramFactory.createHistogramIgnoreZero(
+                HistogramFromObjectsFactory.createHistogramIgnoreZero(
                         channel, params.getObject(), excludeZero);
 
         return new FeatureInputHistogram(histogram, params.getResolutionOptional());

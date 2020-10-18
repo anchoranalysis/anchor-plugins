@@ -34,10 +34,11 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.stack.NamedStacks;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackTask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.NamedStacks;
+import org.anchoranalysis.io.output.enabled.OutputEnabledMutable;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.image.task.bean.grouped.GroupedStackBase;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
@@ -50,7 +51,7 @@ import org.anchoranalysis.plugin.image.task.grouped.NamedChannel;
  *
  * @author Owen Feehan
  */
-public class GroupedMeanChannelTask extends GroupedStackTask<Channel, RunningSumChannel> {
+public class GroupedMeanChannelTask extends GroupedStackBase<Channel, RunningSumChannel> {
 
     // START BEAN PROPERTIES
     /**
@@ -61,17 +62,23 @@ public class GroupedMeanChannelTask extends GroupedStackTask<Channel, RunningSum
     // END BEAN PROPERTIES
 
     @Override
+    public OutputEnabledMutable defaultOutputs() {
+        assert (false);
+        return super.defaultOutputs();
+    }
+
+    @Override
     protected GroupMapByName<Channel, RunningSumChannel> createGroupMap(
             ConsistentChannelChecker channelChecker) {
         return new GroupedMeanChannelMap();
     }
 
     @Override
-    protected void processKeys(
+    protected void processStacks(
             NamedStacks store,
             Optional<String> groupName,
             GroupedSharedState<Channel, RunningSumChannel> sharedState,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         ChannelSource source =

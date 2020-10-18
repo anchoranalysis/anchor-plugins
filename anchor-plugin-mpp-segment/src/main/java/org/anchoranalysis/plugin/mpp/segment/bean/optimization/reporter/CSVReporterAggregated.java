@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.io.PrintWriter;
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.file.FileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -42,10 +42,20 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.aggregate.Aggregator
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
-public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
+/**
+ * Outputs statistics on current energy / kernel acceptance etc. periodically at a particular interval.
+ * 
+ * @author Owen Feehan
+ *
+ */
+public class CSVReporterAggregated extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
-
-    private Optional<FileOutput> csvOutput;
+    
+    public static final String MANIFEST_FUNCTION = "interval_aggregate_stats";
+    
+    private static final String OUTPUT_CSV_STATISTICS = "statisticsInterval";
+    
+    private Optional<TextFileOutput> csvOutput;
 
     private StopWatch timer = null;
 
@@ -73,7 +83,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
 
         this.csvOutput =
                 CSVReporterUtilities.createFileOutputFor(
-                        "csvStatsAgg", initParams, "interval_aggregate_stats");
+                        OUTPUT_CSV_STATISTICS, initParams, MANIFEST_FUNCTION);
 
         timer = new StopWatch();
         timer.start();
@@ -99,7 +109,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
                         writer.print(",Time,TimePerIter,IntervalTimePerIter");
                         writer.println();
                     });
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new AggregatorException(e);
         }
     }
@@ -140,7 +150,7 @@ public class CSVReporterAggregated extends ReporterAgg<VoxelizedMarksWithEnergy>
     public void reportEnd(FeedbackEndParameters<VoxelizedMarksWithEnergy> params) {
         super.reportEnd(params);
         timer.stop();
-        csvOutput.ifPresent(FileOutput::end);
+        csvOutput.ifPresent(TextFileOutput::end);
     }
 
     @Override

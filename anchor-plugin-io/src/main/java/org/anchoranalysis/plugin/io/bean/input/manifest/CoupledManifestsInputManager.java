@@ -34,13 +34,12 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FileProviderException;
-import org.anchoranalysis.io.manifest.deserializer.CachedManifestDeserializer;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.bean.files.FilesProvider;
+import org.anchoranalysis.io.input.files.FilesProviderException;
 import org.anchoranalysis.io.manifest.deserializer.ManifestDeserializer;
 import org.anchoranalysis.io.manifest.deserializer.SimpleManifestDeserializer;
 import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
@@ -48,9 +47,9 @@ import org.anchoranalysis.plugin.io.manifest.ManifestCouplingDefinition;
 public class CoupledManifestsInputManager extends InputManager<ManifestCouplingDefinition> {
 
     // START BEAN PROPERTIES
-    @BeanField @OptionalBean @Getter @Setter private FileProvider manifestInputFileSet;
+    @BeanField @OptionalBean @Getter @Setter private FilesProvider manifestInputFileSet;
 
-    @BeanField @OptionalBean @Getter @Setter private FileProvider manifestExperimentInputFileSet;
+    @BeanField @OptionalBean @Getter @Setter private FilesProvider manifestExperimentInputFileSet;
 
     @BeanField @Getter @Setter private ManifestDeserializer manifestDeserializer;
     // END BEAN PROPERTIES
@@ -62,15 +61,15 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
     }
 
     @Override
-    public List<ManifestCouplingDefinition> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<ManifestCouplingDefinition> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         try {
             if (mcd == null) {
                 mcd = createDeserializedList(params);
             }
         } catch (DeserializationFailedException e) {
-            throw new AnchorIOException("Deserialization failed", e);
+            throw new InputReadFailedException("Deserialization failed", e);
         }
 
         return Collections.singletonList(mcd);
@@ -93,7 +92,7 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
 
             // Uncoupled file manifests
             if (manifestInputFileSet != null) {
-                definition.addUncoupledFiles(
+                definition.addUncoupledJobs(
                         manifestInputFileSet.create(params),
                         manifestDeserializer,
                         params.getLogger());
@@ -107,7 +106,7 @@ public class CoupledManifestsInputManager extends InputManager<ManifestCouplingD
             }
 
             return definition;
-        } catch (FileProviderException e) {
+        } catch (FilesProviderException e) {
             throw new DeserializationFailedException("Cannot find files to deserialize", e);
         }
     }

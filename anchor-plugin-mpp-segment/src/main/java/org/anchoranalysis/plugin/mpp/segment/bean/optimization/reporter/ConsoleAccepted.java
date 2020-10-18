@@ -56,7 +56,7 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
             logger.messageLogger()
                     .logFormatted(
                             "itr=%5d  size=%3d  energy=%e  best_energy=%e   kernel=%s",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             extractStatisticInt(
                                     reporting.getMarksAfterOptional(),
                                     MarksWithEnergyBreakdown::size),
@@ -64,7 +64,7 @@ public class ConsoleAccepted extends FeedbackReceiverBean<VoxelizedMarksWithEner
                                     reporting.getMarksAfterOptional(),
                                     MarksWithEnergyBreakdown::getEnergyTotal),
                             extractStatisticDouble(
-                                    reporting.getBest(), MarksWithEnergyBreakdown::getEnergyTotal),
+                                    reporting.getBestState(), MarksWithEnergyBreakdown::getEnergyTotal),
                             reporting.kernelDescription());
         }
     }

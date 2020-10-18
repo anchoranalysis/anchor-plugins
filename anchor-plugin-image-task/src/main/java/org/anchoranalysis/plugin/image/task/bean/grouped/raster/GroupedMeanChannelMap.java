@@ -28,10 +28,11 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import java.io.IOException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.io.generator.raster.ChannelGenerator;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.grouped.ConsistentChannelChecker;
 import org.anchoranalysis.plugin.image.task.grouped.GroupMapByName;
 
@@ -53,29 +54,35 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
             String outputName,
             RunningSumChannel agg,
             ConsistentChannelChecker channelChecker,
-            BoundIOContext context)
+            InputOutputContext context)
             throws IOException {
-
-        ChannelGenerator generator = new ChannelGenerator(MANIFEST_FUNCTION);
-
+        // TODO change always2D
         VoxelDataType outputType = channelChecker.getChannelType();
+        context.getOutputter()
+                .writerPermissive()
+                .write(outputName, () -> new ChannelGenerator(MANIFEST_FUNCTION), () -> generatorWithMean(agg, outputType, outputName, context));
+    }
 
+    private static Channel generatorWithMean(
+            RunningSumChannel agg,
+            VoxelDataType outputType,
+            String channelName,
+            InputOutputContext context)
+            throws OutputWriteFailedException {
         try {
             Channel mean = agg.createMeanChannel(outputType);
-            generator.setIterableElement(mean);
-            context.getOutputManager().getWriterAlwaysAllowed().write(outputName, () -> generator);
 
-            context.getLogReporter()
+            context.getMessageReporter()
                     .logFormatted(
                             "Writing channel %s with %d items and numPixels>100=%d and outputType=%s",
-                            outputName,
+                            channelName,
                             agg.count(),
                             mean.voxelsGreaterThan(100).count(),
                             outputType);
 
+            return mean;
         } catch (OperationFailedException e) {
-            throw new IOException(
-                    String.format("Cannot create mean channel for: %s", outputName), e);
+            throw new OutputWriteFailedException(e);
         }
     }
 }

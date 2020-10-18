@@ -33,12 +33,12 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 import org.anchoranalysis.plugin.image.channel.DimensionsChecker;
 
@@ -70,7 +70,7 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
         try {
             for (ObjectMask object : objects) {
 
-                Histogram histogram = HistogramFactory.create(lookup.voxels(), Optional.of(object));
+                Histogram histogram = HistogramFromObjectsFactory.create(lookup.voxels(), Optional.of(object));
                 adjustObject(object, channel, lookup, (int) Math.round(histogram.mean()));
             }
 
@@ -88,12 +88,12 @@ public class NormalizeDifferenceToMedian extends UnaryWithObjectsBase {
                 object,
                 channel.voxels().asByte(),
                 channelLookup.voxels().asByte(),
-                (point, buffer, bufferLookup, offset) -> {
+                (point, buffer, bufferLookup, offset, offsetLookup) -> {
                     int valueToAssign =
                             clipValue(
                                     buffer.getUnsigned(offset)
                                             - medianFromObject
-                                            + bufferLookup.getUnsigned(offset));
+                                            + bufferLookup.getUnsigned(offsetLookup));
 
                     buffer.putUnsigned(offset, valueToAssign);
                 });

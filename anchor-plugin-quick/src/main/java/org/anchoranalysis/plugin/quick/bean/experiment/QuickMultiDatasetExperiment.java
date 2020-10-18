@@ -45,33 +45,32 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
 import org.anchoranalysis.experiment.bean.identifier.ExperimentIdentifierConstant;
+import org.anchoranalysis.experiment.bean.io.InputOutputExperiment;
 import org.anchoranalysis.experiment.bean.processor.DebugDependentProcessor;
 import org.anchoranalysis.experiment.bean.processor.JobProcessor;
-import org.anchoranalysis.experiment.io.IReplaceInputManager;
-import org.anchoranalysis.experiment.io.IReplaceOutputManager;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceInputManager;
+import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
-import org.anchoranalysis.experiment.task.Task;
 import org.anchoranalysis.experiment.task.processor.MonitoredSequentialExecutor;
-import org.anchoranalysis.io.bean.input.InputManager;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 
-//
-
 /**
- * Makes a lot of assumptions, that allows us to reduce the number of inputs to an
- * InputOutputExperiment
+ * Makes a lot of assumptions, that allows us to reduce the number of inputs to an {@link
+ * InputOutputExperiment}.
  *
  * <p>Normally, runs an experiment on all data-sets in *datasets*.
  *
- * <p>However, in debug-mode datasetSpecific is used (if non-empty), otherwise the first dataset is
- * used.
+ * <p>However, in debug-mode {@code datasetSpecific} is used (if non-empty), otherwise the first
+ * dataset is used.
  *
- * @param <T> InputManagerType
+ * @param <T> input-object type
  * @param <S> shared-state
  */
 public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends Experiment
-        implements IReplaceInputManager, IReplaceOutputManager {
+        implements ReplaceInputManager, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private String folderDataset;
@@ -94,7 +93,11 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
     @BeanField @AllowEmpty @Getter @Setter private String identifierSuffix = "";
 
-    @BeanField @Getter @Setter private int maxNumProcessors = 100;
+    /**
+     * An upper limit on the number of the processors that can be simultaneously used in parallel,
+     * if they are available.
+     */
+    @BeanField @Getter @Setter private int maxNumberProcessors = 100;
 
     @BeanField @Getter @Setter private boolean suppressExceptions = true;
 
@@ -128,7 +131,6 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     @Override
     public void localise(Path path) throws BeanMisconfiguredException {
         super.localise(path);
-
         delegate.firstLocalise(getLocalPath(), logExperimentPath, logTaskPath, output);
     }
 
@@ -139,12 +141,12 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
-        delegate.setOutput(outputManager);
+    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
+        delegate.setOutput(outputter);
     }
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
 
         delegate.secondInitBeforeExecution(
@@ -233,7 +235,7 @@ public class QuickMultiDatasetExperiment<T extends InputFromManager, S> extends 
 
     private JobProcessor<T, S> createProcessor() {
         DebugDependentProcessor<T, S> processor = new DebugDependentProcessor<>();
-        processor.setMaxNumProcessors(maxNumProcessors);
+        processor.setMaxNumberProcessors(maxNumberProcessors);
         processor.setSuppressExceptions(suppressExceptions);
         processor.setTask(task.duplicateBean());
         return processor;

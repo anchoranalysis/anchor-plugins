@@ -37,9 +37,9 @@ import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.provider.ProviderAsStack;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.ProviderAsStack;
+import org.anchoranalysis.image.core.stack.Stack;
 
 /** Extracts a channel from a provider of a stack */
 @NoArgsConstructor

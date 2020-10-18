@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.object.filter;
 import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Uses a predicate to make a decision whether to keep objects or not.
@@ -43,7 +43,7 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     @Override
     public ObjectCollection filter(
             ObjectCollection objectsToFilter,
-            Optional<Dimensions> dim,
+            Optional<Dimensions> dimensions,
             Optional<ObjectCollection> objectsRejected)
             throws OperationFailedException {
 
@@ -51,10 +51,10 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
             return objectsToFilter;
         }
 
-        start(dim, objectsToFilter);
+        start(dimensions, objectsToFilter);
 
         ObjectCollection dup =
-                objectsToFilter.stream().filter(object -> match(object, dim), objectsRejected);
+                objectsToFilter.stream().filter(object -> match(object, dimensions), objectsRejected);
 
         end();
 
@@ -64,13 +64,13 @@ public abstract class ObjectFilterPredicate extends ObjectFilter {
     /** A precondition, which if evaluates to false, cancels the filter i.e. nothing is removed */
     protected abstract boolean precondition(ObjectCollection objectsToFilter);
 
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         // Default implementation, nothing to do
     }
 
     /** A predicate condition for an object to be kept in the collection */
-    protected abstract boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected abstract boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException;
 
     protected abstract void end() throws OperationFailedException;

@@ -42,19 +42,19 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorMulti;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.io.histogram.HistogramCSVReader;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
-import org.anchoranalysis.io.input.FileInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.files.FileInput;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 
@@ -98,12 +98,12 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
 
     @Override
     protected ResultsVectorWithThumbnail calculateResultsForInput(
-            FileInput inputObject, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
+            FileInput input, InputProcessContext<FeatureList<FeatureInputHistogram>> context)
             throws NamedFeatureCalculateException {
 
-        // Reads histogram from file-system
+        // Reads histogram from filesystem
         try {
-            Histogram histogramRead = readHistogramFromCsv(inputObject);
+            Histogram histogramRead = readHistogramFromCsv(input);
 
             if (histogram != null) {
                 histogramRead = filterHistogramFromProvider(histogramRead, context.getContext());
@@ -130,7 +130,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
     }
 
     private Histogram filterHistogramFromProvider(
-            Histogram inputtedHistogram, BoundIOContext context) throws OperationFailedException {
+            Histogram inputtedHistogram, InputOutputContext context)
+            throws OperationFailedException {
 
         HistogramProvider providerDuplicated = histogram.duplicateBean();
 
@@ -144,8 +145,8 @@ public class FromHistogram extends SingleRowPerInput<FileInput, FeatureInputHist
         }
     }
 
-    private ImageInitParams createImageInitParams(Histogram inputtedHist, BoundIOContext context)
-            throws OperationFailedException {
+    private ImageInitParams createImageInitParams(
+            Histogram inputtedHist, InputOutputContext context) throws OperationFailedException {
         // Create a shared-objects and initialise
         ImageInitParams paramsInit = ImageInitParamsFactory.create(context);
         paramsInit.histograms().add(HISTOGRAM_INPUT_NAME_IN_PROVIDER, () -> inputtedHist);

@@ -29,11 +29,12 @@ package org.anchoranalysis.plugin.io.bean.descriptivename.patternspan;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
-import org.anchoranalysis.io.input.descriptivename.DescriptiveFile;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.input.files.NamedFile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ExtractVariableSpanForList {
@@ -48,9 +49,9 @@ class ExtractVariableSpanForList {
      * @param extractVariableSpan extracted-pattern
      * @return
      */
-    public static List<DescriptiveFile> listExtract(
+    public static List<NamedFile> listExtract(
             Collection<File> files, ExtractVariableSpan extractVariableSpan) {
-        List<DescriptiveFile> listMaybeEmpty = listExtractMaybeEmpty(files, extractVariableSpan);
+        List<NamedFile> listMaybeEmpty = listExtractMaybeEmpty(files, extractVariableSpan);
 
         if (hasAnyEmptyDescriptiveName(listMaybeEmpty)) {
             String prependStr =
@@ -62,27 +63,31 @@ class ExtractVariableSpanForList {
         }
     }
 
-    private static List<DescriptiveFile> listPrepend(
-            String prependStr, List<DescriptiveFile> list) {
+    private static List<NamedFile> listPrepend(
+            String prefix, List<NamedFile> list) {
+        return mapNamesOnList(list, (name,file) -> prependName(prefix, name) ); 
+    }
+    
+    private static List<NamedFile> mapNamesOnList(Collection<NamedFile> collection, BiFunction<String,File,String> changeName ) {
         return FunctionalList.mapToList(
-                list,
-                df ->
-                        new DescriptiveFile(
-                                df.getFile(),
-                                FilePathToUnixStyleConverter.toStringUnixStyle(
-                                                prependStr + df.getDescriptiveName())
-                                        .trim()));
+                collection,
+                df -> df.mapName(changeName)); 
+    }
+    
+    private static String prependName(String prefix, String name) {
+        return FilePathToUnixStyleConverter.toStringUnixStyle(prefix + name).trim();
     }
 
-    private static boolean hasAnyEmptyDescriptiveName(List<DescriptiveFile> list) {
-        return list.stream().filter(df -> df.getDescriptiveName().isEmpty()).count() > 0;
+    private static boolean hasAnyEmptyDescriptiveName(List<NamedFile> list) {
+        return list.stream().filter(df -> df.getName().isEmpty()).count() > 0;
     }
 
-    private static List<DescriptiveFile> listExtractMaybeEmpty(
+    private static List<NamedFile> listExtractMaybeEmpty(
             Collection<File> files, ExtractVariableSpan extractVariableSpan) {
+        
         return FunctionalList.mapToList(
                 files,
-                file -> new DescriptiveFile(file, extractVariableSpan.extractSpanPortionFor(file)));
+                file -> new NamedFile(extractVariableSpan.extractSpanPortionFor(file), file) );
     }
 
     private static String extractLastComponent(String str) {

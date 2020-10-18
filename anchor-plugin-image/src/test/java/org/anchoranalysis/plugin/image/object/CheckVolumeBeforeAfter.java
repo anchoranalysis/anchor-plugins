@@ -26,10 +26,9 @@
 package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
-
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.object.ObjectMask;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckVolumeBeforeAfter {

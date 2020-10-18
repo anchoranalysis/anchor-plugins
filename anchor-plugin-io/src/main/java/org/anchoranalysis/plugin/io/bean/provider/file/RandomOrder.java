@@ -31,26 +31,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
-import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.bean.provider.file.FileProvider;
-import org.anchoranalysis.io.error.FileProviderException;
+import org.anchoranalysis.io.input.bean.files.FilesProviderUnary;
 
-public class RandomOrder extends FileProvider {
-
-    // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FileProvider fileProvider;
-    // END BEAN PROPERTIES
+public class RandomOrder extends FilesProviderUnary {
 
     @Override
-    public Collection<File> create(InputManagerParams params) throws FileProviderException {
-
-        Collection<File> in = fileProvider.create(params);
-
+    protected Collection<File> transform(Collection<File> source, boolean debugMode) {
+        // We need to place the files in a List as a Collection is not supported
+        //  by Collections.shuffle
         List<File> out = new ArrayList<>();
-        out.addAll(in);
+        out.addAll(source);
         Collections.shuffle(out);
         return out;
     }

@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 
 public class AnnotationLabel extends AnchorBean<AnnotationLabel> {
 

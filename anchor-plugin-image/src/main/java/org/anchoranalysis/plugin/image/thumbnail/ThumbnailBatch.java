@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.image.thumbnail;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 
 /**
  * Creates thumbnails for a particular batch of objects that can be calibrated to have similar

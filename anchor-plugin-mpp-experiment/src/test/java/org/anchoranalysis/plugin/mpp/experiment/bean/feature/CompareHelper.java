@@ -32,13 +32,28 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.OperationFailedRuntimeException;
-import org.anchoranalysis.io.csv.comparer.CSVComparer;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
+import org.anchoranalysis.test.image.csv.CSVComparer;
 
 class CompareHelper {
 
+    /** 
+     * <p>Toggles a behaviour that replaces reference files with newly created onces in certain circumstances.
+     * 
+     * <p>If true, and an {@link #assertIdentical} fails, the first path in the comparer
+     * (the newly created file) will be copied on top of the second path in the comparer
+     * (the reference file).
+     * 
+     * <p>If false, no copying occurs.
+     * 
+     * <p>This is a powerful tool to update resources when they are out of sync with
+     * the tests, but should be used very <b>carefully</b> as it overrides existing
+     * files in the source-code directory.
+     */
+    private static final boolean COPY_NOT_IDENTICAL = false;
+    
     private static final CSVComparer CSV_COMPARER = new CSVComparer(",", true, 0, true, false);
 
     public static void compareOutputWithSaved(
@@ -54,9 +69,20 @@ class CompareHelper {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void assertIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
-        assertTrue(relativePath + " is not identical", compareForExtra(comparer, relativePath));
+        boolean identical = compareForExtra(comparer, relativePath);
+        
+        if (COPY_NOT_IDENTICAL && !identical) {
+            try {
+                comparer.copyFromPath1ToPath2(relativePath);
+            } catch (IOException e) {
+                throw new OperationFailedException(e);
+            }
+        } else {
+            assertTrue(relativePath + " is not identical", identical);
+        }
     }
 
     private static boolean compareForExtra(DualComparer comparer, String relativePath)

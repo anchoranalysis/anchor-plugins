@@ -30,12 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.ToIntFunction;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMembership;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -43,6 +38,11 @@ import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.OptionalPointProposer;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 // Proposes a position from somewhere in a list of Memos, with some extra conditions
 // NOT INTENDED TO BE IN A CONFIG FILE

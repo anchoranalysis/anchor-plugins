@@ -34,13 +34,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.plugin.annotation.comparison.AddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
-import org.anchoranalysis.plugin.annotation.comparison.IAddAnnotation;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,9 +48,9 @@ class ObjectsToCompareFactory {
 
     public static Optional<ObjectsToCompare> create(
             AnnotationComparisonInput<ProvidesStackInput> input,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             Dimensions dimensions,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
 
         // Both objects need to be found
@@ -63,10 +63,10 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> createObjects(
             boolean left,
             String objName,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             AnnotationComparisonInput<ProvidesStackInput> input,
             Dimensions dimensions,
-            BoundIOContext context)
+            InputOutputContext context)
             throws JobExecutionException {
         Findable<ObjectCollection> findable =
                 createFindable(left, input, dimensions, context.isDebugEnabled());
@@ -76,7 +76,7 @@ class ObjectsToCompareFactory {
     private static Optional<ObjectCollection> foundOrLogAddUnnannotated(
             Findable<ObjectCollection> objects,
             String objName,
-            IAddAnnotation<?> addAnnotation,
+            AddAnnotation<?> addAnnotation,
             Logger logger) {
         Optional<ObjectCollection> found = objects.getFoundOrLog(objName, logger);
         if (!found.isPresent()) {
@@ -94,7 +94,7 @@ class ObjectsToCompareFactory {
         try {
             return input.getComparerMultiplex(left)
                     .createObjects(input.pathForBindingRequired(), dimensions, debugMode);
-        } catch (CreateException | AnchorIOException e) {
+        } catch (CreateException | InputReadFailedException e) {
             throw new JobExecutionException(e);
         }
     }

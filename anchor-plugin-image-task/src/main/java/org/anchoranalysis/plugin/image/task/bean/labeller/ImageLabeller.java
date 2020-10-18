@@ -32,9 +32,14 @@ import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 /**
+ * Associates a label with an image.
+ *
+ * <p>e.g. this can be used to associate labels with images for training or evaluation in a
+ * machine-learning problem.
+ *
  * @author Owen Feehan
  * @param <T> shared-state
  */
@@ -60,6 +65,7 @@ public abstract class ImageLabeller<T> extends AnchorBean<ImageLabeller<T>> {
      *
      * @param sharedState TODO
      */
-    public abstract String labelFor(T sharedState, ProvidesStackInput input, BoundIOContext context)
+    public abstract String labelFor(
+            T sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException;
 }

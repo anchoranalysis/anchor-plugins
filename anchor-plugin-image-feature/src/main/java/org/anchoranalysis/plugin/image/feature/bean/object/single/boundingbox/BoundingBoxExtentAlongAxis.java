@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.boundingbox;
 
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 public class BoundingBoxExtentAlongAxis extends BoundingBoxAlongAxisBase {
 

@@ -31,19 +31,20 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.util.List;
 import java.util.Optional;
+import org.anchoranalysis.bean.shared.color.RGBColorBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
-import org.anchoranalysis.image.bean.interpolator.InterpolatorBeanLanczos;
+import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.RGBColorBean;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 import org.anchoranalysis.test.feature.plugins.objects.IntersectingCircleObjectsFixture;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
@@ -82,7 +83,7 @@ public class OutlinePreserveRelativeSizeTest {
 
         DualComparer comparer =
                 DualComparerFactory.compareTemporaryFolderToTest(
-                        writer.getFolder(), "thumbnails", "thumbnails01");
+                        writer.getFolder(), Optional.of("thumbnails"), "thumbnails01");
         assertTrue(
                 "thumbnails are identical to saved copy", comparer.compareTwoSubdirectories("."));
     }
@@ -99,9 +100,9 @@ public class OutlinePreserveRelativeSizeTest {
 
         try {
             List<DisplayStack> thumbnails = thumbnailsFor(batch, OBJECTS);
-            writer.writeList("thumbnails", thumbnails);
+            writer.writeList("thumbnails", thumbnails, true);
             return thumbnails;
-        } catch (CreateException e) {
+        } catch (CreateException | OutputWriteFailedException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -123,7 +124,7 @@ public class OutlinePreserveRelativeSizeTest {
         outline.setColorUnselectedObjects(new RGBColorBean(Color.BLUE));
         outline.setOutlineWidth(1);
         outline.setSize(SIZE);
-        outline.setInterpolator(new InterpolatorBeanLanczos());
+        outline.setInterpolator(new ImgLib2Lanczos());
         return outline;
     }
 }

@@ -30,70 +30,68 @@ import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.filepath.prefixer.PathDifferenceFromBase;
+import org.anchoranalysis.core.path.PathDifference;
+import org.anchoranalysis.core.path.PathDifferenceException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
-import org.anchoranalysis.plugin.io.bean.descriptivename.LastFolders;
+import org.anchoranalysis.io.manifest.Manifest;
+import org.anchoranalysis.plugin.io.bean.descriptivename.LastDirectories;
 
 // A file manifest together with the overall manifest for the experiment
 public class CoupledManifests implements InputFromManager {
 
-    @Getter private final Optional<ManifestRecorder> experimentManifest;
+    @Getter private final Optional<Manifest> experimentManifest;
 
-    @Getter private final ManifestRecorderFile fileManifest;
+    @Getter private final DeserializedManifest jobManifest;
 
     private final String name;
 
     public CoupledManifests(
-            ManifestRecorder experimentManifest, ManifestRecorderFile fileManifest, Logger logger)
-            throws AnchorIOException {
+            DeserializedManifest jobManifest, int numberDirectoriesInDescription, Logger logger) {
         super();
-        this.experimentManifest = Optional.of(experimentManifest);
-        this.fileManifest = fileManifest;
-        name = generateName(logger);
+        this.experimentManifest = Optional.empty();
+        this.jobManifest = jobManifest;
+        name = generateNameFromDirectories(numberDirectoriesInDescription, logger);
     }
 
     public CoupledManifests(
-            ManifestRecorderFile fileManifest, int numFoldersInDescription, Logger logger) {
+            Manifest experimentManifest, DeserializedManifest jobManifest, Logger logger)
+            throws PathDifferenceException {
         super();
-        this.experimentManifest = Optional.empty();
-        this.fileManifest = fileManifest;
-        name = generateNameFromFolders(numFoldersInDescription, logger);
+        this.experimentManifest = Optional.of(experimentManifest);
+        this.jobManifest = jobManifest;
+        name = generateName(logger);
     }
 
-    private String generateName(Logger logger) throws AnchorIOException {
+
+    private String generateName(Logger logger) throws PathDifferenceException {
 
         if (experimentManifest.isPresent()) {
             Path experimentRootFolder =
                     getExperimentManifest().get().getRootFolder().calculatePath();
 
-            PathDifferenceFromBase ff =
-                    PathDifferenceFromBase.differenceFrom(
-                            experimentRootFolder, fileManifest.getRootPath());
-            return ff.combined().toString();
+            PathDifference difference =
+                    PathDifference.differenceFrom(experimentRootFolder, jobManifest.getRootPath());
+            return difference.combined().toString();
 
         } else {
-            return generateNameFromFolders(0, logger);
+            return generateNameFromDirectories(0, logger);
         }
     }
 
-    private String generateNameFromFolders(int numFoldersInDescription, Logger logger) {
-        LastFolders dnff = new LastFolders();
-        dnff.setNumFoldersInDescription(numFoldersInDescription);
-        dnff.setRemoveExtensionInDescription(false);
-        return dnff.descriptiveNameFor(fileManifest.getRootPath().toFile(), "<unknown>", logger)
-                .getDescriptiveName();
+    private String generateNameFromDirectories(int numberDirectoriesInDescription, Logger logger) {
+        LastDirectories lastDirectories = new LastDirectories(numberDirectoriesInDescription);
+        lastDirectories.setRemoveExtensionInDescription(false);
+        return lastDirectories.deriveName(jobManifest.getRootPath().toFile(), "<unknown>", logger)
+                .getName();
     }
 
     @Override
-    public String descriptiveName() {
+    public String name() {
         return name;
     }
 
     @Override
     public Optional<Path> pathForBinding() {
-        return Optional.of(fileManifest.getRootPath());
+        return Optional.of(jobManifest.getRootPath());
     }
 }

@@ -3,19 +3,19 @@
  <bean config-class="java.util.List" config-factory="list">
 
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxels">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxels"/>
 		</item>			
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxelFaces">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
 		</item>			
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="areTouching">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item config-class="org.anchoranalysis.plugin.operator.feature.bean.range.CompareWithRange" min="0.5" max="0.5" belowMinValue="0" aboveMaxValue="1">
 				<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxels"/>
 			</item>
@@ -24,7 +24,7 @@
 	
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxelFacesOverMean">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
@@ -45,7 +45,7 @@
 	
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxelFacesOverMax">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>
@@ -65,7 +65,7 @@
 	</item>
 	
 	<item config-class="org.anchoranalysis.bean.NamedBean" name="numTouchingVoxelFacesOverMin">
-		<item config-class="org.anchoranalysis.feature.bean.list.FeatureListProviderDefineSingle">
+		<item config-class="org.anchoranalysis.feature.bean.list.DefineSingle">
 			<item avoidDivideByZero="true" config-class="org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide">
 				<list config-class="java.util.List" config-factory="list">
 					<item config-class="org.anchoranalysis.plugin.image.feature.bean.object.pair.touching.NumTouchingVoxelFaces"/>

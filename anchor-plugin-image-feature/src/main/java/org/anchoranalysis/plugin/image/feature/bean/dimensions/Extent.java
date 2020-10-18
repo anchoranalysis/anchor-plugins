@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.dimensions;
 
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 /**
  * Width/height/depth of energy-stack in pixels depending on axis

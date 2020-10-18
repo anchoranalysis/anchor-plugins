@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
 import org.anchoranalysis.mpp.io.bean.input.MultiInputManager;
 
 /**
@@ -47,7 +47,7 @@ public class AppendStack extends FilePathBaseAppendToManagerWithFileID {
     // END BEAN PROPERTIES
 
     @Override
-    protected List<NamedBean<FilePathGenerator>> getListFromManager(MultiInputManager inputManager)
+    protected List<NamedBean<DerivePath>> getListFromManager(MultiInputManager inputManager)
             throws BeanMisconfiguredException {
         return inputManager.getAppendStack();
     }

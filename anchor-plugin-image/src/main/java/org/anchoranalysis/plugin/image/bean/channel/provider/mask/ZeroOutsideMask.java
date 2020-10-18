@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.mask;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Set pixels NOT IN the mask to 0, but keep pixels IN the mask identical.

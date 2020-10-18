@@ -32,16 +32,16 @@ import lombok.Setter;
 import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.bean.morphological.MorphologicalIterations;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateShellObjectMask;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Constructs a shell around an object-mask using a standard dilation and erosion process
@@ -114,7 +114,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private Optional<ObjectMask> intersectWithEnergyMask(
             ObjectMask object, EnergyStackWithoutParams energyStack) {
-        return object.intersect(createEnergyMask(energyStack), energyStack.dimensions());
+        return object.intersect(createEnergyMask(energyStack), energyStack.extent());
     }
 
     protected abstract double calculateForShell(ObjectMask shell, Channel channel)
@@ -122,7 +122,7 @@ public abstract class IntensityMeanShellBase extends FeatureEnergyChannel {
 
     private ObjectMask createEnergyMask(EnergyStackWithoutParams energyStack) {
         return new ObjectMask(
-                new BoundingBox(energyStack.dimensions()),
+                new BoundingBox(energyStack.extent()),
                 energyStack.getChannel(energyIndexMask).voxels().asByte(),
                 inverseMask
                         ? BinaryValues.getDefault().createInverted()

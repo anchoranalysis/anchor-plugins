@@ -52,8 +52,7 @@ public class GraphLogger {
     }
 
     public void describeMerge(
-            ObjectVertex omMerged,
-            TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
+            ObjectVertex omMerged, TypedEdge<ObjectVertex, PrioritisedVertex> bestImprovement) {
         log(describeGraph.describeMerge(omMerged, bestImprovement));
     }
 

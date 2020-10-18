@@ -37,11 +37,11 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;
-import org.anchoranalysis.experiment.io.IReplaceInputManager;
-import org.anchoranalysis.experiment.io.IReplaceOutputManager;
-import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.io.bean.input.InputManager;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.io.ReplaceInputManager;
+import org.anchoranalysis.experiment.io.ReplaceOutputManager;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.bean.InputManager;
 import org.anchoranalysis.io.output.bean.OutputManager;
 import org.anchoranalysis.plugin.quick.bean.experiment.QuickMultiDatasetExperiment;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -72,7 +72,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>his allows many parameters of {@link QuickMultiDatasetStructuredExperiment} to be easily set.
  */
 public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S> extends Experiment
-        implements IReplaceInputManager, IReplaceOutputManager {
+        implements ReplaceInputManager, ReplaceOutputManager {
 
     // START BEAN PROPERTIES
     /**
@@ -156,9 +156,9 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void replaceOutputManager(OutputManager outputManager) throws OperationFailedException {
+    public void replaceOutputManager(OutputManager outputter) throws OperationFailedException {
         populateDelegateIfNeeded();
-        delegate.replaceOutputManager(outputManager);
+        delegate.replaceOutputManager(outputter);
     }
 
     @Override
@@ -168,10 +168,10 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
     }
 
     @Override
-    public void doExperiment(ExperimentExecutionArguments arguments)
+    public void executeExperiment(ExperimentExecutionArguments arguments)
             throws ExperimentExecutionException {
         populateDelegateIfNeeded();
-        delegate.doExperiment(arguments);
+        delegate.executeExperiment(arguments);
     }
 
     @Override
@@ -211,12 +211,12 @@ public class QuickMultiDatasetStructuredExperiment<T extends InputFromManager, S
         delegate.setDatasets(datasets);
     }
 
-    public int getMaxNumProcessors() {
-        return delegate.getMaxNumProcessors();
+    public int getMaxNumberProcessors() {
+        return delegate.getMaxNumberProcessors();
     }
 
-    public void setMaxNumProcessors(int maxNumProcessors) {
-        delegate.setMaxNumProcessors(maxNumProcessors);
+    public void setMaxNumberProcessors(int maxNumProcessors) {
+        delegate.setMaxNumberProcessors(maxNumProcessors);
     }
 
     public boolean isSuppressExceptions() {

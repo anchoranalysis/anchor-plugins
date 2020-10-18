@@ -30,11 +30,11 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.seed.Seed;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.core.object.seed.Seed;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.iterator.process.ProcessPoint;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

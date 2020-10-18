@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.bean.outline;
 
 import java.util.List;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.mpp.bean.points.PointsBean;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public abstract class OutlinePixelsRetriever extends PointsBean<OutlinePixelsRetriever> {
 

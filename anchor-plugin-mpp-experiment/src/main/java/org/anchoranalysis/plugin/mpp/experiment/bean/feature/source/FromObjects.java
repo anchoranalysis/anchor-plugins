@@ -49,16 +49,16 @@ import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.plugin.image.feature.bean.object.combine.CombineObjectsForFeatures;
 import org.anchoranalysis.plugin.image.task.bean.feature.source.FeatureSource;
-import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
+import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 
 /**
@@ -78,6 +78,20 @@ import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
  * <p>Note unlike other feature-sources, the group here is not only what is returned by the <code>
  * group</code> generator in the super-class, but also includes the name of the {@link
  * ObjectCollectionProvider} if there is more than one.
+ *
+ * <p>*
+ *
+ * <p>The following outputs are produced:
+ *
+ * <table>
+ * <caption></caption>
+ * <thead>
+ * <tr><th>Output Name</th><th>Default?</th><th>Description</th></tr>
+ * </thead>
+ * <tbody>
+ * <tr><td rowspan="3"><i>outputs from a sub-class of {@link DefineOutputterMPPWithEnergy} as used in {@code define}.</i></td></tr>
+ * </tbody>
+ * </table>
  *
  * <p>TODO does this need to be a MultiInput and dependent on MPP? Can it be moved to
  * anchor-plugin-image-task??
@@ -116,16 +130,14 @@ public class FromObjects<T extends FeatureInput>
     public SharedStateExportFeatures<FeatureTableCalculator<T>> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<FeatureInputSingleObject>>> features,
-            BoundIOContext context)
+            ResultsWriterOutputNames outputNames,
+            InputOutputContext context)
             throws CreateException {
         try {
             FeatureTableCalculator<T> tableCalculator =
                     combine.createFeatures(features, STORE_FACTORY, suppressErrors);
             return SharedStateExportFeatures.createForFeatures(
-                    new ResultsWriterOutputNames("features", true, true),
-                    tableCalculator,
-                    metadataHeaders,
-                    context);
+                    outputNames, tableCalculator, metadataHeaders, context);
         } catch (InitException e) {
             throw new CreateException(e);
         }
@@ -140,7 +152,7 @@ public class FromObjects<T extends FeatureInput>
                 context.getContext(),
                 (initParams, energyStack) ->
                         calculateFeaturesForImage(
-                                input.descriptiveName(),
+                                input.name(),
                                 new InitParamsWithEnergyStack(initParams, energyStack),
                                 context));
     }
@@ -166,7 +178,7 @@ public class FromObjects<T extends FeatureInput>
     }
 
     private int calculateFeaturesForImage(
-            String descriptiveName,
+            String inputName,
             InitParamsWithEnergyStack initParams,
             InputProcessContext<FeatureTableCalculator<T>> context)
             throws OperationFailedException {
@@ -177,7 +189,7 @@ public class FromObjects<T extends FeatureInput>
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
         processAllProviders(
-                descriptiveName, context.getGroupGeneratorName(), fromProviderCalculator);
+                inputName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;

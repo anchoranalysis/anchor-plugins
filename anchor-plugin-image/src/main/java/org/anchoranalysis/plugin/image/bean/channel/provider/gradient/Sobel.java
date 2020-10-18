@@ -35,10 +35,10 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.imglib2.ConvertToNativeImg;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToNativeImg;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
@@ -60,10 +60,6 @@ public class Sobel extends GradientBase {
 
         // convert to our output from the float
         return convertToOutputType(intermediate);
-    }
-
-    private static Channel createNewFloat(Dimensions dimensions) {
-        return ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
     }
 
     private void processMultiplexInputType(Channel channelIn, NativeImg<FloatType, FloatArray> out)
@@ -107,56 +103,54 @@ public class Sobel extends GradientBase {
 
             // X Column=-1
             ra.bck(0);
-
-            ra.bck(1);
-            kernel[0][0] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[0][1] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[0][2] = ra.get().getRealFloat();
-            ra.bck(1);
+            readPointInto(ra, kernel, 0);
 
             // X Column=0
             ra.fwd(0);
-
-            ra.bck(1);
-            kernel[1][0] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[1][1] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[1][2] = ra.get().getRealFloat();
-            ra.bck(1);
+            readPointInto(ra, kernel, 1);
 
             // X Column=+1
             ra.fwd(0);
-            ra.bck(1);
-            kernel[2][0] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[2][1] = ra.get().getRealFloat();
-            ra.fwd(1);
-            kernel[2][2] = ra.get().getRealFloat();
-            ra.bck(1);
+            readPointInto(ra, kernel, 2);
 
             ra.bck(0);
 
-            // https://en.wikipedia.org/wiki/Sobel_operator
-            float gx =
-                    -1 * kernel[0][0]
-                            - 2 * kernel[0][1]
-                            - 1 * kernel[0][2]
-                            + 1 * kernel[2][0]
-                            + 2 * kernel[2][1]
-                            + 1 * kernel[2][2];
-            float gy =
-                    -1 * kernel[0][0]
-                            - 2 * kernel[1][0]
-                            - 1 * kernel[2][0]
-                            + 1 * kernel[0][2]
-                            + 2 * kernel[1][2]
-                            + 1 * kernel[2][2];
-
-            float diffNorm = (float) Math.sqrt(Math.pow(gx, 2.0) + Math.pow(gy, 2.0));
-            oc.get().set(diffNorm * scaleFactor);
+            oc.get().set(normedSobelOnKernel(kernel) * scaleFactor);
         }
+    }
+
+    private static <T extends RealType<T>> void readPointInto(
+            OutOfBounds<T> ra, float[][] kernel, int kernelIndex) {
+        ra.bck(1);
+        kernel[kernelIndex][0] = ra.get().getRealFloat();
+        ra.fwd(1);
+        kernel[kernelIndex][1] = ra.get().getRealFloat();
+        ra.fwd(1);
+        kernel[kernelIndex][2] = ra.get().getRealFloat();
+        ra.bck(1);
+    }
+
+    private static float normedSobelOnKernel(float[][] kernel) {
+        // https://en.wikipedia.org/wiki/Sobel_operator
+        float gx =
+                -1 * kernel[0][0]
+                        - 2 * kernel[0][1]
+                        - 1 * kernel[0][2]
+                        + 1 * kernel[2][0]
+                        + 2 * kernel[2][1]
+                        + 1 * kernel[2][2];
+        float gy =
+                -1 * kernel[0][0]
+                        - 2 * kernel[1][0]
+                        - 1 * kernel[2][0]
+                        + 1 * kernel[0][2]
+                        + 2 * kernel[1][2]
+                        + 1 * kernel[2][2];
+
+        return (float) Math.sqrt(Math.pow(gx, 2.0) + Math.pow(gy, 2.0));
+    }
+
+    private static Channel createNewFloat(Dimensions dimensions) {
+        return ChannelFactory.instance().create(dimensions, FloatVoxelType.INSTANCE);
     }
 }

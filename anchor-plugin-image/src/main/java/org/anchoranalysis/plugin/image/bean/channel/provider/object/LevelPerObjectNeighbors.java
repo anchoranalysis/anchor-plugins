@@ -41,12 +41,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.graph.GraphWithPayload;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
-import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborGraph;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Calculates a threshold-level for each object collectively based on other objects
@@ -84,7 +83,8 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             Set<ObjectWithHistogram> visited) {
         for (ObjectWithHistogram omLocal : currentVisit) {
 
-            Collection<ObjectWithHistogram> adjacentObjects = graph.adjacentVerticesOutgoing(omLocal);
+            Collection<ObjectWithHistogram> adjacentObjects =
+                    graph.adjacentVerticesOutgoing(omLocal);
 
             for (ObjectWithHistogram object : adjacentObjects) {
                 if (!visited.contains(object)) {
@@ -140,15 +140,12 @@ public class LevelPerObjectNeighbors extends LevelPerObjectBase {
             throws OperationFailedException {
 
         try {
-            CreateNeighborGraph<ObjectWithHistogram> graphCreator =
-                    new CreateNeighborGraph<>(new EdgeAdderParameters(false));
-
             GraphWithPayload<ObjectWithHistogram, Integer> graph =
-                    graphCreator.createGraph(
+                    NeighborGraph.create(
                             objectsWithHistograms(objects, channelIntensity),
                             ObjectWithHistogram::getObject,
-                            (v1, v2, numberVoxels) -> numberVoxels,
                             channelIntensity.extent(),
+                            false,
                             true);
 
             Voxels<?> voxelsOutput = channelOutput.voxels().any();

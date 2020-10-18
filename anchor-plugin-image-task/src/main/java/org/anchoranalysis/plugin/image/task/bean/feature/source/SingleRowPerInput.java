@@ -40,16 +40,18 @@ import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.io.name.SimpleName;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
+import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
+import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.ResultsVectorWithThumbnail;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Base class for exporting features, where features are calculated per-image using a
- * NamedFeatureStore
+ * Base class for exporting features, where features are calculated per-image using a {@link
+ * NamedFeatureStore}.
  *
  * @author Owen Feehan
  * @param <T> input-manager type
@@ -66,9 +68,11 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     public SharedStateExportFeatures<FeatureList<S>> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<S>>> features,
-            BoundIOContext context)
+            ResultsWriterOutputNames outputNames,
+            InputOutputContext context)
             throws CreateException {
-        return SharedStateExportFeatures.createForFeatures(features, metadataHeaders, context);
+        return SharedStateExportFeatures.createForFeatures(
+                features, metadataHeaders, outputNames, context);
     }
 
     @Override
@@ -83,7 +87,7 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
             ResultsVectorWithThumbnail results = calculateResultsForInput(input, context);
 
             context.addResultsFor(
-                    identifierFor(input.descriptiveName(), context.getGroupGeneratorName()),
+                    identifierFor(input.name(), context.getGroupGeneratorName()),
                     results);
 
         } catch (BeanDuplicateException | NamedFeatureCalculateException e) {
@@ -92,14 +96,14 @@ public abstract class SingleRowPerInput<T extends InputFromManager, S extends Fe
     }
 
     protected abstract ResultsVectorWithThumbnail calculateResultsForInput(
-            T inputObject, InputProcessContext<FeatureList<S>> context)
+            T input, InputProcessContext<FeatureList<S>> context)
             throws NamedFeatureCalculateException;
 
     private static RowLabels identifierFor(
-            String descriptiveName, Optional<String> groupGeneratorName)
+            String inputName, Optional<String> groupGeneratorName)
             throws OperationFailedException {
         return new RowLabels(
-                Optional.of(new String[] {descriptiveName}),
+                Optional.of(new String[] {inputName}),
                 groupGeneratorName.map(SimpleName::new));
     }
 }

@@ -31,8 +31,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.outline.FindOutline;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.outline.FindOutline;
 
 /**
  * Always creates a new mask for the result (no need to duplicate input)

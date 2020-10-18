@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.initializable.params.NullInitParams;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.mark.factory.MarkFactory;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -51,7 +51,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter.ConsoleA
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter.NullReporter;
 import org.anchoranalysis.plugin.mpp.segment.bean.optimization.termination.NumberIterations;
 import org.anchoranalysis.test.experiment.BeanTestChecker;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class OptimizationSchemeFixture {
@@ -97,14 +97,14 @@ class OptimizationSchemeFixture {
                         markFactory,
                         energyScheme,
                         energyStack,
-                        BoundIOContextFixture.withSuppressedLogger()));
+                        InputOutputContextFixture.withSuppressedLogger()));
     }
 
     private static OptimizationContext createContext(
             MarkFactory markFactory,
             EnergySchemeWithSharedFeatures energyScheme,
             EnergyStack energyStack,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
 
         MarkWithIdentifierFactory factoryWithidentifier =

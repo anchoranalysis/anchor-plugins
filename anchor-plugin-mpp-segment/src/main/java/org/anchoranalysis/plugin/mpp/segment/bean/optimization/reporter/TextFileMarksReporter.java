@@ -30,12 +30,12 @@ import java.util.Optional;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.mark.MarkCollection;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubfolderReporter;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.PeriodicSubdirectoryReporter;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
-public class TextFileMarksReporter extends PeriodicSubfolderReporter<MarkCollection> {
+public class TextFileMarksReporter extends PeriodicSubdirectoryReporter<MarkCollection> {
 
     @Override
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)

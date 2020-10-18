@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 // Encodes 3 things in an integer range
 //   * A number of constants

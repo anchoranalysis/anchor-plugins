@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -34,17 +33,17 @@ import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
-import org.anchoranalysis.image.bean.unitvalue.volume.UnitValueVolumeVoxels;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxelsFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.bean.unitvalue.extent.volume.VolumeVoxels;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxelsFactory;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.apache.commons.lang.time.StopWatch;
 
 /**
@@ -57,8 +56,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private Provider<Mask> mask;
 
-    @BeanField @Getter @Setter
-    private UnitValueAreaOrVolume minVolume = new UnitValueVolumeVoxels(1);
+    @BeanField @Getter @Setter private UnitValueAreaOrVolume minVolume = new VolumeVoxels(1);
 
     @BeanField @Getter @Setter private boolean bySlices = false;
 
@@ -79,7 +77,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
                     (int)
                             Math.round(
                                     minVolume.resolveToVoxels(
-                                            Optional.of(maskCreated.dimensions().unitConvert())));
+                                            maskCreated.dimensions().unitConvert()));
 
             if (bySlices) {
                 return createObjectsBySlice(maskCreated, minNumberVoxels);
@@ -97,7 +95,7 @@ public class ConnectedComponentsFromMask extends ObjectCollectionProvider {
     }
 
     private ObjectCollection createObjects3D(Mask mask, int minNumberVoxels) {
-        return createFactory(minNumberVoxels).createConnectedComponents(mask);
+        return createFactory(minNumberVoxels).createConnectedComponents(mask.binaryVoxels());
     }
 
     private ObjectCollection createObjectsBySlice(Mask mask, int minNumberVoxels)
