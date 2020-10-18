@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeaturePairMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
+import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * The minimum distance in any one particular axis-aligned direction (i.e. taking the distance as a

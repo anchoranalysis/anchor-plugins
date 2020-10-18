@@ -37,9 +37,9 @@ import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Scales the channel in the X and Y dimensions.

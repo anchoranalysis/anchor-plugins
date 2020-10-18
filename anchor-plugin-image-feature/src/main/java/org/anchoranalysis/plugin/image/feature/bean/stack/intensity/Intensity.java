@@ -38,7 +38,7 @@ import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
 import org.anchoranalysis.image.feature.histogram.Mean;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.feature.stack.calculation.CalculateHistogram;
 import org.anchoranalysis.plugin.image.feature.stack.calculation.CalculateHistogramMasked;
 

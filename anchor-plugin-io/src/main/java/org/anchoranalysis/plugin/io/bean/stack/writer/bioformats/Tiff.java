@@ -30,9 +30,9 @@ import java.nio.file.Path;
 import loci.formats.FormatException;
 import loci.formats.IFormatWriter;
 import loci.formats.out.TiffWriter;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 
 /**
  * Writes a stack to the filesystem as a TIFF using the <a

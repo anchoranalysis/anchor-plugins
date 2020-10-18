@@ -27,9 +27,9 @@ package org.anchoranalysis.plugin.opencv.convert;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.convert.UnsignedShortBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BufferHelper {

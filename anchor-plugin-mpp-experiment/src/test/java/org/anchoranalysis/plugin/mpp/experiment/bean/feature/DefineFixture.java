@@ -41,7 +41,7 @@ import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.mpp.bean.define.DefineOutputterMPPWithEnergy;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

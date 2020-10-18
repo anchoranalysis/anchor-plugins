@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.intensity.level;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class LevelResultCollection implements Iterable<LevelResult> {
 

@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.mask;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
 
 public class FromMask extends FromMaskBase {
 

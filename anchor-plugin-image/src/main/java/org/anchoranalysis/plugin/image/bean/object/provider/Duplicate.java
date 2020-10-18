@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
  * Duplicates (deep copy) an object-collection.

@@ -33,13 +33,13 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.merge.ObjectMaskMerger;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ReduceElements;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 

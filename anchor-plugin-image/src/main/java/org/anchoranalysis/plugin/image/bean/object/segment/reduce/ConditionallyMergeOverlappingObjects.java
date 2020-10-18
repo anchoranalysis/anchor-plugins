@@ -33,8 +33,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
-import org.anchoranalysis.image.merge.ObjectMaskMerger;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**

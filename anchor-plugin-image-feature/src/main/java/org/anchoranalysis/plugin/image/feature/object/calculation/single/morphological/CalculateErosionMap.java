@@ -30,10 +30,10 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morphological.MorphologicalErosion;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.morphological.MorphologicalErosion;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
+import org.anchoranalysis.spatial.extent.Extent;
 
 @EqualsAndHashCode(callSuper = true)
 public class CalculateErosionMap extends CalculateIncrementalOperationMap {

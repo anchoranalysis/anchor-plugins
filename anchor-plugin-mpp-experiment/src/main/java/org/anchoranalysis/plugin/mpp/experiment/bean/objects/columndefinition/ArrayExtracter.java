@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
+import org.anchoranalysis.spatial.point.Point3i;
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ArrayExtracter {

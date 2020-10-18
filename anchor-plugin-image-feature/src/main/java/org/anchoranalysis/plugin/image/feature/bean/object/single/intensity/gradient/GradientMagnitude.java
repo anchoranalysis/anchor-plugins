@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity.gradient;
 
 import java.util.List;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.spatial.point.Point3d;
 
 /**
  * Calculates the mean of the intensity-gradient defined by multiple Energy channels in a particular

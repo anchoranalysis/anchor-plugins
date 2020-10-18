@@ -30,9 +30,9 @@ import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.asse
 import static org.junit.Assert.assertEquals;
 
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2d;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.spatial.point.Point2d;
 import org.anchoranalysis.test.image.object.CircleObjectFixture;
 
 /**

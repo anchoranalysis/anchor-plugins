@@ -33,8 +33,8 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureInputHistogram;
-import org.anchoranalysis.image.histogram.Histogram;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 

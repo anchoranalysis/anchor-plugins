@@ -28,10 +28,10 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler.VisitSchedulerConvexAboutRoot;
+import org.anchoranalysis.spatial.point.Point3i;
 
 class PointListForConvex {
 

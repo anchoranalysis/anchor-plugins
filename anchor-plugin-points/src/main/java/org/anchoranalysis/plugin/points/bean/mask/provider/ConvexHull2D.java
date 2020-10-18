@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.points.bean.mask.provider;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.points.PointsFromMask;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.points.PointsFromMask;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
 import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
+import org.anchoranalysis.spatial.point.Point2i;
 
 /**
  * Sets particular voxels to high only if they exist on the convex-hull of the outline of a mask.

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.test.feature.plugins;
 
+import org.anchoranalysis.math.histogram.Histogram;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.histogram.Histogram;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramFixture {

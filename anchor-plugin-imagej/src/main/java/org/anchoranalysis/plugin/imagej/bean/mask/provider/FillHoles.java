@@ -35,17 +35,17 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
-import org.anchoranalysis.image.binary.mask.combine.MaskOr;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.MaskFromObjects;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.MaskFromObjects;
+import org.anchoranalysis.image.core.mask.combine.MaskAnd;
+import org.anchoranalysis.image.core.mask.combine.MaskOr;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public class FillHoles extends MaskProviderUnary {
 

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
+import org.anchoranalysis.spatial.point.Point3i;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
 
 /**
  * Maps directions to chain codes

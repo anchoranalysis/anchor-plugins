@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 
 public class Duplicate extends MaskProviderUnary {
 

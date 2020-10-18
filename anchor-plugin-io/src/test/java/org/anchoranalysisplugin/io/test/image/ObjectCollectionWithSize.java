@@ -26,9 +26,9 @@
 
 package org.anchoranalysisplugin.io.test.image;
 
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.image.object.ObjectCollection;
 
 @AllArgsConstructor
 class ObjectCollectionWithSize {

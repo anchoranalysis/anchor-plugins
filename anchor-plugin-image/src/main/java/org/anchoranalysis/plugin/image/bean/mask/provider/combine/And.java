@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.combine.MaskAnd;
 
 /**
  * Outputs the logical operation <b>and</b> voxelwise on both masks, modifying {mask} with the

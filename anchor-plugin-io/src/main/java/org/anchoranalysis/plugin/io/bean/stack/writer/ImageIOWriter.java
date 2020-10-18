@@ -29,10 +29,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.bufferedimage.BufferedImageFactory;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.OneOrThreeChannelsWriter;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.bufferedimage.BufferedImageFactory;
 
 public class ImageIOWriter extends OneOrThreeChannelsWriter {
 

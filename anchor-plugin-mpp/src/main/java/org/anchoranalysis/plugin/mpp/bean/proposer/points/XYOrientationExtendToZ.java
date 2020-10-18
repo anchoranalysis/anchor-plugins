@@ -38,15 +38,13 @@ import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.color.RGBColor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.bean.unitvalue.distance.DistanceVoxels;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.dimensions.Resolution;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.bean.proposer.PointsProposer;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
@@ -58,6 +56,8 @@ import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization
 import org.anchoranalysis.mpp.proposer.visualization.CreateProposeVisualizationList;
 import org.anchoranalysis.plugin.mpp.bean.outline.TraverseOutlineException;
 import org.anchoranalysis.plugin.mpp.bean.proposer.points.fromorientation.PointsFromOrientationProposer;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public class XYOrientationExtendToZ extends PointsProposer {
 

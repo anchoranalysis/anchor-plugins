@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider.object;
 
 import lombok.Getter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFromObjectsFactory;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.histogram.Histogram;
 
 class ObjectWithHistogram {
 

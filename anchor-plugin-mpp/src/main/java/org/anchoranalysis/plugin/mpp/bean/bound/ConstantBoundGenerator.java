@@ -32,11 +32,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.math.rotation.RotationMatrix;
 import org.anchoranalysis.mpp.bean.bound.BoundCalculator;
 import org.anchoranalysis.mpp.bean.bound.ResolvedBound;
 import org.anchoranalysis.mpp.bound.BidirectionalBound;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 @NoArgsConstructor
 @AllArgsConstructor

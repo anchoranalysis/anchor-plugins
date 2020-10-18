@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.dimensions.UnitConverter;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Wraps a BeforeCondition as an UpdatableBefoerCondition

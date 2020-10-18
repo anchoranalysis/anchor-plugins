@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.bean.object.segment.stack;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.scale.AccessObjectMask;
-import org.anchoranalysis.image.object.scale.Scaler;
+import org.anchoranalysis.image.core.object.scale.AccessObjectMask;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Provides access for the {@link Scaler} to the object-representation of {@code

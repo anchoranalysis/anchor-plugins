@@ -43,13 +43,13 @@ import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.image.extent.box.BoundingBox;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.OutlinePreserveRelativeSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObjects;
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.

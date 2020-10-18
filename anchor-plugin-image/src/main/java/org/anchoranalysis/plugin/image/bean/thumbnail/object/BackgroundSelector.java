@@ -27,10 +27,10 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Selects a background from an optional stack with an unknown number of channels, and assigns a

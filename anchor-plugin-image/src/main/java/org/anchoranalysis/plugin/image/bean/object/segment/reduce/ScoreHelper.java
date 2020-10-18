@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

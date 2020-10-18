@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.io.multifile;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Remembers the different sizes among the files

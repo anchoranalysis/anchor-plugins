@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 class EqualVoxelsPlateau {
 

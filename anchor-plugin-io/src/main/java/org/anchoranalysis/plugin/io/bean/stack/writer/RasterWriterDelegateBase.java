@@ -26,11 +26,11 @@
 package org.anchoranalysis.plugin.io.bean.stack.writer;
 
 import java.nio.file.Path;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackWriter;
 import org.anchoranalysis.image.io.generator.raster.series.StackSeries;
 import org.anchoranalysis.image.io.stack.StackWriteOptions;
-import org.anchoranalysis.image.stack.Stack;
 
 /**
  * A base class for a {@link StackWriter} delegates to another {@link StackWriter} based on values of a {@link StackWriteOptions}.  

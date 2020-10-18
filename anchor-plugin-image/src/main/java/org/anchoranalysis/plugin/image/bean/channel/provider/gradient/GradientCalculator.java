@@ -37,9 +37,9 @@ import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
-import org.anchoranalysis.image.convert.imglib2.ConvertToImg;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
+import org.anchoranalysis.image.voxel.convert.imglib2.ConvertToImg;
 
 /**
  * Calculates the gradient in one or more dimensions

@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.mi
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public abstract class MinimaImposition extends AnchorBean<MinimaImposition> {
 

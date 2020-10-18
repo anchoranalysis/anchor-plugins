@@ -1,6 +1,6 @@
 /*-
  * #%L
- * anchor-plugin-image-feature
+ * anchor-image
  * %%
  * Copyright (C) 2010 - 2020 Owen Feehan, ETH Zurich, University of Zurich, Hoffmann-La Roche
  * %%
@@ -24,25 +24,30 @@
  * #L%
  */
 
-package org.anchoranalysis.plugin.image.feature.bean.object.single.shape;
+package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
-import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.feature.calculate.cache.SessionInput;
-import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
-import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-public class ShapeRegularityCenterSlice extends FeatureSingleObject {
+/**
+ * Calculates overlap between object-masks
+ *
+ * @author Owen Feehan
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class OverlapCalculator {
 
-    @Override
-    public double calculate(SessionInput<FeatureInputSingleObject> input)
-            throws FeatureCalculationException {
-        return ShapeRegularityCalculator.calculateShapeRegularity(
-                centerSlice(input.get().getObject()));
-    }
+    public static double calculateOverlapRatio(
+            ObjectMask objA, ObjectMask objB, ObjectMask objMerged) {
 
-    private ObjectMask centerSlice(ObjectMask object) {
-        int zSliceCenter = (int) object.centerOfGravity().z();
-        return object.extractSlice(zSliceCenter, false);
+        int intersectingVoxels = objA.countIntersectingVoxels(objB);
+        if (intersectingVoxels == 0) {
+            return 0;
+        }
+
+        int vol = objMerged.numberVoxelsOn();
+
+        return ((double) intersectingVoxels) / vol;
     }
 }

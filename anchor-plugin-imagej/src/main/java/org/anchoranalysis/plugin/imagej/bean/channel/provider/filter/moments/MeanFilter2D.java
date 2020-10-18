@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider.filter.moments;
 
 import ij.plugin.filter.RankFilters;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.channel.Channel;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.imagej.bean.channel.provider.WithRadiusBase;
 import org.anchoranalysis.plugin.imagej.channel.provider.FilterHelper;
 

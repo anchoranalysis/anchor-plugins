@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.dimensions.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public class Filter extends ObjectCollectionProviderFilterBase {
 

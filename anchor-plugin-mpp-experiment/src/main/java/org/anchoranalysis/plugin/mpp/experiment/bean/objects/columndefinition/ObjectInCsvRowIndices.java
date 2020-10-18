@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 import com.google.common.base.Preconditions;
 import lombok.Value;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.mpp.experiment.objects.csv.CSVRow;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @Value
 class ObjectInCsvRowIndices {

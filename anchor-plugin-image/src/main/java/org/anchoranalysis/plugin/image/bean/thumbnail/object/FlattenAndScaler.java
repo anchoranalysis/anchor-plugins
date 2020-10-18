@@ -34,19 +34,19 @@ import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.index.GetOperationFailedException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.extent.rtree.ObjectCollectionRTree;
-import org.anchoranalysis.image.extent.scale.ScaleFactor;
-import org.anchoranalysis.image.interpolator.Interpolator;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.scale.ScaledElements;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.object.scale.Scaler;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.voxel.interpolator.Interpolator;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 @RequiredArgsConstructor
 class FlattenAndScaler {

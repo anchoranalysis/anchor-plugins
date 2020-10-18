@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.assign;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.mask.UnaryWithMaskBase;
 
 /** Assigns a constant (scalar) value to the portion of the image covered by a mask */

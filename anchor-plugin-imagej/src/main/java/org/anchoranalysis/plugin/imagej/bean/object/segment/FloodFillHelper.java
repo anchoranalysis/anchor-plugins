@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.imagej.bean.object.segment;
 import ij.process.ImageProcessor;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.convert.PrimitiveConverter;
+import org.anchoranalysis.image.voxel.buffer.primitive.PrimitiveConverter;
 
 @AllArgsConstructor
 class FloodFillHelper {

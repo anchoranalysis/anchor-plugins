@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.channel.convert;
 
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
 
 public class ScaleByTypeToByte extends ConvertChannelTo {
 

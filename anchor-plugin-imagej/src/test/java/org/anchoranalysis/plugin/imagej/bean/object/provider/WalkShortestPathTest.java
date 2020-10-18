@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.imagej.bean.object.provider;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.Test;
 
 public class WalkShortestPathTest {

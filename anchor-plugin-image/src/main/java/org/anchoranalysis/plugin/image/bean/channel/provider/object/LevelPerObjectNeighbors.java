@@ -41,11 +41,11 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.graph.GraphWithPayload;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborGraph;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Calculates a threshold-level for each object collectively based on other objects
