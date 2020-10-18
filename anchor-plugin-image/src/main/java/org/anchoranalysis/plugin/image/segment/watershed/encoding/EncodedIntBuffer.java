@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.convert.UnsignedIntBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
 public final class EncodedIntBuffer {

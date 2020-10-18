@@ -34,17 +34,18 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.provider.Provider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.unitvalue.distance.UnitValueDistance;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.math.rotation.RotationMatrix;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
+import org.anchoranalysis.spatial.rotation.RotationMatrix;
 
 /** Walks in a particular direction until the outline is found. */
 public class FindPointOnOutlineWalk extends FindPointOnOutline {
@@ -170,15 +171,23 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             throws OperationFailedException {
         // We do check
         if (maxDistance != null) {
-            double distance = maskCreated.resolution().distanceZRelative(centerPoint, pointDouble);
+            double distance = distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
             double maxDistanceResolved =
                     maxDistance.resolve(
-                            Optional.of(maskCreated.dimensions().unitConvert()),
+                            maskCreated.dimensions().resolution().map(Resolution::unitConvert),
                             centerPoint,
                             pointDouble);
             return distance > maxDistanceResolved;
         } else {
             return false;
+        }
+    }
+    
+    private static double distanceZBetweenPoints(Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
+        if (resolution.isPresent()) {
+            return resolution.get().distanceZRelative(centerPoint, pointDouble);
+        } else {
+            return Math.abs(centerPoint.z() - pointDouble.z());
         }
     }
 }

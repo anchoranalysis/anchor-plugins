@@ -30,13 +30,13 @@ import java.nio.file.Path;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.bean.root.RootPathMap;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.plugin.io.input.path.RootPathMap;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 /**
  * Prepend a 'root' before the file-path-prefix obtained from a delegate
@@ -45,56 +45,56 @@ import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
  *
  * @author Owen Feehan
  */
-public class Rooted extends FilePathPrefixer {
+public class Rooted extends PathPrefixer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathPrefixerAvoidResolve filePathPrefixer;
+    @BeanField @Getter @Setter private PathPrefixerAvoidResolve filePathPrefixer;
 
-    // The name of the RootPath to associate with this fileset
+    // The name of the root-path to associate with this fileset
     @BeanField @Getter @Setter private String rootName;
     // END BEAN PROPERTIES
 
     @Override
-    public FilePathPrefix outFilePrefix(
-            PathWithDescription input, String expName, FilePathPrefixerParams context)
-            throws FilePathPrefixerException {
+    public DirectoryWithPrefix outFilePrefix(
+            NamedPath path, String expName, FilePathPrefixerContext context)
+            throws PathPrefixerException {
 
-        FilePathPrefix fpp =
+        DirectoryWithPrefix fpp =
                 filePathPrefixer.outFilePrefixAvoidResolve(
-                        removeRoot(input, context.isDebugMode()), expName);
+                        removeRoot(path, context.isDebugMode()), expName);
 
-        Path pathOut = folderPathOut(fpp.getFolderPath(), context.isDebugMode());
-        fpp.setFolderPath(pathOut);
+        Path pathOut = folderPathOut(fpp.getDirectory(), context.isDebugMode());
+        fpp.setDirectory(pathOut);
 
         return fpp;
     }
 
-    private PathWithDescription removeRoot(PathWithDescription input, boolean debugMode)
-            throws FilePathPrefixerException {
+    private NamedPath removeRoot(NamedPath path, boolean debugMode)
+            throws PathPrefixerException {
         try {
-            Path pathInWithoutRoot =
+            Path pathWithoutRoot =
                     RootPathMap.instance()
-                            .split(input.getPath(), rootName, debugMode)
+                            .split(path.getPath(), rootName, debugMode)
                             .getRemainder();
-            return new PathWithDescription(pathInWithoutRoot, input.getDescriptiveName());
-        } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
+            return new NamedPath(path.getName(), pathWithoutRoot);
+        } catch (PathDifferenceException e) {
+            throw new PathPrefixerException(e);
         }
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context)
-            throws FilePathPrefixerException {
-        FilePathPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
-        fpp.setFolderPath(folderPathOut(fpp.getFolderPath(), context.isDebugMode()));
+    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+            throws PathPrefixerException {
+        DirectoryWithPrefix fpp = filePathPrefixer.rootFolderPrefixAvoidResolve(expName);
+        fpp.setDirectory(folderPathOut(fpp.getDirectory(), context.isDebugMode()));
         return fpp;
     }
 
-    private Path folderPathOut(Path pathIn, boolean debugMode) throws FilePathPrefixerException {
+    private Path folderPathOut(Path pathIn, boolean debugMode) throws PathPrefixerException {
         try {
             return RootPathMap.instance().findRoot(rootName, debugMode).asPath().resolve(pathIn);
-        } catch (AnchorIOException e) {
-            throw new FilePathPrefixerException(e);
+        } catch (PathDifferenceException e) {
+            throw new PathPrefixerException(e);
         }
     }
 }

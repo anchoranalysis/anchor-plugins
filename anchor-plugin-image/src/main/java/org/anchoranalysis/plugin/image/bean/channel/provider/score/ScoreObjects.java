@@ -31,11 +31,11 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
+import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.functional.function.CheckedToIntFunction;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.bean.provider.FeatureProvider;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -43,14 +43,14 @@ import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.session.FeatureSession;
 import org.anchoranalysis.feature.session.calculator.FeatureCalculatorSingle;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.channel.provider.UnaryWithObjectsBase;
 
 public class ScoreObjects extends UnaryWithObjectsBase {
@@ -58,7 +58,8 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int valueNoObject = 0;
 
-    @BeanField @Getter @Setter private FeatureProvider<FeatureInputSingleObject> feature;
+    /** Feature that calculates the score for an object. */
+    @BeanField @Getter @Setter @SkipInit private Feature<FeatureInputSingleObject> feature;
 
     @BeanField @Getter @Setter
     private List<ChannelProvider> listAdditionalChannelProviders = new ArrayList<>();
@@ -70,13 +71,10 @@ public class ScoreObjects extends UnaryWithObjectsBase {
     protected Channel createFromChannel(Channel channel, ObjectCollection objects)
             throws CreateException {
 
-        Feature<FeatureInputSingleObject> featureCreated = feature.create();
-
         try {
             EnergyStack energyStack = new EnergyStack(createEnergyStack(channel));
 
-            FeatureCalculatorSingle<FeatureInputSingleObject> calculator =
-                    createSession(featureCreated);
+            FeatureCalculatorSingle<FeatureInputSingleObject> calculator = createSession(feature);
 
             return createOutputChannel(
                     channel.dimensions(),

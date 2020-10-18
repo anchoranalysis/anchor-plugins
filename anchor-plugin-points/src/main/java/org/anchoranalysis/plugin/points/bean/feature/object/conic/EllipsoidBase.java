@@ -29,11 +29,11 @@ package org.anchoranalysis.plugin.points.bean.feature.object.conic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
 import org.anchoranalysis.plugin.points.calculate.ellipsoid.CalculateEllipsoidLeastSquares;
 
@@ -43,7 +43,7 @@ public abstract class EllipsoidBase extends FeatureSingleObject {
     private static final int MINIMUM_NUMBER_VOXELS = 12;
 
     // START BEAN PROPERTIES
-    /** Iff true, supresses covariance in the z-direction. */
+    /** Iff true, surpresses covariance in the z-direction. */
     @BeanField @Getter @Setter private boolean suppressZ = false;
     // END BEAN PROPERTIES
 

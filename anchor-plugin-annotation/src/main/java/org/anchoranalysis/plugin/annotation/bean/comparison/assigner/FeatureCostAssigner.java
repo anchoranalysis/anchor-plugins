@@ -35,10 +35,10 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.shared.SharedFeaturesInitParams;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.feature.bean.evaluator.FeatureEvaluator;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroup;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationGroupObject;
 import org.anchoranalysis.plugin.annotation.comparison.ObjectsToCompare;
@@ -60,7 +60,7 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
             ObjectsToCompare objectsToCompare,
             Dimensions dimensions,
             boolean useMIP,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
         try {
             SharedFeaturesInitParams soFeature =
@@ -80,16 +80,15 @@ public class FeatureCostAssigner extends AnnotationComparisonAssigner<Assignment
 
             // We remove any border items from the assignment
             if (removeTouchingBorderXY) {
-                assignment.removeTouchingBorderXY(dimensions);
+                assignment.removeTouchingBorderXY(dimensions.extent());
             }
 
-            context.getOutputManager()
-                    .getWriterCheckIfAllowed()
+            context.getOutputter()
+                    .writerSelective()
                     .write(
                             "costMatrix",
-                            () ->
-                                    new ObjectsDistanceMatrixGenerator(
-                                            assignmentCreator.getCost(), numDecimalPlaces));
+                            () -> new ObjectsCostMatrixGenerator(numDecimalPlaces),
+                            assignmentCreator::getCosts);
 
             return assignment;
         } catch (FeatureCalculationException | InitException e1) {

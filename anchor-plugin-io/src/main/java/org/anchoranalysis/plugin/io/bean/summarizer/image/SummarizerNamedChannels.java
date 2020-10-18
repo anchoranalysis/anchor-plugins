@@ -48,7 +48,7 @@ public abstract class SummarizerNamedChannels<T> extends Summarizer<NamedChannel
 
     protected abstract String describeNoun();
 
-    protected void incrCount(T key) {
+    protected void incrementCount(T key) {
         map.incrCount(key);
     }
 }

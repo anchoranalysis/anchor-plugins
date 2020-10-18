@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.intensity.level;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.spatial.point.Point3i;
 
 @AllArgsConstructor
 public class LevelResult {

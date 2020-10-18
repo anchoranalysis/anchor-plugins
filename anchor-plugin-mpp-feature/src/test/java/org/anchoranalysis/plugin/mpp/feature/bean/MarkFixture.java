@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.mpp.feature.bean;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.orientation.Orientation3DEulerAngles;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.orientation.Orientation3DEulerAngles;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.Ellipsoid;
+import org.anchoranalysis.spatial.point.Point3d;
 
 @AllArgsConstructor
 public class MarkFixture {

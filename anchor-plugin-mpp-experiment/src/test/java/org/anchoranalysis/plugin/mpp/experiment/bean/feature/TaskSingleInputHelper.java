@@ -45,16 +45,19 @@ import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.log.LoggingDestination;
-import org.anchoranalysis.experiment.log.reporter.StatefulMessageLogger;
+import org.anchoranalysis.experiment.bean.task.Task;
+import org.anchoranalysis.experiment.log.StatefulMessageLogger;
 import org.anchoranalysis.experiment.task.ParametersExperiment;
 import org.anchoranalysis.experiment.task.ParametersUnbound;
-import org.anchoranalysis.experiment.task.Task;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
  * Executes a task on a single-input outputting into a specific directory
@@ -114,16 +117,22 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            BoundOutputManagerRouteErrors bom =
-                    OutputManagerFixture.outputManagerForRouterErrors(pathForOutputs);
+            OutputManager outputManager = OutputManagerFixture.createOutputManager(pathForOutputs);
+
+            Outputter outputter = OutputterFixture.outputter(outputManager);
 
             StatefulMessageLogger logger = createStatefulLogReporter();
 
             ParametersExperiment paramsExperiment =
-                    createParametersExperiment(pathForOutputs, bom.getDelegate(), logger);
+                    createParametersExperiment(
+                            pathForOutputs,
+                            outputter.getChecked(),
+                            outputManager.getFilePathPrefixer(),
+                            logger);
 
             ConcurrencyPlan concurrencyPlan = ConcurrencyPlan.singleProcessor(0);
-            S sharedState = task.beforeAnyJobIsExecuted(bom, concurrencyPlan, paramsExperiment);
+            S sharedState =
+                    task.beforeAnyJobIsExecuted(outputter, concurrencyPlan, paramsExperiment);
 
             boolean successful =
                     task.executeJob(
@@ -132,7 +141,7 @@ class TaskSingleInputHelper {
             task.afterAllJobsAreExecuted(sharedState, paramsExperiment.getContext());
 
             return successful;
-        } catch (AnchorIOException
+        } catch (InputReadFailedException
                 | ExperimentExecutionException
                 | JobExecutionException
                 | BeanMisconfiguredException
@@ -142,14 +151,18 @@ class TaskSingleInputHelper {
     }
 
     private static ParametersExperiment createParametersExperiment(
-            Path pathTempFolder, BoundOutputManager outputManager, StatefulMessageLogger logger)
-            throws AnchorIOException {
+            Path pathTempFolder,
+            OutputterChecked outputter,
+            PathPrefixer prefixer,
+            StatefulMessageLogger logger)
+            throws InputReadFailedException {
         ParametersExperiment params =
                 new ParametersExperiment(
                         new ExperimentExecutionArguments(Paths.get(".")),
                         "arbitraryExperimentName",
                         Optional.empty(),
-                        outputManager,
+                        outputter,
+                        prefixer,
                         logger,
                         false);
         params.setLoggerTaskCreator(createLogReporterBean());

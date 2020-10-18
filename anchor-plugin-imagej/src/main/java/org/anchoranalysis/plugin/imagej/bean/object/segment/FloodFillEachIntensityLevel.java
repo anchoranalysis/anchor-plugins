@@ -35,13 +35,13 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.label.DecodeLabels;
-import org.anchoranalysis.image.seed.SeedCollection;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.object.label.DecodeLabels;
+import org.anchoranalysis.image.core.object.seed.SeedCollection;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 
 /**
@@ -117,10 +117,14 @@ public class FloodFillEachIntensityLevel extends SegmentChannelIntoObjects {
     private ObjectCollection objectsFromLabels(Channel channel, int numberLabels)
             throws OperationFailedException {
         try {
-            DecodeLabels<ObjectMask> createObjects = new DecodeLabels<>(
-                    channel.voxels().asByte(), 1, numberLabels, (index,scaledObject) -> scaledObject);
-            
-            return ObjectCollectionFactory.of( createObjects.create(minimumBoundingBoxVolume) );
+            DecodeLabels<ObjectMask> createObjects =
+                    new DecodeLabels<>(
+                            channel.voxels().asByte(),
+                            1,
+                            numberLabels,
+                            (index, scaledObject) -> scaledObject);
+
+            return ObjectCollectionFactory.of(createObjects.create(minimumBoundingBoxVolume));
         } catch (CreateException e) {
             throw new OperationFailedException(e);
         }

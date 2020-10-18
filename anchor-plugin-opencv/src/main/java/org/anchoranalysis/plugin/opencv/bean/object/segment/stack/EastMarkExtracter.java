@@ -35,9 +35,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelException;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
-import org.anchoranalysis.image.extent.Extent;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
@@ -102,16 +102,18 @@ class EastMarkExtracter {
         float[] scoresData = arrayFromMat(scores, 0, rowsByCols);
         float[][] geometryArrs = splitGeometryIntoFiveArrays(geometry, rowsByCols);
 
-        extent.iterateOverXYOffset( (point,offset) -> {
-            float confidence = scoresData[offset];
-            if (confidence >= minConfidence) {
+        extent.iterateOverXYOffset(
+                (point, offset) -> {
+                    float confidence = scoresData[offset];
+                    if (confidence >= minConfidence) {
 
-                Mark mark = RotatableBoundingBoxFromArrays.markFor(
-                                geometryArrs, offset, offsetScale.scale(point));
+                        Mark mark =
+                                RotatableBoundingBoxFromArrays.markFor(
+                                        geometryArrs, offset, offsetScale.scale(point));
 
-                list.add(new WithConfidence<>(mark, confidence));
-            }
-        });
+                        list.add(new WithConfidence<>(mark, confidence));
+                    }
+                });
 
         return list;
     }

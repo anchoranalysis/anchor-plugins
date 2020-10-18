@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
 
 public class ConvexHull3D extends ConvexHullBase {

@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.image.bean.object.provider.slice;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Flattens all object-masks in the z-dimension, so it is 2D instead of 3D (like a maximum intensity

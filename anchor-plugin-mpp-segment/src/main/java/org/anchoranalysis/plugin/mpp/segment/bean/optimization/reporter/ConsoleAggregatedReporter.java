@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
-import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAgg;
+import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameters;
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
@@ -39,7 +39,7 @@ import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 import org.apache.commons.lang.time.StopWatch;
 
 @NoArgsConstructor
-public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksWithEnergy>
+public final class ConsoleAggregatedReporter extends ReporterAggregate<VoxelizedMarksWithEnergy>
         implements AggregateReceiver<VoxelizedMarksWithEnergy> {
 
     private StopWatch timer = null;
@@ -67,9 +67,9 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
     public void aggReport(Reporting<VoxelizedMarksWithEnergy> reporting, Aggregator agg) {
         System.out.printf( // NOSONAR
                 "itr=%d  time=%e  tpi=%e   %s%n",
-                reporting.getIter(),
+                reporting.getIteration(),
                 ((double) timer.getTime()) / 1000,
-                ((double) timer.getTime()) / (reporting.getIter() * 1000),
+                ((double) timer.getTime()) / (reporting.getIteration() * 1000),
                 agg.toString());
     }
 
@@ -78,7 +78,7 @@ public final class ConsoleAggregatedReporter extends ReporterAgg<VoxelizedMarksW
             throws ReporterException {
         System.out.printf( // NOSONAR
                 "*** itr=%d  size=%d  best_energy=%e  kernel=%s%n",
-                reporting.getIter(),
+                reporting.getIteration(),
                 reporting.getMarksAfter().size(),
                 reporting.getMarksAfter().getEnergyTotal(),
                 reporting.kernelDescription());

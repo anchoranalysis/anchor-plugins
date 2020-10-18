@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.object.match;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.object.MatchedObject;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.object.MatchedObject;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatcherIntersectionHelper {

@@ -34,7 +34,7 @@ import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 
 /**
  * Base class for {@link ObjectCollectionProviderUnary} classes that offer an optional means to

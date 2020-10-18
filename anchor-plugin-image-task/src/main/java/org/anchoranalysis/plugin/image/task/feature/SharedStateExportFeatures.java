@@ -33,6 +33,7 @@ import java.util.function.Supplier;
 import lombok.Getter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
@@ -45,14 +46,14 @@ import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.image.io.generator.raster.StackGenerator;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceFactory;
-import org.anchoranalysis.io.generator.sequence.GeneratorSequenceIncrementalRerouteErrors;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.io.stack.OutputSequenceStackFactory;
+import org.anchoranalysis.io.generator.sequence.OutputSequenceIncrementing;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.OutputterChecked;
 
 /**
  * Shared-state for an export-features class
@@ -63,10 +64,9 @@ import org.anchoranalysis.io.output.bound.BoundIOContext;
  */
 public class SharedStateExportFeatures<S> {
 
-    private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
+    public static final String OUTPUT_THUMBNAILS = "thumbnails";
 
-    private static final GeneratorSequenceFactory GENERATOR_SEQUENCE_FACTORY =
-            new GeneratorSequenceFactory("thumbnails", "thumbnail"); // NOSONAR
+    private static final String MANIFEST_FUNCTION_THUMBNAIL = "thumbnail";
 
     private static final NamedFeatureStoreFactory STORE_FACTORY =
             NamedFeatureStoreFactory.factoryParamsOnly();
@@ -78,22 +78,22 @@ public class SharedStateExportFeatures<S> {
     private final Supplier<S> rowSource;
 
     // Generates thumbnails, lazily if needed.
-    private GeneratorSequenceIncrementalRerouteErrors<Stack> thumbnailGenerator;
+    private OutputSequenceIncrementing<Stack> thumbnailOutputSequence;
 
-    private BoundIOContext context;
+    private InputOutputContext context;
 
     /**
      * Creates the shared state.
      *
      * @param outputMetadata headers and output-name for the feature CSV file that is written
      * @param rowSource source of rows in the feature-table (called independently for each thread)
-     * @param context IO-context including directory in which grouped/thumbnails sub-directorys may
+     * @param context IO-context including directory in which grouped/thumbnails subdirectorys may
      *     be created
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     public SharedStateExportFeatures(
-            ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, BoundIOContext context)
-            throws AnchorIOException {
+            ResultsWriterMetadata outputMetadata, Supplier<S> rowSource, InputOutputContext context)
+            throws OutputWriteFailedException {
         this.featureNames = outputMetadata.featureNamesNonAggregate();
         this.rowSource = rowSource;
         this.context = context;
@@ -115,10 +115,14 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     List<NamedBean<FeatureListProvider<T>>> features,
                     LabelHeaders metadataHeaders,
-                    BoundIOContext context)
+                    ResultsWriterOutputNames outputNames,
+                    InputOutputContext context)
                     throws CreateException {
         return createForFeatures(
-                STORE_FACTORY.createNamedFeatureList(features), metadataHeaders, context);
+                STORE_FACTORY.createNamedFeatureList(features),
+                metadataHeaders,
+                outputNames,
+                context);
     }
 
     /**
@@ -135,14 +139,16 @@ public class SharedStateExportFeatures<S> {
             SharedStateExportFeatures<FeatureList<T>> createForFeatures(
                     NamedFeatureStore<T> featureStore,
                     LabelHeaders metadataHeaders,
-                    BoundIOContext context)
+                    ResultsWriterOutputNames outputNames,
+                    InputOutputContext context)
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
-                    new ResultsWriterMetadata(metadataHeaders, featureStore.createFeatureNames()),
+                    new ResultsWriterMetadata(
+                            metadataHeaders, featureStore.createFeatureNames(), outputNames),
                     featureStore.deepCopy()::listFeatures,
                     context);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
@@ -164,21 +170,21 @@ public class SharedStateExportFeatures<S> {
                     ResultsWriterOutputNames outputNames,
                     FeatureTableCalculator<T> features,
                     LabelHeaders identifierHeaders,
-                    BoundIOContext context)
+                    InputOutputContext context)
                     throws CreateException {
         try {
             return new SharedStateExportFeatures<>(
                     new ResultsWriterMetadata(
-                            outputNames, identifierHeaders, features.createFeatureNames()),
+                            identifierHeaders, features.createFeatureNames(), outputNames),
                     features::duplicateForNewThread,
                     context);
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new CreateException(e);
         }
     }
 
     public InputProcessContext<S> createInputProcessContext(
-            Optional<String> groupName, BoundIOContext context) {
+            Optional<String> groupName, InputOutputContext context) {
         return new InputProcessContext<>(
                 addResultsFor(), rowSource.get(), featureNames, groupName, context);
     }
@@ -191,20 +197,18 @@ public class SharedStateExportFeatures<S> {
      * @param includeGroups iff true a group-column is included in the CSV file and the group
      *     exports occur, otherwise not
      * @param context io-context
-     * @throws AnchorIOException
+     * @throws OutputWriteFailedException
      */
     public void writeGroupedResults(
             Optional<NamedFeatureStore<FeatureInputResults>> featuresAggregate,
             boolean includeGroups,
-            BoundIOContext context)
-            throws AnchorIOException {
+            InputOutputContext context)
+            throws OutputWriteFailedException {
         groupedResults.writeResultsForAllGroups(featuresAggregate, includeGroups, context);
     }
 
     public void closeAnyOpenIO() throws IOException {
-        if (thumbnailGenerator != null) {
-            thumbnailGenerator.end();
-        }
+        thumbnailOutputSequence = null;
         groupedResults.close();
     }
 
@@ -225,18 +229,22 @@ public class SharedStateExportFeatures<S> {
                 groupedResults.addResultsFor(labels, results.getResultsVector());
 
                 // Write thumbnail, or empty image
-                results.getThumbnail().ifPresent(image -> addThumbnail(image, context));
+                if (results.getThumbnail().isPresent()) {
+                    try {
+                        addThumbnail(results.getThumbnail().get(), context.getOutputter().getChecked());
+                    } catch (OutputWriteFailedException e) {
+                        throw new OperationFailedException(e);
+                    }
+                }
             }
         };
     }
 
-    private void addThumbnail(DisplayStack thumbnail, BoundIOContext context) {
-        if (thumbnailGenerator == null) {
-            thumbnailGenerator =
-                    GENERATOR_SEQUENCE_FACTORY.createIncremental(
-                            new StackGenerator(MANIFEST_FUNCTION_THUMBNAIL), context);
-            thumbnailGenerator.start();
+    private void addThumbnail(DisplayStack thumbnail, OutputterChecked outputter) throws OutputWriteFailedException {
+        if (thumbnailOutputSequence == null) {
+            OutputSequenceStackFactory factory = OutputSequenceStackFactory.always2D(MANIFEST_FUNCTION_THUMBNAIL);
+            thumbnailOutputSequence = factory.incrementingByOne(OUTPUT_THUMBNAILS, outputter);
         }
-        thumbnailGenerator.add(thumbnail.deriveStack(false));
+        thumbnailOutputSequence.add(thumbnail.deriveStack(false));
     }
 }

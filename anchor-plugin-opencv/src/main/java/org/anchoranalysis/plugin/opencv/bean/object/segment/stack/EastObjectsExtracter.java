@@ -27,21 +27,22 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.concurrency.ConcurrentModelPool;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.image.binary.values.BinaryValuesByte;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.object.properties.ObjectWithProperties;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMapSingleton;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 
@@ -58,7 +59,7 @@ class EastObjectsExtracter {
     public static SegmentedObjects apply(
             ConcurrentModelPool<Net> modelPool,
             Mat image,
-            Resolution resolution,
+            Optional<Resolution> resolution,
             double minConfidence)
             throws Throwable {
         List<WithConfidence<Mark>> listMarks =
@@ -66,8 +67,7 @@ class EastObjectsExtracter {
 
         // Convert marks to object-masks
         return new SegmentedObjects(
-            convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution))
-        );
+                convertMarksToObject(listMarks, dimensionsForMatrix(image, resolution)));
     }
 
     private static List<WithConfidence<ObjectMask>> convertMarksToObject(
@@ -76,11 +76,8 @@ class EastObjectsExtracter {
                 listMarks, withConfidence -> convertToObject(withConfidence, dim));
     }
 
-    private static Dimensions dimensionsForMatrix(Mat matrix, Resolution resolution) {
-        Extent extent = new Extent(
-            (int) matrix.size().width,
-            (int) matrix.size().height
-        );
+    private static Dimensions dimensionsForMatrix(Mat matrix, Optional<Resolution> resolution) {
+        Extent extent = new Extent((int) matrix.size().width, (int) matrix.size().height);
         return new Dimensions(extent, resolution);
     }
 

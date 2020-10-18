@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 public interface AfterCondition {
 

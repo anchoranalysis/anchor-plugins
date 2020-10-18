@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point3i;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

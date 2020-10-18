@@ -27,8 +27,6 @@
 package org.anchoranalysis.plugin.image.segment.watershed.encoding;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
 import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;
 import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighbor;
@@ -36,6 +34,8 @@ import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborAbso
 import org.anchoranalysis.image.voxel.iterator.neighbor.ProcessVoxelNeighborFactory;
 import org.anchoranalysis.image.voxel.neighborhood.Neighborhood;
 import org.anchoranalysis.image.voxel.neighborhood.NeighborhoodFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3i;
 
 public final class Steepest {
 

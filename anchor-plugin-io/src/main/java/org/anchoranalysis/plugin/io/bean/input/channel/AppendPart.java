@@ -33,16 +33,16 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesConcatenate;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeriesMap;
-import org.anchoranalysis.image.io.rasterreader.OpenedRaster;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.PathSupplier;
+import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.io.input.path.DerivePathException;
+import org.anchoranalysis.io.input.path.PathSupplier;
 
 /**
  * Appends another channel to an existing NamedChannelInputBase
@@ -53,7 +53,7 @@ class AppendPart extends NamedChannelsInputPart {
 
     private NamedChannelsInputPart delegate;
     private AdditionalChannel additionalChannel;
-    private RasterReader rasterReader;
+    private StackReader stackReader;
 
     private OpenedRaster openedRasterMemo;
 
@@ -62,25 +62,25 @@ class AppendPart extends NamedChannelsInputPart {
             String channelName,
             int channelIndex,
             PathSupplier filePath,
-            RasterReader rasterReader) {
+            StackReader stackReader) {
         super();
         this.delegate = delegate;
         this.additionalChannel = new AdditionalChannel(channelName, channelIndex, filePath);
-        this.rasterReader = rasterReader;
+        this.stackReader = stackReader;
     }
 
     @Override
-    public int numberSeries() throws RasterIOException {
+    public int numberSeries() throws ImageIOException {
         return delegate.numberSeries();
     }
 
     @Override
-    public Dimensions dimensions(int seriesIndex) throws RasterIOException {
-        return delegate.dimensions(seriesIndex);
+    public Dimensions dimensions(int stackIndexInSeries) throws ImageIOException {
+        return delegate.dimensions(stackIndexInSeries);
     }
 
     @Override
-    public boolean hasChannel(String channelName) throws RasterIOException {
+    public boolean hasChannel(String channelName) throws ImageIOException {
 
         if (additionalChannel.getName().equals(channelName)) {
             return true;
@@ -90,9 +90,9 @@ class AppendPart extends NamedChannelsInputPart {
 
     @Override
     public NamedChannelsForSeries createChannelsForSeries(
-            int seriesNum, ProgressReporter progressReporter) throws RasterIOException {
+            int seriesIndex, ProgressReporter progressReporter) throws ImageIOException {
 
-        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesNum, progressReporter);
+        NamedChannelsForSeries exst = delegate.createChannelsForSeries(seriesIndex, progressReporter);
 
         openRasterIfNecessary();
 
@@ -100,26 +100,26 @@ class AppendPart extends NamedChannelsInputPart {
         out.add(exst);
         out.add(
                 new NamedChannelsForSeriesMap(
-                        openedRasterMemo, additionalChannel.createChannelMap(), seriesNum));
+                        openedRasterMemo, additionalChannel.createChannelMap(), seriesIndex));
         return out;
     }
 
-    private void openRasterIfNecessary() throws RasterIOException {
+    private void openRasterIfNecessary() throws ImageIOException {
         try {
             Path filePathAdditional = additionalChannel.getFilePath();
 
             if (openedRasterMemo == null) {
-                openedRasterMemo = rasterReader.openFile(filePathAdditional);
+                openedRasterMemo = stackReader.openFile(filePathAdditional);
             }
 
-        } catch (AnchorIOException e) {
-            throw new RasterIOException(e);
+        } catch (DerivePathException e) {
+            throw new ImageIOException(e);
         }
     }
 
     @Override
-    public String descriptiveName() {
-        return delegate.descriptiveName();
+    public String name() {
+        return delegate.name();
     }
 
     @Override
@@ -129,7 +129,7 @@ class AppendPart extends NamedChannelsInputPart {
             list.add(additionalChannel.getFilePath());
             return list;
 
-        } catch (AnchorIOException e) {
+        } catch (DerivePathException e) {
             throw new OperationFailedException(e);
         }
     }
@@ -145,12 +145,12 @@ class AppendPart extends NamedChannelsInputPart {
     }
 
     @Override
-    public int numberChannels() throws RasterIOException {
+    public int numberChannels() throws ImageIOException {
         return delegate.numberChannels();
     }
 
     @Override
-    public int bitDepth() throws RasterIOException {
+    public int bitDepth() throws ImageIOException {
         return delegate.bitDepth();
     }
 
@@ -159,7 +159,7 @@ class AppendPart extends NamedChannelsInputPart {
         if (openedRasterMemo != null) {
             try {
                 openedRasterMemo.close();
-            } catch (RasterIOException e) {
+            } catch (ImageIOException e) {
                 errorReporter.recordError(AppendPart.class, e);
             }
         }

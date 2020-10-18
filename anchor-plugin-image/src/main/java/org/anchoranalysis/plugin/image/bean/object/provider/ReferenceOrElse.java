@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 /**
  * Returns a object-collection by name if it exists, or else calls {@code objectsElse} if it doesn't

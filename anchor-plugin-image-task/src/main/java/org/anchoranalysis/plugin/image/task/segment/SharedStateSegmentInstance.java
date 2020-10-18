@@ -34,7 +34,7 @@ import org.anchoranalysis.feature.io.results.LabelHeaders;
 import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
@@ -46,6 +46,11 @@ import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
  */
 public class SharedStateSegmentInstance<T> {
 
+    public static final String OUTPUT_SUMMARY_CSV = "summary";
+
+    private static final ResultsWriterOutputNames OUTPUT_RESULTS =
+            new ResultsWriterOutputNames(OUTPUT_SUMMARY_CSV, false, false);
+
     private final SharedStateExportFeatures<FeatureTableCalculator<FeatureInputSingleObject>>
             features;
     @Getter private final ConcurrentModelPool<T> modelPool;
@@ -54,19 +59,16 @@ public class SharedStateSegmentInstance<T> {
             ConcurrentModelPool<T> modelPool,
             FeatureTableCalculator<FeatureInputSingleObject> featureTable,
             LabelHeaders identifierHeaders,
-            BoundIOContext context)
+            InputOutputContext context)
             throws CreateException {
         this.modelPool = modelPool;
         this.features =
                 SharedStateExportFeatures.createForFeatures(
-                        new ResultsWriterOutputNames("summary", false, false),
-                        featureTable,
-                        identifierHeaders,
-                        context);
+                        OUTPUT_RESULTS, featureTable, identifierHeaders, context);
     }
 
     public InputProcessContext<FeatureTableCalculator<FeatureInputSingleObject>>
-            createInputProcessContext(Optional<String> groupName, BoundIOContext context) {
+            createInputProcessContext(Optional<String> groupName, InputOutputContext context) {
         return features.createInputProcessContext(groupName, context);
     }
 

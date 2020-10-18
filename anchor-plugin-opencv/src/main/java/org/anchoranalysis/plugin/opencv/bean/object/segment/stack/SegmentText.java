@@ -37,14 +37,14 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.scale.ScaleFactor;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.CVInit;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
@@ -158,6 +158,8 @@ public class SegmentText extends SegmentStackIntoObjectsPooled<Net> {
     }
 
     private static Net createNet(Path pathToModel, boolean useGPU) {
+
+        CVInit.blockUntilLoaded();
 
         Net net = Dnn.readNetFromTensorflow(pathToModel.toAbsolutePath().toString());
 

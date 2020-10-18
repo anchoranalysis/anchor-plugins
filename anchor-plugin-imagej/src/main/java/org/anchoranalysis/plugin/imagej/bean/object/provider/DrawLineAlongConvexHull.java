@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.imagej.bean.object.provider;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.points.convexhull.ConvexHullUtilities;
+import org.anchoranalysis.spatial.point.Point2i;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 /**
  * Draws a lines between successive points on the convex-hull of an object.

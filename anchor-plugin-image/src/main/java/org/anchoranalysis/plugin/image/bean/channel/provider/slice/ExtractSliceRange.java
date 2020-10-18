@@ -34,12 +34,12 @@ import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactoryByte;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactoryByte;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.spatial.extent.Extent;
 
 /**
  * Extracts slices from {@code sliceStart} (inclusive) to {@code sliceEnd} (inclusive)

@@ -28,43 +28,41 @@ package org.anchoranalysisplugin.io.test.image;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.io.objects.GeneratorHDF5;
-import org.anchoranalysis.image.io.objects.GeneratorTIFFDirectory;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.output.bound.BindFailedException;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.image.io.objects.RasterDirectoryObjectsGenerator;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.test.image.io.OutputterFixture;
 import org.anchoranalysis.test.image.io.TestReaderWriterUtilities;
 
 class HelperReadWriteObjects {
 
     public static final String TEMPORARY_FOLDER_OUT = "objects";
 
-    public static IterableGenerator<ObjectCollection> generator(boolean hdf5, boolean compression) {
+    public static Generator<ObjectCollection> generator(boolean hdf5, boolean compression) {
         if (hdf5) {
-            return new GeneratorHDF5(compression);
+            return new HDF5ObjectsGenerator(compression);
         } else {
-            return GeneratorTIFFDirectory.create();
+            return RasterDirectoryObjectsGenerator.create();
         }
     }
 
     public static void writeObjects(
-            ObjectCollection objects, Path path, IterableGenerator<ObjectCollection> generator)
+            ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
             throws SetOperationFailedException, BindFailedException {
-        generator.setIterableElement(objects);
 
-        BoundOutputManagerRouteErrors outputManager =
-                OutputManagerFixture.outputManagerForRouterErrors(path);
+        Outputter outputter = OutputterFixture.outputter(path);
 
-        outputManager.getWriterAlwaysAllowed().write("objects", () -> generator.getGenerator());
+        outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }
 
     public static ObjectCollection readObjects(Path path) throws DeserializationFailedException {
 
-        TestReaderWriterUtilities.ensureRasterReader();
+        TestReaderWriterUtilities.ensureStackReader();
 
         return ObjectCollectionReader.createFromPath(path);
     }

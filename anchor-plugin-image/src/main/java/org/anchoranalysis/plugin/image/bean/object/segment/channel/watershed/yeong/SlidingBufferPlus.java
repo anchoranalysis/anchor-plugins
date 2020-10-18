@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.yeong;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.SlidingBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.Steepest;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /** A sliding-buffer enhanced with other elements of internal state used to "visit" a pixel */
 final class SlidingBufferPlus {

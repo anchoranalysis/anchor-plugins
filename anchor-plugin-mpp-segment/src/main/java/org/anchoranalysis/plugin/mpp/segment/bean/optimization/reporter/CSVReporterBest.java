@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import java.util.Optional;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.output.file.FileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.FeedbackReceiverBean;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
@@ -37,9 +37,19 @@ import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackEndParameter
 import org.anchoranalysis.mpp.segment.optimization.feedback.ReporterException;
 import org.anchoranalysis.mpp.segment.optimization.step.Reporting;
 
+/**
+ * Outputs a CSV with statistics on the configuration/energy <b>only</b> the <i>best configuration</i> state changes.
+ * 
+ * @author Owen Feehan
+ *
+ */
 public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEnergy> {
 
-    private Optional<FileOutput> csvOutput;
+    public static final String MANIFEST_FUNCTION = "event_aggregate_stats";
+    
+    private static final String OUTPUT_CSV_STATISTICS = "statisticsBest";
+    
+    private Optional<TextFileOutput> csvOutput;
 
     @Override
     public void reportItr(Reporting<VoxelizedMarksWithEnergy> reporting) {
@@ -56,7 +66,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
                     .getWriter()
                     .printf(
                             "%d,%d,%e%n",
-                            reporting.getIter(),
+                            reporting.getIteration(),
                             reporting.getMarksAfter().size(),
                             reporting.getMarksAfter().getEnergyTotal());
         }
@@ -74,7 +84,7 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
                         output.start();
                         output.getWriter().printf("Itr,Size,Best_Energy%n");
                     });
-        } catch (AnchorIOException e) {
+        } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
     }
@@ -84,9 +94,9 @@ public class CSVReporterBest extends FeedbackReceiverBean<VoxelizedMarksWithEner
         csvOutput.ifPresent(output -> output.getWriter().close());
     }
 
-    private Optional<FileOutput> createOutput(
+    private Optional<TextFileOutput> createOutput(
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         return CSVReporterUtilities.createFileOutputFor(
-                "csvStatsBest", initParams, "event_aggregate_stats");
+                OUTPUT_CSV_STATISTICS, initParams, MANIFEST_FUNCTION);
     }
 }

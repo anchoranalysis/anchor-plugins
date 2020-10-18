@@ -31,14 +31,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public abstract class FeatureIntersectingObjects extends FeatureSingleObject {
 

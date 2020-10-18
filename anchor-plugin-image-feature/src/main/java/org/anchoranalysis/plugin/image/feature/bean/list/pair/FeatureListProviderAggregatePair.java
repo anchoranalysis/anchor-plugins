@@ -34,7 +34,7 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.bean.list.FeatureListProviderPrependName;
+import org.anchoranalysis.feature.bean.list.PrependName;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
 import org.anchoranalysis.image.feature.bean.object.pair.First;
 import org.anchoranalysis.image.feature.bean.object.pair.Merged;
@@ -81,8 +81,7 @@ public abstract class FeatureListProviderAggregatePair
                         new First(featExst.duplicateBean()),
                         new Second(featExst.duplicateBean()),
                         new Merged(featExst.duplicateBean()));
-        FeatureListProviderPrependName.setNewNameOnFeature(
-                featOut, featExst.getFriendlyName(), prependString);
+        PrependName.setNewNameOnFeature(featOut, featExst.getFriendlyName(), prependString);
         return featOut;
     }
 

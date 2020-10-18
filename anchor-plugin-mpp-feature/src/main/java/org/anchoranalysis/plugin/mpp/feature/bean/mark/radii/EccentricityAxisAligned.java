@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation;
 
 // Calculates the eccentricity of the ellipse
 // If it's an ellipsoid it calculates the Meridional Eccentricity i.e. the eccentricity

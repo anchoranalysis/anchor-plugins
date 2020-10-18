@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.bean.proposer.PositionProposer;
 import org.anchoranalysis.mpp.mark.Mark;
@@ -38,6 +37,7 @@ import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
+import org.anchoranalysis.spatial.point.Point3d;
 
 public class Position extends MarkProposer {
 

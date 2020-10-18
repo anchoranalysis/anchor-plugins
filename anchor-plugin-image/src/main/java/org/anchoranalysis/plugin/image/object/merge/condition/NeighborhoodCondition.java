@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.object.merge.condition;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.extent.UnitConverter;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * A condition placed to determine if two objects could be potential neighbors are not (i.e.

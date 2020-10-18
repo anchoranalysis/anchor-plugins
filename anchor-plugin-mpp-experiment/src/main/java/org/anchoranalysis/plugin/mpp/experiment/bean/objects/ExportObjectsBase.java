@@ -33,13 +33,13 @@ import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.experiment.task.Task;
+import org.anchoranalysis.experiment.bean.task.Task;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.bean.spatial.Padding;
+import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawCroppedObjectsGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.stack.DisplayStack;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.overlay.bean.DrawObject;
 
@@ -52,7 +52,7 @@ public abstract class ExportObjectsBase<T extends InputFromManager, S> extends T
     @BeanField @Getter @Setter private Padding padding;
     // END BEAN PROPERTIES
 
-    protected ObjectCollection inputObjects(ImageInitParams so, Logger logger)
+    protected ObjectCollection inputs(ImageInitParams so, Logger logger)
             throws CreateException, InitException {
         ObjectCollectionProvider objectsDuplicated = objects.duplicateBean();
         objectsDuplicated.initRecursive(so, logger);

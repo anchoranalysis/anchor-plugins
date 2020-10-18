@@ -28,13 +28,14 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.scalar;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.params.keyvalue.KeyValueParamsProvider;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
 
 public class GaussianSamplerFromParams extends ScalarProposer {
@@ -51,7 +52,7 @@ public class GaussianSamplerFromParams extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+    public double propose(RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
 
         try {

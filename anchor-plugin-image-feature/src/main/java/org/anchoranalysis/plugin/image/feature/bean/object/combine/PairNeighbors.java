@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,13 +37,13 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.graph.TypedEdge;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.feature.list.NamedFeatureStoreFactory;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.feature.object.input.FeatureInputPairObjects;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.session.FeatureTableCalculator;
@@ -52,12 +51,11 @@ import org.anchoranalysis.image.feature.session.merged.MergedPairsFeatures;
 import org.anchoranalysis.image.feature.session.merged.MergedPairsInclude;
 import org.anchoranalysis.image.feature.session.merged.PairsTableCalculator;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.combine.ObjectMaskMerger;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.voxel.neighborhood.CreateNeighborGraph;
-import org.anchoranalysis.image.voxel.neighborhood.EdgeAdderParameters;
+import org.anchoranalysis.image.voxel.neighborhood.NeighborGraph;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Creates a set of features, that creates pairs of neighboring-objects and applies a mixture of
@@ -157,27 +155,19 @@ public class PairNeighbors extends CombineObjectsForFeatures<FeatureInputPairObj
             ObjectCollection objects, EnergyStack energyStack, Logger logger)
             throws CreateException {
 
-        List<FeatureInputPairObjects> out = new ArrayList<>();
-
         // We create a neighbor-graph of our input objects
-        CreateNeighborGraph<ObjectMask> graphCreator =
-                new CreateNeighborGraph<>(new EdgeAdderParameters(avoidOverlappingObjects));
         GraphWithPayload<ObjectMask, Integer> graphNeighbors =
-                graphCreator.createGraph(
-                        objects.asList(),
-                        Function.identity(),
-                        (vector1, vector2, numberVoxels) -> numberVoxels,
+                NeighborGraph.create(
+                        objects,
                         energyStack.withoutParams().extent(),
+                        avoidOverlappingObjects,
                         do3D);
 
-        // We iterate through every edge in the graph, edges can exist in both directions
-        for (TypedEdge<ObjectMask, Integer> edge : graphNeighbors.edgesUnique()) {
-            out.add(
-                    new FeatureInputPairObjects(
-                            edge.getFrom(), edge.getTo(), Optional.of(energyStack)));
-        }
-
-        return out;
+        return FunctionalList.mapToList(
+                graphNeighbors.edgesUnique(),
+                edge ->
+                        new FeatureInputPairObjects(
+                                edge.getFrom(), edge.getTo(), Optional.of(energyStack)));
     }
 
     @Override

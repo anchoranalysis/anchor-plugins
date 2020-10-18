@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.Point2i;
 
 @AllArgsConstructor
 class ScaleFactorInt {

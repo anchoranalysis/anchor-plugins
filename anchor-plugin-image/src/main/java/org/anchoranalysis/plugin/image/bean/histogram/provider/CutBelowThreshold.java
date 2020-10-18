@@ -31,7 +31,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.HistogramProviderUnary;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * This cuts a Histogram below a threshold BUT TRANSFERS ALL THE COUNT greater than equal to the

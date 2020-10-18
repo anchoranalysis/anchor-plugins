@@ -33,10 +33,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point2i;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.image.core.points.PointsFromObject;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point2i;
 
 // Strongly influenced by http://rsb.info.nih.gov/ij/macros/ConvexHull.txt
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

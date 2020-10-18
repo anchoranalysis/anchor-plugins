@@ -33,14 +33,14 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.core.axis.AxisTypeConverter;
 import org.anchoranalysis.core.axis.AxisTypeException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.orientation.DirectionVector;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.core.orientation.DirectionVector;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.plugin.mpp.feature.bean.unit.UnitConverter;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 public class BoundingBoxExtent extends FeatureMarkRegion {
 
@@ -61,7 +61,7 @@ public class BoundingBoxExtent extends FeatureMarkRegion {
         try {
             return resolveDistance(
                     box,
-                    Optional.of(dimensions.resolution()),
+                    dimensions.resolution(),
                     AxisTypeConverter.createFromString(axis));
         } catch (AxisTypeException e) {
             throw new FeatureCalculationException(e);

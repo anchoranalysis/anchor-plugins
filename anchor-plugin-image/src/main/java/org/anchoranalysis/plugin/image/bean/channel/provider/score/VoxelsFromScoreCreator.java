@@ -32,20 +32,20 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Extent;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
-import org.anchoranalysis.image.object.ObjectMask;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.VoxelsWrapperList;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @AllArgsConstructor
 class VoxelsFromScoreCreator {
@@ -65,7 +65,7 @@ class VoxelsFromScoreCreator {
 
             // We make our index buffer
             Voxels<UnsignedByteBuffer> voxelsOut =
-                    VoxelsFactory.getByte().createInitialized(extent);
+                    VoxelsFactory.getUnsignedByte().createInitialized(extent);
 
             if (object.isPresent()) {
                 setVoxelsWithMask(voxelsOut, object.get(), pixelScore);
@@ -88,7 +88,7 @@ class VoxelsFromScoreCreator {
         List<Histogram> out = new ArrayList<>();
 
         for (VoxelsWrapper voxels : listVoxels) {
-            out.add(HistogramFactory.create(voxels, object));
+            out.add(HistogramFromObjectsFactory.create(voxels, object));
         }
 
         for (Histogram histogram : listAdditionalHistograms) {

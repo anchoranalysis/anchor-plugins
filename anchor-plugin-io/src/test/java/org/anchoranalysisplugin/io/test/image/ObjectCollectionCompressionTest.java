@@ -31,11 +31,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Path;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.output.bound.BindFailedException;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.test.TestLoader;
-import org.anchoranalysis.test.image.io.TestLoaderImageIO;
+import org.anchoranalysis.test.image.io.TestLoaderImage;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -45,8 +45,8 @@ public class ObjectCollectionCompressionTest {
     // An uncompressed obj-mask-collection
     private static final String PATH_UNCOMPRESSED_OBJECTS = "objectsUncompressed/objects.h5";
 
-    private TestLoaderImageIO loader =
-            new TestLoaderImageIO(TestLoader.createFromMavenWorkingDirectory());
+    private TestLoaderImage loader =
+            new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
     @Rule public TemporaryFolder folder = new TemporaryFolder();
 
@@ -96,7 +96,7 @@ public class ObjectCollectionCompressionTest {
             ObjectCollection objects, Path pathRoot, Path pathOut)
             throws SetOperationFailedException, DeserializationFailedException,
                     BindFailedException {
-        // Write the objects to the file-system and read again
+        // Write the objects to the filesystem and read again
         writeObjects(objects, pathRoot, generator(true, true));
         return readObjects(pathOut);
     }

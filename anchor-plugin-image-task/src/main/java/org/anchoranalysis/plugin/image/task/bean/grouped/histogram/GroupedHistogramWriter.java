@@ -26,23 +26,34 @@
 
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.io.generator.histogram.HistogramCSVGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.image.io.generator.histogram.HistogramCSVGenerator;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.math.histogram.Histogram;
 
 class GroupedHistogramWriter {
 
+    /**
+     * The output-name associated with <i>all</i> histograms written.
+     *
+     * <p>Note that this isn't actually used as part of the filenames outputted.
+     */
+    private final String outputName;
+
     private final HistogramCSVGenerator generator;
 
-    public GroupedHistogramWriter(boolean ignoreZeros) {
-        generator = new HistogramCSVGenerator();
-        generator.setIgnoreZeros(ignoreZeros);
+    public GroupedHistogramWriter(String outputName, boolean ignoreZeros) {
+        this.outputName = outputName;
+        this.generator = new HistogramCSVGenerator();
+        this.generator.setIgnoreZeros(ignoreZeros);
     }
 
     public void writeHistogramToFile(
-            Histogram histogram, String outputName, BoundIOContext context) {
-        generator.setIterableElement(histogram);
+            Histogram histogram, String channelName, InputOutputContext context) {
 
-        context.getOutputManager().getWriterCheckIfAllowed().write(outputName, () -> generator);
+        if (context.getOutputter().outputsEnabled().isOutputEnabled(outputName)) {
+            context.getOutputter()
+                    .writerSecondLevel(outputName)
+                    .write(channelName, () -> generator, () -> histogram);
+        }
     }
 }

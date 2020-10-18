@@ -27,42 +27,42 @@
 package org.anchoranalysis.plugin.mpp.segment;
 
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.io.generator.serialized.XStreamGenerator;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.ExperimentState;
 import org.anchoranalysis.mpp.segment.bean.kernel.proposer.KernelProposer;
 
 // State that only needs to be initialized once can be shared across many calls to the algoritm
+@AllArgsConstructor
 public class SgmnMPPState implements ExperimentState {
-
+    
+    private static final String OUTPUT_SERIALIZED = "kernelProposer";
+    
+    private static final String MANIFEST_FUNCTION = OUTPUT_SERIALIZED;
+    
     private KernelProposer<VoxelizedMarksWithEnergy> kernelProposer;
     private Define define;
 
-    public SgmnMPPState(KernelProposer<VoxelizedMarksWithEnergy> kernelProposer, Define define) {
-        super();
-        this.kernelProposer = kernelProposer;
-        this.define = define;
-    }
-
     @Override
-    public void outputBeforeAnyTasksAreExecuted(BoundOutputManagerRouteErrors outputManager) {
+    public void outputBeforeAnyTasksAreExecuted(Outputter outputter) {
 
-        outputManager
-                .getWriterCheckIfAllowed()
-                .write("define", () -> new XStreamGenerator<Object>(define, Optional.of("define")));
+        outputter
+                .writerSelective()
+                .write("define", () -> new XStreamGenerator<Object>(Optional.of("define")), () -> define);
     }
 
     // We just need any single kernel proposer to write out
     @Override
-    public void outputAfterAllTasksAreExecuted(BoundOutputManagerRouteErrors outputManager) {
-        outputManager
-                .getWriterCheckIfAllowed()
+    public void outputAfterAllTasksAreExecuted(Outputter outputter) {
+        outputter
+                .writerSelective()
                 .write(
-                        "kernelProposer",
-                        () ->
-                                new XStreamGenerator<Object>(
-                                        kernelProposer, Optional.of("kernelProposer")));
+                    OUTPUT_SERIALIZED,
+                    () -> new XStreamGenerator<Object>(Optional.of(MANIFEST_FUNCTION)),
+                    () -> kernelProposer
+                 );
     }
 }

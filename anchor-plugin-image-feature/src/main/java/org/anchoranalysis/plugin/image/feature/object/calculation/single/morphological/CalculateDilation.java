@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.image.feature.object.calculation.single.morphological;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculate.CalculationResolver;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculationMap;
+import org.anchoranalysis.feature.calculate.cache.CalculationResolver;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculationMap;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateObjectMask;
 
 @EqualsAndHashCode(callSuper = true)

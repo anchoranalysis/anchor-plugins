@@ -26,14 +26,16 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.ind;
 
-import org.anchoranalysis.feature.cache.SessionInput;
+import java.util.Optional;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.mpp.feature.bean.energy.element.FeatureSingleMemo;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputSingleMemo;
 import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.conic.ConicBase;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 public class BBoxRatio extends FeatureSingleMemo {
 
@@ -56,9 +58,17 @@ public class BBoxRatio extends FeatureSingleMemo {
         int[] extent = bb.extent().asOrderedArray();
 
         // Let's change the z-dimension to include the relative-resolution
-        extent[2] = (int) (bb.extent().z() * dimensions.resolution().zRelative());
+        extent[2] = zExtent(bb.extent().z(), dimensions.resolution());
 
         return extent;
+    }
+    
+    private static int zExtent(int zVoxelExtent, Optional<Resolution> resolution) {
+        if (resolution.isPresent()) {
+            return (int) (zVoxelExtent * resolution.get().zRelative());
+        } else {
+            return zVoxelExtent;
+        }
     }
 
     private static double calculateRatio(int[] extent) {

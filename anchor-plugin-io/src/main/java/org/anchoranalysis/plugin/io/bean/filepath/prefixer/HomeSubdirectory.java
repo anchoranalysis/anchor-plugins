@@ -35,14 +35,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.io.bean.filepath.prefixer.FilePathPrefixer;
-import org.anchoranalysis.io.bean.filepath.prefixer.PathWithDescription;
-import org.anchoranalysis.io.error.FilePathPrefixerException;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefix;
-import org.anchoranalysis.io.filepath.prefixer.FilePathPrefixerParams;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.NamedPath;
+import org.anchoranalysis.io.output.path.PathPrefixer;
 
 //
-public class HomeSubdirectory extends FilePathPrefixer {
+public class HomeSubdirectory extends PathPrefixer {
 
     // START PROPERTIES
     /** A relative-path (to the user home directory) which is used as an output directory */
@@ -59,7 +59,7 @@ public class HomeSubdirectory extends FilePathPrefixer {
 
             delegate = new FilePathCounter(pathAnchorDir.toString());
 
-            // We localize instead to the home sub-directory, not to the current bean location
+            // We localize instead to the home subdirectory, not to the current bean location
             try {
                 delegate.localise(pathAnchorDir);
             } catch (BeanMisconfiguredException e) {
@@ -69,24 +69,24 @@ public class HomeSubdirectory extends FilePathPrefixer {
     }
 
     @Override
-    public FilePathPrefix outFilePrefix(
-            PathWithDescription input, String expName, FilePathPrefixerParams context)
-            throws FilePathPrefixerException {
+    public DirectoryWithPrefix outFilePrefix(
+            NamedPath path, String expName, FilePathPrefixerContext context)
+            throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
-            throw new FilePathPrefixerException(e);
+            throw new PathPrefixerException(e);
         }
-        return delegate.outFilePrefix(input, expName, context);
+        return delegate.outFilePrefix(path, expName, context);
     }
 
     @Override
-    public FilePathPrefix rootFolderPrefix(String expName, FilePathPrefixerParams context)
-            throws FilePathPrefixerException {
+    public DirectoryWithPrefix rootFolderPrefix(String expName, FilePathPrefixerContext context)
+            throws PathPrefixerException {
         try {
             initIfPossible();
         } catch (InitException e) {
-            throw new FilePathPrefixerException(e);
+            throw new PathPrefixerException(e);
         }
         return delegate.rootFolderPrefix(expName, context);
     }

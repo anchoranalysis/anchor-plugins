@@ -30,12 +30,12 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Measures the amount of bounding box overlap in the Z dimension

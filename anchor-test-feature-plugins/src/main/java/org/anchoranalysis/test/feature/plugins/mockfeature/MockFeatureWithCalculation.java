@@ -27,8 +27,8 @@
 package org.anchoranalysis.test.feature.plugins.mockfeature;
 
 import org.anchoranalysis.feature.bean.operator.FeatureOperator;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

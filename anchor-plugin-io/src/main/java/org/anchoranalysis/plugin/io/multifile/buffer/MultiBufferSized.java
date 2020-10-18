@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.io.multifile.buffer;
 
 import java.util.Optional;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.plugin.io.multifile.SizeExtents;
 

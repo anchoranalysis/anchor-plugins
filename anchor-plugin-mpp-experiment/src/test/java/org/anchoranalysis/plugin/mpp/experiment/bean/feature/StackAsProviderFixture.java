@@ -33,9 +33,9 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
 
 @AllArgsConstructor
 class StackAsProviderFixture implements ProvidesStackInput {
@@ -44,7 +44,7 @@ class StackAsProviderFixture implements ProvidesStackInput {
     private String name;
 
     @Override
-    public String descriptiveName() {
+    public String name() {
         return "arbitraryName";
     }
 
@@ -56,7 +56,7 @@ class StackAsProviderFixture implements ProvidesStackInput {
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
         addToStoreWithName(name, stackCollection, 0, progressReporter);
@@ -65,11 +65,11 @@ class StackAsProviderFixture implements ProvidesStackInput {
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        stackCollection.add(name, () -> new TimeSequence(stack));
+        stacks.add(name, () -> new TimeSequence(stack));
     }
 
     @Override

@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.bean.report.feature.ReportFeature;
+import org.anchoranalysis.io.output.bean.ReportFeature;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ReportFeatureUtilities {

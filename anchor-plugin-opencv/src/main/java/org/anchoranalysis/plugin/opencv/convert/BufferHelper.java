@@ -27,13 +27,18 @@ package org.anchoranalysis.plugin.opencv.convert;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedShortBuffer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BufferHelper {
 
-    public static UnsignedByteBuffer bufferFromChannel(Channel channel) {
+    public static UnsignedByteBuffer extractByte(Channel channel) {
         return channel.voxels().asByte().sliceBuffer(0);
+    }
+
+    public static UnsignedShortBuffer extractShort(Channel channel) {
+        return channel.voxels().asShort().sliceBuffer(0);
     }
 }

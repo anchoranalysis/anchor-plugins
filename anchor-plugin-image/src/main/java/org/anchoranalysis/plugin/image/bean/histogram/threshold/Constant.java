@@ -34,7 +34,7 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * A constant value for thresholding

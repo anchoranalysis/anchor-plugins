@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 
 @NoArgsConstructor
 public class Reference extends MaskProvider {

@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.distance;
 
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.mpp.feature.input.memo.FeatureInputPairMemo;
 import org.anchoranalysis.plugin.mpp.feature.bean.memo.pair.FeaturePairMemoSingleRegion;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Measures the amount of distance in Z for the bounding box.

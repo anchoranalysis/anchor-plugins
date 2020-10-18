@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting;
 
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 
 public class NumberIntersectingObjects extends FeatureIntersectingObjects {
 

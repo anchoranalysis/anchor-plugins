@@ -28,18 +28,17 @@ package org.anchoranalysis.plugin.io.bean.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 /**
- * Sorts the input-items in alphabetical order of their descriptiveName()
+ * Sorts the input-items in alphabetical order of their input-name.
  *
  * @author Owen Feehan
  * @param <T> input-object type
@@ -51,17 +50,13 @@ public class SortAlphabetically<T extends InputFromManager> extends InputManager
     // END BEAN PROPERITES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
-        List<T> list = new ArrayList<>();
-
-        Iterator<T> itr = input.inputObjects(params).iterator();
-        while (itr.hasNext()) {
-            list.add(itr.next());
-        }
+        // Shallow copy
+        List<T> list = new ArrayList<>(input.inputs(params));
 
         Collections.sort(
-                list, (T o1, T o2) -> o1.descriptiveName().compareTo(o2.descriptiveName()));
+                list, (T o1, T o2) -> o1.name().compareTo(o2.name()));
 
         return list;
     }

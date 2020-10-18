@@ -26,28 +26,27 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider.color;
 
-import io.vavr.control.Either;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
+import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
+import org.anchoranalysis.bean.shared.color.scheme.HSB;
+import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorList;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.core.stack.ProviderAsStack;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.io.bean.object.draw.Filled;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.image.io.generator.raster.object.rgb.DrawObjectsGenerator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.image.provider.ProviderAsStack;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.bean.color.list.ColorListFactory;
-import org.anchoranalysis.io.bean.color.list.HSB;
-import org.anchoranalysis.io.bean.color.list.Shuffle;
-import org.anchoranalysis.io.bean.object.writer.Filled;
-import org.anchoranalysis.io.bean.object.writer.Outline;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 import org.anchoranalysis.overlay.bean.DrawObject;
 import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
@@ -59,7 +58,7 @@ import org.anchoranalysis.plugin.image.object.ColoredObjectCollection;
  */
 public abstract class ColoredBase extends StackProvider {
 
-    protected static final ColorListFactory DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
+    protected static final ColorScheme DEFAULT_COLOR_SET_GENERATOR = new Shuffle(new HSB());
 
     // START BEAN PROPERTIES
     /**
@@ -130,17 +129,15 @@ public abstract class ColoredBase extends StackProvider {
 
         try {
             if (colors == null) {
-                colors = DEFAULT_COLOR_SET_GENERATOR.create(objects.size());
+                colors = DEFAULT_COLOR_SET_GENERATOR.createList(objects.size());
             }
 
             DrawObjectsGenerator generator =
-                    new DrawObjectsGenerator(
+                    DrawObjectsGenerator.withBackgroundAndColors(
                             createDrawer(),
-                            new ObjectCollectionWithProperties(objects),
-                            Either.right(background),
+                            background,
                             colors);
-
-            return generator.generate();
+            return generator.transform( new ObjectCollectionWithProperties(objects) );
 
         } catch (OutputWriteFailedException | OperationFailedException e) {
             throw new CreateException(e);

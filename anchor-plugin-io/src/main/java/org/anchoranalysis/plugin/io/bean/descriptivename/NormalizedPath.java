@@ -28,18 +28,18 @@ package org.anchoranalysis.plugin.io.bean.descriptivename;
 
 import java.io.File;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.io.bean.descriptivename.DescriptiveNameFromFileIndependent;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.io.input.bean.descriptivename.FileNamerIndependent;
 
 /**
  * Uses the normalized path (always with forward slashes) of each file as it's descriptive-name
  *
  * @author Owen Feehan
  */
-public class NormalizedPath extends DescriptiveNameFromFileIndependent {
+public class NormalizedPath extends FileNamerIndependent {
 
     @Override
-    protected String createDescriptiveName(File file, int index) throws CreateException {
+    protected String deriveName(File file, int index) throws CreateException {
         return FilePathToUnixStyleConverter.toStringUnixStyle(file.toPath().normalize().toString());
     }
 }

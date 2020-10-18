@@ -35,19 +35,20 @@ import org.anchoranalysis.experiment.task.InputTypesExpected;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.feature.io.results.LabelHeaders;
+import org.anchoranalysis.feature.io.results.ResultsWriterOutputNames;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.task.feature.GenerateLabelHeadersForCSV;
 import org.anchoranalysis.plugin.image.task.feature.InputProcessContext;
 import org.anchoranalysis.plugin.image.task.feature.SharedStateExportFeatures;
 
 /**
- * Extracts features from some kind of inputs.
+ * Extracts features from some kind of inputs to produce one or more rows in a feature-table.
  *
  * @author Owen Feehan
  * @param <T> input-type from which one or more rows of features are derived
  * @param <S> row-source that is duplicated for each new thread (to prevent any concurrency issues)
- * @param <U> feature-input type for @{code features} bean-field
+ * @param <U> feature-input type for {@code features} bean-field
  */
 public abstract class FeatureSource<T extends InputFromManager, S, U extends FeatureInput>
         extends AnchorBean<FeatureSource<T, S, U>> {
@@ -55,12 +56,13 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
     public abstract SharedStateExportFeatures<S> createSharedState(
             LabelHeaders metadataHeaders,
             List<NamedBean<FeatureListProvider<U>>> features,
-            BoundIOContext context)
+            ResultsWriterOutputNames outputNames,
+            InputOutputContext context)
             throws CreateException;
 
     /**
      * Iff true, group columns are added to the CSV exports, and other group exports may occur in
-     * sub-directories
+     * sub-directories.
      *
      * @param groupGeneratorDefined has a group-generator been defined for this experiment?
      * @return true iff a group-generator has been defined
@@ -70,7 +72,7 @@ public abstract class FeatureSource<T extends InputFromManager, S, U extends Fea
     public abstract GenerateLabelHeadersForCSV headers();
 
     /**
-     * Processes one input to generate features
+     * Processes one input to generate features.
      *
      * @param input one particular input that will creates one or more "rows" in a feature-table
      * @param context io-context

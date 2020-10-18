@@ -32,7 +32,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 
 public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabeller {
 
@@ -42,8 +42,8 @@ public class DescriptiveNameContainsImageLabeller extends BinaryOutcomeImageLabe
 
     @Override
     public String labelFor(
-            NoSharedState sharedState, ProvidesStackInput input, BoundIOContext context)
+            NoSharedState sharedState, ProvidesStackInput input, InputOutputContext context)
             throws OperationFailedException {
-        return classificationString(input.descriptiveName().contains(contains));
+        return classificationString(input.name().contains(contains));
     }
 }

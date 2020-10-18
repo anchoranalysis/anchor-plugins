@@ -31,11 +31,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.ReadableTuple3i;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterPredicate;
+import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 /**
  * Keeps only objects that are not adjacent to the scene-border (i.e. have a bounding-box on the
@@ -55,14 +55,14 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
 
-        if (!dim.isPresent()) {
+        if (!dimensions.isPresent()) {
             throw new OperationFailedException("Image-dimensions are required for this operation");
         }
 
-        if (object.boundingBox().atBorderXY(dim.get())) {
+        if (object.boundingBox().atBorderXY(dimensions.get().extent())) {
             return false;
         }
 
@@ -73,7 +73,7 @@ public class NotTouchingSceneBorder extends ObjectFilterPredicate {
             }
 
             ReadableTuple3i cornerMax = object.boundingBox().calculateCornerMax();
-            if (cornerMax.z() == (dim.get().z() - 1)) {
+            if (cornerMax.z() == (dimensions.get().z() - 1)) {
                 return false;
             }
         }

@@ -33,9 +33,9 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.core.params.KeyValueParams;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.Voxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 
 public class AssignFromParams extends ChannelProviderUnary {
 

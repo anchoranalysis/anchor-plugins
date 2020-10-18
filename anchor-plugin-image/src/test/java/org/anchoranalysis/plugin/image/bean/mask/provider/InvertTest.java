@@ -32,10 +32,10 @@ import static org.junit.Assert.*;
 import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;
+import org.anchoranalysis.spatial.point.Point3i;
 import org.junit.Test;
 
 public class InvertTest {

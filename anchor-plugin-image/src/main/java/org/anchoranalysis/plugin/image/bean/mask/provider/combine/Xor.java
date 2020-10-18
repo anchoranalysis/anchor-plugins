@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.mask.provider.combine;
 
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.mask.combine.MaskXor;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.combine.MaskXor;
 
 /**
  * Outputs the logical operation <b>xor</b> (exclusive or) voxelwise on both masks, modifying {mask}

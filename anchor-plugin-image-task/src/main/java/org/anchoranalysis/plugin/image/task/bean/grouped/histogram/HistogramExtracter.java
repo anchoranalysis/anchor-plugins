@@ -30,11 +30,11 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.histogram.Histogram;
-import org.anchoranalysis.image.histogram.HistogramFactory;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.math.histogram.Histogram;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;
 
 /** Extracts a histogram from an image for a given key */
@@ -49,9 +49,9 @@ class HistogramExtracter {
 
         try {
             if (!keyMask.isEmpty()) {
-                return HistogramFactory.create(channel, extractMask(keyMask));
+                return HistogramFromObjectsFactory.create(channel, extractMask(keyMask));
             } else {
-                return HistogramFactory.create(channel);
+                return HistogramFromObjectsFactory.create(channel);
             }
 
         } catch (CreateException e) {

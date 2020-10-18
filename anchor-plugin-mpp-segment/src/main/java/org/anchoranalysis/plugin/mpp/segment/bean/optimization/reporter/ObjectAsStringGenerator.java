@@ -31,38 +31,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.generator.Generator;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.SingleFileTypeGenerator;
+import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.generator.OneStageGenerator;
 import org.anchoranalysis.io.manifest.ManifestDescription;
 import org.anchoranalysis.io.output.bean.OutputWriteSettings;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
-class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements IterableGenerator<T> {
-
-    private T object = null;
-
-    public ObjectAsStringGenerator() {
-        super();
-    }
-
-    public ObjectAsStringGenerator(T object) {
-        super();
-        this.object = object;
-    }
+@NoArgsConstructor
+class ObjectAsStringGenerator<T> extends OneStageGenerator<T> {
 
     @Override
-    public void writeToFile(OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(T element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
-
-        if (getIterableElement() == null) {
-            throw new OutputWriteFailedException("no mutable element set");
-        }
 
         try (FileWriter outFile = new FileWriter(filePath.toFile())) {
 
             PrintWriter out = new PrintWriter(outFile);
-            out.println(object.toString());
+            out.println(element.toString());
 
         } catch (IOException e) {
             throw new OutputWriteFailedException(e);
@@ -72,21 +57,6 @@ class ObjectAsStringGenerator<T> extends SingleFileTypeGenerator implements Iter
     @Override
     public String getFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionText();
-    }
-
-    @Override
-    public T getIterableElement() {
-        return this.object;
-    }
-
-    @Override
-    public void setIterableElement(T element) {
-        this.object = element;
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return this;
     }
 
     @Override

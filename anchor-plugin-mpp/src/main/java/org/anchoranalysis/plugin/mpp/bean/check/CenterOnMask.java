@@ -29,13 +29,13 @@ package org.anchoranalysis.plugin.mpp.bean.check;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.PointConverter;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.mpp.bean.regionmap.RegionMap;
 import org.anchoranalysis.mpp.feature.error.CheckException;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.PointConverter;
 
 public class CenterOnMask extends CheckMarkWithMask {
 

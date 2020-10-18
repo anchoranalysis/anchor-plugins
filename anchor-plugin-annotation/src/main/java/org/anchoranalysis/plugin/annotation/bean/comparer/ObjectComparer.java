@@ -35,12 +35,12 @@ import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Dimensions;
+import org.anchoranalysis.core.serialize.DeserializationFailedException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.objects.ObjectCollectionReader;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.deserializer.DeserializationFailedException;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * An object-collection to be used to compare against something
@@ -50,7 +50,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class ObjectComparer extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
     @Override
@@ -58,7 +58,7 @@ public class ObjectComparer extends Comparer {
             Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         try {
-            Path objectsPath = filePathGenerator.outFilePath(filePathSource, debugMode);
+            Path objectsPath = derivePath.deriveFrom(filePathSource, debugMode);
 
             if (!objectsPath.toFile().exists()) {
                 return new NotFound<>(objectsPath, "No objects exist");
@@ -66,7 +66,7 @@ public class ObjectComparer extends Comparer {
 
             return new Found<>(ObjectCollectionReader.createFromPath(objectsPath));
 
-        } catch (AnchorIOException | DeserializationFailedException e) {
+        } catch (DerivePathException | DeserializationFailedException e) {
             throw new CreateException(e);
         }
     }

@@ -32,10 +32,11 @@ import java.util.Optional;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.text.TypedValue;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.InputFromManager;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.csv.CSVWriter;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
 
 class CSVAssignment {
 
@@ -47,20 +48,20 @@ class CSVAssignment {
     private boolean firstRow = true;
 
     public CSVAssignment(
-            BoundOutputManagerRouteErrors outputManager,
+            Outputter outputter,
             String outputName,
             boolean includeDescriptiveSplit,
             int maxSplitGroups)
-            throws AnchorIOException {
+            throws OutputWriteFailedException {
         super();
         this.includeDescriptiveSplit = includeDescriptiveSplit;
         this.maxSplitGroups = maxSplitGroups;
 
-        writer = CSVWriter.createFromOutputManager(outputName, outputManager.getDelegate());
+        writer = CSVWriter.createFromOutputter(outputName, outputter.getChecked());
     }
 
     public synchronized void writeStatisticsForImage(
-            Assignment assignment, SplitString descriptiveSplit, InputFromManager inputObject)
+            Assignment assignment, SplitString descriptiveSplit, InputFromManager input)
             throws OperationFailedException {
 
         if (!writer.isPresent() || !writer.get().isOutputEnabled()) {
@@ -73,7 +74,7 @@ class CSVAssignment {
             writer.get().writeHeaders(createHeaders(assignment));
         }
 
-        writer.get().writeRow(createValues(assignment, inputObject, descriptiveSplit)); // NOSONAR
+        writer.get().writeRow(createValues(assignment, input, descriptiveSplit)); // NOSONAR
     }
 
     private List<String> createHeaders(Assignment assignment) {
@@ -84,7 +85,7 @@ class CSVAssignment {
 
     private List<String> createBaseHeaders() {
         List<String> headerNames = new ArrayList<>();
-        headerNames.add("descriptiveName");
+        headerNames.add("inputName");
         headerNames.add("filePath");
 
         if (includeDescriptiveSplit) {
@@ -97,23 +98,22 @@ class CSVAssignment {
     }
 
     private List<TypedValue> createValues(
-            Assignment assignment, InputFromManager inputObject, SplitString descriptiveSplit)
+            Assignment assignment, InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
-        List<TypedValue> base = createBaseValues(inputObject, descriptiveSplit);
+        List<TypedValue> base = createBaseValues(input, descriptiveSplit);
         base.addAll(assignment.createStatistics());
         return base;
     }
 
-    private List<TypedValue> createBaseValues(
-            InputFromManager inputObject, SplitString descriptiveSplit)
+    private List<TypedValue> createBaseValues(InputFromManager input, SplitString descriptiveSplit)
             throws OperationFailedException {
 
         Elements rowElements = new Elements();
 
         try {
-            rowElements.add(inputObject.descriptiveName());
-            rowElements.add(inputObject.pathForBindingRequired().toString());
-        } catch (AnchorIOException e) {
+            rowElements.add(input.name());
+            rowElements.add(input.pathForBindingRequired().toString());
+        } catch (InputReadFailedException e) {
             throw new OperationFailedException(e);
         }
 

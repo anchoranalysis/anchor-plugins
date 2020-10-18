@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.task.bean.format;
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.core.progress.ProgressReporter;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
 import org.anchoranalysis.image.io.channel.ChannelGetter;
 
 @AllArgsConstructor

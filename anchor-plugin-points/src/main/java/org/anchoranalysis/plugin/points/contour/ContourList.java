@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.points.contour;
 
 import java.util.ArrayList;
 import java.util.Set;
-import org.anchoranalysis.image.object.Contour;
+import org.anchoranalysis.spatial.point.contour.Contour;
 
 public class ContourList extends ArrayList<Contour> {
 

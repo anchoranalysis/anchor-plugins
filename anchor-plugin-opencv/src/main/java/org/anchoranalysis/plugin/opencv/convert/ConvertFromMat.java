@@ -33,20 +33,19 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.FunctionalIterate;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.factory.ChannelFactory;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.extent.Extent;
-import org.anchoranalysis.image.extent.IncorrectImageSizeException;
-import org.anchoranalysis.image.stack.Stack;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.dimensions.IncorrectImageSizeException;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedByte;
-import org.anchoranalysis.image.voxel.buffer.VoxelBufferUnsignedShort;
+import org.anchoranalysis.image.voxel.buffer.VoxelBufferWrap;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactoryTypeBound;
+import org.anchoranalysis.spatial.extent.Extent;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -59,9 +58,11 @@ public class ConvertFromMat {
     public static Stack toStack(Mat mat) throws OperationFailedException {
 
         if (mat.type() == CvType.CV_8UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedByte::wrapRaw, VoxelsFactory.getByte());
+            return toGrayscale(
+                    mat, VoxelBufferWrap::unsignedByteRaw, VoxelsFactory.getUnsignedByte());
         } else if (mat.type() == CvType.CV_16UC1) {
-            return toGrayscale(mat, VoxelBufferUnsignedShort::wrapRaw, VoxelsFactory.getShort());
+            return toGrayscale(
+                    mat, VoxelBufferWrap::unsignedShortRaw, VoxelsFactory.getUnsignedShort());
         } else if (mat.type() == CvType.CV_8UC3) {
             return toRGB(mat);
         } else {
@@ -100,9 +101,9 @@ public class ConvertFromMat {
         Extent extent = channelRed.extent();
         Preconditions.checkArgument(extent.z() == 1);
 
-        UnsignedByteBuffer red = BufferHelper.bufferFromChannel(channelRed);
-        UnsignedByteBuffer green = BufferHelper.bufferFromChannel(channelGreen);
-        UnsignedByteBuffer blue = BufferHelper.bufferFromChannel(channelBlue);
+        UnsignedByteBuffer red = BufferHelper.extractByte(channelRed);
+        UnsignedByteBuffer green = BufferHelper.extractByte(channelGreen);
+        UnsignedByteBuffer blue = BufferHelper.extractByte(channelBlue);
 
         byte[] arr = new byte[3];
 

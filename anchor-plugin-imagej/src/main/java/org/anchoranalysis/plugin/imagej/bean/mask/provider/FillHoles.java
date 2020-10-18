@@ -26,7 +26,6 @@
 
 package org.anchoranalysis.plugin.imagej.bean.mask.provider;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
@@ -35,17 +34,18 @@ import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.bean.unitvalue.areavolume.UnitValueAreaOrVolume;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.mask.combine.MaskAnd;
-import org.anchoranalysis.image.binary.mask.combine.MaskOr;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.MaskFromObjects;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectsFromConnectedComponentsFactory;
+import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.core.mask.MaskFromObjects;
+import org.anchoranalysis.image.core.mask.combine.MaskAnd;
+import org.anchoranalysis.image.core.mask.combine.MaskOr;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
+import org.anchoranalysis.spatial.extent.Extent;
 
 public class FillHoles extends MaskProviderUnary {
 
@@ -89,7 +89,7 @@ public class FillHoles extends MaskProviderUnary {
         ObjectsFromConnectedComponentsFactory objectCreator =
                 new ObjectsFromConnectedComponentsFactory();
 
-        return filterObjects(objectCreator.createConnectedComponents(mask), mask.dimensions());
+        return filterObjects(objectCreator.createConnectedComponents(mask.binaryVoxels()), mask.dimensions());
     }
 
     private ObjectCollection filterObjects(ObjectCollection objects, Dimensions dimensions)
@@ -98,13 +98,13 @@ public class FillHoles extends MaskProviderUnary {
         final double maxVolumeResolved = determineMaxVolume(dimensions);
 
         return objects.stream()
-                .filter(objectMask -> includeObject(objectMask, dimensions, maxVolumeResolved));
+                .filter(objectMask -> includeObject(objectMask, dimensions.extent(), maxVolumeResolved));
     }
 
     private double determineMaxVolume(Dimensions dimensions) throws CreateException {
         if (maxVolume != null) {
             try {
-                return maxVolume.resolveToVoxels(Optional.of(dimensions.unitConvert()));
+                return maxVolume.resolveToVoxels(dimensions.unitConvert());
             } catch (UnitValueException e) {
                 throw new CreateException(e);
             }
@@ -114,9 +114,9 @@ public class FillHoles extends MaskProviderUnary {
     }
 
     private boolean includeObject(
-            ObjectMask object, Dimensions dimensions, double maxVolumeResolved) {
+            ObjectMask object, Extent extent, double maxVolumeResolved) {
         // It's not allowed touch the border
-        if (skipAtBorder && object.boundingBox().atBorderXY(dimensions)) {
+        if (skipAtBorder && object.boundingBox().atBorderXY(extent)) {
             return false;
         }
 

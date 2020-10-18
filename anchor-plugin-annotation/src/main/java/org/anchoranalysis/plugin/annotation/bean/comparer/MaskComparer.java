@@ -36,23 +36,23 @@ import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.values.BinaryValues;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.io.RasterIOException;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReaderUtilities;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.io.ImageIOException;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
+import org.anchoranalysis.image.io.stack.MaskReader;
+import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 public class MaskComparer extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private boolean invert = false;
     // END BEAN PROPERTIES
@@ -62,18 +62,18 @@ public class MaskComparer extends Comparer {
             Path filePathSource, Dimensions dimensions, boolean debugMode) throws CreateException {
 
         try {
-            Path maskPath = filePathGenerator.outFilePath(filePathSource, debugMode);
+            Path maskPath = derivePath.deriveFrom(filePathSource, debugMode);
 
             if (!maskPath.toFile().exists()) {
                 return new NotFound<>(maskPath, "No mask exists");
             }
 
             Mask mask =
-                    RasterReaderUtilities.openMask(rasterReader, maskPath, createBinaryValues());
+                    MaskReader.openMask(stackReader, maskPath, createBinaryValues());
 
             return new Found<>(convertToObjects(mask));
 
-        } catch (AnchorIOException | RasterIOException e) {
+        } catch (DerivePathException | ImageIOException e) {
             throw new CreateException(e);
         }
     }
@@ -87,6 +87,6 @@ public class MaskComparer extends Comparer {
     }
 
     private static ObjectCollection convertToObjects(Mask mask) {
-        return ObjectCollectionFactory.of(mask);
+        return ObjectCollectionFactory.of(mask.binaryVoxels());
     }
 }

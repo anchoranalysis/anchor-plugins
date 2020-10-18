@@ -31,27 +31,26 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.core.params.KeyValueParams;
-import org.anchoranalysis.feature.calculate.results.ResultsVector;
 import org.anchoranalysis.feature.name.FeatureNameList;
+import org.anchoranalysis.feature.results.ResultsVector;
 import org.anchoranalysis.io.generator.serialized.KeyValueParamsGenerator;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
 
 /** Exports a ResultVector as a KeyValueParams */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class KeyValueParamsExporter {
 
     public static void export(
-            FeatureNameList featureNames, ResultsVector rv, BoundIOContext context) {
-        KeyValueParams kvp = convert(featureNames, rv, context.getLogger());
-        writeKeyValueParams(kvp, context.getOutputManager());
+            FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
+        writeKeyValueParams( () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
     }
 
-    private static void writeKeyValueParams(
-            KeyValueParams kvp, BoundOutputManagerRouteErrors outputManager) {
-        outputManager
-                .getWriterCheckIfAllowed()
-                .write("keyValueParams", () -> new KeyValueParamsGenerator(kvp, "keyValueParams"));
+    private static void writeKeyValueParams(ElementSupplier<KeyValueParams> params, Outputter outputter) {
+        outputter
+                .writerSelective()
+                .write("keyValueParams", () -> new KeyValueParamsGenerator("keyValueParams"), params);
     }
 
     private static KeyValueParams convert(

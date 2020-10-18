@@ -34,10 +34,10 @@ import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.task.feature.InitParamsWithEnergyStack;
-import org.anchoranalysis.plugin.image.task.feature.CalculateFeaturesForObjects.LabelsForInput;
+import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects;
+import org.anchoranalysis.plugin.image.task.feature.calculator.CalculateFeaturesForObjects.LabelsForInput;
 
 @AllArgsConstructor
 class CalculateFeaturesFromProvider<T extends FeatureInput> {
@@ -45,8 +45,7 @@ class CalculateFeaturesFromProvider<T extends FeatureInput> {
     private final CalculateFeaturesForObjects<T> calculator;
     private final InitParamsWithEnergyStack initParams;
 
-    public void processProvider(
-            ObjectCollectionProvider provider, LabelsForInput<T> labelsForInput)
+    public void processProvider(ObjectCollectionProvider provider, LabelsForInput<T> labelsForInput)
             throws OperationFailedException {
         calculator.calculateFeaturesForObjects(
                 objectsFromProvider(provider, initParams.getImageInit(), calculator.getLogger()),

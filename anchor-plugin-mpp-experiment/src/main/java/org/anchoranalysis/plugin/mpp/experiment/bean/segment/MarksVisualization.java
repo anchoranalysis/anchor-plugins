@@ -26,16 +26,18 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.segment;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.function.Supplier;
+import org.anchoranalysis.core.cache.CachedSupplier;
 import org.anchoranalysis.core.color.ColorIndex;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.idgetter.IDGetterIter;
-import org.anchoranalysis.image.stack.DisplayStack;
-import org.anchoranalysis.io.bean.object.writer.Filled;
-import org.anchoranalysis.io.bean.object.writer.Outline;
-import org.anchoranalysis.io.output.bound.BoundOutputManagerRouteErrors;
-import org.anchoranalysis.io.output.writer.WriterRouterErrors;
+import org.anchoranalysis.image.core.stack.DisplayStack;
+import org.anchoranalysis.image.io.bean.object.draw.Filled;
+import org.anchoranalysis.image.io.bean.object.draw.Outline;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
+import org.anchoranalysis.io.output.outputter.Outputter;
+import org.anchoranalysis.io.output.writer.ElementSupplier;
 import org.anchoranalysis.mpp.io.marks.ColoredMarksWithDisplayStack;
 import org.anchoranalysis.mpp.io.marks.generator.MarksGenerator;
 import org.anchoranalysis.mpp.mark.ColoredMarks;
@@ -49,34 +51,47 @@ import org.anchoranalysis.overlay.bean.DrawObject;
  *
  * @author Owen Feehan
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 class MarksVisualization {
 
-    public static void write(
-            MarkCollection marks,
-            BoundOutputManagerRouteErrors outputManager,
-            DisplayStack backgroundStack)
-            throws OperationFailedException {
-        ColorIndex colorIndex =
-                outputManager.getOutputWriteSettings().defaultColorIndexFor(marks.size());
+    public static final String OUTPUT_VISUALIZE_MARKS_SOLID = "solid";
+    public static final String OUTPUT_VISUALIZE_MARKS_OUTLINE = "outline";
+    
+    private final MarkCollection marks;
+    private final Outputter outputter;
+    private final DisplayStack backgroundStack;
+    
+    public void write() {
 
-        WriterRouterErrors writeIfAllowed = outputManager.getWriterCheckIfAllowed();
-        ColoredMarksWithDisplayStack marksWithStack =
-                new ColoredMarksWithDisplayStack(
-                        new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>()),
-                        backgroundStack);
+        // Cache the creation of colored-marks
+        CachedSupplier<ColoredMarksWithDisplayStack,OutputWriteFailedException> cachedMarksWithStack = CachedSupplier.cache(this::createMarksWithStack);
 
-        writeMarksGenerator(writeIfAllowed, "solid", new Filled(), marksWithStack);
-        writeMarksGenerator(writeIfAllowed, "outline", new Outline(), marksWithStack);
+        writeColoredMarks(OUTPUT_VISUALIZE_MARKS_SOLID, Filled::new, cachedMarksWithStack::get);
+        writeColoredMarks(OUTPUT_VISUALIZE_MARKS_OUTLINE, Outline::new, cachedMarksWithStack::get);
+    }
+    
+    private ColoredMarksWithDisplayStack createMarksWithStack() throws OutputWriteFailedException {
+        try {
+            ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
+            
+            return new ColoredMarksWithDisplayStack(
+                    new ColoredMarks(marks, colorIndex, new IDGetterIter<Mark>()),
+                    backgroundStack);
+        } catch (OperationFailedException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 
-    private static void writeMarksGenerator(
-            WriterRouterErrors writeIfAllowed,
+    private void writeColoredMarks(
             String outputName,
-            DrawObject drawObject,
-            ColoredMarksWithDisplayStack marksWithStack) {
-        writeIfAllowed.write(
+            Supplier<DrawObject> drawObject,
+            ElementSupplier<ColoredMarksWithDisplayStack> marksWithStack) {
+        outputter.writerSelective().write(
                 outputName,
-                () -> new MarksGenerator(drawObject, marksWithStack, new IDGetterIter<Overlay>()));
+                () -> createMarksGenerator(drawObject.get()), marksWithStack);
+    }
+    
+    private static MarksGenerator createMarksGenerator(DrawObject drawObject) {
+        return new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
     }
 }

@@ -31,7 +31,6 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.error.AnchorIOException;
 
 /**
  * Rejects files that fail to match a particular regular-expression
@@ -49,8 +48,7 @@ public class EnsureRegExMatch extends CopyFilesNamingOneRegEx {
     // END BEAN PROPERTIES
 
     @Override
-    protected Optional<Path> destinationPathRelative(Path pathDelegate, String regex)
-            throws AnchorIOException {
+    protected Optional<Path> destinationPathRelative(Path pathDelegate, String regex) {
         if (acceptPath(pathDelegate, regex)) {
             return Optional.of(pathDelegate);
         } else {

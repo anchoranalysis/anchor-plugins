@@ -29,9 +29,9 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 import java.util.ArrayList;
 import java.util.List;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.point.Point3i;
 
 // Stores minima points
 class MinimaStore {

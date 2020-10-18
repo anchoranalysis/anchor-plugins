@@ -32,7 +32,6 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3d;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
@@ -45,6 +44,7 @@ import org.anchoranalysis.mpp.proposer.ProposalAbnormalFailureException;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculationContext;
+import org.anchoranalysis.spatial.point.Point3d;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class KernelBirthAndKillHelper {

@@ -29,7 +29,8 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class PreserveName implements CopyFilesNaming {
 
@@ -39,13 +40,17 @@ public class PreserveName implements CopyFilesNaming {
     }
 
     @Override
-    public void afterCopying(Path destDir, boolean dummyMode) throws AnchorIOException {
+    public void afterCopying(Path destDir, boolean dummyMode) throws OutputWriteFailedException {
         // NOTHING TO DO
     }
 
     @Override
     public Optional<Path> destinationPathRelative(Path sourceDir, Path destDir, File file, int iter)
-            throws AnchorIOException {
-        return Optional.of(NamingUtilities.filePathDiff(sourceDir, file.toPath()));
+            throws OutputWriteFailedException {
+        try {
+            return Optional.of(NamingUtilities.filePathDifference(sourceDir, file.toPath()));
+        } catch (PathDifferenceException e) {
+            throw new OutputWriteFailedException(e);
+        }
     }
 }

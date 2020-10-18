@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 
 /**
  * Flattens a mask in the z-dimension, so it is 2D instead of 3D (like a maximum intensity

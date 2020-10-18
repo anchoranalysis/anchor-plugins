@@ -35,8 +35,8 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.feature.bean.stack.FeatureStack;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
@@ -95,6 +95,9 @@ public class HOGFeature extends FeatureStack {
     @Override
     protected double calculate(SessionInput<FeatureInputStack> input)
             throws FeatureCalculationException {
+
+        CVInit.blockUntilLoaded();
+
         float[] arr =
                 input.calculate(new CalculateHOGDescriptor(Optional.ofNullable(resizeTo), params));
 

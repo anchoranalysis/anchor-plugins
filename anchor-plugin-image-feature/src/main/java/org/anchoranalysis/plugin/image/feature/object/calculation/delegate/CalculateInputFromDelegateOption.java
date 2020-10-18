@@ -30,11 +30,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.EqualsAndHashCode;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.SessionInput;
-import org.anchoranalysis.feature.cache.calculate.FeatureCalculation;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 
 /**

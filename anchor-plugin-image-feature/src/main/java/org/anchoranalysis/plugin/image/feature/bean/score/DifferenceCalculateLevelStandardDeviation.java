@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.LessThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Similar to {@link Difference} but calculates the width as the standard-deviation of the histogram

@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.extent.box.BoundedList;
-import org.anchoranalysis.image.extent.box.BoundingBox;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.io.generator.IterableGenerator;
-import org.anchoranalysis.io.generator.IterableGeneratorBridge;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.io.generator.Generator;
+import org.anchoranalysis.io.generator.GeneratorBridge;
+import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
 
 /**
  * Exposes an iterable generator that accepts other kinds of objects as one that accepts a {@link
@@ -51,9 +51,9 @@ class WrapGenerators {
      * @param flatten whether the bounding-box should be flattened in the z dimension
      * @return the wrapped generator
      */
-    public static IterableGenerator<BoundedList<ObjectMask>> wrapBoundingBox(
-            IterableGenerator<BoundingBox> generator, boolean flatten) {
-        return IterableGeneratorBridge.createOneToMany(
+    public static Generator<BoundedList<ObjectMask>> wrapBoundingBox(
+            Generator<BoundingBox> generator, boolean flatten) {
+        return GeneratorBridge.createOneToMany(
                 generator, objects -> Stream.of(boundingBoxFromObject(objects, flatten)));
     }
 
@@ -64,10 +64,9 @@ class WrapGenerators {
      * @param generator existing generator to wrap
      * @return the wrapped generator
      */
-    public static IterableGenerator<BoundedList<ObjectMask>> wrapObjectMask(
-            IterableGenerator<ObjectMask> generator) {
-        return IterableGeneratorBridge.createOneToMany(
-                generator, objects -> objects.list().stream());
+    public static Generator<BoundedList<ObjectMask>> wrapObjectMask(
+            Generator<ObjectMask> generator) {
+        return GeneratorBridge.createOneToMany(generator, objects -> objects.list().stream());
     }
 
     private static BoundingBox boundingBoxFromObject(

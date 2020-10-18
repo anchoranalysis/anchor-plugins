@@ -40,11 +40,11 @@ import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.plugin.annotation.comparison.AnnotationComparisonInput;
 
 public class AnnotationComparisonInputManager<T extends InputFromManager>
@@ -61,17 +61,17 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
 
     @BeanField @Getter @Setter private Comparer comparerRight;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
     // END BEAN PROPERTIES
 
     @Override
-    public List<AnnotationComparisonInput<T>> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
+    public List<AnnotationComparisonInput<T>> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
 
-            Iterator<T> itr = input.inputObjects(params).iterator();
+            Iterator<T> itr = input.inputs(params).iterator();
 
             prm.incrWorker();
 
@@ -86,7 +86,7 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                         createListInputWithAnnotationPath(
                                 tempList, new ProgressReporterOneOfMany(prm));
             } catch (CreateException e) {
-                throw new AnchorIOException("Cannot create inputs (with annotation path)", e);
+                throw new InputReadFailedException("Cannot create inputs (with annotation path)", e);
             }
             prm.incrWorker();
 
@@ -95,15 +95,15 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
     }
 
     private List<AnnotationComparisonInput<T>> createListInputWithAnnotationPath(
-            List<T> listInputObjects, ProgressReporter progressReporter) throws CreateException {
+            List<T> listInputs, ProgressReporter progressReporter) throws CreateException {
         return FunctionalProgress.mapList(
-                listInputObjects,
+                listInputs,
                 progressReporter,
-                inputObject ->
+                input ->
                         new AnnotationComparisonInput<>(
-                                inputObject,
+                                input,
                                 Tuple.of(comparerLeft, comparerRight),
                                 Tuple.of(nameLeft, nameRight),
-                                rasterReader));
+                                stackReader));
     }
 }

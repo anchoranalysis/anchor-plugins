@@ -32,9 +32,9 @@ import java.util.TreeSet;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderByLine.ReadByLine;
-import org.anchoranalysis.io.csv.reader.CSVReaderException;
+import org.anchoranalysis.io.input.csv.CSVReaderByLine;
+import org.anchoranalysis.io.input.csv.CSVReaderException;
+import org.anchoranalysis.io.input.csv.ReadByLine;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CsvMatcher {

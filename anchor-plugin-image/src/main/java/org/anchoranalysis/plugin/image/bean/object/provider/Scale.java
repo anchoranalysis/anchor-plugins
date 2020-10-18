@@ -32,13 +32,14 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.bean.scale.ScaleCalculator;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.image.object.scale.ScaledElements;
-import org.anchoranalysis.image.scale.ScaleFactor;
+import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.scale.ScaledElements;
+import org.anchoranalysis.image.core.object.scale.Scaler;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
+import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
 
 /**
  * Scales all the objects in the collection by a particular scale-factor.
@@ -66,8 +67,9 @@ public class Scale extends WithDimensionsBase {
         }
 
         try {
-            ScaledElements<ObjectMask> scaledObjects = objects.scale(scaleFactor, dimensions.extent());
-            return ObjectCollectionFactory.of( scaledObjects.asCollectionOrderNotPreserved() );
+            ScaledElements<ObjectMask> scaledObjects =
+                    Scaler.scaleObjects(objects, scaleFactor, dimensions.extent());
+            return ObjectCollectionFactory.of(scaledObjects.asCollectionOrderNotPreserved());
         } catch (OperationFailedException e) {
             throw new CreateException(e);
         }

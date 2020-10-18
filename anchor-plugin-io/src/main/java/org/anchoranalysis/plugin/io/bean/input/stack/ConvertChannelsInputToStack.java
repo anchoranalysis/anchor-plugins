@@ -35,12 +35,12 @@ import org.anchoranalysis.core.name.store.NamedProviderStore;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;
 import org.anchoranalysis.core.progress.ProgressReporterOneOfMany;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.stack.Stack;
+import org.anchoranalysis.image.core.stack.TimeSequence;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 import org.anchoranalysis.image.io.input.series.NamedChannelsForSeries;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.image.stack.TimeSequence;
 
 /**
  * An input object that converts {@link NamedChannelsInput} to {@link StackSequenceInput}
@@ -67,8 +67,8 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
     }
 
     @Override
-    public String descriptiveName() {
-        return input.descriptiveName();
+    public String name() {
+        return input.name();
     }
 
     @Override
@@ -83,27 +83,27 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
 
     @Override
     public TimeSequenceSupplier createStackSequenceForSeries(int seriesNum)
-            throws RasterIOException {
+            throws ImageIOException {
         return progressReporter -> convert(progressReporter, input, seriesNum);
     }
 
     @Override
     public void addToStoreInferNames(
             NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        input.addToStoreInferNames(stackCollection, seriesNum, progressReporter);
+        input.addToStoreInferNames(stackCollection, seriesIndex, progressReporter);
     }
 
     @Override
     public void addToStoreWithName(
             String name,
-            NamedProviderStore<TimeSequence> stackCollection,
-            int seriesNum,
+            NamedProviderStore<TimeSequence> stacks,
+            int seriesIndex,
             ProgressReporter progressReporter)
             throws OperationFailedException {
-        input.addToStoreWithName(name, stackCollection, seriesNum, progressReporter);
+        input.addToStoreWithName(name, stacks, seriesIndex, progressReporter);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ConvertChannelsInputToStack implements StackSequenceInput {
 
             return new TimeSequence(stackFromNamedChannels(namedChannels, prm));
 
-        } catch (RasterIOException e) {
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }

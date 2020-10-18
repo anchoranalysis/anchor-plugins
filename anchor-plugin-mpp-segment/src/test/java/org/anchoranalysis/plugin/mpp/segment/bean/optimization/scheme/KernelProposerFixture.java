@@ -31,7 +31,7 @@ import java.util.Optional;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
@@ -44,7 +44,7 @@ import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.K
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.independent.pixelized.KernelDeathPixelized;
 import org.anchoranalysis.plugin.mpp.segment.bean.kernel.proposer.KernelProposerOptionSingle;
 import org.anchoranalysis.test.experiment.BeanTestChecker;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 
 class KernelProposerFixture {
 
@@ -59,7 +59,7 @@ class KernelProposerFixture {
     public static KernelProposer<VoxelizedMarksWithEnergy> createBirthAndDeath(
             MarkProposer markProposer) throws CreateException, InitException {
 
-        BoundIOContext context = BoundIOContextFixture.withSuppressedLogger();
+        InputOutputContext context = InputOutputContextFixture.withSuppressedLogger();
 
         MPPInitParams initParams =
                 MPPInitParamsFactory.create(context, Optional.empty(), Optional.empty());

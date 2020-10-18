@@ -30,11 +30,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.channel.convert.ChannelConverter;
-import org.anchoranalysis.image.channel.convert.ConversionPolicy;
-import org.anchoranalysis.image.channel.convert.ToUnsignedByte;
-import org.anchoranalysis.image.channel.convert.ToUnsignedShort;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.channel.convert.ChannelConverter;
+import org.anchoranalysis.image.core.channel.convert.ConversionPolicy;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedByte;
+import org.anchoranalysis.image.core.channel.convert.ToUnsignedShort;
 
 public abstract class GradientBase extends ChannelProviderUnary {
 

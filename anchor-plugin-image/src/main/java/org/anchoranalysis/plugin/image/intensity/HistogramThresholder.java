@@ -30,7 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HistogramThresholder {

@@ -31,22 +31,22 @@ import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
-import org.anchoranalysis.io.manifest.ManifestRecorder;
-import org.anchoranalysis.io.manifest.ManifestRecorderFile;
+import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;
 import org.anchoranalysis.mpp.mark.MarkCollection;
+import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;
 
 public class NumberMarksFromManifest extends ReportFeatureForManifest {
 
     @Override
-    public String featureDescription(ManifestRecorderFile object, Logger logger)
+    public String featureDescription(DeserializedManifest object, Logger logger)
             throws OperationFailedException {
 
         FinderSerializedObject<MarkCollection> finder =
                 new FinderSerializedObject<>(
                         "marks", new ErrorReporterIntoLog(new ConsoleMessageLogger()));
 
-        ManifestRecorder manifest = object.get();
+        Manifest manifest = object.get();
 
         if (!finder.doFind(manifest)) {
             throw new OperationFailedException("Cannot find marks in manifest");

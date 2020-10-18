@@ -26,20 +26,19 @@
 
 package org.anchoranalysis.plugin.io.bean.input.channel;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
+import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;
-import org.anchoranalysis.image.io.bean.rasterreader.RasterReader;
+import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.input.NamedChannelsInputPart;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
-import org.anchoranalysis.io.input.FileInput;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
+import org.anchoranalysis.io.input.files.FileInput;
 import org.anchoranalysis.plugin.io.bean.channel.map.Autoname;
 
 /**
@@ -52,7 +51,7 @@ public class NamedChannels extends NamedChannelsBase {
     // START BEANS
     @BeanField @Getter @Setter private InputManager<FileInput> fileInput;
 
-    @BeanField @DefaultInstance @Getter @Setter private RasterReader rasterReader;
+    @BeanField @DefaultInstance @Getter @Setter private StackReader stackReader;
 
     @BeanField @Getter @Setter private ChannelMap channelMap = new Autoname();
 
@@ -60,21 +59,11 @@ public class NamedChannels extends NamedChannelsBase {
     // END BEANS
 
     @Override
-    public List<NamedChannelsInputPart> inputObjects(InputManagerParams params)
-            throws AnchorIOException {
-
-        List<NamedChannelsInputPart> out = new ArrayList<>();
-
-        Iterator<FileInput> iteratorFiles = fileInput.inputObjects(params).iterator();
-        while (iteratorFiles.hasNext()) {
-            out.add(
-                    new MapPart(
-                            iteratorFiles.next(),
-                            getRasterReader(),
-                            channelMap,
-                            useLastSeriesIndexOnly));
-        }
-
-        return out;
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
+        return FunctionalList.mapToList(fileInput.inputs(params), input -> new MapPart(
+                input,
+                getStackReader(),
+                channelMap,
+                useLastSeriesIndexOnly) );
     }
 }

@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.image.bean.object.provider.connected;
 
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
- * Rejects a set of objects, if any object is not fully connected (pixels form two or more seperate
+ * Rejects a set of objects, if any object is not fully connected (pixels form two or more separate
  * connected components)
  *
  * @author Owen Feehan

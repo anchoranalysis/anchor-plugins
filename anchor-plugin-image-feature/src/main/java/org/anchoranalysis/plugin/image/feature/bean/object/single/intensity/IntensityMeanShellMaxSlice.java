@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.feature.bean.object.single.intensity;
 
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * Constructs a 'shell' around an object by a number of dilation/erosion operations (not including

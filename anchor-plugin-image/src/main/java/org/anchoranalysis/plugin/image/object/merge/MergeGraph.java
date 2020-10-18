@@ -32,18 +32,18 @@ import java.util.Optional;
 import java.util.Set;
 import org.anchoranalysis.core.arithmetic.DoubleUtilities;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Comparator3i;
-import org.anchoranalysis.core.geometry.Point3i;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
-import org.anchoranalysis.image.extent.UnitConverter;
+import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.feature.evaluator.PayloadCalculator;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.condition.UpdatableBeforeCondition;
 import org.anchoranalysis.plugin.image.object.merge.priority.AssignPriority;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
+import org.anchoranalysis.spatial.point.Comparator3i;
+import org.anchoranalysis.spatial.point.Point3i;
 
 /**
  * A graph that stores each object as a vertex, where edges represent a neighborhood relation.
@@ -136,7 +136,8 @@ public class MergeGraph {
 
             if (max == null || edge.getPriority() > max.getPayload().getPriority()) {
                 max = entry;
-            } else if (DoubleUtilities.areEqual(edge.getPriority(), max.getPayload().getPriority())) {
+            } else if (DoubleUtilities.areEqual(
+                    edge.getPriority(), max.getPayload().getPriority())) {
 
                 // We can safely assume a point exists on the object-mask and call .get(), as none
                 // of the

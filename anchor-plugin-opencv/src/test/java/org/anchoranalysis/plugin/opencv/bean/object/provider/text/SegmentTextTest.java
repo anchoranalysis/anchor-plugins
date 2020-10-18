@@ -29,17 +29,17 @@ package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 import java.util.List;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.extent.box.BoundingBox;
+import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
-import org.anchoranalysis.image.stack.Stack;
-import org.anchoranalysis.io.output.bound.BoundIOContext;
+import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ConditionallyMergeOverlappingObjects;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentStackIntoObjectsPooled;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
-import org.anchoranalysis.test.image.BoundIOContextFixture;
+import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Before;
 import org.junit.Rule;
@@ -59,12 +59,14 @@ public class SegmentTextTest {
     private ImageLoader loader = new ImageLoader();
 
     private SegmentStackIntoObjectsPooled<?> segmenter;
-    
-    @Rule public WriteIntoFolder writer = new WriteIntoFolder(true);
+
+    @Rule public WriteIntoFolder writer = new WriteIntoFolder(false);
 
     @Before
     public void setUp() throws InitException {
-        segmenter = new SuppressNonMaxima<>( new SegmentText(), new ConditionallyMergeOverlappingObjects() );
+        segmenter =
+                new SuppressNonMaxima<>(
+                        new SegmentText(), new ConditionallyMergeOverlappingObjects());
         initSegmenter();
     }
 
@@ -78,18 +80,18 @@ public class SegmentTextTest {
         segmentStack(loader.carGrayscale8Bit(), SegmentTextResults.grayscale());
     }
 
-    private static int cnt = 0;
-    
+    private static int count = 0;
+
     private void segmentStack(Stack stack, List<BoundingBox> expectedBoxes)
             throws SegmentationFailedException {
         SegmentedObjects segmentResults = segmenter.segment(stack);
-        writer.writeObjects("objects" + cnt++, segmentResults.asObjects(), loader.carRGB());
+        writer.writeObjects("objects" + count++, segmentResults.asObjects(), loader.carRGB());
         ExpectedBoxesChecker.assertExpectedBoxes(segmentResults.asObjects(), expectedBoxes);
     }
 
     private void initSegmenter() throws InitException {
-        BoundIOContext context =
-                BoundIOContextFixture.withSuppressedLogger(loader.modelDirectory());
+        InputOutputContext context =
+                InputOutputContextFixture.withSuppressedLogger(loader.modelDirectory());
         segmenter.initRecursive(ImageInitParamsFactory.create(context), context.getLogger());
     }
 }

@@ -38,11 +38,12 @@ import org.anchoranalysis.annotation.io.mark.MarkAnnotationReader;
 import org.anchoranalysis.annotation.mark.DualMarksAnnotation;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.properties.ObjectCollectionWithProperties;
-import org.anchoranalysis.io.bean.filepath.generator.FilePathGenerator;
-import org.anchoranalysis.io.error.AnchorIOException;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.path.DerivePath;
+import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * @author Owen Feehan
@@ -51,7 +52,7 @@ import org.anchoranalysis.io.error.AnchorIOException;
 public class AnnotationMarksComparer<T> extends Comparer {
 
     // START BEAN PROPERTIES
-    @BeanField @Getter @Setter private FilePathGenerator filePathGenerator;
+    @BeanField @Getter @Setter private DerivePath derivePath;
     // END BEAN PROPERTIES
 
     @Override
@@ -60,8 +61,8 @@ public class AnnotationMarksComparer<T> extends Comparer {
 
         Path filePath;
         try {
-            filePath = filePathGenerator.outFilePath(filePathSource, false);
-        } catch (AnchorIOException e1) {
+            filePath = derivePath.deriveFrom(filePathSource, false);
+        } catch (DerivePathException e1) {
             throw new CreateException(e1);
         }
 
@@ -69,7 +70,7 @@ public class AnnotationMarksComparer<T> extends Comparer {
         Optional<DualMarksAnnotation<T>> annotation;
         try {
             annotation = annotationReader.read(filePath);
-        } catch (AnchorIOException e) {
+        } catch (InputReadFailedException e) {
             throw new CreateException(e);
         }
 

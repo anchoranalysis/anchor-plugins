@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.image.object.ObjectMask;
 
 /**
  * A vertex in a merge graph representing an object (and and an associated payload)

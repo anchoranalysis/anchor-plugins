@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.operator.feature.bean.list;
 
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.bean.operator.FeatureListElem;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.apache.commons.math3.stat.descriptive.moment.GeometricMean;
 

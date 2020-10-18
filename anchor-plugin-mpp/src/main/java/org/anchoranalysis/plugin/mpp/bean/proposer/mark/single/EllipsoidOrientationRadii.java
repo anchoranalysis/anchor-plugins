@@ -30,8 +30,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.image.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.mpp.bean.bound.Bound;
 import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds3D;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
@@ -41,6 +40,7 @@ import org.anchoranalysis.mpp.mark.conic.RadiiRandomizer;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
 import org.anchoranalysis.mpp.proposer.visualization.CreateProposalVisualization;
+import org.anchoranalysis.spatial.point.Point3d;
 
 public class EllipsoidOrientationRadii extends MarkProposer {
 

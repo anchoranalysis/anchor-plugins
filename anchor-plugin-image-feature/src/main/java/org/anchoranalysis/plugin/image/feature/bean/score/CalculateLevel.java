@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 public class CalculateLevel extends CalculateLevelBase {
 

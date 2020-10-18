@@ -26,19 +26,74 @@
 
 package org.anchoranalysis.plugin.opencv;
 
+import java.util.concurrent.CompletableFuture;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.opencv.opencv_java;
 
+/**
+ * Provides for initialization of the JavaCPP bridge to OpenCV.
+ *
+ * <p>Initialization is tricky as {@code Loader.load(opencv_java.class)} needs to be called once
+ * before any OpenCV libraries can be used. However, this is an expensive operation that can last
+ * several seconds.
+ *
+ * <p>To avoid delays, this class will begin the loading as soon as {@link
+ * #alwaysExecuteBeforeCallingLibrary()} is called (typically from a {@code static} block in a class
+ * that uses OpenCV, but in a separate thread that doesn't block other (typically non-OpenCV)
+ * operations.
+ *
+ * <p>Non-OpenCV code continues unaffected, but OpenCV code should not be prevented from being
+ * called until loading is complete. Therefore, code using the openCV libraries should always first
+ * call {@link #blockUntilLoaded} before immediately before the first call to an OpenCV library.
+ * This will force the thread to wait, if loading is not yet completed.
+ *
+ * @author Owen Feehan
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CVInit {
+
+    /** To synchronize on for changing {@code alreadyInit}. Value is arbitrary. */
+    private static final Object LOCK_ALREADY_INIT = new Object();
+
+    /** To synchronize on for changing {@code loaded}. Value is arbitrary. */
+    private static final Object LOCK_LOADED = new Object();
+
+    private static boolean alreadyInit = false;
+
+    private static Boolean loaded = false;
 
     /**
      * This routine must always be executed at least once before calling any routines in the OpenCV
      * library
      */
     public static void alwaysExecuteBeforeCallingLibrary() {
-        Loader.load(opencv_java.class);
+        synchronized (LOCK_ALREADY_INIT) {
+            if (!alreadyInit) {
+                alreadyInit = true;
+                CompletableFuture.runAsync(
+                        () -> {
+                            synchronized (LOCK_LOADED) {
+                                Loader.load(opencv_java.class);
+                                loaded = true;
+                                LOCK_LOADED.notifyAll();
+                            }
+                        });
+            }
+        }
+    }
+
+    /** Blocks a thread until the initialization has completed. */
+    public static void blockUntilLoaded() {
+        try {
+            synchronized (LOCK_LOADED) {
+                while (!loaded) {
+                    LOCK_LOADED.wait();
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

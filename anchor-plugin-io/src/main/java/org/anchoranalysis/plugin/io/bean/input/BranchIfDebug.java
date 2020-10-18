@@ -33,10 +33,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.io.bean.input.InputManager;
-import org.anchoranalysis.io.bean.input.InputManagerParams;
-import org.anchoranalysis.io.error.AnchorIOException;
 import org.anchoranalysis.io.input.InputFromManager;
+import org.anchoranalysis.io.input.InputReadFailedException;
+import org.anchoranalysis.io.input.bean.InputManager;
+import org.anchoranalysis.io.input.bean.InputManagerParams;
 
 /**
  * Uses one input-manager normally, but a different one if in debug mode
@@ -54,18 +54,18 @@ public class BranchIfDebug<T extends InputFromManager> extends InputManager<T> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<T> inputObjects(InputManagerParams params) throws AnchorIOException {
+    public List<T> inputs(InputManagerParams params) throws InputReadFailedException {
 
         if (params.isDebugModeActivated()) {
             if (inputDebug == null) {
                 // We pick the first
-                Iterator<T> all = input.inputObjects(params).iterator();
+                Iterator<T> all = input.inputs(params).iterator();
                 T firstItem = all.next();
                 return Collections.singletonList(firstItem);
             }
 
-            return inputDebug.inputObjects(params);
+            return inputDebug.inputs(params);
         }
-        return input.inputObjects(params);
+        return input.inputs(params);
     }
 }

@@ -33,13 +33,13 @@ import org.anchoranalysis.bean.annotation.SkipInit;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.feature.bean.Feature;
-import org.anchoranalysis.feature.cache.ChildCacheName;
-import org.anchoranalysis.feature.cache.calculate.CalculateForChild;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.CalculateForChild;
+import org.anchoranalysis.feature.calculate.cache.ChildCacheName;
 import org.anchoranalysis.feature.input.FeatureInputEnergy;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
-import org.anchoranalysis.image.binary.mask.Mask;
+import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 
 /**

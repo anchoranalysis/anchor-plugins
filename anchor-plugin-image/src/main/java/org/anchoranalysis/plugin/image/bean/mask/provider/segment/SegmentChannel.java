@@ -34,16 +34,16 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
-import org.anchoranalysis.image.bean.nonbean.parameters.BinarySegmentationParameters;
+import org.anchoranalysis.image.bean.nonbean.segment.BinarySegmentationParameters;
 import org.anchoranalysis.image.bean.provider.HistogramProvider;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.segment.binary.BinarySegmentation;
-import org.anchoranalysis.image.binary.mask.Mask;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.channel.Channel;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.mask.Mask;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromChannelBase;
 
 /**
@@ -95,7 +95,7 @@ public class SegmentChannel extends FromChannelBase {
     private BinarySegmentationParameters createParams(Dimensions dimensions)
             throws CreateException {
         return new BinarySegmentationParameters(
-                dimensions.resolution(), OptionalFactory.create(histogram));
+                OptionalFactory.create(histogram), dimensions.resolution());
     }
 
     private Optional<ObjectMask> objectFromMask(Dimensions dim) throws CreateException {

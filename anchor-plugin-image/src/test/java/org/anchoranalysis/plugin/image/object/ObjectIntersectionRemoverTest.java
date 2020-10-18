@@ -26,7 +26,7 @@
 package org.anchoranalysis.plugin.image.object;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.junit.Test;
 
 public class ObjectIntersectionRemoverTest {

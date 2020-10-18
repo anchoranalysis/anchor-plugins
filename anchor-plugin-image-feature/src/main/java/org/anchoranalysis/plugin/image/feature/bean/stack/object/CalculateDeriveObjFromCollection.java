@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.image.feature.bean.stack.object;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.feature.cache.calculate.ResolvedCalculation;
+import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
 import org.anchoranalysis.image.feature.stack.FeatureInputStack;
-import org.anchoranalysis.image.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.feature.object.calculation.delegate.CalculateInputFromDelegate;
 
 @EqualsAndHashCode(callSuper = true)

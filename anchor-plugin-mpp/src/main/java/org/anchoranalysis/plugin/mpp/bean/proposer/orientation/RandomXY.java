@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.mpp.bean.proposer.orientation;
 
 import java.util.Optional;
-import org.anchoranalysis.core.geometry.Vector3d;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.orientation.Orientation;
-import org.anchoranalysis.image.orientation.OrientationAxisAngle;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.core.orientation.Orientation;
+import org.anchoranalysis.image.core.orientation.OrientationAxisAngle;
 import org.anchoranalysis.mpp.bean.proposer.OrientationProposer;
 import org.anchoranalysis.mpp.mark.Mark;
+import org.anchoranalysis.spatial.point.Vector3d;
 
 public class RandomXY extends OrientationProposer {
 

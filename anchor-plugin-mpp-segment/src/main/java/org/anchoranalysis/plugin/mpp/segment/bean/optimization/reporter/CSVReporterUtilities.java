@@ -29,23 +29,23 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.io.generator.text.TextFileOutput;
+import org.anchoranalysis.io.generator.text.TextFileOutputter;
 import org.anchoranalysis.io.manifest.ManifestDescription;
-import org.anchoranalysis.io.output.file.FileOutput;
-import org.anchoranalysis.io.output.file.FileOutputFromManager;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CSVReporterUtilities {
 
-    public static Optional<FileOutput> createFileOutputFor(
+    public static Optional<TextFileOutput> createFileOutputFor(
             String outputName,
             FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams,
-            String manifestDscrFunction) {
-        return FileOutputFromManager.create(
+            String manifestFunction) {
+        return TextFileOutputter.create(
                 "csv",
-                Optional.of(new ManifestDescription("csv", manifestDscrFunction)),
-                initParams.getInitContext().getOutputManager().getDelegate(),
+                Optional.of(new ManifestDescription("csv", manifestFunction)),
+                initParams.getInitContext().getOutputter().getChecked(),
                 outputName);
     }
 }

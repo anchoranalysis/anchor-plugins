@@ -32,14 +32,14 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.geometry.Point3d;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.feature.cache.SessionInput;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
+import org.anchoranalysis.feature.calculate.cache.SessionInput;
+import org.anchoranalysis.image.core.points.PointsFromObject;
 import org.anchoranalysis.image.feature.bean.object.single.FeatureSingleObject;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
-import org.anchoranalysis.image.object.ObjectMask;
-import org.anchoranalysis.image.points.PointsFromObject;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.spatial.point.Point3d;
+import org.anchoranalysis.spatial.point.Point3i;
 
 // Standard deviation of distance from surface voxels to centroid
 public class ObjectRadiusStandardDeviation extends FeatureSingleObject {

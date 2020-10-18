@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
 import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
-import org.anchoranalysis.image.histogram.Histogram;
+import org.anchoranalysis.math.histogram.Histogram;
 
 /**
  * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.

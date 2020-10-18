@@ -33,7 +33,7 @@ import java.util.List;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
 
 public class AnnotationGroupList<T extends Assignment>
-        implements Iterable<AnnotationGroup<T>>, IAddAnnotation<T> {
+        implements Iterable<AnnotationGroup<T>>, AddAnnotation<T> {
 
     private List<AnnotationGroup<T>> delegate = new ArrayList<>();
 

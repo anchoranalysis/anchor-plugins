@@ -32,12 +32,12 @@ import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.error.InitException;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.geometry.Point3i;
-import org.anchoranalysis.core.geometry.Tuple3i;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
-import org.anchoranalysis.image.extent.Resolution;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Resolution;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.mpp.bean.proposer.ScalarProposer;
+import org.anchoranalysis.spatial.point.Point3i;
+import org.anchoranalysis.spatial.point.Tuple3i;
 
 // Breadth-first iteration of pixels
 public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
@@ -50,7 +50,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void beforeCreateObject(
-            RandomNumberGenerator randomNumberGenerator, Resolution resolution)
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws InitException {
         try {
             maxDistance = maxDistanceProposer.propose(randomNumberGenerator, resolution);
@@ -62,7 +62,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
     }
 
     @Override
-    public Optional<Tuple3i> maxDistanceFromRootPoint(Resolution resolution) {
+    public Optional<Tuple3i> maxDistanceFromRootPoint(Optional<Resolution> resolution) {
         int maxDistanceInt = (int) Math.ceil(this.maxDistance);
         assert (maxDistanceInt > 0);
         return Optional.of(new Point3i(maxDistanceInt, maxDistanceInt, maxDistanceInt));
@@ -70,7 +70,7 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Resolution resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         // NOTHING TO DO
     }

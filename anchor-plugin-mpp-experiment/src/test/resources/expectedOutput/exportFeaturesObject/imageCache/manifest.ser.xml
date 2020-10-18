@@ -9,10 +9,14 @@
             <type>raster</type>
             <function>stackFromCollection</function>
           </fileDescription>
-          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.SetSequenceType">
-            <set>
-              <string>input</string>
-            </set>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder" serialization="custom">
+            <org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder>
+              <default>
+                <set>
+                  <string>input</string>
+                </set>
+              </default>
+            </org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder>
           </sequenceType>
         </manifestFolderDescription>
         <path>stacks</path>
@@ -35,10 +39,14 @@
             <type>hdf5</type>
             <function>objects</function>
           </fileDescription>
-          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.SetSequenceType">
-            <set>
-              <string>objectsTest</string>
-            </set>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder" serialization="custom">
+            <org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder>
+              <default>
+                <set>
+                  <string>objectsTest</string>
+                </set>
+              </default>
+            </org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder>
           </sequenceType>
         </manifestFolderDescription>
         <path>objects</path>
@@ -61,16 +69,19 @@
             <type>raster</type>
             <function>energyStack</function>
           </fileDescription>
-          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementalSequenceType">
-            <end>2</end>
-            <start>0</start>
-            <incrementSize>1</incrementSize>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers">
+            <range>
+              <start>0</start>
+              <incrementSize>1</incrementSize>
+              <end>2</end>
+            </range>
           </sequenceType>
         </manifestFolderDescription>
         <path>energyStack</path>
         <outputName class="org.anchoranalysis.io.namestyle.IntegerSuffixOutputNameStyle">
           <outputName>energyStack</outputName>
-          <numDigits>2</numDigits>
+          <numberDigits>2</numberDigits>
+          <prefix>energyStack</prefix>
         </outputName>
         <template>
           <org.anchoranalysis.io.manifest.file.FileType>

@@ -31,11 +31,11 @@ import ij.process.ImageProcessor;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.image.binary.voxel.BinaryVoxels;
-import org.anchoranalysis.image.channel.Channel;
-import org.anchoranalysis.image.convert.UnsignedByteBuffer;
+import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
-import org.anchoranalysis.image.voxel.sliceindex.SliceBufferIndex;
+import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
+import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
+import org.anchoranalysis.image.voxel.factory.sliceindex.SliceBufferIndex;
 import org.anchoranalysis.io.imagej.convert.ConvertToImageProcessor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

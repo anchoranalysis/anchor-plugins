@@ -34,9 +34,9 @@ import org.anchoranalysis.bean.shared.relation.GreaterThanEqualToBean;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
 import org.anchoranalysis.core.error.OperationFailedException;
 import org.anchoranalysis.core.relation.RelationToValue;
-import org.anchoranalysis.image.extent.Dimensions;
-import org.anchoranalysis.image.object.ObjectCollection;
-import org.anchoranalysis.image.object.ObjectMask;
+import org.anchoranalysis.image.core.dimensions.Dimensions;
+import org.anchoranalysis.image.voxel.object.ObjectCollection;
+import org.anchoranalysis.image.voxel.object.ObjectMask;
 
 /**
  * An independent object-filter that uses a relation in its predicate.
@@ -57,15 +57,15 @@ public abstract class ObjectFilterRelation extends ObjectFilterPredicate {
     }
 
     @Override
-    protected void start(Optional<Dimensions> dim, ObjectCollection objectsToFilter)
+    protected void start(Optional<Dimensions> dimensions, ObjectCollection objectsToFilter)
             throws OperationFailedException {
         relationResolved = relation.create();
     }
 
     @Override
-    protected boolean match(ObjectMask object, Optional<Dimensions> dim)
+    protected boolean match(ObjectMask object, Optional<Dimensions> dimensions)
             throws OperationFailedException {
-        return match(object, dim, relationResolved);
+        return match(object, dimensions, relationResolved);
     }
 
     protected abstract boolean match(

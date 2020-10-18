@@ -33,7 +33,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.io.filepath.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
 
 /**

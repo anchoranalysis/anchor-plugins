@@ -23,5 +23,9 @@
  * THE SOFTWARE.
  * #L%
  */
-/** Non-bean classes for segmentation. */
+/**
+ * Non-bean classes for image-segmentation.
+ *
+ * <p>These closely relate to the beans in {@code org.anchoranalysis.plugin.image.task.bean.segment}
+ */
 package org.anchoranalysis.plugin.image.task.segment;

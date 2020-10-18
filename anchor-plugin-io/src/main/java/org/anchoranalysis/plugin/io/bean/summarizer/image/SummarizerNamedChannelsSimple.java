@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.io.bean.summarizer.image;
 
 import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.image.io.RasterIOException;
+import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.input.NamedChannelsInput;
 
 /** A simple summerizer where there's one summary-item per image (series are ignored!) */
@@ -36,11 +36,11 @@ public abstract class SummarizerNamedChannelsSimple<T> extends SummarizerNamedCh
     @Override
     public void add(NamedChannelsInput element) throws OperationFailedException {
         try {
-            incrCount(extractKey(element));
-        } catch (RasterIOException e) {
+            incrementCount(extractKey(element));
+        } catch (ImageIOException e) {
             throw new OperationFailedException(e);
         }
     }
 
-    protected abstract T extractKey(NamedChannelsInput element) throws RasterIOException;
+    protected abstract T extractKey(NamedChannelsInput element) throws ImageIOException;
 }

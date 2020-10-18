@@ -33,8 +33,8 @@ import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.core.error.CreateException;
 import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.feature.bean.Feature;
+import org.anchoranalysis.feature.bean.list.Define;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
-import org.anchoranalysis.feature.bean.list.FeatureListProviderDefine;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.test.TestLoader;
 import org.anchoranalysis.test.feature.plugins.FeaturesFromXmlFixture;
@@ -89,7 +89,7 @@ class LoadFeatureListProviderFixture<T extends FeatureInput> {
     public void useSingleFeature(Feature<T> feature) {
 
         NamedBean<FeatureListProvider<T>> nb =
-                new NamedBean<>(SINGLE_FEATURE_NAME, new FeatureListProviderDefine<>(feature));
+                new NamedBean<>(SINGLE_FEATURE_NAME, new Define<>(feature));
 
         this.features = Optional.of(Arrays.asList(nb));
     }
