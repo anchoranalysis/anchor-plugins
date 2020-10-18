@@ -43,24 +43,23 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts a set of channels to a single RGB-stack.
- * 
- * <p>Exactly three channels must be passed to {@link #convert} with names
- * <i>red</i>, <i>green</i> and <i>blue</i> (in any order).
- * 
- * <p>If the above condition is not fulfilled, {@link #fallback} is called
- * instead to process the stack.
- * 
- * <p>If the RGB-stack is created, it is assigned an empty-string as a name.
- * 
- * @author Owen Feehan
  *
+ * <p>Exactly three channels must be passed to {@link #convert} with names <i>red</i>, <i>green</i>
+ * and <i>blue</i> (in any order).
+ *
+ * <p>If the above condition is not fulfilled, {@link #fallback} is called instead to process the
+ * stack.
+ *
+ * <p>If the RGB-stack is created, it is assigned an empty-string as a name.
+ *
+ * @author Owen Feehan
  */
 public class RGB extends ChannelConvertStyle {
 
     private static final String CHANNEL_NAME_RED = "red";
     private static final String CHANNEL_NAME_GREEN = "green";
     private static final String CHANNEL_NAME_BLUE = "blue";
-    
+
     // START BEAN PROPERTIES
     /**
      * If a channel doesn't match an RGB pattern, this conversion-style can be used instead.
@@ -72,9 +71,7 @@ public class RGB extends ChannelConvertStyle {
 
     @Override
     public NamedStacks convert(
-            Set<String> channelNames,
-            ChannelGetterForTimepoint channelGetter,
-            Logger logger)
+            Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException {
 
         if (!channelNamesAreRGB(channelNames)) {
@@ -82,12 +79,13 @@ public class RGB extends ChannelConvertStyle {
             if (fallback != null) {
                 return fallback.convert(channelNames, channelGetter, logger);
             } else {
-                throw new OperationFailedException("Cannot convert as its channels do not look like RGB");
+                throw new OperationFailedException(
+                        "Cannot convert as its channels do not look like RGB");
             }
         }
 
         NamedStacks out = new NamedStacks();
-        
+
         try {
             Stack stack = createRGBStack(channelGetter, logger.messageLogger());
 
@@ -96,7 +94,7 @@ public class RGB extends ChannelConvertStyle {
         } catch (CreateException e) {
             throw new OperationFailedException("Incorrect image size", e);
         }
-        
+
         return out;
     }
 
@@ -109,7 +107,7 @@ public class RGB extends ChannelConvertStyle {
         addChannelOrBlank(CHANNEL_NAME_BLUE, channelGetter, stackRearranged, logger);
         return stackRearranged;
     }
-    
+
     private static void addChannelOrBlank(
             String channelName,
             ChannelGetterForTimepoint channelGetter,
@@ -118,7 +116,7 @@ public class RGB extends ChannelConvertStyle {
             throws CreateException {
         try {
             if (channelGetter.hasChannel(channelName)) {
-                stackRearranged.addChannel( channelGetter.getChannel(channelName) );
+                stackRearranged.addChannel(channelGetter.getChannel(channelName));
             } else {
                 logger.logFormatted(String.format("Adding a blank channel for %s", channelName));
                 stackRearranged.addBlankChannel();
@@ -131,14 +129,16 @@ public class RGB extends ChannelConvertStyle {
     }
 
     private static boolean channelNamesAreRGB(Set<String> channelNames) {
-        
+
         if (channelNames.size() > 3) {
             return false;
         }
 
         for (String key : channelNames) {
             // If a key doesn't match one of the expected red-green-blue names
-            if (!(key.equals(CHANNEL_NAME_RED) || key.equals(CHANNEL_NAME_GREEN) || key.equals(CHANNEL_NAME_BLUE))) {
+            if (!(key.equals(CHANNEL_NAME_RED)
+                    || key.equals(CHANNEL_NAME_GREEN)
+                    || key.equals(CHANNEL_NAME_BLUE))) {
                 return false;
             }
         }

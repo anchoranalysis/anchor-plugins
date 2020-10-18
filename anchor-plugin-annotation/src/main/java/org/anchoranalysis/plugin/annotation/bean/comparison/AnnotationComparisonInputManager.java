@@ -86,7 +86,8 @@ public class AnnotationComparisonInputManager<T extends InputFromManager>
                         createListInputWithAnnotationPath(
                                 tempList, new ProgressReporterOneOfMany(prm));
             } catch (CreateException e) {
-                throw new InputReadFailedException("Cannot create inputs (with annotation path)", e);
+                throw new InputReadFailedException(
+                        "Cannot create inputs (with annotation path)", e);
             }
             prm.incrWorker();
 

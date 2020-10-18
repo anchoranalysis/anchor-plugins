@@ -35,21 +35,20 @@ import org.anchoranalysis.plugin.image.task.channel.ChannelGetterForTimepoint;
 
 /**
  * Converts a channel(s) at a particular timepoint into a stack(s).
- * 
+ *
  * <p>Whether each channel becomes its own single-channeled stack, or is combined to form
  * multi-channeled stacks can vary by sub-class implementation.
- * 
- * <p>A unique-name (the channel-name) is assigned for each stack created, including
- * possibly an empty string.
- * 
- * @author Owen Feehan
  *
+ * <p>A unique-name (the channel-name) is assigned for each stack created, including possibly an
+ * empty string.
+ *
+ * @author Owen Feehan
  */
 public abstract class ChannelConvertStyle extends AnchorBean<ChannelConvertStyle> {
 
     /**
      * Converts a particular set of channels.
-     * 
+     *
      * @param channelNames a set of names of the channels to convert.
      * @param channelGetter gets a particular channel at a particualr time-point
      * @param logger the logger
@@ -57,8 +56,6 @@ public abstract class ChannelConvertStyle extends AnchorBean<ChannelConvertStyle
      * @throws OperationFailedException
      */
     public abstract NamedStacks convert(
-            Set<String> channelNames,
-            ChannelGetterForTimepoint channelGetter,
-            Logger logger)
+            Set<String> channelNames, ChannelGetterForTimepoint channelGetter, Logger logger)
             throws OperationFailedException;
 }

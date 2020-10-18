@@ -46,7 +46,8 @@ public class FromUnitValueDistance extends ScalarProposer {
     // END BEAN PROPERTIES
 
     @Override
-    public double propose(RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
+    public double propose(
+            RandomNumberGenerator randomNumberGenerator, Optional<Resolution> resolution)
             throws OperationFailedException {
         // TODO this could be a bit slow, we are creating an object on the heap every time from
         // directionVector

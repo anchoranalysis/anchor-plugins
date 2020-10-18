@@ -60,7 +60,8 @@ class EnergyStackHelper {
                                                         .getOptional(paramsName))
                                 .orElseGet(KeyValueParams::new);
 
-                EnergyStack energyStack = new EnergyStack(soImage.stacks().getException("energyStack"), params); 
+                EnergyStack energyStack =
+                        new EnergyStack(soImage.stacks().getException("energyStack"), params);
                 new EnergyStackWriter(energyStack, context.getOutputter()).writeEnergyStack();
             }
         } catch (NamedProviderGetException e) {

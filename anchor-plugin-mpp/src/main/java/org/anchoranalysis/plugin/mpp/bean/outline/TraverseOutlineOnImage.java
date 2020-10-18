@@ -112,7 +112,8 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
         }
     }
 
-    private void callBefore(Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+    private void callBefore(
+            Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         try {
             visitScheduler.beforeCreateObject(randomNumberGenerator, resolution);
@@ -128,7 +129,9 @@ public class TraverseOutlineOnImage extends OutlinePixelsRetriever {
     }
 
     private void callAfter(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws TraverseOutlineException {
         Point3i rootRelToMask =
                 BoundingBox.relativePositionTo(root, objectOutline.boundingBox().cornerMin());

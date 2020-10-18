@@ -59,16 +59,18 @@ public abstract class BlurStrategy extends AnchorBean<BlurStrategy> {
         double sigmaToUse = sigma;
 
         if (sigmaInMeters) {
-            
+
             if (dimensions.unitConvert().isPresent()) {
-            
-                // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
+
+                // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care
+                // of
                 // later)
-                sigmaToUse = dimensions.unitConvert().get().fromPhysicalDistance(sigma);    // NOSONAR
-    
+                sigmaToUse = dimensions.unitConvert().get().fromPhysicalDistance(sigma); // NOSONAR
+
                 logger.logFormatted("Converted sigmaInMeters=%f into sigma=%f", sigma, sigmaToUse);
             } else {
-                throw new OperationFailedException("Sigma is specified in meters, but no image-resolution is present");
+                throw new OperationFailedException(
+                        "Sigma is specified in meters, but no image-resolution is present");
             }
         }
 

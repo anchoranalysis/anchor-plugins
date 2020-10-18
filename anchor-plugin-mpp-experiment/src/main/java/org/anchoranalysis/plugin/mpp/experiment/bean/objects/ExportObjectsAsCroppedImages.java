@@ -74,11 +74,11 @@ import org.anchoranalysis.spatial.extent.box.BoundedList;
  * @author Owen Feehan
  */
 public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, NoSharedState> {
-    
+
     private static final String OUTPUT_EXTRACTED_OBJECTS = "extractedObjects";
-    
+
     private static final String FILE_PREFIX_EXTRACTED_OBJECTS = "object";
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private DefineOutputterMPP define;
 
@@ -155,17 +155,18 @@ public class ExportObjectsAsCroppedImages extends ExportObjectsBase<MultiInput, 
     private void outputGeneratorSequence(
             Generator<BoundedList<ObjectMask>> generator,
             ObjectCollection objects,
-            OutputterChecked outputter) throws OutputWriteFailedException {
+            OutputterChecked outputter)
+            throws OutputWriteFailedException {
 
-        Stream<BoundedList<ObjectMask>> sequence = objects.streamStandardJava()
-                .map(
-                        object -> BoundedList.createSingle(object, ObjectMask::boundingBox)
-                        );
-        
-        new OutputSequenceFactory<>(generator, outputter).incrementingByOneStream(
-               new OutputPatternIntegerSuffix(OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
-               sequence
-        );
+        Stream<BoundedList<ObjectMask>> sequence =
+                objects.streamStandardJava()
+                        .map(object -> BoundedList.createSingle(object, ObjectMask::boundingBox));
+
+        new OutputSequenceFactory<>(generator, outputter)
+                .incrementingByOneStream(
+                        new OutputPatternIntegerSuffix(
+                                OUTPUT_EXTRACTED_OBJECTS, FILE_PREFIX_EXTRACTED_OBJECTS),
+                        sequence);
     }
 
     private void outputObjects(ImageInitParams paramsInit, InputOutputContext context)

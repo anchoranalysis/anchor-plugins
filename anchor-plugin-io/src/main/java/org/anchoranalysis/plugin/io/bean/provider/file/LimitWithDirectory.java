@@ -41,9 +41,7 @@ public class LimitWithDirectory extends FilesProviderWithDirectoryUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source)
-            throws FilesProviderException {
-        return LimitUtilities.apply(
-                source, maxNumItems);
+    protected Collection<File> transform(Collection<File> source) throws FilesProviderException {
+        return LimitUtilities.apply(source, maxNumItems);
     }
 }

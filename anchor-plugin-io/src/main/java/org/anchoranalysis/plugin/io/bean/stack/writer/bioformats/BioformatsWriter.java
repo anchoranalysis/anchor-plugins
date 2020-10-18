@@ -71,10 +71,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries,
-            Path filePath,
-            boolean makeRGB,
-            StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
             throws ImageIOException {
         throw new ImageIOException(
                 "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
@@ -90,39 +87,47 @@ public abstract class BioformatsWriter extends StackWriter {
         }
 
         if (stack.allChannelsHaveIdenticalType()) {
-            writeHomogeneousChannels(stack, filePath, makeRGB);   
+            writeHomogeneousChannels(stack, filePath, makeRGB);
         } else {
             writeHeterogeneousChannels(stack, filePath, makeRGB);
         }
     }
 
-    /** Creates or gets an instance of {@link IFormatWriter} which dictates the file format to use for writing. */
+    /**
+     * Creates or gets an instance of {@link IFormatWriter} which dictates the file format to use
+     * for writing.
+     */
     protected abstract IFormatWriter createWriter() throws ImageIOException;
-    
+
     /** When channels all have the same type. */
-    private void writeHomogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws ImageIOException {
+    private void writeHomogeneousChannels(Stack stack, Path filePath, boolean makeRGB)
+            throws ImageIOException {
         VoxelDataType channelType = stack.getChannel(0).getVoxelDataType();
-        
-        VoxelTypeHelper.checkChannelTypeSupported("Channels in stack the are an ", channelType, () -> 
-            writeStackInternal(stack, filePath, makeRGB, channelType)
-        );
+
+        VoxelTypeHelper.checkChannelTypeSupported(
+                "Channels in stack the are an ",
+                channelType,
+                () -> writeStackInternal(stack, filePath, makeRGB, channelType));
     }
 
     /** When channels have varying types. */
-    private void writeHeterogeneousChannels(Stack stack, Path filePath, boolean makeRGB) throws ImageIOException {
+    private void writeHeterogeneousChannels(Stack stack, Path filePath, boolean makeRGB)
+            throws ImageIOException {
         // Find common type to represent all channels
-        Stream<VoxelDataType> stream = stack.asListChannels().stream().map(Channel::getVoxelDataType);
+        Stream<VoxelDataType> stream =
+                stack.asListChannels().stream().map(Channel::getVoxelDataType);
         VoxelDataType commonType = FindCommonVoxelType.commonType(stream).get(); // NOSONAR
-        
-        VoxelTypeHelper.checkChannelTypeSupported("The common channel representation for the channels in stack is ", commonType, () -> 
-            writeStackInternal(stack, filePath, makeRGB, commonType)
-        );        
+
+        VoxelTypeHelper.checkChannelTypeSupported(
+                "The common channel representation for the channels in stack is ",
+                commonType,
+                () -> writeStackInternal(stack, filePath, makeRGB, commonType));
     }
 
     private void writeStackInternal(
             Stack stack, Path filePath, boolean makeRGB, VoxelDataType voxelDataTypeToWrite)
             throws ImageIOException {
-                
+
         try (IFormatWriter writer = createWriter()) {
             prepareWriter(writer, stack, voxelDataTypeToWrite, makeRGB);
 
@@ -138,19 +143,22 @@ public abstract class BioformatsWriter extends StackWriter {
         }
     }
 
-    private static void writeStack(IFormatWriter writer, Stack stack, boolean makeRGB, VoxelDataType voxelDataTypeToWrite)
+    private static void writeStack(
+            IFormatWriter writer, Stack stack, boolean makeRGB, VoxelDataType voxelDataTypeToWrite)
             throws ImageIOException {
         if (makeRGB) {
-            writeRGB(writer,stack);
+            writeRGB(writer, stack);
         } else {
-            List<ByteRepresentationForChannel> channels = FunctionalList.mapToList(
-               stack.asListChannels().stream(),
-               channel -> ByteRepresentationFactory.byteRepresentationFor(channel, voxelDataTypeToWrite)
-            );
+            List<ByteRepresentationForChannel> channels =
+                    FunctionalList.mapToList(
+                            stack.asListChannels().stream(),
+                            channel ->
+                                    ByteRepresentationFactory.byteRepresentationFor(
+                                            channel, voxelDataTypeToWrite));
             writeAsSeparateChannels(writer, channels, stack.dimensions().z());
         }
     }
-    
+
     private static void writeRGB(IFormatWriter writer, Stack stack) throws ImageIOException {
         if (stack.getNumberChannels() != 3) {
             throw new ImageIOException(
@@ -172,23 +180,28 @@ public abstract class BioformatsWriter extends StackWriter {
 
         try {
             PixelType pixelType = VoxelTypeHelper.pixelTypeFor(voxelDataTypeToWrite);
-            
+
             writer.setMetadataRetrieve(
                     MetadataUtilities.createMetadata(
-                            stack.dimensions(), stack.getNumberChannels(), pixelType, makeRGB, false));
+                            stack.dimensions(),
+                            stack.getNumberChannels(),
+                            pixelType,
+                            makeRGB,
+                            false));
         } catch (ServiceException | DependencyException e) {
             throw new ImageIOException(e);
         }
     }
-    
-    private static void writeAsSeparateChannels(IFormatWriter writer, List<ByteRepresentationForChannel> channels, int numberSlices)
+
+    private static void writeAsSeparateChannels(
+            IFormatWriter writer, List<ByteRepresentationForChannel> channels, int numberSlices)
             throws ImageIOException {
         try {
             int sliceIndex = 0;
             for (int channelIndex = 0; channelIndex < channels.size(); channelIndex++) {
 
                 ByteRepresentationForChannel channel = channels.get(channelIndex);
-                
+
                 for (int z = 0; z < numberSlices; z++) {
                     writer.saveBytes(sliceIndex++, channel.bytesForSlice(z));
                 }

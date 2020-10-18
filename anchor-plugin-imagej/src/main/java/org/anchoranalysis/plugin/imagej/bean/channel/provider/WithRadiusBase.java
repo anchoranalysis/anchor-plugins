@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.imagej.bean.channel.provider;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
 import org.anchoranalysis.core.error.CreateException;
@@ -49,7 +49,8 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
 
     @Override
     public Channel createFromChannel(Channel channel) throws CreateException {
-        return createFromChannel(channel, radiusInVoxels(channel.resolution().map(Resolution::unitConvert)));
+        return createFromChannel(
+                channel, radiusInVoxels(channel.resolution().map(Resolution::unitConvert)));
     }
 
     protected abstract Channel createFromChannel(Channel channel, int radius)
@@ -58,11 +59,13 @@ public abstract class WithRadiusBase extends ChannelProviderUnary {
     private int radiusInVoxels(Optional<UnitConverter> converter) throws CreateException {
         if (radiusInMeters) {
             if (converter.isPresent()) {
-                // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care of
+                // Then we reconcile our sigma in microns against the Pixel Size XY (Z is taken care
+                // of
                 // later)
                 return (int) Math.round(converter.get().fromPhysicalDistance(radius));
             } else {
-                throw new CreateException("Radius is specified in meters but no image-resolution information is available");
+                throw new CreateException(
+                        "Radius is specified in meters but no image-resolution information is available");
             }
         } else {
             return (int) radius;

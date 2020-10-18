@@ -50,7 +50,8 @@ public class FromAnnotations<T extends AnnotatorStrategy> extends FilesProvider 
     @Override
     public Collection<File> create(InputManagerParams params) throws FilesProviderException {
         try {
-            return FunctionalList.flatMapToList(annotations.inputs(params), input -> input.deriveAssociatedFiles().stream() );
+            return FunctionalList.flatMapToList(
+                    annotations.inputs(params), input -> input.deriveAssociatedFiles().stream());
         } catch (InputReadFailedException e) {
             throw new FilesProviderException(e);
         }

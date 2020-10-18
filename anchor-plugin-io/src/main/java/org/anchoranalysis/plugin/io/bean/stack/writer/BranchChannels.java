@@ -65,9 +65,9 @@ public class BranchChannels extends RasterWriterDelegateBase {
             return writer;
         }
     }
-    
+
     private StackWriter writerOrDefault(StackWriter writerMaybeNull) {
-        if (writerMaybeNull!=null) {
+        if (writerMaybeNull != null) {
             return writerMaybeNull;
         } else {
             return writer;

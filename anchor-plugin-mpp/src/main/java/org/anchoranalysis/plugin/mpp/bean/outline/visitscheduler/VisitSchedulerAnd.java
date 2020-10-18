@@ -83,7 +83,9 @@ public class VisitSchedulerAnd extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws InitException {
 
         for (VisitScheduler vs : list) {

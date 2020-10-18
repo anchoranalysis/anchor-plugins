@@ -79,7 +79,8 @@ public class InputProcessContext<S> {
         return context.getLogger();
     }
 
-    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results) throws OperationFailedException {
+    public void addResultsFor(RowLabels labels, ResultsVectorWithThumbnail results)
+            throws OperationFailedException {
         adder.addResultsFor(labels, results);
     }
 

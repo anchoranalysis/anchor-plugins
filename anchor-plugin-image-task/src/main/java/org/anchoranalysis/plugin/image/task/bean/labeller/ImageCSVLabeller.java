@@ -47,8 +47,8 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
     /**
      * Path to a CSV label file (comma-separated, with header, no quotes)
      *
-     * <p>The CSV file should have two columns: first column = image id (to match the
-     * input-name of an image) second column = a label string
+     * <p>The CSV file should have two columns: first column = image id (to match the input-name of
+     * an image) second column = a label string
      */
     @BeanField @Getter @Setter private DerivePath pathLabel;
     // END BEAN PROPERTIES
@@ -81,9 +81,7 @@ public class ImageCSVLabeller extends ImageLabeller<ImageCSVLabellerInitParams> 
 
         if (label == null) {
             throw new OperationFailedException(
-                    String.format(
-                            "No label can be found for the name: %s",
-                            input.name()));
+                    String.format("No label can be found for the name: %s", input.name()));
         }
 
         return label;

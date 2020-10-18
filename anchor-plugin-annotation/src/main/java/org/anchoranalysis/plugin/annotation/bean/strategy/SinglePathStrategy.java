@@ -45,8 +45,7 @@ public abstract class SinglePathStrategy extends AnnotatorStrategy {
     @Override
     public Path annotationPathFor(ProvidesStackInput item) throws InputReadFailedException {
         try {
-            return PathFromGenerator.derivePath(
-                    pathAnnotation, item.pathForBindingRequired());
+            return PathFromGenerator.derivePath(pathAnnotation, item.pathForBindingRequired());
         } catch (DerivePathException e) {
             throw new InputReadFailedException(e);
         }

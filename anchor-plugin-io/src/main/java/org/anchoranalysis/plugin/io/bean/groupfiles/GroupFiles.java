@@ -86,8 +86,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
 
     @BeanField @Getter @Setter private ChannelMap imgChannelMapCreator;
 
-    @BeanField @Getter @Setter
-    private FileNamer namer = new LastDirectories(2);
+    @BeanField @Getter @Setter private FileNamer namer = new LastDirectories(2);
 
     /**
      * Imposes a condition on each parsedFilePathBag which must be-fulfilled if a file is to be
@@ -97,7 +96,8 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInput> inputs(InputManagerParams params) throws InputReadFailedException {
+    public List<NamedChannelsInput> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         GroupFilesMap map = new GroupFilesMap();
 
@@ -148,9 +148,7 @@ public class GroupFiles extends InputManager<NamedChannelsInput> {
             openedRasters.add(new MultiFileReaderOpenedRaster(stackReader, bag));
         }
 
-        return zipIntoGrouping(
-                namer.deriveNameUnique(files, logger),
-                openedRasters);
+        return zipIntoGrouping(namer.deriveNameUnique(files, logger), openedRasters);
     }
 
     private List<NamedChannelsInput> zipIntoGrouping(

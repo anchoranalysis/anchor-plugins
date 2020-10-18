@@ -44,13 +44,18 @@ class KeyValueParamsExporter {
 
     public static void export(
             FeatureNameList featureNames, ResultsVector rv, InputOutputContext context) {
-        writeKeyValueParams( () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
+        writeKeyValueParams(
+                () -> convert(featureNames, rv, context.getLogger()), context.getOutputter());
     }
 
-    private static void writeKeyValueParams(ElementSupplier<KeyValueParams> params, Outputter outputter) {
+    private static void writeKeyValueParams(
+            ElementSupplier<KeyValueParams> params, Outputter outputter) {
         outputter
                 .writerSelective()
-                .write("keyValueParams", () -> new KeyValueParamsGenerator("keyValueParams"), params);
+                .write(
+                        "keyValueParams",
+                        () -> new KeyValueParamsGenerator("keyValueParams"),
+                        params);
     }
 
     private static KeyValueParams convert(

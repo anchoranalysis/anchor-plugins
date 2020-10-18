@@ -107,10 +107,7 @@ public class ExportReportFeatures extends Task<MultiInput, CSVWriter> {
                     input.context(),
                     soMPP ->
                             writeFeaturesIntoReporter(
-                                    soMPP,
-                                    writer,
-                                    input.getInput().name(),
-                                    input.getLogger()));
+                                    soMPP, writer, input.getInput().name(), input.getLogger()));
 
         } catch (OperationFailedException e) {
             throw new JobExecutionException(e);

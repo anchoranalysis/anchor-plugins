@@ -59,8 +59,7 @@ public abstract class QuickBase<T extends InputFromManager> extends InputManager
     @BeanField @Getter @Setter private FilesProviderWithDirectory filesProvider;
 
     /** Assigns each input a unique compact name. */
-    @BeanField @Getter @Setter
-    private FileNamer namer = new LastDirectories();
+    @BeanField @Getter @Setter private FileNamer namer = new LastDirectories();
 
     /** If set, a CSV is read with two columns: the names of images and a */
     @BeanField @OptionalBean @Getter @Setter private MatchedAppendCsv filterFilesCsv;

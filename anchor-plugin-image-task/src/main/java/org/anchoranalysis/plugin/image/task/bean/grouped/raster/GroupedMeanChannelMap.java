@@ -60,7 +60,10 @@ class GroupedMeanChannelMap extends GroupMapByName<Channel, RunningSumChannel> {
         VoxelDataType outputType = channelChecker.getChannelType();
         context.getOutputter()
                 .writerPermissive()
-                .write(outputName, () -> new ChannelGenerator(MANIFEST_FUNCTION), () -> generatorWithMean(agg, outputType, outputName, context));
+                .write(
+                        outputName,
+                        () -> new ChannelGenerator(MANIFEST_FUNCTION),
+                        () -> generatorWithMean(agg, outputType, outputName, context));
     }
 
     private static Channel generatorWithMean(

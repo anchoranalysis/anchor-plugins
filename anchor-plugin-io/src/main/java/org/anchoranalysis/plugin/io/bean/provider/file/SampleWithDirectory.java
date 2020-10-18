@@ -43,8 +43,7 @@ public class SampleWithDirectory extends FilesProviderWithDirectoryUnary {
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source)
-            throws FilesProviderException {
+    protected Collection<File> transform(Collection<File> source) throws FilesProviderException {
         List<File> listSampled = new ArrayList<>();
 
         int count = -1; // So the first item becomes 0

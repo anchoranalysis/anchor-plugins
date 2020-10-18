@@ -44,13 +44,14 @@ public class FilterForExistingFiles extends FilesProviderUnary {
 
     // START BEAN PROPERTIES
     /** All files need to be present */
-    @BeanField @Getter @Setter
-    private List<DerivePath> paths = new ArrayList<>();
+    @BeanField @Getter @Setter private List<DerivePath> paths = new ArrayList<>();
     // END BEAN PROPERTIES
 
     @Override
-    protected Collection<File> transform(Collection<File> source, boolean debugMode) throws FilesProviderException {
-        return FunctionalList.filterToList(source, FilesProviderException.class, file -> isFileAccepted(file, debugMode));
+    protected Collection<File> transform(Collection<File> source, boolean debugMode)
+            throws FilesProviderException {
+        return FunctionalList.filterToList(
+                source, FilesProviderException.class, file -> isFileAccepted(file, debugMode));
     }
 
     private boolean isFileAccepted(File file, boolean debugMode) throws FilesProviderException {
@@ -69,5 +70,4 @@ public class FilterForExistingFiles extends FilesProviderUnary {
             throw new FilesProviderException(e);
         }
     }
-
 }

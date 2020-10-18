@@ -75,7 +75,10 @@ public class Dilate extends MorphologicalOperatorBase {
                             background(),
                             getMinIntensityValue(),
                             Optional.empty(),
-                            new DilationKernelFactory(SelectDimensionsFactory.of(do3D, zOnly), false, bigNeighborhood));
+                            new DilationKernelFactory(
+                                    SelectDimensionsFactory.of(do3D, zOnly),
+                                    false,
+                                    bigNeighborhood));
 
             source.replaceBy(out);
         } catch (IncorrectImageSizeException e) {

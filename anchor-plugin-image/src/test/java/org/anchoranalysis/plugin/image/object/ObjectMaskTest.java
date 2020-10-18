@@ -80,7 +80,9 @@ public class ObjectMaskTest {
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objects, "");
 
         Optional<ObjectMask> intersection =
-                objects.get(0).intersect(objects.get(1), TwoIntersectingCirclesFixture.DIMENSIONS.extent());
+                objects.get(0)
+                        .intersect(
+                                objects.get(1), TwoIntersectingCirclesFixture.DIMENSIONS.extent());
 
         // Check the circular objects have the same volume as before
         TwoIntersectingCirclesFixture.checkVolumesOnCircles(objects, "");

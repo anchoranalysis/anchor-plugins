@@ -64,7 +64,9 @@ public class VisitSchedulerUniformSample extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         selected.afterCreateObject(root, resolution, randomNumberGenerator);
     }

@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean.mark.radii;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Optional;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
@@ -66,7 +66,7 @@ public class RadiiRatio extends FeatureMark {
             }
         }
     }
-    
+
     private Optional<Resolution> resolution(SessionInput<FeatureInputMark> input) {
         return suppressRes ? Optional.empty() : input.get().getResolutionOptional();
     }

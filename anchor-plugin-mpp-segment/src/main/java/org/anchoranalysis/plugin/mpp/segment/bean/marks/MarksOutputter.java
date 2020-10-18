@@ -61,13 +61,13 @@ class MarksOutputter {
 
     /** Marks on a background with a thick outline */
     private static final String OUTPUT_OUTLINE_THICK = "outlineThick";
-    
+
     /** XML serialized version of marks */
     public static final String OUTPUT_MARKS_XML_SERIALIZED = "optimalMarks";
 
     /** XML serialized version of marks plus an energy breakdown */
     private static final String OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED = "optimalMarksWithEnergy";
-    
+
     private static final Optional<String> MANIFEST_FUNCTION_MARKS = Optional.of("marks");
 
     public static void outputResults(
@@ -103,7 +103,8 @@ class MarksOutputter {
     private static void writeMarks(MarksWithEnergyBreakdown marks, WriterRouterErrors writer) {
         writer.write(
                 OUTPUT_MARKS_WITH_ENERGY_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS), () -> marks);
+                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
+                () -> marks);
     }
 
     private static void writeMarksAsRaster(
@@ -114,9 +115,8 @@ class MarksOutputter {
                 "finalMarksRaster",
                 () ->
                         new MarksAsUniqueValueGenerator(
-                                coloredMarksDisplayStack.getStack().dimensions(),
-                                regionMembership),
-                                coloredMarksDisplayStack.getMarksColored()::getMarks);
+                                coloredMarksDisplayStack.getStack().dimensions(), regionMembership),
+                coloredMarksDisplayStack.getMarksColored()::getMarks);
     }
 
     private static void writeOutline(
@@ -131,30 +131,31 @@ class MarksOutputter {
                 outputNamePrefix,
                 () ->
                         new MarksGenerator(
-                                outlineWriter,
-                                new IDGetterIter<Overlay>(),
-                                regionMembership), () -> coloredMarksDisplayStack );
+                                outlineWriter, new IDGetterIter<Overlay>(), regionMembership),
+                () -> coloredMarksDisplayStack);
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
-                                outlineWriter,
-                                new IDGetterIter<Overlay>(),
-                                regionMembership), () -> coloredMarksDisplayStack);
+                                outlineWriter, new IDGetterIter<Overlay>(), regionMembership),
+                () -> coloredMarksDisplayStack);
     }
 
-    private static void writeFinalMarks(ElementSupplier<MarkCollection> marks, WriterRouterErrors writer) {
+    private static void writeFinalMarks(
+            ElementSupplier<MarkCollection> marks, WriterRouterErrors writer) {
         writer.write(
                 OUTPUT_MARKS_XML_SERIALIZED,
-                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS), marks);
+                () -> new XStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
+                marks);
         writer.write(
                 "finalMarksBinary",
-                () -> new ObjectOutputStreamGenerator<>(MANIFEST_FUNCTION_MARKS), marks);
+                () -> new ObjectOutputStreamGenerator<>(MANIFEST_FUNCTION_MARKS),
+                marks);
     }
 
     private static void outputMarksSize(
             MarksWithTotalEnergy marks, WriterRouterErrors writer, Logger logger) {
-        writer.write("marksSize", StringGenerator::new, () -> String.format("%d", marks.size()) );
+        writer.write("marksSize", StringGenerator::new, () -> String.format("%d", marks.size()));
         logger.messageLogger().log("Marks size = " + marks.size());
     }
 }

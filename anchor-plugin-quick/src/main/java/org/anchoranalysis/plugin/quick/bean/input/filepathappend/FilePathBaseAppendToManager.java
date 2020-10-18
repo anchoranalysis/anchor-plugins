@@ -36,8 +36,8 @@ public abstract class FilePathBaseAppendToManager extends FilePathAppendBase {
 
     /**
      * @param inputManager
-     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of
-     *     a non rooted
+     * @param rootName if non-empty (and non-null) a rooted derivePath is created instead of a non
+     *     rooted
      * @param regex a regular-expression that returns two groups, the first is the dataset name, the
      *     second is the file-name
      * @throws BeanMisconfiguredException

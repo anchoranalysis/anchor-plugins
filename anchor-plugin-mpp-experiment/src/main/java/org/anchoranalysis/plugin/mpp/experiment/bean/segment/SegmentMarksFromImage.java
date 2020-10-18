@@ -70,23 +70,26 @@ import org.anchoranalysis.mpp.segment.bean.SegmentIntoMarks;
 public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     private static final String OUTPUT_MARKS = "marks";
-    
-    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS = Optional.of(OUTPUT_MARKS);
-    
+
+    private static final Optional<String> MANIFEST_FUNCTION_SERIALIZED_MARKS =
+            Optional.of(OUTPUT_MARKS);
+
     // START BEAN PROPERTIES
     /** How to perform the segmentation. */
     @BeanField @Getter @Setter private SegmentIntoMarks segment;
 
-    /** If non-empty, the identifier of a key-value-params collection that is passed to the segmentation procedure. */
+    /**
+     * If non-empty, the identifier of a key-value-params collection that is passed to the
+     * segmentation procedure.
+     */
     @BeanField @AllowEmpty @Getter @Setter private String keyValueParamsID = "";
     // END BEAN PROPERTIES
-
 
     @Override
     public boolean hasVeryQuickPerInputExecution() {
         return false;
     }
-    
+
     @Override
     public InputTypesExpected inputTypesExpected() {
         return new InputTypesExpected(MultiInput.class);
@@ -94,12 +97,14 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
 
     @Override
     public OutputEnabledMutable defaultOutputs() {
-        OutputEnabledMutable outputs = super.defaultOutputs().addEnabledOutputFirst(OUTPUT_MARKS,
-                MarksVisualization.OUTPUT_VISUALIZE_MARKS_OUTLINE);
+        OutputEnabledMutable outputs =
+                super.defaultOutputs()
+                        .addEnabledOutputFirst(
+                                OUTPUT_MARKS, MarksVisualization.OUTPUT_VISUALIZE_MARKS_OUTLINE);
         outputs.addEnabledOutputs(segment.defaultOutputs());
         return outputs;
     }
-    
+
     @Override
     public ExperimentState beforeAnyJobIsExecuted(
             Outputter outputter, ConcurrencyPlan concurrencyPlan, ParametersExperiment params)
@@ -108,7 +113,7 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
         experimentState.outputBeforeAnyTasksAreExecuted(outputter);
         return experimentState;
     }
-    
+
     @Override
     public void doJobOnInput(InputBound<MultiInput, ExperimentState> inputBound)
             throws JobExecutionException {
@@ -184,7 +189,10 @@ public class SegmentMarksFromImage extends Task<MultiInput, ExperimentState> {
             MarkCollection marks, Outputter outputter, NamedStacks stackCollection, Logger logger) {
         outputter
                 .writerSelective()
-                .write(OUTPUT_MARKS, () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS), () -> marks);
+                .write(
+                        OUTPUT_MARKS,
+                        () -> new XStreamGenerator<Object>(MANIFEST_FUNCTION_SERIALIZED_MARKS),
+                        () -> marks);
 
         try {
             DisplayStack backgroundStack =

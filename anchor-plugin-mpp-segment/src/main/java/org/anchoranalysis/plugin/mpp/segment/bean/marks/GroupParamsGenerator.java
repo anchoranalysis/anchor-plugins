@@ -38,7 +38,8 @@ import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 class GroupParamsGenerator extends OneStageGenerator<KeyValueParams> {
 
     @Override
-    public void writeToFile(KeyValueParams element, OutputWriteSettings outputWriteSettings, Path filePath)
+    public void writeToFile(
+            KeyValueParams element, OutputWriteSettings outputWriteSettings, Path filePath)
             throws OutputWriteFailedException {
         try {
             element.writeToFile(filePath);

@@ -63,7 +63,7 @@ public class Rooted extends DerivePath {
 
         try {
             SplitPath pathInWithoutRoot = RootPathMap.instance().split(source, rootName, debugMode);
-    
+
             Path pathOut = determinePathOut(pathInWithoutRoot, debugMode);
             if (logPath) {
                 logger.info(() -> String.format("pathIn=%s", source));

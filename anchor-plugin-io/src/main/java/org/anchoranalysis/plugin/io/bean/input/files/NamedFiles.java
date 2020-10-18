@@ -56,8 +56,7 @@ public class NamedFiles extends InputManager<FileInput> {
     /** The files to use as inputs. */
     @BeanField @Getter @Setter private FilesProvider filesProvider;
 
-    @BeanField @Getter @Setter
-    private FileNamer namer = new RemoveExtensions(new PatternSpan());
+    @BeanField @Getter @Setter private FileNamer namer = new RemoveExtensions(new PatternSpan());
     // END BEAN PROPERTIES
 
     public NamedFiles(FilesProvider filesProvider) {
@@ -70,9 +69,7 @@ public class NamedFiles extends InputManager<FileInput> {
             Collection<File> files = filesProvider.create(params);
 
             return FunctionalList.mapToList(
-                    namer.deriveNameUnique(
-                            files, params.getLogger()),
-                    FileInput::new);
+                    namer.deriveNameUnique(files, params.getLogger()), FileInput::new);
         } catch (FilesProviderException e) {
             throw new InputReadFailedException("Cannot find files", e);
         }

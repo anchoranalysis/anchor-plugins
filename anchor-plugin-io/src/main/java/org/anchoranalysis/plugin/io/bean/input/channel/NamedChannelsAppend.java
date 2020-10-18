@@ -69,7 +69,8 @@ public class NamedChannelsAppend extends NamedChannelsBase {
     // END BEAN PROPERTIES
 
     @Override
-    public List<NamedChannelsInputPart> inputs(InputManagerParams params) throws InputReadFailedException {
+    public List<NamedChannelsInputPart> inputs(InputManagerParams params)
+            throws InputReadFailedException {
 
         try (ProgressReporterMultiple prm =
                 new ProgressReporterMultiple(params.getProgressReporter(), 2)) {
@@ -138,11 +139,10 @@ public class NamedChannelsAppend extends NamedChannelsBase {
             // Delayed-calculation of the appending path as it can be a bit expensive when
             // multiplied by so many items
             PathSupplier outPath =
-                    cachedOutPathFor(
-                            namedPath.getValue(), ncc::pathForBinding, debugMode);
+                    cachedOutPathFor(namedPath.getValue(), ncc::pathForBinding, debugMode);
 
             if (forceEagerEvaluation && !skipMissingChannels) {
-                Path path = outPath.get();        
+                Path path = outPath.get();
                 if (!path.toFile().exists()) {
                     throw new DerivePathException(
                             String.format("Append path: %s does not exist", path));
@@ -154,14 +154,12 @@ public class NamedChannelsAppend extends NamedChannelsBase {
 
         return out;
     }
-    
+
     private static PathSupplier cachedOutPathFor(
-            DerivePath outputPathGenerator,
-            Supplier<Optional<Path>> pathInput,
-            boolean debugMode) {
+            DerivePath outputPathGenerator, Supplier<Optional<Path>> pathInput, boolean debugMode) {
         return cachePathSupplier(() -> outputPathGenerator.deriveFrom(pathInput, debugMode));
     }
-    
+
     private static PathSupplier cachePathSupplier(PathSupplier supplier) {
         return CachedSupplier.cache(supplier::get)::get;
     }

@@ -40,11 +40,13 @@ import org.anchoranalysis.image.core.dimensions.Dimensions;
 public class VoxelPhysicalSize<T extends FeatureInputEnergy> extends ForSpecificAxis<T> {
 
     @Override
-    protected double calculateForAxis(Dimensions dimensions, AxisType axis) throws FeatureCalculationException {
+    protected double calculateForAxis(Dimensions dimensions, AxisType axis)
+            throws FeatureCalculationException {
         if (dimensions.resolution().isPresent()) {
-            return dimensions.resolution().get().valueByDimension(axis);    // NOSONAR
+            return dimensions.resolution().get().valueByDimension(axis); // NOSONAR
         } else {
-            throw new FeatureCalculationException("No image-resolution is present, so physical voxel size is not specified.");
+            throw new FeatureCalculationException(
+                    "No image-resolution is present, so physical voxel size is not specified.");
         }
     }
 }

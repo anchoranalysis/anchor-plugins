@@ -44,8 +44,7 @@ public class IsPointConvexToTest {
     @Test
     public void test() throws ImageIOException, CreateException, URISyntaxException {
 
-        TestLoaderImage loader =
-                new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
+        TestLoaderImage loader = new TestLoaderImage(TestLoader.createFromMavenWorkingDirectory());
 
         String testPath = "testData/binaryImage/000_zstack_nuclei.tif";
         Stack stack = loader.openStackFromTestPath(testPath);

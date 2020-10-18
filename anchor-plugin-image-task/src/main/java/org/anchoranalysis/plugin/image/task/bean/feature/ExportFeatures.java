@@ -209,7 +209,7 @@ public class ExportFeatures<T extends InputFromManager, S, U extends FeatureInpu
     private Optional<String> extractGroupNameFromGenerator(Path inputPath, boolean debugMode)
             throws DerivePathException {
         return filePathAsIdentifier(Optional.ofNullable(group), inputPath, debugMode);
-    }    
+    }
 
     private static Optional<String> filePathAsIdentifier(
             Optional<DerivePath> generator, Path path, boolean debugMode)

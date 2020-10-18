@@ -41,21 +41,20 @@ import org.anchoranalysis.io.input.path.DerivePathException;
 
 /**
  * Generates an out string where $digit$ is replaced with the #digit group from a regex
- * 
- * @author Owen Feehan
  *
+ * @author Owen Feehan
  */
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class InsertRegExGroups extends DerivePath {
 
     // START BEAN PROPERTIES
-    /**
-     * The regular-expression to use for matching groups.
-     */
+    /** The regular-expression to use for matching groups. */
     @BeanField @Getter private RegEx regEx;
 
     /**
-     * Constructs a path as an output, replacing $1, $2 etc. with the respective group from the matched regular-expression.
+     * Constructs a path as an output, replacing $1, $2 etc. with the respective group from the
+     * matched regular-expression.
      */
     @BeanField @Getter @Setter private String outPath = "";
     // END BEAN PROPERTIES
@@ -70,16 +69,18 @@ public class InsertRegExGroups extends DerivePath {
         // We loop through each possible group, and replace if its found, counting down, so that we
         // don't mistake 11 for 1 (for example).
         for (int groupIndex = matches.length; groupIndex > 0; groupIndex--) {
-            outStr = outStr.replaceAll("\\$" + Integer.toString(groupIndex), matches[groupIndex-1]);
+            outStr =
+                    outStr.replaceAll(
+                            "\\$" + Integer.toString(groupIndex), matches[groupIndex - 1]);
         }
 
         return Paths.get(outStr);
     }
-    
+
     private String[] match(Path pathIn) throws DerivePathException {
 
         String pathInStr = ConvertPathUtilities.convertBackslashes(pathIn);
-        
+
         Optional<String[]> matches = regEx.match(pathInStr);
 
         if (!matches.isPresent()) {
@@ -90,7 +91,10 @@ public class InsertRegExGroups extends DerivePath {
         return matches.get();
     }
 
-    /** The regular-expression to use for matching groups, overloaded to handle legacy situations where a string is supplied. */
+    /**
+     * The regular-expression to use for matching groups, overloaded to handle legacy situations
+     * where a string is supplied.
+     */
     public void setRegExString(String regEx) {
         this.regEx = new RegExSimple(regEx);
     }

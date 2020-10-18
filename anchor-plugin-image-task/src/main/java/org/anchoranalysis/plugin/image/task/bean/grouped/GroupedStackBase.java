@@ -73,7 +73,8 @@ public abstract class GroupedStackBase<S, T>
     private static final String OUTPUT_FALLBACK_GROUPED = "grouped";
 
     private static final ManifestDirectoryDescription MANIFEST_DESCRIPTION_GROUP_FOLDER =
-            new ManifestDirectoryDescription("groupedFolder", "groupedStack", new StringsWithoutOrder());
+            new ManifestDirectoryDescription(
+                    "groupedFolder", "groupedStack", new StringsWithoutOrder());
 
     // START BEAN PROPERTIES
     /**
@@ -114,8 +115,11 @@ public abstract class GroupedStackBase<S, T>
         Optional<String> groupName =
                 extractGroupName(input.pathForBinding(), context.isDebugEnabled());
 
-        processStacks(GroupedStackBase.extractInputStacks(input), groupName,
-                params.getSharedState(), context);
+        processStacks(
+                GroupedStackBase.extractInputStacks(input),
+                groupName,
+                params.getSharedState(),
+                context);
     }
 
     @Override

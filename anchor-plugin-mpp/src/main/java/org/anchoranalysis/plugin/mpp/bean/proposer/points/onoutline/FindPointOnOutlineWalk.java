@@ -171,7 +171,8 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             throws OperationFailedException {
         // We do check
         if (maxDistance != null) {
-            double distance = distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
+            double distance =
+                    distanceZBetweenPoints(centerPoint, pointDouble, maskCreated.resolution());
             double maxDistanceResolved =
                     maxDistance.resolve(
                             maskCreated.dimensions().resolution().map(Resolution::unitConvert),
@@ -182,8 +183,9 @@ public class FindPointOnOutlineWalk extends FindPointOnOutline {
             return false;
         }
     }
-    
-    private static double distanceZBetweenPoints(Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
+
+    private static double distanceZBetweenPoints(
+            Point3d centerPoint, Point3d pointDouble, Optional<Resolution> resolution) {
         if (resolution.isPresent()) {
             return resolution.get().distanceZRelative(centerPoint, pointDouble);
         } else {

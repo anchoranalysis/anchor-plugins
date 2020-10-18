@@ -34,11 +34,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.AllowEmpty;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.anchoranalysis.io.output.path.PathPrefixer;
+import org.anchoranalysis.io.output.path.PathPrefixerException;
 
 /**
  * A file-path-resolver that adds additional methods that perform the same function but output a
@@ -107,8 +107,8 @@ public abstract class PathPrefixerAvoidResolve extends PathPrefixer {
      * @return a prefixer
      * @throws PathPrefixerException
      */
-    public DirectoryWithPrefix outFilePrefixAvoidResolve(NamedPath path, String experimentIdentifier)
-            throws PathPrefixerException {
+    public DirectoryWithPrefix outFilePrefixAvoidResolve(
+            NamedPath path, String experimentIdentifier) throws PathPrefixerException {
         return outFilePrefixFromPath(
                 path, rootFolderPrefixAvoidResolve(experimentIdentifier).getDirectory());
     }

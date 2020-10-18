@@ -36,7 +36,7 @@ abstract class RGBWriter {
     protected Channel channelRed;
     protected Channel channelBlue;
     protected Channel channelGreen;
-    
+
     public RGBWriter(IFormatWriter writer, Stack stack) {
         this.writer = writer;
         this.channelRed = stack.getChannel(0);

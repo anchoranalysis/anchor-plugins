@@ -58,7 +58,7 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     @BeanField @Getter @Setter private boolean best = false;
     // END BEAN PARAMETERS
 
-    private OutputSequenceIndexed<MarksWithEnergyBreakdown,Integer> outputSequence;
+    private OutputSequenceIndexed<MarksWithEnergyBreakdown, Integer> outputSequence;
 
     private Reporting<VoxelizedMarksWithEnergy> lastOptimizationStep;
 
@@ -66,15 +66,15 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     public void reportBegin(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
             throws ReporterException {
 
-        OutputPatternIntegerSuffix pattern = new OutputPatternIntegerSuffix(
-                outputName,
-                10,
-                true,
-                Optional.of(new ManifestDescription("serialized", manifestFunction))
-            );                        
-        
+        OutputPatternIntegerSuffix pattern =
+                new OutputPatternIntegerSuffix(
+                        outputName,
+                        10,
+                        true,
+                        Optional.of(new ManifestDescription("serialized", manifestFunction)));
+
         try {
-            outputSequence = createSequenceFactory(initParams).increasingIntegers(pattern);    
+            outputSequence = createSequenceFactory(initParams).increasingIntegers(pattern);
         } catch (OutputWriteFailedException e) {
             throw new ReporterException(e);
         }
@@ -103,7 +103,9 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
         }
 
         if (outputSequence.isOn() && lastOptimizationStep != null) {
-            outputSequence.getSequenceType().assignMaximumIndex(lastOptimizationStep.getIteration());
+            outputSequence
+                    .getSequenceType()
+                    .assignMaximumIndex(lastOptimizationStep.getIteration());
         }
     }
 
@@ -111,17 +113,19 @@ public class VoxelizedMarksChangeReporter extends FeedbackReceiverBean<Voxelized
     public void reportNewBest(Reporting<VoxelizedMarksWithEnergy> reporting) {
         // NOTHING TO DO
     }
-    
-    private OutputSequenceFactory<MarksWithEnergyBreakdown> createSequenceFactory(FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) throws OutputWriteFailedException {
-        
+
+    private OutputSequenceFactory<MarksWithEnergyBreakdown> createSequenceFactory(
+            FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams)
+            throws OutputWriteFailedException {
+
         OutputterChecked outputter = initParams.getInitContext().getOutputter().getChecked();
-        
+
         Generator<MarksWithEnergyBreakdown> generator =
                 new ObjectOutputStreamGenerator<>(Optional.of(manifestFunction));
-        
+
         return new OutputSequenceFactory<>(generator, outputter);
     }
-    
+
     private void addToSequenceWriter(Optional<VoxelizedMarksWithEnergy> marks, int iteration)
             throws OutputWriteFailedException {
         if (marks.isPresent()) {

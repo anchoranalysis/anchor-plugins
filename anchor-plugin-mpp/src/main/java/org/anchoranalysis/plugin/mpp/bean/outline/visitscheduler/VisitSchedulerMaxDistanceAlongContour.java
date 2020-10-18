@@ -70,7 +70,9 @@ public class VisitSchedulerMaxDistanceAlongContour extends VisitScheduler {
 
     @Override
     public void afterCreateObject(
-            Point3i root, Optional<Resolution> resolution, RandomNumberGenerator randomNumberGenerator)
+            Point3i root,
+            Optional<Resolution> resolution,
+            RandomNumberGenerator randomNumberGenerator)
             throws InitException {
         // NOTHING TO DO
     }

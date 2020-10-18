@@ -188,8 +188,7 @@ public class FromObjects<T extends FeatureInput>
 
         CalculateFeaturesFromProvider<T> fromProviderCalculator =
                 new CalculateFeaturesFromProvider<>(objectsCalculator, initParams);
-        processAllProviders(
-                inputName, context.getGroupGeneratorName(), fromProviderCalculator);
+        processAllProviders(inputName, context.getGroupGeneratorName(), fromProviderCalculator);
 
         // Arbitrary, we need a return-type
         return 0;
