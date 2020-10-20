@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.feature;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.Getter;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 import org.anchoranalysis.feature.name.FeatureNameList;

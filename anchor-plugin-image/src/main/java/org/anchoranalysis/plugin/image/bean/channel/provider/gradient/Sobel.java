@@ -34,7 +34,7 @@ import net.imglib2.outofbounds.OutOfBounds;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.Views;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;

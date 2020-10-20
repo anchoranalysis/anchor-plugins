@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;
 import org.anchoranalysis.image.core.dimensions.Dimensions;

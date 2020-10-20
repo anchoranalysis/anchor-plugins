@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.functional.function.IntBinaryOperation;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.functional.checked.IntBinaryOperation;
 import org.anchoranalysis.image.bean.provider.ChannelProviderBinary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;

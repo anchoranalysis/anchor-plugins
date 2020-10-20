@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.feature.bean.object.combine;
 
 import java.util.List;
 import org.anchoranalysis.bean.NamedBean;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
 import org.anchoranalysis.feature.energy.EnergyStack;
@@ -40,8 +40,8 @@ import org.anchoranalysis.image.feature.session.SingleTableCalculator;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Simply selects features directly from the list, and objects directly from the list passed.

@@ -42,7 +42,7 @@ import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Performs a sequence of succesive segmentations
@@ -82,7 +82,7 @@ public class Sequence extends BinarySegmentation {
         BoundingBox box =
                 objectMask
                         .map(ObjectMask::boundingBox)
-                        .orElseGet(() -> new BoundingBox(voxels.any()));
+                        .orElseGet(() -> new BoundingBox(voxels.extent()));
 
         // A mask that evolves as we move through each segmentation to be increasingly smaller.
         Optional<ObjectMask> evolvingMask = objectMask;

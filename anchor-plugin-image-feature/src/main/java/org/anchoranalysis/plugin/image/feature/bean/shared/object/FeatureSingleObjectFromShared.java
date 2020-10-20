@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.shared.object;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;

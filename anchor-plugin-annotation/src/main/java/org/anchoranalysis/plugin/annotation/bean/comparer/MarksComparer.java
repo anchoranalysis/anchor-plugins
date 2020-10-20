@@ -34,7 +34,7 @@ import org.anchoranalysis.annotation.io.image.findable.Findable;
 import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

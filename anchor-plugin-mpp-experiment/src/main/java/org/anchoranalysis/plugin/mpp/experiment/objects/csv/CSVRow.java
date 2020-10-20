@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.objects.csv;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition.ColumnDefinition;

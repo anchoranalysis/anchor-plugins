@@ -32,15 +32,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.Positive;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Splits objects into sub-objects by cutting by an orthogonal square lattice (like a chessboard).

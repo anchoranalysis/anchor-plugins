@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import java.io.IOException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporterIntoLog;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.error.ErrorReporterIntoLog;
 import org.anchoranalysis.experiment.log.ConsoleMessageLogger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.finder.FinderSerializedObject;

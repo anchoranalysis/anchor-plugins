@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.file.TextFileReader;
 import org.anchoranalysis.plugin.io.manifest.DeserializedManifest;

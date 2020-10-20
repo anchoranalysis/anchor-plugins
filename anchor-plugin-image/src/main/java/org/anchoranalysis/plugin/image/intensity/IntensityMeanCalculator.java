@@ -28,13 +28,13 @@ package org.anchoranalysis.plugin.image.intensity;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.arithmetic.RunningSum;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMask;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.math.arithmetic.RunningSum;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntensityMeanCalculator {

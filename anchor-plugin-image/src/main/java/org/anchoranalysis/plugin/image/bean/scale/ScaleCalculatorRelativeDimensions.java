@@ -31,13 +31,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 public class ScaleCalculatorRelativeDimensions extends ScaleCalculator {
 

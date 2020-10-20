@@ -36,9 +36,9 @@ import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
@@ -63,7 +63,7 @@ import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
 import org.anchoranalysis.mpp.io.input.MultiInput;
 import org.anchoranalysis.mpp.segment.bean.define.DefineOutputterMPP;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
+import org.anchoranalysis.spatial.box.BoundedList;
 
 /**
  * Exports a cropped image for each object-mask showing its context within an image

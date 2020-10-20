@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider.arithmetic;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.ChannelProviderTernary;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.factory.ChannelFactory;

@@ -30,7 +30,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.annotation.io.image.findable.Findable;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.experiment.JobExecutionException;

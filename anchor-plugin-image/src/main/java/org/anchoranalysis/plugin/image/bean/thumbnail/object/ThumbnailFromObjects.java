@@ -27,12 +27,12 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.thumbnail.ThumbnailBatch;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Creates a thumbnail of one or more objects on a stack by drawing the outline of the objects

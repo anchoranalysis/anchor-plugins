@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.mpp.proposer.OptionalPointProposer;
 import org.anchoranalysis.mpp.proposer.ProposerContext;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;

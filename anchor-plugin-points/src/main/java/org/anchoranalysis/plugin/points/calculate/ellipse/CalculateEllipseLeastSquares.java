@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.points.calculate.ellipse;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.calculate.FeatureCalculation;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;

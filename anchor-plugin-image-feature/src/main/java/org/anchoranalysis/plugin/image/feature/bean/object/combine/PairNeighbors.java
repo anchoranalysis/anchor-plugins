@@ -35,8 +35,8 @@ import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.core.log.Logger;
@@ -55,7 +55,7 @@ import org.anchoranalysis.image.voxel.neighborhood.NeighborGraph;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * Creates a set of features, that creates pairs of neighboring-objects and applies a mixture of

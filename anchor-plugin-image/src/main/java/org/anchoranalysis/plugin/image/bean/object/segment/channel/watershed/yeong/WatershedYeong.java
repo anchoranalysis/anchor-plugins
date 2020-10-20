@@ -31,8 +31,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.OptionalFactory;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.bean.segment.object.SegmentChannelIntoObjects;
 import org.anchoranalysis.image.core.channel.Channel;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.iterator.IterateVoxelsObjectMaskOptional;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 /**

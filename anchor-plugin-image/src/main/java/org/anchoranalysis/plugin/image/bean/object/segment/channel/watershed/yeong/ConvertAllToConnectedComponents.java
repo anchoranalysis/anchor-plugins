@@ -30,7 +30,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedIntBuffer;
 import org.anchoranalysis.image.voxel.iterator.process.buffer.ProcessBufferUnary;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedIntBuffer;
 import org.anchoranalysis.plugin.image.segment.watershed.encoding.EncodedVoxels;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3i;
 
 final class ConvertAllToConnectedComponents implements ProcessBufferUnary<UnsignedIntBuffer> {

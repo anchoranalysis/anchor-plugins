@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 

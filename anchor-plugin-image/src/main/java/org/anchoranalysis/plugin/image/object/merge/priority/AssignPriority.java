@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.object.merge.GraphLogger;

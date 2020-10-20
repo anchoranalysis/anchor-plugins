@@ -30,10 +30,10 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 public class ScaleCalculatorConstant extends ScaleCalculator {
 

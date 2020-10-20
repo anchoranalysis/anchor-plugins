@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer;
 
-import org.anchoranalysis.core.text.LanguageUtilities;
+import org.anchoranalysis.core.value.LanguageUtilities;
 
 /**
  * A count of the number of inputs. Thread-safe.

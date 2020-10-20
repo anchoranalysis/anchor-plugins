@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature;
 import static org.anchoranalysis.test.feature.plugins.ResultsVectorTestUtilities.*;
 
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;

@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
 import org.anchoranalysis.io.generator.serialized.ObjectOutputStreamGenerator;
@@ -82,7 +82,7 @@ class MarksOutputter {
                 new ColoredMarks(
                         marks.getMarks(),
                         outputter.getSettings().defaultColorIndexFor(20),
-                        new IDGetterIter<Mark>());
+                        new IdentifyByIteration<Mark>());
 
         ColoredMarksWithDisplayStack coloredMarksDisplayStack =
                 new ColoredMarksWithDisplayStack(coloredMarks, dualStack.getBackground());
@@ -131,13 +131,13 @@ class MarksOutputter {
                 outputNamePrefix,
                 () ->
                         new MarksGenerator(
-                                outlineWriter, new IDGetterIter<Overlay>(), regionMembership),
+                                outlineWriter, new IdentifyByIteration<Overlay>(), regionMembership),
                 () -> coloredMarksDisplayStack);
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
-                                outlineWriter, new IDGetterIter<Overlay>(), regionMembership),
+                                outlineWriter, new IdentifyByIteration<Overlay>(), regionMembership),
                 () -> coloredMarksDisplayStack);
     }
 

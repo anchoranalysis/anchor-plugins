@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.task.grouped;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.core.index.SetOperationFailedException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.NamedStacks;

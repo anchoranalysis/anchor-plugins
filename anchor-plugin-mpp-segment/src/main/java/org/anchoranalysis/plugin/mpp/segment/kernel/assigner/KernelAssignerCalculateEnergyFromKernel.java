@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.kernel.assigner;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.kernel.KernelAssigner;
 import org.anchoranalysis.mpp.segment.kernel.KernelCalculateEnergyException;

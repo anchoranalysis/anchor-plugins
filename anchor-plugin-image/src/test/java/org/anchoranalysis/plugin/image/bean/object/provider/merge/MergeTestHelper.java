@@ -30,8 +30,8 @@ import static org.junit.Assert.assertEquals;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.provider.ProviderFixture;

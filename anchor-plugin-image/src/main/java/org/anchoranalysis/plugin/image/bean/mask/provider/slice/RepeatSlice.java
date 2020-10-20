@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.slice;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.provider.DimensionsProvider;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -37,7 +37,7 @@ import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.plugin.image.bean.dimensions.provider.GuessDimensions;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Creates a new mask with specific dimensions that repeatedly duplicates a slice from an existing

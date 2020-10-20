@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 /**
  * Considers all possible pairs of objects in a provider, and removes those that touch the border.

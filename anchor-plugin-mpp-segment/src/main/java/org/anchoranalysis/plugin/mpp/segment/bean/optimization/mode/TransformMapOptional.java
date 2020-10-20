@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.mode;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformer;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;

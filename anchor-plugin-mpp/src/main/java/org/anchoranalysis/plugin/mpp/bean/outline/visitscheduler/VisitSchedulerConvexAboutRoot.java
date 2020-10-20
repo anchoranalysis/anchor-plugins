@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
@@ -35,7 +35,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValues;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.extracter.VoxelsExtracter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.PointConverter;

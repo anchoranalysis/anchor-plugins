@@ -29,16 +29,16 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.resize;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.voxel.binary.BinaryVoxels;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.IterateVoxelsEqualTo;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.box.PointRange;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.box.PointRange;
 
 /**
  * Fits a box around the ON pixels.

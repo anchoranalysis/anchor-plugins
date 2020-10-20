@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.threshold;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.cache.SessionInput;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;

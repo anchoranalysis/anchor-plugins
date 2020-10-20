@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.bean.spatial.SizeXY;
 import org.anchoranalysis.image.core.channel.Channel;

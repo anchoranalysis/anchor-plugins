@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.ImageIOException;

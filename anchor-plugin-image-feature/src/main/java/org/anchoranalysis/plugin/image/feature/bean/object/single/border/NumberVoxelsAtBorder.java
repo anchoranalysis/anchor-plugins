@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.single.border;
 
-import org.anchoranalysis.core.functional.function.CheckedSupplier;
+import org.anchoranalysis.core.functional.checked.CheckedSupplier;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;

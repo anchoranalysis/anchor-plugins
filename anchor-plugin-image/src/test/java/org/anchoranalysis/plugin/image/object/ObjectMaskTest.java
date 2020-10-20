@@ -29,7 +29,7 @@ import static org.anchoranalysis.plugin.image.object.CheckVolumeBeforeAfter.*;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point2d;

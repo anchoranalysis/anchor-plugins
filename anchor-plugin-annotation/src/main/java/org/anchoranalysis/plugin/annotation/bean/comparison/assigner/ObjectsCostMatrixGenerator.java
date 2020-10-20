@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.List;
 import org.anchoranalysis.annotation.io.assignment.CostMatrix;
 import org.anchoranalysis.core.functional.FunctionalList;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.io.generator.tabular.CSVGenerator;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;

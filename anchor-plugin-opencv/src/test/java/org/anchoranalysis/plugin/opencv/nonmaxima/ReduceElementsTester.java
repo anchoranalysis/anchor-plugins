@@ -30,8 +30,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorFriendlyRuntimeException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorFriendlyRuntimeException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.merge.ObjectMaskMerger;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

@@ -30,8 +30,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.provider.MaskProviderUnary;
 import org.anchoranalysis.image.bean.unitvalue.extent.UnitValueAreaOrVolume;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.imagej.mask.ApplyImageJMorphologicalOperation;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class FillHoles extends MaskProviderUnary {
 

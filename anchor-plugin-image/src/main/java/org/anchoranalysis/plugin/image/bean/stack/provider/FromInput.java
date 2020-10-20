@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.image.bean.stack.provider;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.stack.StackProvider;
 import org.anchoranalysis.image.core.stack.Stack;

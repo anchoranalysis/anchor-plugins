@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.opencv.nonmaxima;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.image.bean.object.segment.reduce.ThresholdConfidence;
 import org.junit.Test;
 

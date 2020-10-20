@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.object;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.junit.Test;
 

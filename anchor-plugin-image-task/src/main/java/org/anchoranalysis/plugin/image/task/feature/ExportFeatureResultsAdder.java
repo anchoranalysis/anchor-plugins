@@ -25,7 +25,7 @@
  */
 package org.anchoranalysis.plugin.image.task.feature;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.io.csv.RowLabels;
 
 /**

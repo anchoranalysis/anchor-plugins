@@ -28,12 +28,12 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single.morpho
 
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.morphological.MorphologicalDilation;
 import org.anchoranalysis.plugin.image.feature.object.calculation.single.CalculateIncrementalOperationMap;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 @EqualsAndHashCode(callSuper = true)
 public class CalculateDilationMap extends CalculateIncrementalOperationMap {

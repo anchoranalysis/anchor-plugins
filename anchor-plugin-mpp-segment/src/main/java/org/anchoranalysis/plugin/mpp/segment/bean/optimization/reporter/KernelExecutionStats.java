@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.segment.bean.optimization.reporter;
 
 import java.io.Serializable;
-import org.anchoranalysis.core.arithmetic.RunningSum;
+import org.anchoranalysis.math.arithmetic.RunningSum;
 
 class KernelExecutionStats implements Serializable {
 

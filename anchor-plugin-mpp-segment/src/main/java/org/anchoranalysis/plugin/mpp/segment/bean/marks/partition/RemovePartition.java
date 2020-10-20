@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.segment.bean.marks.partition;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;
 import org.anchoranalysis.mpp.segment.transformer.TransformationContext;

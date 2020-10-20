@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.task.grouped;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Adds an individual-item to an aggregate-item

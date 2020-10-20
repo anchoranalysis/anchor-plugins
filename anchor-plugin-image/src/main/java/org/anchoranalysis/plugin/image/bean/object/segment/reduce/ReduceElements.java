@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import java.util.List;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
 
 /**

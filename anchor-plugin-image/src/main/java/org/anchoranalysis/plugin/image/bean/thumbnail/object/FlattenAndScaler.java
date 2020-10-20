@@ -29,8 +29,8 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.friendly.AnchorImpossibleSituationException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.friendly.AnchorImpossibleSituationException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.index.GetOperationFailedException;
@@ -44,9 +44,9 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 @RequiredArgsConstructor
 class FlattenAndScaler {

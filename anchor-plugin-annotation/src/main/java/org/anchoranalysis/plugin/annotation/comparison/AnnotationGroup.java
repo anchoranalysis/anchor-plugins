@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.anchoranalysis.annotation.io.assignment.Assignment;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)

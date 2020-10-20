@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 import java.util.function.BiConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.voxel.Voxels;
@@ -40,7 +40,7 @@ import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedShortVoxelType;
 import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 

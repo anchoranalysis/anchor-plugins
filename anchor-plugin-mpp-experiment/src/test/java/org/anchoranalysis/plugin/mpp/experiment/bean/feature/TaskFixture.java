@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.energy.EnergyStackWithoutParams;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;

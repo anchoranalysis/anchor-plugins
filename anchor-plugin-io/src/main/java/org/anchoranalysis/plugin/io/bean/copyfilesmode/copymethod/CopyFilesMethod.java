@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 
 public abstract class CopyFilesMethod {
 

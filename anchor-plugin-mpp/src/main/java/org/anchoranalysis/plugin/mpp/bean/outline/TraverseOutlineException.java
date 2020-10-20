@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.outline;
 
-import org.anchoranalysis.core.error.AnchorCheckedException;
+import org.anchoranalysis.core.exception.AnchorCheckedException;
 
 public class TraverseOutlineException extends AnchorCheckedException {
 

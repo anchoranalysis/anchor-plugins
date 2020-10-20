@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
@@ -230,9 +230,9 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
         if (pair != null && pair.getSource() != null && pair.getDestination() != null) {
             return String.format(
                     "merge %d and %d into %d",
-                    pair.getSource().getId(),
-                    pair.getDestination().getId(),
-                    markAdded.map(Mark::getId).orElse(-1));
+                    pair.getSource().getIdentifier(),
+                    pair.getDestination().getIdentifier(),
+                    markAdded.map(Mark::getIdentifier).orElse(-1));
         } else {
             return "merge";
         }
@@ -241,9 +241,9 @@ public class KernelMerge extends KernelPosNeg<VoxelizedMarksWithEnergy> {
     @Override
     public int[] changedMarkIDArray() {
         return new int[] {
-            pair.getSource().getId(),
-            pair.getDestination().getId(),
-            markAdded.map(Mark::getId).orElse(-1)
+            pair.getSource().getIdentifier(),
+            pair.getDestination().getIdentifier(),
+            markAdded.map(Mark::getIdentifier).orElse(-1)
         };
     }
 

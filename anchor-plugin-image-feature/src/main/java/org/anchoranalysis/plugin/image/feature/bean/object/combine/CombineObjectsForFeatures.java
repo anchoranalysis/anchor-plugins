@@ -33,9 +33,9 @@ import lombok.Setter;
 import org.anchoranalysis.bean.AnchorBean;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.StreamableCollection;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.bean.list.FeatureListProvider;
@@ -49,7 +49,7 @@ import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.OutlinePreserveRelativeSize;
 import org.anchoranalysis.plugin.image.bean.thumbnail.object.ThumbnailFromObjects;
 import org.anchoranalysis.plugin.image.feature.object.ListWithThumbnails;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * A way to combine (or not combine) objects so that they provide a feature-table.

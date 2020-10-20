@@ -34,8 +34,8 @@ import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Extracts and object-mask from the list and scales.

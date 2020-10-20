@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.filter.combine;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.object.ObjectFilter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

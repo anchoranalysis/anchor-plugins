@@ -26,8 +26,8 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.obj.intersecting;
 
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.FeatureIntersectingObjects;
 import org.anchoranalysis.plugin.image.feature.bean.object.single.shared.intersecting.NumberIntersectingObjectsAboveThreshold;

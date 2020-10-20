@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.task.bean.grouped.raster;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.Voxels;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedBuffer;

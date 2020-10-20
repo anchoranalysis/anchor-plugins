@@ -33,7 +33,7 @@ import org.anchoranalysis.bean.BeanInstanceMap;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.ExperimentExecutionArguments;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.bean.Experiment;

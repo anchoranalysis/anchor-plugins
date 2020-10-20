@@ -35,7 +35,7 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.define.Define;
 import org.anchoranalysis.bean.define.adder.DefineAdderBean;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;

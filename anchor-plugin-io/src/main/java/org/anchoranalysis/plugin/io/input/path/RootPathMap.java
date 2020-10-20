@@ -35,9 +35,9 @@ import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.shared.path.RootPath;
 import org.anchoranalysis.bean.xml.BeanXmlLoader;
 import org.anchoranalysis.bean.xml.error.BeanXmlException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.path.PathDifferenceException;
-import org.anchoranalysis.core.path.SplitPath;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.SplitPath;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 

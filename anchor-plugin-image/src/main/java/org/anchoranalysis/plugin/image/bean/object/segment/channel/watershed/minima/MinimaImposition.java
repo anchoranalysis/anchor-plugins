@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.mi
 
 import java.util.Optional;
 import org.anchoranalysis.bean.AnchorBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.object.seed.SeedCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

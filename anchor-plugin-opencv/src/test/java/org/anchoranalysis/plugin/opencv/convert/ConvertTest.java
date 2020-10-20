@@ -27,9 +27,8 @@ package org.anchoranalysis.plugin.opencv.convert;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.plugin.opencv.CVInit;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;

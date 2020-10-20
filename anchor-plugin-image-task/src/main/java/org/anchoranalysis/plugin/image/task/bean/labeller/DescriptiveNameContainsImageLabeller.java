@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.task.bean.labeller;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 import org.anchoranalysis.image.io.input.ProvidesStackInput;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

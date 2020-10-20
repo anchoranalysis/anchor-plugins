@@ -66,7 +66,7 @@ public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> 
     @Override
     public String describeLast() {
         if (markNew != null) {
-            return String.format("%s(%d)", getBeanName(), markExst.getId());
+            return String.format("%s(%d)", getBeanName(), markExst.getIdentifier());
         } else {
             return getBeanName();
         }
@@ -85,7 +85,7 @@ public class KernelExchange extends KernelIndependent<VoxelizedMarksWithEnergy> 
 
     @Override
     public int[] changedMarkIDArray() {
-        return new int[] {markExst.getId(), markNew.getId()};
+        return new int[] {markExst.getIdentifier(), markNew.getIdentifier()};
     }
 
     @Override

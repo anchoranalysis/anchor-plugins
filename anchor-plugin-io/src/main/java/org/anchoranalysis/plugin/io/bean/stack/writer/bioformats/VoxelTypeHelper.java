@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.stack.writer.bioformats;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ome.xml.model.enums.PixelType;
-import org.anchoranalysis.core.functional.function.CheckedRunnable;
+import org.anchoranalysis.core.functional.checked.CheckedRunnable;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.voxel.datatype.FloatVoxelType;
 import org.anchoranalysis.image.voxel.datatype.UnsignedByteVoxelType;

@@ -31,9 +31,9 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.image.bean.threshold.CalculateLevel;
 import org.anchoranalysis.math.histogram.Histogram;
 

@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.NamedBean;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.plugin.image.bean.channel.provider.FromStack;
 import org.anchoranalysis.plugin.image.task.grouped.ChannelSource;

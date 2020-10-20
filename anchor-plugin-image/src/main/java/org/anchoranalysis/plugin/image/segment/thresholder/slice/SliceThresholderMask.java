@@ -31,7 +31,7 @@ import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.VoxelBuffer;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 public class SliceThresholderMask extends SliceThresholder {

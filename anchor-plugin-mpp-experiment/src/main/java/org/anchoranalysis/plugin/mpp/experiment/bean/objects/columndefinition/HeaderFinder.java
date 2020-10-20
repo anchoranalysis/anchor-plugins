@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.functional.CheckedStream;
 import org.apache.commons.lang.ArrayUtils;
 

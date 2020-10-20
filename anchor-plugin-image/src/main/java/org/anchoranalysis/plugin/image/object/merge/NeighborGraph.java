@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithPayload;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;

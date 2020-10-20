@@ -30,7 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.MessageLogger;
-import org.anchoranalysis.core.memory.MemoryUtilities;
+import org.anchoranalysis.core.system.MemoryUtilities;
 import org.anchoranalysis.mpp.feature.energy.marks.VoxelizedMarksWithEnergy;
 import org.anchoranalysis.mpp.segment.bean.optimization.feedback.ReporterAggregate;
 import org.anchoranalysis.mpp.segment.optimization.feedback.FeedbackBeginParameters;

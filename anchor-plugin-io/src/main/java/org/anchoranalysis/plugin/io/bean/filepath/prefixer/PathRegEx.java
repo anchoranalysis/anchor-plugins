@@ -31,7 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.shared.regex.RegEx;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.NamedPath;
 import org.anchoranalysis.io.output.path.PathPrefixerException;

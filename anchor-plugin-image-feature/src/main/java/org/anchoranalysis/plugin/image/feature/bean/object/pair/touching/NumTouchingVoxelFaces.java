@@ -26,11 +26,11 @@
 
 package org.anchoranalysis.plugin.image.feature.bean.object.pair.touching;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.voxel.kernel.ApplyKernel;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * A scheme for counting the touching voxels by intersection of object-masks

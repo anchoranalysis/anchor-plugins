@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.annotation.bean.comparison.assigner;
 
 import org.anchoranalysis.annotation.io.assignment.AssignmentMaskIntersection;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

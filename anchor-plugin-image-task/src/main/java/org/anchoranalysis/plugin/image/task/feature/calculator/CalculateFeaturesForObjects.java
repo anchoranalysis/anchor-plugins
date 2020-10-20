@@ -26,9 +26,9 @@
 package org.anchoranalysis.plugin.image.task.feature.calculator;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.feature.energy.EnergyStack;

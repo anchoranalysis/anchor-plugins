@@ -30,8 +30,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.error.OperationFailedRuntimeException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedRuntimeException;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.test.image.DualComparer;
 import org.anchoranalysis.test.image.DualComparerFactory;
