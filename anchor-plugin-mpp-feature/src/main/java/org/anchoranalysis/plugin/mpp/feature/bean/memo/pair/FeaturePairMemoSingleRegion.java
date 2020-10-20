@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
 import org.anchoranalysis.plugin.mpp.feature.overlap.CalculateOverlap;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 public abstract class FeaturePairMemoSingleRegion extends FeaturePairMemo {
 

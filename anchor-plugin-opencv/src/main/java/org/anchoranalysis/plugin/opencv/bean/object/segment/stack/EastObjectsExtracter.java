@@ -42,7 +42,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObjects;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.opencv.core.Mat;
 import org.opencv.dnn.Net;
 

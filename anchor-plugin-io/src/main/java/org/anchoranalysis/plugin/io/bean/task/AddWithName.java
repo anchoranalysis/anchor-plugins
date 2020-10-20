@@ -30,8 +30,8 @@ import static org.anchoranalysis.plugin.io.bean.task.TypedValueUtilities.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.io.generator.tabular.CSVWriter;
 import org.anchoranalysis.io.input.csv.CSVReaderException;
 import org.anchoranalysis.io.input.csv.ReadByLine;

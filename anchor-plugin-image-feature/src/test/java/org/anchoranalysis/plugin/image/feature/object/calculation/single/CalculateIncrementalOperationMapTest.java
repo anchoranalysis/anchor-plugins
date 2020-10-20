@@ -28,8 +28,7 @@ package org.anchoranalysis.plugin.image.feature.object.calculation.single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;

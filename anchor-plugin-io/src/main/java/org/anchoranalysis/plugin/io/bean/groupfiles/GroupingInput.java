@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.bean.groupfiles;
 
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.io.ImageIOException;

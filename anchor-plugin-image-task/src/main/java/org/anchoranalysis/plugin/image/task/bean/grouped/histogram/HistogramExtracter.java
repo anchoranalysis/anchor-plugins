@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.image.task.bean.grouped.histogram;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;

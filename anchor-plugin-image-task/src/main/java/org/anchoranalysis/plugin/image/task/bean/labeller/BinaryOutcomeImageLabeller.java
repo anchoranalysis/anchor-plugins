@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.experiment.task.NoSharedState;
 
 /** @author Owen Feehan */

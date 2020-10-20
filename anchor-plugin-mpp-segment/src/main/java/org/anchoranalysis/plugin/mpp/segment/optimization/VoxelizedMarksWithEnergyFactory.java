@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.segment.optimization;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.feature.energy.marks.MarksWithEnergyBreakdown;

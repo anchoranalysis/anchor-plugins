@@ -35,7 +35,7 @@ import org.anchoranalysis.annotation.io.image.findable.Found;
 import org.anchoranalysis.annotation.io.image.findable.NotFound;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.io.ImageIOException;

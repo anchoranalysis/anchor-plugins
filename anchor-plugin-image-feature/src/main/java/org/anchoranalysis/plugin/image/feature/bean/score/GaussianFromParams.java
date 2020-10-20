@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.plugin.operator.feature.score.GaussianScoreCalculator;
 
 public class GaussianFromParams extends FromParamsBase {

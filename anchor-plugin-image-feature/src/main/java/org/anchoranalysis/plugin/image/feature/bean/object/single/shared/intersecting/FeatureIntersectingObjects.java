@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.image.feature.bean.object.single.shared.inters
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.feature.calculate.FeatureInitParams;
 import org.anchoranalysis.feature.calculate.cache.ResolvedCalculation;

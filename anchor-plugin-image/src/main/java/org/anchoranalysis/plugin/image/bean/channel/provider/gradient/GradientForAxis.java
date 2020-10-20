@@ -29,10 +29,10 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.gradient;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.axis.AxisType;
-import org.anchoranalysis.core.axis.AxisTypeConverter;
-import org.anchoranalysis.core.axis.AxisTypeException;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.spatial.axis.AxisType;
+import org.anchoranalysis.spatial.axis.AxisTypeConverter;
+import org.anchoranalysis.spatial.axis.AxisTypeException;
 
 /**
  * Extracts the gradient in the direction of a particular axis (identified by an index)

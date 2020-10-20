@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.bean.interpolator.ImgLib2Lanczos;
 import org.anchoranalysis.image.bean.interpolator.InterpolatorBean;
@@ -39,7 +39,7 @@ import org.anchoranalysis.image.bean.provider.ChannelProviderUnary;
 import org.anchoranalysis.image.bean.spatial.ScaleCalculator;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Scales the channel in the X and Y dimensions.

@@ -35,11 +35,11 @@ import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
 import org.anchoranalysis.bean.annotation.NonNegative;
 import org.anchoranalysis.bean.shared.relation.RelationBean;
-import org.anchoranalysis.core.relation.RelationToValue;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.stack.StackReader;
 import org.anchoranalysis.image.io.stack.OpenedRaster;
+import org.anchoranalysis.math.relation.RelationToValue;
 
 /**
  * If the XY resolution of an opened-image meets a certain condition then the resolution is scaled

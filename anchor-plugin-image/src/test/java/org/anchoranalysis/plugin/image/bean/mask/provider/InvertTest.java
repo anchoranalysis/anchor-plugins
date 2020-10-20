@@ -30,7 +30,7 @@ import static org.anchoranalysis.plugin.image.bean.mask.provider.MaskFixture.*;
 import static org.junit.Assert.*;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.bean.provider.MaskProvider;
 import org.anchoranalysis.image.core.mask.Mask;

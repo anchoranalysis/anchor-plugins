@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.log.Logger;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.value.TypedValue;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.TaskWithoutSharedState;
 import org.anchoranalysis.experiment.task.InputBound;

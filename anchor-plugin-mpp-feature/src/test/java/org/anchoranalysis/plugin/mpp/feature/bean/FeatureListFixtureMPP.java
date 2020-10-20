@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.feature.bean;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.list.FeatureList;
 import org.anchoranalysis.mpp.feature.bean.mark.FeatureInputMark;
 import org.anchoranalysis.mpp.feature.bean.mark.collection.FeatureInputMarkCollection;

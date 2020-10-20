@@ -34,7 +34,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
 import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
 import org.anchoranalysis.io.output.path.NamedPath;

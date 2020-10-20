@@ -27,11 +27,11 @@
 package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 
 import java.nio.file.Path;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.system.path.PathDifference;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
-import org.anchoranalysis.core.path.PathDifference;
-import org.anchoranalysis.core.path.PathDifferenceException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NamingUtilities {

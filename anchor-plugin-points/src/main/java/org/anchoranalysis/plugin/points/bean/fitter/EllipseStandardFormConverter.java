@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.bean.fitter;
 import cern.colt.matrix.DoubleFactory1D;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.linalg.Algebra;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.spatial.point.Point2d;
 
 //

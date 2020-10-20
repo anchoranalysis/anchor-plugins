@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.io.bean.channel.map;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelEntry;
 import org.anchoranalysis.image.io.bean.channel.map.ChannelMap;

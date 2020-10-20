@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.image.object.merge.condition;
 
 import java.util.Optional;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.dimensions.UnitConverter;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 

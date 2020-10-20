@@ -31,8 +31,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.function.Consumer;
 import org.anchoranalysis.bean.xml.RegisterBeanFactories;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.bean.object.pair.First;

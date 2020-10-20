@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.object.provider.filter;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithContainerBase;

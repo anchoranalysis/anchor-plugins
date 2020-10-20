@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.bean.provider.collection;
 
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.mpp.bean.provider.MarkCollectionProvider;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 

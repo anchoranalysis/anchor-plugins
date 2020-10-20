@@ -30,8 +30,8 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProvider;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.BoundedVoxels;
@@ -45,7 +45,7 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.image.voxel.object.factory.ObjectsFromConnectedComponentsFactory;
 import org.anchoranalysis.plugin.image.bean.object.provider.WithDimensionsBase;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 public class SplitByObjects extends WithDimensionsBase {
 

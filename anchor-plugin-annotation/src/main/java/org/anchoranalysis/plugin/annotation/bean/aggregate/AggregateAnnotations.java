@@ -27,10 +27,10 @@
 package org.anchoranalysis.plugin.annotation.bean.aggregate;
 
 import java.util.Optional;
+import org.anchoranalysis.annotation.io.AnnotationWithStrategy;
 import org.anchoranalysis.annotation.io.bean.AnnotatorStrategy;
-import org.anchoranalysis.annotation.io.input.AnnotationWithStrategy;
 import org.anchoranalysis.core.concurrency.ConcurrencyPlan;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.experiment.ExperimentExecutionException;
 import org.anchoranalysis.experiment.JobExecutionException;
 import org.anchoranalysis.experiment.bean.task.Task;

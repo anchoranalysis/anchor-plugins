@@ -32,8 +32,8 @@ import org.anchoranalysis.bean.shared.color.scheme.ColorScheme;
 import org.anchoranalysis.bean.shared.color.scheme.HSB;
 import org.anchoranalysis.bean.shared.color.scheme.Shuffle;
 import org.anchoranalysis.core.color.ColorIndex;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.idgetter.IDGetterIter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.getter.IdentifyByIteration;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.bean.object.draw.Outline;
@@ -46,7 +46,7 @@ import org.anchoranalysis.mpp.mark.points.PointList;
 import org.anchoranalysis.mpp.mark.points.PointListFactory;
 import org.anchoranalysis.overlay.Overlay;
 import org.anchoranalysis.overlay.bean.DrawObject;
-import org.anchoranalysis.spatial.point.contour.Contour;
+import org.anchoranalysis.spatial.Contour;
 
 class ContourListGenerator
         extends RasterGeneratorDelegateToRaster<ColoredMarksWithDisplayStack, List<Contour>> {
@@ -74,7 +74,7 @@ class ContourListGenerator
                 new ColoredMarks(
                         createMarksFromContourList(element),
                         generateColors(element.size()),
-                        new IDGetterIter<>());
+                        new IdentifyByIteration<>());
         return new ColoredMarksWithDisplayStack(marks, background);
     }
 
@@ -106,7 +106,7 @@ class ContourListGenerator
     }
 
     private static MarksGenerator createDelegate(DrawObject drawObject) {
-        MarksGenerator delegate = new MarksGenerator(drawObject, new IDGetterIter<Overlay>());
+        MarksGenerator delegate = new MarksGenerator(drawObject, new IdentifyByIteration<Overlay>());
         delegate.setManifestDescriptionFunction("contourRepresentationRGB");
         return delegate;
     }

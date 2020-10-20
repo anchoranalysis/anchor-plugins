@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.naming;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.output.error.OutputWriteFailedException;
 
 public class PreserveName implements CopyFilesNaming {

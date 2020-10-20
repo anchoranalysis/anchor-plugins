@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.bean.outline.visitscheduler;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.random.RandomNumberGenerator;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

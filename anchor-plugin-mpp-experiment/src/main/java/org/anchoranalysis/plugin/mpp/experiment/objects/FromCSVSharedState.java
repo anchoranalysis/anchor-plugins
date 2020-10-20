@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.mpp.experiment.objects;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.index.GetOperationFailedException;
 import org.anchoranalysis.io.input.csv.CSVReaderByLine;
 import org.anchoranalysis.io.input.csv.CSVReaderException;

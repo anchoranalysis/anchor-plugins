@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.objects.columndefinition;
 
 import com.google.common.base.Preconditions;
 import lombok.Value;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectCollectionRTree;
 import org.anchoranalysis.image.voxel.object.ObjectMask;

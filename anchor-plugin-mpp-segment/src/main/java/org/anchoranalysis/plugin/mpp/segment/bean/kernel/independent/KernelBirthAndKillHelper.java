@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.feature.calculate.NamedFeatureCalculateException;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;

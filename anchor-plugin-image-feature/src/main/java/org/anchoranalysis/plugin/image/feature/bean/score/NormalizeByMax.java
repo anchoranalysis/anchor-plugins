@@ -28,9 +28,9 @@ package org.anchoranalysis.plugin.image.feature.bean.score;
 
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.math.histogram.Histogram;
 
 /**

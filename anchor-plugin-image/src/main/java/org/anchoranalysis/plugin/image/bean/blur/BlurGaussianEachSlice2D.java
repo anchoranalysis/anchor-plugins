@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.bean.blur;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.VoxelsWrapper;

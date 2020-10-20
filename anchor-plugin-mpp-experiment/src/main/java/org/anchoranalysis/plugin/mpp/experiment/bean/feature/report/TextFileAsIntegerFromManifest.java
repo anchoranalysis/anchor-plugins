@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.manifest.Manifest;
 import org.anchoranalysis.io.manifest.finder.FinderFileAsText;

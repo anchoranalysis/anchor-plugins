@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.bean.channel.provider;
 
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.name.provider.NamedProviderGetException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.identifier.provider.NamedProviderGetException;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.bean.provider.ChannelProvider;
 import org.anchoranalysis.image.core.channel.Channel;

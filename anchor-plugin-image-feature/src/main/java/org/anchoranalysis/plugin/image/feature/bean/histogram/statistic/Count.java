@@ -49,7 +49,7 @@ public class Count extends FeatureHistogramStatistic {
     @Override
     protected double calculateStatisticFrom(Histogram histogram) {
         if (threshold != null) {
-            return histogram.countThreshold(threshold);
+            return histogram.countThreshold(threshold.relation(), threshold.threshold());
         } else {
             return histogram.getTotalCount();
         }

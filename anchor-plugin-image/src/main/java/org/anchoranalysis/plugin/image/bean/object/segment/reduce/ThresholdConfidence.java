@@ -33,11 +33,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;
-import org.anchoranalysis.spatial.extent.box.BoundedList;
-import org.anchoranalysis.spatial.extent.rtree.SpatiallySeparate;
+import org.anchoranalysis.spatial.box.BoundedList;
+import org.anchoranalysis.spatial.rtree.SpatiallySeparate;
 
 /**
  * Combines object-masks by projecting the maximum confidence-level for each voxel and thresholding.

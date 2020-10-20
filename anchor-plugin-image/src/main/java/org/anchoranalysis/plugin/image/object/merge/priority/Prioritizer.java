@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.image.object.merge.priority;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.plugin.image.object.merge.ObjectVertex;
 

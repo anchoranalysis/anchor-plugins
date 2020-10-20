@@ -35,7 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.xml.XmlUtilities;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Resolution;
 import org.anchoranalysis.image.io.ImageIOException;
 import org.anchoranalysis.io.output.xml.XMLWriter;

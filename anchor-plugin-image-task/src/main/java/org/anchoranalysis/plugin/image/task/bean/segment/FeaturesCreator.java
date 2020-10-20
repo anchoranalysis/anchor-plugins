@@ -27,11 +27,11 @@ package org.anchoranalysis.plugin.image.task.bean.segment;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.axis.AxisType;
 import org.anchoranalysis.feature.list.NamedFeatureStore;
 import org.anchoranalysis.image.feature.bean.object.single.CenterOfGravity;
 import org.anchoranalysis.image.feature.bean.object.single.NumberVoxels;
 import org.anchoranalysis.image.feature.object.input.FeatureInputSingleObject;
+import org.anchoranalysis.spatial.axis.AxisType;
 
 /**
  * Creates certain hard-coded features to describe a segmented-object.

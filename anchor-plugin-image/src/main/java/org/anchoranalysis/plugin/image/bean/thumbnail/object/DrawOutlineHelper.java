@@ -27,8 +27,8 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import lombok.AllArgsConstructor;
 import org.anchoranalysis.bean.shared.color.RGBColorBean;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.properties.ObjectCollectionWithProperties;
 import org.anchoranalysis.image.core.stack.DisplayStack;
 import org.anchoranalysis.image.core.stack.Stack;

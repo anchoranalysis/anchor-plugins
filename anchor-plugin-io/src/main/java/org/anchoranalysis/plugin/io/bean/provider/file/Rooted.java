@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.error.BeanDuplicateException;
-import org.anchoranalysis.core.path.PathDifferenceException;
+import org.anchoranalysis.core.system.path.PathDifferenceException;
 import org.anchoranalysis.io.input.bean.InputManagerParams;
 import org.anchoranalysis.io.input.bean.files.FilesProvider;
 import org.anchoranalysis.io.input.bean.files.FilesProviderWithDirectory;

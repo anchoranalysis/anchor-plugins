@@ -27,9 +27,9 @@
 package org.anchoranalysis.plugin.mpp.experiment.bean.feature.source;
 
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.feature.input.FeatureInput;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;

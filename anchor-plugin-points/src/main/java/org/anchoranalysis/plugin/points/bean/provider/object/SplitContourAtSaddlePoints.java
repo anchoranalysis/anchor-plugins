@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.points.bean.provider.object;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.provider.ObjectCollectionProviderUnary;
 import org.anchoranalysis.image.core.object.factory.SingleObjectFromPointsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
@@ -38,8 +38,8 @@ import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.image.voxel.object.factory.ObjectCollectionFactory;
 import org.anchoranalysis.plugin.points.bean.contour.SplitContourSmoothingSpline;
 import org.anchoranalysis.plugin.points.contour.ContourList;
+import org.anchoranalysis.spatial.Contour;
 import org.anchoranalysis.spatial.point.PointConverter;
-import org.anchoranalysis.spatial.point.contour.Contour;
 
 /**
  * Splits a 2D contour represented by an object-mask into several contours, splitting at "turn"

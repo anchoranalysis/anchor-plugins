@@ -27,9 +27,9 @@ package org.anchoranalysis.plugin.image.bean.thumbnail.object;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3i;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 import org.anchoranalysis.spatial.point.Tuple3i;

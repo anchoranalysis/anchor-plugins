@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.feature.bean.list.permute;
 import java.util.Arrays;
 import org.anchoranalysis.bean.StringSet;
 import org.anchoranalysis.bean.permute.property.PermutePropertySequenceInteger;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.feature.bean.Feature;
 import org.anchoranalysis.feature.input.FeatureInputParams;
 import org.anchoranalysis.plugin.operator.feature.bean.arithmetic.Divide;

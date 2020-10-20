@@ -29,12 +29,12 @@ package org.anchoranalysis.plugin.image.bean.mask.provider.dimensions;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.mask.MaskFactory;
 import org.anchoranalysis.plugin.image.bean.mask.provider.FromDimensionsBase;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.spatial.point.Point3d;
 
 /**

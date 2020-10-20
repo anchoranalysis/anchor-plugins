@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.anchoranalysis.bean.initializable.params.NullInitParams;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.random.RandomNumberGeneratorMersenne;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;

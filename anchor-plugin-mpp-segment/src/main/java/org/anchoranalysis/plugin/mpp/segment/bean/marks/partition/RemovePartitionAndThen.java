@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.segment.bean.marks.partition;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.mark.MarkCollection;
 import org.anchoranalysis.mpp.segment.transformer.Compose;
 import org.anchoranalysis.mpp.segment.transformer.StateTransformerBean;

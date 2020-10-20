@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.mpp.experiment.bean.feature.report;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 public abstract class ReportFeatureForManifestFileBase extends ReportFeatureForManifest {
 

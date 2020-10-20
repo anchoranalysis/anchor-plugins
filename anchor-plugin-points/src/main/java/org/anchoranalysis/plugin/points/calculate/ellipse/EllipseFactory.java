@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.points.calculate.ellipse;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalList;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.points.PointsFromObject;

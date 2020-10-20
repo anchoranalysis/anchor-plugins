@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.channel.watershed.ye
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.voxel.binary.values.BinaryValuesByte;
 import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.iterator.neighbor.IterateVoxelsNeighbors;

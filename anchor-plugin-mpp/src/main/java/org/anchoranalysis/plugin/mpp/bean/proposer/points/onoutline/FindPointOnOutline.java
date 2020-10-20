@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.mpp.bean.proposer.points.onoutline;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.NullParamsBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.orientation.Orientation;
 import org.anchoranalysis.spatial.point.Point3d;
 import org.anchoranalysis.spatial.point.Point3i;

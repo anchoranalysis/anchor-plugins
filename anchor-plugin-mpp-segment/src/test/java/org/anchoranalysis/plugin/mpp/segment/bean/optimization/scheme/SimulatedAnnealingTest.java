@@ -29,8 +29,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 import static org.junit.Assert.*;
 
 import org.anchoranalysis.bean.error.BeanMisconfiguredException;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.mpp.bean.bound.BoundUnitless;
 import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds2D;
 import org.anchoranalysis.mpp.bean.mark.bounds.RotationBounds3D;

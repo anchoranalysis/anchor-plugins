@@ -28,11 +28,11 @@ package org.anchoranalysis.plugin.mpp.bean.define;
 
 import java.util.Optional;
 import org.anchoranalysis.bean.define.Define;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.name.provider.NamedProvider;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.identifier.provider.NamedProvider;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.energy.EnergyStack;
 import org.anchoranalysis.image.bean.nonbean.init.ImageInitParams;
 import org.anchoranalysis.image.core.stack.Stack;

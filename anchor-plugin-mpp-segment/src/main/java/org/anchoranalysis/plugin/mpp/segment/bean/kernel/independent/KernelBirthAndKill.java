@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.OptionalBean;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.functional.OptionalUtilities;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.mpp.bean.mark.MarkWithIdentifierFactory;
@@ -156,7 +156,7 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     @Override
     public String describeLast() {
-        return String.format("birthAndKill(%d)", markNew.getId());
+        return String.format("birthAndKill(%d)", markNew.getIdentifier());
     }
 
     @Override
@@ -215,7 +215,7 @@ public class KernelBirthAndKill extends KernelPosNeg<VoxelizedMarksWithEnergy> {
 
     @Override
     public int[] changedMarkIDArray() {
-        return new int[] {this.markNew.getId()};
+        return new int[] {this.markNew.getIdentifier()};
     }
 
     @Override

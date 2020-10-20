@@ -29,12 +29,10 @@ package org.anchoranalysis.plugin.image.feature.bean.histogram.statistic;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.EqualToBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToThreshold;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.feature.histogram.FeatureHistogramStatistic;
 import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.EqualTo;
 
 //
 // Ratio of number of non-mode pixels to number of pixels
@@ -59,9 +57,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
 
             for (int v = startV; v < 255; v++) {
 
-                RelationToThreshold relation = new RelationToConstant(new EqualToBean(), v);
-
-                long cnt = histogram.countThreshold(relation);
+                long cnt = histogram.countThreshold(new EqualTo(), v);
 
                 if (cnt != 0) {
                     if (v != mode) {
@@ -88,9 +84,7 @@ public class RatioNonMode extends FeatureHistogramStatistic {
         long maxValue = -1;
         for (int v = startV; v < 255; v++) {
 
-            RelationToThreshold relation = new RelationToConstant(new EqualToBean(), v);
-
-            long cnt = histogram.countThreshold(relation);
+            long cnt = histogram.countThreshold(new EqualTo(), v);
 
             if (cnt > maxValue) {
                 maxValue = cnt;

@@ -30,7 +30,7 @@ import com.github.quickhull3d.Point3d;
 import com.github.quickhull3d.QuickHull3D;
 import java.util.ArrayList;
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.log.MessageLogger;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;

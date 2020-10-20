@@ -26,10 +26,10 @@
 
 package org.anchoranalysis.plugin.opencv.bean.object.segment.stack;
 
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.spatial.extent.Extent;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactorUtilities;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.spatial.Extent;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactorUtilities;
 
 /**
  * Finds largest multiple of an Extent without being larger than another extent

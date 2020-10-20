@@ -27,13 +27,13 @@
 package org.anchoranalysis.plugin.mpp.bean.region;
 
 import lombok.EqualsAndHashCode;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.MarkWithPosition;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class CenterSliceBase extends IndexedRegionBase {

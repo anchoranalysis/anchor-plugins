@@ -30,13 +30,13 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.relation.RelationToValue;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.nonbean.error.UnitValueException;
 import org.anchoranalysis.image.bean.unitvalue.extent.volume.UnitValueVolume;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
+import org.anchoranalysis.math.relation.RelationToValue;
 import org.anchoranalysis.plugin.image.bean.object.filter.ObjectFilterRelation;
 
 /**

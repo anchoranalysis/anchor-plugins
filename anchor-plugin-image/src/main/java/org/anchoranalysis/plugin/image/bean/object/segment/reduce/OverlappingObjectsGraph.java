@@ -27,7 +27,7 @@ package org.anchoranalysis.plugin.image.bean.object.segment.reduce;
 
 import java.util.Collection;
 import java.util.List;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.graph.GraphWithoutPayload;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.plugin.image.segment.WithConfidence;

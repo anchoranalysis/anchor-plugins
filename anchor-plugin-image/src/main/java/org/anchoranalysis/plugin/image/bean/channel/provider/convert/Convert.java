@@ -29,7 +29,7 @@ package org.anchoranalysis.plugin.image.bean.channel.provider.convert;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.bean.channel.converter.ConvertChannelTo;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.channel.convert.ChannelConverter;

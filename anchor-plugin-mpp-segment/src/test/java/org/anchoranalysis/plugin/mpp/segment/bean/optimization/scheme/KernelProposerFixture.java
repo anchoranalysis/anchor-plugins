@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.mpp.segment.bean.optimization.scheme;
 
 import java.util.Arrays;
 import java.util.Optional;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.core.log.Logger;
 import org.anchoranalysis.io.output.outputter.InputOutputContext;
 import org.anchoranalysis.mpp.bean.init.MPPInitParams;

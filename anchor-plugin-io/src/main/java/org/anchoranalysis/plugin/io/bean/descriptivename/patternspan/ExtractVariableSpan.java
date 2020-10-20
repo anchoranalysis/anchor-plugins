@@ -32,8 +32,8 @@ import com.owenfeehan.pathpatternfinder.patternelements.PatternElement;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.path.FilePathToUnixStyleConverter;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.system.path.FilePathToUnixStyleConverter;
 import org.apache.commons.io.IOCase;
 
 /**

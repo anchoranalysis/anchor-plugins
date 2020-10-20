@@ -41,7 +41,7 @@ import ome.xml.model.enums.PixelType;
 import ome.xml.model.primitives.PositiveInteger;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.core.dimensions.Resolution;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MetadataUtilities {

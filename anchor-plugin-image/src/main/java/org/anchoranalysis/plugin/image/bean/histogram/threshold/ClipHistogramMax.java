@@ -31,11 +31,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.bean.shared.relation.GreaterThanBean;
-import org.anchoranalysis.bean.shared.relation.threshold.RelationToConstant;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.bean.threshold.CalculateLevelOne;
 import org.anchoranalysis.math.histogram.Histogram;
+import org.anchoranalysis.math.relation.GreaterThan;
 
 /**
  * Clips the input-histogram to a certain maximum value, and then delegates the calculate-level.
@@ -45,6 +44,8 @@ import org.anchoranalysis.math.histogram.Histogram;
 @EqualsAndHashCode(callSuper = true)
 public class ClipHistogramMax extends CalculateLevelOne {
 
+    private static final GreaterThan RELATION = new GreaterThan();
+    
     // START BEAN
     @BeanField @Getter @Setter private int max;
     // END BEAN
@@ -58,7 +59,7 @@ public class ClipHistogramMax extends CalculateLevelOne {
         Preconditions.checkArgument(maxVal <= histogram.getMaxBin());
 
         long numAbove =
-                histogram.countThreshold(new RelationToConstant(new GreaterThanBean(), maxVal));
+                histogram.countThreshold(RELATION, maxVal);
 
         Histogram out = new Histogram(histogram.getMaxBin());
         histogram.iterateBinsUntil(maxVal, out::incrementValueBy);

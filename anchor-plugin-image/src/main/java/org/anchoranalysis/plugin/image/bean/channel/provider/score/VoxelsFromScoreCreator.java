@@ -30,9 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.InitException;
-import org.anchoranalysis.core.params.KeyValueParams;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.InitException;
+import org.anchoranalysis.core.value.KeyValueParams;
 import org.anchoranalysis.feature.calculate.FeatureCalculationException;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;
 import org.anchoranalysis.image.feature.bean.score.VoxelScore;
@@ -44,7 +44,7 @@ import org.anchoranalysis.image.voxel.buffer.primitive.UnsignedByteBuffer;
 import org.anchoranalysis.image.voxel.factory.VoxelsFactory;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.math.histogram.Histogram;
-import org.anchoranalysis.spatial.extent.Extent;
+import org.anchoranalysis.spatial.Extent;
 import org.anchoranalysis.spatial.point.ReadableTuple3i;
 
 @AllArgsConstructor

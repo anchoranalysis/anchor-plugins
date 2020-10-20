@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
-import org.anchoranalysis.core.text.TypedValue;
+import org.anchoranalysis.core.exception.OperationFailedException;
+import org.anchoranalysis.core.value.TypedValue;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class TypedValueUtilities {

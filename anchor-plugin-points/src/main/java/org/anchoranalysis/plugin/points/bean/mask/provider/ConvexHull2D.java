@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.points.bean.mask.provider;
 
 import java.util.List;
-import org.anchoranalysis.core.error.CreateException;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.CreateException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.points.PointsFromMask;
 import org.anchoranalysis.image.voxel.assigner.VoxelsAssigner;

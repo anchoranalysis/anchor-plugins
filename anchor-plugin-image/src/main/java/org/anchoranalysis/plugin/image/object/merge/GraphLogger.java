@@ -26,9 +26,9 @@
 
 package org.anchoranalysis.plugin.image.object.merge;
 
-import org.anchoranalysis.core.error.reporter.ErrorReporter;
 import org.anchoranalysis.core.graph.TypedEdge;
 import org.anchoranalysis.core.log.Logger;
+import org.anchoranalysis.core.log.error.ErrorReporter;
 import org.anchoranalysis.plugin.image.object.merge.priority.PrioritisedVertex;
 
 public class GraphLogger {

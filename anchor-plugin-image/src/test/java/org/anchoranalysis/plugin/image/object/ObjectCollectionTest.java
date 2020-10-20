@@ -26,8 +26,7 @@
 package org.anchoranalysis.plugin.image.object;
 
 import static org.junit.Assert.assertEquals;
-
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.object.scale.ScaledElements;
 import org.anchoranalysis.image.core.object.scale.Scaler;
 import org.anchoranalysis.image.voxel.object.ObjectCollection;

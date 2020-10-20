@@ -35,7 +35,7 @@ import lombok.Setter;
 import org.anchoranalysis.annotation.io.bean.comparer.Comparer;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.bean.annotation.DefaultInstance;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.functional.FunctionalProgress;
 import org.anchoranalysis.core.progress.ProgressReporter;
 import org.anchoranalysis.core.progress.ProgressReporterMultiple;

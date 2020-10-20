@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.dimensions.Dimensions;
 import org.anchoranalysis.image.voxel.statistics.VoxelStatistics;
 import org.anchoranalysis.mpp.bean.mark.MarkRegion;
@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.mark.GlobalRegionIdentifiers;
 import org.anchoranalysis.mpp.mark.Mark;
 import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 import org.anchoranalysis.mpp.mark.voxelized.memo.VoxelizedMarkMemo;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 
 /**
  * {@link MarkRegion} with a region and an index

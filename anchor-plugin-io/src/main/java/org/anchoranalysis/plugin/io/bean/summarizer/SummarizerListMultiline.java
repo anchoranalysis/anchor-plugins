@@ -26,7 +26,7 @@
 
 package org.anchoranalysis.plugin.io.bean.summarizer;
 
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 /**
  * Creates a string where each line is an element (the string representation thereof)

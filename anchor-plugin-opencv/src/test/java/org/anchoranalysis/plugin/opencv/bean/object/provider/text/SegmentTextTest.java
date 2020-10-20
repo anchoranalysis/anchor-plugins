@@ -27,7 +27,7 @@
 package org.anchoranalysis.plugin.opencv.bean.object.provider.text;
 
 import java.util.List;
-import org.anchoranalysis.core.error.InitException;
+import org.anchoranalysis.core.exception.InitException;
 import org.anchoranalysis.image.bean.nonbean.error.SegmentationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.input.ImageInitParamsFactory;
@@ -38,7 +38,7 @@ import org.anchoranalysis.plugin.image.bean.object.segment.stack.SegmentedObject
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SegmentText;
 import org.anchoranalysis.plugin.opencv.bean.object.segment.stack.SuppressNonMaxima;
 import org.anchoranalysis.plugin.opencv.test.ImageLoader;
-import org.anchoranalysis.spatial.extent.box.BoundingBox;
+import org.anchoranalysis.spatial.box.BoundingBox;
 import org.anchoranalysis.test.image.InputOutputContextFixture;
 import org.anchoranalysis.test.image.WriteIntoFolder;
 import org.junit.Before;

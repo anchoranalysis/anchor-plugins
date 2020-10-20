@@ -28,7 +28,7 @@ package org.anchoranalysis.plugin.imagej.bean.channel.provider;
 
 import ij.ImagePlus;
 import ij.plugin.filter.BackgroundSubtracter;
-import org.anchoranalysis.core.error.CreateException;
+import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.io.imagej.convert.ConvertFromImagePlus;
 import org.anchoranalysis.io.imagej.convert.ConvertToImagePlus;

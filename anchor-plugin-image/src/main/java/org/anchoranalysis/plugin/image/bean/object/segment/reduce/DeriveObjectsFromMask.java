@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.channel.Channel;
 import org.anchoranalysis.image.core.mask.Mask;
 import org.anchoranalysis.image.core.object.HistogramFromObjectsFactory;

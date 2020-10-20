@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 import org.anchoranalysis.image.core.stack.Stack;
 import org.anchoranalysis.image.io.generator.raster.boundingbox.ScaleableBackground;
 import org.anchoranalysis.image.voxel.interpolator.Interpolator;
-import org.anchoranalysis.spatial.extent.scale.ScaleFactor;
+import org.anchoranalysis.spatial.scale.ScaleFactor;
 
 /**
  * Selects a background from an optional stack with an unknown number of channels, and assigns a

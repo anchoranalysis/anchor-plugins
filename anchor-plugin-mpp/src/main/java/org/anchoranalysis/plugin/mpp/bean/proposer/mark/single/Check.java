@@ -32,7 +32,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.color.RGBColor;
-import org.anchoranalysis.core.error.OperationFailedException;
+import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.mpp.bean.proposer.MarkProposer;
 import org.anchoranalysis.mpp.feature.bean.mark.CheckMark;
 import org.anchoranalysis.mpp.feature.error.CheckException;
