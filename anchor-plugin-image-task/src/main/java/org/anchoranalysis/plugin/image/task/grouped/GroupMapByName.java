@@ -57,7 +57,7 @@ public abstract class GroupMapByName<S, T> {
 
     private String nounT;
 
-    private final ManifestDirectoryDescription manifestFolderDescription;
+    private final ManifestDirectoryDescription manifestDirectoryDescription;
 
     /**
      * Creates a group-map.
@@ -68,7 +68,7 @@ public abstract class GroupMapByName<S, T> {
     public GroupMapByName(String nounT, String manifestFunction, Supplier<T> createEmpty) {
         this.map = new MapCreate<>(createEmpty);
         this.nounT = nounT;
-        this.manifestFolderDescription =
+        this.manifestDirectoryDescription =
                 new ManifestDirectoryDescription(
                         "groupedFolder", manifestFunction, new StringsWithoutOrder());
     }
@@ -111,7 +111,7 @@ public abstract class GroupMapByName<S, T> {
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
         InputOutputContextSubdirectoryCache subdirectoryCache =
-                new InputOutputContextSubdirectoryCache(context, manifestFolderDescription, false);
+                new InputOutputContextSubdirectoryCache(context, manifestDirectoryDescription, false);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory

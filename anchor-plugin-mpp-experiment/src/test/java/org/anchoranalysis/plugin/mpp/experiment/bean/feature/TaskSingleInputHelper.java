@@ -52,11 +52,11 @@ import org.anchoranalysis.experiment.task.ParametersUnbound;
 import org.anchoranalysis.io.input.InputFromManager;
 import org.anchoranalysis.io.input.InputReadFailedException;
 import org.anchoranalysis.io.output.bean.OutputManager;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
 import org.anchoranalysis.io.output.outputter.BindFailedException;
 import org.anchoranalysis.io.output.outputter.Outputter;
 import org.anchoranalysis.io.output.outputter.OutputterChecked;
-import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.test.image.io.OutputManagerFixture;
+import org.anchoranalysis.test.image.io.OutputManagerForImagesFixture;
 import org.anchoranalysis.test.image.io.OutputterFixture;
 
 /**
@@ -117,7 +117,7 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            OutputManager outputManager = OutputManagerFixture.createOutputManager(pathForOutputs);
+            OutputManager outputManager = OutputManagerForImagesFixture.createOutputManager( Optional.of(pathForOutputs) );
 
             Outputter outputter = OutputterFixture.outputter(outputManager);
 
