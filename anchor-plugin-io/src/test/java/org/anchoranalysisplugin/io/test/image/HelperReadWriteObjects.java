@@ -27,6 +27,7 @@
 package org.anchoranalysisplugin.io.test.image;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.anchoranalysis.core.index.SetOperationFailedException;
 import org.anchoranalysis.core.serialize.DeserializationFailedException;
 import org.anchoranalysis.image.io.objects.HDF5ObjectsGenerator;
@@ -55,7 +56,7 @@ class HelperReadWriteObjects {
             ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
             throws SetOperationFailedException, BindFailedException {
 
-        Outputter outputter = OutputterFixture.outputter(path);
+        Outputter outputter = OutputterFixture.outputter( Optional.of(path) );
 
         outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }

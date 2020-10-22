@@ -31,11 +31,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.anchoranalysis.bean.annotation.BeanField;
 import org.anchoranalysis.core.system.path.PathDifferenceException;
-import org.anchoranalysis.io.output.path.DirectoryWithPrefix;
-import org.anchoranalysis.io.output.path.FilePathPrefixerContext;
-import org.anchoranalysis.io.output.path.NamedPath;
-import org.anchoranalysis.io.output.path.PathPrefixer;
-import org.anchoranalysis.io.output.path.PathPrefixerException;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixer;
+import org.anchoranalysis.io.output.bean.path.prefixer.PathPrefixerAvoidResolve;
+import org.anchoranalysis.io.output.path.prefixer.DirectoryWithPrefix;
+import org.anchoranalysis.io.output.path.prefixer.FilePathPrefixerContext;
+import org.anchoranalysis.io.output.path.prefixer.NamedPath;
+import org.anchoranalysis.io.output.path.prefixer.PathPrefixerException;
 import org.anchoranalysis.plugin.io.input.path.RootPathMap;
 
 /**
