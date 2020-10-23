@@ -34,12 +34,12 @@ import lombok.NoArgsConstructor;
 class ExportOutputter {
 
     // Saved output locations for particular tests
-    public static final String OUTPUT_DIR_SIMPLE_1 = "simple01/";
-    public static final String OUTPUT_DIR_MERGED_1 = "mergedPairs01/";
-    public static final String OUTPUT_DIR_MERGED_2 = "mergedPairs02/";
-    public static final String OUTPUT_DIR_MERGED_3 = "mergedPairs03/";
-    public static final String OUTPUT_DIR_IMAGE_CACHE = "imageCache/";
-    public static final String OUTPUT_DIR_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
+    public static final String OUTPUT_DIRECTORY_SIMPLE_1 = "simple01/";
+    public static final String OUTPUT_DIRECTORY_MERGED_1 = "mergedPairs01/";
+    public static final String OUTPUT_DIRECTORY_MERGED_2 = "mergedPairs02/";
+    public static final String OUTPUT_DIRECTORY_MERGED_3 = "mergedPairs03/";
+    public static final String OUTPUT_DIRECTORY_IMAGE_CACHE = "imageCache/";
+    public static final String OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE = "simpleWithReference/";
 
     // Used for tests where we expect an exception to be thrown, and thus never to actually be
     // compared
