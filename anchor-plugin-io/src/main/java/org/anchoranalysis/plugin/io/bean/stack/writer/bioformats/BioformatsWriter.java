@@ -71,7 +71,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException(
                 "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
@@ -79,7 +79,7 @@ public abstract class BioformatsWriter extends StackWriter {
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         if (stack.getNumberChannels() == 0) {
@@ -87,9 +87,9 @@ public abstract class BioformatsWriter extends StackWriter {
         }
 
         if (stack.allChannelsHaveIdenticalType()) {
-            writeHomogeneousChannels(stack, filePath, makeRGB);
+            writeHomogeneousChannels(stack, filePath, options.isRgb());
         } else {
-            writeHeterogeneousChannels(stack, filePath, makeRGB);
+            writeHeterogeneousChannels(stack, filePath, options.isRgb());
         }
     }
 

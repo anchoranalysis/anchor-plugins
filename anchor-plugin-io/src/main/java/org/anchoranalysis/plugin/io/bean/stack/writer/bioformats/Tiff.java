@@ -44,14 +44,14 @@ public class Tiff extends BioformatsWriter {
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {
             throw new ImageIOException("Stack must have 1 or 3 channels");
         }
 
-        super.writeStack(stack, filePath, makeRGB, writeOptions);
+        super.writeStack(stack, filePath, options);
     }
 
     // A default extension

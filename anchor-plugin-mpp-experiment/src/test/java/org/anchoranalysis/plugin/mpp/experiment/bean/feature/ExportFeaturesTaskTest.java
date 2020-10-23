@@ -87,7 +87,7 @@ public class ExportFeaturesTaskTest {
     @Test
     public void testSimpleLarge() throws OperationFailedException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_1, fixture -> {} // Change nothing
+                OUTPUT_DIRECTORY_SIMPLE_1, fixture -> {} // Change nothing
                 );
     }
 
@@ -104,13 +104,13 @@ public class ExportFeaturesTaskTest {
 
     @Test
     public void testMergedLarge() throws OperationFailedException, CreateException {
-        testOnTask(OUTPUT_DIR_MERGED_1, fixture -> fixture.changeToMergedPairs(false, false));
+        testOnTask(OUTPUT_DIRECTORY_MERGED_1, fixture -> fixture.changeToMergedPairs(false, false));
     }
 
     @Test
     public void testMergedLargeWithPairs() throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_MERGED_2,
+                OUTPUT_DIRECTORY_MERGED_2,
                 fixture -> {
                     fixture.featureLoader().changeSingleToShellFeatures();
                     fixture.changeToMergedPairs(true, false);
@@ -119,7 +119,7 @@ public class ExportFeaturesTaskTest {
 
     @Test
     public void testMergedLargeWithImage() throws OperationFailedException, CreateException {
-        testOnTask(OUTPUT_DIR_MERGED_3, fixture -> fixture.changeToMergedPairs(false, true));
+        testOnTask(OUTPUT_DIRECTORY_MERGED_3, fixture -> fixture.changeToMergedPairs(false, true));
     }
 
     /**
@@ -140,7 +140,7 @@ public class ExportFeaturesTaskTest {
         when(feature.duplicateBean()).thenReturn(feature);
 
         testOnTask(
-                OUTPUT_DIR_IMAGE_CACHE,
+                OUTPUT_DIRECTORY_IMAGE_CACHE,
                 fixture -> {
                     fixture.featureLoader().changeImageTo(feature);
                     fixture.changeToMergedPairs(false, true);
@@ -209,7 +209,7 @@ public class ExportFeaturesTaskTest {
     public void testSimpleLargeWithIncludedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+                OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceWithInclude());
     }
 
@@ -218,7 +218,7 @@ public class ExportFeaturesTaskTest {
     public void testSimpleLargeWithSharedReference()
             throws OperationFailedException, CreateException {
         testOnTask(
-                OUTPUT_DIR_SIMPLE_WITH_REFERENCE,
+                OUTPUT_DIRECTORY_SIMPLE_WITH_REFERENCE,
                 fixture -> fixture.featureLoader().changeSingleToReferenceShared());
     }
 

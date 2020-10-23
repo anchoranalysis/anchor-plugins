@@ -67,17 +67,17 @@ public class WriteResolutionXml extends StackWriter {
 
     @Override
     public void writeStack(
-            Stack stack, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-        writer.writeStack(stack, filePath, makeRGB, writeOptions);
+        writer.writeStack(stack, filePath, options);
         writeResolutionXml(filePath, stack.resolution());
     }
 
     @Override
     public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions writeOptions)
+            StackSeries stackSeries, Path filePath, boolean makeRGB, StackWriteOptions options)
             throws ImageIOException {
-        writer.writeStackSeries(stackSeries, filePath, makeRGB, writeOptions);
+        writer.writeStackSeries(stackSeries, filePath, makeRGB, options);
 
         // We assume all the stacks in the series have the same dimension, and write only one
         // metadata file
