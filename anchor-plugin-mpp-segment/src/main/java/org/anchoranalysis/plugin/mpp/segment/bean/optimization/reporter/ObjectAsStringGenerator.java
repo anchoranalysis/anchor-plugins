@@ -55,7 +55,7 @@ class ObjectAsStringGenerator<T> extends OneStageGenerator<T> {
     }
 
     @Override
-    public String getFileExtension(OutputWriteSettings outputWriteSettings) {
+    public String selectFileExtension(OutputWriteSettings outputWriteSettings) {
         return outputWriteSettings.getExtensionText();
     }
 
