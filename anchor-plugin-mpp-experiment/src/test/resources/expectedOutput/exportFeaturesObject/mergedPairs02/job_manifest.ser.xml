@@ -1,0 +1,103 @@
+<org.anchoranalysis.io.manifest.Manifest>
+  <rootFolder>
+    <subdirectories>
+      <org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+        <parent class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../.."/>
+        <subdirectories/>
+        <description>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder">
+            <set>
+              <string>input.tif</string>
+            </set>
+          </sequenceType>
+        </description>
+        <path>stacks</path>
+        <outputName class="org.anchoranalysis.io.output.namestyle.StringSuffixOutputNameStyle">
+          <outputName>stacks</outputName>
+          <outputFormatString>%s</outputFormatString>
+        </outputName>
+        <fileTypes>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription>
+              <type>raster</type>
+              <function>stackFromCollection</function>
+            </manifestDescription>
+            <fileExtension>tif</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </fileTypes>
+      </org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+      <org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+        <parent class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../.."/>
+        <subdirectories/>
+        <description>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.StringsWithoutOrder">
+            <set>
+              <string>objectsTest.h5</string>
+            </set>
+          </sequenceType>
+        </description>
+        <path>objects</path>
+        <outputName class="org.anchoranalysis.io.output.namestyle.StringSuffixOutputNameStyle">
+          <outputName>objects</outputName>
+          <outputFormatString>%s</outputFormatString>
+        </outputName>
+        <fileTypes>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription>
+              <type>hdf5</type>
+              <function>objects</function>
+            </manifestDescription>
+            <fileExtension>h5</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </fileTypes>
+      </org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+      <org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+        <parent class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../.."/>
+        <subdirectories/>
+        <description>
+          <description>
+            <type>raster</type>
+            <function>energyStack</function>
+          </description>
+          <sequenceType class="org.anchoranalysis.io.manifest.sequencetype.IncrementingIntegers">
+            <range>
+              <start>0</start>
+              <incrementSize>1</incrementSize>
+              <end>2</end>
+            </range>
+          </sequenceType>
+        </description>
+        <path>energyStack</path>
+        <outputName class="org.anchoranalysis.io.output.namestyle.IntegerSuffixOutputNameStyle">
+          <outputName>energyStack</outputName>
+          <prefix>energyStack</prefix>
+          <numberDigits>2</numberDigits>
+        </outputName>
+        <fileTypes>
+          <org.anchoranalysis.io.manifest.file.FileType>
+            <manifestDescription>
+              <type>raster</type>
+              <function>energyStackChannel</function>
+            </manifestDescription>
+            <fileExtension>tif</fileExtension>
+          </org.anchoranalysis.io.manifest.file.FileType>
+        </fileTypes>
+      </org.anchoranalysis.io.generator.sequence.IndexableSubdirectory>
+    </subdirectories>
+    <delegate>
+      <directory class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../.."/>
+      <files>
+        <org.anchoranalysis.io.manifest.file.OutputtedFile>
+          <parentFolder class="org.anchoranalysis.io.manifest.directory.RootDirectory" reference="../../../.."/>
+          <fileName>energyStackParams.xml</fileName>
+          <outputName>energyStackParams</outputName>
+          <index></index>
+          <description>
+            <type>keyvalueparams</type>
+            <function>energyStackParams</function>
+          </description>
+        </org.anchoranalysis.io.manifest.file.OutputtedFile>
+      </files>
+    </delegate>
+  </rootFolder>
+</org.anchoranalysis.io.manifest.Manifest>

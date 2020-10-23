@@ -144,7 +144,7 @@ public abstract class ColoredBase extends StackProvider {
 
     private DisplayStack maybeFlatten(DisplayStack stack) {
         if (flatten) {
-            return stack.maximumIntensityProjection();
+            return stack.projectMax();
         } else {
             return stack;
         }

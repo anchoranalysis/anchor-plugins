@@ -57,6 +57,6 @@ class ExportOutputter {
         "energyStackParams.xml",
         "grouped/arbitraryGroup/featuresAggregatedGroup.xml",
         String.format("objects/%s.h5", MultiInputFixture.OBJECTS_NAME),
-        "manifest.ser.xml"
+        "job_manifest.ser.xml"
     };
 }
