@@ -73,20 +73,26 @@ public class ConvertFromMat {
 
     private static <T extends Buffer, S> Stack toGrayscale(
             Mat mat,
-            Function<T, VoxelBuffer<S>> createVoxelBuffer,
+            Function<T, VoxelBuffer<S>> voxelBufferFromBuffer,
             VoxelsFactoryTypeBound<S> factory) {
-
-        Dimensions dimensions = dimensionsFrom(mat);
 
         org.bytedeco.opencv.opencv_core.Mat matConverted =
                 CONVERTER.convertToMat(CONVERTER.convert(mat));
 
-        VoxelBuffer<S> buffer = createVoxelBuffer.apply(matConverted.createBuffer());
+        Voxels<S> voxels = factory.createForBuffer(
+                createVoxelBuffer(matConverted, voxelBufferFromBuffer),
+                dimensionsFrom(mat).extent());
 
-        Voxels<S> voxels = factory.createForBuffer(buffer, dimensions.extent());
-
-        Channel channel = ChannelFactory.instance().create(voxels);
-        return new Stack(channel);
+        return new Stack(ChannelFactory.instance().create(voxels));
+    }
+    
+    private static <T extends Buffer, S> VoxelBuffer<S> createVoxelBuffer(org.bytedeco.opencv.opencv_core.Mat matConverted, Function<T, VoxelBuffer<S>> voxelBufferFromBuffer) {
+        try {
+            T bufferArrayBacked = ConvertDirectBuffer.convertIfNeeded(matConverted.createBuffer());
+            return voxelBufferFromBuffer.apply(bufferArrayBacked);
+        } catch (OperationFailedException e) {
+            throw new AnchorImpossibleSituationException();
+        }
     }
 
     private static Stack toRGB(Mat mat) {

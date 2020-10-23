@@ -50,20 +50,20 @@ public class ConvertTest {
 
     @Test
     public void testGrayScale8Bit() throws OperationFailedException {
-        testConversion(loader.carGrayscale8Bit(), true);
+        testConversion(loader.carGrayscale8Bit());
     }
 
     @Test
     public void testGrayScale16Bit() throws OperationFailedException {
-        testConversion(loader.carGrayscale16Bit(), true);
+        testConversion(loader.carGrayscale16Bit());
     }
 
     @Test
     public void testRGB() throws OperationFailedException {
-        testConversion(loader.carRGB(), false);
+        testConversion(loader.carRGB());
     }
 
-    private void testConversion(Stack stack, boolean expectFinalStackDirect)
+    private void testConversion(Stack stack)
             throws OperationFailedException {
         try {
             CVInit.blockUntilLoaded();
@@ -83,7 +83,7 @@ public class ConvertTest {
             // and copying.
             assertEquals(
                     "buffer backed by array",
-                    expectFinalStackDirect,
+                    false,
                     isBufferDirect(stackCopiedBack));
 
         } catch (CreateException e) {
