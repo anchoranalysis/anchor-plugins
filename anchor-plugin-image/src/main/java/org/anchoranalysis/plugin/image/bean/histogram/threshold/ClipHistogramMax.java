@@ -45,7 +45,7 @@ import org.anchoranalysis.math.relation.GreaterThan;
 public class ClipHistogramMax extends CalculateLevelOne {
 
     private static final GreaterThan RELATION = new GreaterThan();
-    
+
     // START BEAN
     @BeanField @Getter @Setter private int max;
     // END BEAN
@@ -58,8 +58,7 @@ public class ClipHistogramMax extends CalculateLevelOne {
     private static Histogram createClipped(Histogram histogram, int maxVal) {
         Preconditions.checkArgument(maxVal <= histogram.getMaxBin());
 
-        long numAbove =
-                histogram.countThreshold(RELATION, maxVal);
+        long numAbove = histogram.countThreshold(RELATION, maxVal);
 
         Histogram out = new Histogram(histogram.getMaxBin());
         histogram.iterateBinsUntil(maxVal, out::incrementValueBy);

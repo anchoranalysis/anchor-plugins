@@ -107,7 +107,7 @@ class BuildGeneratorHelper {
             // TODO does the first generator get added twice for both flattened and non-flattened
             // stacks?
             ScaleableBackground background =
-                    ScaleableBackground.noScaling( extractBackground(stacks,key));
+                    ScaleableBackground.noScaling(extractBackground(stacks, key));
 
             // Bounding box-generator
             ExtractBoundingBoxAreaFromStackGenerator generator =
@@ -121,10 +121,11 @@ class BuildGeneratorHelper {
                             generator, outlineWidth, OUTLINE_COLOR));
         }
     }
-    
-    private DisplayStack extractBackground(NamedStacks stacks, String key) throws NamedProviderGetException {
+
+    private DisplayStack extractBackground(NamedStacks stacks, String key)
+            throws NamedProviderGetException {
         try {
-            return DisplayStack.create( stacks.getException(key) );
+            return DisplayStack.create(stacks.getException(key));
         } catch (CreateException e) {
             throw new NamedProviderGetException(key, e);
         }

@@ -76,8 +76,10 @@ public class FeatureListMPPTest {
         MarkCollectionFixture marksFixture = new MarkCollectionFixture(DIMENSIONS);
 
         testConstantsInList(
-                new FeatureInputMarkCollection(marksFixture.createMarks1(), Optional.of(DIMENSIONS)),
-                new FeatureInputMarkCollection(marksFixture.createMarks2(), Optional.of(DIMENSIONS)));
+                new FeatureInputMarkCollection(
+                        marksFixture.createMarks1(), Optional.of(DIMENSIONS)),
+                new FeatureInputMarkCollection(
+                        marksFixture.createMarks2(), Optional.of(DIMENSIONS)));
     }
 
     @Test

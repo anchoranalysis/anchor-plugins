@@ -201,6 +201,8 @@ public class KernelSplit extends KernelPosNeg<VoxelizedMarksWithEnergy> {
                         markExst,
                         pairNew.map(pmm -> pmm.getSource().getMark()),
                         pairNew.map(pmm -> pmm.getDestination().getMark()));
-        return stream.filter(Optional::isPresent).mapToInt(opt -> opt.get().getIdentifier()).toArray();
+        return stream.filter(Optional::isPresent)
+                .mapToInt(opt -> opt.get().getIdentifier())
+                .toArray();
     }
 }

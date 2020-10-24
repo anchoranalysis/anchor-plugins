@@ -131,13 +131,17 @@ class MarksOutputter {
                 outputNamePrefix,
                 () ->
                         new MarksGenerator(
-                                outlineWriter, new IdentifyByIteration<Overlay>(), regionMembership),
+                                outlineWriter,
+                                new IdentifyByIteration<Overlay>(),
+                                regionMembership),
                 () -> coloredMarksDisplayStack);
         writer.write(
                 outputNamePrefix + "MIP",
                 () ->
                         new MarksFlattenedGenerator(
-                                outlineWriter, new IdentifyByIteration<Overlay>(), regionMembership),
+                                outlineWriter,
+                                new IdentifyByIteration<Overlay>(),
+                                regionMembership),
                 () -> coloredMarksDisplayStack);
     }
 

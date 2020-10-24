@@ -109,7 +109,8 @@ public abstract class KernelBirth<T> extends KernelPosNeg<T> {
 
     private static String idStr(Set<Mark> list) {
         return String.join(
-                ", ", FunctionalList.mapToList(list, mark -> Integer.toString(mark.getIdentifier())));
+                ", ",
+                FunctionalList.mapToList(list, mark -> Integer.toString(mark.getIdentifier())));
     }
 
     private static int[] idArr(Set<Mark> set) {

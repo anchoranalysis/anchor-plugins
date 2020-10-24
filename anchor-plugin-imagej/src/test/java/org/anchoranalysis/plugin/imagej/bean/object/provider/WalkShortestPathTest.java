@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.imagej.bean.object.provider;
 
 import static org.junit.Assert.*;
+
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.voxel.object.ObjectMask;
 import org.anchoranalysis.spatial.point.Point3i;

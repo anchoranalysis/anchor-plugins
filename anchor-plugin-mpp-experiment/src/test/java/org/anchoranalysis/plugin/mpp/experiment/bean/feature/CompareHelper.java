@@ -72,27 +72,28 @@ class CompareHelper {
     @SuppressWarnings("unused")
     private static void assertIdentical(DualComparer comparer, String relativePath)
             throws OperationFailedException {
-        
+
         if (COPY_NOT_IDENTICAL && !comparer.getLoader2().doesPathExist(relativePath)) {
             copyFromTemporaryToResources(comparer, relativePath);
             return; // Exit early
         }
-        
+
         boolean identical = compareForExtra(comparer, relativePath);
-        
+
         if (COPY_NOT_IDENTICAL && !identical) {
             copyFromTemporaryToResources(comparer, relativePath);
         } else {
             assertTrue(relativePath + " is not identical", identical);
         }
     }
-    
-    private static void copyFromTemporaryToResources(DualComparer comparer, String relativePath) throws OperationFailedException {
+
+    private static void copyFromTemporaryToResources(DualComparer comparer, String relativePath)
+            throws OperationFailedException {
         try {
             comparer.copyFromPath1ToPath2(relativePath);
         } catch (IOException e) {
             throw new OperationFailedException(e);
-        }        
+        }
     }
 
     private static boolean compareForExtra(DualComparer comparer, String relativePath)

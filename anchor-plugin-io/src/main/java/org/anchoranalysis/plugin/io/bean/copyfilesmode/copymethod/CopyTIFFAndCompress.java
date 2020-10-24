@@ -29,7 +29,6 @@ package org.anchoranalysis.plugin.io.bean.copyfilesmode.copymethod;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.anchoranalysis.core.exception.OperationFailedException;
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceException;
 import loci.common.services.ServiceFactory;
@@ -40,6 +39,7 @@ import loci.formats.out.TiffWriter;
 import loci.formats.services.OMEXMLService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.anchoranalysis.core.exception.OperationFailedException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CopyTIFFAndCompress {

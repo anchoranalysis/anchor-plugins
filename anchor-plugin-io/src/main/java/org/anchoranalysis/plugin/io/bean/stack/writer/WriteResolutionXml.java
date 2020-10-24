@@ -66,16 +66,14 @@ public class WriteResolutionXml extends StackWriter {
     }
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         writer.writeStack(stack, filePath, options);
         writeResolutionXml(filePath, stack.resolution());
     }
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         writer.writeStackSeries(stackSeries, filePath, options);
 

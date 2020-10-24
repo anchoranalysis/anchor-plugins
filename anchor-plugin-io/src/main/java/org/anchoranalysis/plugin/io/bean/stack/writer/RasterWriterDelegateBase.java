@@ -46,15 +46,13 @@ public abstract class RasterWriterDelegateBase extends StackWriter {
     }
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         selectDelegate(options).writeStack(stack, filePath, options);
     }
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         selectDelegate(options).writeStackSeries(stackSeries, filePath, options);
     }

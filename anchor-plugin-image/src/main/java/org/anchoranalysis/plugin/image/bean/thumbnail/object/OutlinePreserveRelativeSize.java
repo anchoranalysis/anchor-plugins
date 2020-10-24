@@ -221,7 +221,8 @@ public class OutlinePreserveRelativeSize extends ThumbnailFromObjects {
     }
 
     private Optional<ScaleableBackground> determineBackgroundMaybeOutlined(
-            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator) throws OperationFailedException {
+            Optional<Stack> backgroundSource, FlattenAndScaler scaler, Interpolator interpolator)
+            throws OperationFailedException {
         BackgroundSelector backgroundHelper =
                 new BackgroundSelector(
                         backgroundChannelIndex, scaler.getScaleFactor(), interpolator);

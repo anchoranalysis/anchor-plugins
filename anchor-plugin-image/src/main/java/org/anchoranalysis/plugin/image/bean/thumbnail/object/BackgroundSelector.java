@@ -49,11 +49,13 @@ class BackgroundSelector {
     private ScaleFactor scaleFactor;
     private Interpolator interpolator;
 
-    public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource) throws OperationFailedException {
-        return OptionalUtilities.flatMap( backgroundSource, this::determineScaledBackground);
+    public Optional<ScaleableBackground> determineBackground(Optional<Stack> backgroundSource)
+            throws OperationFailedException {
+        return OptionalUtilities.flatMap(backgroundSource, this::determineScaledBackground);
     }
 
-    private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource) throws OperationFailedException {
+    private Optional<ScaleableBackground> determineScaledBackground(Stack backgroundSource)
+            throws OperationFailedException {
         try {
             return determineBackground(backgroundSource)
                     .map(stack -> ScaleableBackground.scaleBy(stack, scaleFactor, interpolator));
@@ -62,9 +64,13 @@ class BackgroundSelector {
         }
     }
 
-    /** Derives a background-stack from a stack that is a source of possible backgrounds 
-     * @throws CreateException */
-    private Optional<DisplayStack> determineBackground(Stack backgroundSource) throws CreateException {
+    /**
+     * Derives a background-stack from a stack that is a source of possible backgrounds
+     *
+     * @throws CreateException
+     */
+    private Optional<DisplayStack> determineBackground(Stack backgroundSource)
+            throws CreateException {
 
         if (backgroundChannelIndex > -1) {
             return Optional.of(extractChannelAsStack(backgroundSource, backgroundChannelIndex));
@@ -74,13 +80,14 @@ class BackgroundSelector {
         if (numberChannels == 0) {
             return Optional.empty();
         } else if (numberChannels == 3 || numberChannels == 1) {
-            return Optional.of( DisplayStack.create(backgroundSource) );
+            return Optional.of(DisplayStack.create(backgroundSource));
         } else {
             return Optional.of(extractChannelAsStack(backgroundSource, 0));
         }
     }
 
-    private static DisplayStack extractChannelAsStack(Stack stack, int index) throws CreateException {
+    private static DisplayStack extractChannelAsStack(Stack stack, int index)
+            throws CreateException {
         return DisplayStack.create(stack.getChannel(index));
     }
 }

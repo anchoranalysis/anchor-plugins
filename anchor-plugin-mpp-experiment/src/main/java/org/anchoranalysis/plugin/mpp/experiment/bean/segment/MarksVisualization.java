@@ -76,7 +76,8 @@ class MarksVisualization {
             ColorIndex colorIndex = outputter.getSettings().defaultColorIndexFor(marks.size());
 
             return new ColoredMarksWithDisplayStack(
-                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>()), backgroundStack);
+                    new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>()),
+                    backgroundStack);
         } catch (OperationFailedException e) {
             throw new OutputWriteFailedException(e);
         }

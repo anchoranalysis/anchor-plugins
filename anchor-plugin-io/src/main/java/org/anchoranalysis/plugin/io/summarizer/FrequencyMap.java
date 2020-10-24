@@ -28,8 +28,8 @@ package org.anchoranalysis.plugin.io.summarizer;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import org.anchoranalysis.core.value.LanguageUtilities;
 import java.util.TreeMap;
+import org.anchoranalysis.core.value.LanguageUtilities;
 
 /**
  * Counts the frequency of certain strings, and describes the contents in human language.
