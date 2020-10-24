@@ -27,8 +27,8 @@
 package org.anchoranalysis.plugin.quick.bean.file.path.derive;
 
 import java.nio.file.Path;
-import org.anchoranalysis.core.exception.CreateException;
 import lombok.Getter;
+import org.anchoranalysis.core.exception.CreateException;
 
 /** Separates a path into two parts */
 class PathTwoParts {

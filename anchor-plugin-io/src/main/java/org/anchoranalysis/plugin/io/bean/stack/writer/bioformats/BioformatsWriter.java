@@ -70,24 +70,22 @@ import org.anchoranalysis.image.voxel.datatype.VoxelDataType;
 public abstract class BioformatsWriter extends StackWriter {
 
     @Override
-    public void writeStackSeries(
-            StackSeries stackSeries, Path filePath, StackWriteOptions options)
+    public void writeStackSeries(StackSeries stackSeries, Path filePath, StackWriteOptions options)
             throws ImageIOException {
         throw new ImageIOException(
                 "Writing time-series is unsupported by this " + StackWriter.class.getSimpleName());
     }
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
-        
+
         if (stack.getNumberChannels() == 0) {
             throw new ImageIOException("This stack has no channels to write.");
         }
 
         boolean rgb = options.writeAsRGB(stack.getNumberChannels());
-        
+
         if (stack.allChannelsHaveIdenticalType()) {
             writeHomogeneousChannels(stack, filePath, rgb);
         } else {

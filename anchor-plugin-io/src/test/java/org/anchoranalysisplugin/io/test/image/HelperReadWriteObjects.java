@@ -56,7 +56,7 @@ class HelperReadWriteObjects {
             ObjectCollection objects, Path path, Generator<ObjectCollection> generator)
             throws SetOperationFailedException, BindFailedException {
 
-        Outputter outputter = OutputterFixture.outputter( Optional.of(path) );
+        Outputter outputter = OutputterFixture.outputter(Optional.of(path));
 
         outputter.writerPermissive().write("objects", () -> generator, () -> objects);
     }

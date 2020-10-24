@@ -111,7 +111,8 @@ public abstract class GroupMapByName<S, T> {
         // We wish to create a new output-manager only once for each primary key, so we store them
         // in a hashmap
         InputOutputContextSubdirectoryCache subdirectoryCache =
-                new InputOutputContextSubdirectoryCache(context, manifestDirectoryDescription, false);
+                new InputOutputContextSubdirectoryCache(
+                        context, manifestDirectoryDescription, false);
 
         // If there is one part-only, it is assumed that there is no group (for all items) and it is
         // written without a subdirectory

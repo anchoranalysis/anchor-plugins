@@ -44,7 +44,7 @@ public class DifferenceCalculateLevelStandardDeviation extends CalculateLevelBas
 
     private static final RelationToValue RELATION_LESS_THAN = new LessThan();
     private static final RelationToValue RELATION_GREATER_THAN = new GreaterThan();
-    
+
     // START BEAN PROPERTIES
     @BeanField @Getter @Setter private int minDifference = 0;
 

@@ -117,7 +117,8 @@ class TaskSingleInputHelper {
         try {
             task.checkMisconfigured(RegisterBeanFactories.getDefaultInstances());
 
-            OutputManager outputManager = OutputManagerForImagesFixture.createOutputManager( Optional.of(pathForOutputs) );
+            OutputManager outputManager =
+                    OutputManagerForImagesFixture.createOutputManager(Optional.of(pathForOutputs));
 
             Outputter outputter = OutputterFixture.outputter(outputManager);
 

@@ -43,8 +43,7 @@ import org.anchoranalysis.image.io.stack.StackWriteOptions;
 public class Tiff extends BioformatsWriter {
 
     @Override
-    public void writeStack(
-            Stack stack, Path filePath, StackWriteOptions options)
+    public void writeStack(Stack stack, Path filePath, StackWriteOptions options)
             throws ImageIOException {
 
         if (!(stack.getNumberChannels() == 1 || stack.getNumberChannels() == 3)) {

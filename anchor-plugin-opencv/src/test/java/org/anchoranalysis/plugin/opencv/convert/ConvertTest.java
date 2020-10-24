@@ -27,6 +27,7 @@ package org.anchoranalysis.plugin.opencv.convert;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.image.core.stack.Stack;
@@ -63,8 +64,7 @@ public class ConvertTest {
         testConversion(loader.carRGB());
     }
 
-    private void testConversion(Stack stack)
-            throws OperationFailedException {
+    private void testConversion(Stack stack) throws OperationFailedException {
         try {
             CVInit.blockUntilLoaded();
 
@@ -81,10 +81,7 @@ public class ConvertTest {
             //   internally by Anchor or whether it came from JavaCPP's OpenCV wrapper
             // This gives an indication if we are reusing buffers as opposed to creating new memory
             // and copying.
-            assertEquals(
-                    "buffer backed by array",
-                    false,
-                    isBufferDirect(stackCopiedBack));
+            assertEquals("buffer backed by array", false, isBufferDirect(stackCopiedBack));
 
         } catch (CreateException e) {
             throw new OperationFailedException(e);

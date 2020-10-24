@@ -27,6 +27,7 @@
 package org.anchoranalysis.plugin.points.bean.contour;
 
 import static org.junit.Assert.assertEquals;
+
 import org.anchoranalysis.core.exception.CreateException;
 import org.anchoranalysis.core.exception.OperationFailedException;
 import org.anchoranalysis.core.index.SetOperationFailedException;

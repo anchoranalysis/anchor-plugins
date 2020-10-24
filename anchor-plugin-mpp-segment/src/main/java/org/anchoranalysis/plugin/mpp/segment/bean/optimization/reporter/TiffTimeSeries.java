@@ -106,7 +106,8 @@ public class TiffTimeSeries extends PeriodicSubdirectoryReporter<MarksWithEnergy
     private ColoredMarksWithDisplayStack addColor(
             MarkCollection marks, FeedbackBeginParameters<VoxelizedMarksWithEnergy> initParams) {
         DisplayStack stack = initParams.getInitContext().getDualStack().getBackground();
-        ColoredMarks coloredMarks = new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>());
+        ColoredMarks coloredMarks =
+                new ColoredMarks(marks, colorIndex, new IdentifyByIteration<Mark>());
         return new ColoredMarksWithDisplayStack(coloredMarks, stack);
     }
 }

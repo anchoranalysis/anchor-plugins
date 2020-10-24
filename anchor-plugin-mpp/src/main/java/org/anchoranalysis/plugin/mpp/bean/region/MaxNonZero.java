@@ -38,7 +38,7 @@ import org.anchoranalysis.mpp.mark.voxelized.VoxelizedMark;
 public class MaxNonZero extends IndexedRegionBase {
 
     private static final GreaterThan RELATION = new GreaterThan();
-    
+
     @Override
     protected VoxelStatistics createStatisticsFor(
             VoxelizedMark voxelizedMark, Mark mark, Dimensions dimensions) throws CreateException {
